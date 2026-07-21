@@ -29,7 +29,7 @@ header{position:fixed; top:0; left:0; right:0; z-index:50; background:rgba(250,2
 .navlinks::-webkit-scrollbar{display:none;}
 .navlinks a{text-decoration:none; color:var(--ink-dim); font-size:12.5px; padding:9px 10px; white-space:nowrap;}
 .navlinks a.cta-link{color:var(--cream); background:var(--panel-dark); padding:9px 15px; border-radius:2px; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.06em; text-transform:uppercase;}
-@media (max-width:560px){ .navlinks a:not(.cta-link){display:none;} }
+@media (max-width:560px){ .navlinks a:not(.cta-link):not(.cart-link){display:none;} }
 
 .btn{display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; padding:14px 22px; text-decoration:none; border:1px solid var(--hairline-strong); border-radius:2px; background:none; color:var(--ink); cursor:pointer;}
 .btn-solid{background:var(--panel-dark); color:var(--cream); border-color:var(--panel-dark);}
