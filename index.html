@@ -85,6 +85,7 @@
       <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);">E-posta</span>
       <div style="font-family:'Sora',sans-serif;font-size:15px;margin-top:4px;"><a id="contactEmail" href="mailto:hello@auraproject.com">hello@auraproject.com</a></div>
     </div>
+    <div id="socialLinks" style="display:flex; gap:14px; margin-top:24px; flex-wrap:wrap;"></div>
   </div>
 </section>
 
@@ -131,6 +132,19 @@
     if (map.site_year) document.getElementById('heroTag').textContent = map.site_year;
     if (map.hero_title) document.getElementById('heroTitle').textContent = map.hero_title;
     if (map.hero_body) document.getElementById('heroBody').textContent = map.hero_body;
+
+    const socials = [
+      { key:'social_instagram', label:'Instagram' },
+      { key:'social_pinterest', label:'Pinterest' },
+      { key:'social_facebook', label:'Facebook' },
+      { key:'social_tiktok', label:'TikTok' },
+      { key:'social_linkedin', label:'LinkedIn' },
+      { key:'social_houzz', label:'Houzz' }
+    ];
+    const wrap = document.getElementById('socialLinks');
+    wrap.innerHTML = socials.filter(s => map[s.key]).map(s =>
+      '<a href="'+escapeHtml(map[s.key])+'" target="_blank" rel="noopener" class="btn btn-line btn-sm">'+s.label+'</a>'
+    ).join('');
   }
 
   loadCategories();
