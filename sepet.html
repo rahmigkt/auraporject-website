@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sepetim — AURA PROJECT®</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/brand.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  .page-head{padding:120px 0 24px;}
+  .page-head h1{font-family:'Sora',sans-serif; font-weight:700; font-size:clamp(26px,6vw,40px); margin:14px 0 0;}
+  .cart-note{background:var(--cream-panel); padding:16px 18px; border-radius:2px; font-size:13.5px; color:var(--ink-dim); margin:24px 0;}
+  .cart-empty{padding:60px 0; text-align:center; color:var(--ink-dim);}
+  .cart-total-row{display:flex; justify-content:space-between; align-items:center; margin-top:24px; padding-top:20px; border-top:1px solid var(--hairline-strong);}
+  .cart-item-qty{display:flex; align-items:center; gap:8px; margin-top:6px;}
+  .cart-item-qty button{background:none; border:1px solid var(--hairline-strong); width:26px; height:26px; border-radius:2px; cursor:pointer; font-size:13px;}
+  .cart-item-qty span{font-family:'JetBrains Mono',monospace; font-size:12.5px; width:20px; text-align:center;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap navbar">
+    <a href="index.html" class="wordmark">AURA PROJECT<sup>®</sup></a>
+    <nav class="navlinks">
+      <a href="kategori.html">Koleksiyonlar</a>
+      <a href="felsefe.html">Felsefe</a>
+      <a href="index.html#iletisim">İletişim</a>
+      <a href="sepet.html" class="cart-link">🛍️<span class="cart-badge"></span></a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap page-head">
+  <span class="eyebrow">Sepetim</span>
+  <h1>Talep ettiğiniz ürünler</h1>
+</div>
+
+<div class="wrap" style="padding-bottom:80px;">
+  <div class="cart-note">
+    Bu sepet doğrudan ödeme almaz — seçtiğiniz ürünler için <strong>WhatsApp üzerinden Merve Hanım ile</strong> proje, ölçü ve fiyat detaylarını görüşürsünüz. Doğrudan online satış yakında aktif olacak.
+  </div>
+  <div id="cartList"></div>
+  <div class="cart-total-row" id="cartTotalRow" style="display:none;">
+    <span class="eyebrow" id="cartCountLabel">0 ürün</span>
+    <a href="#" class="btn btn-solid" id="waCartBtn" target="_blank" rel="noopener">WhatsApp'tan Teklif İste</a>
+  </div>
+</div>
+
+<footer>© 2026 AURA PROJECT® — İstanbul</footer>
+
+<script src="assets/shared.js"></script>
+<script>
+  function render(){
+    const items = getCart();
+    const list = document.getElementById('cartList');
+    const totalRow = document.getElementById('cartTotalRow');
+
+    if (items.length === 0){
+      list.innerHTML = '<div class="cart-empty">Sepetiniz boş.<br><br><a href="kategori.html" class="btn btn-line" style="margin-top:8px;">Koleksiyonu İncele</a></div>';
+      totalRow.style.display = 'none';
+      return;
+    }
+
+    list.innerHTML = items.map(it => {
+      const img = it.image ? publicImageUrl(it.image) : null;
+      return '<div class="cart-item" data-slug="'+escapeHtml(it.slug)+'">'+
+        '<div class="thumb">'+(img ? '<img src="'+img+'" alt="">' : '')+'</div>'+
+        '<div class="info"><h4>'+escapeHtml(it.title)+'</h4>'+
+        '<div class="cart-item-qty">'+
+          '<button data-act="minus">−</button><span>'+it.qty+'</span><button data-act="plus">+</button>'+
+        '</div></div>'+
+        '<button class="remove-btn" data-act="remove">Kaldır</button>'+
+      '</div>';
+    }).join('');
+
+    list.querySelectorAll('.cart-item').forEach(row => {
+      const slug = row.dataset.slug;
+      const item = items.find(i => i.slug === slug);
+      row.querySelector('[data-act=minus]').onclick = () => { updateCartQty(slug, item.qty - 1); render(); };
+      row.querySelector('[data-act=plus]').onclick = () => { updateCartQty(slug, item.qty + 1); render(); };
+      row.querySelector('[data-act=remove]').onclick = () => { removeFromCart(slug); render(); };
+    });
+
+    totalRow.style.display = 'flex';
+    document.getElementById('cartCountLabel').textContent = cartCount() + ' ürün';
+    document.getElementById('waCartBtn').href = waLink(waCartMessage(items));
+  }
+
+  render();
+</script>
+</body>
+</html>
