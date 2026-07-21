@@ -55,6 +55,7 @@
     <div>
       <span class="eyebrow" id="pCategory">Koleksiyon</span>
       <h1 class="p-title" id="pTitle">Yükleniyor…</h1>
+      <div id="designerCredit" style="display:none; font-family:'Sora',sans-serif; font-style:italic; font-weight:400; font-size:15px; color:var(--brass); margin:-4px 0 14px;"></div>
       <div class="p-price" id="pPrice"></div>
       <div class="stock-line" id="stockLine" style="display:none;"></div>
       <div class="p-desc" id="pDesc"></div>
@@ -229,7 +230,17 @@
       const btn = document.getElementById('addToCartBtn');
       const original = btn.textContent;
       btn.textContent = 'Sepete Eklendi ✓';
-      setTimeout(() => { btn.textContent = original; }, 1600);
+      let goCart = document.getElementById('goCartLink');
+      if (!goCart){
+        goCart = document.createElement('a');
+        goCart.id = 'goCartLink';
+        goCart.href = 'sepet.html';
+        goCart.className = 'btn btn-line';
+        goCart.textContent = 'Sepete Git →';
+        goCart.style.marginLeft = '8px';
+        btn.insertAdjacentElement('afterend', goCart);
+      }
+      setTimeout(() => { btn.textContent = original; }, 2200);
     };
 
     if (product.category_id){
@@ -237,6 +248,11 @@
       if (cat){
         document.getElementById('pCategory').textContent = cat.name;
         document.getElementById('breadcrumb').innerHTML = '<a href="kategori.html">Koleksiyonlar</a> / <a href="kategori.html?slug='+encodeURIComponent(cat.slug)+'">'+escapeHtml(cat.name)+'</a>';
+        if (cat.designer_credit){
+          const dc = document.getElementById('designerCredit');
+          dc.textContent = cat.designer_credit;
+          dc.style.display = 'block';
+        }
       }
       loadRelated(product.category_id, product.id);
     }
