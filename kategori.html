@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Koleksiyonlar — AURA PROJECT®</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/brand.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  .page-head{padding:120px 0 32px;}
+  .page-head h1{font-family:'Sora',sans-serif; font-weight:700; font-size:clamp(26px,6vw,42px); margin:14px 0 0;}
+  .load-more-wrap{text-align:center; margin-top:32px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap navbar">
+    <a href="index.html" class="wordmark">AURA PROJECT<sup>®</sup></a>
+    <nav class="navlinks">
+      <a href="kategori.html">Koleksiyonlar</a>
+      <a href="felsefe.html">Felsefe</a>
+      <a href="index.html#iletisim">İletişim</a>
+      <a href="index.html#iletisim" class="cta-link">Teklif Al</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap page-head">
+  <span class="eyebrow" id="pageEyebrow">Koleksiyonlar</span>
+  <h1 id="pageTitle">Tüm Koleksiyon</h1>
+</div>
+
+<div class="wrap">
+  <div class="filter-bar" id="filterBar"></div>
+  <div class="card-grid" id="productGrid">
+    <div class="p-card"><div class="thumb skeleton"></div></div>
+    <div class="p-card"><div class="thumb skeleton"></div></div>
+    <div class="p-card"><div class="thumb skeleton"></div></div>
+    <div class="p-card"><div class="thumb skeleton"></div></div>
+  </div>
+  <div class="load-more-wrap"><button class="btn btn-line" id="loadMoreBtn" style="display:none;">Daha Fazla Göster</button></div>
+</div>
+
+<footer style="margin-top:60px;">© 2026 AURA PROJECT® — İstanbul</footer>
+
+<script src="assets/shared.js"></script>
+<script>
+  const PAGE_SIZE = 24;
+  let currentSlug = qs('slug') || '';
+  let offset = 0;
+  let categories = [];
+
+  async function loadCategoriesBar(){
+    const { data } = await sb.from('aura_categories').select('*').order('sort_order');
+    categories = data || [];
+    const bar = document.getElementById('filterBar');
+    const chips = [{slug:'', name:'Tümü'}, ...categories];
+    bar.innerHTML = chips.map(c =>
+      '<a href="kategori.html'+(c.slug ? '?slug='+encodeURIComponent(c.slug) : '')+'" class="filter-chip'+(c.slug===currentSlug?' active':'')+'">'+escapeHtml(c.name)+'</a>'
+    ).join('');
+
+    if (currentSlug){
+      const cat = categories.find(c => c.slug === currentSlug);
+      if (cat){
+        document.getElementById('pageEyebrow').textContent = 'Koleksiyon';
+        document.getElementById('pageTitle').textContent = cat.name;
+        document.title = cat.name + ' — AURA PROJECT®';
+      }
+    }
+  }
+
+  function renderCards(products, append){
+    const grid = document.getElementById('productGrid');
+    const html = products.map(p => {
+      const img = publicImageUrl(p.image_url);
+      const price = formatPrice(p.price, p.currency);
+      return '<a href="urun.html?slug='+encodeURIComponent(p.slug)+'" class="p-card">'+
+        '<div class="thumb">'+(img ? '<img src="'+img+'" alt="'+escapeHtml(p.title)+'" loading="lazy">' : '')+
+        (!p.in_stock ? '<span class="badge">Talep Üzerine</span>' : '')+'</div>'+
+        '<div class="meta"><span class="eyebrow">'+escapeHtml(p.frame_material || p.upholstery || '')+'</span><h4>'+escapeHtml(p.title)+'</h4>'+
+        (price ? '<div class="price">'+price+'</div>' : '')+'</div>'+
+      '</a>';
+    }).join('');
+    if (append) grid.insertAdjacentHTML('beforeend', html); else grid.innerHTML = html || '<p style="color:var(--ink-dim);grid-column:1/-1;">Bu koleksiyonda henüz ürün yok.</p>';
+  }
+
+  async function loadProducts(append=false){
+    let query = sb.from('aura_products').select('*', { count: 'exact' });
+    if (currentSlug){
+      const cat = categories.find(c => c.slug === currentSlug);
+      if (cat) query = query.eq('category_id', cat.id);
+    }
+    const { data, error, count } = await query.order('sort_order').range(offset, offset + PAGE_SIZE - 1);
+    if (error){ console.error(error); return; }
+    renderCards(data || [], append);
+    offset += PAGE_SIZE;
+    document.getElementById('loadMoreBtn').style.display = (count && offset < count) ? 'inline-flex' : 'none';
+  }
+
+  document.getElementById('loadMoreBtn').onclick = () => loadProducts(true);
+
+  (async () => {
+    await loadCategoriesBar();
+    loadProducts(false);
+  })();
+</script>
+</body>
+</html>
