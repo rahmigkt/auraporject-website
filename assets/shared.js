@@ -3,7 +3,6 @@ const SUPABASE_KEY = "sb_publishable_yjwxxm5IaMkEi1TCugejzA__cqLpYnP";
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const CATALOG_BUCKET = "aura-catalog-images";
 const PROJECT_BUCKET = "aura-project-images"; // felsefe bölümleri / kurucu fotoğrafı için
-const WHATSAPP_NUMBER = "905330339084";
 
 function escapeHtml(str){
   if (str == null) return "";
@@ -100,57 +99,4 @@ document.addEventListener('DOMContentLoaded', () => {
     el.rel = 'noopener';
   });
 });
-
-// ---------- WhatsApp ----------
-function waLink(message){
-  return 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message);
-}
-const WA_WELCOME = 'Merhaba AURA PROJECT 👋 Proje, tasarım ve çizim süreci için Merve Hanım ile görüşeceksiniz. ';
-function waProductLink(product){
-  const url = window.location.origin + window.location.pathname.replace(/urun\.html.*$/, 'urun.html?slug=' + encodeURIComponent(product.slug));
-  const msg = WA_WELCOME + '"' + product.title + '" ürünü hakkında bilgi almak istiyorum.\n' + url;
-  return waLink(msg);
-}
-function waGeneralLink(){
-  return waLink(WA_WELCOME + 'Bir proje için teklif almak istiyorum.');
-}
-
-// ---------- Sepet (localStorage) ----------
-const CART_KEY = 'aura_cart_v1';
-function getCart(){
-  try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch(e){ return []; }
-}
-function saveCart(cart){
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
-  updateCartBadge();
-}
-function addToCart(product, qty=1){
-  const cart = getCart();
-  const existing = cart.find(i => i.slug === product.slug);
-  if (existing) existing.qty += qty;
-  else cart.push({ slug: product.slug, title: product.title, price: product.price, currency: product.currency, image_url: product.image_url, qty });
-  saveCart(cart);
-}
-function removeFromCart(slug){
-  saveCart(getCart().filter(i => i.slug !== slug));
-}
-function cartCount(){
-  return getCart().reduce((sum,i) => sum + i.qty, 0);
-}
-function updateCartBadge(){
-  const badge = document.getElementById('cartCountBadge');
-  if (!badge) return;
-  const n = cartCount();
-  badge.textContent = n > 0 ? n : '';
-  badge.style.display = n > 0 ? 'inline-flex' : 'none';
-}
-function waCartLink(){
-  const cart = getCart();
-  if (cart.length === 0) return waGeneralLink();
-  let msg = WA_WELCOME + 'Sepetimdeki ürünler için görüşmek istiyorum:\n\n';
-  cart.forEach((i,idx) => { msg += (idx+1)+'. '+i.title+' (adet: '+i.qty+')\n'; });
-  msg += '\nBu ürünler hakkında bilgi ve teklif almak istiyorum.';
-  return waLink(msg);
-}
-document.addEventListener('DOMContentLoaded', updateCartBadge);
 
