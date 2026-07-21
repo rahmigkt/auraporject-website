@@ -32,7 +32,8 @@
       <a href="kategori.html">Koleksiyonlar</a>
       <a href="felsefe.html">Felsefe</a>
       <a href="index.html#iletisim">İletişim</a>
-      <a href="index.html#iletisim" class="cta-link">Teklif Al</a>
+      <a href="sepet.html" class="cart-link">🛍️<span class="cart-badge"></span></a>
+      <a href="#" class="cta-link cta-whatsapp">Teklif Al</a>
     </nav>
   </div>
 </header>
@@ -43,15 +44,31 @@
     <div>
       <div class="gallery-main" id="galleryMain"><div class="skeleton" style="height:100%;"></div></div>
       <div class="gallery-thumbs" id="galleryThumbs"></div>
+      <div id="viewer360Wrap" style="margin-top:20px; display:none;">
+        <span class="eyebrow">360° Görünüm</span>
+        <div class="viewer-360" id="viewer360" style="margin-top:10px;">
+          <div class="viewer-360-badge">⟳ 360°</div>
+          <div class="viewer-360-hint">Döndürmek için sürükleyin</div>
+        </div>
+      </div>
     </div>
     <div>
       <span class="eyebrow" id="pCategory">Koleksiyon</span>
       <h1 class="p-title" id="pTitle">Yükleniyor…</h1>
       <div class="p-price" id="pPrice"></div>
+      <div class="stock-line" id="stockLine" style="display:none;"></div>
       <div class="p-desc" id="pDesc"></div>
       <table class="spec-table" id="specTable"></table>
+      <div class="qty-row">
+        <div class="qty-box">
+          <button type="button" id="qtyMinus">−</button>
+          <input type="text" id="qtyInput" value="1" readonly>
+          <button type="button" id="qtyPlus">+</button>
+        </div>
+        <button type="button" class="btn btn-solid" id="addToCartBtn">Sepete Ekle</button>
+      </div>
       <div class="p-cta">
-        <a href="index.html#iletisim" class="btn btn-solid">Teklif İste</a>
+        <a href="#" class="btn btn-line" id="waProductBtn" target="_blank" rel="noopener">WhatsApp'tan Teklif İste</a>
         <a href="kategori.html" class="btn btn-line">Koleksiyona Dön</a>
       </div>
     </div>
@@ -93,10 +110,61 @@
     if (product.upholstery) rows.push(['Döşeme', product.upholstery]);
     if (product.leg_material) rows.push(['Ayak Malzemesi', product.leg_material]);
     if (product.technique) rows.push(['Teknik', product.technique]);
+    if (product.lead_time) rows.push(['Teslimat', product.lead_time]);
     (product.custom_fields || []).forEach(f => { if (f.label && f.value) rows.push([f.label, f.value]); });
     document.getElementById('specTable').innerHTML = rows.map(([k,v]) =>
       '<tr><td>'+escapeHtml(k)+'</td><td>'+escapeHtml(v)+'</td></tr>'
     ).join('');
+  }
+
+  function renderStockLine(product){
+    const el = document.getElementById('stockLine');
+    if (product.in_stock === false){
+      el.textContent = product.lead_time ? ('Talep Üzerine Üretim · ' + product.lead_time) : 'Talep Üzerine Üretim';
+      el.className = 'stock-line pre-order';
+    } else {
+      el.textContent = product.lead_time ? ('Stokta · ' + product.lead_time) : 'Stokta';
+      el.className = 'stock-line in-stock';
+    }
+    el.style.display = 'flex';
+  }
+
+  function render360Viewer(product){
+    const frames = (product.images_360 || []).map(im => publicImageUrl(typeof im === 'string' ? im : im.path)).filter(Boolean);
+    if (frames.length < 2) return;
+    const wrap = document.getElementById('viewer360Wrap');
+    const viewer = document.getElementById('viewer360');
+    wrap.style.display = 'block';
+    const img = document.createElement('img');
+    img.src = frames[0];
+    viewer.appendChild(img);
+
+    let currentFrame = 0;
+    let dragging = false;
+    let startX = 0;
+    const sensitivity = 8; // px başına kaç derece/kare geçişi
+
+    function setFrame(i){
+      currentFrame = ((i % frames.length) + frames.length) % frames.length;
+      img.src = frames[currentFrame];
+    }
+    function onDown(x){ dragging = true; startX = x; }
+    function onMove(x){
+      if (!dragging) return;
+      const delta = x - startX;
+      if (Math.abs(delta) > sensitivity){
+        setFrame(currentFrame + (delta > 0 ? -1 : 1));
+        startX = x;
+      }
+    }
+    function onUp(){ dragging = false; }
+
+    viewer.addEventListener('mousedown', e => onDown(e.clientX));
+    window.addEventListener('mousemove', e => onMove(e.clientX));
+    window.addEventListener('mouseup', onUp);
+    viewer.addEventListener('touchstart', e => onDown(e.touches[0].clientX), { passive:true });
+    viewer.addEventListener('touchmove', e => onMove(e.touches[0].clientX), { passive:true });
+    viewer.addEventListener('touchend', onUp);
   }
 
   async function loadRelated(categoryId, excludeId){
@@ -126,7 +194,24 @@
     document.getElementById('pPrice').textContent = price || '';
 
     renderGallery(product);
+    render360Viewer(product);
     renderSpecs(product);
+    renderStockLine(product);
+
+    const productUrl = window.location.href;
+    document.getElementById('waProductBtn').href = waLink(waProductMessage(product.title, productUrl));
+
+    let qty = 1;
+    const qtyInput = document.getElementById('qtyInput');
+    document.getElementById('qtyMinus').onclick = () => { qty = Math.max(1, qty - 1); qtyInput.value = qty; };
+    document.getElementById('qtyPlus').onclick = () => { qty = qty + 1; qtyInput.value = qty; };
+    document.getElementById('addToCartBtn').onclick = () => {
+      addToCart(product, qty);
+      const btn = document.getElementById('addToCartBtn');
+      const original = btn.textContent;
+      btn.textContent = 'Sepete Eklendi ✓';
+      setTimeout(() => { btn.textContent = original; }, 1600);
+    };
 
     if (product.category_id){
       const { data: cat } = await sb.from('aura_categories').select('*').eq('id', product.category_id).maybeSingle();
