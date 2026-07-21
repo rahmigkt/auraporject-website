@@ -28,19 +28,26 @@ function qs(name){
 }
 
 // ================= WHATSAPP =================
-const WHATSAPP_NUMBER = "905330339084";
-const WHATSAPP_WELCOME = "Merhaba AURA PROJECT 👋\nBir proje hakkında bilgi almak istiyorum.\n\nProjenizin tasarım ve çizim sürecinde Merve Hanım ile görüşeceksiniz.";
+let WHATSAPP_NUMBER = "905330339084"; // varsayılan — aura_project_content içinde 'whatsapp_number' anahtarı varsa onunla değiştirilir
+const WHATSAPP_WELCOME = "Merhaba AURA PROJECT 👋\nBir proje hakkında bilgi almak istiyorum.";
+async function loadWhatsappNumber(){
+  try {
+    const { data } = await sb.from('aura_project_content').select('value').eq('key','whatsapp_number').maybeSingle();
+    if (data && data.value) WHATSAPP_NUMBER = data.value.replace(/[^0-9]/g,'');
+  } catch(e) {}
+  document.querySelectorAll('.cta-whatsapp').forEach(el => { el.href = waLink(); el.target = '_blank'; el.rel = 'noopener'; });
+  const floatBtn = document.getElementById('waFloat');
+  if (floatBtn) floatBtn.href = waLink();
+}
 function waLink(message){
   return "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message || WHATSAPP_WELCOME);
 }
 function waProductMessage(title, url){
-  return "Merhaba AURA PROJECT 👋\n\n\"" + title + "\" hakkında teklif almak istiyorum.\n🔗 " + url +
-    "\n\nProjenizin tasarım ve çizim sürecinde Merve Hanım ile görüşeceksiniz.";
+  return "Merhaba AURA PROJECT 👋\n\n\"" + title + "\" hakkında teklif almak istiyorum.\n🔗 " + url;
 }
 function waCartMessage(items){
   const lines = items.map((it,i) => (i+1) + ". " + it.title + " (adet: " + it.qty + ")\n🔗 " + it.url).join("\n\n");
-  return "Merhaba AURA PROJECT 👋\n\nAşağıdaki ürünler için teklif almak istiyorum:\n\n" + lines +
-    "\n\nProjenizin tasarım ve çizim sürecinde Merve Hanım ile görüşeceksiniz.";
+  return "Merhaba AURA PROJECT 👋\n\nAşağıdaki ürünler için teklif almak istiyorum:\n\n" + lines;
 }
 
 // ================= SEPET (localStorage) =================
@@ -98,5 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
     el.target = '_blank';
     el.rel = 'noopener';
   });
+  loadWhatsappNumber();
 });
 
