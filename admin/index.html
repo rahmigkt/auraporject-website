@@ -127,6 +127,7 @@
         <div class="field"><label>Ölçüler</label><input type="text" id="prodDimensions" placeholder="örn. 220 x 95 x 80 cm"></div>
         <div class="field"><label>Üretim Tekniği</label><input type="text" id="prodTechnique" placeholder="örn. El Dikimi, Ahşap Oyma"></div>
       </div>
+      <div class="field"><label>Teslimat / Üretim Süresi</label><input type="text" id="prodLeadTime" placeholder="örn. 4-6 Hafta Üretim Süresi"></div>
       <div class="field" style="flex-direction:row; align-items:center; gap:8px;">
         <input type="checkbox" id="prodFeatured" style="width:16px; height:16px;">
         <label style="margin:0; text-transform:none; font-family:inherit; font-size:13px;">Ana sayfada "Öne Çıkanlar" alanında göster</label>
@@ -145,6 +146,13 @@
         <div class="hint">Silmek için görsele tıklayın. Kaydettiğinizde uygulanır.</div>
       </div>
       <div class="field"><label>Galeriye Yeni Görsel Ekle (birden fazla seçilebilir — yüzlerce foto destekler)</label><input type="file" id="prodExtraImages" accept="image/*" multiple></div>
+
+      <div class="field">
+        <label>360° Görünüm — Mevcut Kareler (ürünü her açıdan çeken sıralı fotoğraflar)</label>
+        <div class="gallery-manage" id="gallery360Manage"></div>
+        <div class="hint">Sırasıyla çekilmiş 12-36 kare önerilir. Silmek için görsele tıklayın.</div>
+      </div>
+      <div class="field"><label>360° Foto Seti Ekle (dosyaları çekim sırasına göre seçin)</label><input type="file" id="prod360Images" accept="image/*" multiple></div>
 
       <div class="field">
         <label>Ek Teknik Özellikler (istediğiniz kadar ekleyin)</label>
@@ -348,6 +356,7 @@ document.getElementById('saveCatBtn').onclick = async () => {
 // ================= ÜRÜNLER =================
 let editingProdId = null;
 let currentEditingImages = [];
+let currentEditing360 = [];
 let productSearchTimeout = null;
 
 function addCustomFieldRow(label='', value=''){
@@ -381,6 +390,19 @@ function renderGalleryManage(){
   });
 }
 
+function render360Manage(){
+  const wrap = document.getElementById('gallery360Manage');
+  if (!currentEditing360.length){ wrap.innerHTML = '<span class="hint" style="margin:0;">Henüz 360° karesi yok.</span>'; return; }
+  wrap.innerHTML = currentEditing360.map((path, i) => {
+    const url = publicUrl(CATALOG_BUCKET, path);
+    return '<div class="g-item"><img src="'+url+'"><button type="button" data-i="'+i+'">×</button></div>';
+  }).join('');
+  wrap.querySelectorAll('button').forEach(btn => btn.onclick = () => {
+    currentEditing360.splice(parseInt(btn.dataset.i), 1);
+    render360Manage();
+  });
+}
+
 async function loadProducts(search=''){
   let query = sb.from('aura_products').select('*').order('sort_order');
   if (search) query = query.ilike('title', '%'+search+'%');
@@ -407,6 +429,7 @@ document.getElementById('productSearch').addEventListener('input', (e) => {
 function editProduct(p){
   editingProdId = p.id;
   currentEditingImages = (p.images || []).map(im => typeof im === 'string' ? im : im.path).filter(Boolean);
+  currentEditing360 = (p.images_360 || []).map(im => typeof im === 'string' ? im : im.path).filter(Boolean);
   document.getElementById('prodFormTitle').textContent = 'Düzenle: ' + p.title;
   document.getElementById('prodId').value = p.id;
   document.getElementById('prodTitle').value = p.title;
@@ -418,27 +441,31 @@ function editProduct(p){
   document.getElementById('prodLeg').value = p.leg_material || '';
   document.getElementById('prodDimensions').value = p.dimensions || '';
   document.getElementById('prodTechnique').value = p.technique || '';
+  document.getElementById('prodLeadTime').value = p.lead_time || '';
   document.getElementById('prodFeatured').checked = !!p.is_featured;
   document.getElementById('prodInStock').checked = p.in_stock !== false;
   document.getElementById('prodDesc').value = p.description || '';
   document.getElementById('customFieldsList').innerHTML = '';
   (p.custom_fields || []).forEach(f => addCustomFieldRow(f.label, f.value));
   renderGalleryManage();
+  render360Manage();
   document.getElementById('cancelProdBtn').style.display = 'inline-flex';
   window.scrollTo({top: document.getElementById('prodFormTitle').offsetTop - 20, behavior:'smooth'});
 }
 document.getElementById('cancelProdBtn').onclick = () => resetProdForm();
 function resetProdForm(){
-  editingProdId = null; currentEditingImages = [];
+  editingProdId = null; currentEditingImages = []; currentEditing360 = [];
   document.getElementById('prodFormTitle').textContent = 'Yeni Ürün Ekle';
-  ['prodId','prodTitle','prodSlug','prodPrice','prodFrame','prodUpholstery','prodLeg','prodDimensions','prodTechnique','prodDesc'].forEach(id => document.getElementById(id).value = '');
+  ['prodId','prodTitle','prodSlug','prodPrice','prodFrame','prodUpholstery','prodLeg','prodDimensions','prodTechnique','prodLeadTime','prodDesc'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('prodCategory').value = '';
   document.getElementById('prodFeatured').checked = false;
   document.getElementById('prodInStock').checked = true;
   document.getElementById('prodImage').value = '';
   document.getElementById('prodExtraImages').value = '';
+  document.getElementById('prod360Images').value = '';
   document.getElementById('customFieldsList').innerHTML = '';
   renderGalleryManage();
+  render360Manage();
   document.getElementById('cancelProdBtn').style.display = 'none';
 }
 document.getElementById('prodTitle').addEventListener('input', (e) => { if (!editingProdId) document.getElementById('prodSlug').value = slugify(e.target.value); });
@@ -473,6 +500,16 @@ document.getElementById('saveProdBtn').onclick = async () => {
     }
   }
 
+  const files360 = Array.from(document.getElementById('prod360Images').files || []);
+  if (files360.length > 0) {
+    msg.textContent = '360° kareleri yükleniyor… (' + files360.length + ' dosya)'; msg.className='msg';
+    for (const f360 of files360) {
+      const p360 = 'products/' + slug + '-360-' + Date.now() + '-' + Math.random().toString(36).slice(2,7) + '.' + f360.name.split('.').pop();
+      const { error: e360 } = await sb.storage.from(CATALOG_BUCKET).upload(p360, f360);
+      if (!e360) currentEditing360.push(p360);
+    }
+  }
+
   const payload = {
     title, slug,
     category_id: document.getElementById('prodCategory').value || null,
@@ -482,11 +519,13 @@ document.getElementById('saveProdBtn').onclick = async () => {
     leg_material: document.getElementById('prodLeg').value,
     dimensions: document.getElementById('prodDimensions').value,
     technique: document.getElementById('prodTechnique').value,
+    lead_time: document.getElementById('prodLeadTime').value,
     is_featured: document.getElementById('prodFeatured').checked,
     in_stock: document.getElementById('prodInStock').checked,
     description: document.getElementById('prodDesc').value,
     custom_fields: getCustomFieldsFromForm(),
-    images: currentEditingImages
+    images: currentEditingImages,
+    images_360: currentEditing360
   };
   if (image_url) payload.image_url = image_url;
 
