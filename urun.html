@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ürün — AURA PROJECT®</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/brand.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  .product-wrap{padding:104px 0 40px;}
+  .p-grid{display:flex; flex-direction:column; gap:32px;}
+  @media (min-width:900px){ .p-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:56px; align-items:start;} }
+  .p-title{font-family:'Sora',sans-serif; font-weight:700; font-size:clamp(24px,5vw,34px); margin:12px 0 8px; line-height:1.15;}
+  .p-price{font-family:'JetBrains Mono',monospace; font-size:16px; color:var(--brass); margin-bottom:18px;}
+  .p-desc{color:var(--ink-dim); font-size:15px; margin-bottom:20px;}
+  .p-cta{display:flex; gap:10px; flex-wrap:wrap; margin-top:24px;}
+  .related-head{margin:56px 0 20px;}
+  .breadcrumb{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-dim); margin-bottom:6px;}
+  .breadcrumb a{text-decoration:none; color:var(--ink-dim);}
+  .breadcrumb a:hover{color:var(--ink);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap navbar">
+    <a href="index.html" class="wordmark">AURA PROJECT<sup>®</sup></a>
+    <nav class="navlinks">
+      <a href="kategori.html">Koleksiyonlar</a>
+      <a href="felsefe.html">Felsefe</a>
+      <a href="index.html#iletisim">İletişim</a>
+      <a href="index.html#iletisim" class="cta-link">Teklif Al</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap product-wrap">
+  <div class="breadcrumb" id="breadcrumb"><a href="kategori.html">Koleksiyonlar</a></div>
+  <div class="p-grid">
+    <div>
+      <div class="gallery-main" id="galleryMain"><div class="skeleton" style="height:100%;"></div></div>
+      <div class="gallery-thumbs" id="galleryThumbs"></div>
+    </div>
+    <div>
+      <span class="eyebrow" id="pCategory">Koleksiyon</span>
+      <h1 class="p-title" id="pTitle">Yükleniyor…</h1>
+      <div class="p-price" id="pPrice"></div>
+      <div class="p-desc" id="pDesc"></div>
+      <table class="spec-table" id="specTable"></table>
+      <div class="p-cta">
+        <a href="index.html#iletisim" class="btn btn-solid">Teklif İste</a>
+        <a href="kategori.html" class="btn btn-line">Koleksiyona Dön</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="related-head">
+    <span class="eyebrow">Aynı Koleksiyondan</span>
+    <div class="sec-head"><h2 style="font-size:22px;">Bunları da beğenebilirsiniz</h2></div>
+  </div>
+  <div class="card-grid" id="relatedGrid"></div>
+</div>
+
+<footer>© 2026 AURA PROJECT® — İstanbul</footer>
+
+<script src="assets/shared.js"></script>
+<script>
+  const slug = qs('slug');
+
+  function setActiveThumb(images, idx){
+    document.getElementById('galleryMain').innerHTML = '<img src="'+images[idx]+'" alt="">';
+    document.querySelectorAll('.gallery-thumbs img').forEach((img,i) => img.classList.toggle('active', i===idx));
+  }
+
+  function renderGallery(product){
+    const cover = product.image_url ? publicImageUrl(product.image_url) : null;
+    const extra = (product.images || []).map(im => publicImageUrl(typeof im === 'string' ? im : im.path)).filter(Boolean);
+    const all = [cover, ...extra].filter(Boolean);
+    if (all.length === 0){ document.getElementById('galleryMain').innerHTML = ''; return; }
+    setActiveThumb(all, 0);
+    const thumbs = document.getElementById('galleryThumbs');
+    thumbs.innerHTML = all.map((src,i) => '<img src="'+src+'" class="'+(i===0?'active':'')+'" data-i="'+i+'">').join('');
+    thumbs.querySelectorAll('img').forEach(img => img.onclick = () => setActiveThumb(all, parseInt(img.dataset.i)));
+  }
+
+  function renderSpecs(product){
+    const rows = [];
+    if (product.dimensions) rows.push(['Ölçüler', product.dimensions]);
+    if (product.frame_material) rows.push(['İskelet', product.frame_material]);
+    if (product.upholstery) rows.push(['Döşeme', product.upholstery]);
+    if (product.leg_material) rows.push(['Ayak Malzemesi', product.leg_material]);
+    if (product.technique) rows.push(['Teknik', product.technique]);
+    (product.custom_fields || []).forEach(f => { if (f.label && f.value) rows.push([f.label, f.value]); });
+    document.getElementById('specTable').innerHTML = rows.map(([k,v]) =>
+      '<tr><td>'+escapeHtml(k)+'</td><td>'+escapeHtml(v)+'</td></tr>'
+    ).join('');
+  }
+
+  async function loadRelated(categoryId, excludeId){
+    if (!categoryId) return;
+    const { data } = await sb.from('aura_products').select('*').eq('category_id', categoryId).neq('id', excludeId).limit(4);
+    const grid = document.getElementById('relatedGrid');
+    if (!data || data.length === 0){ grid.innerHTML = '<p style="color:var(--ink-dim);">Bu koleksiyonda başka ürün yok.</p>'; return; }
+    grid.innerHTML = data.map(p => {
+      const img = publicImageUrl(p.image_url);
+      const price = formatPrice(p.price, p.currency);
+      return '<a href="urun.html?slug='+encodeURIComponent(p.slug)+'" class="p-card">'+
+        '<div class="thumb">'+(img ? '<img src="'+img+'" alt="'+escapeHtml(p.title)+'" loading="lazy">' : '')+'</div>'+
+        '<div class="meta"><h4>'+escapeHtml(p.title)+'</h4>'+(price ? '<div class="price">'+price+'</div>' : '')+'</div>'+
+      '</a>';
+    }).join('');
+  }
+
+  async function loadProduct(){
+    if (!slug){ document.getElementById('pTitle').textContent = 'Ürün bulunamadı'; return; }
+    const { data: product, error } = await sb.from('aura_products').select('*').eq('slug', slug).maybeSingle();
+    if (error || !product){ document.getElementById('pTitle').textContent = 'Ürün bulunamadı'; return; }
+
+    document.title = product.title + ' — AURA PROJECT®';
+    document.getElementById('pTitle').textContent = product.title;
+    document.getElementById('pDesc').innerHTML = nl2p(product.description);
+    const price = formatPrice(product.price, product.currency);
+    document.getElementById('pPrice').textContent = price || '';
+
+    renderGallery(product);
+    renderSpecs(product);
+
+    if (product.category_id){
+      const { data: cat } = await sb.from('aura_categories').select('*').eq('id', product.category_id).maybeSingle();
+      if (cat){
+        document.getElementById('pCategory').textContent = cat.name;
+        document.getElementById('breadcrumb').innerHTML = '<a href="kategori.html">Koleksiyonlar</a> / <a href="kategori.html?slug='+encodeURIComponent(cat.slug)+'">'+escapeHtml(cat.name)+'</a>';
+      }
+      loadRelated(product.category_id, product.id);
+    }
+  }
+
+  loadProduct();
+</script>
+</body>
+</html>
