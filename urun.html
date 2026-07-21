@@ -135,31 +135,50 @@
     const wrap = document.getElementById('viewer360Wrap');
     const viewer = document.getElementById('viewer360');
     wrap.style.display = 'block';
-    const img = document.createElement('img');
-    img.src = frames[0];
-    viewer.appendChild(img);
+
+    const imgA = document.createElement('img');
+    const imgB = document.createElement('img');
+    [imgA, imgB].forEach(im => { im.style.cssText = 'position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:opacity .18s ease;'; im.draggable = false; });
+    imgA.src = frames[0];
+    imgA.style.opacity = '1';
+    imgB.style.opacity = '0';
+    viewer.style.position = 'relative';
+    viewer.appendChild(imgA);
+    viewer.appendChild(imgB);
 
     let currentFrame = 0;
+    let showingA = true;
     let dragging = false;
     let startX = 0;
-    const sensitivity = 8; // px başına kaç derece/kare geçişi
+    let accumulated = 0;
+    const sensitivity = 28; // px başına bir kare geçişi — daha yüksek = daha yumuşak/kontrollü
 
     function setFrame(i){
-      currentFrame = ((i % frames.length) + frames.length) % frames.length;
-      img.src = frames[currentFrame];
+      const next = ((i % frames.length) + frames.length) % frames.length;
+      if (next === currentFrame) return;
+      currentFrame = next;
+      const incoming = showingA ? imgB : imgA;
+      const outgoing = showingA ? imgA : imgB;
+      incoming.src = frames[currentFrame];
+      incoming.style.opacity = '1';
+      outgoing.style.opacity = '0';
+      showingA = !showingA;
     }
-    function onDown(x){ dragging = true; startX = x; }
+    function onDown(x){ dragging = true; startX = x; accumulated = 0; viewer.style.cursor = 'grabbing'; }
     function onMove(x){
       if (!dragging) return;
       const delta = x - startX;
-      if (Math.abs(delta) > sensitivity){
-        setFrame(currentFrame + (delta > 0 ? -1 : 1));
-        startX = x;
+      accumulated += delta;
+      startX = x;
+      if (Math.abs(accumulated) >= sensitivity){
+        const steps = Math.trunc(accumulated / sensitivity);
+        setFrame(currentFrame - steps);
+        accumulated -= steps * sensitivity;
       }
     }
-    function onUp(){ dragging = false; }
+    function onUp(){ dragging = false; viewer.style.cursor = 'grab'; }
 
-    viewer.addEventListener('mousedown', e => onDown(e.clientX));
+    viewer.addEventListener('mousedown', e => { onDown(e.clientX); e.preventDefault(); });
     window.addEventListener('mousemove', e => onMove(e.clientX));
     window.addEventListener('mouseup', onUp);
     viewer.addEventListener('touchstart', e => onDown(e.touches[0].clientX), { passive:true });
