@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AURA PROJECT® — Mobilya ve Mekân Tasarımı</title>
+<meta name="description" content="AURA PROJECT: koltuk takımları, kanepeler, masalar, duvar panelleri ve aydınlatma koleksiyonları. Mekânın bütünsel dengesini kuran mobilya tasarımı.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/brand.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  .hero{min-height:88vh; min-height:88dvh; display:flex; flex-direction:column; justify-content:center; padding:100px 0 50px; background:linear-gradient(180deg, var(--cream) 0%, var(--cream-panel) 100%);}
+  .hero h1{font-family:'Sora',sans-serif; font-weight:700; font-size:clamp(30px,8.5vw,58px); line-height:1.1; margin:16px 0 0; letter-spacing:-0.01em; max-width:820px;}
+  .hero h1 em{font-style:italic; font-weight:500; color:var(--brass);}
+  .hero p{max-width:460px; margin:20px 0 0; color:var(--ink-dim); font-size:15.5px;}
+  .hero-actions{display:flex; gap:12px; margin-top:28px; flex-wrap:wrap;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap navbar">
+    <a href="index.html" class="wordmark">AURA PROJECT<sup>®</sup></a>
+    <nav class="navlinks">
+      <a href="kategori.html">Koleksiyonlar</a>
+      <a href="felsefe.html">Felsefe</a>
+      <a href="#iletisim">İletişim</a>
+      <a href="#iletisim" class="cta-link">Teklif Al</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow" id="heroTag">İstanbul · Design by Merve</span>
+    <h1 id="heroTitle">Mobilya, mekânın <em>mimari kararını</em> taşır.</h1>
+    <p id="heroBody">Koltuk takımlarından duvar panellerine, her parça oran, ışık ve malzeme ilişkisi gözetilerek tasarlanır.</p>
+    <div class="hero-actions">
+      <a href="kategori.html" class="btn btn-solid">Koleksiyonu İncele</a>
+      <a href="felsefe.html" class="btn btn-line">Felsefemiz</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="koleksiyonlar">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:28px;">
+      <span class="eyebrow">Koleksiyonlar</span>
+      <h2>Kategoriye göre keşfet.</h2>
+    </div>
+  </div>
+  <div class="cat-reel" id="categoryReel">
+    <div class="cat-card skeleton"></div>
+    <div class="cat-card skeleton"></div>
+    <div class="cat-card skeleton"></div>
+  </div>
+</section>
+
+<section class="section tinted" id="one-cikanlar">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:28px;">
+      <span class="eyebrow">Öne Çıkanlar</span>
+      <h2>Atölyeden seçmeler.</h2>
+    </div>
+    <div class="card-grid" id="featuredGrid">
+      <div class="p-card"><div class="thumb skeleton"></div></div>
+      <div class="p-card"><div class="thumb skeleton"></div></div>
+      <div class="p-card"><div class="thumb skeleton"></div></div>
+      <div class="p-card"><div class="thumb skeleton"></div></div>
+    </div>
+    <div style="text-align:center; margin-top:32px;">
+      <a href="kategori.html" class="btn btn-line">Tüm Koleksiyonu Gör</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="iletisim">
+  <div class="wrap">
+    <span class="eyebrow">İletişim</span>
+    <div class="sec-head" style="margin-bottom:24px;"><h2>Projenizi konuşalım.</h2></div>
+    <div>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);">E-posta</span>
+      <div style="font-family:'Sora',sans-serif;font-size:15px;margin-top:4px;"><a id="contactEmail" href="mailto:hello@auraproject.com">hello@auraproject.com</a></div>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 AURA PROJECT® — İstanbul</footer>
+
+<script src="assets/shared.js"></script>
+<script>
+  async function loadCategories(){
+    const reel = document.getElementById('categoryReel');
+    const { data, error } = await sb.from('aura_categories').select('*').order('sort_order');
+    if (error || !data || data.length === 0){ reel.innerHTML = ''; return; }
+    reel.innerHTML = data.map(c => {
+      const img = publicImageUrl(c.sample_image_url);
+      return '<a href="kategori.html?slug='+encodeURIComponent(c.slug)+'" class="cat-card">'+
+        (img ? '<img src="'+img+'" alt="'+escapeHtml(c.name)+'" loading="lazy">' : '') +
+        '<div class="cat-scrim"></div>'+
+        '<div class="cat-label"><span class="eyebrow" style="color:var(--brass-light);">Koleksiyon</span><h3>'+escapeHtml(c.name)+'</h3></div>'+
+      '</a>';
+    }).join('');
+  }
+
+  async function loadFeatured(){
+    const grid = document.getElementById('featuredGrid');
+    const { data, error } = await sb.from('aura_products').select('*').eq('is_featured', true).order('sort_order').limit(8);
+    if (error || !data || data.length === 0){
+      grid.innerHTML = '<div class="p-card"><div class="thumb"></div><div class="meta"><span class="eyebrow">Yakında</span><h4>Ürünler ekleniyor</h4></div></div>';
+      return;
+    }
+    grid.innerHTML = data.map(p => {
+      const img = publicImageUrl(p.image_url);
+      const price = formatPrice(p.price, p.currency);
+      return '<a href="urun.html?slug='+encodeURIComponent(p.slug)+'" class="p-card">'+
+        '<div class="thumb">'+(img ? '<img src="'+img+'" alt="'+escapeHtml(p.title)+'" loading="lazy">' : '')+'</div>'+
+        '<div class="meta"><span class="eyebrow">'+escapeHtml(p.frame_material || p.upholstery || '')+'</span><h4>'+escapeHtml(p.title)+'</h4>'+
+        (price ? '<div class="price">'+price+'</div>' : '')+'</div>'+
+      '</a>';
+    }).join('');
+  }
+
+  async function loadContact(){
+    const { data } = await sb.from('aura_project_content').select('*');
+    const map = {}; (data||[]).forEach(r => map[r.key]=r.value);
+    if (map.contact_email){ document.getElementById('contactEmail').textContent = map.contact_email; document.getElementById('contactEmail').href = 'mailto:'+map.contact_email; }
+    if (map.site_year) document.getElementById('heroTag').textContent = map.site_year;
+    if (map.hero_title) document.getElementById('heroTitle').textContent = map.hero_title;
+    if (map.hero_body) document.getElementById('heroBody').textContent = map.hero_body;
+  }
+
+  loadCategories();
+  loadFeatured();
+  loadContact();
+</script>
+</body>
+</html>
