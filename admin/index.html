@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yönetim — AURA PROJECT</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root{
+    --bg:#FAF6EF; --bg-panel:#F1EAE0; --ink:#241F1A; --ink-dim:#79706690;
+    --label:#8A7F72; --brass:#B98F63; --brass-light:#D8B78C; --danger:#C0533F;
+    --hairline:rgba(36,31,26,0.14); --hairline-strong:rgba(36,31,26,0.28);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:'IBM Plex Sans',sans-serif; padding-bottom:80px;}
+  header{background:var(--bg-panel); border-bottom:1px solid var(--hairline); position:sticky; top:0; z-index:10;}
+  .navbar{display:flex; align-items:center; justify-content:space-between; padding:16px 20px; max-width:1100px; margin:0 auto;}
+  .wordmark{font-family:'Sora',sans-serif; font-weight:700; font-size:14px; text-decoration:none; color:var(--ink);}
+  .wordmark span{color:var(--label); font-family:'JetBrains Mono',monospace; font-size:10.5px; font-weight:400;}
+  main{max-width:1040px; margin:0 auto; padding:32px 18px;}
+
+  .login-box{max-width:380px; margin:110px auto; padding:36px; background:var(--bg-panel); border:1px solid var(--hairline);}
+  .login-box h1{font-family:'Sora',sans-serif; font-size:20px; margin:0 0 22px;}
+  .field{margin-bottom:14px; display:flex; flex-direction:column; gap:6px;}
+  .field label{font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.07em; text-transform:uppercase; color:var(--label);}
+  .field input, .field textarea, .field select{background:var(--bg); border:1px solid var(--hairline-strong); color:var(--ink); padding:10px 11px; font-family:'IBM Plex Sans',sans-serif; font-size:13.5px; border-radius:2px;}
+  .field textarea{min-height:80px; resize:vertical; font-family:inherit;}
+  .btn{display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.05em; text-transform:uppercase; padding:11px 16px; border:1px solid var(--hairline-strong); border-radius:2px; background:none; color:var(--ink); cursor:pointer;}
+  .btn-solid{background:var(--ink); color:var(--bg); border-color:var(--ink);}
+  .btn-solid:hover{background:var(--brass); border-color:var(--brass);}
+  .btn-sm{padding:7px 10px; font-size:10px;}
+  .msg{font-size:12px; margin-top:10px; font-family:'JetBrains Mono',monospace;}
+  .msg.err{color:var(--danger);} .msg.ok{color:var(--brass);}
+
+  .tabs{display:flex; gap:2px; margin-bottom:26px; border-bottom:1px solid var(--hairline); overflow-x:auto;}
+  .tab-btn{background:none; border:none; color:var(--label); font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.05em; text-transform:uppercase; padding:11px 14px; cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap;}
+  .tab-btn.active{color:var(--brass); border-color:var(--brass);}
+  .panel{display:none;} .panel.active{display:block;}
+
+  .card{background:var(--bg-panel); border:1px solid var(--hairline); padding:20px; margin-bottom:16px; border-radius:2px;}
+  .card h2{font-family:'Sora',sans-serif; font-size:14.5px; margin:0 0 14px;}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .grid3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;}
+  @media (max-width:640px){ .grid2, .grid3{grid-template-columns:1fr;} }
+
+  .row-list{display:flex; flex-direction:column; gap:1px; background:var(--hairline); border:1px solid var(--hairline); margin-bottom:20px; max-height:480px; overflow-y:auto;}
+  .row-item{background:var(--bg); padding:12px 14px; display:flex; align-items:center; gap:12px;}
+  .row-item .thumb{width:40px; height:40px; background:var(--bg-panel); flex-shrink:0; object-fit:cover; border-radius:2px;}
+  .row-item .info{flex:1; min-width:0;}
+  .row-item .info .t{font-family:'Sora',sans-serif; font-size:13px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .row-item .info .s{font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--label);}
+  .row-item .acts{display:flex; gap:5px; flex-shrink:0;}
+  .row-item .acts button{background:none; border:1px solid var(--hairline-strong); color:var(--ink-dim); font-size:10px; padding:5px 8px; cursor:pointer; font-family:'JetBrains Mono',monospace; border-radius:2px;}
+  .row-item .acts button:hover{border-color:var(--brass); color:var(--brass);}
+  .row-item .acts button.danger:hover{border-color:var(--danger); color:var(--danger);}
+
+  .search-row{display:flex; gap:8px; margin-bottom:12px;}
+  .search-row input{flex:1;}
+
+  .gallery-manage{display:flex; flex-wrap:wrap; gap:8px; margin:10px 0;}
+  .gallery-manage .g-item{position:relative; width:64px; height:64px; border-radius:2px; overflow:hidden;}
+  .gallery-manage .g-item img{width:100%; height:100%; object-fit:cover;}
+  .gallery-manage .g-item button{position:absolute; top:2px; right:2px; background:rgba(36,31,26,0.75); color:#fff; border:none; width:18px; height:18px; font-size:11px; line-height:1; border-radius:50%; cursor:pointer;}
+
+  .item-row{display:flex; gap:8px; align-items:flex-start; margin-bottom:8px;}
+  .item-row input, .item-row textarea{flex:1; background:var(--bg); border:1px solid var(--hairline-strong); padding:8px 9px; font-size:12.5px; font-family:'IBM Plex Sans',sans-serif; border-radius:2px;}
+  .item-row textarea{min-height:40px;}
+  .item-row button{background:none; border:1px solid var(--hairline-strong); color:var(--label); font-size:10px; padding:7px 9px; cursor:pointer; flex-shrink:0; border-radius:2px;}
+  .item-row button:hover{border-color:var(--danger); color:var(--danger);}
+  .who{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--label);}
+  .topbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;}
+  .hint{font-size:11.5px; color:var(--label); margin-top:-6px; margin-bottom:12px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="navbar">
+    <a href="../index.html" class="wordmark">AURA PROJECT <span>/ YÖNETİM</span></a>
+    <div id="logoutWrap" style="display:none;"><button class="btn" id="logoutBtn">Çıkış Yap</button></div>
+  </div>
+</header>
+
+<div id="loginScreen" class="login-box">
+  <h1>Yönetim Girişi</h1>
+  <div class="field"><label>E-posta</label><input type="email" id="loginEmail" placeholder="merve@auraproject.com"></div>
+  <div class="field"><label>Şifre</label><input type="password" id="loginPass"></div>
+  <button class="btn btn-solid" id="loginBtn" style="width:100%; justify-content:center;">Giriş Yap</button>
+  <div class="msg" id="loginMsg"></div>
+</div>
+
+<main id="dashboard" style="display:none;">
+  <div class="topbar"><span class="who" id="whoAmI"></span></div>
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="urunler">Ürünler</button>
+    <button class="tab-btn" data-tab="kategoriler">Kategoriler</button>
+    <button class="tab-btn" data-tab="felsefe">Felsefe Bölümleri</button>
+    <button class="tab-btn" data-tab="metinler">Site Metinleri</button>
+  </div>
+
+  <!-- ÜRÜNLER -->
+  <div class="panel active" id="panel-urunler">
+    <div class="search-row">
+      <input type="text" id="productSearch" placeholder="Ürün ara (başlık)…">
+    </div>
+    <div class="row-list" id="productList"></div>
+    <div class="card">
+      <h2 id="prodFormTitle">Yeni Ürün Ekle</h2>
+      <input type="hidden" id="prodId">
+      <div class="grid2">
+        <div class="field"><label>Başlık</label><input type="text" id="prodTitle" placeholder="örn. Roma Koltuk Takımı"></div>
+        <div class="field"><label>Slug (URL)</label><input type="text" id="prodSlug" placeholder="örn. roma-koltuk-takimi"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Kategori</label><select id="prodCategory"></select></div>
+        <div class="field"><label>Fiyat (opsiyonel)</label><input type="number" id="prodPrice" step="0.01"></div>
+      </div>
+      <div class="grid3">
+        <div class="field"><label>İskelet Malzemesi</label><input type="text" id="prodFrame" placeholder="örn. Masif Kayın"></div>
+        <div class="field"><label>Döşeme</label><input type="text" id="prodUpholstery" placeholder="örn. Bouclé Kumaş"></div>
+        <div class="field"><label>Ayak Malzemesi</label><input type="text" id="prodLeg" placeholder="örn. Pirinç"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Ölçüler</label><input type="text" id="prodDimensions" placeholder="örn. 220 x 95 x 80 cm"></div>
+        <div class="field"><label>Üretim Tekniği</label><input type="text" id="prodTechnique" placeholder="örn. El Dikimi, Ahşap Oyma"></div>
+      </div>
+      <div class="field" style="flex-direction:row; align-items:center; gap:8px;">
+        <input type="checkbox" id="prodFeatured" style="width:16px; height:16px;">
+        <label style="margin:0; text-transform:none; font-family:inherit; font-size:13px;">Ana sayfada "Öne Çıkanlar" alanında göster</label>
+      </div>
+      <div class="field" style="flex-direction:row; align-items:center; gap:8px;">
+        <input type="checkbox" id="prodInStock" checked style="width:16px; height:16px;">
+        <label style="margin:0; text-transform:none; font-family:inherit; font-size:13px;">Stokta var (işaretli değilse "Talep Üzerine" gösterilir)</label>
+      </div>
+      <div class="field"><label>Açıklama</label><textarea id="prodDesc" placeholder="Ürün açıklaması"></textarea></div>
+
+      <div class="field"><label>Kapak Görseli</label><input type="file" id="prodImage" accept="image/*"></div>
+
+      <div class="field">
+        <label>Galeri — Mevcut Görseller</label>
+        <div class="gallery-manage" id="galleryManage"></div>
+        <div class="hint">Silmek için görsele tıklayın. Kaydettiğinizde uygulanır.</div>
+      </div>
+      <div class="field"><label>Galeriye Yeni Görsel Ekle (birden fazla seçilebilir — yüzlerce foto destekler)</label><input type="file" id="prodExtraImages" accept="image/*" multiple></div>
+
+      <div class="field">
+        <label>Ek Teknik Özellikler (istediğiniz kadar ekleyin)</label>
+        <div id="customFieldsList"></div>
+        <button type="button" class="btn btn-sm" id="addCustomFieldBtn" style="margin-top:6px; align-self:flex-start;">+ Özellik Ekle</button>
+      </div>
+
+      <button class="btn btn-solid" id="saveProdBtn" style="margin-top:8px;">Kaydet</button>
+      <button class="btn" id="cancelProdBtn" style="display:none;">İptal</button>
+      <div class="msg" id="prodMsg"></div>
+    </div>
+  </div>
+
+  <!-- KATEGORİLER -->
+  <div class="panel" id="panel-kategoriler">
+    <div class="row-list" id="categoryList"></div>
+    <div class="card">
+      <h2 id="catFormTitle">Yeni Kategori Ekle</h2>
+      <input type="hidden" id="catId">
+      <div class="grid2">
+        <div class="field"><label>Ad</label><input type="text" id="catName" placeholder="örn. Koltuk Takımları"></div>
+        <div class="field"><label>Slug (URL)</label><input type="text" id="catSlug" placeholder="örn. koltuk-takimlari"></div>
+      </div>
+      <div class="field"><label>Açıklama</label><textarea id="catDesc"></textarea></div>
+      <div class="field"><label>Vitrin Görseli</label><input type="file" id="catImage" accept="image/*"></div>
+      <button class="btn btn-solid" id="saveCatBtn">Kaydet</button>
+      <button class="btn" id="cancelCatBtn" style="display:none;">İptal</button>
+      <div class="msg" id="catMsg"></div>
+    </div>
+  </div>
+
+  <!-- FELSEFE BÖLÜMLERİ -->
+  <div class="panel" id="panel-felsefe">
+    <div class="row-list" id="sectionList"></div>
+    <div class="card">
+      <h2 id="secFormTitle">Yeni Bölüm Ekle</h2>
+      <input type="hidden" id="secId">
+      <div class="grid2">
+        <div class="field"><label>Sıra No</label><input type="number" id="secOrder" value="0"></div>
+        <div class="field"><label>Görünüm</label>
+          <select id="secLayout">
+            <option value="text-image">Metin + Görsel</option>
+            <option value="three-col">Üç Sütun (kart)</option>
+            <option value="list">Numaralı Liste</option>
+            <option value="stat-badges">Rozet Grid (4'lü)</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Etiket</label><input type="text" id="secEyebrow"></div>
+        <div class="field"><label>Başlık</label><input type="text" id="secTitle"></div>
+      </div>
+      <div class="field"><label>Ana Metin</label><textarea id="secBody"></textarea></div>
+      <div class="field"><label>Görsel</label><input type="file" id="secImage" accept="image/*"></div>
+      <div class="field"><label>Alıntı (opsiyonel)</label><input type="text" id="secQuote"></div>
+      <div class="field">
+        <label>Alt Kartlar / Maddeler</label>
+        <div id="itemsList"></div>
+        <button type="button" class="btn btn-sm" id="addItemBtn" style="margin-top:6px; align-self:flex-start;">+ Madde Ekle</button>
+      </div>
+      <button class="btn btn-solid" id="saveSecBtn" style="margin-top:8px;">Kaydet</button>
+      <button class="btn" id="cancelSecBtn" style="display:none;">İptal</button>
+      <div class="msg" id="secMsg"></div>
+    </div>
+  </div>
+
+  <!-- SİTE METİNLERİ -->
+  <div class="panel" id="panel-metinler">
+    <div class="card">
+      <h2>Hero &amp; Kurucu &amp; İletişim</h2>
+      <div id="contentFields"></div>
+      <button class="btn btn-solid" id="saveContentBtn" style="margin-top:6px;">Metinleri Kaydet</button>
+      <div class="msg" id="contentMsg"></div>
+    </div>
+    <div class="card">
+      <h2>Kurucu Fotoğrafı</h2>
+      <div class="field"><label>Fotoğraf Yükle</label><input type="file" id="founderPhotoFile" accept="image/*"></div>
+      <button class="btn btn-solid" id="saveFounderPhotoBtn">Fotoğrafı Kaydet</button>
+      <div class="msg" id="founderPhotoMsg"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+const SUPABASE_URL = "https://xcsvobtewvjlnjeyqiux.supabase.co";
+const SUPABASE_KEY = "sb_publishable_yjwxxm5IaMkEi1TCugejzA__cqLpYnP";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const CATALOG_BUCKET = "aura-catalog-images";
+const PROJECT_BUCKET = "aura-project-images";
+
+function escapeHtml(str){ if (str == null) return ""; return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function publicUrl(bucket, path){ if (!path) return null; if (path.startsWith("http")) return path; const { data } = sb.storage.from(bucket).getPublicUrl(path); return data.publicUrl; }
+function slugify(str){
+  const map = {'ç':'c','ğ':'g','ı':'i','ö':'o','ş':'s','ü':'u','Ç':'c','Ğ':'g','İ':'i','Ö':'o','Ş':'s','Ü':'u'};
+  return str.split('').map(ch => map[ch] || ch).join('').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+}
+
+const loginScreen = document.getElementById('loginScreen');
+const dashboard = document.getElementById('dashboard');
+const logoutWrap = document.getElementById('logoutWrap');
+
+async function checkSession(){
+  const { data } = await sb.auth.getSession();
+  if (data.session) showDashboard(data.session); else showLogin();
+}
+function showLogin(){ loginScreen.style.display='block'; dashboard.style.display='none'; logoutWrap.style.display='none'; }
+function showDashboard(session){
+  loginScreen.style.display='none'; dashboard.style.display='block'; logoutWrap.style.display='block';
+  document.getElementById('whoAmI').textContent = session.user.email + ' olarak giriş yapıldı';
+  loadCategories(); loadProducts(); loadSections(); loadContent();
+}
+document.getElementById('loginBtn').onclick = async () => {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPass').value;
+  const msg = document.getElementById('loginMsg');
+  msg.textContent = 'Giriş yapılıyor…'; msg.className='msg';
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) { msg.textContent = 'Hata: ' + error.message; msg.className='msg err'; return; }
+  msg.textContent = ''; showDashboard(data.session);
+};
+document.getElementById('logoutBtn').onclick = async () => { await sb.auth.signOut(); showLogin(); };
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('panel-'+btn.dataset.tab).classList.add('active');
+  };
+});
+
+// ================= KATEGORİLER =================
+let editingCatId = null;
+let allCategories = [];
+async function loadCategories(){
+  const { data } = await sb.from('aura_categories').select('*').order('sort_order');
+  allCategories = data || [];
+  const list = document.getElementById('categoryList');
+  const select = document.getElementById('prodCategory');
+  list.innerHTML = ''; select.innerHTML = '<option value="">— Kategori seç —</option>';
+  allCategories.forEach(cat => {
+    const img = publicUrl(CATALOG_BUCKET, cat.sample_image_url);
+    const item = document.createElement('div');
+    item.className = 'row-item';
+    item.innerHTML = (img ? '<img class="thumb" src="'+img+'">' : '<div class="thumb"></div>') +
+      '<div class="info"><div class="t">'+escapeHtml(cat.name)+'</div><div class="s">/'+escapeHtml(cat.slug)+'</div></div>' +
+      '<div class="acts"><button data-act="edit">Düzenle</button><button data-act="del" class="danger">Sil</button></div>';
+    item.querySelector('[data-act=edit]').onclick = () => editCategory(cat);
+    item.querySelector('[data-act=del]').onclick = () => deleteCategory(cat);
+    list.appendChild(item);
+    const opt = document.createElement('option'); opt.value = cat.id; opt.textContent = cat.name; select.appendChild(opt);
+  });
+}
+function editCategory(cat){
+  editingCatId = cat.id;
+  document.getElementById('catFormTitle').textContent = 'Düzenle: ' + cat.name;
+  document.getElementById('catId').value = cat.id;
+  document.getElementById('catName').value = cat.name;
+  document.getElementById('catSlug').value = cat.slug;
+  document.getElementById('catDesc').value = cat.description || '';
+  document.getElementById('cancelCatBtn').style.display = 'inline-flex';
+}
+document.getElementById('cancelCatBtn').onclick = () => resetCatForm();
+function resetCatForm(){
+  editingCatId = null;
+  document.getElementById('catFormTitle').textContent = 'Yeni Kategori Ekle';
+  document.getElementById('catId').value = ''; document.getElementById('catName').value = '';
+  document.getElementById('catSlug').value = ''; document.getElementById('catDesc').value = '';
+  document.getElementById('catImage').value = ''; document.getElementById('cancelCatBtn').style.display = 'none';
+}
+document.getElementById('catName').addEventListener('input', (e) => { if (!editingCatId) document.getElementById('catSlug').value = slugify(e.target.value); });
+async function deleteCategory(cat){
+  if (!confirm('"'+cat.name+'" kategorisini silmek istediğine emin misin? İçindeki ürünler kategorisiz kalır.')) return;
+  await sb.from('aura_categories').delete().eq('id', cat.id);
+  loadCategories();
+}
+document.getElementById('saveCatBtn').onclick = async () => {
+  const msg = document.getElementById('catMsg');
+  const name = document.getElementById('catName').value.trim();
+  const slug = document.getElementById('catSlug').value.trim();
+  if (!name || !slug) { msg.textContent = 'Ad ve slug zorunlu'; msg.className='msg err'; return; }
+  msg.textContent = 'Kaydediliyor…'; msg.className='msg';
+  let sample_image_url;
+  const file = document.getElementById('catImage').files[0];
+  if (file) {
+    const path = 'categories/' + slug + '-' + Date.now() + '.' + file.name.split('.').pop();
+    const { error: upErr } = await sb.storage.from(CATALOG_BUCKET).upload(path, file, { upsert:true });
+    if (upErr) { msg.textContent = 'Görsel yüklenemedi: ' + upErr.message; msg.className='msg err'; return; }
+    sample_image_url = path;
+  }
+  const payload = { name, slug, description: document.getElementById('catDesc').value };
+  if (sample_image_url) payload.sample_image_url = sample_image_url;
+  let error;
+  if (editingCatId) ({ error } = await sb.from('aura_categories').update(payload).eq('id', editingCatId));
+  else ({ error } = await sb.from('aura_categories').insert(payload));
+  if (error) { msg.textContent = 'Hata: ' + error.message; msg.className='msg err'; return; }
+  msg.textContent = 'Kaydedildi ✓'; msg.className='msg ok';
+  resetCatForm(); loadCategories();
+};
+
+// ================= ÜRÜNLER =================
+let editingProdId = null;
+let currentEditingImages = [];
+let productSearchTimeout = null;
+
+function addCustomFieldRow(label='', value=''){
+  const list = document.getElementById('customFieldsList');
+  const row = document.createElement('div');
+  row.className = 'item-row';
+  row.innerHTML = '<input type="text" placeholder="Özellik (örn. Kumaş Tipi)" class="cf-label" value="'+escapeHtml(label)+'" style="max-width:160px;">' +
+    '<input type="text" placeholder="Değer" class="cf-value" value="'+escapeHtml(value)+'">' +
+    '<button type="button">Sil</button>';
+  row.querySelector('button').onclick = () => row.remove();
+  list.appendChild(row);
+}
+document.getElementById('addCustomFieldBtn').onclick = () => addCustomFieldRow();
+function getCustomFieldsFromForm(){
+  return Array.from(document.querySelectorAll('#customFieldsList .item-row')).map(row => ({
+    label: row.querySelector('.cf-label').value.trim(),
+    value: row.querySelector('.cf-value').value.trim()
+  })).filter(f => f.label || f.value);
+}
+
+function renderGalleryManage(){
+  const wrap = document.getElementById('galleryManage');
+  if (!currentEditingImages.length){ wrap.innerHTML = '<span class="hint" style="margin:0;">Henüz galeri görseli yok.</span>'; return; }
+  wrap.innerHTML = currentEditingImages.map((path, i) => {
+    const url = publicUrl(CATALOG_BUCKET, path);
+    return '<div class="g-item"><img src="'+url+'"><button type="button" data-i="'+i+'">×</button></div>';
+  }).join('');
+  wrap.querySelectorAll('button').forEach(btn => btn.onclick = () => {
+    currentEditingImages.splice(parseInt(btn.dataset.i), 1);
+    renderGalleryManage();
+  });
+}
+
+async function loadProducts(search=''){
+  let query = sb.from('aura_products').select('*').order('sort_order');
+  if (search) query = query.ilike('title', '%'+search+'%');
+  const { data } = await query.limit(100);
+  const list = document.getElementById('productList');
+  list.innerHTML = '';
+  (data||[]).forEach(p => {
+    const img = publicUrl(CATALOG_BUCKET, p.image_url);
+    const item = document.createElement('div');
+    item.className = 'row-item';
+    item.innerHTML = (img ? '<img class="thumb" src="'+img+'">' : '<div class="thumb"></div>') +
+      '<div class="info"><div class="t">'+escapeHtml(p.title)+'</div><div class="s">/'+escapeHtml(p.slug)+' · '+((p.images||[]).length+ (p.image_url?1:0))+' foto</div></div>' +
+      '<div class="acts"><button data-act="edit">Düzenle</button><button data-act="del" class="danger">Sil</button></div>';
+    item.querySelector('[data-act=edit]').onclick = () => editProduct(p);
+    item.querySelector('[data-act=del]').onclick = () => deleteProduct(p);
+    list.appendChild(item);
+  });
+}
+document.getElementById('productSearch').addEventListener('input', (e) => {
+  clearTimeout(productSearchTimeout);
+  productSearchTimeout = setTimeout(() => loadProducts(e.target.value.trim()), 300);
+});
+
+function editProduct(p){
+  editingProdId = p.id;
+  currentEditingImages = (p.images || []).map(im => typeof im === 'string' ? im : im.path).filter(Boolean);
+  document.getElementById('prodFormTitle').textContent = 'Düzenle: ' + p.title;
+  document.getElementById('prodId').value = p.id;
+  document.getElementById('prodTitle').value = p.title;
+  document.getElementById('prodSlug').value = p.slug;
+  document.getElementById('prodCategory').value = p.category_id || '';
+  document.getElementById('prodPrice').value = p.price || '';
+  document.getElementById('prodFrame').value = p.frame_material || '';
+  document.getElementById('prodUpholstery').value = p.upholstery || '';
+  document.getElementById('prodLeg').value = p.leg_material || '';
+  document.getElementById('prodDimensions').value = p.dimensions || '';
+  document.getElementById('prodTechnique').value = p.technique || '';
+  document.getElementById('prodFeatured').checked = !!p.is_featured;
+  document.getElementById('prodInStock').checked = p.in_stock !== false;
+  document.getElementById('prodDesc').value = p.description || '';
+  document.getElementById('customFieldsList').innerHTML = '';
+  (p.custom_fields || []).forEach(f => addCustomFieldRow(f.label, f.value));
+  renderGalleryManage();
+  document.getElementById('cancelProdBtn').style.display = 'inline-flex';
+  window.scrollTo({top: document.getElementById('prodFormTitle').offsetTop - 20, behavior:'smooth'});
+}
+document.getElementById('cancelProdBtn').onclick = () => resetProdForm();
+function resetProdForm(){
+  editingProdId = null; currentEditingImages = [];
+  document.getElementById('prodFormTitle').textContent = 'Yeni Ürün Ekle';
+  ['prodId','prodTitle','prodSlug','prodPrice','prodFrame','prodUpholstery','prodLeg','prodDimensions','prodTechnique','prodDesc'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('prodCategory').value = '';
+  document.getElementById('prodFeatured').checked = false;
+  document.getElementById('prodInStock').checked = true;
+  document.getElementById('prodImage').value = '';
+  document.getElementById('prodExtraImages').value = '';
+  document.getElementById('customFieldsList').innerHTML = '';
+  renderGalleryManage();
+  document.getElementById('cancelProdBtn').style.display = 'none';
+}
+document.getElementById('prodTitle').addEventListener('input', (e) => { if (!editingProdId) document.getElementById('prodSlug').value = slugify(e.target.value); });
+async function deleteProduct(p){
+  if (!confirm('"'+p.title+'" silinsin mi?')) return;
+  await sb.from('aura_products').delete().eq('id', p.id);
+  loadProducts();
+}
+document.getElementById('saveProdBtn').onclick = async () => {
+  const msg = document.getElementById('prodMsg');
+  const title = document.getElementById('prodTitle').value.trim();
+  const slug = document.getElementById('prodSlug').value.trim();
+  if (!title || !slug) { msg.textContent = 'Başlık ve slug zorunlu'; msg.className='msg err'; return; }
+  msg.textContent = 'Kaydediliyor…'; msg.className='msg';
+
+  let image_url;
+  const file = document.getElementById('prodImage').files[0];
+  if (file) {
+    const path = 'products/' + slug + '-' + Date.now() + '.' + file.name.split('.').pop();
+    const { error: upErr } = await sb.storage.from(CATALOG_BUCKET).upload(path, file, { upsert:true });
+    if (upErr) { msg.textContent = 'Kapak görseli yüklenemedi: ' + upErr.message; msg.className='msg err'; return; }
+    image_url = path;
+  }
+
+  const extraFiles = Array.from(document.getElementById('prodExtraImages').files || []);
+  if (extraFiles.length > 0) {
+    msg.textContent = 'Galeri görselleri yükleniyor… (' + extraFiles.length + ' dosya)'; msg.className='msg';
+    for (const ef of extraFiles) {
+      const epath = 'products/' + slug + '-extra-' + Date.now() + '-' + Math.random().toString(36).slice(2,7) + '.' + ef.name.split('.').pop();
+      const { error: eErr } = await sb.storage.from(CATALOG_BUCKET).upload(epath, ef);
+      if (!eErr) currentEditingImages.push(epath);
+    }
+  }
+
+  const payload = {
+    title, slug,
+    category_id: document.getElementById('prodCategory').value || null,
+    price: document.getElementById('prodPrice').value ? parseFloat(document.getElementById('prodPrice').value) : null,
+    frame_material: document.getElementById('prodFrame').value,
+    upholstery: document.getElementById('prodUpholstery').value,
+    leg_material: document.getElementById('prodLeg').value,
+    dimensions: document.getElementById('prodDimensions').value,
+    technique: document.getElementById('prodTechnique').value,
+    is_featured: document.getElementById('prodFeatured').checked,
+    in_stock: document.getElementById('prodInStock').checked,
+    description: document.getElementById('prodDesc').value,
+    custom_fields: getCustomFieldsFromForm(),
+    images: currentEditingImages
+  };
+  if (image_url) payload.image_url = image_url;
+
+  let error;
+  if (editingProdId) ({ error } = await sb.from('aura_products').update(payload).eq('id', editingProdId));
+  else ({ error } = await sb.from('aura_products').insert(payload));
+  if (error) { msg.textContent = 'Hata: ' + error.message; msg.className='msg err'; return; }
+  msg.textContent = 'Kaydedildi ✓'; msg.className='msg ok';
+  resetProdForm(); loadProducts();
+};
+
+// ================= FELSEFE BÖLÜMLERİ =================
+let editingSecId = null;
+function addItemRow(title='', body=''){
+  const list = document.getElementById('itemsList');
+  const row = document.createElement('div');
+  row.className = 'item-row';
+  row.innerHTML = '<input type="text" placeholder="Başlık" class="it-title" value="'+escapeHtml(title)+'">' +
+    '<textarea placeholder="Metin" class="it-body">'+escapeHtml(body)+'</textarea>' +
+    '<button type="button">Sil</button>';
+  row.querySelector('button').onclick = () => row.remove();
+  list.appendChild(row);
+}
+document.getElementById('addItemBtn').onclick = () => addItemRow();
+function getItemsFromForm(){
+  return Array.from(document.querySelectorAll('#itemsList .item-row')).map(row => ({
+    title: row.querySelector('.it-title').value.trim(), body: row.querySelector('.it-body').value.trim()
+  })).filter(it => it.title || it.body);
+}
+async function loadSections(){
+  const { data } = await sb.from('aura_project_sections').select('*').order('sort_order');
+  const list = document.getElementById('sectionList');
+  list.innerHTML = '';
+  (data||[]).forEach(sec => {
+    const img = publicUrl(PROJECT_BUCKET, sec.image_url);
+    const item = document.createElement('div');
+    item.className = 'row-item';
+    item.innerHTML = (img ? '<img class="thumb" src="'+img+'">' : '<div class="thumb"></div>') +
+      '<div class="info"><div class="t">'+escapeHtml(sec.title || '(başlıksız)')+'</div><div class="s">#'+sec.sort_order+' — '+escapeHtml(sec.layout)+'</div></div>' +
+      '<div class="acts"><button data-act="edit">Düzenle</button><button data-act="del" class="danger">Sil</button></div>';
+    item.querySelector('[data-act=edit]').onclick = () => editSection(sec);
+    item.querySelector('[data-act=del]').onclick = () => deleteSection(sec);
+    list.appendChild(item);
+  });
+}
+function editSection(sec){
+  editingSecId = sec.id;
+  document.getElementById('secFormTitle').textContent = 'Düzenle: ' + (sec.title || '');
+  document.getElementById('secId').value = sec.id;
+  document.getElementById('secOrder').value = sec.sort_order;
+  document.getElementById('secLayout').value = sec.layout;
+  document.getElementById('secEyebrow').value = sec.eyebrow || '';
+  document.getElementById('secTitle').value = sec.title || '';
+  document.getElementById('secBody').value = sec.body || '';
+  document.getElementById('secQuote').value = sec.quote || '';
+  document.getElementById('itemsList').innerHTML = '';
+  (sec.items||[]).forEach(it => addItemRow(it.title, it.body));
+  document.getElementById('cancelSecBtn').style.display = 'inline-flex';
+}
+document.getElementById('cancelSecBtn').onclick = () => resetSecForm();
+function resetSecForm(){
+  editingSecId = null;
+  document.getElementById('secFormTitle').textContent = 'Yeni Bölüm Ekle';
+  document.getElementById('secId').value = ''; document.getElementById('secOrder').value = '0';
+  document.getElementById('secLayout').value = 'text-image';
+  document.getElementById('secEyebrow').value = ''; document.getElementById('secTitle').value = '';
+  document.getElementById('secBody').value = ''; document.getElementById('secQuote').value = '';
+  document.getElementById('secImage').value = ''; document.getElementById('itemsList').innerHTML = '';
+  document.getElementById('cancelSecBtn').style.display = 'none';
+}
+async function deleteSection(sec){
+  if (!confirm('"'+(sec.title||'Bu bölüm')+'" silinsin mi?')) return;
+  await sb.from('aura_project_sections').delete().eq('id', sec.id);
+  loadSections();
+}
+document.getElementById('saveSecBtn').onclick = async () => {
+  const msg = document.getElementById('secMsg');
+  msg.textContent = 'Kaydediliyor…'; msg.className='msg';
+  let image_url;
+  const file = document.getElementById('secImage').files[0];
+  if (file) {
+    const path = 'sections/' + Date.now() + '.' + file.name.split('.').pop();
+    const { error: upErr } = await sb.storage.from(PROJECT_BUCKET).upload(path, file, { upsert:true });
+    if (upErr) { msg.textContent = 'Görsel yüklenemedi: ' + upErr.message; msg.className='msg err'; return; }
+    image_url = path;
+  }
+  const payload = {
+    sort_order: parseInt(document.getElementById('secOrder').value) || 0,
+    layout: document.getElementById('secLayout').value,
+    eyebrow: document.getElementById('secEyebrow').value.trim(),
+    title: document.getElementById('secTitle').value.trim(),
+    body: document.getElementById('secBody').value,
+    quote: document.getElementById('secQuote').value.trim(),
+    items: getItemsFromForm()
+  };
+  if (image_url) payload.image_url = image_url;
+  let error;
+  if (editingSecId) ({ error } = await sb.from('aura_project_sections').update(payload).eq('id', editingSecId));
+  else ({ error } = await sb.from('aura_project_sections').insert(payload));
+  if (error) { msg.textContent = 'Hata: ' + error.message; msg.className='msg err'; return; }
+  msg.textContent = 'Kaydedildi ✓'; msg.className='msg ok';
+  resetSecForm(); loadSections();
+};
+
+// ================= SİTE METİNLERİ =================
+const CONTENT_LABELS = {
+  site_name: 'Marka Adı', site_year: 'Üst Etiket', site_url: 'Website (görünen)',
+  hero_title: 'Hero Başlık', hero_body: 'Hero Açıklama',
+  founder_name: 'Kurucu Adı', founder_role: 'Kurucu Unvanı',
+  contact_email: 'İletişim E-postası', contact_address: 'Adres'
+};
+async function loadContent(){
+  const { data } = await sb.from('aura_project_content').select('*');
+  const wrap = document.getElementById('contentFields');
+  wrap.innerHTML = '';
+  Object.keys(CONTENT_LABELS).forEach(key => {
+    const row = (data||[]).find(r => r.key === key);
+    const isLong = key === 'hero_body';
+    const currentVal = row ? (row.value || '') : '';
+    const field = document.createElement('div');
+    field.className = 'field';
+    field.innerHTML = '<label>'+CONTENT_LABELS[key]+'</label>' +
+      (isLong ? '<textarea data-key="'+key+'">'+escapeHtml(currentVal)+'</textarea>' : '<input type="text" data-key="'+key+'" value="'+escapeHtml(currentVal)+'">');
+    wrap.appendChild(field);
+  });
+}
+document.getElementById('saveContentBtn').onclick = async () => {
+  const msg = document.getElementById('contentMsg');
+  msg.textContent = 'Kaydediliyor…'; msg.className='msg';
+  const rows = Array.from(document.querySelectorAll('#contentFields [data-key]')).map(el => ({ key: el.dataset.key, value: el.value }));
+  const { error } = await sb.from('aura_project_content').upsert(rows);
+  if (error) { msg.textContent = 'Hata: ' + error.message; msg.className='msg err'; return; }
+  msg.textContent = 'Kaydedildi ✓'; msg.className='msg ok';
+};
+document.getElementById('saveFounderPhotoBtn').onclick = async () => {
+  const msg = document.getElementById('founderPhotoMsg');
+  const file = document.getElementById('founderPhotoFile').files[0];
+  if (!file) { msg.textContent = 'Bir dosya seçmelisin'; msg.className='msg err'; return; }
+  msg.textContent = 'Yükleniyor…'; msg.className='msg';
+  const path = 'founder/' + Date.now() + '.' + file.name.split('.').pop();
+  const { error: upErr } = await sb.storage.from(PROJECT_BUCKET).upload(path, file, { upsert:true });
+  if (upErr) { msg.textContent = 'Hata: ' + upErr.message; msg.className='msg err'; return; }
+  const { error } = await sb.from('aura_project_content').upsert({ key:'founder_photo_url', value: path });
+  if (error) { msg.textContent = 'Hata: ' + error.message; msg.className='msg err'; return; }
+  msg.textContent = 'Kaydedildi ✓'; msg.className='msg ok';
+};
+
+checkSession();
+</script>
+</body>
+</html>
