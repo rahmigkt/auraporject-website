@@ -639,7 +639,13 @@ const CONTENT_LABELS = {
   hero_title: 'Hero Başlık', hero_body: 'Hero Açıklama',
   founder_name: 'Kurucu Adı', founder_role: 'Kurucu Unvanı',
   contact_email: 'İletişim E-postası', contact_address: 'Adres',
-  whatsapp_number: 'WhatsApp Numarası (ülke kodu ile, örn. 905XXXXXXXXX)'
+  whatsapp_number: 'WhatsApp Numarası (ülke kodu ile, örn. 905XXXXXXXXX)',
+  social_instagram: 'Instagram (tam link, örn. https://instagram.com/auraproject)',
+  social_pinterest: 'Pinterest (tam link)',
+  social_facebook: 'Facebook (tam link)',
+  social_tiktok: 'TikTok (tam link)',
+  social_linkedin: 'LinkedIn (tam link)',
+  social_houzz: 'Houzz (tam link)'
 };
 async function loadContent(){
   const { data } = await sb.from('aura_project_content').select('*');
