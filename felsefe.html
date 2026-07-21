@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Felsefe — AURA PROJECT®</title>
+<meta name="description" content="AURA PROJECT'in tasarım felsefesi: mobilyayı merkez olmaktan çıkarıp mekânsal kararların taşıyıcısı hâline getiren disiplin.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/brand.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  .page-head{padding:120px 0 40px;}
+  .page-head h1{font-family:'Sora',sans-serif; font-weight:700; font-size:clamp(28px,7vw,50px); margin:14px 0 0; line-height:1.1; max-width:640px;}
+  .page-head p{max-width:480px; color:var(--ink-dim); margin:18px 0 0;}
+
+  .ti-grid{display:flex; flex-direction:column; gap:24px;}
+  @media (min-width:860px){ .ti-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:56px; align-items:center;} .ti-grid.rev{grid-template-columns:1.1fr 0.9fr;} .ti-grid.rev .ti-img{order:2;} }
+  .ti-img{aspect-ratio:4/3; background:var(--cream-panel); border-radius:2px; overflow:hidden;}
+  .dark .ti-img{background:var(--panel-dark-2);}
+  .ti-img img{width:100%; height:100%; object-fit:cover;}
+  .ti-body p{margin:0 0 14px; font-size:15.5px;}
+  .ti-body p:last-child{margin-bottom:0;}
+
+  .col-grid{display:grid; grid-template-columns:1fr; gap:1px; background:var(--hairline);}
+  .dark .col-grid{background:var(--hairline-dark);}
+  @media (min-width:760px){ .col-grid{grid-template-columns:repeat(3,1fr);} }
+  .col-card{background:var(--cream); padding:26px 22px;}
+  .dark .col-card{background:var(--panel-dark);}
+  .col-card h3{font-family:'Sora',sans-serif; font-weight:600; font-size:17px; margin:0 0 10px;}
+  .col-card p{margin:0; font-size:14.5px; color:var(--ink-dim);}
+  .dark .col-card p{color:var(--on-dark-dim);}
+
+  .quote-banner{margin-top:2px; padding:36px 24px; background:var(--brass); color:var(--panel-dark); text-align:center;}
+  .quote-banner p{font-family:'Sora',sans-serif; font-style:italic; font-weight:500; font-size:clamp(17px,3vw,22px); margin:0; max-width:640px; margin:0 auto;}
+
+  .list-items{display:flex; flex-direction:column; gap:1px; background:var(--hairline); margin-top:22px;}
+  .dark .list-items{background:var(--hairline-dark);}
+  .list-item{background:var(--cream); padding:16px 18px; display:flex; gap:14px; align-items:flex-start;}
+  .dark .list-item{background:var(--panel-dark);}
+  .list-item .n{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--brass); flex-shrink:0; padding-top:2px;}
+  .list-item h4{font-family:'Sora',sans-serif; font-size:14.5px; font-weight:600; margin:0 0 3px;}
+  .list-item p{margin:0; font-size:13.5px; color:var(--ink-dim);}
+  .dark .list-item p{color:var(--on-dark-dim);}
+
+  .badge-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--hairline); margin-top:8px;}
+  @media (min-width:760px){ .badge-grid{grid-template-columns:repeat(4,1fr);} }
+  .badge-card{background:var(--cream-panel); padding:26px 20px;}
+  .badge-card h3{font-family:'Sora',sans-serif; font-weight:700; font-size:20px; margin:0 0 8px; color:var(--brass);}
+  .badge-card p{margin:0; font-size:13px; color:var(--ink-dim);}
+
+  .founder{display:flex; flex-direction:column; gap:18px; align-items:flex-start; padding:28px 0; border-top:1px solid var(--hairline); border-bottom:1px solid var(--hairline);}
+  @media (min-width:640px){ .founder{flex-direction:row; align-items:center; gap:22px;} }
+  .founder-photo{width:80px; height:80px; border-radius:50%; overflow:hidden; background:var(--cream-panel); flex-shrink:0;}
+  .founder-photo img{width:100%; height:100%; object-fit:cover;}
+  .founder-name{font-family:'Sora',sans-serif; font-weight:600; font-size:16px;}
+  .founder-role{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-dim); letter-spacing:0.04em;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap navbar">
+    <a href="index.html" class="wordmark">AURA PROJECT<sup>®</sup></a>
+    <nav class="navlinks">
+      <a href="kategori.html">Koleksiyonlar</a>
+      <a href="felsefe.html">Felsefe</a>
+      <a href="index.html#iletisim">İletişim</a>
+      <a href="index.html#iletisim" class="cta-link">Teklif Al</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap page-head">
+  <span class="eyebrow">Manifesto</span>
+  <h1>Mobilya değil, mekânın kendisi.</h1>
+  <p>İç mimarlığı ürün seçiminden çıkarıp, mekânın bütünsel dengesini kuran bir tasarım disiplinine dönüştürüyoruz.</p>
+  <div class="founder" style="margin-top:28px;">
+    <div class="founder-photo" id="founderPhoto"></div>
+    <div><div class="founder-name" id="founderName">Merve</div><div class="founder-role" id="founderRole">Founding Designer</div></div>
+  </div>
+</div>
+
+<main id="sectionsRoot">
+  <div class="section"><div class="wrap"><div class="skeleton" style="height:200px;"></div></div></div>
+</main>
+
+<footer>© 2026 AURA PROJECT® — İstanbul</footer>
+
+<script src="assets/shared.js"></script>
+<script>
+  async function loadFounder(){
+    const { data } = await sb.from('aura_project_content').select('*');
+    const map = {}; (data||[]).forEach(r => map[r.key]=r.value);
+    if (map.founder_name) document.getElementById('founderName').textContent = map.founder_name;
+    if (map.founder_role) document.getElementById('founderRole').textContent = map.founder_role;
+    const photo = publicImageUrl(map.founder_photo_url, PROJECT_BUCKET);
+    if (photo) document.getElementById('founderPhoto').innerHTML = '<img src="'+photo+'" alt="">';
+  }
+
+  function renderSection(sec, idx){
+    const darkClass = (idx % 2 === 1) ? ' dark' : '';
+    const img = sec.image_url ? publicImageUrl(sec.image_url, PROJECT_BUCKET) : null;
+    let inner = '';
+
+    if (sec.layout === 'three-col'){
+      inner = (sec.eyebrow ? '<span class="eyebrow">'+escapeHtml(sec.eyebrow)+'</span>' : '') +
+        (sec.title ? '<div class="sec-head"><h2>'+escapeHtml(sec.title)+'</h2></div>' : '') +
+        '<div class="col-grid">' + (sec.items||[]).map(it => '<div class="col-card"><h3>'+escapeHtml(it.title)+'</h3><p>'+escapeHtml(it.body)+'</p></div>').join('') + '</div>' +
+        (sec.quote ? '<div class="quote-banner"><p>"'+escapeHtml(sec.quote)+'"</p></div>' : '');
+    } else if (sec.layout === 'list'){
+      inner = (sec.eyebrow ? '<span class="eyebrow">'+escapeHtml(sec.eyebrow)+'</span>' : '') +
+        (sec.title ? '<div class="sec-head"><h2>'+escapeHtml(sec.title)+'</h2></div>' : '') +
+        (sec.body ? '<div class="ti-body">'+nl2p(sec.body)+'</div>' : '') +
+        '<div class="list-items">' + (sec.items||[]).map((it,i) => '<div class="list-item"><span class="n">0'+(i+1)+'</span><div><h4>'+escapeHtml(it.title)+'</h4><p>'+escapeHtml(it.body)+'</p></div></div>').join('') + '</div>' +
+        (sec.quote ? '<div class="quote-banner" style="margin-top:24px;"><p>"'+escapeHtml(sec.quote)+'"</p></div>' : '');
+    } else if (sec.layout === 'stat-badges'){
+      inner = (sec.eyebrow ? '<span class="eyebrow">'+escapeHtml(sec.eyebrow)+'</span>' : '') +
+        (sec.title ? '<div class="sec-head"><h2>'+escapeHtml(sec.title)+'</h2></div>' : '') +
+        '<div class="badge-grid">' + (sec.items||[]).map(it => '<div class="badge-card"><h3>'+escapeHtml(it.title)+'</h3><p>'+escapeHtml(it.body)+'</p></div>').join('') + '</div>';
+    } else {
+      const rev = (idx % 2 === 1) ? ' rev' : '';
+      inner = '<div class="ti-grid'+rev+'">' +
+        '<div class="ti-img">'+(img ? '<img src="'+img+'" alt="'+escapeHtml(sec.title||'')+'" loading="lazy">' : '') + '</div>' +
+        '<div>' + (sec.eyebrow ? '<span class="eyebrow">'+escapeHtml(sec.eyebrow)+'</span>' : '') +
+        (sec.title ? '<div class="sec-head"><h2>'+escapeHtml(sec.title)+'</h2></div>' : '') +
+        '<div class="ti-body">'+nl2p(sec.body)+'</div>' +
+        '</div></div>';
+    }
+    return '<div class="section'+darkClass+'"><div class="wrap">'+inner+'</div></div>';
+  }
+
+  async function loadSections(){
+    const { data, error } = await sb.from('aura_project_sections').select('*').order('sort_order');
+    const root = document.getElementById('sectionsRoot');
+    if (error || !data){ root.innerHTML = ''; return; }
+    root.innerHTML = data.map((sec,i) => renderSection(sec, i)).join('');
+  }
+
+  loadFounder();
+  loadSections();
+</script>
+</body>
+</html>
