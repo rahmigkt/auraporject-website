@@ -38,6 +38,13 @@
   .story-line.sub-line{font-size:clamp(15px,1.9vw,16.5px); font-style:normal; font-weight:400; line-height:1.75; color:var(--ink-dim); text-align:center;}
 
   @media (prefers-reduced-motion: reduce){ .story-panel{opacity:1 !important; transform:none !important; transition:none !important;} }
+
+  .brand-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--hairline);}
+  @media (min-width:760px){ .brand-grid{grid-template-columns:repeat(5,1fr);} }
+  .brand-card{background:var(--cream); padding:28px 16px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; text-decoration:none; transition:background .2s ease;}
+  .brand-card:hover{background:var(--cream-panel);}
+  .brand-card img{width:100%; max-width:120px; height:auto; display:block;}
+  .brand-cat{font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.06em; color:var(--ink-dim); text-align:center;}
 </style>
 </head>
 <body>
@@ -68,45 +75,38 @@
   </div>
 </section>
 
-<section class="story-panel tinted sub" id="storyVerev">
-  <div class="wrap story-inner">
-    <div class="sub-logo"><img src="assets/verev-logo.svg" alt="VEREV"></div>
-    <span class="eyebrow">Koltuk · Berjer</span>
-    <p class="story-line sub-line">Bedenin mekândaki varlığını tanıyan bir esneklik, doksan derecenin katı kurallarından sıyrılıp kendi açısını bulur. Odanın sessizliğinde, içine usulca yerleşilecek, önceden sezilmiş bir boşluk gibi bekler. İnsanın kendi doğasına sessizce yer açarak orada durur.</p>
+<section class="section" id="altMarkalar">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:28px;">
+      <span class="eyebrow">Alt Markalar</span>
+      <h2>Her biri kendi zanaatinden gelir.</h2>
+    </div>
+    <div class="brand-grid">
+      <a href="verev.html" class="brand-card">
+        <img src="assets/verev-logo.svg" alt="VEREV">
+        <span class="brand-cat">Koltuk · Berjer</span>
+      </a>
+      <a href="gonye.html" class="brand-card">
+        <img src="assets/gonye-logo.svg" alt="GÖNYE">
+        <span class="brand-cat">Paneller · Dolaplar</span>
+      </a>
+      <a href="iskarpela.html" class="brand-card">
+        <img src="assets/iskarpela-logo.svg" alt="İSKARPELA">
+        <span class="brand-cat">Ahşap Aksesuarlar</span>
+      </a>
+      <a href="kavela.html" class="brand-card">
+        <img src="assets/kavela-logo.svg" alt="KAVELA">
+        <span class="brand-cat">Yatak Odası</span>
+      </a>
+      <a href="masif.html" class="brand-card">
+        <img src="assets/masif-logo.svg" alt="MASİF">
+        <span class="brand-cat">Mutfak</span>
+      </a>
+    </div>
   </div>
 </section>
 
-<section class="story-panel sub" id="storyGonye">
-  <div class="wrap story-inner">
-    <div class="sub-logo"><img src="assets/gonye-logo.svg" alt="GÖNYE"></div>
-    <span class="eyebrow">Paneller · Dolaplar</span>
-    <p class="story-line sub-line">İki yüzeyin kavuştuğu yerdeki o kusursuz, sessiz sadakat. Sabahın soluk ışığı üzerine düştüğünde, odanın bir köşesinde kendi içine kapalı, vakur bir mevcudiyet olarak belirir. Gözün aramadığı ama elin geçerken usulca hissettiği o pürüzsüz uyumla, barındırdıklarını sessizce muhafaza eder.</p>
-  </div>
-</section>
-
-<section class="story-panel tinted sub" id="storyIskarpela">
-  <div class="wrap story-inner">
-    <div class="sub-logo"><img src="assets/iskarpela-logo.svg" alt="İSKARPELA"></div>
-    <span class="eyebrow">Ahşap Aksesuarlar</span>
-    <p class="story-line sub-line">İçeride saklı olanı incelikle ve sabırla gün yüzüne çıkaran bir dokunuş, ahşabın lifleriyle birlikte akar. Odanın bir köşesinde, hep o gölgenin, o boşluğun içinde var olmuş gibi durur — usulca bırakılmış, organik bir tanık. Yüzeyi, eşyanın kendi yalnızlığını koruyan ama sıcak bir temasa çağıran o tanıdık aşinalığı taşır.</p>
-  </div>
-</section>
-
-<section class="story-panel sub" id="storyKavela">
-  <div class="wrap story-inner">
-    <div class="sub-logo"><img src="assets/kavela-logo.svg" alt="KAVELA"></div>
-    <span class="eyebrow">Yatak Odası</span>
-    <p class="story-line sub-line">İki parçayı dışarıdan görünmeden birbirine bağlayan sessiz bir bağ. Ne biri diğerine üstünlük kurar, ne de aradaki iz kalır; sadece tutar, taşır, orada olduğunu belli etmeden. Yatak odasının en örtük anlarına eşlik eden de böyle bir varlıktır — görünmeyen ama hep orada olan.</p>
-  </div>
-</section>
-
-<section class="story-panel tinted sub" id="storyMasif">
-  <div class="wrap story-inner">
-    <div class="sub-logo"><img src="assets/masif-logo.svg" alt="MASİF"></div>
-    <span class="eyebrow">Mutfak</span>
-    <p class="story-line sub-line">Katmanlanmamış, gizlenecek bir yüzeye ihtiyaç duymayan bütünlük. Neyse odur; kesildiği yerde de aynı özü taşır. Mutfağın paylaşılan, elle temas edilen doğasına, sahteliğe yer bırakmayan bu bütünlükle eşlik eder.</p>
-  </div>
-</section>
+<section class="story-panel" id="storyCta">
   <div class="wrap story-inner">
     <div class="hero-actions" style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
       <a href="kategori.html" class="btn btn-solid">Koleksiyonu İncele</a>
