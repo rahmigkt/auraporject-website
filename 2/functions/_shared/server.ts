@@ -1,0 +1,11 @@
+export const env=(key:string)=>Deno.env.get(key)||'';
+export const origins=()=>env('AURA_ALLOWED_ORIGINS').split(',').map(x=>x.trim()).filter(Boolean);
+export function headers(req:Request){const origin=req.headers.get('origin')||'';return {'Content-Type':'application/json','Cache-Control':'no-store',...(origins().includes(origin)?{'Access-Control-Allow-Origin':origin}:{}),'Vary':'Origin','Access-Control-Allow-Headers':'authorization,apikey,content-type','Access-Control-Allow-Methods':'POST,OPTIONS'}}
+export const json=(req:Request,body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:headers(req)});
+export function guard(req:Request){if(!origins().includes(req.headers.get('origin')||''))return json(req,{error:'Origin not allowed'},403);if(req.method==='OPTIONS')return new Response(null,{status:204,headers:headers(req)});if(req.method!=='POST')return json(req,{error:'Method not allowed'},405);return null}
+export async function body(req:Request){const txt=await req.text();if(txt.length>16000)throw Error('Request too large');return JSON.parse(txt)}
+export async function db(path:string,options:RequestInit={}){const r=await fetch(env('SUPABASE_URL')+'/rest/v1/'+path,{...options,headers:{apikey:env('SUPABASE_SERVICE_ROLE_KEY'),Authorization:'Bearer '+env('SUPABASE_SERVICE_ROLE_KEY'),'Content-Type':'application/json',Prefer:'return=representation',...options.headers}});const text=await r.text();if(!r.ok)throw Error('Database operation failed');return text?JSON.parse(text):null}
+export const uuid=(s:unknown)=>typeof s==='string'&&/^[a-f0-9]{8}-[a-f0-9]{4}-[1-8][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(s);
+export function clean(value:unknown,max=200){if(typeof value!=='string')return '';return value.trim().slice(0,max)}
+export async function digest(s:string){return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)))).map(x=>x.toString(16).padStart(2,'0')).join('')}
+export async function requireAdmin(req:Request){const r=await fetch(env('SUPABASE_URL')+'/rest/v1/rpc/aura_v2_is_admin',{method:'POST',headers:{apikey:env('SUPABASE_ANON_KEY'),Authorization:req.headers.get('authorization')||'','Content-Type':'application/json'},body:'{}'});if(!r.ok||await r.json()!==true)throw Error('Not authorized')}
