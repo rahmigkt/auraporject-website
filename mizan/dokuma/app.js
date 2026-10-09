@@ -1,4 +1,4 @@
-import {COUNTS,analyze,chain,trace,relativeError} from './fourier.js?v=3';
+import {COUNTS,analyze,chain,trace,relativeError} from './fourier.js?v=4';
 import {motif,palettes,pathD,transform,repeatSize,exportSVG,formula} from './geometry.js?v=3';
 const $=id=>document.getElementById(id),canvas=$('cloth'),ctx=canvas.getContext('2d');
 const state={kind:'carnation',petals:8,palette:'madder',repeat:'halfdrop',scale:.92,style:'print',mm:100,lang:'tr',custom:null};
@@ -39,9 +39,9 @@ function drawConstruction(c,cx,cy,size,pal,i,p){
  stroke(paths[hero].pts);for(let j=1;j<order.length;j++){if(j<=Math.floor(part))stroke(paths[order[j]].pts);else if(j===Math.floor(part)+1)stroke(paths[order[j]].pts,u);}
  fade=1-smooth((time-52)/2);if(time>=52){c.save();c.globalAlpha=smooth((time-52)/3);drawMotif(c,cx,cy,size,{fill:1});c.restore();}}
  if(fade>0){const m=models[active],tip=chain(m,count,u*(m.closed?1:.5));c.save();c.globalAlpha=fade;c.strokeStyle=pal.accent;c.lineWidth=.8;
- for(const l of tip.links){if(l.r*size<.15)continue;c.globalAlpha=fade*(l.r*size>2?.55:.25);c.beginPath();c.arc(cx+l.x*size,cy+l.y*size,l.r*size,0,Math.PI*2);c.stroke();c.globalAlpha=fade*.7;c.beginPath();c.moveTo(cx+l.x*size,cy+l.y*size);c.lineTo(cx+l.nx*size,cy+l.ny*size);c.stroke();}
+ for(const l of tip.links){if(l.r*size<.15)continue;c.globalAlpha=fade*(l.r*size>2?.75:.3);c.beginPath();c.arc(cx+l.x*size,cy+l.y*size,l.r*size,0,Math.PI*2);c.stroke();c.globalAlpha=fade*.7;c.beginPath();c.moveTo(cx+l.x*size,cy+l.y*size);c.lineTo(cx+l.nx*size,cy+l.ny*size);c.stroke();}
  c.globalAlpha=fade;c.fillStyle=pal.ink;c.beginPath();c.arc(cx+tip.x*size,cy+tip.y*size,3,0,Math.PI*2);c.fill();c.strokeStyle=pal.ink;c.globalAlpha=.35;c.beginPath();c.moveTo(cx+m.dc.re*size-5,cy+m.dc.im*size);c.lineTo(cx+m.dc.re*size+5,cy+m.dc.im*size);c.moveTo(cx+m.dc.re*size,cy+m.dc.im*size-5);c.lineTo(cx+m.dc.re*size,cy+m.dc.im*size+5);c.stroke();c.restore();}
- c.save();c.fillStyle=pal.ink;c.font='12px Arial';c.textAlign='center';const label=i===0?say(`${count} DAİRE  /  RMS HATA %${relativeError(models[hero],count).toFixed(2)}`,`${count} CIRCLES  /  RMS ERROR ${relativeError(models[hero],count).toFixed(2)}%`):time<52?say(`AYRI ÇİZGİ ${active+1} / ${paths.length} · 255 DAİRE`,`SEPARATE PATH ${active+1} / ${paths.length} · 255 CIRCLES`):say('MEKANİZMA ÇEKİLİR · MOTİF KALIR','THE MECHANISM FADES · THE MOTIF REMAINS');c.fillText(label,cx,cy+size*1.18);c.restore();
+ c.save();c.fillStyle=pal.ink;c.font='12px Arial';c.textAlign='center';const label=i===0?say(`${count} DAİRE  /  RMS HATA %${relativeError(models[hero],count).toFixed(2)}`,`${count} CIRCLES  /  RMS ERROR ${relativeError(models[hero],count).toFixed(2)}%`):time<52?say(`AYRI ÇİZGİ ${active+1} / ${paths.length} · 255 DAİRE`,`SEPARATE PATH ${active+1} / ${paths.length} · 255 CIRCLES`):say('MEKANİZMA ÇEKİLİR · MOTİF KALIR','THE MECHANISM FADES · THE MOTIF REMAINS');c.fillText(label,cx,cy+size*1.05);c.restore();
 }
 
 function render(c,w,h){const pal=palettes[state.palette],i=phase(),p=progress(i),margin=Math.max(23,w*.045),top=58,bottom=Math.max(114,h*.16),areaH=h-top-bottom,cx=w/2,cy=top+areaH/2;
@@ -49,7 +49,7 @@ function render(c,w,h){const pal=palettes[state.palette],i=phase(),p=progress(i)
  // Subtle woven warp/weft, rendered locally and excluded from production SVG.
  c.save();c.globalAlpha=.045;c.strokeStyle=pal.ink;c.lineWidth=.6;c.beginPath();for(let x=0;x<w;x+=4){c.moveTo(x,0);c.lineTo(x,h)}for(let y=0;y<h;y+=5){c.moveTo(0,y);c.lineTo(w,y)}c.stroke();c.restore();
  c.fillStyle=pal.ink;c.font=`${Math.max(9,w*.014)}px Arial`;c.textAlign='left';c.fillText('NAKIŞ / '+say('CANLI DESEN ÇALIŞMASI','A LIVING TEXTILE STUDY'),margin,32);c.textAlign='right';c.fillText('0'+(i+1)+' / 04',w-margin-35,32);c.textAlign='left';
- c.save();c.beginPath();c.rect(margin,top,w-2*margin,areaH);c.clip();const large=Math.min(w*.33,areaH*.43)*.85;
+ c.save();c.beginPath();c.rect(margin,top,w-2*margin,areaH);c.clip();const large=Math.min(w*.4,areaH*.52);
  if(i<2){drawConstruction(c,cx,cy,large,pal,i,p);}
  else{const columns=w<500?4:5,cellW=(w-2*margin)/columns,cellH=cellW*1.25,small=cellW*.42*state.scale,shrink=i===2?smooth(p/.28):1,sz=large+(small-large)*shrink;let cells=[];const countX=Math.ceil(w/cellW/2)+2,countY=Math.ceil(areaH/cellH/2)+2;
  for(let m=-countX;m<=countX;m++)for(let n=-countY;n<=countY;n++){const t=transform(m,n,cellW,cellH,state.repeat);cells.push({...t,m,n,d:Math.abs(m)+Math.abs(n)});}cells.sort((a,b)=>a.d-b.d);
