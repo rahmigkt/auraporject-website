@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {ROTORS,TAU,configuration,locus} from '../mechanism.js';
+const close=(a,b)=>assert.ok(Math.abs(a-b)<1e-11,`${a} != ${b}`);
+test('Every centre joins the preceding endpoint and every radius is constant',()=>{for(let n=1;n<=3;n++)for(let j=0;j<=1000;j++){const p=configuration(n,TAU*j/1000);p.links.forEach((l,i)=>{close(Math.hypot(l.x-l.cx,l.y-l.cy),ROTORS[i].r);close(l.cx,i?p.links[i-1].x:0);close(l.cy,i?p.links[i-1].y:0)});close(p.x,p.links.at(-1).x);close(p.y,p.links.at(-1).y)}});
+test('Endpoint agrees with independent Cartesian equations, including negative rotation',()=>{for(let j=0;j<300;j++){const a=j*.037,p=configuration(3,a);close(p.x,Math.cos(a)+.5*Math.cos(2*a)+.25*Math.cos(3*a));close(p.y,Math.sin(a)-.5*Math.sin(2*a)+.25*Math.sin(3*a));}const p=configuration(2,Math.PI/4);assert.ok(p.links[1].y<p.links[1].cy)});
+test('One rotor is a unit circle and every complete trace closes',()=>{for(let j=0;j<360;j++){const p=configuration(1,j*TAU/360);close(p.x*p.x+p.y*p.y,1)}for(let n=1;n<=3;n++){const ps=locus(n);close(ps[0].x,ps.at(-1).x);close(ps[0].y,ps.at(-1).y)}});
+test('Partial traces terminate at the live mechanism endpoint',()=>{for(let n=1;n<=3;n++)for(const a of [0,.001,.3,Math.PI,TAU]){const end=locus(n,a).at(-1),p=configuration(n,a);close(end.x,p.x);close(end.y,p.y)}});
