@@ -1,0 +1,8 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {analyze,chain,relativeError,COUNTS} from '../fourier.js';
+import {motif} from '../geometry.js';
+test('Complex Fourier inversion reconstructs every sampled point of separate open and closed paths',()=>{for(const path of motif('tulip')){const m=analyze(path);for(let j=0;j<256;j++){const p=chain(m,255,j/256);assert.ok(Math.hypot(p.x-m.samples[j].x,p.y-m.samples[j].y)<1e-10)}assert.ok(relativeError(m,255)<1e-10)}});
+test('A circle has one rotating component and a separate constant centre',()=>{const pts=Array.from({length:256},(_,j)=>({x:2+3*Math.cos(2*Math.PI*j/256),y:-1+3*Math.sin(2*Math.PI*j/256)}));const m=analyze({pts,closed:true});assert.ok(Math.abs(m.dc.re-2)<1e-10);assert.ok(Math.abs(m.dc.im+1)<1e-10);assert.equal(m.terms[0].k,1);assert.ok(Math.abs(m.terms[0].amp-3)<1e-10);assert.ok(relativeError(m,1)<1e-8)});
+test('Adding components decreases RMS error and the displayed metric equals measured error',()=>{const m=analyze(motif('star',7)[0]);let prev=Infinity;for(const n of COUNTS){const err=relativeError(m,n);assert.ok(err<=prev+1e-10);prev=err;let sq=0,denom=0;for(let j=0;j<256;j++){const p=chain(m,n,j/256),q=m.samples[j];sq+=(p.x-q.x)**2+(p.y-q.y)**2;denom+=(q.x-m.dc.re)**2+(q.y-m.dc.im)**2;}assert.ok(Math.abs(100*Math.sqrt(sq/denom)-err)<1e-8)}});
+test('An open path retraces instead of drawing an artificial connecting segment',()=>{const m=analyze({closed:false,pts:[{x:0,y:0},{x:1,y:0},{x:1,y:1}]});assert.deepEqual(m.samples[0],{x:0,y:0});assert.deepEqual(m.samples[128],{x:1,y:1});for(let j=1;j<128;j++)assert.ok(Math.hypot(m.samples[j].x-m.samples[256-j].x,m.samples[j].y-m.samples[256-j].y)<1e-10)});
