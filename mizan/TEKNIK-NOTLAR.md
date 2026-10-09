@@ -1,4 +1,4 @@
-# Mizan v0.1 — kapsam ve teknik notlar
+# Mizan v0.2 — kapsam ve teknik notlar
 
 ## Referans envanteri
 
@@ -30,7 +30,11 @@ Ek sahneler: bağımsız motor tezgâhı ve Tûsî çifti.
 ## Üretim araçları
 
 - Oynat/duraklat, başa dön, zaman kaydırma, hız, 4–120 saniye döngü.
-- Dört adımlı anlatım; başlık ve açıklama düzenleme.
+- Motor ve Fourier sahnelerinde 1, 2, 3… seçili toplam bileşene kadar oluşum; her aşama bir tam döngü sürer. Ardından tam iz ve sayısal formül gösterilir. Diğer sahneler kendi dört açıklama adımını korur.
+- Önceki / sonraki aşama, aşama kaydırıcısı ve doğrudan sonuç seçimi. Oluşum, motor listesini değiştirmez.
+- Motor başına daire, kare veya eşkenar üçgen; boyut, işaretli tam sayı frekansı ve başlangıç fazı. Çokgen kenarlarında sabit hız; boyut çevrel çember yarıçapı, faz ise çevrimdeki başlangıç konumudur. Rijit bir çokgenin kendi ekseninde dönmesi veya fiziksel dişli simülasyonu değildir.
+- Formüller ayarlanan katsayılardan üretilir ve metin olarak indirilebilir. Gösterimde 6 ondalığa yuvarlanır. Hesap tam hassasiyetlidir.
+- Başlık ve açıklama düzenleme.
 - Izgara, yardımcı geometri, referans şekil, iz katmanları; sahneye göre anlamlı olan katmanlar.
 - Yatay, kare, dikey kadraj; yakınlaştırma; 3B kamera sürükleme.
 - Tek kapalı SVG path / tek vuruş serbest çizim → DFT.
@@ -63,3 +67,7 @@ Bu sürüm Matharium'un özel motorunu kullandığını veya onunla eksiksiz öz
 - 1440 piksel masaüstü ve 390 piksel mobil genişlikte ekran görüntüleri incelendi. Diğer sahnelerin çizim alanları ayrıca görsel olarak kontrol edildi.
 - Test kaydı: 1280×908 VP9 görüntü ve Opus ses kanalları doğrulandı. Gerçek zamanlı kayıt cihaz performansına bağlıdır; sabit kare hızlı profesyonel render değildir.
 - Gerçek Android cihazı, Safari, fiziksel kiosk veya kesintisiz uzun süreli sergi testi yapılmadı. Bu kontroller saha kabulünün yerini tutmaz.
+
+## v0.2 doğrulama
+
+14 matematik testi; çokgen köşeleri ve kenar ortaları, negatif zaman, çember uyumluluğu, karma zincir önekleri ve kayıt uyumluluğu dahil. Tarayıcıda aşamalar, otomatik oluşum, formül, kayıt yükleme ve mobil taşma denetlendi. Video düğmesi bir hareket döngüsü kaydeder; çok aşamalı oluşumun tümünü ve uzun formülleri videoya aktarmaz.

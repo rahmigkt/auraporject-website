@@ -1,4 +1,4 @@
-import {TAU,chain,squareChain,field,fieldPosition,correlation,music,mod} from './math.js';
+import {TAU,motorChain,orbitPoint,chain,squareChain,field,fieldPosition,correlation,music,mod} from './math.js?v=0.2';
 const C={grid:'#1d2a30',muted:'#668186',gold:'#dfbb7e',teal:'#7cc9be',coral:'#ec8b71',text:'#e3e9e4'};
 export class Renderer{
  constructor(canvas){this.canvas=canvas;this.ctx=canvas.getContext('2d');this.pointsScreen=[];}
@@ -9,7 +9,7 @@ export class Renderer{
  path(points,ox,oy,scale,color=C.coral,width=2,close=false,count=points.length){if(!points.length)return;const c=this.ctx;c.beginPath();c.strokeStyle=color;c.lineWidth=width;points.slice(0,Math.max(1,count)).forEach((p,i)=>{if(i===0)c.moveTo(ox+p.x*scale,oy+p.y*scale);else c.lineTo(ox+p.x*scale,oy+p.y*scale)});if(close)c.closePath();c.stroke();}
  arrow(x,y,dx,dy,color=C.teal){const l=Math.hypot(dx,dy);if(!l)return;this.line(x,y,x+dx,y+dy,color,1);const a=Math.atan2(dy,dx),h=Math.min(4,l/3);this.line(x+dx,y+dy,x+dx-h*Math.cos(a-.5),y+dy-h*Math.sin(a-.5),color);this.line(x+dx,y+dy,x+dx-h*Math.cos(a+.5),y+dy-h*Math.sin(a+.5),color);}
  epicycles(result,ox,oy,s,settings,color=C.gold,rotation=0){const co=Math.cos(rotation),si=Math.sin(rotation),tr=p=>({x:ox+(p.x*co-p.y*si)*s,y:oy+(p.x*si+p.y*co)*s});for(const p of result.nodes){const a=tr(p),b=tr({x:p.nx,y:p.ny});if(settings.rings)this.circle(a.x,a.y,p.r*s,color+'65');this.line(a.x,a.y,b.x,b.y,color+'bb',.9);}const p=tr(result);this.dot(p.x,p.y,3,C.text);return p;}
- render(state){const {canvas,ctx:c}=this,w=canvas.clientWidth,h=canvas.clientHeight,dpr=Math.min(devicePixelRatio||1,2);if(!w||!h)return; if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);}c.setTransform(dpr,0,0,dpr,0,0);c.fillStyle='#0b1317';c.fillRect(0,0,w,h);this.w=w;this.h=h;const p=state.settings,t=mod(state.time/p.duration+p.phase/360,1);if(p.grid){for(let x=30;x<w;x+=32)this.line(x,45,x,h-42,C.grid,.5);for(let y=65;y<h-42;y+=32)this.line(14,y,w-14,y,C.grid,.5);}
+ render(state){const {canvas,ctx:c}=this,w=canvas.clientWidth,h=canvas.clientHeight,dpr=Math.min(devicePixelRatio||1,2);if(!w||!h)return; if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);}c.setTransform(dpr,0,0,dpr,0,0);c.fillStyle='#0b1317';c.fillRect(0,0,w,h);this.w=w;this.h=h;const p=state.settings,t=state.buildFinal?1:mod(state.time/p.duration+p.phase/360,1);if(p.grid){for(let x=30;x<w;x+=32)this.line(x,45,x,h-42,C.grid,.5);for(let y=65;y<h-42;y+=32)this.line(14,y,w-14,y,C.grid,.5);}
  c.save();c.beginPath();c.rect(10,46,w-20,h-90);c.clip();if(['pi','clef','horse'].includes(state.scene))this.fourier(state,t);else if(state.scene==='motors')this.motors(state,t);else if(state.scene==='music')this.music(state,t);else if(state.scene==='correlation')this.correlation(state,t);else if(state.scene==='square')this.square(state,t);else if(state.scene==='field')this.field(state,t);else if(state.scene==='tusi')this.tusi(state,t);c.restore();}
  fourier(state,t){const {w,h}=this,p=state.settings,s=Math.min(w*.34,h*.31)*p.zoom,ox=w*.54,oy=h*.56;
  if(state.scene!=='horse'){if(p.target)this.path(state.shape,ox,oy,s,'#485257',2,true);if(p.trace)this.path(state.reconstruction,ox,oy,s,C.coral,2,false,Math.ceil(t*state.reconstruction.length));this.epicycles(chain(state.coeff,t,p.n),ox,oy,s,p);}
@@ -18,7 +18,14 @@ export class Renderer{
  // Chains use exact same scale as target; endpoints redrawn at this scale below.
  if(p.rings){this.line(ax.x,ax.y,px,py,C.teal,.7,[3,4]);this.line(ay.x,ay.y,px,py,C.gold,.7,[3,4]);}this.dot(px,py,3,C.coral);}
  }
- motors(state,t){const {w,h}=this,p=state.settings,s=Math.min(w,h)*.25*p.zoom,coeff=state.motors.map(m=>({amp:m.amp,freq:m.freq,phase:m.phase*Math.PI/180}));if(p.trace)this.path(state.motorTrace,w/2,h*.56,s,C.coral,2,false,Math.ceil(t*state.motorTrace.length));this.epicycles(chain(coeff,t),w/2,h*.56,s,p);}
+ motors(state,t){const {w,h}=this,p=state.settings,totalRadius=state.motors.reduce((a,m)=>a+m.amp,0),s=Math.min(w*.42,h*.32)/Math.max(1,totalRadius)*p.zoom,ox=w/2,oy=h*.56;
+ if(p.trace)this.path(state.motorTrace,ox,oy,s,C.coral,2,false,Math.ceil(t*state.motorTrace.length));
+ const result=motorChain(state.motors,t,state.buildCount??state.motors.length);
+ result.nodes.forEach((node,i)=>{const color=i===result.nodes.length-1?C.teal:C.gold,x=ox+node.x*s,y=oy+node.y*s;
+ if(p.rings){if(node.shape==='circle')this.circle(x,y,node.r*s,color+'88');else{const n=node.shape==='triangle'?3:4;this.path(Array.from({length:n},(_,j)=>orbitPoint(node.shape,j/n)),x,y,node.r*s,color+'88',1,true);}}
+ this.line(x,y,ox+node.nx*s,oy+node.ny*s,color,1.2);this.dot(ox+node.nx*s,oy+node.ny*s,2,color);
+ });this.dot(ox+result.x*s,oy+result.y*s,4,C.coral);
+ }
  tusi(state,t){const {w,h}=this,p=state.settings,s=Math.min(w*.21,h*.28)*p.zoom,cx=w/2,cy=h*.56,a=t*TAU,r=s/2,x=cx+r*Math.cos(a),y=cy+r*Math.sin(a),px=cx+s*Math.cos(a);this.circle(cx,cy,s,C.gold,1.4);this.line(cx-s-15,cy,cx+s+15,cy,C.muted,1,[4,5]);if(state.stage>=1){this.circle(x,y,r,C.teal,1.3);this.dot(x,y,3,C.teal);}if(state.stage>=2){this.line(cx,cy,x,y,C.gold,1.8);this.line(x,y,px,cy,C.teal,1.8);this.dot(px,cy,5,C.coral);}if(state.stage>=3&&p.trace)this.line(cx-s,cy,cx+s,cy,C.coral,2);if(p.rings){this.text('R = 2r',cx+s*.6,cy-s*.82,C.gold,14);this.text('r',x+r*.35,y-r*.35,C.teal,14);this.dot(cx,cy,2,C.gold);}this.text('−2r',cx-s,cy+28,C.muted,12,'center');this.text('0',cx,cy+28,C.muted,12,'center');this.text('+2r',cx+s,cy+28,C.muted,12,'center');}
  music(state,t){const {w,h}=this,p=state.settings,left=50,right=w-24,top=h*.31,bottom=h*.65,width=right-left,scale=Math.min(21,(h*.27)/6),end=t*16,stage=state.stage;const smooth=x=>2.27+1.2*Math.sin(Math.PI*(x+1)/8)-Math.cos(Math.PI*x/4),y=d=>bottom-d*scale;
  for(let d=0;d<6;d++){this.line(left,y(d),right,y(d),C.grid);this.text(['C','D','E','F','G','A'][d],left-15,y(d)+4,C.muted,12);}if(p.target){const points=Array.from({length:320},(_,i)=>({x:left+i/319*width,y:y(smooth(i/319*16))}));this.path(points,0,0,1,C.teal+'88',1.2);}

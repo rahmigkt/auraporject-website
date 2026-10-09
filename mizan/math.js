@@ -31,7 +31,22 @@ export function validateScene(o){
  const ranges={n:[1,256],speed:[.1,3],zoom:[.4,2.5],phase:[0,360],power:[.5,3],attraction:[0,2],swirl:[-3,3],blend:[-1,1],duration:[4,120]};
  for(const [k,v] of Object.entries(o.settings||{})){if(k in ranges){if(typeof v!=='number'||!Number.isFinite(v))throw Error('Sayısal ayar geçersiz.');defaults[k]=clamp(v,...ranges[k]);}else if(['grid','rings','trace','target'].includes(k))defaults[k]=Boolean(v);else if(k==='mode'&&['both','surface','bars'].includes(v))defaults[k]=v;else if(k==='ratio'&&['wide','square','portrait'].includes(v))defaults[k]=v;}
  defaults.n=Math.round(defaults.n);
- const motors=(o.motors||[]).slice(0,32).map(m=>{if(!['amp','freq','phase'].every(k=>Number.isFinite(m[k])))throw Error('Motor değeri geçersiz.');return {amp:clamp(m.amp,0,2),freq:Math.round(clamp(m.freq,-30,30)),phase:clamp(m.phase,-360,360)};});
+ const motors=(o.motors||[]).slice(0,32).map(m=>{if(!['amp','freq','phase'].every(k=>Number.isFinite(m[k])))throw Error('Motor değeri geçersiz.');return {amp:clamp(m.amp,0,2),freq:Math.round(clamp(m.freq,-30,30)),phase:clamp(m.phase,-360,360),shape:["circle","square","triangle"].includes(m.shape)?m.shape:"circle"};});
+ if(o.scene==='motors'&&Array.isArray(o.motors)&&!motors.length)throw Error('En az bir motor gerekli.');
  let custom=null;if(o.custom){if(!Array.isArray(o.custom)||o.custom.length<2||o.custom.length>2048||!o.custom.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)&&Math.abs(p.x)<1e5&&Math.abs(p.y)<1e5))throw Error('Çizim verisi geçersiz.');custom=o.custom.length===256?o.custom.map(p=>({x:p.x,y:p.y})):normalize(resample(o.custom));}
  return {version:1,scene:o.scene,settings:defaults,motors,custom,title:String(o.title||'Yeni sahne').slice(0,120),note:String(o.note||'').slice(0,1200)};
+}
+
+// Regular polygons use circumradius 1 and constant speed along each edge.
+export function orbitPoint(shape,t){
+ if(!shape||shape==='circle')return {x:Math.cos(TAU*t),y:Math.sin(TAU*t)};
+ const n=shape==='triangle'?3:4,q=mod(t,1)*n,k=Math.floor(q),u=q-k;
+ const a=TAU*k/n,b=TAU*(k+1)/n;
+ return {x:(1-u)*Math.cos(a)+u*Math.cos(b),y:(1-u)*Math.sin(a)+u*Math.sin(b)};
+}
+export function motorChain(motors,t,n=motors.length){
+ let x=0,y=0;const nodes=[];
+ for(const m of motors.slice(0,n)){const q=orbitPoint(m.shape,m.freq*t+m.phase/360),nx=x+m.amp*q.x,ny=y+m.amp*q.y;
+ nodes.push({x,y,nx,ny,r:m.amp,shape:m.shape||'circle'});x=nx;y=ny;}
+ return {x,y,nodes};
 }
