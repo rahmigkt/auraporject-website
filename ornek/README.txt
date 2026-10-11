@@ -12,7 +12,7 @@ TAŞIMA / MIGRATION
 - Bildiri başvurusu bağlantısı harici bir servise gider; onu yerinde bırak.
 - Delegasyon ve fuar için henüz çalışan bir backend/ödeme veya başvuru formu dahil değildir.
 - Beş resmi sempozyum başlığını değiştirme.
-- WAC işareti korunacak, edisyon logoda 20 ve 27 alt alta olacak.
+- WAC işareti korunacak, kongre yılı logoda 20 ve 27 alt alta olacak.
 - TBTK amblemi kullanılmaz; kurum adı ve 1989 gerektiğinde metin olarak belirtilir.
 - Sergiler öneri durumunda; kesinleşmiş program sayılmaz.
 - robots noindex geçici önizleme içindir. Kalıcı yayında kaldırılmalı.
