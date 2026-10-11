@@ -34,3 +34,28 @@ header,footer,.hero{background:#292B2C;color:#FAFAF7}
 .note{background:#E3E6E1;color:#434747;border-left-color:#747978}
 .assets a{background:#E4E7E2}
 .assets a:hover{background:#D6DAD5}
+
+
+/* WAC identity v3: mineral slate / architectural paper */
+:root{--night:#27343C;--ink:#2D373D;--paper:#F3F4F1;--graphite:#496F7C;--line:#C9D5D3;--muted:#53636A}
+body{background:#F3F4F1;color:#2D373D}
+header,footer{background:#27343C;color:#FAFAF8}
+.hero{background:linear-gradient(115deg,#27343C,#3B4B53);color:#FAFAF8}
+.hero .eyebrow{color:#B7CDD3}
+.hero p{color:#E3EBEC}
+.section{background:#F7F8F5;border-color:#CFD9D7}
+.section:nth-of-type(even){background:#EAEFEC}
+.section-head .n{color:#496F7C}
+.section h2{color:#2D373D}
+.section p{color:#515F63}
+.dual figure,.example{background:#FAFAF8}
+.dual figure.dark,.example[style*="background"]{background:#27343C!important;color:#FAFAF8}
+.swatch{background:#FAFAF8;border-color:#CBD5D3}
+.swatch p{color:#303B42}
+.swatch small{color:#53636A}
+.note{background:#E0EAE7;border-color:#6C8992;color:#45565C}
+.assets a{background:#E2EBE8;color:#2D373D}
+.assets a:hover{background:#D2E0DE}
+.rules li{border-bottom-color:#CCD7D5}
+a:focus-visible{outline-color:#537885}
+@media(max-width:650px){.hero h1{font-size:clamp(54px,10vw,83px)}}
