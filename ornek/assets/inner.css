@@ -140,3 +140,58 @@
 .related-nav{background:#393939;color:#F4F4F4}.related-grid a{background:#393939}
 .submission-band{background:#404040;color:#F4F4F4}
 .detail-button-primary,.detail-button-dark{background:#424242;border-color:#424242;color:#F6F6F6}
+
+
+/* Inner-page editorial finish: stronger hierarchy, clearer reading rhythm */
+.inner-cover{border-bottom:1px solid #D0D0D0}
+.cover-layout{min-height:405px;gap:clamp(28px,5.5vw,90px);padding-bottom:66px}
+.cover-breadcrumb{margin-bottom:29px}
+.inner-cover h1{font-weight:770;letter-spacing:-.057em;line-height:1.07}
+.cover-lead{color:#555555;line-height:1.72;max-width:730px}
+.cover-art{filter:grayscale(1)}
+.cover-art-congress,.cover-art-science,.cover-art-platform{border-color:#B8B8B8}
+.content-chapter{padding-block:clamp(70px,6.7vw,108px)}
+.chapter-label{font-size:12px;letter-spacing:.13em;color:#555555}
+.chapter-body h2{font-weight:745;line-height:1.1;letter-spacing:-.048em}
+.detail-prose{line-height:1.77;color:#505050}
+.detail-tile{background:#F4F4F4;position:relative;padding:clamp(23px,2.4vw,36px)}
+.detail-tile:before{content:"";position:absolute;top:0;left:0;width:39px;height:2px;background:#686868}
+.detail-tile h3{font-weight:740;line-height:1.24}
+.detail-tile p,.detail-step p,.detail-timeline p{color:#555555}
+.detail-steps{border-top:1px solid #9F9F9F}
+.detail-step{padding-block:28px}
+.detail-step h3{font-weight:735}
+.detail-inset{border-left-width:2px;background:#E6E6E6}
+.detail-inset p{color:#545454}
+.detail-timeline article{padding-top:26px;padding-bottom:29px}
+.timeline-year{font-weight:760}
+.submission-band{background:#424242}
+.related-nav{background:#E7E7E7;color:#363636;padding-block:clamp(55px,6vw,85px)}
+.related-nav .small-overline{color:#595959}
+.related-grid{background:#CBCBCB}
+.related-grid a{background:#E7E7E7;color:#363636;transition:background .18s ease}
+.related-grid a:hover{background:#F6F6F6}
+.cover-forum .forum-circle{border-color:#888888}
+.detail-button{min-height:48px;transition:background .2s ease,transform .2s ease}
+@media(max-width:960px){
+  .cover-layout{min-height:0;padding-bottom:48px}
+  .chapter-grid{gap:20px}
+}
+@media(max-width:720px){
+  .inner-cover{padding-top:100px}
+  .cover-layout{padding-bottom:42px}
+  .inner-cover h1{font-size:clamp(39px,9.4vw,57px)}
+  .cover-lead{font-size:16px}
+  .content-chapter{padding-block:62px}
+  .chapter-body h2{font-size:clamp(34px,8.2vw,48px)}
+  .detail-step{padding-block:23px}
+  .detail-tiles .detail-tile h3{margin-top:26px}
+  .related-grid a{min-height:54px}
+}
+@media(max-width:420px){
+  .cover-breadcrumb{margin-bottom:17px}
+  .inner-cover h1{font-size:clamp(36px,9.9vw,43px);letter-spacing:-.045em}
+  .cover-layout{gap:20px;padding-bottom:35px}
+  .content-chapter{padding-block:54px}
+  .chapter-body h2{font-size:35px}
+}

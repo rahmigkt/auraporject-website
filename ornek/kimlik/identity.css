@@ -4,3 +4,14 @@
 
 /* Muted monochrome guide */
 body{background:#EFEFEF;color:#353535}.hero,header,footer{background:#343434}.swatch{background:#F6F6F6}.dual figure,.example{background:#F4F4F4}.assets a{background:#E6E6E6}.note{background:#E2E2E2}
+
+
+/* Editorial consistency with the public WAC site */
+.hero h1{font-weight:760;letter-spacing:-.06em}
+.section h2{font-weight:740}
+.section{padding-block:clamp(68px,6.5vw,100px)}
+.swatch small{font-variant-numeric:tabular-nums}
+.dual figure{border-top:2px solid #A2A2A2}
+.examples .example{border-top:2px solid #A2A2A2}
+.assets a{transition:background .18s ease}
+@media(max-width:680px){.section{padding-block:60px}.hero h1{font-size:clamp(52px,10vw,76px)}}

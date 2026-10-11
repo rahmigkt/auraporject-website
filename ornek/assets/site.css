@@ -76,3 +76,87 @@ body{background:#EFEFEF;color:#353535}
 .footer{background:#EAEAEA}
 .footer-bottom{color:#666666}
 .main-nav a:hover,.main-nav a.active{color:#E2E2E2}
+
+
+/* WAC editorial refinement: proportion, rhythm and restrained movement */
+.header{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.brand-word{font-weight:780;letter-spacing:-.055em}
+.brand-caption{font-size:9px;line-height:1.28;letter-spacing:.105em}
+.main-nav a{font-size:12.5px;font-weight:700;transition:color .2s ease}
+.hero,.hero-grid{min-height:clamp(690px,88svh,850px)}
+.hero h1{font-size:clamp(58px,6.45vw,103px);font-weight:720;line-height:1.035;letter-spacing:-.06em}
+.hero-sub{max-width:630px;line-height:1.7;font-size:clamp(17px,1.35vw,20px)}
+.hero-side-mark{opacity:.31;transform:translate(1%,0)}
+.hero-grid{position:relative}
+.hero-scroll-cue{display:flex;align-items:center;gap:17px;margin-top:clamp(55px,8vh,105px);font-size:10px;letter-spacing:.2em;font-weight:800;color:#D5D5D5}
+.hero-scroll-cue:after{content:"";display:block;width:80px;height:1px;background:linear-gradient(90deg,#D3D3D3,transparent)}
+.hero-scroll-cue i{width:6px;height:6px;border:1px solid #B8B8B8;transform:rotate(45deg);margin-left:-12px}
+.section{padding-block:clamp(76px,7.75vw,120px)}
+.section h2{font-weight:720;letter-spacing:-.055em}
+.kicker{font-size:11px;font-weight:780;letter-spacing:.17em}
+.intro{background:#F0F0F0}
+.intro-lead{max-width:710px;line-height:1.68}
+.science{background:#EAEAEA}
+.section-header{margin-bottom:40px}
+.axis-row{padding-top:24px;padding-bottom:24px;transition:padding .25s ease,background .25s ease}
+.axis-row strong{font-weight:700;letter-spacing:-.035em}
+.axis-row span:last-child{transition:transform .24s ease}
+.axis-row:hover span:last-child,.axis-row:focus-visible span:last-child{transform:translate(4px,-4px)}
+.index-rail{background:#F0F0F0}
+.index-link{position:relative;min-height:145px;gap:14px}
+.index-link:before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:#565656;transform:scaleX(0);transform-origin:left;transition:transform .25s ease}
+.index-link:hover:before,.index-link:focus-visible:before{transform:scaleX(1)}
+.index-link .index-top span:last-child{transition:transform .24s ease}
+.index-link:hover .index-top span:last-child{transform:translate(3px,-3px)}
+.fair.section{padding-block:clamp(90px,9vw,135px)}
+.fair h2{font-weight:735;letter-spacing:-.065em}
+.fair-drawing svg{overflow:visible}
+.fair-right{padding-top:12px}
+.forum{background:#F3F3F3}
+.deleg{background:#E9E9E9}
+.timeline-section{background:#F0F0F0}
+.timeline .era b{font-weight:745}
+.timeline .era p,.culture-grid>p,.section-header p:not(.kicker){color:#5B5B5B}
+.culture{background:#EAEAEA}
+.closing{background:#E5E5E5;color:#383838;padding-block:clamp(75px,8vw,116px)}
+.closing .kicker.light{color:#606060}
+.closing h2{font-weight:725;letter-spacing:-.059em}
+.closing .button-light{background:#3B3B3B;border-color:#3B3B3B;color:#F6F6F6}
+.closing .button-light:hover{background:#575757}
+.closing .button-outline{color:#393939;border-color:#8F8F8F}
+.closing .button-outline:hover{background:#D1D1D1;color:#303030}
+.footer nav a{font-size:13px}
+.footer-bottom{font-size:11px;letter-spacing:.06em;line-height:1.5}
+.resource-grid a{transition:background .18s ease,transform .18s ease}
+.resource-grid a:hover{background:#DADADA;transform:translateY(-2px)}
+@media(max-width:1050px){
+  .main-nav a{font-size:12px}
+  .hero-scroll-cue{margin-top:54px}
+}
+@media(max-width:720px){
+  .hero,.hero-grid{min-height:clamp(650px,92svh,785px)}
+  .hero-grid{padding-top:clamp(120px,17svh,162px);padding-bottom:55px}
+  .hero h1{font-size:clamp(43px,9.8vw,64px);line-height:1.07}
+  .hero-scroll-cue{margin-top:39px}
+  .section{padding-block:clamp(63px,9vw,83px)}
+  .section-header{gap:25px;margin-bottom:30px}
+  .index-link{min-height:127px;padding:21px 14px}
+  .axis-row{padding-block:19px}
+  .axis-row strong{font-size:clamp(19px,4.8vw,27px)}
+  .footer nav{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 22px}
+  .closing{padding-block:75px}
+  .closing h2{font-size:clamp(39px,8.7vw,60px)}
+}
+@media(max-width:420px){
+  .brand-caption{display:none}
+  .header .brand{gap:6px}
+  .hero,.hero-grid{min-height:0}
+  .hero-grid{padding-top:145px;padding-bottom:66px}
+  .hero h1{font-size:clamp(39px,10.1vw,44px)}
+  .hero-scroll-cue{margin-top:34px}
+  .section{padding-block:62px}
+  .footer nav{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(prefers-reduced-motion:reduce){
+  .axis-row span:last-child,.index-link:before,.index-link .index-top span:last-child,.resource-grid a{transition:none}
+}
