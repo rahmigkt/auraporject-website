@@ -33,7 +33,7 @@
 .footer-year-stack b{font-size:15px;font-weight:750}
 .footer-org-identity{display:flex;align-items:center;gap:13px;min-width:0}
 .footer-org-identity p{border:0;padding:0;margin:0}
-.tbtk-emblem{width:45px;height:45px;object-fit:contain;flex:0 0 auto;filter:grayscale(1);opacity:.86}
+
 .main-nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:8px;color:#b4d7f0}
 .footer nav a:hover{text-decoration:underline;text-underline-offset:4px}
 .edition-text,.edition-entry p{overflow-wrap:break-word}
@@ -42,5 +42,26 @@
 .expo-quicklinks a:hover{background:#315772}
 #pavyonlar,#katilim{scroll-margin-top:25px}
 @media(max-width:1150px){.footer-top{flex-wrap:wrap;gap:30px}.footer-institution{flex-wrap:wrap}.footer nav{flex:1 1 100%}}
-@media(max-width:720px){.footer-org-identity{gap:9px}.tbtk-emblem{width:37px;height:37px}.footer-wac-word{font-size:18px}.footer-year-stack b{font-size:12px}.expo-quicklinks a{flex:1 1 170px}}
+@media(max-width:720px){.footer-org-identity{gap:9px}.footer-wac-word{font-size:18px}.footer-year-stack b{font-size:12px}.expo-quicklinks a{flex:1 1 170px}}
 @media(max-width:420px){.footer-org-identity{width:100%}.footer-institution{gap:17px}}
+
+/* WAC example polishing — all scoped to /ornek/ */
+.footer-org-identity{gap:0!important}
+.footer-org-identity p{border:0!important;padding:0!important}
+.identity-footer-link{color:#30516a;font-weight:750;font-size:11px;letter-spacing:.02em;text-transform:none;white-space:nowrap;border-bottom:1px solid #7a96a8;padding-bottom:3px}
+.identity-footer-link:hover{color:#005c96}
+.footer-bottom{align-items:center;flex-wrap:wrap;row-gap:14px}
+.footer-institution{align-items:center}
+.footer-org-identity{min-width:0}
+.footer-institution p,.footer-org-identity p{max-width:340px}
+.header a,.footer a,.edition-links a,.index-link{touch-action:manipulation}
+.mobile-nav:not([hidden]) a{min-height:46px;display:flex;align-items:center}
+.year-stack{font-variant-numeric:tabular-nums}
+.header .brand-symbol,.hero-side-mark img{flex-shrink:0}
+.hero h1,.inside-hero h1,.edition-block h2{overflow-wrap:normal;word-break:normal;hyphens:auto}
+.edition-entry p,.edition-text,.intro-lead,.fair-lead{max-width:75ch}
+button:focus-visible,a:focus-visible{outline:3px solid #66bcff;outline-offset:3px}
+html{scroll-padding-top:28px}
+@media (max-width:960px){.footer nav a{min-height:40px;display:flex;align-items:center}.footer-bottom{gap:12px}}
+@media (max-width:720px){.header .brand{gap:7px}.hero-ctas a{min-height:46px;justify-content:center}.edition-block h2{line-height:1.13}.edition-list .edition-entry{padding:24px 0}}
+@media (max-width:420px){.footer-bottom{align-items:flex-start;flex-direction:column}.identity-footer-link{font-size:12px}.lang a{padding:7px 3px}}
