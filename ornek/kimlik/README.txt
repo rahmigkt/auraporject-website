@@ -16,3 +16,7 @@ ANA KURALLAR
 - Sempozyum kategorilerinin resmî adlarını değiştirme.
 - Bu dosyalar WAC 2027 tasarım prototipidir; son vektör işçiliği ve kurumsal marka doğrulaması baskıdan önce yapılmalı.
 - Kılavuz üçüncü taraf font, dış fotoğraf veya uzak servis kullanmaz.
+
+ENGLISH GUIDELINES: en/index.html
+DESIGN TOKENS: brand-tokens.json
+Self-contained favicon: assets/wac-favicon.svg
