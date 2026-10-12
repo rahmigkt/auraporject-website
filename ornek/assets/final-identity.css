@@ -60,3 +60,23 @@
 :root{font-family:Montserrat,Arial,sans-serif}
 button,input,select,textarea{font-family:inherit}
 @media(min-width:1051px) and (max-width:1200px){.header .brand-symbol{width:180px}.header .main-nav{gap:9px}.header .main-nav a{font-size:10px}.header .head-actions{gap:9px}.header .submit-btn{padding:12px 10px}}
+
+
+/* Homepage editorial congress overview; keep the approved logo only in site chrome. */
+.hero-congress-summary,.hero-congress-summary .hero-grid{min-height:clamp(620px,78svh,740px)}
+.hero-congress-summary .hero-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(325px,.78fr);align-items:center;gap:clamp(38px,6vw,105px);padding-top:clamp(155px,17svh,195px);padding-bottom:clamp(72px,9svh,105px)}
+.hero-congress-summary .hero-text{max-width:790px}
+.hero-congress-summary .hero-text .kicker{font-size:11px;letter-spacing:.15em;line-height:1.75}
+.hero-congress-summary h1{max-width:790px;margin:25px 0 26px;font-size:clamp(48px,5.6vw,88px);line-height:1.04;font-weight:740;letter-spacing:-.06em}
+.hero-congress-summary .hero-sub{max-width:710px;font-size:clamp(17px,1.25vw,19px);font-weight:420;line-height:1.7;color:#e9eff3}
+.hero-summary-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:38px}
+.hero-summary-actions .button{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:51px}
+.hero-congress-summary .hero-brief{min-width:0;align-self:center;margin:0;padding:30px 0 21px 31px;border-left:1px solid rgba(207,224,234,.5);color:#f6f9fa}
+.hero-brief-kicker{margin:0 0 13px;font-size:11px;font-weight:760;letter-spacing:.17em;color:#bdd0db}
+.hero-congress-summary .hero-brief h2{margin:0 0 30px;font-size:clamp(27px,2.4vw,38px);line-height:1.18;letter-spacing:-.04em;font-weight:700;color:#f6f9fa}
+.hero-brief-item{display:grid;grid-template-columns:minmax(120px,.78fr) minmax(0,1.25fr);gap:15px;align-items:start;padding:18px 0;border-top:1px solid rgba(205,222,230,.28)}
+.hero-brief-item strong{font-size:13px;font-weight:750;line-height:1.5;color:#f8fafb}
+.hero-brief-item p{font-size:13px;line-height:1.65;color:#ccdae2;margin:0}
+@media(max-width:1150px){.hero-congress-summary .hero-grid{grid-template-columns:minmax(0,1.13fr) minmax(285px,.87fr);gap:36px}.hero-congress-summary h1{font-size:clamp(47px,5.6vw,72px)}.hero-congress-summary .hero-brief{padding-left:24px}.hero-brief-item{grid-template-columns:1fr;gap:6px;padding:15px 0}}
+@media(max-width:720px){.hero-congress-summary,.hero-congress-summary .hero-grid{min-height:0}.hero-congress-summary .hero-grid{display:block;padding-top:137px;padding-bottom:65px}.hero-congress-summary h1{font-size:clamp(41px,9vw,62px);margin:23px 0}.hero-congress-summary .hero-sub{font-size:16px;line-height:1.65}.hero-summary-actions{margin-top:29px}.hero-congress-summary .hero-brief{margin-top:53px;padding:25px 0 0;border-left:0;border-top:1px solid rgba(207,224,234,.48)}.hero-congress-summary .hero-brief h2{margin-bottom:16px;font-size:27px}.hero-brief-item{grid-template-columns:minmax(122px,.72fr) minmax(0,1.28fr);gap:14px;padding:16px 0}}
+@media(max-width:460px){.hero-congress-summary .hero-grid{padding-top:128px;padding-bottom:54px}.hero-congress-summary h1{font-size:clamp(38px,9vw,43px)}.hero-summary-actions .button{width:100%}.hero-brief-item{grid-template-columns:1fr;gap:5px}}
