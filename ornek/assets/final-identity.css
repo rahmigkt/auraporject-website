@@ -45,3 +45,18 @@
 @media(max-width:720px){.header .brand-symbol{width:124px;height:36px}.header .brand-caption{display:none}.header .year-stack{font-size:12px;padding-left:9px}.hero-grid{display:block;padding-top:clamp(135px,17svh,165px);padding-bottom:65px;min-height:clamp(680px,92svh,820px)}.hero .hero-side-mark{display:block;position:absolute;top:120px;right:-17%;width:78%;opacity:.17;pointer-events:none;z-index:-1}.hero-side-mark:after{display:none}.hero h1{font-size:clamp(43px,9.6vw,63px)}.hero-meta{position:relative;z-index:2}.footer-brand img{width:92px;height:29px}}
 @media(max-width:390px){.header .brand-symbol{width:107px}.header .year-stack{font-size:11px}.header .head-actions{gap:9px}.lang{letter-spacing:0}.hero-grid{padding-top:137px}.hero h1{font-size:40px}}
 @media(prefers-reduced-motion:reduce){.hero-side-mark{transition:none;animation:none}}
+
+/* Approved 12 October 2026: unchanged artwork extracted from supplied brand board. */
+:root{--wac-graphite:#64748B;--wac-mist:#E5E7EB;--wac-rule:#E5E7EB}
+.header .brand-symbol{width:250px;height:auto;aspect-ratio:1013/228;object-fit:contain}
+.footer-brand img{width:230px;height:auto;aspect-ratio:494/106;object-fit:contain}
+.hero-side-mark{opacity:1;filter:none}
+.hero-side-mark:after{display:none}
+@media(max-width:1310px){.header .brand-symbol{width:210px}}
+@media(max-width:1050px){.header .brand-symbol{width:240px}}
+@media(max-width:720px){.header .brand-symbol{width:190px}.hero .hero-side-mark{position:relative;top:auto;right:auto;width:100%;max-width:460px;margin:38px 0 0;opacity:1;z-index:1}.hero-grid{padding-bottom:42px}.footer-brand img{width:220px}}
+@media(max-width:390px){.header .brand-symbol{width:156px}}
+@font-face{font-family:Montserrat;src:url('./fonts/Montserrat.ttf') format('truetype');font-weight:100 900;font-style:normal;font-display:swap}
+:root{font-family:Montserrat,Arial,sans-serif}
+button,input,select,textarea{font-family:inherit}
+@media(min-width:1051px) and (max-width:1200px){.header .brand-symbol{width:180px}.header .main-nav{gap:9px}.header .main-nav a{font-size:10px}.header .head-actions{gap:9px}.header .submit-btn{padding:12px 10px}}
