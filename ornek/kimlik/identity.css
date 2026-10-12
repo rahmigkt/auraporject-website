@@ -59,3 +59,19 @@ header,footer{background:#27343C;color:#FAFAF8}
 .rules li{border-bottom-color:#CCD7D5}
 a:focus-visible{outline-color:#537885}
 @media(max-width:650px){.hero h1{font-size:clamp(54px,10vw,83px)}}
+
+/* WAC origami visual system v4 */
+:root{--night:#0E2A3D;--ink:#1D303B;--paper:#F4F6F7;--graphite:#58758A;--line:#CCD5DD;--muted:#5D6E7C}
+body{background:#F4F6F7;color:#1D303B}
+header,footer{background:#0E2A3D!important;color:white}
+.hero{background:linear-gradient(115deg,#0E2A3D,#1B415A)!important}
+.section,.section:nth-of-type(even){background:#F4F6F7;border-color:#CCD5DD}
+.section:nth-of-type(even){background:#EAF0F3}
+.section h2{color:#1D303B}.section p{color:#485B68}
+header .bar img{width:150px;height:45px;object-fit:contain}
+.year img{width:130px;height:54px}
+.example img{max-width:240px;height:108px}
+.construction{margin:30px 0;background:#F8FAFB;padding:clamp(12px,2vw,25px);border:1px solid #D0DCE3}
+.construction img{display:block;width:100%;height:auto}
+.construction figcaption{font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:#58758A;margin-top:12px;font-weight:700}
+@media(max-width:560px){header .bar img{width:112px}.year img{width:100px}}
