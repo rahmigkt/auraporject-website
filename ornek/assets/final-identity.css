@@ -1,0 +1,47 @@
+/* WAC 2027 / final visual identity / scoped to the /ornek/ site only.
+   Master origami WAC letterforms: 76-unit folds; matching 153/300 diagonals.
+   No external fonts, trackers, image CDNs or animation dependencies. */
+:root{--night:#0E2A3D;--night2:#16374C;--wac-carbon:#0E2A3D;--wac-ink:#1D303B;--wac-graphite:#536677;--wac-accent:#58758A;--wac-paper:#F4F6F7;--wac-chalk:#FFFFFF;--wac-mist:#E7ECEF;--wac-rule:#CCD5DD;--wac-silver:#DDE5EA;--paper:#F4F6F7;--white:#FFFFFF;--ink:#1D303B;--line:#CCD5DD;--muted:#596B76}
+.header{background:rgba(10,32,46,.97);border-bottom:1px solid rgba(240,245,248,.16)}
+.header-inner{gap:clamp(12px,1.5vw,24px)}
+.header .brand{min-width:0;gap:12px;flex-shrink:0}
+.header .brand-symbol{width:158px;height:52px;object-fit:contain;filter:none;margin:0}
+.brand-word{display:none!important}
+.header .year-stack{font-size:15px;border-left:1px solid #8DA7B6;padding-left:11px;gap:4px;line-height:.91;color:#F7FAFC}
+.header .brand-caption{font-size:9px;letter-spacing:.12em;border-left-color:#486273;padding-left:11px;line-height:1.35}
+.header .main-nav a{font-size:clamp(11px,.91vw,13px);font-weight:700}
+.header .main-nav{gap:clamp(10px,1.3vw,19px)}
+.header .head-actions{gap:14px}
+.header .submit-btn{padding:13px 15px}
+.hero{background:#0B2535;isolation:isolate}
+.hero-art{background-image:linear-gradient(120deg,rgba(12,34,49,.86),rgba(12,34,49,.52)),url('./sky-original.svg?v=3');filter:none}
+.hero:after{background:linear-gradient(90deg,rgba(8,29,43,.91) 0%,rgba(8,29,43,.68) 49%,rgba(16,46,66,.28) 100%)}
+.hero-grid{position:relative;grid-template-columns:minmax(0,1fr) minmax(260px,38%);min-height:clamp(680px,91svh,850px)}
+.hero-text{max-width:880px}
+.hero .kicker.light{color:#BFD3E0}
+.hero h1{font-size:clamp(54px,6.1vw,99px);letter-spacing:-.057em}
+.hero-sub{color:#ECF0F3}
+.hero-side-mark{display:block;position:relative;z-index:0;width:100%;max-width:none;opacity:.9;transform:none;filter:drop-shadow(0 24px 30px rgba(0,0,0,.12));pointer-events:none}
+.hero-side-mark img{filter:none;width:100%;height:auto;display:block;transform:none}
+.hero-side-mark:after{content:"";display:block;width:68%;height:1px;background:linear-gradient(90deg,#AFC3D1,transparent);margin:22px 0 0 auto;opacity:.6}
+.index-rail,.intro{background:#F4F6F7}
+.index-link:hover{background:#E9EFF2}
+.science{background:#E9EFF3}
+.axis-row:hover{background:#DCE8EE}
+.fair,.cover-fuar{background:#123044;color:#fff}
+.forum{background:#F8FAFA}
+.deleg,.culture{background:#ECF1F4}
+.closing{background:#DEE8ED}
+.header a:focus-visible,.hero a:focus-visible{outline-color:#fff}
+.footer-brand img{width:122px;height:36px;filter:none;object-fit:contain}
+.footer-wac-word{font-size:0}
+.footer-year-stack{font-size:15px!important;vertical-align:middle;margin-left:3px}
+.footer-year-stack b{font-size:15px!important}
+.brand-wordmark-only{display:block}
+.section h2,.inner-cover h1{letter-spacing:-.055em}
+.index-link:before{background:#517084}
+@media(max-width:1310px){.header .brand-caption{display:none}.header .brand-symbol{width:143px}.header .main-nav{gap:12px}.header-inner{gap:15px}}
+@media(max-width:1050px){.header .brand-symbol{width:151px;height:45px}.header .brand-caption{display:block}.hero-grid{grid-template-columns:minmax(0,1fr) 29%}.hero-side-mark{max-width:430px}}
+@media(max-width:720px){.header .brand-symbol{width:124px;height:36px}.header .brand-caption{display:none}.header .year-stack{font-size:12px;padding-left:9px}.hero-grid{display:block;padding-top:clamp(135px,17svh,165px);padding-bottom:65px;min-height:clamp(680px,92svh,820px)}.hero .hero-side-mark{display:block;position:absolute;top:120px;right:-17%;width:78%;opacity:.17;pointer-events:none;z-index:-1}.hero-side-mark:after{display:none}.hero h1{font-size:clamp(43px,9.6vw,63px)}.hero-meta{position:relative;z-index:2}.footer-brand img{width:92px;height:29px}}
+@media(max-width:390px){.header .brand-symbol{width:107px}.header .year-stack{font-size:11px}.header .head-actions{gap:9px}.lang{letter-spacing:0}.hero-grid{padding-top:137px}.hero h1{font-size:40px}}
+@media(prefers-reduced-motion:reduce){.hero-side-mark{transition:none;animation:none}}
