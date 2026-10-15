@@ -2,7 +2,7 @@ import {applyStudioCalls} from './design-tools.js?v=20261016b';
 import {openProjectSubmission,sendLabel} from './project-submit.js?v=20261016b';
 import {projectRecord} from './choice-flow.js?v=20261016b';
 import {FAMILIES,DETAILS,LANGUAGES,detailFields,detailValue,WOODS,FABRICS,label,illustration,normalizeStudio,changeFamily,compileStudio} from './design-library.js?v=20261016b';
-import {createFurnitureScene} from './furniture-scene.js?v=20261016e';
+import {createFurnitureScene} from './furniture-scene.js?v=20261016f';
 import {fabricCanvas,woodCanvas} from './furniture-textures.js?v=20261016b';
 import {strings} from './design-i18n.js?v=20261016b';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

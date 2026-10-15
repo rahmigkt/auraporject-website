@@ -1,4 +1,4 @@
-import {renderDesignHome} from './design-home.js?v=20261016e';
+import {renderDesignHome} from './design-home.js?v=20261016f';
 import {renderFurniturePlanner} from './furniture-planner.js';
 import {renderSurfaceLab} from './surface-lab.js';
 import {studioHome,studioMaterials,studioTrade} from './studio.js';
