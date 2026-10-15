@@ -68,3 +68,14 @@ The guided final step now opens a contact dialog instead of customer-facing proj
 Geometry now includes continuous upholstered back support down to the frame, full loose-back support and an upholstered lower apron. Side/front views suppress the dimension that would collapse onto the screen; height labels sit outside the side silhouette. Non-sofa split-seat defaults normalize to a single seat.
 
 QA: geometry suites pass; draft contact form completed with example.invalid data, acknowledgement and explicit no-send result; side silhouette checked on an armless loose-back armchair. Backend validator accepts a valid concept, rejects missing acknowledgement, bad email, family and geometry; draft gate remains disabled. Enabled mail transport and live PII submission have not been tested.
+
+
+## Design-led homepage and WhatsApp PDF hand-off
+
+W4 now opens around two primary entry points: guided choices and the design assistant. The homepage has a live colour/arm preview and furniture-family shortcuts, with no catalogue fetch required. The assistant is still explicitly a preview without a model backend. Both workspaces now use the same contact-to-PDF hand-off.
+
+`project-pdf.js` creates an A4 PDF on the visitor's device, containing perspective, selections, three orthographic drawings, fabric close-up and optional contact/address notes. JPEG page images retain Unicode text appearance without external font dependencies; the PDF is a raster concept dossier, not editable CAD or tagged/selectable text. Contact overflow paginates. Privacy notice remains a draft pending actual company details.
+
+No email/API request uploads contact data in this flow. The configured WhatsApp line is 905330339084. The prepared PDF can be sent via native Web Share on supported devices (visitor chooses WhatsApp/AURA), or saved and attached manually after opening the exact AURA chat. A wa.me URL cannot attach the file or guarantee its recipient in the native share picker. Sharing uses the visitor's WhatsApp account. The interface never claims delivery. Automatic server-to-business PDF delivery is not implemented and would require a WhatsApp Business API integration.
+
+QA: homepage colour/arm interaction, direct armchair shortcut, desktop and 390px layout; complete contact-to-PDF browser path using fictional details; downloaded 340 KB PDF validated as three A4 pages by Poppler, all three page renders inspected. No test WhatsApp message was sent. Existing geometry suites remain passing.
