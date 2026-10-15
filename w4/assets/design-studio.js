@@ -1,10 +1,10 @@
-import {FAMILIES,DETAILS,LANGUAGES,detailFields,WOODS,FABRICS,label,illustration,normalizeStudio,changeFamily,compileStudio} from './design-library.js';
-import {createFurnitureScene} from './furniture-scene.js';
-import {fabricCanvas,woodCanvas} from './furniture-textures.js';
-import {strings} from './design-i18n.js';
+import {FAMILIES,DETAILS,LANGUAGES,detailFields,WOODS,FABRICS,label,illustration,normalizeStudio,changeFamily,compileStudio} from './design-library.js?v=20261015b';
+import {createFurnitureScene} from './furniture-scene.js?v=20261015b';
+import {fabricCanvas,woodCanvas} from './furniture-textures.js?v=20261015b';
+import {strings} from './design-i18n.js?v=20261015b';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const STORE='aura-codesign-v2';
-import {drawing} from './design-drawing.js';
+import {drawing} from './design-drawing.js?v=20261015b';
 export {drawing};
 export async function renderDesignStudio(main){
  let language=new URLSearchParams(location.search).get('lang')||navigator.language.split('-')[0];if(!Object.hasOwn(LANGUAGES,language))language='en';
