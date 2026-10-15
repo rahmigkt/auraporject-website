@@ -90,6 +90,21 @@ export const WORDS={
 
 export const ROOMS={living:phrase('Salon','Living room','Salon','Stue','Wohnzimmer','Woonkamer','Salón','Soggiorno'),dining:phrase('Yemek alanı','Dining space','Salle à manger','Spisestue','Essbereich','Eetkamer','Comedor','Sala da pranzo'),bedroom:phrase('Yatak odası','Bedroom','Chambre','Soveværelse','Schlafzimmer','Slaapkamer','Dormitorio','Camera da letto'),entry:phrase('Antre','Entrance','Entrée','Entré','Eingang','Entree','Entrada','Ingresso'),office:phrase('Çalışma alanı','Workspace','Bureau','Arbejdsrum','Arbeitszimmer','Werkruimte','Despacho','Studio')};
 
+export const ROOM_FAMILIES={
+ living:['sofa','armchair','coffee','tv','console','shelf','bench'],
+ dining:['table','chair','console','shelf','bench'],
+ bedroom:['bed','wardrobe','dresser','nightstand','bench','armchair'],
+ entry:['console','bench','shelf','wardrobe'],
+ office:['desk','chair','shelf','console','armchair']
+};
+export const familiesForRoom=room=>Object.hasOwn(ROOM_FAMILIES,room)?ROOM_FAMILIES[room]:Object.keys(FAMILIES);
+export const roomForFamily=family=>Object.keys(ROOM_FAMILIES).find(room=>ROOM_FAMILIES[room].includes(family))||'living';
+export function reconcileRoomSelection(state,brief,room){
+ if(!Object.hasOwn(ROOM_FAMILIES,room))throw Error('Invalid furniture space');
+ const valid=familiesForRoom(room).includes(state.family);
+ return {state:valid?state:changeFamily({},familiesForRoom(room)[0]),brief:{...brief,room,familyChosen:valid&&brief.familyChosen===true,...(!valid?{dimensionsEntered:false,sizePreset:null}:{}),accepted:['room',...(valid&&brief.familyChosen?['family']:[])]}};
+}
+
 export const CONFIGS={two:phrase('İkili','Two seats','Deux places','To sæder','Zweisitzer','Twee zitplaatsen','Dos plazas','Due posti'),three:phrase('Üçlü','Three seats','Trois places','Tre sæder','Dreisitzer','Drie zitplaatsen','Tres plazas','Tre posti'),left:phrase('Solda uzanma','Chaise on left','Méridienne à gauche','Chaiselong til venstre','Longchair links','Chaise links','Chaise a la izquierda','Chaise a sinistra'),right:phrase('Sağda uzanma','Chaise on right','Méridienne à droite','Chaiselong til højre','Longchair rechts','Chaise rechts','Chaise a la derecha','Chaise a destra')};
 
 CONFIGS.cornerLeft=phrase('Soldan dönen köşe','Left corner sofa','Canapé d’angle gauche','Venstrevendt hjørnesofa');CONFIGS.cornerRight=phrase('Sağdan dönen köşe','Right corner sofa','Canapé d’angle droit','Højrevendt hjørnesofa');
@@ -125,14 +140,14 @@ export function stepsFor(family,state={}){
 
 }
 
-export function choicesFor(step,s){
+export function choicesFor(step,s,brief={}){
 
  const corner=s.configuration?.startsWith('corner');
  const ids={returnSeats:corner?['returnOne','returnTwo','returnThree']:['returnTwo'],service:corner?['noService','woodService','cupService']:['noService'],pillows:corner?['noPillows','withPillows']:['noPillows'],arms:corner?['rounded','paddedWood','slim','none']:['rounded','rolled','slim','sloped','square','none'],cushions:s.family==='sofa'?['fixed','single','split']:['fixed','single'],back:s.family==='bed'?['fixedBack','channelBack']:['fixedBack','looseBack','channelBack'],legs:corner?['tapered','straight','cylindrical']:s.configuration!=='straight'?['tapered','straight']:['tapered','straight','sled','plinth'],front:['closed','open','mixed']}[step];
 
  if(ids)return ids.map(id=>({id,names:DETAILS[id].names,sketch:DETAILS[id].sketch}));
 
- const options={room:ROOMS,family:Object.fromEntries(Object.entries(FAMILIES).map(([k,v])=>[k,v.names])),layout:CONFIGS,top:s.family==='desk'?{rect:TOPS.rect,soft:TOPS.soft}:TOPS,wood:WOOD_NAMES,fabric:FABRIC_NAMES,weave:WEAVE_NAMES}[step];
+ const options={room:ROOMS,family:Object.fromEntries(familiesForRoom(brief.room).map(k=>[k,FAMILIES[k].names])),layout:CONFIGS,top:s.family==='desk'?{rect:TOPS.rect,soft:TOPS.soft}:TOPS,wood:WOOD_NAMES,fabric:FABRIC_NAMES,weave:WEAVE_NAMES}[step];
 
  if(options)return Object.entries(options).map(([id,names])=>({id,names}));
 
