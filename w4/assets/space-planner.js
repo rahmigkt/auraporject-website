@@ -1,8 +1,8 @@
-import {ROOM_TYPES,local,roomName,makeProject,reconcileRooms,makeItem,normaliseProject,validateRoom,roomSvg,esc,footprint} from './space-model.js?v=20261015d';
-import {FAMILIES,LANGUAGES,normalizeStudio,compileStudio,label,FABRICS} from './design-library.js?v=20261015d';
-import {createFurnitureScene} from './furniture-scene.js?v=20261015d';
-import {fabricCanvas} from './furniture-textures.js?v=20261015d';
-import {openProjectSubmission} from './project-submit.js?v=20261015d';
+import {ROOM_TYPES,local,roomName,makeProject,reconcileRooms,makeItem,normaliseProject,validateRoom,roomSvg,esc,footprint} from './space-model.js?v=20261015e';
+import {FAMILIES,LANGUAGES,normalizeStudio,compileStudio,label,FABRICS} from './design-library.js?v=20261015e';
+import {createFurnitureScene} from './furniture-scene.js?v=20261015e';
+import {fabricCanvas} from './furniture-textures.js?v=20261015e';
+import {openProjectSubmission} from './project-submit.js?v=20261015e';
 const STORE='aura-space-v1';
 const TRANSLATIONS={
 'Estimated dimensions':['Dimensions indicatives','Anslåede mål'],

@@ -1,10 +1,11 @@
-import {renderProjectStart} from './space-planner.js?v=20261015d';
-import {openProjectSubmission,sendLabel} from './project-submit.js?v=20261015d';
-import {FAMILIES,DETAILS,LANGUAGES,WOODS,FABRICS,SIZE_LIMITS,normalizeStudio,compileStudio,label,illustration} from './design-library.js?v=20261015d';
-import {WORDS,ROOMS,CONFIGS,TOPS,WEAVE_NAMES,WOOD_NAMES,FABRIC_NAMES,stepsFor,choicesFor,applyChoice,selectedChoice,projectRecord} from './choice-flow.js?v=20261015d';
-import {drawing} from './design-drawing.js?v=20261015d';
-import {createFurnitureScene} from './furniture-scene.js?v=20261015d';
-import {fabricCanvas,woodCanvas} from './furniture-textures.js?v=20261015d';
+import {renderAIWorkspace} from './ai-workspace.js?v=20261015e';
+import {renderProjectStart} from './space-planner.js?v=20261015e';
+import {openProjectSubmission,sendLabel} from './project-submit.js?v=20261015e';
+import {FAMILIES,DETAILS,LANGUAGES,WOODS,FABRICS,SIZE_LIMITS,normalizeStudio,compileStudio,label,illustration} from './design-library.js?v=20261015e';
+import {WORDS,ROOMS,CONFIGS,TOPS,WEAVE_NAMES,WOOD_NAMES,FABRIC_NAMES,stepsFor,choicesFor,applyChoice,selectedChoice,projectRecord} from './choice-flow.js?v=20261015e';
+import {drawing} from './design-drawing.js?v=20261015e';
+import {createFurnitureScene} from './furniture-scene.js?v=20261015e';
+import {fabricCanvas,woodCanvas} from './furniture-textures.js?v=20261015e';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),STORE='aura-choice-project-v1';
 export async function renderChoiceWizard(main){
  let language=new URLSearchParams(location.search).get('lang')||navigator.language.split('-')[0];if(!Object.hasOwn(LANGUAGES,language))language='en';
@@ -55,4 +56,4 @@ export async function renderChoiceWizard(main){
  const preset=new URLSearchParams(location.search).get('family');if(Object.hasOwn(FAMILIES,preset)){state=applyChoice(state,'family',preset);brief={...brief,room:'living',familyChosen:true};stepIndex=2;}
  mount();await initScene();window.addEventListener('pagehide',e=>{if(!e.persisted)scene?.dispose();});
 }
-if(document.body.dataset.page==='choices'){const q=new URLSearchParams(location.search);if(q.get('scope')==='furniture'||q.has('family'))renderChoiceWizard(document.getElementById('main'));else renderProjectStart(document.getElementById('main'));}
+if(document.body.dataset.page==='choices'){const q=new URLSearchParams(location.search);if(q.get('classic')==='1')renderChoiceWizard(document.getElementById('main'));else renderAIWorkspace(document.getElementById('main'));}
