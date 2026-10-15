@@ -1,6 +1,6 @@
-import {drawing} from './design-drawing.js?v=20261015f';
-import {compileStudio,FAMILIES,FABRICS,label} from './design-library.js?v=20261015f';
-import {fabricCanvas} from './furniture-textures.js?v=20261015f';
+import {drawing} from './design-drawing.js?v=20261016b';
+import {compileStudio,FAMILIES,FABRICS,label} from './design-library.js?v=20261016b';
+import {fabricCanvas} from './furniture-textures.js?v=20261016b';
 const W=1480,H=2093,M=100;
 const bytes=s=>new TextEncoder().encode(s);
 export function jpegPagesToPdf(pages){
