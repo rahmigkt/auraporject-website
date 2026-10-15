@@ -28,8 +28,8 @@ export function buildKitchenStudy(type='cabinets',style='natural'){
   for(const x of [-.65,.65]){box('stool-seat',x,.65,-.96,.4,.055,.38,'wood',undefined,'rounded');for(const a of [-1,1])for(const b of [-1,1])box('stool-leg',x+a*.14,.32,-.96+b*.13,.028,.63,.028,'metal');box('stool-footrest',x,.24,-1.09,.30,.02,.02,'metal');}
  }
  if(type==='worktop'){
-  for(let i=0;i<4;i++)unit(-.9+i*.6,.6,.86,0,i===1?1:3);
-  sinkSlab(-.3,.88,0,2.4,.65);unit(.9,.6,.86,.6,3);unit(.9,.6,.86,1.2,3);stone('L-return-worktop',.9,.88,.94,.65,.03,1.23);
+  unit(-.9,.6,.86,0,3);unit(0,1.2,.86,0,1);unit(.9,.6,.86,0,3);
+  sinkSlab(0,.88,0,2.4,.65);unit(.9,.6,.86,.6,3);unit(.9,.6,.86,1.2,3);stone('L-return-worktop',.9,.88,.94,.65,.03,1.23);
   stone('low-upstand',0,.97,-.317,2.4,.15,.018);stone('return-upstand',1.217,.97,.75,.018,.15,1.5);
  }
  const vertices=parts.flatMap(partCorners),lo=[0,1,2].map(a=>Math.min(...vertices.map(v=>v[a]))),hi=[0,1,2].map(a=>Math.max(...vertices.map(v=>v[a]))),offset=[(lo[0]+hi[0])/2,lo[1],(lo[2]+hi[2])/2];
