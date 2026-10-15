@@ -71,7 +71,7 @@ export function compileStudio(raw){
   const count=s.cushions==='split'&&s.family==='sofa'?3:1;
   for(let i=0;i<count;i++)box('seat-cushion',-inner/2+(i+.5)*inner/count,seatY-cushion/2,isBench?0:backD/2,inner/count-.008,cushion,usableD-.012,'fabric');
   if(!isBench){box('back',0,(H+seatY)/2,-D/2+backD/2,W,H-seatY,backD,'fabric');
-   if(hasArms)for(const sign of [-1,1]){const armH=(H-seatY)*.55;box('arm',sign*(W/2-armW/2),seatY+armH/2,0,armW,armH,D,'fabric');if(s.arms==='rolled')box('arm-roll',sign*(W/2-armW/2),seatY+armH-armW/2,0,armW,D,armW,'fabric','round',[Math.PI/2,0,0]);}}
+   if(hasArms)for(const sign of [-1,1]){const armH=(H-seatY)*.55;const baseArmH=s.arms==='rolled'?Math.max(.02,armH-armW/2):armH;box('arm',sign*(W/2-armW/2),seatY+baseArmH/2,0,armW,baseArmH,D,'fabric');if(s.arms==='rolled')box('arm-roll',sign*(W/2-armW/2),seatY+armH-armW/2,0,armW,D,armW,'fabric','round',[Math.PI/2,0,0]);}}
  }else if(s.family==='bed'){
   legs(.14);box('bed-frame',0,.23,.035,W,.18,D-.07);box('mattress',0,.41,.035,W-.06,.18,D-.13,'fabric');box('headboard',0,H/2,-D/2+.035,W,H,.07,'fabric');
  }else{
