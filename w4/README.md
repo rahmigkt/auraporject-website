@@ -28,7 +28,7 @@ Deployment uses the repository's existing main-branch FTP workflow, authorized b
 
 ## Furniture planner
 
-`tasarla.html` adds a three-step customer experience: piece, size and finish. Sideboard, bookcase and upholstered bench are generated as bounded concept geometry in metres. Overall dimensions are exposed in centimetres. Customers can select open/closed sideboard fronts, columns and rows, three wood appearances, and four upholstery colourways with plain/Palmette/Damask on the bench. There is no structural certification, binding price, stock promise or production-ready cutlist.
+`tasarla.html` adds a three-step customer experience: piece, size and finish. Sideboard, bookcase and upholstered bench are generated as bounded concept geometry in metres. Overall dimensions are exposed in centimetres. Customers can select open/closed sideboard fronts, columns and rows, three wood appearances, and four plain upholstery colours with procedural weave texture. There is no structural certification, binding price, stock promise or production-ready cutlist.
 
 The renderer uses the MIT-licensed Three.js already present in the repository, now copied with its license into W4 so this edition is self-contained. Manual orbit/keyboard rotation, front/side views, zoom and dimensional labels are supported. A front elevation fallback is available when WebGL creation fails; browser QA covered WebGL, not forced context failure.
 
@@ -37,3 +37,10 @@ Morti was inspected at `torusservices/morti-app`, commit `d12cb910339bd5d50e6358
 Furniture designs use their own versioned, allowlisted state and storage key. Save/share, PNG export, bounded JSON download/import, language preservation and enquiry-prefill are provided. Existing NAKIŞ atelier studies can be passed into the bench design. Product-page and home links point to the planner.
 
 Validation: 192 extreme parameter combinations were checked for positive finite parts and geometry inside the overall dimensions, as well as JSON/share round trips and invalid file rejection. Browser checks covered all three models, numeric resizing, open fronts, material/pattern selection, views, save, JSON download/reimport, PNG download, language preservation, NAKIŞ-to-bench hand-off, enquiry prefilling and 390px mobile overflow. A production enquiry/payment was not submitted.
+
+
+## Conversational co-design
+
+`birlikte.html` provides a side-by-side chat and 3D concept workspace in eight UI languages, fourteen furniture families and eleven illustrated detail choices. Plain upholstery only. Full scope, local startup and production hosting boundaries are documented in `services/design/README.md` in the repository. No training, payment collection or designer project submission is implemented. Existing static FTP hosting does not run the model service. Live AI requires a separate deployed backend.
+
+Local inference tests: Qwen3.5:9b on CPU exceeded the 85-second timeout. With a compact prompt, Qwen2.5:7b-instruct produced a French reply and tapered-leg patch in 36.5 seconds. Danish replies arrived in 23.6 and 37.0 seconds, but omitted the requested furniture family; locale vocabulary was added for a follow-up check. These are individual prototype tests, not a multilingual quality or load benchmark.
