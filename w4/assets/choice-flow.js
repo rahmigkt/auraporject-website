@@ -1,4 +1,4 @@
-import {FAMILIES,DETAILS,WOODS,FABRICS,SIZE_LIMITS,normalizeStudio,changeFamily,compileStudio,label} from './design-library.js?v=20261015c';
+import {FAMILIES,DETAILS,WOODS,FABRICS,SIZE_LIMITS,normalizeStudio,changeFamily,compileStudio,label} from './design-library.js?v=20261015d';
 
 export const phrase=(tr,en,fr,da,de,nl,es,it)=>({tr,en,fr:fr||en,da:da||en,de:de||en,nl:nl||en,es:es||en,it:it||en});
 
