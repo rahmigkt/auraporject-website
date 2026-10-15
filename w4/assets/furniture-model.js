@@ -5,7 +5,7 @@ export const MODELS={
  bench:{tr:'Döşemeli bank',en:'Upholstered bench',tag:['Ahşapla dokunun buluştuğu bir köşe.','A meeting of wood, texture and comfort.'],defaults:{width:140,height:46,depth:45,columns:2,rows:1,front:'open'},limits:{width:[90,200],height:[40,55],depth:[35,65],columns:[2,2],rows:[1,1]}}
 };
 export const WOODS={oak:{tr:'Doğal meşe',en:'Natural oak',hex:'#b99b70'},walnut:{tr:'Sıcak ceviz',en:'Warm walnut',hex:'#79523d'},dark:{tr:'Koyu ahşap',en:'Dark wood',hex:'#393b32'}};
-export const FABRICS={linen:{tr:'Keten & zeytin',en:'Linen & olive',ground:'#ded5bf',ink:'#475541',accent:'#a77a55',soft:'#a5ad8a'},clay:{tr:'Kil & kökboya',en:'Clay & madder',ground:'#ad6c53',ink:'#f0dfc2',accent:'#5d3438',soft:'#d5ae8f'},indigo:{tr:'Çivit & kum',en:'Indigo & sand',ground:'#273e50',ink:'#e4d8bf',accent:'#b58755',soft:'#88a3a1'},charcoal:{tr:'Kömür & tebeşir',en:'Charcoal & chalk',ground:'#333833',ink:'#e9e5d7',accent:'#a59d7b',soft:'#7d8d7c'}};
+export const FABRICS={linen:{tr:'Kum beji',en:'Sand beige',ground:'#ded5bf',ink:'#475541',accent:'#a77a55',soft:'#a5ad8a'},clay:{tr:'Kiremit',en:'Terracotta',ground:'#ad6c53',ink:'#f0dfc2',accent:'#5d3438',soft:'#d5ae8f'},indigo:{tr:'Çivit mavisi',en:'Indigo blue',ground:'#273e50',ink:'#e4d8bf',accent:'#b58755',soft:'#88a3a1'},charcoal:{tr:'Antrasit',en:'Charcoal',ground:'#333833',ink:'#e9e5d7',accent:'#a59d7b',soft:'#7d8d7c'}};
 export const INITIAL={version:1,model:'console',...MODELS.console.defaults,wood:'walnut',fabric:'linen',pattern:'none'};
 const has=(o,k)=>typeof k==='string'&&Object.prototype.hasOwnProperty.call(o,k);
 const bound=(v,range,fallback)=>typeof v==='number'&&Number.isFinite(v)?Math.min(range[1],Math.max(range[0],Math.round(v))):fallback;
@@ -18,7 +18,7 @@ export function normalizeDesign(value={}){
  r.rows=Math.min(r.rows,Math.max(1,Math.floor((r.height-(model==='console'?16:0))/22)));
  if(model==='bench'){r.columns=2;r.rows=1;}
  r.front=model==='console'&&value.front==='closed'?'closed':model==='console'&&value.front!=='open'?m.defaults.front:'open';
- r.wood=has(WOODS,value.wood)?value.wood:'walnut';r.fabric=has(FABRICS,value.fabric)?value.fabric:'linen';r.pattern=['none','palmet','damask'].includes(value.pattern)?value.pattern:'none';
+ r.wood=has(WOODS,value.wood)?value.wood:'walnut';r.fabric=has(FABRICS,value.fabric)?value.fabric:'linen';r.pattern='none';
  return r;
 }
 export function decodeDesign(text){try{const value=JSON.parse(text);return value?.version===1&&has(MODELS,value.model)&&['width','height','depth'].every(k=>typeof value[k]==='number'&&Number.isFinite(value[k]))?normalizeDesign(value):null}catch{return null}}
