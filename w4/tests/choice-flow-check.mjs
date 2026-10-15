@@ -15,3 +15,8 @@ for(const layout of ['left','right']){const s=applyChoice(sofa,'layout',layout);
 const round=applyChoice(applyChoice({},'family','table'),'top','round');assert.equal(round.width,round.depth);assert(compileStudio(round).parts.some(p=>p.shape==='ellipse'));assert(applyChoice(round,'size','generous').width>round.width);
 const mixed=applyChoice(applyChoice({},'family','console'),'front','mixed');assert(mixed.columns>=3);assert(!choicesFor('storage',mixed).some(c=>c.id==='2'));
 console.log(`PASS ${cases} option variants across ${Object.keys(FAMILIES).length} complete family flows; fixed seats, rounded/sloped arms, back variants, chaise, round tops, project hand-off.`);
+
+for(const family of ['sofa','armchair','chair'])for(const back of ['fixedBack','looseBack','channelBack']){
+ const model=compileStudio({family,arms:'none',back});const support=model.parts.find(p=>p.role==='back-support');const frame=model.parts.find(p=>p.role==='seat-frame');assert.ok(support.position[1]-support.size[1]/2<=frame.position[1]+frame.size[1]/2,'Back support must meet seat frame');assert.ok(support.position[1]+support.size[1]/2>=.45,'Back support reaches seating');
+}
+console.log('PASS continuous back support for 9 armless seating variants');

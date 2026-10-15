@@ -50,6 +50,7 @@ export function normalizeStudio(raw={}){
  for(const [i,k] of ['width','height','depth'].entries())r[k]=typeof raw[k]==='number'&&Number.isFinite(raw[k])?Math.round(Math.min(k==='height'?260:350,Math.max(k==='height'?(family==='bed'?60:30):25,raw[k]))):d[i];
  for(const [k,choices,fallback] of [['legs',['straight','tapered','sled','plinth'],'tapered'],['arms',['square','rolled','rounded','slim','sloped','none'],'rounded'],['cushions',['single','split','fixed'],'split'],['back',['fixedBack','looseBack','channelBack'],'fixedBack'],['configuration',['straight','left','right'],'straight'],['top',['rect','soft','round','oval'],'rect'],['weave',['plain','twill22','basket'],'plain'],['front',['open','closed','mixed'],'closed'],['wood',Object.keys(WOODS),'walnut'],['fabric',Object.keys(FABRICS),'linen']])r[k]=choices.includes(raw[k])?raw[k]:fallback;
  r.seats=raw.seats===2?2:3;
+ if(family!=='sofa'&&r.cushions==='split')r.cushions='single';
  r.columns=Number.isInteger(raw.columns)?Math.min(4,Math.max(2,raw.columns)):3;
  r.rows=Number.isInteger(raw.rows)?Math.min(6,Math.max(1,raw.rows)):family==='shelf'?4:['dresser','nightstand'].includes(family)?3:1;
  if(['console','shelf'].includes(family)){const n=normalizeDesign({...r,model:family});for(const k of ['width','height','depth','columns','rows'])r[k]=n[k];}
@@ -81,14 +82,16 @@ export function compileStudio(raw){
  if(['table','coffee','desk'].includes(s.family)){const t=Math.min(.045,H*.12);legs(H-t);box('top',0,H-t/2,0,W,t,D,'wood',s.top==='round'||s.top==='oval'?'ellipse':s.top==='soft'?'rounded':'box');}
  else if(['sofa','armchair','chair','bench'].includes(s.family)){
   const isBench=s.family==='bench',seatY=isBench?H*.82:Math.min(.45,H*.55),cushion=Math.min(.13,H*.15),base=.06,legTop=Math.max(.08,seatY-cushion-base),L=s.configuration!=='straight',mainD=L?Math.min(.95,D*.62):D,mainZ=-D/2+mainD/2;
-  legs(legTop);if(L)for(const p of parts)if(p.role==='leg'&&Math.sign(p.position[0])===(s.configuration==='left'?1:-1)&&p.position[2]>0)p.position[2]=mainZ+mainD/2-p.size[2]*1.2;box('seat-frame',0,legTop+base/2,mainZ,W,base,mainD);
+  legs(legTop);if(L)for(const p of parts)if(p.role==='leg'&&Math.sign(p.position[0])===(s.configuration==='left'?1:-1)&&p.position[2]>0)p.position[2]=mainZ+mainD/2-p.size[2]*1.2;box('seat-frame',0,legTop+base/2,mainZ,W,base,mainD,'fabric','rounded');
+  box('seat-apron',0,(legTop+base+seatY-cushion+.018)/2,mainZ,W,Math.max(.018,seatY-cushion+.018-legTop-base),mainD,'fabric','rounded');
   const armW=s.arms==='slim'?Math.min(.075,W*.06):Math.min(.19,W*.12),hasArms=!isBench&&s.family!=='chair'&&s.arms!=='none',inner=W-(hasArms?2*armW:0),backD=Math.min(.16,mainD*.2),usableD=mainD-(isBench?0:backD),count=s.cushions==='split'&&s.family==='sofa'?s.seats:1,soft=s.arms==='rounded';
   if(s.cushions==='fixed')box('fixed-seat',0,(legTop+seatY)/2,mainZ+(isBench?0:backD/2),inner,seatY-legTop,usableD-.012,'fabric','rounded');
   else for(let i=0;i<count;i++)box('seat-cushion',-inner/2+(i+.5)*inner/count,seatY-cushion/2,mainZ+(isBench?0:backD/2),inner/count-.012,cushion,usableD-.012,'fabric','rounded');
   if(L){const chaiseW=inner/s.seats,x=(s.configuration==='left'?-1:1)*(inner/2-chaiseW/2),extension=D-mainD;box('chaise-frame',x,legTop+base/2,mainZ+mainD/2+extension/2,chaiseW,base,extension);box(s.cushions==='fixed'?'fixed-chaise':'chaise-cushion',x,seatY-cushion/2,mainZ+mainD/2+extension/2,chaiseW-.012,cushion,extension-.012,'fabric','rounded');}
   if(!isBench){
    const backH=H-seatY;
-   if(s.back==='looseBack'){box('back-frame',0,seatY+backH*.4,-D/2+.025,W,backH*.8,.05,'fabric','rounded');const n=s.family==='sofa'?s.seats:1;for(let i=0;i<n;i++)box('back-cushion',-inner/2+(i+.5)*inner/n,seatY+backH/2,-D/2+backD/2+.018,inner/n-.012,backH,backD,'fabric','rounded');}
+   box('back-support',0,(legTop+seatY+.035)/2,-D/2+backD/2,W,seatY+.035-legTop,backD,'fabric','rounded');
+   if(s.back==='looseBack'){box('back-frame',0,(legTop+H-.025)/2,-D/2+.03,W,H-.025-legTop,.06,'fabric','rounded');const n=s.family==='sofa'?s.seats:1;for(let i=0;i<n;i++)box('back-cushion',-inner/2+(i+.5)*inner/n,seatY+backH/2,-D/2+backD/2+.018,inner/n-.012,backH,backD,'fabric','rounded');}
    else if(s.back==='channelBack'){const n=Math.max(3,Math.round(inner/.18));for(let i=0;i<n;i++)box('back-channel',-W/2+(i+.5)*W/n,seatY+backH/2,-D/2+backD/2,W/n-.006,backH,backD,'fabric','rounded');}
    else box('back',0,seatY+backH/2,-D/2+backD/2,W,backH,backD,'fabric',soft?'rounded':'box');
    if(hasArms)for(const sign of [-1,1]){const armH=(H-seatY)*.55,baseArmH=s.arms==='rolled'?Math.max(.02,armH-armW/2):armH;box('arm',sign*(W/2-armW/2),(legTop+seatY+baseArmH)/2,mainZ,armW,seatY+baseArmH-legTop,mainD,'fabric',s.arms==='sloped'?'sloped':soft?'rounded':'box');if(s.arms==='rolled')box('arm-roll',sign*(W/2-armW/2),seatY+armH-armW/2,mainZ,armW,mainD,armW,'fabric','round',[Math.PI/2,0,0]);}
