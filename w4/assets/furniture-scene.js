@@ -1,4 +1,8 @@
-export function partGeometry(THREE,part){
+import {WOODS,FABRICS} from './furniture-model.js?v=20261015f';
+import {woodCanvas,fabricCanvas} from './furniture-textures.js?v=20261015f';
+export async function createFurnitureScene(host,onRotate){
+ const THREE=await import('./vendor/three.module.js?v=20261015f');
+ function geometry(part){
   const [w,h,d]=part.size;
   if(part.shape==='tapered')return new THREE.CylinderGeometry(w/2,w*.23,h,20);
   if(part.shape==='round')return new THREE.CylinderGeometry(w/2,w/2,h,24);
@@ -8,11 +12,6 @@ export function partGeometry(THREE,part){
   else if(part.shape==='sloped'){for(let i=0;i<p.count;i++)if(p.getY(i)>0)p.setY(i,-h/2+h*(.6+.4*(.5-p.getZ(i)/d)));g.computeVertexNormals();}
   return g;
  }
-
-import {WOODS,FABRICS} from './furniture-model.js?v=20261015e';
-import {woodCanvas,fabricCanvas} from './furniture-textures.js?v=20261015e';
-export async function createFurnitureScene(host,onRotate){
- const THREE=await import('./vendor/three.module.js?v=20261015e');
  let renderer;
  try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,preserveDrawingBuffer:true});}catch{return createElevation(host)}
  const scene=new THREE.Scene();scene.background=new THREE.Color('#e6e8df');
@@ -31,7 +30,7 @@ export async function createFurnitureScene(host,onRotate){
  function setDesign(next){design=next;while(group.children.length){const child=group.children[0];group.remove(child);child.traverse(o=>{o.geometry?.dispose();if(Array.isArray(o.material))o.material.forEach(m=>m.dispose());else o.material?.dispose()});}textures.forEach(t=>t.dispose());textures=[];
   const woodTexture=new THREE.CanvasTexture(woodCanvas(WOODS[next.state.wood].hex));woodTexture.colorSpace=THREE.SRGBColorSpace;woodTexture.wrapS=woodTexture.wrapT=THREE.RepeatWrapping;textures.push(woodTexture);
   const fabricTexture=new THREE.CanvasTexture(fabricCanvas(FABRICS[next.state.fabric],next.state.pattern,next.state.weave));fabricTexture.colorSpace=THREE.SRGBColorSpace;fabricTexture.wrapS=fabricTexture.wrapT=THREE.RepeatWrapping;fabricTexture.repeat.set(Math.max(1,next.width/next.depth),1);textures.push(fabricTexture);
-  for(const part of next.parts){const material=new THREE.MeshStandardMaterial(part.material==='fabric'?{map:fabricTexture,roughness:.95}:part.material==='metal'?{color:'#4e5043',metalness:.55,roughness:.4}:{map:woodTexture,roughness:.65});const mesh=new THREE.Mesh(partGeometry(THREE,part),material);mesh.position.set(...part.position);if(part.rotation)mesh.rotation.set(...part.rotation);mesh.castShadow=true;mesh.receiveShadow=true;group.add(mesh);const lines=new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry),new THREE.LineBasicMaterial({color:'#2f382a',transparent:true,opacity:part.material==='fabric'?.08:.15}));lines.position.copy(mesh.position);lines.rotation.copy(mesh.rotation);if(part.shape!=='rounded')group.add(lines);else{lines.geometry.dispose();lines.material.dispose();}}
+  for(const part of next.parts){const material=new THREE.MeshStandardMaterial(part.material==='fabric'?{map:fabricTexture,roughness:.95}:part.material==='metal'?{color:'#4e5043',metalness:.55,roughness:.4}:{map:woodTexture,roughness:.65});const mesh=new THREE.Mesh(geometry(part),material);mesh.position.set(...part.position);if(part.rotation)mesh.rotation.set(...part.rotation);mesh.castShadow=true;mesh.receiveShadow=true;group.add(mesh);const lines=new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry),new THREE.LineBasicMaterial({color:'#2f382a',transparent:true,opacity:part.material==='fabric'?.08:.15}));lines.position.copy(mesh.position);lines.rotation.copy(mesh.rotation);if(part.shape!=='rounded')group.add(lines);else{lines.geometry.dispose();lines.material.dispose();}}
   const {width:w,height:h,depth:d,state:s}=next;dimension([-w/2,-.035,d/2+.16],[w/2,-.035,d/2+.16],s.width+' cm',[0,-.035,d/2+.19],'width');dimension([w/2+.15,0,-d/2-.16],[w/2+.15,h,-d/2-.16],s.height+' cm',[w/2+.22,h/2,-d/2-.2],'height');dimension([-w/2-.12,.03,-d/2],[-w/2-.12,.03,d/2],s.depth+' cm',[-w/2-.22,.03,0],'depth');group.children.filter(c=>c.userData.dimension).forEach(c=>c.visible=measure&&!(activeView==='side'&&c.userData.axis==='width')&&!(activeView==='front'&&c.userData.axis==='depth'));draw();
  }
  const resize=()=>{const r=host.getBoundingClientRect();renderer.setSize(Math.max(1,r.width),Math.max(1,r.height),false);draw()};const observer=new ResizeObserver(resize);observer.observe(host);
