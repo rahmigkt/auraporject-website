@@ -1,9 +1,9 @@
-import {openProjectSubmission,sendLabel} from './project-submit.js';
-import {FAMILIES,DETAILS,LANGUAGES,WOODS,FABRICS,SIZE_LIMITS,normalizeStudio,compileStudio,label,illustration} from './design-library.js';
-import {WORDS,ROOMS,CONFIGS,TOPS,WEAVE_NAMES,WOOD_NAMES,FABRIC_NAMES,stepsFor,choicesFor,applyChoice,selectedChoice,projectRecord} from './choice-flow.js';
-import {drawing} from './design-drawing.js';
-import {createFurnitureScene} from './furniture-scene.js';
-import {fabricCanvas,woodCanvas} from './furniture-textures.js';
+import {openProjectSubmission,sendLabel} from './project-submit.js?v=20261015b';
+import {FAMILIES,DETAILS,LANGUAGES,WOODS,FABRICS,SIZE_LIMITS,normalizeStudio,compileStudio,label,illustration} from './design-library.js?v=20261015b';
+import {WORDS,ROOMS,CONFIGS,TOPS,WEAVE_NAMES,WOOD_NAMES,FABRIC_NAMES,stepsFor,choicesFor,applyChoice,selectedChoice,projectRecord} from './choice-flow.js?v=20261015b';
+import {drawing} from './design-drawing.js?v=20261015b';
+import {createFurnitureScene} from './furniture-scene.js?v=20261015b';
+import {fabricCanvas,woodCanvas} from './furniture-textures.js?v=20261015b';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),STORE='aura-choice-project-v1';
 export async function renderChoiceWizard(main){
  let language=new URLSearchParams(location.search).get('lang')||navigator.language.split('-')[0];if(!Object.hasOwn(LANGUAGES,language))language='en';

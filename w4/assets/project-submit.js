@@ -1,5 +1,5 @@
-import {phrase} from './choice-flow.js';
-import {label} from './design-library.js';
+import {phrase} from './choice-flow.js?v=20261015b';
+import {label} from './design-library.js?v=20261015b';
 const texts={
  open:phrase('Projemi AURA’ya gönder','Send my project to AURA','Envoyer mon projet à AURA','Send mit projekt til AURA','Mein Projekt an AURA senden','Mijn project naar AURA sturen','Enviar mi proyecto a AURA','Invia il mio progetto ad AURA'),
  title:phrase('Tasarımınız bize ulaşsın.','Let’s receive your design.','Recevons votre projet.','Lad os modtage dit design.'),
