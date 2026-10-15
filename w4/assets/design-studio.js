@@ -1,12 +1,12 @@
-import {openProjectSubmission,sendLabel} from './project-submit.js?v=20261015c';
-import {projectRecord} from './choice-flow.js?v=20261015c';
-import {FAMILIES,DETAILS,LANGUAGES,detailFields,WOODS,FABRICS,label,illustration,normalizeStudio,changeFamily,compileStudio} from './design-library.js?v=20261015c';
-import {createFurnitureScene} from './furniture-scene.js?v=20261015c';
-import {fabricCanvas,woodCanvas} from './furniture-textures.js?v=20261015c';
-import {strings} from './design-i18n.js?v=20261015c';
+import {openProjectSubmission,sendLabel} from './project-submit.js?v=20261015d';
+import {projectRecord} from './choice-flow.js?v=20261015d';
+import {FAMILIES,DETAILS,LANGUAGES,detailFields,WOODS,FABRICS,label,illustration,normalizeStudio,changeFamily,compileStudio} from './design-library.js?v=20261015d';
+import {createFurnitureScene} from './furniture-scene.js?v=20261015d';
+import {fabricCanvas,woodCanvas} from './furniture-textures.js?v=20261015d';
+import {strings} from './design-i18n.js?v=20261015d';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const STORE='aura-codesign-v2';
-import {drawing} from './design-drawing.js?v=20261015c';
+import {drawing} from './design-drawing.js?v=20261015d';
 export {drawing};
 export async function renderDesignStudio(main){
  let language=new URLSearchParams(location.search).get('lang')||navigator.language.split('-')[0];if(!Object.hasOwn(LANGUAGES,language))language='en';
@@ -14,8 +14,8 @@ export async function renderDesignStudio(main){
  const $=id=>document.getElementById(id),S=()=>strings(language);
  const setStatus=text=>{$('studioStatus').textContent=text;};
  function mount(){const t=S();document.documentElement.lang=language;document.title='AURA — '+t.title;
- main.innerHTML=`<header class="ds-header"><a href="index.html" class="ds-brand">AURA<span>PROJECT</span></a><a href="index.html" class="ds-back">← AURA</a><label class="ds-language"><span aria-hidden="true">◎</span><select id="studioLanguage" aria-label="Language">${Object.entries(LANGUAGES).map(([k,v])=>`<option value="${k}" ${language===k?'selected':''}>${v}</option>`).join('')}</select></label></header>
- <section class="ds-heading"><div><p class="ds-eyebrow">AURA / CO-DESIGN</p><h1>${t.title}</h1></div><p>${t.intro}</p></section>
+ main.innerHTML=`<header class="ds-header"><a href="index.html" class="ds-brand">AURA<span>AI / PROJECT</span></a><a href="index.html" class="ds-back">← AURA</a><label class="ds-language"><span aria-hidden="true">◎</span><select id="studioLanguage" aria-label="Language">${Object.entries(LANGUAGES).map(([k,v])=>`<option value="${k}" ${language===k?'selected':''}>${v}</option>`).join('')}</select></label></header>
+ <section class="ds-heading"><div><p class="ds-eyebrow">AURA AI / PROJECT</p><h1>${t.title}</h1></div><p>${t.intro}</p></section>
  <div class="ds-workspace"><section class="ds-conversation" aria-label="${t.assistant}"><div class="ds-chat-head"><span class="ds-avatar">a</span><div><strong>${t.assistant}</strong><small id="connectionState" role="status">${online?t.online:t.offline}</small></div></div><div class="ds-messages" id="studioMessages" role="log" aria-live="polite"></div><div class="ds-starters" id="starters">${['start','replace','unsure'].map(k=>`<button data-start="${k}">${t[k]} ↗</button>`).join('')}</div><form id="studioChat" class="ds-composer"><label class="ds-sr" for="studioPrompt">${t.placeholder}</label><textarea id="studioPrompt" rows="2" maxlength="2000" placeholder="${t.placeholder}" required></textarea><button id="sendStudio" type="submit" aria-label="${t.send}">↑</button></form><small class="ds-privacy">${t.review}</small></section>
  <section class="ds-design"><div class="ds-design-top"><span id="studioPiece"></span><span class="ds-pill">DESIGN STUDY</span></div><div id="studioStage" class="furniture-stage" aria-label="${t.title}" aria-busy="true"></div><div class="ds-view"><span id="studioDimensions"></span><div>${['angle','front','side'].map(k=>`<button data-view="${k}" aria-pressed="${k==='angle'}">${t[k]}</button>`).join('')}<button id="studioZoomOut" aria-label="Zoom −">−</button><button id="studioZoomIn" aria-label="Zoom +">+</button></div></div><p class="ds-concept">${t.note}</p><nav class="ds-tabs" aria-label="Design options">${['library','details','materials','measure'].map(k=>`<button data-tab="${k}" aria-pressed="${activeTab===k}">${t[k]}</button>`).join('')}</nav><div class="ds-options" id="studioOptions"></div><div class="ds-exports"><button id="saveStudio">${t.save} ↓</button><button id="restoreStudio">${t.restore} ↺</button><button id="exportStudio">${sendLabel(language)} ↗</button></div><p id="studioStatus" role="status" aria-live="polite"></p></section></div>`;
  if(!messages.length)messages.push({role:'assistant',content:t.welcome,kind:'welcome'});
