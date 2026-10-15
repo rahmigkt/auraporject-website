@@ -14,6 +14,7 @@ const loadImage=src=>new Promise((resolve,reject)=>{const i=new Image();i.onload
 function fit(ctx,img,x,y,w,h){const s=Math.min(w/img.width,h/img.height);ctx.drawImage(img,x+(w-img.width*s)/2,y+(h-img.height*s)/2,img.width*s,img.height*s);}
 function wrap(ctx,text,x,y,width,line=36){let words=String(text||'—').split(/\s+/),row='';for(const word of words){if(ctx.measureText(row+' '+word).width>width&&row){ctx.fillText(row,x,y);y+=line;row=word;}else row+=(row?' ':'')+word;}if(row){ctx.fillText(row,x,y);y+=line;}return y;}
 export async function createProjectPdf({project,contact={},rows=[],perspective,reference}){
+ if(project.stage==='brief')return createBriefPdf({project,contact,rows,reference});
  const tr=project.language==='tr',t=(a,b)=>tr?a:b,d=compileStudio(project.design),title=label(FAMILIES[d.state.family],project.language),pages=[];
  const start=(name,n)=>{const c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');g.fillStyle='#f8f6ef';g.fillRect(0,0,W,H);g.fillStyle='#34422f';g.font='52px Georgia';g.fillText('AURA',M,105);g.font='19px Arial';g.fillText('PROJECT / '+reference,M,145);g.fillText(String(n).padStart(2,'0'),W-M-70,110);g.font='46px Georgia';g.fillText(name,M,230);g.font='22px Arial';g.fillStyle='#66725b';g.fillText(t('ÖN TASARIM · ÜRETİM ÇİZİMİ DEĞİLDİR','CONCEPT · NOT A PRODUCTION DRAWING'),M,H-85);g.fillText(reference,W-M-360,H-85);return {c,g};};
  const finish=({c})=>{const raw=atob(c.toDataURL('image/jpeg',.94).split(',')[1]);pages.push({width:W,height:H,data:Uint8Array.from(raw,c=>c.charCodeAt(0))});};
@@ -24,4 +25,16 @@ export async function createProjectPdf({project,contact={},rows=[],perspective,r
  for(const[key,a,b]of[['name','Ad soyad','Name'],['email','E-posta','Email'],['phone','Telefon','Phone'],['country','Ülke','Country'],['city','Şehir','City'],['postal','Posta kodu','Postcode'],['address','Adres','Address'],['note','Not','Note']]){if(!contact[key])continue;ensure();p.g.font='22px Arial';p.g.fillStyle='#748067';p.g.fillText(t(a,b),M,y);y+=42;p.g.fillStyle='#34422f';p.g.font='26px Arial';let line='';for(const char of String(contact[key])){if(char==='\n'||p.g.measureText(line+char).width>W-M*2){ensure();p.g.fillStyle='#34422f';p.g.font='26px Arial';p.g.fillText(line,M,y);y+=36;line=char==='\n'?'':char;}else line+=char;}if(line){ensure();p.g.fillStyle='#34422f';p.g.font='26px Arial';p.g.fillText(line,M,y);y+=36;}y+=28;}
  p.g.font='23px Arial';wrap(p.g,t('Bu belge sipariş, kapora veya stok rezervasyonu oluşturmaz. Tasarımcı uygunluk, gerçek ürün ve fiyatı ayrıca doğrular.','This document is not an order, deposit or stock reservation. A designer confirms feasibility, the actual product and price separately.'),M,1830,W-M*2,35);finish(p);
  return jpegPagesToPdf(pages);
+}
+
+function createBriefPdf({project,contact,rows,reference}){
+ const tr=project.language==='tr',pages=[],title=project.product?.names?.[project.language]||project.product?.names?.en||'Project brief';let canvas,ctx,y;
+ function page(){canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;ctx=canvas.getContext('2d');ctx.fillStyle='#f8f6ef';ctx.fillRect(0,0,W,H);ctx.fillStyle='#34422f';ctx.font='46px Georgia';ctx.fillText('AURA / '+(tr?'TASARIM TALEBİ':'DESIGN BRIEF'),M,110);ctx.font='22px Arial';ctx.fillText(reference||'—',M,160);ctx.fillText(tr?'ÇİZİM İÇERMEZ · TASARIMCI İNCELEMESİ GEREKİR':'NO DRAWING · DESIGNER REVIEW REQUIRED',M,H-90);y=240;}
+ function finish(){const raw=atob(canvas.toDataURL('image/jpeg',.94).split(',')[1]);pages.push({width:W,height:H,data:Uint8Array.from(raw,c=>c.charCodeAt(0))});}
+ function line(text){if(y>H-160){finish();page();}ctx.fillStyle='#34422f';ctx.font='26px Arial';ctx.fillText(text,M,y);y+=38;}
+ function paragraph(value){let lineText='';for(const char of String(value||'—')){if(char==='\n'||ctx.measureText(lineText+char).width>W-2*M){line(lineText);lineText=char==='\n'?'':char;}else lineText+=char;}if(lineText)line(lineText);y+=24;}
+ page();paragraph(title);paragraph(tr?'Bu dosya ürün talebidir. Üretim çizimi, sipariş veya ücret onayı değildir.':'This file is a product request, not a production drawing, order or payment approval.');
+ for(const row of rows){paragraph(row.key);paragraph(row.value);}
+ paragraph(tr?'İLETİŞİM':'CONTACT');for(const [key,value]of Object.entries(contact))if(value&&typeof value==='string')paragraph(key+': '+value);
+ finish();return jpegPagesToPdf(pages);
 }
