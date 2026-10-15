@@ -23,7 +23,7 @@ Examples: customer "Je voudrais un buffet avec des pieds qui deviennent plus fin
 
 const headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'};
 function json(res,status,data){res.writeHead(status,headers);res.end(JSON.stringify(data));}
-async function body(req){let s='';for await(const part of req){s+=part.toString('utf8');if(Buffer.byteLength(s)>50000)throw Error('Body too large');}return JSON.parse(s);}
+async function body(req){const chunks=[];let bytes=0;for await(const part of req){bytes+=part.length;if(bytes>50000)throw Error('Body too large');chunks.push(part);}return JSON.parse(Buffer.concat(chunks).toString('utf8'));}
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.txt':'text/plain; charset=utf-8'};
 export const server=http.createServer(async(req,res)=>{
  try{const url=new URL(req.url,`http://127.0.0.1:${PORT}`);
