@@ -2,6 +2,16 @@ import {WOODS,FABRICS} from './furniture-model.js';
 import {woodCanvas,fabricCanvas} from './furniture-textures.js';
 export async function createFurnitureScene(host,onRotate){
  const THREE=await import('./vendor/three.module.js');
+ function geometry(part){
+  const [w,h,d]=part.size;
+  if(part.shape==='tapered')return new THREE.CylinderGeometry(w/2,w*.23,h,20);
+  if(part.shape==='round')return new THREE.CylinderGeometry(w/2,w/2,h,24);
+  if(part.shape==='ellipse'){const g=new THREE.CylinderGeometry(1,1,h,56);g.scale(w/2,1,d/2);return g;}
+  const rounded=part.shape==='rounded',g=new THREE.BoxGeometry(w,h,d,rounded?8:1,rounded?8:1,rounded?8:1),p=g.attributes.position;
+  if(rounded){const r=Math.min(w,h,d)*.28,inner=[w/2-r,h/2-r,d/2-r],v=new THREE.Vector3(),c=new THREE.Vector3(),n=new THREE.Vector3();for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i);c.set(Math.max(-inner[0],Math.min(inner[0],v.x)),Math.max(-inner[1],Math.min(inner[1],v.y)),Math.max(-inner[2],Math.min(inner[2],v.z)));n.copy(v).sub(c).normalize();v.copy(c).addScaledVector(n,r);p.setXYZ(i,v.x,v.y,v.z);g.attributes.normal.setXYZ(i,n.x,n.y,n.z);}}
+  else if(part.shape==='sloped'){for(let i=0;i<p.count;i++)if(p.getY(i)>0)p.setY(i,-h/2+h*(.6+.4*(.5-p.getZ(i)/d)));g.computeVertexNormals();}
+  return g;
+ }
  let renderer;
  try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,preserveDrawingBuffer:true});}catch{return createElevation(host)}
  const scene=new THREE.Scene();scene.background=new THREE.Color('#e6e8df');
@@ -19,8 +29,8 @@ export async function createFurnitureScene(host,onRotate){
  function dimension(a,b,text,where){const geom=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...a),new THREE.Vector3(...b)]),line=new THREE.Line(geom,new THREE.LineBasicMaterial({color:'#6c775e',transparent:true,opacity:.65}));line.userData.dimension=true;group.add(line);label(text,...where);}
  function setDesign(next){design=next;while(group.children.length){const child=group.children[0];group.remove(child);child.traverse(o=>{o.geometry?.dispose();if(Array.isArray(o.material))o.material.forEach(m=>m.dispose());else o.material?.dispose()});}textures.forEach(t=>t.dispose());textures=[];
   const woodTexture=new THREE.CanvasTexture(woodCanvas(WOODS[next.state.wood].hex));woodTexture.colorSpace=THREE.SRGBColorSpace;woodTexture.wrapS=woodTexture.wrapT=THREE.RepeatWrapping;textures.push(woodTexture);
-  const fabricTexture=new THREE.CanvasTexture(fabricCanvas(FABRICS[next.state.fabric],next.state.pattern));fabricTexture.colorSpace=THREE.SRGBColorSpace;fabricTexture.wrapS=fabricTexture.wrapT=THREE.RepeatWrapping;fabricTexture.repeat.set(Math.max(1,next.width/next.depth),1);textures.push(fabricTexture);
-  for(const part of next.parts){const material=new THREE.MeshStandardMaterial(part.material==='fabric'?{map:fabricTexture,roughness:.95}:part.material==='metal'?{color:'#4e5043',metalness:.55,roughness:.4}:{map:woodTexture,roughness:.65});const mesh=new THREE.Mesh((part.shape==='tapered'?new THREE.CylinderGeometry(part.size[0]/2,part.size[0]*.23,part.size[1],16):part.shape==='round'?new THREE.CylinderGeometry(part.size[0]/2,part.size[0]/2,part.size[1],20):new THREE.BoxGeometry(...part.size)),material);mesh.position.set(...part.position);if(part.rotation)mesh.rotation.set(...part.rotation);mesh.castShadow=true;mesh.receiveShadow=true;group.add(mesh);const lines=new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry),new THREE.LineBasicMaterial({color:'#2f382a',transparent:true,opacity:part.material==='fabric'?.08:.15}));lines.position.copy(mesh.position);lines.rotation.copy(mesh.rotation);group.add(lines);}
+  const fabricTexture=new THREE.CanvasTexture(fabricCanvas(FABRICS[next.state.fabric],next.state.pattern,next.state.weave));fabricTexture.colorSpace=THREE.SRGBColorSpace;fabricTexture.wrapS=fabricTexture.wrapT=THREE.RepeatWrapping;fabricTexture.repeat.set(Math.max(1,next.width/next.depth),1);textures.push(fabricTexture);
+  for(const part of next.parts){const material=new THREE.MeshStandardMaterial(part.material==='fabric'?{map:fabricTexture,roughness:.95}:part.material==='metal'?{color:'#4e5043',metalness:.55,roughness:.4}:{map:woodTexture,roughness:.65});const mesh=new THREE.Mesh(geometry(part),material);mesh.position.set(...part.position);if(part.rotation)mesh.rotation.set(...part.rotation);mesh.castShadow=true;mesh.receiveShadow=true;group.add(mesh);const lines=new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry),new THREE.LineBasicMaterial({color:'#2f382a',transparent:true,opacity:part.material==='fabric'?.08:.15}));lines.position.copy(mesh.position);lines.rotation.copy(mesh.rotation);if(part.shape!=='rounded')group.add(lines);else{lines.geometry.dispose();lines.material.dispose();}}
   const {width:w,height:h,depth:d,state:s}=next;dimension([-w/2,-.035,d/2+.16],[w/2,-.035,d/2+.16],s.width+' cm',[0,-.035,d/2+.19]);dimension([w/2+.15,0,0],[w/2+.15,h,0],s.height+' cm',[w/2+.22,h/2,0]);dimension([-w/2-.12,.03,-d/2],[-w/2-.12,.03,d/2],s.depth+' cm',[-w/2-.22,.03,0]);group.children.filter(c=>c.userData.dimension).forEach(c=>c.visible=measure);draw();
  }
  const resize=()=>{const r=host.getBoundingClientRect();renderer.setSize(Math.max(1,r.width),Math.max(1,r.height),false);draw()};const observer=new ResizeObserver(resize);observer.observe(host);

@@ -41,6 +41,17 @@ Validation: 192 extreme parameter combinations were checked for positive finite 
 
 ## Conversational co-design
 
-`birlikte.html` provides a side-by-side chat and 3D concept workspace in eight UI languages, fourteen furniture families and eleven illustrated detail choices. Plain upholstery only. Full scope, local startup and production hosting boundaries are documented in `services/design/README.md` in the repository. No training, payment collection or designer project submission is implemented. Existing static FTP hosting does not run the model service. Live AI requires a separate deployed backend.
+`sohbet.html` provides a side-by-side chat and 3D concept workspace in eight UI languages, fourteen furniture families and eleven illustrated detail choices. Plain upholstery only. Full scope, local startup and production hosting boundaries are documented in `services/design/README.md` in the repository. No training, payment collection or designer project submission is implemented. Existing static FTP hosting does not run the model service. Live AI requires a separate deployed backend.
 
 Local inference tests: Qwen3.5:9b on CPU exceeded the 85-second timeout. With a compact prompt, Qwen2.5:7b-instruct produced a French reply and tapered-leg patch in 36.5 seconds. Danish replies arrived in 23.6 and 37.0 seconds, but omitted the requested furniture family; after adding locale vocabulary a Danish request correctly produced console + tapered legs in 16.0 seconds. These are individual prototype tests, not a multilingual quality or load benchmark.
+
+
+## Guided first-use configurator
+
+`birlikte.html` is now the default non-AI guided configurator. It has adaptive, illustrated steps across 14 furniture families, eight selectable languages, live procedural geometry, plain fabric colour and three representative weave textures. Sofa choices include six arm shapes, fixed or loose seating, three back treatments, two/three seats and left/right chaise layouts. Storage, top shape, legs and dimensions adapt by family. Drawings are original concept geometry, not downloaded production CAD or a complete furniture component catalogue.
+
+Final hand-off downloads include allowlisted JSON and a self-contained HTML sheet with front/side/top SVG drawings, perspective and material close-up, printable to PDF. Local save/restore and bounded import are supported. Designer payment and automatic submission remain unimplemented and are disclosed in the UI. No AI requests are made by this page. Rendering is per visitor; hosting concurrency has not been load-tested. The separate model service currently allows one generation at a time.
+
+Validation: 451 guided option variants across all 14 flows, 336 studio combinations and 192 original planner boundary configurations pass. Browser QA completed a 12-stage sofa flow with rounded arms, fixed seat, channel back, left chaise, walnut and plain clay fabric; verified save/restore and drawing-sheet download. Mobile and all eight language screens have not yet been manually rechecked for this new flow.
+
+References considered: IKEA EKTORP and SODERHAMN official product/buying-guide pages; O-LAP/home and torusservices/morti-app. No proprietary patterns were imported. KodyJKing/circlify is an image-to-circle JavaScript project; circle packing and Fourier contour animation do not replace measured component geometry. Its code is not included.

@@ -4,13 +4,8 @@ import {fabricCanvas,woodCanvas} from './furniture-textures.js';
 import {strings} from './design-i18n.js';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const STORE='aura-codesign-v2';
-export function drawing(design,view='front'){
- const axes=view==='side'?[2,1]:view==='top'?[0,2]:[0,1],ext=[design.width,design.height,design.depth],scale=Math.min(420/ext[axes[0]],235/ext[axes[1]]);
- const parts=[...design.parts].sort((a,b)=>a.position[view==='side'?0:view==='top'?1:2]-b.position[view==='side'?0:view==='top'?1:2]);
- const rects=parts.map(p=>{const w=p.size[axes[0]]*scale,h=p.size[axes[1]]*scale,x=260+p.position[axes[0]]*scale-w/2,y=view==='top'?155-p.position[2]*scale-h/2:275-(p.position[1]+p.size[1]/2)*scale;if(p.shape==='tapered'&&view!=='top')return `<polygon points="${x},${y} ${x+w},${y} ${x+w*.73},${y+h} ${x+w*.27},${y+h}" fill="${WOODS[design.state.wood].hex}" stroke="#43503d" stroke-width=".7"/>`;return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${p.role.includes('cushion')?5:0}" fill="${p.material==='fabric'?FABRICS[design.state.fabric].ground:p.material==='metal'?'#555c50':WOODS[design.state.wood].hex}" stroke="#43503d" stroke-width=".7"/>`;}).join('');
- const width=ext[axes[0]]*scale,x1=260-width/2,x2=260+width/2;
- return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 330" role="img" aria-label="${view}">${rects}<path d="M${x1} 294v12m0-6H${x2}m0-6v12" stroke="#43503d"/><text x="260" y="322" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#43503d">${Math.round(ext[axes[0]]*100)} cm</text></svg>`;
-}
+import {drawing} from './design-drawing.js';
+export {drawing};
 export async function renderDesignStudio(main){
  let language=new URLSearchParams(location.search).get('lang')||navigator.language.split('-')[0];if(!Object.hasOwn(LANGUAGES,language))language='en';
  let state=normalizeStudio(),messages=[],scene=null,online=false,busy=false,activeTab='library',dimensionsConfirmed=false,selectionMade=false,revision=0;
