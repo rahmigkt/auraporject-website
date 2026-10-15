@@ -13,8 +13,8 @@ export async function createFurnitureScene(host,onRotate){
   return g;
  }
  let renderer;
- try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,preserveDrawingBuffer:true});}catch{return createElevation(host)}
- const scene=new THREE.Scene();scene.background=new THREE.Color('#f3f0e8');
+ try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});}catch{return createElevation(host)}
+ const scene=new THREE.Scene();scene.background=null;
  renderer.setPixelRatio(2);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.3;
  renderer.domElement.tabIndex=0;renderer.domElement.setAttribute('role','img');renderer.domElement.setAttribute('aria-label',host.getAttribute('aria-label'));host.appendChild(renderer.domElement);
  const camera=new THREE.OrthographicCamera(-2,2,2,-2,.01,100),group=new THREE.Group();scene.add(group);
