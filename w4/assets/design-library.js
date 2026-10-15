@@ -1,4 +1,4 @@
-import {compileDesign,normalizeDesign,WOODS,FABRICS} from './furniture-model.js?v=20261015d';
+import {compileDesign,normalizeDesign,WOODS,FABRICS} from './furniture-model.js?v=20261015e';
 export {WOODS,FABRICS};
 export const LANGUAGES={tr:'Türkçe',en:'English',fr:'Français',da:'Dansk',de:'Deutsch',nl:'Nederlands',es:'Español',it:'Italiano'};
 const names=(tr,en,fr,da,de,nl,es,it)=>({tr,en,fr,da,de,nl,es,it});

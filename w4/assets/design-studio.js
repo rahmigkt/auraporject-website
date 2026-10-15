@@ -1,12 +1,12 @@
-import {openProjectSubmission,sendLabel} from './project-submit.js?v=20261015d';
-import {projectRecord} from './choice-flow.js?v=20261015d';
-import {FAMILIES,DETAILS,LANGUAGES,detailFields,WOODS,FABRICS,label,illustration,normalizeStudio,changeFamily,compileStudio} from './design-library.js?v=20261015d';
-import {createFurnitureScene} from './furniture-scene.js?v=20261015d';
-import {fabricCanvas,woodCanvas} from './furniture-textures.js?v=20261015d';
-import {strings} from './design-i18n.js?v=20261015d';
+import {openProjectSubmission,sendLabel} from './project-submit.js?v=20261015e';
+import {projectRecord} from './choice-flow.js?v=20261015e';
+import {FAMILIES,DETAILS,LANGUAGES,detailFields,WOODS,FABRICS,label,illustration,normalizeStudio,changeFamily,compileStudio} from './design-library.js?v=20261015e';
+import {createFurnitureScene} from './furniture-scene.js?v=20261015e';
+import {fabricCanvas,woodCanvas} from './furniture-textures.js?v=20261015e';
+import {strings} from './design-i18n.js?v=20261015e';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const STORE='aura-codesign-v2';
-import {drawing} from './design-drawing.js?v=20261015d';
+import {drawing} from './design-drawing.js?v=20261015e';
 export {drawing};
 export async function renderDesignStudio(main){
  let language=new URLSearchParams(location.search).get('lang')||navigator.language.split('-')[0];if(!Object.hasOwn(LANGUAGES,language))language='en';

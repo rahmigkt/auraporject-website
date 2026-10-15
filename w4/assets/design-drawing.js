@@ -1,4 +1,4 @@
-import {WOODS,FABRICS} from './design-library.js?v=20261015d';
+import {WOODS,FABRICS} from './design-library.js?v=20261015e';
 export function drawing(design,view='front'){
  const axes=view==='side'?[2,1]:view==='top'?[0,2]:[0,1],ext=[design.width,design.height,design.depth],scale=Math.min(420/ext[axes[0]],235/ext[axes[1]]);
  const parts=[...design.parts].sort((a,b)=>a.position[view==='side'?0:view==='top'?1:2]-b.position[view==='side'?0:view==='top'?1:2]);
