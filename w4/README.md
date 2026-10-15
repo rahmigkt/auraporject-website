@@ -55,3 +55,16 @@ Final hand-off downloads include allowlisted JSON and a self-contained HTML shee
 Validation: 451 guided option variants across all 14 flows, 336 studio combinations and 192 original planner boundary configurations pass. Browser QA completed a 12-stage sofa flow with rounded arms, fixed seat, channel back, left chaise, walnut and plain clay fabric; verified save/restore and drawing-sheet download. Mobile and all eight language screens have not yet been manually rechecked for this new flow.
 
 References considered: IKEA EKTORP and SODERHAMN official product/buying-guide pages; O-LAP/home and torusservices/morti-app. No proprietary patterns were imported. KodyJKing/circlify is an image-to-circle JavaScript project; circle packing and Fourier contour animation do not replace measured component geometry. Its code is not included.
+
+
+## Project submission draft (2026-10-15)
+
+The guided final step now opens a contact dialog instead of customer-facing project downloads. Name, email, country and city are required; phone, full address, postcode and notes are optional. Contact details are never included in local design save/restore. Draft validation uses fictional input only and performs no submission. WhatsApp is not opened. The stock photograph area is explicitly pending verified stock/SKU matching; no stock data or real product images have been invented.
+
+`proje-gizlilik.html` contains a clearly marked KVKK/GDPR draft with placeholders for controller identity, recipients, transfer safeguards and retention. TR/EN/FR/DA text is supplied; other language selections use English for the new form where untranslated. Acknowledgement is distinct from marketing consent; marketing is not collected.
+
+`api/project.php` is disabled by default and returns draft/unavailable before reading any customer payload. Activation requires the verified controller/notice, actual recipient/sender, retention configuration, and a real hosting mail delivery test. In enabled mode it validates same-origin/session token, body and input sizes, allowlisted design state/geometry, honeypot, per-address rate limit; stores records outside the public document root and supplies reference receipts. Server email contains JSON and orthographic SVG attachments. PHP mail transport acceptance is not proof of inbox delivery. No actual email was sent in QA. Cleanup of private records runs on later submissions; before activation schedule retention cleanup and configure mailbox/log retention as well. Add operational notification failure monitoring before production use.
+
+Geometry now includes continuous upholstered back support down to the frame, full loose-back support and an upholstered lower apron. Side/front views suppress the dimension that would collapse onto the screen; height labels sit outside the side silhouette. Non-sofa split-seat defaults normalize to a single seat.
+
+QA: geometry suites pass; draft contact form completed with example.invalid data, acknowledgement and explicit no-send result; side silhouette checked on an armless loose-back armchair. Backend validator accepts a valid concept, rejects missing acknowledgement, bad email, family and geometry; draft gate remains disabled. Enabled mail transport and live PII submission have not been tested.
