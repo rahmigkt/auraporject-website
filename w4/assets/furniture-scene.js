@@ -1,7 +1,7 @@
-import {WOODS,FABRICS} from './furniture-model.js?v=20261015b';
-import {woodCanvas,fabricCanvas} from './furniture-textures.js?v=20261015b';
+import {WOODS,FABRICS} from './furniture-model.js?v=20261015c';
+import {woodCanvas,fabricCanvas} from './furniture-textures.js?v=20261015c';
 export async function createFurnitureScene(host,onRotate){
- const THREE=await import('./vendor/three.module.js?v=20261015b');
+ const THREE=await import('./vendor/three.module.js?v=20261015c');
  function geometry(part){
   const [w,h,d]=part.size;
   if(part.shape==='tapered')return new THREE.CylinderGeometry(w/2,w*.23,h,20);
