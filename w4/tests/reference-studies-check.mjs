@@ -1,0 +1,9 @@
+import assert from 'node:assert/strict';
+import {PRODUCTS} from '../assets/furniture-taxonomy.js';
+import {buildReferenceStudy,partCorners} from '../assets/reference-studies.js';
+import {referenceDrawing} from '../assets/reference-drawing.js';
+import {perspectiveDistance} from '../assets/camera-framing.js';
+let variants=0;for(const id of Object.keys(PRODUCTS))for(const pose of ['open','closed'])for(const scale of [.6,1,1.5]){const m=buildReferenceStudy(id,{pose,scale});assert(m.parts.length,id);assert([m.width,m.height,m.depth].every(v=>Number.isFinite(v)&&v>0));for(const p of m.parts){assert(p.size.every(v=>Number.isFinite(v)&&v>0),id);for(const v of partCorners(p)){assert(v.every(Number.isFinite));assert(v[0]>=-m.width/2-1e-7&&v[0]<=m.width/2+1e-7,id);assert(v[1]>=-1e-7&&v[1]<=m.height+1e-7,id);assert(v[2]>=-m.depth/2-1e-7&&v[2]<=m.depth/2+1e-7,id);}}
+ for(const view of ['front','side','top']){const svg=referenceDrawing(m,view);assert(svg.startsWith('<svg'));assert(!svg.includes('NaN'));}assert(Number.isFinite(perspectiveDistance({...m,aspect:.6,yaw:.4,pitch:.24})));variants++;}
+assert.throws(()=>buildReferenceStudy('__proto__'));assert(buildReferenceStudy('crib').parts.some(p=>p.role==='cot-spindle'));assert(buildReferenceStudy('bunk').parts.some(p=>p.role==='ladder-rung'));assert(buildReferenceStudy('officeChair').parts.some(p=>p.role==='caster'));assert(buildReferenceStudy('sleeperSofa',{pose:'open'}).parts.length>buildReferenceStudy('sleeperSofa',{pose:'closed'}).parts.length);assert(buildReferenceStudy('slidingWardrobe',{pose:'open'}).parts.some(p=>p.role==='sliding-door'));assert(buildReferenceStudy('cornerSofa').parts.some(p=>p.role==='return-back-support'));
+console.log(`PASS ${variants} reference study variants, positive parts, rotated bounds, source-specific features, SVG views and camera fit.`);
