@@ -1,8 +1,8 @@
-import {SPACES,GROUPS,PRODUCTS,groupsForSpace,productsFor,productForFamily} from './furniture-taxonomy.js?v=20261016h';
+import {SPACES,GROUPS,PRODUCTS,isMainProduct,groupsForSpace,productsFor,productForFamily} from './furniture-taxonomy.js?v=20261016j';
 import {normalizeStudio,changeFamily} from './design-library.js?v=20261016b';
 import {stepsFor,choicesFor,applyChoice,selectedChoice,projectRecord} from './choice-flow.js?v=20261016g';
 export {SPACES,GROUPS,PRODUCTS};
-export const currentProduct=brief=>Object.hasOwn(PRODUCTS,brief.product)?PRODUCTS[brief.product]:null;
+export const currentProduct=brief=>isMainProduct(brief.product)?PRODUCTS[brief.product]:null;
 export function catalogueSteps(state,brief){const prefix=['room','group','family'],product=currentProduct(brief);return product?.coverage==='brief'?[...prefix,'request','review']:[...prefix,...stepsFor(state.family,state).filter(k=>!['room','family'].includes(k))];}
 export function catalogueChoices(step,state,brief){if(step==='room')return Object.entries(SPACES).map(([id,names])=>({id,names}));if(step==='group')return groupsForSpace(brief.room).map(id=>({id,names:GROUPS[id]}));if(step==='layout'){const id=currentProduct(brief)?.id,allowed=id==='cornerSofa'?['cornerLeft','cornerRight']:id==='chaiseSofa'?['left','right']:id==='sofa'?['two','three']:null;return choicesFor(step,state,brief).filter(c=>!allowed||allowed.includes(c.id));}if(step==='family')return productsFor(brief.room,brief.group).map(p=>({...p}));return choicesFor(step,state,brief);}
 export function catalogueSelected(step,state,brief){if(step==='group')return brief.group;if(step==='family')return brief.product;return selectedChoice(step,state,brief);}

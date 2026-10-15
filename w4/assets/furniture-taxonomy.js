@@ -95,6 +95,10 @@ add('nurserySet','Bebek odası takımı','Nursery set','sets','nursery');
 add('outdoorSet','Bahçe / balkon takımı','Outdoor set','sets','outdoor');
 // An explicit escape hatch in every space, without inventing a matching drawing.
 add('custom','Diğer / özel üretim parça','Other / bespoke piece','bespoke',Object.keys(SPACES).join(' '));
-export const groupsForSpace=space=>Object.keys(GROUPS).filter(g=>Object.values(PRODUCTS).some(p=>p.group===g&&p.spaces.includes(space)));
-export const productsFor=(space,group)=>Object.values(PRODUCTS).filter(p=>p.spaces.includes(space)&&(!group||p.group===group));
+// Public selection stays concise. PRODUCTS and all reference geometry remain the research archive.
+export const MAIN_PRODUCT_IDS=Object.freeze(['sofa','cornerSofa','armchair','bench','diningChair','coffee','sideTable','diningTable','console','display','shelf','tv','bed','nightstand','wardrobe','dresser','vanity','dresuar','shoeCabinet','desk','childBed','crib','kitchenBase','vanityUnit','outdoorSofa','outdoorTable','custom']);
+export const isMainProduct=id=>MAIN_PRODUCT_IDS.includes(id);
+export const MAIN_PRODUCTS=Object.fromEntries(MAIN_PRODUCT_IDS.map(id=>[id,PRODUCTS[id]]));
+export const groupsForSpace=space=>Object.keys(GROUPS).filter(g=>Object.values(MAIN_PRODUCTS).some(p=>p.group===g&&p.spaces.includes(space)));
+export const productsFor=(space,group)=>Object.values(MAIN_PRODUCTS).filter(p=>p.spaces.includes(space)&&(!group||p.group===group));
 export const productForFamily=(family,space)=>productsFor(space).find(p=>p.family===family)?.id||null;

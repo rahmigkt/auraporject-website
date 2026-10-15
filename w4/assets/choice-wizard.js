@@ -1,4 +1,4 @@
-import {SPACES,GROUPS,PRODUCTS,currentProduct,catalogueSteps,catalogueChoices,catalogueSelected,catalogueSelect,restoreCatalogue,catalogueProject} from './catalogue-flow.js?v=20261016h';
+import {SPACES,GROUPS,PRODUCTS,currentProduct,catalogueSteps,catalogueChoices,catalogueSelected,catalogueSelect,restoreCatalogue,catalogueProject} from './catalogue-flow.js?v=20261016j';
 import {openProjectSubmission,sendLabel} from './project-submit.js?v=20261016h';
 import {FAMILIES,DETAILS,LANGUAGES,WOODS,FABRICS,SIZE_LIMITS,normalizeStudio,compileStudio,label,illustration} from './design-library.js?v=20261016b';
 import {WORDS,ROOMS,CONFIGS,TOPS,WEAVE_NAMES,WOOD_NAMES,FABRIC_NAMES,stepsFor,choicesFor,familiesForRoom,roomForFamily,reconcileRoomSelection,applyChoice,selectedChoice,projectRecord} from './choice-flow.js?v=20261016g';
