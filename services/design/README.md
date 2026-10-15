@@ -1,59 +1,47 @@
-# AURA co-design service
+# AURA local furniture tool experiment
 
-## What is implemented
+The local assistant route is `/w4/sohbet.html?lang=tr`. Live W4 has not been changed by this experiment. Home and room planning remain out of scope.
 
-`/w4/birlikte.html` is a visual furniture concept workspace with eight UI languages. A local Ollama model interprets the customer's language, asks one discovery question at a time, and returns a constrained JSON patch. The browser renders validated procedural geometry. This is inference with catalogue context, **not a fine-tuned furniture model**.
+## Run locally
 
-Fourteen supported families: sofa, armchair, chair, bench, sideboard, dining table, coffee table, desk, bookcase, wardrobe, dresser, nightstand, TV unit and bed. Eleven illustrated details cover legs, arms, cushions and fronts. This is a bounded starter library; it does not contain every domestic furniture part. Unsupported custom features must be discussed as unresolved requirements rather than fabricated.
-
-Fabric is always plain. Four procedural fabric appearances and three wood appearances are representative, not verified supplier products or colour matches. No customer references/images are uploaded, analysed or retained by this version.
-
-Explicit save/restore uses browser storage. JSON project export includes geometry, materials, conversation, proposed dimensions and review/payment status. Print sheets include front, side, top, perspective and fabric close-up; use browser Save as PDF. Export is a concept brief, not a production CAD file. No payment, designer queue, project transmission or automatic price is implemented. No data is submitted to production enquiry/payment services during tests.
-
-## Local start
-
-Requires Node 22+ and an already running Ollama. No npm packages required.
+Requires the existing Ollama installation and Node 22+; no model is downloaded automatically.
 
 ```powershell
-$env:AURA_MODEL='qwen2.5:7b-instruct'
+$env:AURA_MODEL='qwen3.5:9b'
+$env:PORT='8770'
 node services/design/server.mjs
 ```
 
-Visit `http://127.0.0.1:8770/w4/birlikte.html?lang=tr`.
-The model is configurable using `AURA_MODEL`; there is no runtime model download or training. `AURA_OLLAMA_URL` defaults to `http://127.0.0.1:11434` and must remain loopback. Do not expose port 11434 to the internet. UI languages: tr, en, fr, da, de, nl, es, it. Model language proficiency needs evaluation per target market.
+Open `http://127.0.0.1:8770/w4/sohbet.html?lang=tr`. The service binds to 127.0.0.1 by default. Ollama stays on loopback. `AURA_MODEL` can select another installed tool-capable model; the compatibility default remains qwen2.5:7b-instruct.
 
-API:
-- GET `/api/design/health`: reports whether the configured model exists; not a latency or generation guarantee.
-- POST `/api/design/chat`: same-origin JSON `{language,messages,design}`, last 16 turns, response `{reply,patch}`. No credentials/URL/model/tool code supplied by customer requests is executed.
+## Tool contract
 
-## Production deployment boundary
+Six allowlisted native Ollama tools are exposed: update_design, set_view, zoom_view, save_draft, restore_draft and prepare_project. Furniture updates cover 14 families and 20 fields: family, width, height, depth, legs, arms, cushions, back, configuration, seats, top, front, columns, rows, wood, fabric, weave, returnSeats, service and pillows. Every proposed update is normalised and compiled with the existing geometry engine. Adjustments are reported; unknown commands and invalid arguments are rejected. No shell, URL fetch, external file or messaging tool is exposed to the model.
 
-The existing Natro workflow uploads static W4 files over FTP. It cannot start Node/Ollama, install a model, provision GPU capacity, set DNS or install an HTTPS reverse proxy. The service is explicitly excluded from FTP publication. A successful FTP deployment alone **does not make live AI available**.
+`studio-agent.mjs` feeds validated tool results back to the model, with a maximum of three inference rounds and twelve tool calls. CPU evaluation has a generous eight-minute total planning deadline. The client applies validated operations in order, so saving after a modification captures the updated design. Camera and zoom operate on the actual scene. Browser save/restore remain browser-local. Project preparation opens the existing contact/PDF form; it never sends a message, charges money, reserves stock or bypasses the form.
 
-A server able to run the selected model must be provisioned separately, or existing accessible server credentials/configuration supplied. Deploy Node as a supervised service and Ollama on that server. Keep both on loopback behind HTTPS. Route `/api/design/` on the AURA website to the Node service over a private connection. The client deliberately uses same-origin API paths; it never calls the visitor's localhost.
+Server-side tool results explicitly mark browser-only operations as queued. A model reply alone does not prove browser storage or delivery succeeded. Restore followed by relative edits requires knowing the restored browser state; this prototype has not established that general workflow. User edits made while inference runs invalidate the returned drawing/actions.
 
-Example application environment (server administrator configures it, never browser code):
+## Local evaluation
 
-```text
-AURA_BIND=127.0.0.1
-PORT=8770
-AURA_MODEL=qwen2.5:7b-instruct
-AURA_ALLOWED_ORIGINS=https://auraproject.com.tr,https://www.auraproject.com.tr
-AURA_OLLAMA_URL=http://127.0.0.1:11434
-```
+Set `AURA_LOCAL_EVAL=1` and open `?lang=tr&eval=1` to show model operations and per-round timings in the local-only diagnostic details. The flag logs tool names/timings in the local terminal; it is off by default. Normal application code does not persist chat transcripts on the server. Evaluation scripts outside the service save synthetic test requests/results for inspection.
 
-Example nginx locations on a server that already serves the AURA domain, with its existing HTTPS configuration:
+Readiness at `/api/design/health` only verifies that a model is installed; it does not guarantee inference latency. Only one chat request is admitted concurrently; additional requests receive 429. Native commands are not production-qualified by these limited tests. Unsupported geometry must remain an unresolved designer requirement. Fabrics are plain and representative; drawings are concepts, not production CAD or stock photographs.
 
-```nginx
-location /api/design/ {
-    proxy_pass http://127.0.0.1:8770;
-    proxy_set_header Host $host;
-    proxy_set_header Origin $http_origin;
-    proxy_read_timeout 95s;
-    client_max_body_size 50k;
-}
-```
+## Deployment
 
-This is an example configuration, not an installed configuration. For shared hosting without reverse-proxy control, the hosting administrator must provide equivalent routing or hosting must change. Do not publish a temporary tunnel to this workstation as a production service.
+The FTP workflow excludes `services/`; it cannot start Node or Ollama. This local experiment does not connect the public site to AI. A future deployment needs its own model server and same-origin HTTPS proxy, per-language and latency evaluation, execution acknowledgements, queueing and production error handling. Do not expose Ollama or this workstation with a public tunnel as a workaround.
 
-The application limits generation to one concurrent request and 12 requests per socket IP/minute; behind a reverse proxy this is a shared conservative limit. Scale with authenticated sessions, proxy rate limiting and a bounded job queue before wider promotion. Conversational data exists in request memory and the user's explicit browser save/export; application code does not write server chat logs. Configure external proxy/provider retention separately. No payment provider or amount has been selected.
+References: https://docs.ollama.com/capabilities/tool-calling and https://docs.ollama.com/capabilities/structured-outputs
+
+## Observed local results (16 October 2026)
+
+CPU-only Qwen3.5:9b produced the requested complex sofa update with side view and zoom in 177.352 s. Qwen2.5:7b-instruct took 114.982 s but interpreted rounded arms as no arms. An eight-scenario first-response suite passed five checks; failures were wrong chaise cushion type, missing later camera/save operations and unnecessary clarification instead of drawing in Danish. These are limited synthetic checks, not a production success rate.
+
+The real browser agent trial completed in 213.077 s over two inference rounds (133.334 + 79.738 s). It selected all six tool types in order, created a 160 cm walnut console, selected front view and opened the project form. Save/restore was independently verified by switching to an armchair and restoring the console. The zoom command was dispatched; numerical camera displacement was not independently measured. No contact data, external message or payment was submitted. GPU latency and concurrency remain unmeasured.
+
+## Sectional drawing tools
+
+Real cornerLeft/cornerRight layouts now generate backed return seating rather than a chaise. Sectional controls include 1–3 return seats, optional wood/cupholder service module, padded wood-tray arms, cylindrical legs and throw pillows. Taupe and sage plain fabrics are available. These are procedural concept parts, not engineering specifications for cupholder cutouts or manufacturing hardware. Generic freeform curves and photo reconstruction are still unsupported. The same normalized fields are available to native Qwen tool calls, guided choices and manual studio controls. `sectional-check.mjs` verifies 216 size/layout/material combinations, mirror symmetry, bounds, support parts and the model tool contract.
+
+A real Qwen3.5:9b request for all new sectional features timed out at 240.043 s on the local CPU. This does not demonstrate model mastery of the new options. Manual UI drawing and tool-schema validation passed; model latency and new-feature selection require further evaluation on serving hardware.

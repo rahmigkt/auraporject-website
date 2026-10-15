@@ -1,0 +1,14 @@
+import {STUDIO_TOOLS,studioPrompt,applyStudioCalls} from './studio-tools.mjs';
+const LOOP='Use ALL requested tools, not just the furniture update. If independent, call view/zoom/save in the same response as the update. Tools return verified geometry and queue browser-only actions. After results, compare all original customer requirements to the returned state, correct omissions, then finish. Do not repeat queued actions. A queued browser action is not evidence of saving or sending. Never claim a file was sent. Keep the final reply to one short sentence.';
+export async function runStudioAgent({model,language='tr',design={},messages,origin='http://127.0.0.1:11434',maxRounds=3,onRound=()=>{}}){
+ let state=applyStudioCalls(design,[]).state;const conversation=[{role:'system',content:studioPrompt(language,state)+'\n'+LOOP},...messages],operations=[],rounds=[],adjustedFields=new Set();const started=Date.now();
+ for(let round=0;round<maxRounds;round++){
+  const begin=Date.now(),response=await fetch(new URL('/api/chat',origin),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model,stream:false,think:false,keep_alive:'10m',options:{temperature:0,num_predict:350,num_ctx:8192},tools:STUDIO_TOOLS,messages:conversation}),signal:AbortSignal.timeout(Math.max(1000,Math.min(200000,480000-(Date.now()-started))))});
+  const raw=await response.json();if(!response.ok)throw Error('Model unavailable');const message=raw.message,calls=message?.tool_calls||[];if(!message)throw Error('Invalid model response');
+  const stats={round:round+1,seconds:(Date.now()-begin)/1000,calls,tokens:raw.eval_count,promptTokens:raw.prompt_eval_count,tokensPerSecond:raw.eval_count/(raw.eval_duration/1e9)};rounds.push(stats);onRound(stats);
+  if(!calls.length){if(!String(message.content||'').trim())throw Error('Empty model response');return {reply:String(message.content).slice(0,2500),operations,state,adjustedFields:[...adjustedFields],rounds,seconds:(Date.now()-started)/1000,complete:true};}
+  if(operations.length+calls.length>12)throw Error('Too many studio commands');applyStudioCalls(state,calls);conversation.push(message);
+  for(const call of calls){const step=applyStudioCalls(state,[call]);state=step.state;operations.push(call);step.adjustedFields.forEach(k=>adjustedFields.add(k));conversation.push({role:'tool',tool_name:call.function.name,content:JSON.stringify({status:call.function.name==='update_design'?'preview_geometry_updated':'queued_for_browser',state,adjustedFields:step.adjustedFields,notice:'Geometry validated. Browser actions execute after this planning response; no message sent, payment or stock reservation.'})});}
+ }
+ return {reply:language==='tr'?'Stüdyo komutları hazır; bazı adımların doğrulanması gerekiyor.':'Studio commands are ready; some steps still need verification.',operations,state,adjustedFields:[...adjustedFields],rounds,seconds:(Date.now()-started)/1000,complete:false};
+}

@@ -1,4 +1,5 @@
-import {compileDesign,normalizeDesign,WOODS,FABRICS} from './furniture-model.js?v=20261015f';
+import {compileSectional} from './sectional-model.js?v=20261016a';
+import {compileDesign,normalizeDesign,WOODS,FABRICS} from './furniture-model.js?v=20261016b';
 export {WOODS,FABRICS};
 export const LANGUAGES={tr:'Türkçe',en:'English',fr:'Français',da:'Dansk',de:'Deutsch',nl:'Nederlands',es:'Español',it:'Italiano'};
 const names=(tr,en,fr,da,de,nl,es,it)=>({tr,en,fr,da,de,nl,es,it});
@@ -40,6 +41,27 @@ export const DETAILS={
  channelBack:{field:'back',names:names('Dikey kanallı sırt','Channel back','Dossier cannelé','Ryg med lodrette kanaler','Rücken mit Längsnähten','Rug met verticale banen','Respaldo acanalado','Schienale a canali'),sketch:'M15 17h90v55H15zM33 17v55M51 17v55M69 17v55M87 17v55'},
  mixed:{field:'front',names:names('Açık ve kapaklı','Open and closed','Ouvert et fermé','Åbent og lukket','Offen und geschlossen','Open en gesloten','Abierto y cerrado','Aperto e chiuso'),sketch:'M15 16h90v64H15zM45 16v64M75 16v64M45 46h30M34 40v11M86 40v11'}
 };
+const extra=(field,tr,en,sketch)=>({field,names:names(tr,en,en,en,en,en,en,en),sketch});
+Object.assign(DETAILS,{
+ cylindrical:extra('legs','Silindir ayak','Cylindrical legs','M30 17h15v60H30zM75 17h15v60H75z'),
+ paddedWood:extra('arms','Ahşap altlıklı dolgulu kolçak','Padded arms with wood tray','M12 32h24v10H12zM12 44h24v28H12zM84 32h24v10H84zM84 44h24v28H84zM36 55h48v17H36z'),
+ straightLayout:extra('configuration','Düz koltuk','Straight sofa','M15 30h90v35H15z'),
+ left:extra('configuration','Solda uzanma','Left chaise','M15 25h90v30H45v25H15z'),
+ right:extra('configuration','Sağda uzanma','Right chaise','M15 25h90v55H75V55H15z'),
+ cornerLeft:extra('configuration','Soldan dönen köşe','Left corner sofa','M15 20h90v30H45v30H15zM22 25v48M28 28h70'),
+ cornerRight:extra('configuration','Sağdan dönen köşe','Right corner sofa','M15 20h90v60H75V50H15zM98 25v48M22 28h70'),
+ twoSeats:extra('seats','Ana kolda 2 oturum','Two main seats','M15 30h43v35H15zM62 30h43v35H62z'),
+ threeSeats:extra('seats','Ana kolda 3 oturum','Three main seats','M15 30h27v35H15zM46 30h27v35H46zM77 30h27v35H77z'),
+ returnOne:extra('returnSeats','Dönen kolda 1 oturum','One return seat','M35 15h50v60H35z'),
+ returnTwo:extra('returnSeats','Dönen kolda 2 oturum','Two return seats','M35 15h50v28H35zM35 47h50v28H35z'),
+ returnThree:extra('returnSeats','Dönen kolda 3 oturum','Three return seats','M35 12h50v20H35zM35 36h50v20H35zM35 60h50v20H35z'),
+ noService:extra('service','Servis modülü yok','No service module','M15 30h90v35H15z'),
+ woodService:extra('service','Ahşap servis modülü','Wood service module','M35 15h50v60H35zM35 28h50'),
+ cupService:extra('service','Bardaklıklı servis modülü','Cupholder module','M35 15h50v60H35zM60 26a7 7 0 1 0 0 14a7 7 0 1 0 0-14M60 49a7 7 0 1 0 0 14a7 7 0 1 0 0-14'),
+ noPillows:extra('pillows','Dekoratif yastık yok','No throw pillows','M20 35h80v35H20z'),
+ withPillows:extra('pillows','Dekoratif yastık ekle','Add throw pillows','M20 35h80v35H20zM25 25h25v30H25zM70 25h25v30H70z')
+});
+export const detailValue=(key)=>({straightLayout:'straight',twoSeats:2,threeSeats:3,returnOne:1,returnTwo:2,returnThree:3,noService:'none',woodService:'wood',cupService:'cupholders',noPillows:'no',withPillows:'yes'}[key]??key);
 export const label=(obj,language)=>obj.names?.[language]||obj[language]||obj.names?.en||obj.en;
 export function illustration(path){return `<svg viewBox="0 0 120 90" fill="none" aria-hidden="true"><path d="${path}" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg>`;}
 const has=(o,k)=>typeof k==='string'&&Object.hasOwn(o,k);
@@ -48,8 +70,9 @@ export function normalizeStudio(raw={}){
  const family=has(FAMILIES,raw.family)?raw.family:'sofa',d=FAMILIES[family].size;
  const r={version:2,family};
  for(const [i,k] of ['width','height','depth'].entries())r[k]=typeof raw[k]==='number'&&Number.isFinite(raw[k])?Math.round(Math.min(k==='height'?260:350,Math.max(k==='height'?(family==='bed'?60:30):25,raw[k]))):d[i];
- for(const [k,choices,fallback] of [['legs',['straight','tapered','sled','plinth'],'tapered'],['arms',['square','rolled','rounded','slim','sloped','none'],'rounded'],['cushions',['single','split','fixed'],'split'],['back',['fixedBack','looseBack','channelBack'],'fixedBack'],['configuration',['straight','left','right'],'straight'],['top',['rect','soft','round','oval'],'rect'],['weave',['plain','twill22','basket'],'plain'],['front',['open','closed','mixed'],'closed'],['wood',Object.keys(WOODS),'walnut'],['fabric',Object.keys(FABRICS),'linen']])r[k]=choices.includes(raw[k])?raw[k]:fallback;
+ for(const [k,choices,fallback] of [['legs',['straight','tapered','sled','plinth','cylindrical'],'tapered'],['arms',['square','rolled','rounded','slim','sloped','none','paddedWood'],'rounded'],['cushions',['single','split','fixed'],'split'],['back',['fixedBack','looseBack','channelBack'],'fixedBack'],['configuration',['straight','left','right','cornerLeft','cornerRight'],'straight'],['top',['rect','soft','round','oval'],'rect'],['weave',['plain','twill22','basket'],'plain'],['front',['open','closed','mixed'],'closed'],['wood',Object.keys(WOODS),'walnut'],['fabric',Object.keys(FABRICS),'linen']])r[k]=choices.includes(raw[k])?raw[k]:fallback;
  r.seats=raw.seats===2?2:3;
+ r.returnSeats=[1,2,3].includes(raw.returnSeats)?raw.returnSeats:2;r.service=['none','wood','cupholders'].includes(raw.service)?raw.service:'none';r.pillows=raw.pillows==='yes'?'yes':'no';
  if(family!=='sofa'&&r.cushions==='split')r.cushions='single';
  r.columns=Number.isInteger(raw.columns)?Math.min(4,Math.max(2,raw.columns)):3;
  r.rows=Number.isInteger(raw.rows)?Math.min(6,Math.max(1,raw.rows)):family==='shelf'?4:['dresser','nightstand'].includes(family)?3:1;
@@ -58,26 +81,28 @@ export function normalizeStudio(raw={}){
  if(family==='nightstand')r.columns=1;
  if(['dresser','nightstand'].includes(family))r.rows=Math.max(2,r.rows);
  const ranges=SIZE_LIMITS[family];for(const [i,k] of ['width','height','depth'].entries())r[k]=Math.min(ranges[i][1],Math.max(ranges[i][0],r[k]));
- if(family!=='sofa')r.configuration='straight';if(r.configuration!=='straight'){r.depth=Math.max(r.depth,140);if(!['straight','tapered'].includes(r.legs))r.legs='tapered';}
+ if(family==='sofa'&&r.configuration.startsWith('corner')){r.width=Math.max(220,r.width);if(!['rounded','slim','none','paddedWood'].includes(r.arms))r.arms='rounded';r.depth=Math.min(350,Math.max(180,typeof raw.depth==='number'&&Number.isFinite(raw.depth)?Math.round(raw.depth):260));}else{r.service='none';r.pillows='no';if(r.arms==='paddedWood')r.arms='rounded';}
+ if(family!=='sofa')r.configuration='straight';if(r.configuration!=='straight'){r.depth=Math.max(r.depth,140);if(!['straight','tapered','cylindrical'].includes(r.legs))r.legs='tapered';}
  if(['table','coffee'].includes(family)&&r.top==='round')r.depth=r.width=Math.min(r.width,r.depth);
  return r;
 }
 export function changeFamily(raw,family){return normalizeStudio({...raw,family,...Object.fromEntries(['width','height','depth'].map((k,i)=>[k,FAMILIES[family].size[i]]))});}
 export function compileStudio(raw){
  const s=normalizeStudio(raw);
+ if(s.family==='sofa'&&s.configuration.startsWith('corner'))return compileSectional(s);
  if(['console','shelf'].includes(s.family)){const result=compileDesign({...s,front:s.front==='mixed'?'open':s.front,model:s.family});if(s.front==='mixed'||(s.family==='shelf'&&s.front==='closed')){if(s.front==='mixed')result.parts=result.parts.filter(p=>p.role!=='door'&&p.role!=='pull');const count=s.front==='mixed'?2:s.columns;for(let i=0;i<count;i++){const col=s.front==='mixed'?(i===0?0:s.columns-1):i,w=result.width/s.columns-.012,h=(result.height-(s.family==='console'?.16:.04))-.012;result.parts.push({role:'door',position:[-result.width/2+(col+.5)*result.width/s.columns,result.height-h/2-.006,result.depth/2-.012],size:[w,h,.024],material:'wood'});}}if(s.family==='console'){
    result.parts=result.parts.filter(p=>p.role!=='leg');const w=result.width,d=result.depth,h=.16,t=.045;
    const add=(role,position,size,material='wood',shape='box')=>result.parts.push({role,position,size,material,shape});
    if(s.legs==='plinth')add('plinth',[0,h/2,0],[w*.82,h,d*.75]);
    else if(s.legs==='sled')for(const sign of [-1,1]){const x=sign*(w/2-.1);add('sled-base',[x,t/2,0],[t,t,d-.12],'metal');for(const z of [-1,1])add('sled-upright',[x,h/2,z*(d/2-.08)],[t,h,t],'metal');}
-   else for(const x of [-1,1])for(const z of [-1,1])add('leg',[x*(w/2-.1),h/2,z*(d/2-.08)],[t,h,t],'wood',s.legs==='tapered'?'tapered':'box');
+   else for(const x of [-1,1])for(const z of [-1,1])add('leg',[x*(w/2-.1),h/2,z*(d/2-.08)],[t,h,t],'wood',s.legs==='tapered'?'tapered':s.legs==='cylindrical'?'round':'box');
   }return {...result,state:{...s,width:result.state.width,height:result.state.height,depth:result.state.depth}};}
  const W=s.width/100,H=s.height/100,D=s.depth/100,parts=[];
  const box=(role,x,y,z,w,h,d,material='wood',shape='box',rotation=null)=>parts.push({role,position:[x,y,z],size:[w,h,d],material,shape,...(rotation?{rotation}:{})});
  function legs(top){const thick=Math.min(W,D)*.075,offset=thick*1.2;
   if(s.legs==='plinth')box('plinth',0,top/2,0,W*.82,top,D*.78);
   else if(s.legs==='sled'){for(const sign of [-1,1]){const x=sign*(W/2-offset);box('sled-base',x,thick/2,0,thick,thick,D*.85,'metal');for(const z of [-1,1])box('sled-upright',x,top/2,z*(D*.425-thick/2),thick,top,thick,'metal');}}
-  else for(const x of [-1,1])for(const z of [-1,1])box('leg',x*(W/2-offset),top/2,z*(D/2-offset),thick,top,thick,'wood',s.legs==='tapered'?'tapered':'box');
+  else for(const x of [-1,1])for(const z of [-1,1])box('leg',x*(W/2-offset),top/2,z*(D/2-offset),thick,top,thick,'wood',s.legs==='tapered'?'tapered':s.legs==='cylindrical'?'round':'box');
  }
  if(['table','coffee','desk'].includes(s.family)){const t=Math.min(.045,H*.12);legs(H-t);box('top',0,H-t/2,0,W,t,D,'wood',s.top==='round'||s.top==='oval'?'ellipse':s.top==='soft'?'rounded':'box');}
  else if(['sofa','armchair','chair','bench'].includes(s.family)){
@@ -112,6 +137,6 @@ export function compileStudio(raw){
  return {state:s,width:W,height:H,depth:D,parts};
 }
 
-export function detailFields(family){return ['table','coffee','desk','bed','bench'].includes(family)?['legs']:['sofa','armchair','chair'].includes(family)?['legs',...(['sofa','armchair'].includes(family)?['arms']:[]),'cushions',...(family!=='bench'?['back']:[])]:family==='console'?['legs','front']:['front'];}
+export function detailFields(family){return ['table','coffee','desk','bed','bench'].includes(family)?['legs']:['sofa','armchair','chair'].includes(family)?['legs',...(family==='sofa'?['configuration','seats','returnSeats','service','pillows']:[]),...(['sofa','armchair'].includes(family)?['arms']:[]),'cushions',...(family!=='bench'?['back']:[])]:family==='console'?['legs','front']:['front'];}
 
 export const SIZE_LIMITS={sofa:[[120,330],[65,115],[75,200]],armchair:[[65,130],[65,120],[65,120]],chair:[[40,90],[70,120],[40,85]],bench:[[70,220],[35,65],[35,80]],table:[[80,300],[65,85],[60,150]],coffee:[[45,180],[30,65],[40,120]],desk:[[80,240],[65,90],[45,100]],bed:[[100,240],[60,160],[190,240]],console:[[80,240],[55,110],[30,60]],shelf:[[60,220],[100,220],[25,45]],wardrobe:[[80,300],[160,260],[45,80]],dresser:[[60,180],[65,130],[35,65]],nightstand:[[35,90],[35,85],[30,60]],tv:[[90,300],[35,90],[30,65]]};

@@ -1,0 +1,9 @@
+import assert from 'node:assert/strict';
+import {STUDIO_TOOLS,DESIGN_FIELDS,applyStudioCalls,validatePatch} from '../assets/design-tools.js';
+import {FAMILIES} from '../assets/design-library.js';
+const call=(name,args={})=>({function:{name,arguments:args}});
+for(const family of Object.keys(FAMILIES)){const r=applyStudioCalls({},[call('update_design',{family}),call('set_view',{view:'side'}),call('zoom_view',{direction:'in'})]);assert.equal(r.state.family,family);assert(r.parts.length);assert.equal(r.actions.length,2);}
+for(const[field,rule]of Object.entries(DESIGN_FIELDS))for(const v of rule.enum||[]){const r=applyStudioCalls({family:'sofa'},[call('update_design',{[field]:v})]);assert(r.parts.every(p=>p.size.every(n=>n>0)));}
+assert.throws(()=>applyStudioCalls({},[call('execute_shell',{cmd:'anything'})]));assert.throws(()=>validatePatch(JSON.parse('{"__proto__":{"bad":true}}')));assert.throws(()=>validatePatch({toString:'bad'}));assert.throws(()=>validatePatch({width:NaN}));assert.throws(()=>validatePatch({arms:'dragon'}));assert.throws(()=>applyStudioCalls({},[call('set_view',{view:'evil'})]));assert.throws(()=>applyStudioCalls({},[call('save_draft',{destination:'external'})]));assert.throws(()=>applyStudioCalls({},[call('zoom_view',{})]));assert.throws(()=>applyStudioCalls({},Array(13).fill(call('save_draft'))));
+const r=applyStudioCalls({},[call('update_design',{family:'table',width:900,top:'round',depth:80})]);assert(r.adjustedFields.includes('width'));assert.equal(r.state.width,r.state.depth);assert.deepEqual(applyStudioCalls({},[call('save_draft'),call('restore_draft'),call('prepare_project')]).actions.map(a=>a.type),['save_draft','restore_draft','prepare_project']);
+console.log('PASS all 14 families, option enums, drawing geometry, action allowlist, invalid calls, prototype keys and dimension adjustments.');

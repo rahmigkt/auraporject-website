@@ -1,4 +1,4 @@
-import {FAMILIES,DETAILS,WOODS,FABRICS,SIZE_LIMITS,normalizeStudio,changeFamily,compileStudio,label} from './design-library.js?v=20261015f';
+import {FAMILIES,DETAILS,WOODS,FABRICS,SIZE_LIMITS,normalizeStudio,changeFamily,compileStudio,label,detailValue} from './design-library.js?v=20261016b';
 
 export const phrase=(tr,en,fr,da,de,nl,es,it)=>({tr,en,fr:fr||en,da:da||en,de:de||en,nl:nl||en,es:es||en,it:it||en});
 
@@ -92,6 +92,9 @@ export const ROOMS={living:phrase('Salon','Living room','Salon','Stue','Wohnzimm
 
 export const CONFIGS={two:phrase('İkili','Two seats','Deux places','To sæder','Zweisitzer','Twee zitplaatsen','Dos plazas','Due posti'),three:phrase('Üçlü','Three seats','Trois places','Tre sæder','Dreisitzer','Drie zitplaatsen','Tres plazas','Tre posti'),left:phrase('Solda uzanma','Chaise on left','Méridienne à gauche','Chaiselong til venstre','Longchair links','Chaise links','Chaise a la izquierda','Chaise a sinistra'),right:phrase('Sağda uzanma','Chaise on right','Méridienne à droite','Chaiselong til højre','Longchair rechts','Chaise rechts','Chaise a la derecha','Chaise a destra')};
 
+CONFIGS.cornerLeft=phrase('Soldan dönen köşe','Left corner sofa','Canapé d’angle gauche','Venstrevendt hjørnesofa');CONFIGS.cornerRight=phrase('Sağdan dönen köşe','Right corner sofa','Canapé d’angle droit','Højrevendt hjørnesofa');
+
+WORDS.returnSeats=phrase('Dönen kolda kaç oturum olsun?','How many return seats?');WORDS.service=phrase('Servis modülü ekleyelim mi?','Add a service module?');WORDS.pillows=phrase('Dekoratif yastık olsun mu?','Add throw pillows?');
 export const TOPS={rect:phrase('Dikdörtgen','Rectangular','Rectangulaire','Rektangulær','Rechteckig','Rechthoekig','Rectangular','Rettangolare'),soft:phrase('Yumuşak köşeler','Soft corners','Angles adoucis','Bløde hjørner','Weiche Ecken','Zachte hoeken','Esquinas suaves','Angoli morbidi'),round:phrase('Yuvarlak','Round','Rond','Rund','Rund','Rond','Redondo','Rotondo'),oval:phrase('Oval','Oval','Ovale','Oval','Oval','Ovaal','Ovalado','Ovale')};
 
 export const WEAVE_NAMES={plain:phrase('İnce düz dokuma','Fine plain weave','Tissage fin','Fin lærredsvævning','Feine Leinwandbindung','Fijn platbinding','Tejido liso fino','Tela fine'),twill22:phrase('Çapraz dokuma','Twill texture','Sergé','Kipervævning','Köper','Keper','Sarga','Saia'),basket:phrase('İri dokuma','Coarse weave','Tissage épais','Grov vævning','Grobe Webung','Grof weefsel','Tejido grueso','Trama grossa')};
@@ -100,9 +103,11 @@ export const WOOD_NAMES={oak:phrase('Doğal meşe','Natural oak','Chêne naturel
 
 export const FABRIC_NAMES={linen:phrase('Kum beji','Sand beige','Beige sable','Sandbeige','Sandbeige','Zandbeige','Beige arena','Beige sabbia'),clay:phrase('Kiremit','Terracotta','Terre cuite','Terracotta','Terrakotta','Terracotta','Terracota','Terracotta'),indigo:phrase('Çivit mavisi','Indigo blue','Bleu indigo','Indigoblå','Indigoblau','Indigoblauw','Azul índigo','Blu indaco'),charcoal:phrase('Antrasit','Charcoal','Anthracite','Antracit','Anthrazit','Antraciet','Antracita','Antracite')};
 
-export function stepsFor(family){
+FABRIC_NAMES.taupe=phrase('Bohem kahve','Bohemian taupe','Brun taupe','Taupebrun');FABRIC_NAMES.sage=phrase('Adaçayı yeşili','Sage green','Vert sauge','Salviegrøn');
 
- const steps=['room','family'];if(family==='sofa')steps.push('layout');
+export function stepsFor(family,state={}){
+
+ const steps=['room','family'];if(family==='sofa'){steps.push('layout');if(state.configuration?.startsWith('corner'))steps.push('returnSeats','service','pillows');}
 
  if(['sofa','armchair'].includes(family))steps.push('arms');
 
@@ -122,7 +127,8 @@ export function stepsFor(family){
 
 export function choicesFor(step,s){
 
- const ids={arms:['rounded','rolled','slim','sloped','square','none'],cushions:s.family==='sofa'?['fixed','single','split']:['fixed','single'],back:s.family==='bed'?['fixedBack','channelBack']:['fixedBack','looseBack','channelBack'],legs:s.configuration!=='straight'?['tapered','straight']:['tapered','straight','sled','plinth'],front:['closed','open','mixed']}[step];
+ const corner=s.configuration?.startsWith('corner');
+ const ids={returnSeats:corner?['returnOne','returnTwo','returnThree']:['returnTwo'],service:corner?['noService','woodService','cupService']:['noService'],pillows:corner?['noPillows','withPillows']:['noPillows'],arms:corner?['rounded','paddedWood','slim','none']:['rounded','rolled','slim','sloped','square','none'],cushions:s.family==='sofa'?['fixed','single','split']:['fixed','single'],back:s.family==='bed'?['fixedBack','channelBack']:['fixedBack','looseBack','channelBack'],legs:corner?['tapered','straight','cylindrical']:s.configuration!=='straight'?['tapered','straight']:['tapered','straight','sled','plinth'],front:['closed','open','mixed']}[step];
 
  if(ids)return ids.map(id=>({id,names:DETAILS[id].names,sketch:DETAILS[id].sketch}));
 
@@ -141,21 +147,23 @@ export function choicesFor(step,s){
 
 export function applyChoice(state,step,id){
 
+ if(['returnSeats','service','pillows'].includes(step))return normalizeStudio({...state,[step]:detailValue(id)});
  if(step==='family')return changeFamily({},id);
 
- if(step==='layout'){if(id==='two')return normalizeStudio({...state,width:170,depth:90,seats:2,configuration:'straight'});if(id==='three')return normalizeStudio({...state,width:220,depth:95,seats:3,configuration:'straight'});return normalizeStudio({...state,width:260,depth:165,seats:3,configuration:id});}
+ if(step==='layout'){if(id.startsWith('corner'))return normalizeStudio({...state,width:320,height:90,depth:260,seats:2,returnSeats:2,configuration:id});if(id==='two')return normalizeStudio({...state,width:170,depth:90,seats:2,configuration:'straight'});if(id==='three')return normalizeStudio({...state,width:220,depth:95,seats:3,configuration:'straight'});return normalizeStudio({...state,width:260,depth:165,seats:3,configuration:id});}
 
  if(step==='top'&&id==='round'){const diameter=state.family==='table'?110:80;return normalizeStudio({...state,top:id,width:diameter,depth:diameter});}
 
  if(step==='storage')return normalizeStudio({...state,[state.family==='nightstand'?'rows':'columns']:Number(id)});
 
+ if(step==='size'&&state.configuration?.startsWith('corner')){const ratio=id==='compact'?.9:id==='generous'?1.03:1;return normalizeStudio({...state,width:Math.round(320*ratio),height:90,depth:Math.round(260*ratio)});}
  if(step==='size'){const d=FAMILIES[state.family].size,ratio=id==='compact'?.85:id==='generous'?1.15:1;if(state.top==='round'&&['table','coffee'].includes(state.family)){const diameter=Math.round((state.family==='table'?110:80)*ratio);return normalizeStudio({...state,width:diameter,depth:diameter});}return normalizeStudio({...state,width:Math.round((state.configuration!=='straight'?260:state.family==='sofa'?(state.seats===2?170:220):d[0])*ratio),height:d[1],depth:state.configuration!=='straight'?165:d[2]});}
 
  return normalizeStudio({...state,[step]:id});
 
 }
 
-export function selectedChoice(step,s,brief){if(step==='room')return brief.room;if(step==='family')return brief.familyChosen?s.family:null;if(step==='layout')return s.configuration==='straight'?(s.seats===2?'two':'three'):s.configuration;if(step==='storage')return String(s.family==='nightstand'?s.rows:s.columns);if(step==='size')return brief.sizePreset||null;return s[step];}
+export function selectedChoice(step,s,brief){if(['returnSeats','service','pillows'].includes(step))return choicesFor(step,s).find(c=>detailValue(c.id)===s[step])?.id;if(step==='room')return brief.room;if(step==='family')return brief.familyChosen?s.family:null;if(step==='layout')return s.configuration==='straight'?(s.seats===2?'two':'three'):s.configuration;if(step==='storage')return String(s.family==='nightstand'?s.rows:s.columns);if(step==='size')return brief.sizePreset||null;return s[step];}
 
 export function projectRecord(state,brief,language){const model=compileStudio(state);return {format:'aura-guided-design',version:1,createdAt:new Date().toISOString(),language,design:model.state,brief:{...brief},parts:model.parts,stage:'concept',dimensionsStatus:brief.dimensionsEntered?'customer_entered_unverified':'suggested',materialsRepresentative:true,designerReviewRequired:true,paymentStatus:'not_collected',submitted:false};}
 
