@@ -1,6 +1,6 @@
 import {t,href} from './core.js';
 import {compileStudio,changeFamily,FAMILIES,label} from './design-library.js?v=20261016b';
-import {createFurnitureScene} from './furniture-scene.js?v=20261016d';
+import {createFurnitureScene} from './furniture-scene.js?v=20261016e';
 import {drawing} from './design-drawing.js?v=20261016b';
 export async function renderDesignHome(main){
  let state=changeFamily({},'armchair');state={...state,arms:'rounded',cushions:'fixed',fabric:'clay'};

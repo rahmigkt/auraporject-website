@@ -2,7 +2,7 @@ import {openProjectSubmission,sendLabel} from './project-submit.js?v=20261016b';
 import {FAMILIES,DETAILS,LANGUAGES,WOODS,FABRICS,SIZE_LIMITS,normalizeStudio,compileStudio,label,illustration} from './design-library.js?v=20261016b';
 import {WORDS,ROOMS,CONFIGS,TOPS,WEAVE_NAMES,WOOD_NAMES,FABRIC_NAMES,stepsFor,choicesFor,applyChoice,selectedChoice,projectRecord} from './choice-flow.js?v=20261016b';
 import {drawing} from './design-drawing.js?v=20261016b';
-import {createFurnitureScene} from './furniture-scene.js?v=20261016d';
+import {createFurnitureScene} from './furniture-scene.js?v=20261016e';
 import {fabricCanvas,woodCanvas} from './furniture-textures.js?v=20261016b';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),STORE='aura-choice-project-v1';
 export async function renderChoiceWizard(main){
