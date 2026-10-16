@@ -58,7 +58,9 @@ export function normalize(input = {}) {
   if (p.width > p.length && !round) [p.length, p.width] = [p.width, p.length];
   p.cornerRadius = Math.min(p.cornerRadius, p.width / 2 - 1);
   // Supports that need a long top, or a round/oval one.
-  if (p.baseType === 'tripod' && !['round', 'oval', 'superellipse'].includes(p.topShape)) p.baseType = 'pedestal';
+  if (p.baseType === 'tripod' && (!['round', 'oval', 'superellipse'].includes(p.topShape) || p.width < 600)) p.baseType = 'pedestal';
+  // Legs need room under narrow tops: no splay where the top is too narrow to keep feet inside.
+  if (p.width - 2 * p.sideOverhang < 4 * p.legSize) p.legSplay = 0;
   if (p.baseType === 'doublePedestal' && p.length < 1700) p.baseType = 'pedestal';
   if (p.baseType === 'trestle' && p.length < 1000) p.baseType = 'legsApron';
   // Drawers and leaves live where they make sense.
@@ -95,14 +97,45 @@ export function edgeProfile(type, T, e) {
 const part = (id, role, mat, geom, pos, rot = [0, 0, 0], extra = {}) => ({id, role, mat, geom, pos, rot, ...extra});
 const box = (id, role, mat, w, h, d, pos, rot, extra) => part(id, role, mat, {fn: 'cushion', w, h, d, r: Math.min(2, w / 3, h / 3, d / 3)}, pos, rot, extra);
 
-/** Support layout: points where the base meets the floor and the outline of the support zone. */
-function legSpots(p, outline) {
-  const a = p.length / 2 - p.overhang - p.legSize / 2, b = p.width / 2 - p.sideOverhang - p.legSize / 2;
-  if (['round', 'oval', 'superellipse'].includes(p.topShape)) {
-    const k = Math.SQRT1_2; return [[a * k, b * k], [-a * k, b * k], [-a * k, -b * k], [a * k, -b * k]];
+// ---- Support fitting -----------------------------------------------------------------------
+// Every support must stand inside the underside of the top (the top outline minus the edge-profile
+// inset) with a visible margin, whatever the top shape. Footprints are shrunk towards the centre until
+// they fit, so round, oval, racetrack, boat and soft-cornered tops never have legs outside or the top
+// floating past its supports.
+function insidePoly(poly, x, z) {
+  let c = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [xi, zi] = poly[i], [xj, zj] = poly[j];
+    if ((zi > z) !== (zj > z) && x < (xj - xi) * (z - zi) / (zj - zi) + xi) c = !c;
   }
-  return [[a, b], [-a, b], [-a, -b], [a, -b]];
+  return c;
 }
+function edgeDist(poly, x, z) {
+  let d = Infinity;
+  for (let i = 0; i < poly.length; i++) {
+    const [ax, az] = poly[i], [bx, bz] = poly[(i + 1) % poly.length], ex = bx - ax, ez = bz - az, l2 = ex * ex + ez * ez || 1;
+    const t = Math.max(0, Math.min(1, ((x - ax) * ex + (z - az) * ez) / l2));
+    d = Math.min(d, Math.hypot(x - ax - t * ex, z - az - t * ez));
+  }
+  return d;
+}
+/** True when every point lies inside the outline at least m from its edge. */
+export const fitsInside = (poly, pts, m) => pts.every(([x, z]) => insidePoly(poly, x, z) && edgeDist(poly, x, z) >= m);
+/** Largest t ≤ 1 for which footprint(t) fits (binary search; footprint grows with t). */
+function fitScale(poly, footprint, m) {
+  if (fitsInside(poly, footprint(1), m)) return 1;
+  let lo = 0, hi = 1;
+  for (let k = 0; k < 22; k++) { const t = (lo + hi) / 2; if (fitsInside(poly, footprint(t), m)) lo = t; else hi = t; }
+  return lo;
+}
+const mirror4 = (x, z) => [[x, z], [-x, z], [-x, -z], [x, -z]];
+const circlePts = (cx, cz, r, n = 24) => Array.from({length: n}, (_, k) => [cx + Math.cos(k / n * 2 * Math.PI) * r, cz + Math.sin(k / n * 2 * Math.PI) * r]);
+/** Largest radius of a circle at (cx, cz) that fits. */
+function fitRadius(poly, cx, cz, m, rMax) { const t = fitScale(poly, t => circlePts(cx, cz, rMax * t), m); return rMax * t; }
+
+/** Leg anchored at its top (x, yTop, z), splayed so the foot moves outward; length solved so the foot is on the floor. */
+function splayRot(sx, sz, splay) { return [sz * -splay * 0.8, 0, sx * splay]; }
+function legAxis(rot) { const [rx, , rz] = rot; return [-Math.sin(rz), Math.cos(rx) * Math.cos(rz), Math.sin(rx) * Math.cos(rz)]; }
 
 export function compile(raw) {
   const p = normalize(raw), parts = [], dims = [];
@@ -123,128 +156,199 @@ export function compile(raw) {
 
   // ---- Base -------------------------------------------------------------------------
   const LB = p.length; // the base never extends with the leaves
-  const spots = legSpots({...p, length: LB}, outline);
-  const legMat = 'base', ls = p.legSize;
-  const legPart = (id, x, z, h, sx = 0, sz = 0) => {
-    const type = p.legType, splay = (type === 'cone' ? Math.max(p.legSplay, 6) : p.legSplay) * Math.PI / 180;
-    let q;
-    if (type === 'blade') q = box(id, 'leg', legMat, ls * 0.32, h, ls, [x, h / 2, z]);
-    else if (type === 'square') q = box(id, 'leg', legMat, ls, h, ls, [x, h / 2, z]);
-    else {
-      const prof = type === 'turned' ? legProfile('turned', h, ls / 2) : type === 'squareTaper' ? legProfile('squareTaper', h, ls / 2, p.legTaper) : type === 'round' ? legProfile('cylinder', h, ls / 2) : legProfile(type === 'cone' ? 'cone' : 'tapered', h, ls / 2, p.legTaper);
-      q = part(id, 'leg', legMat, {fn: 'lathe', profile: prof, square: type === 'squareTaper'}, [x, 0, z], [sz * -splay * 0.8, 0, sx * splay]);
-    }
-    return q;
+  const baseOutline = open ? topOutline(p.topShape, LB, W, {r: p.topShape === 'rect' ? 2 : p.cornerRadius, n: p.shapeN, bow: p.topShape === 'boat' ? p.boatBow : 0}) : outline;
+  const under = prof(1) || 0, M = under + 15; // supports stay ≥ 15 mm inside the visible underside
+  const legMat = 'base', ls = p.legSize, bt = p.baseType;
+  const lathed = !['blade', 'square'].includes(p.legType);
+  const splayDeg = lathed ? (p.legType === 'cone' ? Math.max(p.legSplay, 6) : p.legSplay) : 0, splay = splayDeg * Math.PI / 180;
+  // Horizontal outward travel of a splayed leg from top to floor.
+  const splayOut = Math.tan(splay) * yu;
+  const legProfileFor = len => p.legType === 'turned' ? legProfile('turned', len, ls / 2) : p.legType === 'squareTaper' ? legProfile('squareTaper', len, ls / 2, p.legTaper) : p.legType === 'round' ? legProfile('cylinder', len, ls / 2) : legProfile(p.legType === 'cone' ? 'cone' : 'tapered', len, ls / 2, p.legTaper);
+  // A tilted lathe leg whose top centre is at (x, yTop, z), cut flat at the floor and under the top.
+  const tiltedLeg = (id, x, z, yTop, rot, profileFor, square = false) => {
+    const v = legAxis(rot), tilt = Math.acos(Math.min(1, v[1])), extra = ls / 2 * Math.tan(tilt) + 2;
+    const len = yTop / v[1] + 2 * extra, top = [0, yTop + extra * v[1], 0];
+    const inner = {fn: 'lathe', profile: profileFor(len), square};
+    if (tilt < 1e-4) return part(id, 'leg', legMat, inner, [x, 0, z]);
+    return part(id, 'leg', legMat, {fn: 'clipped', inner, rot, offset: [top[0] - v[0] * len, top[1] - v[1] * len, top[2] - v[2] * len], y0: 0, y1: yTop}, [x, 0, z]);
   };
+  const legPart = (id, x, z, yTop, sx = 0, sz = 0) => {
+    const type = p.legType;
+    if (type === 'blade') return box(id, 'leg', legMat, ls * 0.32, yTop, ls, [x, yTop / 2, z]);
+    if (type === 'square') return box(id, 'leg', legMat, ls, yTop, ls, [x, yTop / 2, z]);
+    const rot = splay && (sx || sz) ? splayRot(sx, sz, splay) : [0, 0, 0];
+    return tiltedLeg(id, x, z, yTop, rot, legProfileFor, type === 'squareTaper');
+  };
+  // Centre of a splayed leg at height y, given its top centre (x, z) at yu.
+  const legAt = (x, z, y) => { if (!splay || !lathed) return [x, z]; const v = legAxis(splayRot(Math.sign(x), Math.sign(z), splay)), k = (yu - y) / v[1]; return [x - v[0] * k, z - v[2] * k]; };
   const apronLen = (a) => Math.max(40, a);
   const shelfAt = (lenX, depZ, y) => {
-    if (p.shelf === 'none') return;
+    if (p.shelf === 'none' || lenX < 120 || depZ < 120) return;
     if (p.shelf === 'solid') parts.push(part('shelf', 'shelf', 'top', {fn: 'slab', outline: topOutline('rect', lenX, depZ, {r: 2}), t: p.shelfThickness, profile: ['eased', p.shelfThickness, 2]}, [0, y, 0]));
-    else { const n = Math.max(4, Math.round(depZ / 60)), sw = depZ / n - 8; for (let i = 0; i < n; i++) parts.push(box(`slat-${i + 1}`, 'shelf-slat', 'base', lenX, p.shelfThickness, sw, [0, y + p.shelfThickness / 2, -depZ / 2 + (i + 0.5) * depZ / n])); }
+    else {
+      const n = Math.max(4, Math.round(depZ / 60)), sw = depZ / n - 8, rw = Math.max(30, ls * 0.6);
+      // Slats rest on two cross rails that run between the legs.
+      for (const sx of [-1, 1]) parts.push(box(`shelf-rail-${sx}`, 'shelf-rail', 'base', rw, 24, depZ, [sx * (lenX / 2 - rw / 2), y - 12, 0]));
+      for (let i = 0; i < n; i++) parts.push(box(`slat-${i + 1}`, 'shelf-slat', 'base', lenX, p.shelfThickness, sw, [0, y + p.shelfThickness / 2, -depZ / 2 + (i + 0.5) * depZ / n]));
+    }
   };
-  const bt = p.baseType;
+  let spots = [];
+  if (bt === 'legsApron' || bt === 'legsOnly' || bt === 'hairpin') {
+    const a0 = LB / 2 - p.overhang - ls / 2, b0 = W / 2 - p.sideOverhang - ls / 2;
+    const reach = bt === 'hairpin' ? 60 : ls / 2 + 2;
+    // Both the top (attachment) and the splayed foot must sit under the top.
+    const t = fitScale(baseOutline, t => mirror4(a0 * t + reach + splayOut, b0 * t + reach + splayOut * 0.8).concat(mirror4(a0 * t + reach, b0 * t + reach)), M);
+    const ax = Math.max(ls * 0.75, a0 * t), az = Math.max(ls * 0.75, b0 * t);
+    spots = mirror4(ax, az);
+  }
   if (bt === 'legsApron' || bt === 'legsOnly') {
-    const legH = yu;
-    spots.forEach(([x, z], i) => parts.push(legPart(`leg-${i + 1}`, x, z, legH, Math.sign(x), Math.sign(z))));
+    spots.forEach(([x, z], i) => parts.push(legPart(`leg-${i + 1}`, x, z, yu, Math.sign(x), Math.sign(z))));
     const [ax, az] = spots[0];
     if (bt === 'legsApron' && p.apronHeight > 0) {
-      const ah = p.apronHeight, at = p.apronThickness, sb = p.apronSetback, y = yu - ah / 2;
+      const ah = p.apronHeight, at = p.apronThickness, sb = Math.min(p.apronSetback, ls / 2 - 2), y = yu - ah / 2;
       const zFace = az + ls / 2 - sb - at / 2, xFace = ax + ls / 2 - sb - at / 2;
-      const lenX = apronLen(2 * ax - ls), lenZ = apronLen(2 * az - ls);
+      // Aprons run between leg faces (tenons go into the legs; the BOM adds the tenon length).
+      const lenX = apronLen(2 * ax - ls + 2), lenZ = apronLen(2 * az - ls + 2);
       if (p.drawers > 0) {
         const n = p.drawers, gap = 3, fw = (lenX - gap * (n + 1)) / n, fh = ah - 2 * gap;
         for (let i = 0; i < n; i++) {
           const x = -lenX / 2 + gap + fw / 2 + i * (fw + gap);
           parts.push(box(`drawer-front-${i + 1}`, 'drawer-front', legMat, fw, fh, at, [x, y, zFace]));
           const depth = Math.max(200, Math.floor((2 * az - ls - 40) / 50) * 50);
-          parts.push(box(`drawer-box-${i + 1}`, 'drawer-box', 'frame', fw - 26, fh - 25, depth, [x, y - 5, zFace - at / 2 - depth / 2], [0, 0, 0], {internal: true}));
+          parts.push(box(`drawer-box-${i + 1}`, 'drawer-box', 'frame', fw - 26, fh - 25, Math.min(depth, 2 * zFace - 40), [x, y - 5, zFace - at / 2 - Math.min(depth, 2 * zFace - 40) / 2], [0, 0, 0], {internal: true}));
           if (p.drawerPull === 'knob') parts.push(part(`pull-${i + 1}`, 'pull', 'metal', {fn: 'lathe', profile: [[0, 6], [14, 6], [16, 13], [24, 13], [26, 9]]}, [x, y, zFace + at / 2], [Math.PI / 2, 0, 0]));
           if (p.drawerPull === 'bar') parts.push(part(`pull-${i + 1}`, 'pull', 'metal', {fn: 'tube', points: [[x - fw * 0.22, y, zFace + at / 2], [x - fw * 0.22, y, zFace + at / 2 + 28], [x + fw * 0.22, y, zFace + at / 2 + 28], [x + fw * 0.22, y, zFace + at / 2]], r: 5}, [0, 0, 0]));
           if (p.drawerPull === 'recess') parts.push(box(`pull-${i + 1}`, 'pull', 'dark', fw * 0.4, 6, 2, [x, y - fh / 2 + 8, zFace + at / 2 + 0.6]));
         }
+        // Rail above the drawers ties the front legs.
+        parts.push(box('drawer-rail', 'apron', legMat, lenX, 18, at, [0, yu - 9, zFace]));
       } else parts.push(box('apron-front', 'apron', legMat, lenX, ah, at, [0, y, zFace]));
       parts.push(box('apron-back', 'apron', legMat, lenX, ah, at, [0, y, -zFace]));
       for (const s of [-1, 1]) parts.push(box(`apron-side-${s < 0 ? 'l' : 'r'}`, 'apron', legMat, at, ah, lenZ, [s * xFace, y, 0]));
       for (const [x, z] of spots) parts.push(box(`corner-block-${Math.sign(x)}${Math.sign(z)}`, 'corner-block', 'frame', 60, Math.max(40, ah - 10), 60, [x - Math.sign(x) * (ls / 2 + 25), y, z - Math.sign(z) * (ls / 2 + 25)], [0, Math.PI / 4, 0], {internal: true}));
     }
     if (p.stretcher !== 'none') {
-      const sy = p.stretcherHeight, st = Math.max(18, ls * 0.45), lenX = 2 * ax - ls, lenZ = 2 * az - ls;
-      for (const s of [-1, 1]) parts.push(box(`stretcher-side-${s < 0 ? 'l' : 'r'}`, 'stretcher', legMat, st, st, lenZ, [s * ax, sy, 0]));
+      const sy = p.stretcherHeight, st = Math.max(18, ls * 0.45), [sxL, szL] = legAt(ax, az, sy);
+      // Rails end inside the legs at the rail height (legs lean out when splayed).
+      const lenX = 2 * sxL, lenZ = 2 * szL;
+      for (const s of [-1, 1]) parts.push(box(`stretcher-side-${s < 0 ? 'l' : 'r'}`, 'stretcher', legMat, st, st, lenZ, [s * sxL, sy, 0]));
       if (p.stretcher === 'H') parts.push(box('stretcher-long', 'stretcher', legMat, lenX, st, st, [0, sy, 0]));
-      else for (const s of [-1, 1]) parts.push(box(`stretcher-${s < 0 ? 'b' : 'f'}`, 'stretcher', legMat, lenX, st, st, [0, sy, s * az]));
+      else for (const s of [-1, 1]) parts.push(box(`stretcher-${s < 0 ? 'b' : 'f'}`, 'stretcher', legMat, lenX, st, st, [0, sy, s * szL]));
     }
-    shelfAt(2 * ax - ls + 2, 2 * az - ls + 2, p.shelfHeight);
-    if (p.backPanel === 'panel') parts.push(box('back-panel', 'back-panel', legMat, 2 * ax - ls, Math.min(380, yu * 0.5), 16, [0, yu - Math.min(380, yu * 0.5) / 2, -az]));
+    { const [sxL, szL] = legAt(ax, az, p.shelfHeight); shelfAt(2 * sxL + ls * 0.4, 2 * szL + ls * 0.4, p.shelfHeight); }
+    if (p.backPanel === 'panel') parts.push(box('back-panel', 'back-panel', legMat, 2 * ax - ls + 2, Math.min(380, yu * 0.5), 16, [0, yu - Math.min(380, yu * 0.5) / 2, -az]));
   } else if (bt === 'trestle') {
-    const xs = LB / 2 - p.overhang - ls / 2, zs = W / 2 - p.sideOverhang - ls / 2, rail = Math.max(50, p.apronHeight || 70);
+    const x0 = LB / 2 - p.overhang - ls / 2, z0 = W / 2 - p.sideOverhang - ls / 2, rail = Math.max(50, p.apronHeight || 70);
+    const t = fitScale(baseOutline, t => mirror4(x0 * t + ls * 0.55, z0 * t + ls / 2 + 30), M);
+    const xs = x0 * t, zs = Math.max(ls, z0 * t);
     for (const sx of [-1, 1]) {
-      for (const sz of [-1, 1]) parts.push(legPart(`trestle-leg-${sx}${sz}`, sx * xs, sz * zs, yu - rail));
+      // One wide post per end, foot below and bearer above (classic trestle).
+      const postD = Math.min(2 * zs, Math.max(ls * 2.4, 160));
+      parts.push(box(`trestle-post-${sx}`, 'trestle-post', legMat, ls, yu - rail - 60 + 2, postD, [sx * xs, 60 + (yu - rail - 60) / 2, 0]));
       parts.push(box(`trestle-top-${sx}`, 'trestle-bearer', legMat, ls, rail, 2 * zs + ls + 40, [sx * xs, yu - rail / 2, 0]));
       parts.push(box(`trestle-foot-${sx}`, 'trestle-foot', legMat, ls * 1.1, 60, 2 * zs + ls + 60, [sx * xs, 30, 0]));
     }
-    parts.push(box('trestle-stretcher', 'stretcher', legMat, 2 * xs - ls, Math.max(60, ls * 1.1), Math.max(30, ls * 0.5), [0, p.stretcherHeight, 0]));
+    parts.push(box('trestle-stretcher', 'stretcher', legMat, 2 * xs, Math.max(60, ls * 1.1), Math.max(30, ls * 0.5), [0, Math.max(120, Math.min(p.stretcherHeight, yu - rail - 80)), 0]));
   } else if (bt === 'pedestal' || bt === 'doublePedestal') {
     const xs = bt === 'doublePedestal' ? [-(LB * 0.27), LB * 0.27] : [0];
-    const reach = p.footSpread * Math.min(LB, W) / 2;
+    const type = p.pedestalType, y0 = (type === 'tulip' ? 44 : 34) - 2, h = yu - y0;
+    // Profile radii relative to the column radius c: widest point and top flare.
+    const shape = type === 'tulip' ? [[0, 1.9], [0.06, 1.3], [0.35, 0.75], [0.65, 0.75], [0.92, 1.2], [1, 1.6]] : type === 'tapered' ? [[0, 1.25], [1, 0.7]] : [[0, 1], [1, 1]];
+    const widest = Math.max(...shape.map(s => s[1]));
     xs.forEach((x, i) => {
-      const c = p.columnSize / 2, h = yu - 40, type = p.pedestalType;
-      const col = type === 'tulip' ? [[0, c * 1.9], [h * 0.06, c * 1.3], [h * 0.35, c * 0.75], [h * 0.65, c * 0.75], [h * 0.92, c * 1.2], [h, c * 1.6]]
-        : type === 'tapered' ? [[0, c * 1.25], [h, c * 0.7]] : [[0, c], [h, c]];
-      parts.push(part(`column-${i + 1}`, 'column', legMat, {fn: 'lathe', profile: col.map(([y, r]) => [y + 40, r]), faceted: type === 'faceted', segments: type === 'faceted' ? 8 : 40}, [x, 0, 0]));
-      parts.push(part(`spider-${i + 1}`, 'top-plate', 'frame', {fn: 'lathe', profile: [[0, c * 1.6], [18, c * 1.6]]}, [x, yu - 18, 0], [0, 0, 0], {internal: true}));
+      // The column (and its top plate, 1.6 c) must sit inside the top; the foot must too.
+      const room = fitRadius(baseOutline, x, 0, M, Math.max(LB, W));
+      const c = Math.max(30, Math.min(p.columnSize / 2, room * 0.85 / Math.max(widest, 1.6)));
+      let reach = Math.min(p.footSpread * Math.min(LB, W) / 2, room);
+      if (bt === 'doublePedestal') reach = Math.min(reach, LB * 0.27 - 20);
+      reach = Math.max(reach, c * widest + 20);
+      parts.push(part(`column-${i + 1}`, 'column', legMat, {fn: 'lathe', profile: shape.map(([f, r]) => [y0 + f * h, c * r]), faceted: type === 'faceted', segments: type === 'faceted' ? 8 : 40}, [x, 0, 0]));
+      parts.push(part(`spider-${i + 1}`, 'top-plate', 'frame', {fn: 'lathe', profile: [[0, Math.min(c * 1.6, room - 5)], [18, Math.min(c * 1.6, room - 5)]]}, [x, yu - 18, 0], [0, 0, 0], {internal: true}));
       if (type === 'cross' || type === 'star') {
         const n = type === 'cross' ? 4 : bt === 'doublePedestal' ? 2 : 3;
         for (let k = 0; k < n; k++) {
           const a = (bt === 'doublePedestal' ? Math.PI / 2 : 0) + k / n * Math.PI * 2 + (type === 'cross' ? Math.PI / 4 : Math.PI / 2);
           parts.push(box(`foot-${i + 1}-${k + 1}`, 'foot', legMat, reach, 50, Math.max(40, c * 0.7), [x + Math.cos(a) * reach / 2, 25, Math.sin(a) * reach / 2], [0, -a, 0]));
         }
-      } else parts.push(part(`base-disc-${i + 1}`, 'foot', legMat, {fn: 'lathe', profile: [[0, reach - 6], [6, reach], [type === 'tulip' ? 40 : 30, reach - (type === 'tulip' ? 10 : 2)], [type === 'tulip' ? 44 : 34, c * 1.2]]}, [x, 0, 0]));
+      } else parts.push(part(`base-disc-${i + 1}`, 'foot', legMat, {fn: 'lathe', profile: [[0, reach - 6], [6, reach], [type === 'tulip' ? 40 : 30, reach - (type === 'tulip' ? 10 : 2)], [type === 'tulip' ? 44 : 34, Math.min(reach - 12, c * widest)]]}, [x, 0, 0]));
     });
-    if (bt === 'doublePedestal') parts.push(box('pedestal-stretcher', 'stretcher', legMat, LB * 0.54, 60, 40, [0, yu - 40, 0]));
+    if (bt === 'doublePedestal') parts.push(box('pedestal-stretcher', 'stretcher', legMat, LB * 0.54, 60, 40, [0, yu - 30, 0]));
   } else if (bt === 'slabEnds') {
-    const pt = p.panelThickness, xs = LB / 2 - p.overhang - pt / 2, d = W - 2 * p.sideOverhang;
-    const waterfall = p.overhang < 10;
-    for (const s of [-1, 1]) parts.push(part(`end-panel-${s < 0 ? 'l' : 'r'}`, 'end-panel', waterfall ? 'top' : legMat, {fn: 'cushion', w: pt, h: yu, d, r: Math.min(3, pt / 3)}, [s * (waterfall ? L / 2 - pt / 2 : xs), yu / 2, 0]));
-    if (p.kind === 'console' || p.kind === 'desk' || p.length > 1600) parts.push(box('slab-stretcher', 'stretcher', legMat, 2 * xs - pt, 60, 30, [0, yu - 30, -d / 2 + 40]));
-    shelfAt(2 * xs - pt, d - 10, p.shelfHeight);
-  } else if (bt === 'sled') {
-    const ts = p.tubeSize, xs = LB / 2 - p.overhang - ts / 2, zs = W / 2 - p.sideOverhang - ts / 2;
-    for (const sx of [-1, 1]) {
-      for (const sz of [-1, 1]) parts.push(box(`post-${sx}${sz}`, 'frame-post', 'metal', ts, yu - ts, ts, [sx * xs, (yu - ts) / 2 + ts / 2, sz * zs]));
-      parts.push(box(`runner-${sx}`, 'frame-runner', 'metal', ts, ts, 2 * zs + ts, [sx * xs, ts / 2, 0]));
+    const pt = p.panelThickness, waterfall = p.overhang < 10 && p.topShape === 'rect';
+    let xs, d;
+    if (waterfall) { xs = L / 2 - pt / 2; d = W - 2 * Math.max(0, p.sideOverhang); }
+    else {
+      const x0 = LB / 2 - Math.max(p.overhang, 40) - pt / 2, d0 = W - 2 * p.sideOverhang;
+      // Panels are wide in z: shrink the depth first, then move them inward if still outside.
+      const tz = fitScale(baseOutline, t => mirror4(x0 + pt / 2, d0 / 2 * t), M);
+      d = Math.max(200, d0 * tz);
+      const tx = fitScale(baseOutline, t => mirror4(x0 * t + pt / 2, d / 2), M);
+      xs = x0 * tx;
     }
-    for (const sz of [-1, 1]) parts.push(box(`rail-${sz}`, 'frame-rail', 'metal', 2 * xs + ts, ts, ts, [0, yu - ts / 2, sz * zs]));
-    shelfAt(2 * xs - ts, 2 * zs - ts, p.shelfHeight);
-  } else if (bt === 'xBase') {
-    const ts = Math.max(p.tubeSize, p.legSize * 0.6), xs = LB / 2 - p.overhang - ts / 2, zs = W / 2 - p.sideOverhang - ts;
-    const len = Math.hypot(yu, 2 * zs), ang = Math.atan2(yu, 2 * zs);
-    for (const sx of [-1, 1]) for (const k of [-1, 1]) parts.push(box(`x-bar-${sx}${k}`, 'x-leg', legMat, ts, len, ts * 0.8, [sx * xs, yu / 2, 0], [k * (Math.PI / 2 - ang), 0, 0]));
-    parts.push(box('x-stretcher', 'stretcher', legMat, 2 * xs, ts, ts, [0, yu / 2, 0]));
+    for (const s of [-1, 1]) parts.push(part(`end-panel-${s < 0 ? 'l' : 'r'}`, 'end-panel', waterfall ? 'top' : legMat, {fn: 'cushion', w: pt, h: yu + (waterfall ? 0 : 1), d, r: Math.min(3, pt / 3)}, [s * xs, yu / 2, 0]));
+    if (p.kind === 'console' || p.kind === 'desk' || p.length > 1600) parts.push(box('slab-stretcher', 'stretcher', legMat, 2 * xs - pt + 2, 60, 30, [0, yu - 30, -d / 2 + 40]));
+    shelfAt(2 * xs - pt + 2, d - 10, p.shelfHeight);
+  } else if (bt === 'sled' || bt === 'xBase') {
+    const ts = bt === 'sled' ? p.tubeSize : Math.max(p.tubeSize, p.legSize * 0.6);
+    const x0 = LB / 2 - p.overhang - ts / 2, z0 = W / 2 - p.sideOverhang - ts / 2;
+    const t = fitScale(baseOutline, t => mirror4(x0 * t + ts / 2, z0 * t + ts * (bt === 'xBase' ? 1.4 : 0.5)), M);
+    const xs = x0 * t, zs = Math.max(ts * 2, z0 * t);
+    if (bt === 'sled') {
+      for (const sx of [-1, 1]) {
+        for (const sz of [-1, 1]) parts.push(box(`post-${sx}${sz}`, 'frame-post', 'metal', ts, yu - ts, ts, [sx * xs, (yu - ts) / 2 + ts / 2, sz * zs]));
+        parts.push(box(`runner-${sx}`, 'frame-runner', 'metal', ts, ts, 2 * zs + ts, [sx * xs, ts / 2, 0]));
+      }
+      for (const sz of [-1, 1]) parts.push(box(`rail-${sz}`, 'frame-rail', 'metal', 2 * xs + ts, ts, ts, [0, yu - ts / 2, sz * zs]));
+      shelfAt(2 * xs - ts + 2, 2 * zs - ts + 2, p.shelfHeight);
+    } else {
+      // Two X frames: each bar runs corner to corner from the floor to the underside.
+      const zx = zs, len = Math.hypot(yu, 2 * zx), ang = Math.atan2(yu, 2 * zx);
+      for (const sx of [-1, 1]) {
+        for (const k of [-1, 1]) parts.push(part(`x-bar-${sx}${k}`, 'x-leg', legMat, {fn: 'clipped', inner: {fn: 'cushion', w: ts, h: len + ts * 2, d: ts * 0.8, r: 2}, rot: [k * (Math.PI / 2 - ang), 0, 0], offset: [0, yu / 2, 0], y0: ts * 0.8, y1: yu - ts * 0.8}, [sx * xs, 0, 0]));
+        parts.push(box(`x-cap-${sx}`, 'trestle-bearer', legMat, ts, ts * 0.8, 2 * zx + ts, [sx * xs, yu - ts * 0.4, 0]));
+        parts.push(box(`x-foot-${sx}`, 'trestle-foot', legMat, ts, ts * 0.8, 2 * zx + ts, [sx * xs, ts * 0.4, 0]));
+      }
+      parts.push(box('x-stretcher', 'stretcher', legMat, 2 * xs, ts, ts, [0, yu / 2, 0]));
+    }
   } else if (bt === 'tripod') {
-    const R = Math.min(L, W) / 2 * (1 - (p.overhang / Math.max(L, 1)) * 2) - ls, splay = Math.max(6, p.legSplay) * Math.PI / 180;
-    for (let k = 0; k < 3; k++) {
-      const a = k / 3 * Math.PI * 2 + Math.PI / 2, x = Math.cos(a) * R * 0.75, z = Math.sin(a) * R * 0.75;
-      parts.push(part(`leg-${k + 1}`, 'leg', legMat, {fn: 'lathe', profile: legProfile(p.legType === 'turned' ? 'turned' : 'tapered', yu + 10, ls / 2, p.legTaper)}, [x, 0, z], [Math.sin(a) * -splay, 0, Math.cos(a) * splay]));
+    const so = Math.tan(Math.max(6, p.legSplay) * Math.PI / 180) * yu;
+    // Legs at 90°, 210°, 330°; top ends on a ring, feet outward, everything under the top.
+    const dirs = [0, 1, 2].map(k => k / 3 * Math.PI * 2 + Math.PI / 2);
+    const R = fitScale(baseOutline, t => dirs.flatMap(a => [[Math.cos(a) * (t * 600 + so + ls / 2), Math.sin(a) * (t * 600 + so + ls / 2)], [Math.cos(a) * (t * 600 + ls / 2), Math.sin(a) * (t * 600 + ls / 2)]]), M) * 600;
+    const Rt = Math.max(ls * 1.5, R);
+    const sp = Math.max(6, p.legSplay) * Math.PI / 180;
+    for (const [k, a] of dirs.entries()) {
+      const rot = [Math.sin(a) * -sp, 0, Math.cos(a) * sp];
+      parts.push(tiltedLeg(`leg-${k + 1}`, Math.cos(a) * Rt, Math.sin(a) * Rt, yu, rot, len => legProfile(p.legType === 'turned' ? 'turned' : 'tapered', len, ls / 2, p.legTaper)));
     }
-    parts.push(part('tripod-ring', 'top-plate', 'frame', {fn: 'lathe', profile: [[0, R * 0.8], [20, R * 0.8]]}, [0, yu - 20, 0], [0, 0, 0], {internal: true}));
-  } else if (bt === 'hairpin') {
+    parts.push(part('tripod-ring', 'top-plate', 'frame', {fn: 'lathe', profile: [[0, Rt + ls / 2], [20, Rt + ls / 2]]}, [0, yu - 20, 0], [0, 0, 0], {internal: true}));
+    spots = dirs.map(a => [Math.cos(a) * (Rt + so), Math.sin(a) * (Rt + so)]);
+  } else if (bt === 'drum') {
+    const inset = Math.max(30, p.overhang * 0.5, M);
+    const shrunk = d => topOutline(p.topShape, LB - 2 * d, W - 2 * d, {r: p.topShape === 'rect' ? 2 : Math.max(2, p.cornerRadius - d), n: p.shapeN, bow: p.topShape === 'boat' ? p.boatBow : 0});
+    // The shrunk shape is checked against the underside and shrunk further if a curved outline needs it.
+    let dIn = inset; while (dIn < W / 3 && !fitsInside(baseOutline, shrunk(dIn), M - 1)) dIn += 5;
+    parts.push(part('drum', 'drum', legMat, {fn: 'slab', outline: shrunk(dIn), t: yu - 30, profile: ['eased', yu - 30, 3]}, [0, 30, 0]));
+    parts.push(part('drum-plinth', 'plinth', 'dark', {fn: 'slab', outline: shrunk(dIn + 25), t: 30.5, profile: ['square', 30, 0]}, [0, 0, 0]));
+  }
+  if (bt === 'hairpin') {
     const r = Math.max(5, p.tubeSize / 4);
     for (const [x, z] of spots) {
-      const sx = Math.sign(x), sz = Math.sign(z), foot = [x - sx * 10, r, z - sz * 10];
-      for (const dx of [-55, 55]) parts.push(part(`hairpin-${sx}${sz}${dx}`, 'hairpin', 'metal', {fn: 'tube', points: [[x - sx * 40 + dx * 0.0, yu - 2, z + dx * (sx * sz > 0 ? 0.7 : -0.7)], foot], r}, [0, 0, 0]));
+      const sx = Math.sign(x), sz = Math.sign(z), foot = [x - sx * 10, 0, z - sz * 10];
+      for (const dx of [-55, 55]) parts.push(part(`hairpin-${sx}${sz}${dx}`, 'hairpin', 'metal', {fn: 'clipped', inner: {fn: 'tube', points: [[x - sx * 40, yu, z + dx * (sx * sz > 0 ? 0.7 : -0.7)], [foot[0], -r, foot[2]]], r}, rot: [0, 0, 0], offset: [0, 0, 0], y0: 0, y1: yu - 4}, [0, 0, 0]));
       parts.push(box(`plate-${sx}${sz}`, 'mount-plate', 'metal', 110, 4, 110, [x - sx * 40, yu - 2, z], [0, 0, 0]));
     }
-  } else if (bt === 'drum') {
-    const inset = Math.max(30, p.overhang * 0.5), dOut = offsetOutline(signedCCW(outline), inset);
-    parts.push(part('drum', 'drum', legMat, {fn: 'slab', outline: dOut, t: yu - 30, profile: ['eased', yu - 30, 3]}, [0, 30, 0]));
-    parts.push(part('drum-plinth', 'plinth', 'dark', {fn: 'slab', outline: offsetOutline(signedCCW(outline), inset + 25), t: 30, profile: ['square', 30, 0]}, [0, 0, 0]));
   }
+  if (!spots.length) spots = supportSpots(parts, yu);
   parts.push(...glides(parts));
 
   const meta = derive(p, {L, W, H, T, yu, spots, open, outline});
   dims.push(...tableDims(p, meta));
   return {family: FAMILY, params: p, parts, meta, dims, sectionX: bt === 'doublePedestal' ? -(LB * 0.27) : 0, detail: {kind: 'edge', title: 'edge', T, profile: [p.edge, T, p.edgeSize]}};
 }
+
+/** Floor contact corners for tipping checks when the base is not four legs. */
+function supportSpots(parts, yu) { return []; }
 
 function signedCCW(pts) { let a = 0; for (let i = 0; i < pts.length; i++) { const p = pts[i], q = pts[(i + 1) % pts.length]; a += p[0] * q[1] - q[0] * p[1]; } return a > 0 ? pts : [...pts].reverse(); }
 
@@ -312,10 +416,10 @@ export function validate(design, materials = null, buildMesh = null) {
     const wt = weights(design, materials, buildMesh), Wn = wt.total * 9.81;
     // Vertical test load on the most unfavourable edge, scaled by use (after EN 12521 practice; indicative only).
     const load = {dining: 400, desk: 400, coffee: 250, console: 150, side: 100}[p.kind] || 300;
-    const reach = supportReach(p, m), edge = Math.min(p.length, p.width) / 2;
-    const over = load * Math.max(0, edge - reach.minor);
-    const sf = over > 0 ? Wn * reach.minor / over : 99;
-    if (sf < 1) add('error', 'tipping', +sf.toFixed(2)); else if (sf < 1.3) add('warn', 'tipping', +sf.toFixed(2));
+    // Worst edge of the real floor footprint: load at the top's furthest point beyond that edge.
+    const sf = tippingFactor(design, buildMesh, Wn, load);
+    // Consoles stand against a wall and are fixed to it (anti-tip bracket): a warning, not an error.
+    if (sf < 1 && p.kind !== 'console') add('error', 'tipping', +sf.toFixed(2)); else if (sf < 1.3) add('warn', 'tipping', +sf.toFixed(2));
     if (wt.total > 120) add('warn', 'heavy', wt.total);
   }
   if (surface === 'wood' && p.width > 450) add('info', 'woodMovement', +(p.width * 0.0025 * 3).toFixed(1));
@@ -324,13 +428,35 @@ export function validate(design, materials = null, buildMesh = null) {
   return issues;
 }
 
-/** Distance from the centre to the tipping line along the short axis (mm). */
-export function supportReach(p, m) {
-  const bt = p.baseType;
-  if (bt === 'pedestal' || bt === 'doublePedestal') { const r = p.footSpread * Math.min(p.length, p.width) / 2; return {minor: p.pedestalType === 'star' ? r * 0.5 : p.pedestalType === 'cross' ? r * Math.SQRT1_2 : r}; }
-  if (bt === 'tripod') { const R = Math.min(p.length, p.width) / 2 - p.legSize; return {minor: R * 0.75 * 0.5}; }
-  if (bt === 'drum') return {minor: p.width / 2 - Math.max(30, p.overhang * 0.5) - 25};
-  return {minor: p.width / 2 - p.sideOverhang - p.legSize / 2};
+/** Convex hull (x, z) of every point where the base touches the floor. */
+export function floorHull(compiled, buildMesh) {
+  const pts = [];
+  for (const q of compiled.parts) {
+    if (q.internal || q.role === 'top' || q.role === 'leaf') continue;
+    const w = transformPositions(buildMesh(q).positions, q.pos, q.rot);
+    for (let i = 0; i < w.length; i += 3) if (w[i + 1] < 6) pts.push([w[i], w[i + 2]]);
+  }
+  pts.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const lower = [], upper = [];
+  for (const p of pts) { while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) lower.pop(); lower.push(p); }
+  for (const p of pts.slice().reverse()) { while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) upper.pop(); upper.push(p); }
+  return lower.slice(0, -1).concat(upper.slice(0, -1));
+}
+/** Safety factor against tipping: self weight × lever inside the footprint / edge load × lever outside it. */
+export function tippingFactor(compiled, buildMesh, weightN, load) {
+  const hull = floorHull(compiled, buildMesh);
+  if (hull.length < 3) return 0;
+  const top = compiled.parts.filter(q => q.role === 'top' || q.role === 'leaf').flatMap(q => q.geom.outline.map(([x, z]) => [x + q.pos[0], z + q.pos[2]]));
+  let worst = 99;
+  for (let i = 0; i < hull.length; i++) {
+    const a = hull[i], b = hull[(i + 1) % hull.length], ex = b[0] - a[0], ez = b[1] - a[1], l = Math.hypot(ex, ez) || 1;
+    const n = [ez / l, -ex / l], d = a[0] * n[0] + a[1] * n[1]; // hull is CCW → outward normal
+    const nn = d < 0 ? [-n[0], -n[1]] : n, dd = Math.abs(d);
+    const ext = Math.max(...top.map(([x, z]) => x * nn[0] + z * nn[1]));
+    if (ext - dd > 0) worst = Math.min(worst, weightN * dd / (load * (ext - dd)));
+  }
+  return worst;
 }
 
 function tableDims(p, m) {
@@ -373,8 +499,8 @@ export function tableBom(compiled, materials, lang, buildMesh, materialText) {
   }
   const NAME = {leg: ['Ayak', 'Leg', 'Masif blok, ham kesit +6 mm; zıvana-lamba ile kuşağa', 'Solid blank, +6 mm rough section; mortise & tenon to apron'], apron: ['Kuşak', 'Apron', 'Masif, iki uçta 25 mm zıvana dili', 'Solid, 25 mm tenon each end'], 'corner-block': ['Köşe takozu', 'Corner block', 'Vida + tutkal, M8 askı cıvatası', 'Glue + screws, M8 hanger bolt'], stretcher: ['Alt kuşak', 'Stretcher', 'Masif, kavelalı', 'Solid, dowelled'],
     'drawer-front': ['Çekmece önü', 'Drawer front', 'Kuşakla aynı malzeme, 3 mm derz', 'Same as apron, 3 mm reveal'], 'drawer-box': ['Çekmece kutusu', 'Drawer box', '12 mm huş kontrplak, 6 mm taban; tam çekilir ray', '12 mm birch ply, 6 mm bottom; full-extension runners'], pull: ['Kulp', 'Pull', 'Metal', 'Metal'],
-    shelf: ['Alt raf', 'Lower shelf', 'Ayaklara gizli kavela', 'Concealed dowels to legs'], 'shelf-slat': ['Raf çıtası', 'Shelf slat', 'Masif çıta, 8 mm boşluk', 'Solid slat, 8 mm gap'], 'back-panel': ['Arka panel', 'Modesty panel', 'Kuşağa vida', 'Screwed to apron'],
-    'trestle-bearer': ['Sehpa ayak üst kayıtı', 'Trestle bearer', 'Masif, tablaya Z-klips', 'Solid, Z-clips to top'], 'trestle-foot': ['Sehpa ayak tabanı', 'Trestle foot', 'Masif, alt kenar 3 mm boşaltma', 'Solid, 3 mm relief underneath'],
+    shelf: ['Alt raf', 'Lower shelf', 'Ayaklara gizli kavela', 'Concealed dowels to legs'], 'shelf-slat': ['Raf çıtası', 'Shelf slat', 'Masif çıta, 8 mm boşluk', 'Solid slat, 8 mm gap'], 'shelf-rail': ['Raf taşıyıcı kayıt', 'Shelf rail', 'Masif, ayaklara zıvana', 'Solid, tenoned into the legs'], 'trestle-post': ['Köprü ayak dikmesi', 'Trestle post', 'Masif, alt ve üst kayıta zıvana', 'Solid, tenoned into foot and bearer'], 'back-panel': ['Arka panel', 'Modesty panel', 'Kuşağa vida', 'Screwed to apron'],
+    'trestle-bearer': ['Köprü ayak üst kayıtı', 'Trestle bearer', 'Masif, tablaya Z-klips', 'Solid, Z-clips to top'], 'trestle-foot': ['Köprü ayak tabanı', 'Trestle foot', 'Masif, alt kenar 3 mm boşaltma', 'Solid, 3 mm relief underneath'],
     column: ['Kolon', 'Column', 'Lamine masif blok, torna; veya çelik boru kaplama', 'Laminated solid, turned; or clad steel tube'], foot: ['Ayak tabanı', 'Base foot', 'Ağırlık için çelik plaka gömülü olabilir', 'May embed a steel plate for weight'], 'top-plate': ['Bağlantı plakası', 'Mounting plate', '18 mm kontrplak / çelik', '18 mm ply / steel'],
     'end-panel': ['Yan tabla', 'End panel', 'Tabla ile gönye veya kavela', 'Mitred or dowelled to the top'], 'frame-post': ['Dikme (metal)', 'Post (metal)', 'Kare profil, kaynaklı, elektrostatik boya', 'Square tube, welded, powder coat'], 'frame-runner': ['Taban kızağı', 'Runner', 'Kare profil', 'Square tube'], 'frame-rail': ['Üst lama', 'Top rail', 'Kare profil, tablaya vida', 'Square tube, screwed to top'],
     'x-leg': ['X ayak kolu', 'X leg bar', 'Ortada yarım geçme', 'Cross-halved at centre'], hairpin: ['Firkete ayak çubuğu', 'Hairpin rod', 'Ø10–12 mm çelik çubuk, bükme', 'Ø10–12 mm steel rod, bent'], 'mount-plate': ['Montaj plakası', 'Mounting plate', '4 mm çelik, 4 vida', '4 mm steel, 4 screws'], drum: ['Silindir gövde', 'Drum body', 'Bükme kontrplak / MDF, kaplama veya lake', 'Bent ply / MDF, veneered or lacquered'], plinth: ['Gizli baza', 'Recessed plinth', 'Siyah mat', 'Black matt']};
