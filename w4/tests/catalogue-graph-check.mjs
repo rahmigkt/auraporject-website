@@ -17,3 +17,5 @@ assert.equal(restoreCatalogue(normalizeStudio(),{room:'kitchen',group:'storage',
 let changed=catalogueSelect(normalizeStudio(),{room:'bedroom',group:'storage',product:'wardrobe',request:'bedroom request'},'room','kitchen');assert.equal(changed.brief.product,null);assert.equal(changed.brief.group,null);assert.equal(changed.brief.request,'');
 assert.equal(Object.keys(PRODUCTS).length,88);assert(MAIN_PRODUCT_IDS.length<45);
 console.log(`PASS ${valid} allowed and ${rejected} rejected space/group/product triples, migrations and context resets.`);
+
+const customReset=catalogueSelect(normalizeStudio(),{room:'bedroom',group:'bespoke',product:'custom',request:'old room'},'room','kitchen');assert.equal(customReset.brief.product,null);assert.equal(customReset.brief.request,'');
