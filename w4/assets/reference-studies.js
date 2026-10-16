@@ -1,5 +1,5 @@
 // Reference studies are simplified, editable concept geometry, never supplier CAD.
-import {PRODUCTS} from './furniture-taxonomy.js?v=20261016h';
+import {PRODUCTS} from './furniture-taxonomy.js?v=20261016m';
 import {compileStudio} from './design-library.js?v=20261016b';
 export function transformStudyPoint(p,v){const [rx,ry,rz]=p.rotation||[0,0,0],yaw=p.yaw||0;let [x,y,z]=v;[x,y]=[x*Math.cos(rz)-y*Math.sin(rz),x*Math.sin(rz)+y*Math.cos(rz)];[x,z]=[x*Math.cos(ry)+z*Math.sin(ry),-x*Math.sin(ry)+z*Math.cos(ry)];[y,z]=[y*Math.cos(rx)-z*Math.sin(rx),y*Math.sin(rx)+z*Math.cos(rx)];[x,z]=[x*Math.cos(yaw)+z*Math.sin(yaw),-x*Math.sin(yaw)+z*Math.cos(yaw)];return [x+p.position[0],y+p.position[1],z+p.position[2]];}
 export function partCorners(p){const result=[];for(const a of [-1,1])for(const b of [-1,1])for(const c of [-1,1])result.push(transformStudyPoint(p,[a*p.size[0]/2,b*p.size[1]/2,c*p.size[2]/2]));return result;}
@@ -87,6 +87,7 @@ export function buildReferenceStudy(id,options={}){
  case 'crib':{const w=.75,d=1.45,h=.9;box('cot-mattress',0,.38,0,w-.06,.08,d-.07,'fabric');for(const z of [-d/2,d/2])box('cot-end',0,h/2,z,w,h,.035);for(const x of [-w/2,w/2]){box('cot-top-rail',x,.86,0,.035,.05,d);box('cot-base-rail',x,.29,0,.035,.06,d);for(let i=0;i<18;i++)box('cot-spindle',x,.58,-d/2+.05+i*(d-.1)/17,.02,.55,.02);}legs(w,d,.12);}break;
  case 'changing':cabinet(.9,.87,.52,1,3,'drawers',.05);box('changing-top',0,.91,.12,.94,.035,.78);for(const x of [-.45,.45])box('changing-side-guard',x,.96,.12,.025,.10,.78);box('changing-mat',0,.95,.12,.83,.04,.66,'fabric','rounded');break;
  case 'nurseryWardrobe':cabinet(.8,1.7,.5,2,1,'doors',.15);box('base-drawer',0,.25,.27,.74,.18,.025);break;
+ case 'kitchenWorktop':cabinet(2.4,.86,.6,4,2,'drawers',.08);box('counter-left',-.88,.885,0,.64,.03,.65,'ceramic');box('counter-right',.62,.885,0,1.24,.03,.65,'ceramic');box('counter-rear',-.3,.885,-.26,.52,.03,.13,'ceramic');box('counter-front',-.3,.885,.26,.52,.03,.13,'ceramic');box('sink-bowl',-.3,.8,0,.5,.02,.36,'metal');rod('tap',[-.3,.9,-.23],[-.3,1.15,-.23],.025,'metal');rod('spout',[-.3,1.15,-.23],[-.3,1.15,-.06],.025,'metal');break;
  case 'kitchenBase':cabinet(.6,.88,.6,1,2,'open',.08);box('worktop',0,.905,0,.63,.04,.63);break;
  case 'kitchenWall':cabinet(.6,1,.37,1,3,'open',0);box('half-open-door',-.17,.5,.23,.3,.96,.025,'wood','box',null,{yaw:-.45});break;
  case 'pantry':cabinet(.6,2.2,.6,1,6,'open',.08);box('pantry-door',-.2,1.14,.36,.6,2.1,.025,'wood','box',null,{yaw:-.55});break;

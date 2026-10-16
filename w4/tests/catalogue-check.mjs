@@ -11,4 +11,4 @@ assert(!productsFor('living').some(p=>['bed','wardrobe','crib'].includes(p.id)))
 let s=normalizeStudio({family:'bed'}),b=restoreCatalogue(s,{room:'bedroom',familyChosen:true}).brief;assert.equal(b.product,'bed');const changed=catalogueSelect(s,b,'room','living');assert.equal(changed.brief.product,null);assert.equal(changed.brief.familyChosen,false);assert.throws(()=>catalogueSelect(s,{room:'living',group:'seating'},'family','crib'));
 console.log(`PASS ${Object.keys(SPACES).length} spaces, ${Object.keys(GROUPS).length} groups, ${Object.keys(PRODUCTS).length} product types, ${count} valid paths; no misleading drawing for unsupported products; saved-state migration and invalid cross-room choices.`);
 
-assert.equal(Object.keys(PRODUCTS).length,87);assert.equal(restoreCatalogue(normalizeStudio(),{room:'living',product:'nestingTables'}).brief.product,null);
+assert.equal(Object.keys(PRODUCTS).length,88);assert.equal(restoreCatalogue(normalizeStudio(),{room:'living',product:'nestingTables'}).brief.product,null);

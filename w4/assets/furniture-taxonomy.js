@@ -95,10 +95,39 @@ add('nurserySet','Bebek odası takımı','Nursery set','sets','nursery');
 add('outdoorSet','Bahçe / balkon takımı','Outdoor set','sets','outdoor');
 // An explicit escape hatch in every space, without inventing a matching drawing.
 add('custom','Diğer / özel üretim parça','Other / bespoke piece','bespoke',Object.keys(SPACES).join(' '));
-// Public selection stays concise. PRODUCTS and all reference geometry remain the research archive.
-export const MAIN_PRODUCT_IDS=Object.freeze(['sofa','cornerSofa','armchair','bench','diningChair','coffee','sideTable','diningTable','console','display','shelf','tv','bed','nightstand','wardrobe','dresser','vanity','dresuar','shoeCabinet','desk','childBed','crib','kitchenBase','vanityUnit','outdoorSofa','outdoorTable','custom']);
+// The public graph is curated independently from the full research archive.
+add('kitchenWorktop','Mutfak tezgâhı ve evye','Kitchen worktop and sink','fitted','kitchen');
+Object.assign(GROUPS,{kitchenCabinets:names('Mutfak dolapları','Kitchen cabinets'),kitchenWorktops:names('Tezgâh ve evye','Worktop and sink'),kitchenIslands:names('Mutfak adası','Kitchen island')});
+export const PUBLIC_TREE={
+ living:{seating:['sofa','cornerSofa','armchair'],tables:['coffee','sideTable'],storage:['console','display','shelf'],media:['tv'],bespoke:['custom']},
+ dining:{tables:['diningTable'],seating:['diningChair','bench'],storage:['console','display'],bespoke:['custom']},
+ bedroom:{sleep:['bed'],storage:['nightstand','wardrobe','dresser'],vanity:['vanity'],bespoke:['custom']},
+ dressing:{storage:['wardrobe','dresser'],vanity:['vanity'],bespoke:['custom']},
+ entry:{storage:['coatStorage','shoeCabinet'],tables:['dresuar'],seating:['bench'],bespoke:['custom']},
+ office:{study:['desk','officeChair'],storage:['shelf'],bespoke:['custom']},
+ kids:{sleep:['childBed'],storage:['wardrobe','dresser','nightstand','shelf'],study:['desk'],bespoke:['custom']},
+ nursery:{care:['crib','changing'],storage:['nurseryWardrobe','dresser'],bespoke:['custom']},
+ kitchen:{kitchenCabinets:['kitchenBase','kitchenWall','pantry'],kitchenWorktops:['kitchenWorktop'],kitchenIslands:['island'],bespoke:['custom']},
+ bathroom:{fitted:['vanityUnit'],storage:['bathCabinet','laundryCabinet'],vanity:['mirrorCabinet'],bespoke:['custom']},
+ outdoor:{seating:['outdoorSofa','outdoorChair'],tables:['outdoorTable'],bespoke:['custom']}
+};
+const contextualNames={
+ living:{seating:names('Koltuklar','Sofas and armchairs'),tables:names('Sehpalar','Coffee and side tables'),storage:names('Salon depolama mobilyaları','Living room storage'),media:names('TV ünitesi','TV unit')},
+ dining:{tables:names('Yemek masası','Dining table'),seating:names('Sandalyeler ve banklar','Chairs and benches'),storage:names('Konsol ve vitrin','Sideboard and display cabinet')},
+ bedroom:{sleep:names('Yatak / karyola','Bed'),storage:names('Gardırop, şifonyer ve komodin','Wardrobe, dresser and bedside table'),vanity:names('Makyaj masası','Dressing table')},
+ dressing:{storage:names('Giyinme dolapları','Dressing storage'),vanity:names('Makyaj masası','Dressing table')},
+ entry:{storage:names('Portmanto ve ayakkabılık','Hall storage'),tables:names('Dresuar','Hall console'),seating:names('Antre bankı','Hall bench')},
+ office:{study:names('Çalışma masası ve sandalyesi','Desk and office chair'),storage:names('Kitaplık','Bookcase')},
+ kids:{sleep:names('Çocuk / genç yatağı','Child / teen bed'),storage:names('Çocuk / genç depolama mobilyaları','Child / teen storage'),study:names('Çalışma masası','Desk')},
+ nursery:{care:names('Bebek yatağı ve bakım ünitesi','Cot and changing unit'),storage:names('Bebek dolabı ve şifonyer','Nursery storage')},
+ bathroom:{fitted:names('Lavabo dolabı','Vanity unit'),storage:names('Banyo ve çamaşır dolapları','Bathroom and laundry cabinets'),vanity:names('Aynalı banyo dolabı','Bathroom mirror cabinet')},
+ outdoor:{seating:names('Bahçe koltukları ve sandalyeleri','Outdoor seating'),tables:names('Bahçe / balkon masası','Outdoor table')}
+};
+export const groupNamesFor=(space,group)=>contextualNames[space]?.[group]||GROUPS[group];
+export const groupsForSpace=space=>Object.keys(PUBLIC_TREE[space]||{});
+export const productsFor=(space,group)=>{const tree=PUBLIC_TREE[space]||{};return (group?(tree[group]||[]).map(id=>({...PRODUCTS[id],group})):Object.entries(tree).flatMap(([key,ids])=>ids.map(id=>({...PRODUCTS[id],group:key}))));};
+export const allowedProduct=(space,group,id)=>Object.hasOwn(PUBLIC_TREE,space)&&Object.hasOwn(PUBLIC_TREE[space],group)&&PUBLIC_TREE[space][group].includes(id);
+export const MAIN_PRODUCT_IDS=Object.freeze([...new Set(Object.values(PUBLIC_TREE).flatMap(tree=>Object.values(tree).flat()))]);
 export const isMainProduct=id=>MAIN_PRODUCT_IDS.includes(id);
 export const MAIN_PRODUCTS=Object.fromEntries(MAIN_PRODUCT_IDS.map(id=>[id,PRODUCTS[id]]));
-export const groupsForSpace=space=>Object.keys(GROUPS).filter(g=>Object.values(MAIN_PRODUCTS).some(p=>p.group===g&&p.spaces.includes(space)));
-export const productsFor=(space,group)=>Object.values(MAIN_PRODUCTS).filter(p=>p.spaces.includes(space)&&(!group||p.group===group));
 export const productForFamily=(family,space)=>productsFor(space).find(p=>p.family===family)?.id||null;
