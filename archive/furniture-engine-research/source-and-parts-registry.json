@@ -1508,5 +1508,36 @@
     "Source, license and revision recorded per imported component.",
     "Seams, capitone and mechanisms must not be advertised as ready before actual geometry and tests exist.",
     "Manufacturing output requires specified material thickness, hardware, tolerances, joinery and human sign-off."
-  ]
+  ],
+  "implementationSnapshot": {
+    "status": "first partial integration",
+    "upholsteryArchetypes": [
+      "modern",
+      "chester",
+      "lounge",
+      "timber"
+    ],
+    "panelFronts": [
+      "plain",
+      "shaker",
+      "slatted",
+      "glass"
+    ],
+    "integratedSourceAdapters": [
+      "Infinigen deterministic sofa parameters",
+      "WoodworkingShop example side-runner drawer fit"
+    ],
+    "computation": "browser module Worker for geometry, part dimensions and drawings",
+    "exports": [
+      "dimensioned concept PDF with component pages",
+      "component dimensions CSV",
+      "nominal envelope DXF"
+    ],
+    "limits": [
+      "No full Blender, Infinigen, FreeCAD or CadQuery runtime deployment.",
+      "No automatic fabric cutting patterns or machining-ready CNC files.",
+      "Hardware and manufacturing tolerances remain unverified.",
+      "Other target archetypes and parts remain planned."
+    ]
+  }
 }

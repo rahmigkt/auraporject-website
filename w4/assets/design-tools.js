@@ -1,8 +1,8 @@
-import {FAMILIES,LANGUAGES,normalizeStudio,changeFamily,compileStudio} from './design-library.js?v=20261016b';
+import {FAMILIES,LANGUAGES,normalizeStudio,changeFamily,compileStudio} from './design-library.js?v=20261016n';
 const option=values=>({type:'string',enum:values});
 export const DESIGN_FIELDS={
- family:option(Object.keys(FAMILIES)),width:{type:'number'},height:{type:'number'},depth:{type:'number'},
- legs:option(['straight','tapered','sled','plinth','cylindrical']),arms:option(['square','rolled','rounded','slim','sloped','none','paddedWood']),
+ archetype:option(['standard','modern','chester','lounge','timber']),frontStyle:option(['plain','shaker','slatted','glass']),family:option(Object.keys(FAMILIES)),width:{type:'number'},height:{type:'number'},depth:{type:'number'},
+ legs:option(['straight','tapered','sled','plinth','cylindrical','turned']),arms:option(['square','rolled','rounded','slim','sloped','none','paddedWood']),
  cushions:option(['single','split','fixed']),back:option(['fixedBack','looseBack','channelBack']),
  returnSeats:{type:'integer',enum:[1,2,3]},service:option(['none','wood','cupholders']),pillows:option(['no','yes']),
  configuration:option(['straight','left','right','cornerLeft','cornerRight']),seats:{type:'integer',enum:[2,3]},

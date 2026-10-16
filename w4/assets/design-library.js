@@ -1,3 +1,5 @@
+import {enrichPanelModel} from './panel-model.js?v=20261016n';
+import {compileUpholstery} from './upholstery-model.js?v=20261016n';
 import {compileSectional} from './sectional-model.js?v=20261016a';
 import {compileDesign,normalizeDesign,WOODS,FABRICS} from './furniture-model.js?v=20261016b';
 export {WOODS,FABRICS};
@@ -61,6 +63,14 @@ Object.assign(DETAILS,{
  noPillows:extra('pillows','Dekoratif yastık yok','No throw pillows','M20 35h80v35H20z'),
  withPillows:extra('pillows','Dekoratif yastık ekle','Add throw pillows','M20 35h80v35H20zM25 25h25v30H25zM70 25h25v30H70z')
 });
+Object.assign(DETAILS,{
+ modern:{field:'archetype',names:{tr:'Modern gövde',en:'Modern tailored'},sketch:'M12 42h96v30H12zM20 20h80v26H20zM20 72v8M100 72v8'},
+ chester:{field:'archetype',names:{tr:'Chester / kapitone',en:'Chesterfield'},sketch:'M12 25q0-12 12-12h72q12 0 12 12v48H12zM22 26l76 35M22 60l76-34M42 16v47M78 16v47'},
+ lounge:{field:'archetype',names:{tr:'Alçak lounge',en:'Low modular lounge'},sketch:'M10 40h100v34H10zM18 25h84v24H18zM52 42v32M72 42v32'},
+ timber:{field:'archetype',names:{tr:'Açık ahşap karkas',en:'Exposed timber frame'},sketch:'M15 15v65M105 15v65M15 55h90M15 65h90M25 25h70v30H25zM15 35h12M93 35h12'}
+});
+Object.assign(DETAILS,{plain:{field:'frontStyle',names:{tr:'Düz panel',en:'Plain slab'},sketch:'M25 12h70v68H25z'},shaker:{field:'frontStyle',names:{tr:'Çerçeveli Shaker',en:'Shaker frame'},sketch:'M20 10h80v70H20zM32 22h56v46H32z'},slatted:{field:'frontStyle',names:{tr:'Dikey çıtalı',en:'Vertical slats'},sketch:'M20 10h80v70H20zM33 10v70M46 10v70M59 10v70M72 10v70M85 10v70'},glass:{field:'frontStyle',names:{tr:'Camlı çerçeve',en:'Glazed frame'},sketch:'M20 10h80v70H20zM28 18h64v54H28zM37 48l28-24M53 58l28-24'}});
+DETAILS.turned={field:'legs',names:{tr:'Tornalı ayak',en:'Turned legs'},sketch:'M46 12h28l-6 14 8 16-10 20 5 16H49l5-16-10-20 8-16z'};
 export const detailValue=(key)=>({straightLayout:'straight',twoSeats:2,threeSeats:3,returnOne:1,returnTwo:2,returnThree:3,noService:'none',woodService:'wood',cupService:'cupholders',noPillows:'no',withPillows:'yes'}[key]??key);
 export const label=(obj,language)=>obj.names?.[language]||obj[language]||obj.names?.en||obj.en;
 export function illustration(path){return `<svg viewBox="0 0 120 90" fill="none" aria-hidden="true"><path d="${path}" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg>`;}
@@ -70,7 +80,12 @@ export function normalizeStudio(raw={}){
  const family=has(FAMILIES,raw.family)?raw.family:'sofa',d=FAMILIES[family].size;
  const r={version:2,family};
  for(const [i,k] of ['width','height','depth'].entries())r[k]=typeof raw[k]==='number'&&Number.isFinite(raw[k])?Math.round(Math.min(k==='height'?260:350,Math.max(k==='height'?(family==='bed'?60:30):25,raw[k]))):d[i];
- for(const [k,choices,fallback] of [['legs',['straight','tapered','sled','plinth','cylindrical'],'tapered'],['arms',['square','rolled','rounded','slim','sloped','none','paddedWood'],'rounded'],['cushions',['single','split','fixed'],'split'],['back',['fixedBack','looseBack','channelBack'],'fixedBack'],['configuration',['straight','left','right','cornerLeft','cornerRight'],'straight'],['top',['rect','soft','round','oval'],'rect'],['weave',['plain','twill22','basket'],'plain'],['front',['open','closed','mixed'],'closed'],['wood',Object.keys(WOODS),'walnut'],['fabric',Object.keys(FABRICS),'linen']])r[k]=choices.includes(raw[k])?raw[k]:fallback;
+ for(const [k,choices,fallback] of [['legs',['straight','tapered','sled','plinth','cylindrical','turned'],'tapered'],['arms',['square','rolled','rounded','slim','sloped','none','paddedWood'],'rounded'],['cushions',['single','split','fixed'],'split'],['back',['fixedBack','looseBack','channelBack'],'fixedBack'],['configuration',['straight','left','right','cornerLeft','cornerRight'],'straight'],['top',['rect','soft','round','oval'],'rect'],['weave',['plain','twill22','basket'],'plain'],['front',['open','closed','mixed'],'closed'],['wood',Object.keys(WOODS),'walnut'],['fabric',Object.keys(FABRICS),'linen']])r[k]=choices.includes(raw[k])?raw[k]:fallback;
+ r.frontStyle=['plain','shaker','slatted','glass'].includes(raw.frontStyle)?raw.frontStyle:'plain';
+ if(['dresser','nightstand'].includes(family)&&r.frontStyle==='glass')r.frontStyle='plain';
+ r.archetype=['standard','modern','chester','lounge','timber'].includes(raw.archetype)?raw.archetype:'standard';if(!['sofa','armchair'].includes(family)||r.configuration!=='straight')r.archetype='standard';
+ if(r.archetype==='standard'&&r.legs==='turned')r.legs='tapered';
+ if(r.archetype==='chester'){r.arms='rolled';r.back='fixedBack';}
  r.seats=raw.seats===2?2:3;
  r.returnSeats=[1,2,3].includes(raw.returnSeats)?raw.returnSeats:2;r.service=['none','wood','cupholders'].includes(raw.service)?raw.service:'none';r.pillows=raw.pillows==='yes'?'yes':'no';
  if(family!=='sofa'&&r.cushions==='split')r.cushions='single';
@@ -87,9 +102,11 @@ export function normalizeStudio(raw={}){
  return r;
 }
 export function changeFamily(raw,family){return normalizeStudio({...raw,family,...Object.fromEntries(['width','height','depth'].map((k,i)=>[k,FAMILIES[family].size[i]]))});}
-export function compileStudio(raw){
+export function compileStudio(raw){const model=compileStudioCore(raw);return ['console','shelf','wardrobe','dresser','nightstand','tv'].includes(model.state.family)?enrichPanelModel(model):model;}
+function compileStudioCore(raw){
  const s=normalizeStudio(raw);
  if(s.family==='sofa'&&s.configuration.startsWith('corner'))return compileSectional(s);
+ if(['sofa','armchair'].includes(s.family)&&s.archetype!=='standard'&&s.configuration==='straight')return compileUpholstery(s);
  if(['console','shelf'].includes(s.family)){const result=compileDesign({...s,front:s.front==='mixed'?'open':s.front,model:s.family});if(s.front==='mixed'||(s.family==='shelf'&&s.front==='closed')){if(s.front==='mixed')result.parts=result.parts.filter(p=>p.role!=='door'&&p.role!=='pull');const count=s.front==='mixed'?2:s.columns;for(let i=0;i<count;i++){const col=s.front==='mixed'?(i===0?0:s.columns-1):i,w=result.width/s.columns-.012,h=(result.height-(s.family==='console'?.16:.04))-.012;result.parts.push({role:'door',position:[-result.width/2+(col+.5)*result.width/s.columns,result.height-h/2-.006,result.depth/2-.012],size:[w,h,.024],material:'wood'});}}if(s.family==='console'){
    result.parts=result.parts.filter(p=>p.role!=='leg');const w=result.width,d=result.depth,h=.16,t=.045;
    const add=(role,position,size,material='wood',shape='box')=>result.parts.push({role,position,size,material,shape});
@@ -137,6 +154,6 @@ export function compileStudio(raw){
  return {state:s,width:W,height:H,depth:D,parts};
 }
 
-export function detailFields(family){return ['table','coffee','desk','bed','bench'].includes(family)?['legs']:['sofa','armchair','chair'].includes(family)?['legs',...(family==='sofa'?['configuration','seats','returnSeats','service','pillows']:[]),...(['sofa','armchair'].includes(family)?['arms']:[]),'cushions',...(family!=='bench'?['back']:[])]:family==='console'?['legs','front']:['front'];}
+export function detailFields(family){return ['table','coffee','desk','bed','bench'].includes(family)?['legs']:['sofa','armchair','chair'].includes(family)?[...(['sofa','armchair'].includes(family)?['archetype']:[]),'legs',...(family==='sofa'?['configuration','seats','returnSeats','service','pillows']:[]),...(['sofa','armchair'].includes(family)?['arms']:[]),'cushions',...(family!=='bench'?['back']:[])]:family==='console'?['legs','front','frontStyle']:['front','frontStyle'];}
 
 export const SIZE_LIMITS={sofa:[[120,330],[65,115],[75,200]],armchair:[[65,130],[65,120],[65,120]],chair:[[40,90],[70,120],[40,85]],bench:[[70,220],[35,65],[35,80]],table:[[80,300],[65,85],[60,150]],coffee:[[45,180],[30,65],[40,120]],desk:[[80,240],[65,90],[45,100]],bed:[[100,240],[60,160],[190,240]],console:[[80,240],[55,110],[30,60]],shelf:[[60,220],[100,220],[25,45]],wardrobe:[[80,300],[160,260],[45,80]],dresser:[[60,180],[65,130],[35,65]],nightstand:[[35,90],[35,85],[30,60]],tv:[[90,300],[35,90],[30,65]]};

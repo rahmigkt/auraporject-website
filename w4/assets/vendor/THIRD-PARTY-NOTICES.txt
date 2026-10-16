@@ -1,0 +1,13 @@
+AURA furniture engine adapters
+
+1. Infinigen / Princeton University
+BSD-3-Clause. Complete license: infinigen/LICENSE.txt
+Source commit: 224598d4a2ff95b4fc928e72c222598b7122c698
+Source path: src/infinigen/assets/objects/seating/sofa.py
+Adaptation: deterministic sofa parameter adapter. The Blender node graph, renderer and entire Infinigen system are not bundled. AURA upholstery, mesh and technical drawing code is separate.
+
+2. WoodworkingShop / Ryair
+MIT. Complete license: woodworkingshop/LICENSE.txt
+Source commit: db927cad3213a69f10dcdd7e29eb8c3fcb907c7f
+Source path: src/engine/geometry/drawer-box.ts
+Adaptation: side-mounted example drawer sizing. Other upstream hardware assumptions were not enabled. Manufacturing must verify the chosen runner dimensions.

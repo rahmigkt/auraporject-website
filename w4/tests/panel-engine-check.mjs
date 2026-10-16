@@ -1,0 +1,8 @@
+import assert from 'node:assert/strict';
+import {compileStudio} from '../assets/design-library.js';
+import {partCorners} from '../assets/reference-studies.js';
+import {drawerFit} from '../assets/vendor/woodworkingshop/drawer-fit.js';
+import {buildTechnicalPacket} from '../assets/technical-packet.js';
+let variants=0;for(const family of ['console','shelf','wardrobe','dresser','nightstand','tv'])for(const frontStyle of ['plain','shaker','slatted','glass'])for(const width of [60,180]){const m=compileStudio({family,frontStyle,width});for(const p of m.parts){assert(p.size.every(v=>Number.isFinite(v)&&v>0));for(const v of partCorners(p)){assert(v[0]>=-m.width/2-1e-6&&v[0]<=m.width/2+1e-6,p.role);assert(v[1]>=-1e-6&&v[1]<=m.height+1e-6,p.role);assert(v[2]>=-m.depth/2-1e-6&&v[2]<=m.depth/2+1e-6,p.role);}}const packet=buildTechnicalPacket(m);assert.equal(packet.groups.reduce((v,g)=>v+g.quantity,0),m.parts.length);variants++;}
+const a=compileStudio({family:'dresser',frontStyle:'shaker'});assert(a.parts.some(p=>p.role==='front-stile'));assert(a.parts.some(p=>p.role==='drawer-box-bottom'&&p.internal));assert(compileStudio({family:'console',frontStyle:'glass'}).parts.some(p=>p.material==='glass'));assert(compileStudio({family:'console',frontStyle:'slatted'}).parts.some(p=>p.role==='front-slat'));
+const fit=drawerFit({openingWidthMm:500,openingHeightMm:150,openingDepthMm:550});assert.equal(fit.widthMm,474.6);assert.equal(fit.heightMm,144);assert.equal(fit.depthMm,526);assert.equal(fit.hardwareVerified,false);assert.throws(()=>drawerFit({openingWidthMm:20,openingHeightMm:50,openingDepthMm:100}));console.log(`PASS ${variants} panel constructions, clearances, internal drawer components and BOM consistency.`);
