@@ -1,0 +1,151 @@
+// Woven-textile material maps generated from the weave draft (warp/weft interlacing matrix).
+// The weave definitions are the NAKIŞ ones: top(i,j) = warp i passes over weft j.
+// Output is pure RGBA data (albedo, normal, roughness) at real thread scale, usable in three.js DataTextures.
+import {WEAVES, FIBERS, COLORS} from './catalog.js';
+import {MOTIF_WEAVE} from '../nakis/weave.js?v=20261016b';
+import {MOTIFS} from '../nakis/motifs.js?v=20261016b';
+import {fbm, valueNoise, clamp} from './rng.js';
+
+const hex = h => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+const mix = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+const shade = (c, k) => c.map(v => clamp(v * k, 0, 255));
+const gcd = (a, b) => (b ? gcd(b, a % b) : a);
+const lcm = (a, b) => a / gcd(a, b) * b;
+
+/** Weave draft as a boolean matrix (true = warp up) for the "kareli" diagram in the UI. */
+export function draft(weave, size = 0) {
+  const W = WEAVES[weave] || WEAVES.plain, n = size || Math.max(8, W.P * 2);
+  return Array.from({length: n}, (_, j) => Array.from({length: n}, (_, i) => W.top(i, j)));
+}
+
+/** Colour sequence (in threads) for warp and weft, giving stripes, gingham and plaid. */
+function sequences(spec, pitch, base, second) {
+  const t = mm => Math.max(2, Math.round(mm / pitch));
+  const dark = shade(base, 0.62), light = mix(base, [245, 240, 228], 0.55);
+  switch (spec.pattern) {
+    case 'stripe': { const a = t(22 * spec.scale), b = t(7 * spec.scale); return {warp: [...Array(a).fill(base), ...Array(b).fill(second)], weft: [base]}; }
+    case 'check': { const a = t(6 * spec.scale); const s = [...Array(a).fill(base), ...Array(a).fill(light)]; return {warp: s, weft: s}; }
+    case 'plaid': {
+      const s = [...Array(t(26 * spec.scale)).fill(base), ...Array(t(3 * spec.scale)).fill(second), ...Array(t(9 * spec.scale)).fill(dark), ...Array(t(2 * spec.scale)).fill(light), ...Array(t(9 * spec.scale)).fill(dark), ...Array(t(3 * spec.scale)).fill(second)];
+      return {warp: s, weft: s};
+    }
+    case 'damask': return {warp: [base], weft: [mix(base, second, 0.35)]};
+    default: return {warp: [base], weft: [shade(base, 0.95)]};
+  }
+}
+
+/** Damask figure mask: a NAKIŞ motif rasterised in a half-drop repeat (tile coordinates). */
+const maskCache = new Map();
+function motifMask(id, size) {
+  const key = id + ':' + size;
+  if (maskCache.has(key)) return maskCache.get(key);
+  const m = MOTIFS[id] || MOTIFS.damask, shapes = m.build(m.counts?.at?.(-1) ?? 6).filter(sh => sh.closed !== false && sh.fill !== false && sh.pts?.length > 2);
+  const mask = new Uint8Array(size * size), scale = size * 0.29;
+  for (const [cx, cy] of [[0.5, 0.5], [0, 0], [1, 0], [0, 1], [1, 1]]) for (const sh of shapes) {
+    const pts = sh.pts.map(([x, y]) => [cx * size + x * scale, cy * size - y * scale]);
+    let y0 = Infinity, y1 = -Infinity; for (const [, y] of pts) { y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+    for (let y = Math.max(0, Math.floor(y0)); y <= Math.min(size - 1, Math.ceil(y1)); y++) {
+      const xs = [], yy = y + 0.5;
+      for (let k = 0; k < pts.length; k++) { const [ax, ay] = pts[k], [bx, by] = pts[(k + 1) % pts.length]; if ((ay <= yy) !== (by <= yy)) xs.push(ax + (yy - ay) / (by - ay) * (bx - ax)); }
+      xs.sort((a, b) => a - b);
+      for (let k = 0; k + 1 < xs.length; k += 2) for (let x = Math.max(0, Math.ceil(xs[k])); x <= Math.min(size - 1, Math.floor(xs[k + 1])); x++) mask[y * size + x] ^= 1;
+    }
+  }
+  maskCache.set(key, mask);
+  return mask;
+}
+
+/**
+ * Build fabric maps. spec: {fiber, weave, color, pattern, color2, scale}. Returns
+ * {size, tileMm, albedo, normal, rough} where maps are Uint8ClampedArray RGBA of size×size.
+ */
+export function fabricMaps(spec, {maxPx = 1024} = {}) {
+  const F = FIBERS[spec.fiber] || FIBERS.linen;
+  const base = hex(COLORS[spec.color]?.hex || '#d8ccb4'), second = hex(COLORS[spec.color2]?.hex || '#3b3b38');
+  if (!F.weave) return pileMaps(spec, F, base, maxPx);
+  const pitch = F.thread * (spec.fiber === 'linen' ? 1.1 : 1); // mm per thread
+  const W = WEAVES[spec.weave] || WEAVES.plain, damask = spec.pattern === 'damask';
+  // Damask: the figure is woven in a contrasting structure (satin, or the reversed face of a satin ground).
+  const Wfig = !damask ? W : spec.weave === 'satin' ? {P: W.P, top: (i, j) => !W.top(i, j)} : WEAVES[MOTIF_WEAVE[spec.weave] || 'satin'];
+  const seq = sequences(spec, pitch, base, second);
+  let n = lcm(lcm(W.P, Wfig.P), lcm(seq.warp.length, seq.weft.length));
+  const target = damask ? Math.round(110 * spec.scale / pitch) : Math.round(96 / pitch);
+  n = Math.max(n, Math.ceil(target / n) * n);
+  const ppt = clamp(Math.floor(maxPx / n), 3, 10), size = n * ppt; // ≥3 px per thread keeps the interlacing readable
+  const albedo = new Uint8ClampedArray(size * size * 4), height = new Float32Array(size * size), rough = new Uint8ClampedArray(size * size * 4);
+  const mask = damask ? motifMask(spec.motif || 'damask', size) : null;
+  const seed = (spec.color?.length || 3) * 7 + (spec.weave?.length || 1);
+  const slubWarp = Array.from({length: n}, (_, i) => 1 - F.slub * 0.35 * valueNoise(i * 0.37, 0.5, seed, 0));
+  for (let y = 0; y < size; y++) {
+    const j = Math.floor(y / ppt), fy = (y % ppt + 0.5) / ppt;
+    for (let x = 0; x < size; x++) {
+      const i = Math.floor(x / ppt), fx = (x % ppt + 0.5) / ppt;
+      const fig = mask && mask[y * size + x];
+      const weave = fig ? Wfig : W;
+      const warpUp = weave.top(i, j);
+      // Float length: how many crossings the top thread spans (satin floats look glossier and flatter).
+      let run = 1;
+      if (warpUp) { while (run < 6 && weave.top(i, j + run)) run++; } else { while (run < 6 && !weave.top(i + run, j)) run++; }
+      const slubWeft = 1 - F.slub * 0.35 * valueNoise(0.5, j * 0.41, seed + 3, 0);
+      const across = warpUp ? fx : fy, along = warpUp ? fy : fx;
+      const w = warpUp ? slubWarp[i] : slubWeft;
+      const prof = Math.sqrt(Math.max(0, 1 - ((across - 0.5) / (0.5 * w)) ** 2));
+      const arch = 0.82 + 0.18 * Math.sin(Math.PI * clamp(along, 0, 1));
+      const fuzz = F.fuzz * (fbm(x / ppt * 1.7, y / ppt * 1.7, seed, 3, n * 1.7) - 0.5);
+      const h = clamp(prof * arch * (run > 2 ? 0.8 : 1) + fuzz, 0, 1);
+      height[y * size + x] = h;
+      const c = warpUp ? seq.warp[i % seq.warp.length] : seq.weft[j % seq.weft.length];
+      const tone = 0.7 + 0.36 * h + (run > 2 ? 0.06 : 0) + fuzz * 0.35;
+      const k = (y * size + x) * 4;
+      albedo[k] = clamp(c[0] * tone, 0, 255); albedo[k + 1] = clamp(c[1] * tone, 0, 255); albedo[k + 2] = clamp(c[2] * tone, 0, 255); albedo[k + 3] = 255;
+      const r = clamp(F.rough - (run > 2 ? 0.18 : 0) + (1 - h) * 0.05, 0.05, 1) * 255;
+      rough[k] = rough[k + 1] = rough[k + 2] = r; rough[k + 3] = 255;
+    }
+  }
+  return {size, tileMm: n * pitch, albedo, normal: normalFromHeight(height, size, 2.2), rough};
+}
+
+/** Velvet, bouclé and leather have no visible weave: pile, loops or grain instead. */
+function pileMaps(spec, F, base, maxPx) {
+  const size = Math.min(512, maxPx), tileMm = spec.fiber === 'leather' ? 90 : spec.fiber === 'boucle' ? 40 : 60;
+  const albedo = new Uint8ClampedArray(size * size * 4), rough = new Uint8ClampedArray(size * size * 4), height = new Float32Array(size * size);
+  const per = 8;
+  for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
+    const u = x / size * per, v = y / size * per; let h, tone, r;
+    if (spec.fiber === 'leather') {
+      const pebble = fbm(u * 26, v * 26, 11, 2, per * 26), crease = Math.abs(fbm(u * 2.2, v * 2.2, 5, 3, per * 2.2) - 0.5), patina = fbm(u * 0.8, v * 0.8, 2, 3, per * 0.8);
+      h = clamp(0.55 + (pebble - 0.5) * 0.7 - (crease < 0.02 ? 0.25 : 0), 0, 1); tone = 0.88 + 0.16 * (patina - 0.5) + (pebble - 0.5) * 0.08 - (crease < 0.02 ? 0.04 : 0); r = F.rough + (pebble - 0.5) * 0.2;
+    } else if (spec.fiber === 'boucle') {
+      const wu = u * 4.5 + (fbm(u * 3, v * 3, 8, 2, per * 3) - 0.5) * 1.2, wv = v * 4.5 + (fbm(u * 3, v * 3, 9, 2, per * 3) - 0.5) * 1.2;
+      const fx = wu - Math.floor(wu), fy = wv - Math.floor(wv), jitter = valueNoise(Math.floor(wu), Math.floor(wv), 7, per * 4.5);
+      const loop = Math.abs(Math.hypot(fx - 0.5 + (jitter - 0.5) * 0.2, fy - 0.5) - (0.22 + jitter * 0.16));
+      h = clamp(1 - loop * 4 + (fbm(u * 9, v * 9, 3, 3, per * 9) - 0.5) * 0.6, 0, 1); tone = 0.9 + 0.14 * h; r = F.rough;
+    } else {
+      const crush = fbm(u * 0.9, v * 0.9, 21, 3, per * 0.9), fine = fbm(u * 20, v * 20, 4, 2, per * 20);
+      h = clamp(crush * 0.4 + fine * 0.3, 0, 1); tone = 0.84 + 0.22 * crush; r = F.rough + (crush - 0.5) * 0.12;
+    }
+    const k = (y * size + x) * 4; height[y * size + x] = h;
+    albedo[k] = clamp(base[0] * tone, 0, 255); albedo[k + 1] = clamp(base[1] * tone, 0, 255); albedo[k + 2] = clamp(base[2] * tone, 0, 255); albedo[k + 3] = 255;
+    rough[k] = rough[k + 1] = rough[k + 2] = clamp(r, 0.05, 1) * 255; rough[k + 3] = 255;
+  }
+  return {size, tileMm, albedo, normal: normalFromHeight(height, size, spec.fiber === 'leather' ? 1.4 : 1.8), rough};
+}
+
+/** Tangent-space normal map from a wrapping height field. */
+export function normalFromHeight(height, size, strength = 2) {
+  const out = new Uint8ClampedArray(size * size * 4);
+  for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
+    const l = height[y * size + (x + size - 1) % size], r = height[y * size + (x + 1) % size];
+    const d = height[((y + size - 1) % size) * size + x], u = height[((y + 1) % size) * size + x];
+    let nx = (l - r) * strength, ny = (d - u) * strength, nz = 1; const len = Math.hypot(nx, ny, nz);
+    const k = (y * size + x) * 4;
+    out[k] = (nx / len * 0.5 + 0.5) * 255; out[k + 1] = (ny / len * 0.5 + 0.5) * 255; out[k + 2] = (nz / len * 0.5 + 0.5) * 255; out[k + 3] = 255;
+  }
+  return out;
+}
+
+/** Approximate fabric need (metres of 1400 mm roll) from upholstered surface area, with waste allowance. */
+export function yardage(areaMm2, {rollWidth = 1400, waste = 0.35, pattern = 'none'} = {}) {
+  const extra = pattern === 'none' ? 0 : pattern === 'stripe' ? 0.1 : 0.2;
+  return Math.ceil(areaMm2 * (1 + waste + extra) / rollWidth / 1000 * 10) / 10;
+}
