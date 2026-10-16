@@ -1,8 +1,9 @@
 // Bill of materials for the designer: grouped parts, sizes, materials, suggested build specs and fabric need.
 // Build specs are starting suggestions for the designer to confirm, not engineering approval.
-import {buildMesh} from './sofa.js';
+import {buildMesh} from './build.js';
+import {tableBom} from './table.js';
 import {bounds} from './mesh.js';
-import {FIBERS, WEAVE_NAMES, PATTERNS, COLORS, WOODS, FINISHES, METALS} from './catalog.js';
+import {FIBERS, WEAVE_NAMES, PATTERNS, COLORS, WOODS, FINISHES, METALS, STAINS, STONES, GLASS, MOTIF_NAMES, name as nm} from './catalog.js';
 import {yardage} from './textile.js';
 
 const ROLE = {
@@ -16,7 +17,7 @@ const ROLE = {
   'arm': ['Kolçak', 'Arm', 'Kontrplak profil iskelet, 25–40 mm köpük, kumaş', 'Ply profile frame, 25–40 mm foam, fabric'],
   'arm-post': ['Kol dikmesi', 'Arm post', 'Masif ahşap, zıvana birleşim', 'Solid wood, mortise and tenon'],
   'arm-top': ['Kol tablası', 'Arm top', 'Masif ahşap, kenarlar yuvarlatılmış', 'Solid wood, eased edges'],
-  'leg': ['Ayak', 'Leg', 'Masif ahşap, M8 dişli pim ile bağlantı', 'Solid wood, M8 threaded insert'],
+  'leg': ['Ayak', 'Leg', 'Masif gürgen (sağlamlık için), renk ayrıca boya/vernik; M8 dişli pim', 'Solid beech (gürgen) for strength, colour as a separate stain/lacquer; M8 threaded insert'],
   'plinth': ['Kaide', 'Plinth', 'Kontrplak kutu, kaplama veya lake', 'Ply box, veneered or lacquered'],
   'skirt': ['Etek', 'Skirt', 'Astarlı kumaş panel, köşe pileli', 'Lined fabric panel, corner pleats'],
   'sled': ['Kızak ayak', 'Sled base', 'Bükülmüş çelik boru, toz boya / kaplama', 'Bent steel tube, powder coat / plating'],
@@ -24,8 +25,8 @@ const ROLE = {
   'welt': ['Biye', 'Welt / piping', 'Ø5 mm kordon üzerine kumaş biye', 'Fabric over Ø5 mm cord'],
   'tuft-button': ['Kapitone düğmesi', 'Tufting button', 'Kumaş kaplı düğme Ø18 mm', 'Fabric-covered button Ø18 mm'],
   'pillow': ['Kırlent', 'Throw pillow', 'Elyaf veya kuştüyü iç yastık', 'Fibre or feather insert'],
-  'frame-rail': ['İskelet kayıtı (iç)', 'Frame rail (internal)', 'Kurutulmuş masif kayın / dişbudak 30×90', 'Kiln-dried beech / ash 30×90'],
-  'frame-stretcher': ['İskelet kuşağı (iç)', 'Frame stretcher (internal)', 'Masif kayın 22×60', 'Solid beech 22×60']
+  'frame-rail': ['İskelet kayıtı (iç)', 'Frame rail (internal)', 'Kurutulmuş masif gürgen 30×90, kavela + tutkal', 'Kiln-dried solid beech (gürgen) 30×90, dowelled and glued'],
+  'frame-stretcher': ['İskelet kuşağı (iç)', 'Frame stretcher (internal)', 'Masif gürgen 22×60', 'Solid beech (gürgen) 22×60']
 };
 
 function meshArea(m) {
@@ -40,16 +41,34 @@ function meshArea(m) {
 
 function materialText(mat, materials, lang) {
   const f = materials.fabric, tr = lang === 'tr', n = e => (tr ? e.tr : e.en);
-  if (mat === 'fabric') return `${n(FIBERS[f.fiber])} · ${FIBERS[f.fiber].weave ? n(WEAVE_NAMES[f.weave]) + ' · ' : ''}${n(COLORS[f.color])}${f.pattern !== 'none' ? ' · ' + n(PATTERNS[f.pattern]) + ' / ' + n(COLORS[f.color2]) : ''}`;
+  if (mat === 'fabric') return `${n(FIBERS[f.fiber])} · ${FIBERS[f.fiber].weave ? n(WEAVE_NAMES[f.weave]) + ' · ' : ''}${n(COLORS[f.color])}${f.pattern !== 'none' ? ' · ' + n(PATTERNS[f.pattern]) + (f.motif ? ' (' + n(MOTIF_NAMES[f.motif]) + ')' : '') + ' / ' + n(COLORS[f.color2]) + ' · ' + (tr ? 'sıklık ' : 'density ') + f.density + '/6' : ''}`;
   if (mat === 'welt') return `${n(FIBERS[f.fiber])} · ${n(COLORS[materials.welt.color || f.color2])}`;
-  if (mat === 'wood') return `${n(WOODS[materials.wood.species])} · ${n(FINISHES[materials.wood.finish])}`;
+  if (mat === 'wood') return woodText(materials.wood, lang);
   if (mat === 'metal') return n(METALS[materials.metal.finish]);
   if (mat === 'dark') return tr ? 'Siyah mat yüzey' : 'Black matt finish';
-  return tr ? 'Masif sert ağaç' : 'Solid hardwood';
+  return tr ? 'Gürgen masif' : 'Solid beech (gürgen)';
+}
+
+const woodText = (w, lang) => `${nm(WOODS[w.species], lang)} · ${w.stain && w.stain !== 'natural' ? nm(STAINS[w.stain], lang) + ' · ' : ''}${nm(FINISHES[w.finish], lang)}`;
+
+/** Localized text for a table surface slot. */
+export function surfaceText(spec, lang) {
+  if (!spec) return '';
+  const tr = lang === 'tr';
+  if (spec.surface === 'wood') return woodText(spec, lang) + (tr ? ' (masif)' : ' (solid)');
+  if (spec.surface === 'veneer') return woodText(spec, lang) + (tr ? ' (kaplama)' : ' (veneer)');
+  if (spec.surface === 'stone') return `${nm(STONES[spec.stone], lang)} · ${spec.polish === 'polished' ? (tr ? 'parlak' : 'polished') : (tr ? 'honlu (mat)' : 'honed')}`;
+  if (spec.surface === 'glass') return nm(GLASS[spec.glass], lang);
+  if (spec.surface === 'metal') return nm(METALS[spec.metal], lang);
+  return `${tr ? 'Lake' : 'Lacquer'} · ${nm(COLORS[spec.color], lang)} · ${spec.finish === 'lacquer' ? (tr ? 'parlak' : 'gloss') : (tr ? 'mat' : 'matt')}`;
 }
 
 /** Grouped BOM rows plus totals. */
 export function bom(compiled, materials, lang = 'tr') {
+  if (compiled.family === 'table') {
+    const text = slot => slot === 'top' ? surfaceText(materials.top, lang) : slot === 'base' ? surfaceText(materials.base.surface === 'same' ? materials.top : materials.base, lang) : slot === 'metal' ? nm(METALS[materials.base.surface === 'metal' ? materials.base.metal : materials.hardware.metal], lang) : slot === 'dark' ? (lang === 'tr' ? 'Siyah mat' : 'Black matt') : (lang === 'tr' ? 'Huş kontrplak / masif (iç)' : 'Birch ply / solid (internal)');
+    return tableBom(compiled, materials, lang, buildMesh, text);
+  }
   const groups = new Map();
   let fabricArea = 0, weltLength = 0, buttons = 0;
   for (const part of compiled.parts) {
@@ -71,10 +90,12 @@ export function bom(compiled, materials, lang = 'tr') {
   return {rows, totals: {fabricAreaM2: +(fabricArea / 1e6).toFixed(2), fabricMetres: metres, weltMetres: +(weltLength / 1000).toFixed(1), buttons}};
 }
 
-const csvCell = v => { const s = String(v ?? ''); return /[",;\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
+export const csvCell = v => { const s = String(v ?? ''); return /[",;\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
 export function bomCsv(b) {
   const head = ['Kod / Code', 'Parça', 'Part', 'Adet / Qty', 'Ölçü mm / Size mm', 'Malzeme / Material', 'Öneri yapım', 'Suggested build', 'İç parça / Internal'];
   const lines = [head, ...b.rows.map(r => [r.code, r.nameTr, r.nameEn, r.qty, r.size.join(' × '), r.material, r.specTr, r.specEn, r.internal ? 'x' : ''])];
-  lines.push([], ['Kumaş alanı / Fabric area m²', b.totals.fabricAreaM2], ['Tahmini kumaş (1400 mm top) / Est. fabric (1400 mm roll) m', b.totals.fabricMetres], ['Biye / Welt m', b.totals.weltMetres], ['Düğme / Buttons', b.totals.buttons]);
+  lines.push([]);
+  if (b.totals.fabricAreaM2 !== undefined) lines.push(['Kumaş alanı / Fabric area m²', b.totals.fabricAreaM2], ['Tahmini kumaş (1400 mm top) / Est. fabric (1400 mm roll) m', b.totals.fabricMetres], ['Biye / Welt m', b.totals.weltMetres], ['Düğme / Buttons', b.totals.buttons]);
+  if (b.totals.weightKg !== undefined) lines.push(['Tahmini ağırlık / Est. weight kg', b.totals.weightKg], ['Tabla ağırlığı / Top weight kg', b.totals.topKg], ['Kişi kapasitesi / Seats', b.totals.seats], ['Tabla alanı / Top area m²', b.totals.areaM2]);
   return '﻿' + lines.map(l => l.map(csvCell).join(';')).join('\r\n');
 }

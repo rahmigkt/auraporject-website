@@ -356,3 +356,20 @@ Yayındaki sayfa: `w4/tasarla.html`. Kod: `w4/assets/forma/` (ayrıntı: `w4/ass
 5. Perde ailesi (tekstil sistemi hazır).
 6. Renk adlarının ve parça listesinin DE/FR/NL/DA/ES/IT çevirileri (şu an renkler TR/EN).
 7. İsteğe bağlı: path-traced fotoğraf (three-gpu-pathtracer), ahşap haritalarının hızlandırılması.
+
+## 8. Uygulama durumu (2026-10-16 gece, Claude) — Masa ve sehpa ailesi, kumaş deseni, ses
+
+**Yapıldı**
+- Stüdyo iki aileli: üst çubukta "Oturma grubu | Masa ve sehpa"; `tasarla.html?family=table&kind=dining`. Sohbetteki "masa" kategorisi masa stüdyosuna bağlandı.
+- Masa grameri (`table.js`): yemek, orta sehpa, yan sehpa, konsol, çalışma masası; 7 tabla şekli, 6 kenar profili, 11 ayak sistemi, uzatma tablası, çekmece, raf, arka panel. Kontroller: diz boşluğu, sehim, devrilme, ağırlık, ahşap hareketi; kişi kapasitesi. Parça listesinde gerçek kesim ölçüleri. 26 tarz × 5 tür × 4 tohum = 520 tasarım hatasız (test).
+- Malzeme: masif/kaplama ahşap + vernik tonu, 8 doğal taş/seramik (honlu/parlak), 5 cam, lake (piyasa renkleri), metal ayak; "tabla ile aynı".
+- Komutlar: "6 kişilik oval ceviz yemek masası", "mermer tabla", "füme cam", "pirinç ayak", "uzatmalı", "20 cm daha uzun" (8 dil). Oturma grubundayken masa sözcüğü aileyi değiştirir.
+- Kumaş sırası: lif → örgü → renk (24 piyasa rengi + tarihî boyalar) → desen (çiçekli, puantiye, yaprak, geometrik, çizgili, pötikare, ekose, kazayağı, zikzak, damask) → motif → sıklık (1–6) → ikinci renk.
+- "Kanepe" yerine "Üçlü koltuk / İkili koltuk / Berjer". İskelet ve ayaklar gürgen; renk ayrı vernik tonu.
+- Ses: `.htaccess` mikrofonu tüm sayfalarda kapatıyordu (`microphone=()`), açıldı (`self`). Tarayıcıda konuşma tanıma yoksa Whisper tarayıcıda çalışır (sunucusuz, ücretsiz).
+
+**Codex'e kalanlar**
+1. Masa ailesi için AI sözlüğü (`ai.js` şu an yalnız oturma); görselden masa.
+2. Sunucusuz görsel okuma: transformers.js ile tarayıcıda CLIP/SigLIP sıfır-atış sınıflandırma (her parça özelliği için aday metinler) + ölçü oranları; isteğe bağlı WebGPU'da küçük VLM (SmolVLM/Florence-2).
+3. Sandalye ailesi (masa ile takım), köşe koltuk modülleri, yatak başlığı.
+4. Tasarımcı paneli, oda akışı, perde ailesi (önceki listeden).

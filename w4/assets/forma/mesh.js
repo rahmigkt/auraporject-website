@@ -175,7 +175,7 @@ export function loft(section, {length, noseFront = 40, noseBack = 8, shape = () 
 }
 
 /** Lathe: profile [[y, radius]] bottom→top. square=true gives a four-sided (tapered) leg. */
-export function lathe(profile, {segments = 28, square = false} = {}) {
+export function lathe(profile, {segments = 28, square = false, faceted = false} = {}) {
   const b = new Builder(), seg = square ? 4 : segments, rings = [];
   for (const [y, r] of profile) {
     const ring = [];
@@ -190,7 +190,7 @@ export function lathe(profile, {segments = 28, square = false} = {}) {
   }
   const bottom = b.v(0, profile[0][0], 0), top = b.v(0, profile.at(-1)[0], 0);
   for (let s = 0; s < seg; s++) { const t = (s + 1) % seg; b.tri(bottom, rings[0][s], rings[0][t]); b.tri(top, rings.at(-1)[t], rings.at(-1)[s]); }
-  return finish(b, {smooth: !square});
+  return finish(b, {smooth: !square && !faceted});
 }
 
 /** Round tube along a polyline of [x,y,z] points. */
@@ -256,4 +256,79 @@ export function bounds(positions) {
     min[k] = Math.min(min[k], positions[v + k]); max[k] = Math.max(max[k], positions[v + k]);
   }
   return {min, max, size: max.map((m, k) => m - min[k])};
+}
+
+// ---- Table-top helpers -------------------------------------------------------------
+
+/** Closed outline (CCW in the x–z plane, viewed from above) for a table top. */
+export function topOutline(shape, L, W, {r = 0, n = 4, bow = 0, segments = 96} = {}) {
+  const a = L / 2, b = W / 2, pts = [];
+  const sgnPow = (v, e) => Math.sign(v) * Math.abs(v) ** e;
+  if (shape === 'round' || shape === 'oval' || shape === 'superellipse') {
+    const e = shape === 'superellipse' ? 2 / Math.max(2, n) : 1;
+    for (let k = 0; k < segments * 2; k++) { const t = k / (segments * 2) * Math.PI * 2; pts.push([a * sgnPow(Math.cos(t), e), b * sgnPow(Math.sin(t), e)]); }
+    return pts;
+  }
+  if (shape === 'racetrack') {
+    const rr = Math.min(b, a), cx = a - rr;
+    for (let k = 0; k <= 24; k++) { const t = -Math.PI / 2 + k / 24 * Math.PI; pts.push([cx + Math.cos(t) * rr, Math.sin(t) * rr]); }
+    for (let k = 0; k <= 24; k++) { const t = Math.PI / 2 + k / 24 * Math.PI; pts.push([-cx + Math.cos(t) * rr, Math.sin(t) * rr]); }
+    return pts;
+  }
+  // Rectangle family (rect, rounded, boat): corner arcs; boat bows the long sides inward towards the ends.
+  const rr = Math.max(0.5, Math.min(r, a - 1, b - 1));
+  const corner = (cx, cz, a0) => { for (let k = 0; k <= 10; k++) { const t = (a0 + k * 9) * Math.PI / 180; pts.push([cx + Math.cos(t) * rr, cz + Math.sin(t) * rr]); } };
+  const side = (x0, x1, z, steps = 24) => { for (let k = 1; k < steps; k++) { const x = x0 + (x1 - x0) * k / steps; pts.push([x, z]); } };
+  corner(a - rr, -(b - rr), 270); corner(a - rr, b - rr, 0); side(a - rr, -(a - rr), b); corner(-(a - rr), b - rr, 90); corner(-(a - rr), -(b - rr), 180); side(-(a - rr), a - rr, -b);
+  if (bow > 0) for (const p of pts) p[1] *= 1 - bow * (p[0] / a) ** 2;
+  return pts;
+}
+
+/** Clip a convex outline to x0 ≤ x ≤ x1 (Sutherland–Hodgman). */
+export function clipX(pts, x0, x1) {
+  const clip = (poly, keep, cross) => { const out = []; for (let i = 0; i < poly.length; i++) { const p = poly[i], q = poly[(i + 1) % poly.length], kp = keep(p), kq = keep(q); if (kp) out.push(p); if (kp !== kq) out.push(cross(p, q)); } return out; };
+  const at = x => (p, q) => [x, p[1] + (q[1] - p[1]) * (x - p[0]) / (q[0] - p[0])];
+  return clip(clip(pts, p => p[0] >= x0, at(x0)), p => p[0] <= x1, at(x1));
+}
+
+/** Offset a convex CCW outline by d (positive = inward) along vertex bisectors. */
+export function offsetOutline(pts, d) {
+  const n = pts.length, out = [];
+  for (let i = 0; i < n; i++) {
+    const p = pts[(i - 1 + n) % n], c = pts[i], q = pts[(i + 1) % n];
+    let e1 = [c[0] - p[0], c[1] - p[1]], e2 = [q[0] - c[0], q[1] - c[1]];
+    const l1 = Math.hypot(...e1) || 1, l2 = Math.hypot(...e2) || 1; e1 = [e1[0] / l1, e1[1] / l1]; e2 = [e2[0] / l2, e2[1] / l2];
+    // Inward normal of a CCW polygon is (-ey, ex).
+    const n1 = [-e1[1], e1[0]], n2 = [-e2[1], e2[0]], nb = [n1[0] + n2[0], n1[1] + n2[1]], lb = Math.hypot(...nb) || 1;
+    const cos = Math.max(0.35, (nb[0] / lb) * n1[0] + (nb[1] / lb) * n1[1]);
+    out.push([c[0] + nb[0] / lb * d / cos, c[1] + nb[1] / lb * d / cos]);
+  }
+  return out;
+}
+
+/**
+ * Slab with an edge profile: outline (x,z) extruded from y=0 (bottom) to y=t (top); inset(s) gives the inward
+ * offset at s ∈ [0,1] measured from the TOP face down. Used for table tops, shelves and drum bodies.
+ */
+export function profiledSlab(outline, t, inset = () => 0, {steps = 12} = {}) {
+  const b = new Builder(), n = outline.length;
+  // Ensure CCW (positive area in x–z seen from +y means z axis points to the viewer's bottom; we test signed area).
+  let area = 0; for (let i = 0; i < n; i++) { const p = outline[i], q = outline[(i + 1) % n]; area += p[0] * q[1] - q[0] * p[1]; }
+  const ccw = area > 0 ? outline : [...outline].reverse();
+  const rings = [];
+  for (let k = 0; k <= steps; k++) {
+    const s = k / steps, y = t * (1 - s), ring = offsetOutline(ccw, inset(s));
+    rings.push(ring.map(([x, z]) => b.v(x, y, z)));
+  }
+  for (let r = 0; r < rings.length - 1; r++) for (let i = 0; i < n; i++) { const j = (i + 1) % n; b.quad(rings[r][i], rings[r + 1][i], rings[r + 1][j], rings[r][j]); }
+  for (const [ring, top] of [[rings[0], true], [rings.at(-1), false]]) {
+    let x = 0, y = 0, z = 0; for (const v of ring) { x += b.p[v * 3]; y += b.p[v * 3 + 1]; z += b.p[v * 3 + 2]; }
+    const c = b.v(x / n, y / n, z / n);
+    for (let i = 0; i < n; i++) top ? b.tri(c, ring[i], ring[(i + 1) % n]) : b.tri(c, ring[(i + 1) % n], ring[i]);
+  }
+  // Make the winding outward (positive signed volume) whatever the outline orientation was.
+  let vol = 0; const P = b.p, I = b.i;
+  for (let k = 0; k < I.length; k += 3) { const a = I[k] * 3, c = I[k + 1] * 3, d = I[k + 2] * 3; vol += P[a] * (P[c + 1] * P[d + 2] - P[c + 2] * P[d + 1]) - P[a + 1] * (P[c] * P[d + 2] - P[c + 2] * P[d]) + P[a + 2] * (P[c] * P[d + 1] - P[c + 1] * P[d]); }
+  if (vol < 0) for (let k = 0; k < I.length; k += 3) { const tmp = I[k + 1]; I[k + 1] = I[k + 2]; I[k + 2] = tmp; }
+  return finish(b, {smooth: false});
 }

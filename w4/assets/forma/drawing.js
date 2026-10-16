@@ -1,7 +1,8 @@
 // Technical drawings generated from the same meshes as the 3D view.
 // Views: front, right side, top and a vertical section through the left seat. Hidden lines are removed by
 // painting part silhouettes far→near. Output is an A3 landscape SVG at a true printable scale (paper mm).
-import {worldPositions, buildMesh} from './sofa.js';
+import {worldPositions, buildMesh} from './build.js';
+import {edgeProfile} from './table.js';
 import {transformPositions} from './mesh.js';
 
 const RES = 2; // mm per raster cell for silhouette extraction
@@ -117,10 +118,10 @@ export function buildViews(compiled) {
   const visible = compiled.parts.filter(p => !p.internal);
   const views = {};
   for (const view of ['front', 'side', 'top']) {
-    views[view] = visible.map(p => ({id: p.id, mat: p.mat, ...silhouette(p, view)})).sort((a, b) => a.depth - b.depth);
+    views[view] = visible.map(p => ({id: p.id, mat: p.mat, role: p.role, ...silhouette(p, view)})).sort((a, b) => a.depth - b.depth);
   }
   const m = compiled.meta, seatW = m.seatWidthEach;
-  const xCut = Math.round(-m.innerWidth / 2 + seatW / 2);
+  const xCut = compiled.sectionX ?? Math.round(-m.innerWidth / 2 + seatW / 2);
   views.sideBehind = views.side.filter(s => s.dmin < xCut);
   views.section = compiled.parts.map(p => ({id: p.id, mat: p.mat, internal: !!p.internal, loops: section(p, xCut)})).filter(s => s.loops.length);
   return {views, xCut};
@@ -153,6 +154,8 @@ export function drawingSheet(compiled, labels, info = {}) {
   };
   out.push(`<g class="views">`);
   drawView('front', views.front, Hm); drawView('side', views.side, Hm); drawView('top', views.top, 0);
+  // Plan of a table: the base under the top as hidden (dashed) lines.
+  if (compiled.family === 'table') for (const s of views.top) if (!['top', 'leaf', 'grommet'].includes(s.role)) out.push(`<path d="${path('top', s.loops, 0)}" fill="none" stroke="#1f2420" stroke-width="0.18" stroke-dasharray="1.2 0.8"/>`);
   // Section: everything beyond the cut in light line, then cut faces hatched.
   for (const s of views.sideBehind) out.push(`<path d="${path('section', s.loops, Hm)}" fill="#fbfaf7" stroke="#9aa096" stroke-width="0.15"/>`);
   for (const s of views.section) out.push(`<path d="${path('section', s.loops, Hm)}" fill="url(#${s.internal ? 'hatchWood' : s.mat === 'wood' ? 'hatchWood' : 'hatchFoam'})" fill-rule="evenodd" stroke="#1f2420" stroke-width="0.35"/>`);
@@ -180,24 +183,28 @@ export function drawingSheet(compiled, labels, info = {}) {
     }
     s.push('</g>'); return s.join('');
   }
-  const hasArms = p.armType !== 'none';
-  dim('front', [-Wm / 2, 0], [Wm / 2, 0], 70, `${Wm}`, Hm, 'h');
-  dim('front', [Wm / 2, 0], [Wm / 2, Hm], 80, `${Hm}`, Hm, 'v');
-  if (hasArms) dim('front', [Wm / 2, 0], [Wm / 2, p.armHeight], 30, `${p.armHeight}`, Hm, 'v');
-  if (p.legHeight > 0 && p.baseType !== 'skirt') dim('front', [-Wm / 2 + p.legInset, 0], [-Wm / 2 + p.legInset, p.legHeight], -p.legInset - 140, `${p.legHeight}`, Hm, 'v');
-  dim('side', [-Dm / 2, 0], [Dm / 2, 0], 70, `${Dm}`, Hm, 'h');
-  dim('side', [Dm / 2, 0], [Dm / 2, p.seatHeight], 40, `${p.seatHeight}`, Hm, 'v');
-  dim('side', [Dm / 2, 0], [Dm / 2, Hm], 110, `${Hm}`, Hm, 'v');
-  dim('top', [-Wm / 2, -Dm / 2], [Wm / 2, -Dm / 2], 60, `${Wm}`, 0, 'h');
-  dim('top', [Wm / 2, -Dm / 2], [Wm / 2, Dm / 2], 60, `${Dm}`, 0, 'v');
-  if (hasArms) dim('top', [-m.innerWidth / 2, Dm / 2], [m.innerWidth / 2, Dm / 2], -60, `${m.innerWidth}`, 0, 'h');
-  dim('section', [-(Dm / 2 + 12), 0], [-(Dm / 2 + 12) + m.seatDepth, 0], 70, `${labels.seatDepth} ${m.seatDepth}`, Hm, 'h');
-  dim('section', [Dm / 2, 0], [Dm / 2, m.deckTop], 40, `${m.deckTop}`, Hm, 'v');
+  if (compiled.dims) {
+    for (const d of compiled.dims) dim(d.view, d.a, d.b, d.off, `${d.label ? (labels[d.label] || d.label) + ' ' : ''}${d.text}`, d.view === 'top' ? 0 : Hm, d.orient);
+  } else {
+    const hasArms = p.armType !== 'none';
+    dim('front', [-Wm / 2, 0], [Wm / 2, 0], 70, `${Wm}`, Hm, 'h');
+    dim('front', [Wm / 2, 0], [Wm / 2, Hm], 80, `${Hm}`, Hm, 'v');
+    if (hasArms) dim('front', [Wm / 2, 0], [Wm / 2, p.armHeight], 30, `${p.armHeight}`, Hm, 'v');
+    if (p.legHeight > 0 && p.baseType !== 'skirt') dim('front', [-Wm / 2 + p.legInset, 0], [-Wm / 2 + p.legInset, p.legHeight], -p.legInset - 140, `${p.legHeight}`, Hm, 'v');
+    dim('side', [-Dm / 2, 0], [Dm / 2, 0], 70, `${Dm}`, Hm, 'h');
+    dim('side', [Dm / 2, 0], [Dm / 2, p.seatHeight], 40, `${p.seatHeight}`, Hm, 'v');
+    dim('side', [Dm / 2, 0], [Dm / 2, Hm], 110, `${Hm}`, Hm, 'v');
+    dim('top', [-Wm / 2, -Dm / 2], [Wm / 2, -Dm / 2], 60, `${Wm}`, 0, 'h');
+    dim('top', [Wm / 2, -Dm / 2], [Wm / 2, Dm / 2], 60, `${Dm}`, 0, 'v');
+    if (hasArms) dim('top', [-m.innerWidth / 2, Dm / 2], [m.innerWidth / 2, Dm / 2], -60, `${m.innerWidth}`, 0, 'h');
+    dim('section', [-(Dm / 2 + 12), 0], [-(Dm / 2 + 12) + m.seatDepth, 0], 70, `${labels.seatDepth} ${m.seatDepth}`, Hm, 'h');
+    dim('section', [Dm / 2, 0], [Dm / 2, m.deckTop], 40, `${m.deckTop}`, Hm, 'v');
+  }
   // View titles and section marker on the front view.
   const title = (view, text, extent) => { const [x, y] = cell[view]; out.push(`<text x="${x}" y="${y - 6}" font-size="3.4" font-weight="600" fill="#1f2420">${esc(text)}</text>`); };
   title('front', labels.front); title('side', labels.side); title('top', labels.top); title('section', `${labels.section} A–A`);
   { const [x, y0] = T('front', [xCut, Hm + 60], Hm), [, y1] = T('front', [xCut, -60], Hm); out.push(`<line x1="${x}" y1="${y0}" x2="${x}" y2="${y1}" stroke="#a24a2a" stroke-width="0.3" stroke-dasharray="4 1 1 1"/><text x="${x + 1}" y="${y0}" font-size="3" fill="#a24a2a">A</text><text x="${x + 1}" y="${y1 + 3}" font-size="3" fill="#a24a2a">A</text>`); }
-  { const [x, y] = T('section', [-Dm / 2, Hm + 30], Hm); out.push(`<text x="${x}" y="${y}" font-size="2.6" fill="#3c5a46">${esc(labels.rake)} ${p.backRake}°</text>`); }
+  if (p.backRake !== undefined) { const [x, y] = T('section', [-Dm / 2, Hm + 30], Hm); out.push(`<text x="${x}" y="${y}" font-size="2.6" fill="#3c5a46">${esc(labels.rake)} ${p.backRake}°</text>`); }
   // Specification table in the free right column.
   if (info.rows?.length) {
     const x0 = Math.max(cell.side[0] + Dm * k + 34, sheetW - margin - 120), y0 = margin + 14, colW = sheetW - margin - 6 - x0;
@@ -205,6 +212,19 @@ export function drawingSheet(compiled, labels, info = {}) {
       out.push(`<g font-size="2.7" fill="#1f2420"><text x="${x0}" y="${y0}" font-size="3.4" font-weight="600">${esc(labels.spec || '')}</text>`);
       info.rows.forEach(([a, b], i) => { const y = y0 + 7 + i * 5.6; out.push(`<text x="${x0}" y="${y}" fill="#5c625a">${esc(a)}</text><text x="${x0 + colW * 0.42}" y="${y}">${esc(b)}</text><line x1="${x0}" y1="${y + 1.8}" x2="${x0 + colW}" y2="${y + 1.8}" stroke="#d8d4ca" stroke-width="0.15"/>`); });
       out.push('</g>');
+    }
+  }
+  // Detail: table edge profile at 1:2 (drawn under the specification table when there is room).
+  if (compiled.detail?.kind === 'edge') {
+    const [type, T, e] = compiled.detail.profile, f = edgeProfile(type, T, e), kD = 0.5, deep = 50;
+    const x0 = Math.max(cell.side[0] + Dm * k + 34, sheetW - margin - 120), y0 = margin + 14 + (info.rows?.length || 0) * 5.6 + 22;
+    if (sheetW - margin - x0 > 60 && y0 + T * kD + 30 < sheetH - margin - 34) {
+      const pts = []; for (let i = 0; i <= 24; i++) { const s2 = i / 24; pts.push([f(s2), s2 * T]); }
+      const poly = [[deep, 0], ...pts, [deep, T]].map(([dx, dy]) => [x0 + 10 + dx * kD * 2, y0 + 8 + dy * kD * 2]);
+      out.push(`<text x="${x0}" y="${y0}" font-size="3.4" font-weight="600" fill="#1f2420">${esc(labels.edgeDetail || 'Edge')} 1:1</text>`);
+      out.push(`<path d="M${poly.map(q => q.map(n => n.toFixed(2)).join(' ')).join('L')}Z" fill="url(#hatchWood)" stroke="#1f2420" stroke-width="0.35"/>`);
+      const yb = y0 + 8 + T * kD * 2;
+      out.push(dline(x0 + 10 + deep * kD * 2 + 6, y0 + 8, x0 + 10 + deep * kD * 2 + 6, yb, `${T}`, 'v', x0 + 10 + deep * kD * 2, x0 + 10 + deep * kD * 2));
     }
   }
   // Title block

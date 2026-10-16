@@ -54,3 +54,11 @@
 .f-filebar{display:flex;gap:6px;padding:12px 26px;border-top:1px solid var(--line)}.f-filebar button{background:transparent;border:1px solid var(--line);padding:8px 12px;font-size:11px}
 @media (max-width:980px){.f-layout{grid-template-columns:1fr}.f-visual{position:static;padding:16px}.f-stage{height:52vh}.f-editor{border-left:0;border-top:1px solid var(--line);min-height:0}.f-panel{padding:18px 16px}.f-header{padding:0 16px}.f-header-title{display:none}.f-status{max-width:52%}.f-tabs button{font-size:10px}.f-caption h1{font-size:26px}}
 @media (max-width:520px){.f-slider{grid-template-columns:1fr 92px}.f-slider input[type=range]{grid-column:1/-1;grid-row:2}.f-send{grid-template-columns:1fr}.f-tabs{grid-template-columns:repeat(3,1fr)}.f-fabric-preview{grid-template-columns:110px 1fr}.f-fabric-preview canvas{width:110px;height:110px}}
+/* Family switch and grouped swatches */
+.f-families{display:flex;gap:0;border:1px solid var(--line)}
+.f-families button{border:0;background:transparent;padding:9px 16px;font:inherit;font-size:12px;letter-spacing:.6px;cursor:pointer;color:var(--muted)}
+.f-families button+button{border-left:1px solid var(--line)}
+.f-families button[aria-pressed="true"]{background:var(--ink,#1d1d1b);color:var(--paper,#f4efe4)}
+.f-sub{font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);margin:10px 0 6px}
+.f-panel h3 + .f-sub{margin-top:0}
+@media (max-width:620px){.f-header{height:auto;flex-wrap:wrap;padding:10px 16px;gap:10px}.f-families{order:3;width:100%}.f-families button{flex:1;padding:9px 6px}}

@@ -40,8 +40,8 @@ const TARGETS = [
 
 // Comparative words carry both a direction and a default target.
 const COMPARATIVES = [
-  [+1, 'width', L('genislet|genis|wider|widen|longer|lengthen|uzat|breiter|verbreiter|langer|elargi|plus large|plus long|breder|langer|bredere|laengere|mas ancho|mas largo|ensancha|alarga|piu largo|piu lungo|allarga|allunga')],
-  [-1, 'width', L('daralt|kisalt|dar|narrower|shorter|shorten|schmaler|kurzer|verkurz|plus etroit|plus court|retreci|smaller maken|korter|smallere|kortere|mas estrecho|mas corto|estrecha|acorta|piu stretto|piu corto|restringi|accorcia')],
+  [+1, 'width', L('daha uzun|uzunlat|genislet|genis|wider|widen|longer|lengthen|uzat|breiter|verbreiter|langer|elargi|plus large|plus long|breder|langer|bredere|laengere|mas ancho|mas largo|ensancha|alarga|piu largo|piu lungo|allarga|allunga')],
+  [-1, 'width', L('daha kisa|daralt|kisalt|dar|narrower|shorter|shorten|schmaler|kurzer|verkurz|plus etroit|plus court|retreci|smaller maken|korter|smallere|kortere|mas estrecho|mas corto|estrecha|acorta|piu stretto|piu corto|restringi|accorcia')],
   [+1, 'depth', L('derinlestir|deeper|tiefer|plus profond|dieper|dybere|mas profundo|piu profondo')],
   [-1, 'depth', L('sig|sigla|shallower|flacher|moins profond|ondieper|mindre dyb|menos profundo|meno profondo')],
   [+1, 'height', L('yukselt|yuksek|taller|higher|raise|hoher|erhoh|plus haut|rehausse|hoger|verhoog|hojere|haev|mas alto|sube|eleva|piu alto|piu alt|alza')],
@@ -188,6 +188,41 @@ const COMMANDS = {
 
 /** Relative step sizes [small, normal, large] for "a bit", plain and "a lot" (mm or degrees). */
 const STEPS = {width: [50, 100, 200], depth: [20, 40, 80], height: [20, 40, 80], seatHeight: [10, 20, 40], armHeight: [15, 30, 60], armWidth: [10, 25, 50], legHeight: [10, 25, 50], legSize: [2, 4, 8], backRake: [1, 3, 5], cushionThickness: [10, 20, 40], cushionCrown: [3, 6, 12]};
+// ---- Table vocabulary ---------------------------------------------------------------
+const TABLE_TARGETS = [
+  ['topThickness', L('tabla kalinli|kalinlik|top thickness|plattenstarke|plattendicke|epaisseur du plateau|bladdikte|pladetykkelse|grosor del tablero|spessore del piano')],
+  ['legSize', L('ayak kalinli|ayak kesiti|leg thickness|leg size|beinstarke|epaisseur des pieds|pootdikte|bentykkelse|grosor de las patas|spessore gambe')],
+  ['overhang', L('tasma|cikinti|overhang|uberstand|debord|overstek|udhaeng|voladizo|sbalzo')],
+  ['length', L('uzunluk|uzunlugu|boy|boyu|length|long|lange|longueur|lengte|laengde|largo|longitud|lunghezza')],
+  ['width', L('genislik|genisli|en|eni|width|wide|breite|largeur|breedte|bredde|ancho|anchura|larghezza|derinlik|depth|tiefe|profondeur|diepte|dybde|profundidad|profondita')],
+  ['height', L('yukseklik|yuksekli|height|tall|hohe|hauteur|hoogte|hojde|altura|altezza')]
+];
+const TABLE_ENUM_WORDS = {
+  topShape: {round: L('yuvarlak|daire|round|circular|rund|ronde|rond|rund|redonda|redondo|rotondo|rotonda'), oval: L('oval|elips|ellipse|ovaal'), rect: L('dikdortgen|kare|rectangular|rectangle|square|rechteckig|eckig|rectangulaire|carree|rechthoekig|vierkant|rektangulaer|firkantet|rectangular|cuadrada|rettangolare|quadrato'), rounded: L('kosesi yuvarlak|yumusak kose|rounded corners|abgerundete ecken|angles arrondis|afgeronde hoeken|afrundede hjorner|esquinas redondeadas|angoli arrotondati'), racetrack: L('yaris pisti|stadyum|racetrack|stadium|stadion|piste|renbaan|stadio'), boat: L('tekne|gemi|boat|bootsform|bateau|boot|bad|barco|barca'), superellipse: L('yumusak kare|soft square|weiches quadrat|carre doux|zacht vierkant|blod firkant|cuadrado suave|quadrato morbido')},
+  edge: {underbevel: L('ince kenar|alttan pahli|ince gorunen|thin edge|knife edge|underbevel|dunne kante|bord fin|dunne rand|tynd kant|canto fino|bordo sottile'), bullnose: L('yuvarlak kenar|bullnose|halbrund|bord arrondi|ronde rand|afrundet kant|canto redondo|bordo arrotondato'), chamfer: L('pahli|pah|chamfer|fase|chanfrein|afgeschuind|affaset|chaflan|smusso'), ogee: L('ogee|klasik kenar|profil kenar|karnies|doucine|profiel|profilkant|moldura|modanatura'), square: L('keskin kenar|duz kenar|square edge|gerade kante|bord droit|rechte rand|lige kant|canto recto|bordo dritto'), eased: L('hafif yuvarlatilmis|eased|gebrochen|adouci|afgerond|brudt kant|suavizado|smussato')},
+  baseType: {pedestal: L('tek ayak|orta ayak|pedestal|saule|mittelfuss|pied central|centrale poot|midterfod|pie central|piede centrale|lale ayak|tulip'), doublePedestal: L('cift ayak|iki ayakli orta|double pedestal|zwei saulen|deux pieds centraux|dubbele poot|dobbelt fod|doble pie|doppio piede'), trestle: L('sehpa ayak|kavalet|trestle|bock|treteau|schragen|bukke|caballete|cavalletto'), slabEnds: L('tabla ayak|yan panel|selale|waterfall|wange|wangen|pieds panneaux|cascade|wangen|plade ben|cascada|fianchi|a cascata'), sled: L('kizak|cerceve ayak|sled|kufe|traineau|slee|mede|patin|slitta'), xBase: L('x ayak|capraz ayak|x base|x-gestell|kreuzgestell|pieds en x|x-poot|kryds|patas en x|gambe a x'), tripod: L('uc ayak|uc ayakli|tripod|dreibein|trepied|driepoot|trefod|tripode|treppiede'), hairpin: L('firkete|hairpin|haarnadel|epingle|haarspeld|harnal|horquilla|forcina'), drum: L('silindir govde|tambur|drum|trommel|tambour|trommel|tromle|tambor|tamburo'), legsApron: L('kusakli|dort ayak|4 ayak|apron|zarge|ceinture|regel|sarg|faldon de madera|fascia'), legsOnly: L('kusaksiz|kusak yok|without apron|ohne zarge|sans ceinture|zonder regel|uden sarg|sin faldon|senza fascia')},
+  legType: {cone: L('mid century ayak|konik acili|cone leg|kegelbein|pied conique|kegelpoot|kegleben|pata conica|gamba conica'), turned: L('torna|turned|gedrechselt|tourne|gedraaid|drejet|torneada|tornita'), blade: L('bicak ayak|lama ayak|blade|klinge|lame|blad|klinge|hoja|lama'), squareTaper: L('kare konik|square tapered|vierkant konisch|carre fusele|vierkant taps|firkantet konisk|cuadrada conica|quadrata rastremata'), roundTaper: L('yuvarlak konik|round tapered|rund konisch|rond fusele|rond taps|rund konisk|redonda conica|tonda rastremata'), round: L('silindir ayak|yuvarlak ayak|round leg|rundbein|pied rond|ronde poot|rundt ben|pata redonda|gamba tonda'), square: L('kare ayak|square leg|vierkantbein|pied carre|vierkante poot|firkantet ben|pata cuadrada|gamba quadrata')},
+  pedestalType: {tulip: L('lale|tulip|tulpe|tulipe|tulp|tulipan|tulipano'), faceted: L('faset|kosegen|faceted|facettiert|facette|gefacetteerd|facetteret|facetado|sfaccettato'), cross: L('hac ayak|arti ayak|cross foot|kreuzfuss|pied croix|kruisvoet|krydsfod|pie en cruz|piede a croce'), star: L('yildiz ayak|star base|sternfuss|pied etoile|stervoet|stjernefod|pie estrella|piede a stella'), tapered: L('konik kolon|tapered column|konische saule|colonne conique|taps kolom|konisk soejle|columna conica|colonna conica'), column: L('kolon|silindir kolon|column|saule|colonne|kolom|soejle|columna|colonna')},
+  stretcher: {H: L('alt kusak|h kusak|stretcher|h-strebe|entretoise|dwarsregel|tvaerstang|travesano|traversa'), box: L('cevre kusak|box stretcher|umlaufende strebe|entretoise peripherique|rondom regel|rundtgaende|travesanos perimetrales|traverse perimetrali'), none: L('alt kusaksiz|no stretcher|ohne strebe|sans entretoise|zonder regel|uden tvaerstang|sin travesano|senza traversa')},
+  shelf: {solid: L('alt raf|raf|shelf|ablage|tablette|plank|hylde|estante|ripiano'), slatted: L('citali raf|slatted shelf|lattenablage|tablette a lattes|latten plank|lamelhylde|estante de listones|ripiano a doghe'), none: L('rafsiz|no shelf|ohne ablage|sans tablette|zonder plank|uden hylde|sin estante|senza ripiano')},
+  drawerPull: {knob: L('topuz|dugme kulp|knob|knauf|bouton|knop|knop|pomo|pomolo'), bar: L('kulp|cubuk kulp|bar handle|griffstange|poignee|greep|greb|tirador|maniglia'), recess: L('gizli kulp|tirnakli|recess|griffmulde|prise integree|greeploos|grebsfri|tirador integrado|maniglia incassata')}
+};
+const SURFACE_WORDS = {
+  stone: L('mermer|tas|marble|stone|marmor|stein|marbre|pierre|marmer|steen|marmor|sten|marmol|piedra|marmo|pietra|seramik|ceramic|keramik|ceramique|keramiek|ceramica|traverten|travertine|travertin|travertijn|travertino|terrazzo|terazzo|beton|concrete'),
+  glass: L('cam|glass|glas|verre|vidrio|vetro'), lacquer: L('lake|boyali|lacquer|lackiert|lack|laque|laqueado|lak|laccato|laccata'), veneer: L('kaplama|veneer|furnier|placage|fineer|finer|chapa|impiallacciato'), wood: L('masif|ahsap|solid wood|massivholz|bois massif|massief hout|massivt trae|madera maciza|legno massello')
+};
+const STONE_WORDS = {calacatta: L('calacatta|kalakata|altin damarli'), nero: L('nero|siyah mermer|black marble|schwarzer marmor|marbre noir|zwart marmer|sort marmor|marmol negro|marmo nero'), emperador: L('emperador|kahve mermer|brown marble'), verde: L('yesil mermer|green marble|gruner marmor|marbre vert|groen marmer|gron marmor|marmol verde|marmo verde|verde'), travertine: L('traverten|travertine|travertin|travertijn|travertino'), terrazzo: L('terrazzo|terazzo|mozaik'), concrete: L('beton|concrete|betonoptik|effet beton|betonlook|hormigon|cemento'), carrara: L('carrara|karrara|beyaz mermer|white marble|weisser marmor|marbre blanc|wit marmer|hvid marmor|marmol blanco|marmo bianco')};
+const GLASS_WORDS = {smoked: L('fume|fume cam|smoked|rauchglas|fume|rookglas|roget|ahumado|fume'), bronze: L('bronz cam|bronze glass|bronzeglas|verre bronze|bronsglas|vidrio bronce|vetro bronzo'), frosted: L('buzlu|frosted|satiniert|depoli|mat glas|mattet|esmerilado|satinato'), extra: L('ekstra seffaf|low iron|weissglas|extra clair|extra helder|extraclaro|extrachiaro'), clear: L('seffaf|clear|klar|transparent|helder|klart|transparente|trasparente')};
+const KIND_TABLE = {
+  coffee: L('orta sehpa|sehpa|coffee table|couchtisch|table basse|salontafel|sofabord|mesa de centro|tavolino'),
+  side: L('yan sehpa|zigon|side table|beistelltisch|bout de canape|bijzettafel|sidebord|mesa auxiliar|tavolino laterale'),
+  console: L('konsol|dresuar|console|konsole|konsoltisch|wandtafel|konsolbord|consola'),
+  desk: L('calisma masasi|yazi masasi|desk|schreibtisch|bureau|bureau|skrivebord|escritorio|scrivania'),
+  dining: L('yemek masasi|masa|dining table|esstisch|table a manger|eettafel|spisebord|mesa de comedor|tavolo da pranzo|tavolo')
+};
+const FAMILY_WORDS = {table: L('masa|sehpa|konsol|dresuar|table|tisch|tafel|bord|mesa|tavolo|tavolino|desk|bureau|escritorio|scrivania'), seating: L('koltuk|kanepe|berjer|sofa|couch|canape|divano|sessel|fauteuil|sillon|poltrona|lenestol|laenestol')};
+const PERSON_UNITS = L('kisilik|kisi|people|persons|personen|person|personnes|personnes|personer|personas|persone|seats|places|zitplaatsen|pladser|plazas|posti');
+
 const DELTA_WORDS = L('daha|ilave|more|extra|another|mehr|noch|weitere|plus|encore|meer|nog|mere|endnu|mas|otro|piu|ancora|altri');
 const WORD_NUMS = {1: L('bir|tek|one|single|ein|eine|un|une|een|en|et|uno|una'), 2: L('iki|two|zwei|deux|twee|to|dos|due'), 3: L('uc|three|drei|trois|drie|tre|tres'), 4: L('dort|four|vier|quatre|fire|cuatro|quattro'), 5: L('bes|five|funf|cinq|vijf|fem|cinco|cinque')};
 const SEAT_UNITS = L('kisilik|kisi|oturumlu|oturum|seater|seats|seat|sitzer|sitze|sitzplatze|places|place|zits|zitter|zitplaatsen|personers|pladser|plazas|asientos|posti|sedute');
@@ -203,6 +238,9 @@ const pickMap = (text, map) => { let best = null, len = 0; for (const [k, list] 
 /** Parse one utterance. Returns {actions, understood}. */
 export function parse(raw, current = {}) {
   const text = fold(raw), actions = [];
+  if (current.family === 'table') return parseTable(text);
+  // A table word while seating is open switches family, then the rest is read with the table grammar.
+  if (text && pickMap(text, FAMILY_WORDS) === 'table') { const r = parseTable(text); return {actions: [{type: 'family', value: 'table'}, ...r.actions.filter(a => a.type !== 'family')], understood: true}; }
   if (!text) return {actions, understood: false};
   for (const [name, list] of Object.entries(COMMANDS)) if (any(text, list)) { actions.push({type: 'command', name}); }
   if (actions.some(a => a.name === 'similar')) for (let i = actions.length - 1; i >= 0; i--) if (actions[i].name === 'variants') actions.splice(i, 1);
@@ -289,6 +327,69 @@ export function parse(raw, current = {}) {
   }
   return {actions: dedupe(actions), understood: actions.length > 0};
 }
+
+/** Table commands: shape, edge, base, materials, persons, drawers, shelf, extension and dimensions. */
+function parseTable(text) {
+  const actions = [];
+  if (!text) return {actions, understood: false};
+  for (const [name, list] of Object.entries(COMMANDS)) if (any(text, list)) actions.push({type: 'command', name});
+  if (actions.some(a => a.name === 'similar')) for (let i = actions.length - 1; i >= 0; i--) if (actions[i].name === 'variants') actions.splice(i, 1);
+  for (const [id, list] of STYLE_WORDS) if (any(text, list)) { actions.push({type: 'style', value: id}); break; }
+  const fam = pickMap(text, FAMILY_WORDS); if (fam === 'seating') actions.push({type: 'family', value: 'seating'});
+  const kind = pickMap(text, KIND_TABLE); if (kind) actions.push({type: 'kind', value: kind});
+  const slotBase = any(text, SLOTS.leg) || any(text, SLOTS.base) || /\b(ayag|ayak|govde|kaide)/.test(text);
+  for (const [key, map] of Object.entries(TABLE_ENUM_WORDS)) { const v = pickMap(text, map); if (v) actions.push({type: 'enum', key, value: v}); }
+  if (actions.some(a => a.key === 'legType') && !actions.some(a => a.key === 'baseType')) actions.push({type: 'enum', key: 'baseType', value: 'legsOnly'});
+  if (actions.some(a => a.key === 'pedestalType') && !actions.some(a => a.key === 'baseType')) actions.push({type: 'enum', key: 'baseType', value: 'pedestal'});
+  // Persons: "8 kişilik"
+  const pm = text.match(/(\d{1,2})\s*-?\s*(\w+)/g)?.map(m => m.match(/(\d{1,2})\s*-?\s*(\w+)/)).find(m => PERSON_UNITS.some(u => m[2].startsWith(u)));
+  if (pm) actions.push({type: 'seats', value: +pm[1]});
+  // Drawers / leaves
+  const dm = text.match(/(\d)\s*(cekmece|drawer|schublade|tiroir|lade|skuffe|cajon|cassett)/); if (dm) actions.push({type: 'set', key: 'drawers', value: +dm[1]}); else if (/(cekmeceli|with drawer|mit schublade|avec tiroir|met lade|med skuffe|con cajon|con cassett)/.test(text)) actions.push({type: 'set', key: 'drawers', value: 1});
+  const extend = /(uzatmali|acilir|uzayabilir|extendable|extending|ausziehbar|extensible|uitschuifbaar|udtraek|allungabile)/.test(text);
+  if (extend) actions.push({type: 'set', key: 'leaves', value: 1});
+  // Surfaces: slot words decide top vs base ("mermer tabla", "pirinç ayak").
+  const surf = pickMap(text, SURFACE_WORDS), slot = slotBase && !/(tabla|top|platte|plateau|blad|plade|tablero|piano)/.test(text) ? 'base' : 'top';
+  if (surf) actions.push({type: 'material', slot: surf === 'glass' || surf === 'stone' ? 'top' : slot, key: 'surface', value: surf});
+  const stone = pickMap(text, STONE_WORDS); if (stone) { actions.push({type: 'material', slot: 'top', key: 'surface', value: 'stone'}); actions.push({type: 'material', slot: 'top', key: 'stone', value: stone}); }
+  const glass = pickMap(text, GLASS_WORDS); if (glass && surf === 'glass') actions.push({type: 'material', slot: 'top', key: 'glass', value: glass});
+  const species = surf === 'glass' || surf === 'stone' || stone ? null : pickMap(text, WOOD_WORDS); if (species) actions.push({type: 'material', slot, key: 'species', value: species});
+  const metal = pickMap(text, METAL_WORDS); if (metal) { actions.push({type: 'material', slot: 'base', key: 'surface', value: 'metal'}); actions.push({type: 'material', slot: 'base', key: 'metal', value: metal}); }
+  if (/(parlak|polished|poliert|poli|gepolijst|poleret|pulido|lucidat)/.test(text) && (stone || surf === 'stone')) actions.push({type: 'material', slot: 'top', key: 'polish', value: 'polished'});
+  if (/(honlu|mat tas|honed|geschliffen|adouci|gezoet|slebet|apomazado|levigat)/.test(text)) actions.push({type: 'material', slot: 'top', key: 'polish', value: 'honed'});
+  if (!species && !metal && !stone) {
+    let colour = null, len = 0;
+    for (const [id, list] of COLOR_WORDS) for (const s of list) if (s.length > len && has(text, s)) { colour = id; len = s.length; }
+    if (colour) actions.push({type: 'material', slot, key: 'color', value: MARKET_OF[colour] || colour});
+  }
+  // Dimensions
+  const num = text.match(/(-?\d+(?:[.,]\d+)?)\s*(mm|cm|m)?(?![a-z0-9])/);
+  let target = null, targetStem = '';
+  for (const [key, list] of TABLE_TARGETS) { const m = any(text, list); if (m) { target = key; targetStem = m; break; } }
+  let dir = 0, compWord = '';
+  const LONG = ['daha uzun', 'uzunlat', 'uzat', 'longer', 'lengthen', 'langer', 'plus long', 'mas largo', 'piu lungo', 'laengere', 'daha kisa', 'kisalt', 'shorter', 'shorten', 'kurzer', 'verkurz', 'plus court', 'korter', 'kortere', 'mas corto', 'acorta', 'piu corto', 'accorcia'];
+  for (const [d, key, list] of COMPARATIVES) { const m = any(text, list); if (m) { dir = d; compWord = m; if (!target && key) target = key === 'width' ? (LONG.includes(m) ? 'length' : 'width') : key === 'depth' ? 'width' : key === 'cushionThickness' ? 'topThickness' : key; if (key) break; } }
+  if (target && num && !any(text, DELTA_WORDS) && !COMPARATIVES.filter(c => !c[1]).some(c => any(text, c[2])) && !(compWord && compWord.length > targetStem.length)) dir = 0;
+  const personNum = pm && num && +num[1] === +pm[1];
+  if (extend && !num) target = null;
+  if (target && !personNum && !(dm && num && +num[1] === +dm[1])) {
+    if (num) {
+      const v = parseFloat(num[1].replace(',', '.')), unit = num[2] || '';
+      const mm = unit === 'mm' ? v : unit === 'm' ? v * 1000 : unit === 'cm' ? v * 10 : target === 'topThickness' || target === 'legSize' ? (v < 12 ? v * 10 : v) : v <= 4 ? v * 1000 : v < 400 ? v * 10 : v;
+      actions.push(dir ? {type: 'delta', key: target, value: dir * Math.abs(mm)} : {type: 'set', key: target, value: mm});
+    } else if (dir) {
+      const steps = {length: [50, 100, 200], width: [20, 50, 100], height: [10, 20, 40], topThickness: [2, 5, 10], legSize: [3, 6, 12], overhang: [20, 50, 100]}[target] || [10, 20, 40];
+      actions.push({type: 'delta', key: target, value: dir * (any(text, SIZE.big) ? steps[2] : any(text, SIZE.small) ? steps[0] : steps[1])});
+    }
+  }
+  return {actions: dedupe(actions), understood: actions.length > 0};
+}
+
+/** Heritage colour words map to market colours for lacquer. */
+const MARKET_OF = {turkeyRed: 'cherryRed', cochineal: 'cherryRed', tyrian: 'lilac', blush: 'dustyRose', weld: 'mustard', ochre: 'mustard', bottle: 'emerald', turkishBlue: 'petrol', indigo: 'navy', kakishibu: 'chocolate', charcoal: 'anthracite', stone: 'silver', bogolan: 'black', chalk: 'white', oat: 'cream', naturalLinen: 'sand', sage: 'mint', verdigris: 'turquoise', woad: 'iceBlue'};
+
+/** Family switch words also work from the seating parser. */
+export function familyWord(raw) { return pickMap(fold(raw), FAMILY_WORDS); }
 
 function dedupe(list) { const seen = new Set(); return list.filter(a => { const k = JSON.stringify(a); if (seen.has(k)) return false; seen.add(k); return true; }); }
 

@@ -19,14 +19,18 @@ export function draft(weave, size = 0) {
 }
 
 /** Colour sequence (in threads) for warp and weft, giving stripes, gingham and plaid. */
+/** Density 1 (sparse/large) … 6 (dense/small) → size factor for stripes, checks and motif repeats. */
+export const densityFactor = spec => 3 / (spec.density || 3) * (spec.scale || 1);
+const MOTIF_REPEAT = 150; // mm at density 3
+
 function sequences(spec, pitch, base, second) {
-  const t = mm => Math.max(2, Math.round(mm / pitch));
+  const f = densityFactor(spec), t = mm => Math.max(2, Math.round(mm * f / pitch));
   const dark = shade(base, 0.62), light = mix(base, [245, 240, 228], 0.55);
   switch (spec.pattern) {
-    case 'stripe': { const a = t(22 * spec.scale), b = t(7 * spec.scale); return {warp: [...Array(a).fill(base), ...Array(b).fill(second)], weft: [base]}; }
-    case 'check': { const a = t(6 * spec.scale); const s = [...Array(a).fill(base), ...Array(a).fill(light)]; return {warp: s, weft: s}; }
+    case 'stripe': { const a = t(22), b = t(7); return {warp: [...Array(a).fill(base), ...Array(b).fill(second)], weft: [base]}; }
+    case 'check': { const a = t(6); const s = [...Array(a).fill(base), ...Array(a).fill(light)]; return {warp: s, weft: s}; }
     case 'plaid': {
-      const s = [...Array(t(26 * spec.scale)).fill(base), ...Array(t(3 * spec.scale)).fill(second), ...Array(t(9 * spec.scale)).fill(dark), ...Array(t(2 * spec.scale)).fill(light), ...Array(t(9 * spec.scale)).fill(dark), ...Array(t(3 * spec.scale)).fill(second)];
+      const s = [...Array(t(26)).fill(base), ...Array(t(3)).fill(second), ...Array(t(9)).fill(dark), ...Array(t(2)).fill(light), ...Array(t(9)).fill(dark), ...Array(t(3)).fill(second)];
       return {warp: s, weft: s};
     }
     case 'damask': return {warp: [base], weft: [mix(base, second, 0.35)]};
@@ -36,6 +40,7 @@ function sequences(spec, pitch, base, second) {
 
 /** Damask figure mask: a NAKIŞ motif rasterised in a half-drop repeat (tile coordinates). */
 const maskCache = new Map();
+const MOTIF_PATTERNS = {floral: 'cancicegi', leaf: 'kalpyaprak', damask: 'damask'};
 function motifMask(id, size) {
   const key = id + ':' + size;
   if (maskCache.has(key)) return maskCache.get(key);
@@ -55,6 +60,14 @@ function motifMask(id, size) {
   return mask;
 }
 
+/** Figure masks for printed / jacquard patterns in tile coordinates u,v ∈ [0,1). */
+const PATTERN_MASK = {
+  polka: (u, v) => { for (const [cx, cy] of [[0.25, 0.25], [0.75, 0.75], [0.25, 1.25], [1.25, 0.25], [-0.25, 0.75], [0.75, -0.25]]) if (Math.hypot(u - cx, v - cy) < 0.085) return 1; return 0; },
+  geometric: (u, v) => { const d = Math.abs(u - 0.5) + Math.abs(v - 0.5), e = Math.min(u + v, 2 - u - v, Math.abs(u - v) + 1); return (Math.abs(d - 0.5) < 0.035 || d < 0.09 || e < 0.04) ? 1 : 0; },
+  chevron: (u, v) => { const w = v * 3 + Math.abs(((u * 6) % 2) - 1) * 0.5; return (w - Math.floor(w)) < 0.38 ? 1 : 0; },
+  houndstooth: (u, v) => { const i = Math.floor(u * 8), j = Math.floor(v * 8), up = ((i - j) % 4 + 4) % 4 < 2; return (up ? i % 8 < 4 : j % 8 < 4) ? 1 : 0; }
+};
+
 /**
  * Build fabric maps. spec: {fiber, weave, color, pattern, color2, scale}. Returns
  * {size, tileMm, albedo, normal, rough} where maps are Uint8ClampedArray RGBA of size×size.
@@ -69,19 +82,21 @@ export function fabricMaps(spec, {maxPx = 1024} = {}) {
   const Wfig = !damask ? W : spec.weave === 'satin' ? {P: W.P, top: (i, j) => !W.top(i, j)} : WEAVES[MOTIF_WEAVE[spec.weave] || 'satin'];
   const seq = sequences(spec, pitch, base, second);
   let n = lcm(lcm(W.P, Wfig.P), lcm(seq.warp.length, seq.weft.length));
-  const target = damask ? Math.round(110 * spec.scale / pitch) : Math.round(96 / pitch);
+  const motifPattern = !!MOTIF_PATTERNS[spec.pattern], printed = PATTERN_MASK[spec.pattern];
+  const repeatMm = (motifPattern || printed) ? MOTIF_REPEAT * densityFactor(spec) * (spec.pattern === 'houndstooth' ? 0.12 : spec.pattern === 'polka' ? 0.45 : spec.pattern === 'chevron' ? 0.7 : 1) : 0;
+  const target = repeatMm ? Math.round(repeatMm / pitch) : Math.round(96 / pitch);
   n = Math.max(n, Math.ceil(target / n) * n);
-  const ppt = clamp(Math.floor(maxPx / n), 3, 10), size = n * ppt; // ≥3 px per thread keeps the interlacing readable
+  const ppt = clamp(Math.floor(maxPx / n), n > 400 ? 2 : 3, 10), size = n * ppt; // ≥3 px per thread keeps the interlacing readable
   const albedo = new Uint8ClampedArray(size * size * 4), height = new Float32Array(size * size), rough = new Uint8ClampedArray(size * size * 4);
-  const mask = damask ? motifMask(spec.motif || 'damask', size) : null;
+  const mask = motifPattern ? motifMask(spec.motif || MOTIF_PATTERNS[spec.pattern], size) : null;
   const seed = (spec.color?.length || 3) * 7 + (spec.weave?.length || 1);
   const slubWarp = Array.from({length: n}, (_, i) => 1 - F.slub * 0.35 * valueNoise(i * 0.37, 0.5, seed, 0));
   for (let y = 0; y < size; y++) {
     const j = Math.floor(y / ppt), fy = (y % ppt + 0.5) / ppt;
     for (let x = 0; x < size; x++) {
       const i = Math.floor(x / ppt), fx = (x % ppt + 0.5) / ppt;
-      const fig = mask && mask[y * size + x];
-      const weave = fig ? Wfig : W;
+      const fig = mask ? mask[y * size + x] : printed ? printed(x / size, y / size) : 0;
+      const weave = fig && damask ? Wfig : W;
       const warpUp = weave.top(i, j);
       // Float length: how many crossings the top thread spans (satin floats look glossier and flatter).
       let run = 1;
@@ -94,7 +109,8 @@ export function fabricMaps(spec, {maxPx = 1024} = {}) {
       const fuzz = F.fuzz * (fbm(x / ppt * 1.7, y / ppt * 1.7, seed, 3, n * 1.7) - 0.5);
       const h = clamp(prof * arch * (run > 2 ? 0.8 : 1) + fuzz, 0, 1);
       height[y * size + x] = h;
-      const c = warpUp ? seq.warp[i % seq.warp.length] : seq.weft[j % seq.weft.length];
+      // Damask shows the figure through the weave change; other figures are jacquard/print colour.
+      const c = fig && !damask ? (warpUp ? second : shade(second, 0.94)) : warpUp ? seq.warp[i % seq.warp.length] : seq.weft[j % seq.weft.length];
       const tone = 0.7 + 0.36 * h + (run > 2 ? 0.06 : 0) + fuzz * 0.35;
       const k = (y * size + x) * 4;
       albedo[k] = clamp(c[0] * tone, 0, 255); albedo[k + 1] = clamp(c[1] * tone, 0, 255); albedo[k + 2] = clamp(c[2] * tone, 0, 255); albedo[k + 3] = 255;
@@ -107,7 +123,14 @@ export function fabricMaps(spec, {maxPx = 1024} = {}) {
 
 /** Velvet, bouclé and leather have no visible weave: pile, loops or grain instead. */
 function pileMaps(spec, F, base, maxPx) {
-  const size = Math.min(512, maxPx), tileMm = spec.fiber === 'leather' ? 90 : spec.fiber === 'boucle' ? 40 : 60;
+  // Velvet, chenille and bouclé can be printed; leather stays plain.
+  const pat = spec.fiber === 'leather' ? 'none' : spec.pattern, second = hex(COLORS[spec.color2]?.hex || '#3b3b38');
+  const motifId = MOTIF_PATTERNS[pat] ? (spec.motif || MOTIF_PATTERNS[pat]) : null, printed = PATTERN_MASK[pat];
+  const df = densityFactor(spec);
+  const stripeMask = pat === 'stripe' ? (u => (u % 1) < 0.24 ? 1 : 0) : null, checkMask = pat === 'check' || pat === 'plaid' ? ((u, v) => ((Math.floor(u * 2) + Math.floor(v * 2)) % 2) || (pat === 'plaid' && (Math.abs(u - 0.5) < 0.03 || Math.abs(v - 0.5) < 0.03)) ? 1 : 0) : null;
+  const patterned = motifId || printed || stripeMask || checkMask;
+  const size = Math.min(patterned ? 768 : 512, maxPx), tileMm = patterned ? MOTIF_REPEAT * df * (pat === 'polka' ? 0.45 : pat === 'houndstooth' ? 0.12 : pat === 'stripe' ? 0.25 : pat === 'check' ? 0.1 : 1) : spec.fiber === 'leather' ? 90 : spec.fiber === 'boucle' ? 40 : 60;
+  const mask = motifId ? motifMask(motifId, size) : null;
   const albedo = new Uint8ClampedArray(size * size * 4), rough = new Uint8ClampedArray(size * size * 4), height = new Float32Array(size * size);
   const per = 8;
   for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
@@ -125,7 +148,9 @@ function pileMaps(spec, F, base, maxPx) {
       h = clamp(crush * 0.4 + fine * 0.3, 0, 1); tone = 0.84 + 0.22 * crush; r = F.rough + (crush - 0.5) * 0.12;
     }
     const k = (y * size + x) * 4; height[y * size + x] = h;
-    albedo[k] = clamp(base[0] * tone, 0, 255); albedo[k + 1] = clamp(base[1] * tone, 0, 255); albedo[k + 2] = clamp(base[2] * tone, 0, 255); albedo[k + 3] = 255;
+    const fig = mask ? mask[y * size + x] : printed ? printed(x / size, y / size) : stripeMask ? stripeMask(x / size * 2) : checkMask ? checkMask(x / size, y / size) : 0;
+    const col = fig ? second : base;
+    albedo[k] = clamp(col[0] * tone, 0, 255); albedo[k + 1] = clamp(col[1] * tone, 0, 255); albedo[k + 2] = clamp(col[2] * tone, 0, 255); albedo[k + 3] = 255;
     rough[k] = rough[k + 1] = rough[k + 2] = clamp(r, 0.05, 1) * 255; rough[k + 3] = 255;
   }
   return {size, tileMm, albedo, normal: normalFromHeight(height, size, spec.fiber === 'leather' ? 1.4 : 1.8), rough};

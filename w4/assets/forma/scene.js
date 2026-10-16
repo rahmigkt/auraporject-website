@@ -7,10 +7,11 @@ import {RenderPass} from '../vendor/addons/postprocessing/RenderPass.js';
 import {GTAOPass} from '../vendor/addons/postprocessing/GTAOPass.js';
 import {SMAAPass} from '../vendor/addons/postprocessing/SMAAPass.js';
 import {OutputPass} from '../vendor/addons/postprocessing/OutputPass.js';
-import {buildMesh} from './sofa.js';
-import {COLORS, FIBERS, METALS, WOODS, FINISHES} from './catalog.js';
+import {buildMesh} from './build.js';
+import {COLORS, FIBERS, METALS, WOODS, FINISHES, STAINS, STONES, GLASS} from './catalog.js';
 import {fabricMaps} from './textile.js';
 import {woodMaps} from './wood.js';
+import {stoneMaps} from './stone.js';
 
 // ---- Map generation (worker with synchronous fallback) ----------------------
 let worker = null, jobs = 0;
@@ -25,7 +26,7 @@ function makeMaps(kind, spec, maxPx = 1024) {
       worker.onerror = () => { worker = null; for (const [, p] of pending) p(null); pending.clear(); };
       const id = ++jobs; pending.set(id, out => resolve(out || sync())); worker.postMessage({id, kind, spec, maxPx});
     } catch { resolve(sync()); }
-    function sync() { return kind === 'wood' ? woodMaps(spec.species, spec.finish) : fabricMaps(spec, {maxPx}); }
+    function sync() { return kind === 'wood' ? woodMaps(spec.species, spec.finish, {stain: spec.stain}) : kind === 'stone' ? stoneMaps(spec.stone, spec.polish) : fabricMaps(spec, {maxPx}); }
   });
   mapCache.set(key, job);
   if (mapCache.size > 24) mapCache.delete(mapCache.keys().next().value);
@@ -42,38 +43,77 @@ function dataTexture(data, w, h, srgb) {
 const hexColor = h => new THREE.Color(h);
 
 /** Material set for one design. Starts with flat colours; textures arrive asynchronously. */
-function materialSet(materials, {detail = true, onReady} = {}) {
+function materialSet(materials, opts = {}) { return materials.top ? tableMaterialSet(materials, opts) : seatingMaterialSet(materials, opts); }
+
+function applyMaps(set, mat, out, tileMmX, tileMmY, {rotate = false} = {}) {
+  if (!out || set.disposed) return;
+  const w = out.w || out.size, h = out.h || out.size;
+  const map = dataTexture(out.albedo, w, h, true), normal = dataTexture(out.normal, w, h, false), rough = dataTexture(out.rough, w, h, false);
+  for (const t of [map, normal, rough]) { t.repeat.set(1000 / tileMmX, 1000 / tileMmY); if (rotate) { t.center.set(0.5, 0.5); t.rotation = Math.PI / 2; } }
+  Object.assign(mat, {map, normalMap: normal, roughnessMap: rough, roughness: 1});
+  mat.normalScale = new THREE.Vector2(0.7, 0.7);
+  mat.color.set('#ffffff');
+  mat.needsUpdate = true; set.textures.push(map, normal, rough);
+}
+
+function seatingMaterialSet(materials, {detail = true, onReady} = {}) {
   const f = materials.fabric, F = FIBERS[f.fiber] || FIBERS.linen, base = hexColor(COLORS[f.color].hex);
   const fabric = new THREE.MeshPhysicalMaterial({color: base, roughness: F.rough, sheen: F.sheen, sheenRoughness: f.fiber === 'velvet' ? 0.45 : 0.75, sheenColor: base.clone().lerp(new THREE.Color('#ffffff'), 0.35)});
   if (f.fiber === 'leather') { fabric.clearcoat = 0.25; fabric.clearcoatRoughness = 0.5; }
   const weltSpec = {...f, color: materials.welt.color || f.color2, pattern: 'none'};
   const welt = fabric.clone(); welt.color = hexColor(COLORS[weltSpec.color].hex); welt.sheenColor = welt.color.clone().lerp(new THREE.Color('#fff'), 0.35);
-  const W = WOODS[materials.wood.species], Fi = FINISHES[materials.wood.finish];
-  const wood = new THREE.MeshPhysicalMaterial({color: hexColor(W.base), roughness: Fi.rough, clearcoat: Fi.clearcoat, clearcoatRoughness: 0.2});
+  const wood = woodMaterial(materials.wood);
   const M = METALS[materials.metal.finish];
   const metal = new THREE.MeshPhysicalMaterial({color: hexColor(M.hex), metalness: 1, roughness: M.rough});
   const dark = new THREE.MeshStandardMaterial({color: '#1d1c1a', roughness: 0.8});
   const frame = new THREE.MeshStandardMaterial({color: '#d9c7a4', roughness: 0.85});
   const set = {fabric, welt, wood, metal, dark, frame, textures: []};
-  if (detail) {
-    const apply = (mat, out, tileMmX, tileMmY, srgbColorWhite = true) => {
-      if (!out) return;
-      const w = out.w || out.size, h = out.h || out.size;
-      const map = dataTexture(out.albedo, w, h, true), normal = dataTexture(out.normal, w, h, false), rough = dataTexture(out.rough, w, h, false);
-      for (const t of [map, normal, rough]) t.repeat.set(1000 / tileMmX, 1000 / tileMmY);
-      Object.assign(mat, {map, normalMap: normal, roughnessMap: rough, roughness: 1});
-      mat.normalScale = new THREE.Vector2(0.7, 0.7);
-      if (srgbColorWhite) mat.color.set('#ffffff');
-      mat.needsUpdate = true; set.textures.push(map, normal, rough);
-    };
-    Promise.all([makeMaps('fabric', f), makeMaps('fabric', weltSpec, 512), makeMaps('wood', materials.wood)]).then(([a, b, c]) => {
-      if (set.disposed) return;
-      apply(fabric, a, a?.tileMm, a?.tileMm); apply(welt, b, b?.tileMm, b?.tileMm);
-      if (c) apply(wood, c, c.tileMm[0], c.tileMm[1]);
-      onReady?.();
-    });
-  }
+  if (detail) Promise.all([makeMaps('fabric', f), makeMaps('fabric', weltSpec, 512), makeMaps('wood', materials.wood)]).then(([a, b, c]) => {
+    if (set.disposed) return;
+    applyMaps(set, fabric, a, a?.tileMm, a?.tileMm); applyMaps(set, welt, b, b?.tileMm, b?.tileMm);
+    if (c) applyMaps(set, wood, c, c.tileMm[0], c.tileMm[1]);
+    onReady?.();
+  });
   set.dispose = () => { set.disposed = true; for (const m of [fabric, welt, wood, metal, dark, frame]) m.dispose(); for (const t of set.textures) t.dispose(); };
+  return set;
+}
+
+function woodMaterial(w) {
+  const W = WOODS[w.species] || WOODS.oak, Fi = FINISHES[w.finish] || FINISHES.matte, St = STAINS[w.stain];
+  const color = hexColor(W.base); if (St?.hex) color.lerp(hexColor(St.hex), St.k);
+  return new THREE.MeshPhysicalMaterial({color, roughness: Fi.rough, clearcoat: Fi.clearcoat, clearcoatRoughness: 0.2});
+}
+
+/** Surface material for table tops and bases: wood/veneer, stone, glass, lacquer or metal. */
+function surfaceMaterial(spec, set, jobs, {rotate = false} = {}) {
+  if (spec.surface === 'wood' || spec.surface === 'veneer') {
+    const mat = woodMaterial(spec); jobs.push(makeMaps('wood', {species: spec.species, finish: spec.finish, stain: spec.stain}).then(out => applyMaps(set, mat, out, out?.tileMm[0], out?.tileMm[1], {rotate}))); return mat;
+  }
+  if (spec.surface === 'stone') {
+    const S = STONES[spec.stone] || STONES.carrara, mat = new THREE.MeshPhysicalMaterial({color: hexColor(S.base), roughness: spec.polish === 'polished' ? 0.1 : 0.45, clearcoat: spec.polish === 'polished' ? 0.6 : 0, clearcoatRoughness: 0.08});
+    jobs.push(makeMaps('stone', {stone: spec.stone, polish: spec.polish}).then(out => { applyMaps(set, mat, out, 600, 600); if (out) mat.normalScale = new THREE.Vector2(0.25, 0.25); })); return mat;
+  }
+  if (spec.surface === 'glass') {
+    const G = GLASS[spec.glass] || GLASS.clear;
+    return new THREE.MeshPhysicalMaterial({color: hexColor(G.hex), roughness: spec.glass === 'frosted' ? 0.55 : 0.04, metalness: 0, transparent: true, opacity: 0.35 + G.opacity * 0.9, clearcoat: 1, clearcoatRoughness: 0.03, depthWrite: false});
+  }
+  if (spec.surface === 'metal') { const M = METALS[spec.metal] || METALS.black; return new THREE.MeshPhysicalMaterial({color: hexColor(M.hex), metalness: 1, roughness: M.rough}); }
+  const C = COLORS[spec.color] || COLORS.white, gloss = spec.finish === 'lacquer';
+  return new THREE.MeshPhysicalMaterial({color: hexColor(C.hex), roughness: gloss ? 0.14 : 0.5, clearcoat: gloss ? 0.9 : 0.1, clearcoatRoughness: 0.08});
+}
+
+function tableMaterialSet(materials, {detail = true, onReady} = {}) {
+  const set = {textures: []}, jobs = [];
+  const quiet = detail ? jobs : [];
+  set.top = surfaceMaterial(materials.top, set, quiet, {rotate: true});
+  set.base = materials.base.surface === 'same' ? set.top : surfaceMaterial(materials.base, set, quiet);
+  const M = METALS[materials.hardware?.metal] || METALS.brass;
+  set.metal = materials.base.surface === 'metal' ? set.base : new THREE.MeshPhysicalMaterial({color: hexColor(M.hex), metalness: 1, roughness: M.rough});
+  set.dark = new THREE.MeshStandardMaterial({color: '#1d1c1a', roughness: 0.8});
+  set.frame = new THREE.MeshStandardMaterial({color: '#d9c7a4', roughness: 0.85});
+  set.fabric = set.base; set.wood = set.base; set.welt = set.base;
+  if (detail) Promise.all(jobs).then(() => { if (!set.disposed) onReady?.(); });
+  set.dispose = () => { set.disposed = true; for (const m of new Set([set.top, set.base, set.metal, set.dark, set.frame])) m.dispose(); for (const t of set.textures) t.dispose(); };
   return set;
 }
 
@@ -92,8 +132,8 @@ function buildGroup(compiled, mats, {structure = false} = {}) {
   for (const part of compiled.parts) {
     if (part.internal && !structure) continue;
     let mat = mats[part.mat] || mats.fabric;
-    if (structure && !part.internal && (part.mat === 'fabric' || part.mat === 'welt')) {
-      mat = mat.clone(); mat.transparent = true; mat.opacity = 0.16; mat.depthWrite = false;
+    if (structure && !part.internal && ['fabric', 'welt', 'top'].includes(part.mat)) {
+      mat = mat.clone(); mat.transparent = true; mat.opacity = 0.16; mat.depthWrite = false; mat.userData.temp = true;
     }
     const mesh = new THREE.Mesh(geometryFor(part), mat);
     mesh.position.set(...part.pos); mesh.rotation.set(...part.rot);
@@ -104,7 +144,7 @@ function buildGroup(compiled, mats, {structure = false} = {}) {
   return group;
 }
 
-function disposeGroup(group) { group?.traverse(o => { o.geometry?.dispose(); if (o.material?.opacity < 1) o.material.dispose(); }); }
+function disposeGroup(group) { group?.traverse(o => { o.geometry?.dispose(); if (o.material?.userData?.temp) o.material.dispose(); }); }
 
 function makeRenderer(canvas, {alpha = true} = {}) {
   const r = new THREE.WebGLRenderer({canvas, antialias: true, alpha, preserveDrawingBuffer: true});
@@ -156,7 +196,7 @@ export function createViewer(host, {onRotate} = {}) {
     if (view === 'angle') {
       camera = persp; persp.aspect = aspect;
       const radius = Math.hypot(W, H, D) * 0.5, fov = persp.fov * Math.PI / 180;
-      const dist = radius / Math.sin(Math.min(fov, 2 * Math.atan(Math.tan(fov / 2) * aspect)) / 2) * 0.8 / zoom;
+      const dist = radius / Math.sin(Math.min(fov, 2 * Math.atan(Math.tan(fov / 2) * aspect)) / 2) * (aspect < 1 ? 1.02 : 0.8) / zoom;
       persp.position.set(Math.sin(yaw) * Math.cos(pitch) * dist, target.y + Math.sin(pitch) * dist, Math.cos(yaw) * Math.cos(pitch) * dist);
       persp.lookAt(target); persp.updateProjectionMatrix();
     } else {
