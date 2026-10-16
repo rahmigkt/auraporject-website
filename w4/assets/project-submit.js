@@ -1,4 +1,4 @@
-import {createProjectPdf} from './project-pdf.js?v=20261016n';
+import {createProjectPdf} from './project-pdf.js?v=20261016r';
 import {config} from './config.js?v=20261016b';
 import {phrase} from './choice-flow.js?v=20261016b';
 import {label} from './design-library.js?v=20261016b';
