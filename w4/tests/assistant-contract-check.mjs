@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {CATEGORIES,STYLE_DIRECTIONS} from '../assets/style-directions.js';
+import {normalizeTaste,validateAssistantReply,assistantPrompt} from '../assets/assistant-contract.js';
+import {trainingCandidates,approvedTrainingRows} from '../../services/design/style-training.mjs';
+assert.equal(CATEGORIES.length,6);assert.equal(STYLE_DIRECTIONS.length,26);assert.equal(new Set(STYLE_DIRECTIONS.map(p=>p.id)).size,26);
+assert.equal(STYLE_DIRECTIONS.filter(p=>p.status==='source-profile').length,5);
+assert.deepEqual(normalizeTaste({category:'kitchen-sofa',styles:['__proto__','japandi','japandi']}).styles,['japandi']);
+assert.equal(normalizeTaste({category:'kitchen-sofa'}).category,'other');
+assert.throws(()=>validateAssistantReply({reply:'a',styleIds:['made-up-style'],reason:'b',question:'c'}));
+assert.equal(validateAssistantReply({reply:'Merhaba',styleIds:[],reason:'',question:'Ne düşünüyorsunuz?'}).styleIds.length,0);
+const prompt=assistantPrompt({category:'storage',styles:['art_deco'],avoid:'Japandi istemiyorum'});assert.ok(prompt.includes('art_deco'));assert.ok(prompt.includes('Japandi istemiyorum'));assert.ok(prompt.includes('Respect negation'));
+const examples=trainingCandidates();assert.equal(examples.length,52);assert.deepEqual(approvedTrainingRows(examples),[]);assert.ok(examples.filter(r=>r.id.endsWith('avoid')).every(r=>r.assistant.styleIds.length===0));
+assert.throws(()=>approvedTrainingRows([{...examples[0],reviewStatus:'approved'}]));
+assert.equal(approvedTrainingRows([{...examples[0],reviewStatus:'approved',reviewer:'test reviewer'}]).length,1);
+console.log('PASS 26 style directions, six categories, response allowlist, explicit avoid context, 52 unreviewed candidates and reviewed-only training export.');

@@ -11,3 +11,9 @@ MIT. Complete license: woodworkingshop/LICENSE.txt
 Source commit: db927cad3213a69f10dcdd7e29eb8c3fcb907c7f
 Source path: src/engine/geometry/drawer-box.ts
 Adaptation: side-mounted example drawer sizing. Other upstream hardware assumptions were not enabled. Manufacturing must verify the chosen runner dimensions.
+
+3. Optional browser inference
+WebLLM npm distribution @mlc-ai/web-llm 0.2.85, loaded via esm.run only when the customer starts device inference.
+Source: https://github.com/mlc-ai/web-llm
+Model: https://huggingface.co/mlc-ai/Qwen2.5-1.5B-Instruct-q4f16_1-MLC (or q4f32_1 variant).
+Upstream runtime and model licenses apply. No weights are bundled in this repository.

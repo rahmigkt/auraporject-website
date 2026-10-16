@@ -1,3 +1,4 @@
+import {runTasteAgent} from './taste-agent.mjs';
 import {runStudioAgent} from './studio-agent.mjs';
 import {DESIGN_FIELDS,STUDIO_TOOLS,studioPrompt,applyStudioCalls} from './studio-tools.mjs';
 import http from 'node:http';
@@ -8,6 +9,7 @@ import {FAMILIES,DETAILS,LANGUAGES,normalizeStudio} from '../../w4/assets/design
 const ROOT=fileURLToPath(new URL('../../',import.meta.url));
 const HOST=process.env.AURA_BIND||'127.0.0.1',PORT=Number(process.env.PORT||8770),MODEL=process.env.AURA_MODEL||'qwen2.5:7b-instruct';
 // Only the application server talks to Ollama. Never expose Ollama publicly.
+const ASSISTANT_MODEL=process.env.AURA_ASSISTANT_MODEL||process.env.AURA_MODEL||'qwen3.5:9b';
 const OLLAMA=new URL(process.env.AURA_OLLAMA_URL||'http://127.0.0.1:11434');
 if(!['127.0.0.1','localhost','[::1]'].includes(OLLAMA.hostname))throw Error('Ollama must be on this server or a local SSH tunnel.');
 const ORIGINS=new Set((process.env.AURA_ALLOWED_ORIGINS||`http://127.0.0.1:${PORT},http://localhost:${PORT}`).split(','));
@@ -28,6 +30,18 @@ const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=u
 export const server=http.createServer(async(req,res)=>{
  try{const url=new URL(req.url,`http://127.0.0.1:${PORT}`);
   if(req.headers.origin&&!ORIGINS.has(req.headers.origin)){json(res,403,{error:'Origin denied'});return;}
+  if(url.pathname==='/api/assistant/health'&&req.method==='GET'){
+   try{const r=await fetch(new URL('/api/tags',OLLAMA),{signal:AbortSignal.timeout(3000)});const d=await r.json();json(res,200,{available:r.ok&&d.models?.some(m=>m.name===ASSISTANT_MODEL),model:ASSISTANT_MODEL,knowledgeVersion:'aura-style-directions-20261016'});}catch{json(res,503,{available:false});}return;
+  }
+  if(url.pathname==='/api/assistant/chat'&&req.method==='POST'){
+   if(!req.headers.origin||!ORIGINS.has(req.headers.origin)){json(res,403,{error:'Origin denied'});return;}
+   if(!req.headers['content-type']?.startsWith('application/json')){json(res,415,{error:'JSON required'});return;}
+   const now=Date.now(),ip=req.socket.remoteAddress;const rate=limits.get(ip);if(active>=1||rate&&now-rate.start<60000&&rate.count>=12){json(res,429,{error:'Busy'});return;}
+   limits.set(ip,{start:rate&&now-rate.start<60000?rate.start:now,count:rate&&now-rate.start<60000?rate.count+1:1});
+   let data;try{data=await body(req);}catch{json(res,400,{error:'Invalid JSON'});return;}
+   if(!Array.isArray(data.messages)||!data.messages.length||data.messages.length>12||data.messages.at(-1)?.role!=='user'||data.messages.some(m=>!m||!['user','assistant'].includes(m.role)||typeof m.content!=='string'||m.content.length>2500)){json(res,400,{error:'Invalid conversation'});return;}
+   active++;try{json(res,200,await runTasteAgent({model:ASSISTANT_MODEL,language:['tr','en','fr','da'].includes(data.language)?data.language:'tr',taste:data.taste,messages:data.messages,origin:OLLAMA}));}catch{json(res,502,{error:'Model unavailable or invalid reply'});}finally{active--;}return;
+  }
   if(url.pathname==='/api/design/health'&&req.method==='GET'){
    try{const r=await fetch(new URL('/api/tags',OLLAMA),{signal:AbortSignal.timeout(3000)});const d=await r.json();json(res,200,{available:r.ok&&d.models?.some(m=>m.name===MODEL),model:MODEL});}catch{json(res,503,{available:false});}return;
   }
