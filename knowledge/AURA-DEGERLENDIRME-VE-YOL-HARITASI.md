@@ -329,3 +329,30 @@ Her faz bağımsız teslim edilebilir. Testler her fazda yeşil kalmalıdır.
 2. Faz 1 vitrin ürünü kanepe olsun mu, yoksa başka bir aile mi?
 3. Tasarımcı teslim biçimi: e-posta, site içi panel ya da ikisi.
 4. Tekstil kataloğu: gerçek tedarikçi kumaşları mı, yoksa temsilî prosedürel kumaşlar mı (ilk aşama)?
+
+---
+
+## 7. Uygulama durumu (2026-10-16 akşam, Claude) — Forma oturma stüdyosu
+
+Yayındaki sayfa: `w4/tasarla.html`. Kod: `w4/assets/forma/` (ayrıntı: `w4/assets/forma/README.md`). Test: `node w4/tests/forma-check.mjs`.
+
+**Yapıldı**
+- Parametrik parça kütüphanesi: profil tabanlı kolçaklar (8 kesit + ahşap + kolçaksız), torna ayaklar (9), crown'lu/kapitone/kanallı minderler, biye, etek, baza, kızak, ahşap çatkı, iç iskelet.
+- Oturma grameri (kanepe, ikili, berjer); ergonomi ve üretim kontrolleri; oturum derinliği otomatik oturtma.
+- 26 tarz dağılımı (kimlikler AI tarz brifiyle aynı); 12'li farklı öneri, "buna benzer", "iki tasarımı karıştır". Testte her tarzın 12 önerisi en az 7 farklı parça kombinasyonu taşır.
+- NAKIŞ örgü çekirdeğinden gerçek ölçekli kumaş: 7 örgü, kareli örgü şeması arayüzde; çizgili, pötikare, ekose, damask (figür farklı örgüyle); kadife, bukle, deri. Ahşap türleri ve yüzeyler.
+- Render: PBR, yumuşak gölge, AO, kenar yumuşatma, sayfa tonunda zemin, "Fotoğraf", GLB.
+- Teknik çizim: A3, gerçek ölçek, ön/yan/üst/kesit, ölçü zincirleri, özellik tablosu; DXF; parça listesi (TR/EN) ve kumaş metrajı; tasarımcı paketi ZIP (PDF, SVG, DXF, CSV, GLB, JSON).
+- 8 dilde yazılı ve sesli komut (tarayıcı konuşma tanıma); çevrimdışı çalışır.
+- AI altyapısı: `api/forma-ai.php` (serbest komut + görselden parametrik tasarım), çıktılar sözlükle doğrulanır. Anahtar girilene kadar kapalı.
+- Tasarımcıya gönderim: `api/forma-submit.php`, yapılandırılana kadar kapalı; kapalıyken paket indirilir.
+- Ana sayfa ve sohbet (oturma kategorisi) stüdyoya bağlandı.
+
+**Codex'e kalanlar (öncelik sırasıyla)**
+1. AI anahtarını sunucuya koyup (`forma-secrets.php`) görselden tasarımı 10 fotoğraflık bir setle ölçmek; serbest komutlar için 30 cümlelik senaryo testi.
+2. Tasarımcı paneli: gelen paketleri listeleme, `project.json`'u stüdyoda "kilitsiz" açma, revizyon notu, durum akışı.
+3. Köşe ve uzanma modülleri (eski `sectional-model.js` mantığı) Forma gramerine; ardından sandalye, sehpa/masa, yatak başlığı; Ritmo'nun aynı `AuraProject` modeline taşınması.
+4. Oda akışı: `space-model`/`space-planner` sayfaya bağlanacak, yerleşim çözücü ve oda paketi.
+5. Perde ailesi (tekstil sistemi hazır).
+6. Renk adlarının ve parça listesinin DE/FR/NL/DA/ES/IT çevirileri (şu an renkler TR/EN).
+7. İsteğe bağlı: path-traced fotoğraf (three-gpu-pathtracer), ahşap haritalarının hızlandırılması.
