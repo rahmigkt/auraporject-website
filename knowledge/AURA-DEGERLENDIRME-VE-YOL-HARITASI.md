@@ -373,3 +373,10 @@ Yayındaki sayfa: `w4/tasarla.html`. Kod: `w4/assets/forma/` (ayrıntı: `w4/ass
 2. Sunucusuz görsel okuma: transformers.js ile tarayıcıda CLIP/SigLIP sıfır-atış sınıflandırma (her parça özelliği için aday metinler) + ölçü oranları; isteğe bağlı WebGPU'da küçük VLM (SmolVLM/Florence-2).
 3. Sandalye ailesi (masa ile takım), köşe koltuk modülleri, yatak başlığı.
 4. Tasarımcı paneli, oda akışı, perde ailesi (önceki listeden).
+
+## 9. Karar (2026-10-16 gece): hazır öneri yok, paket yalnız tasarımcıya
+- "Öneriler" sekmesi kaldırıldı (iki ailede). Tarz seçimi yalnız temel formu açar; kişi tasarımı parça, ölçü ve malzemeyle kendisi kurar. "Daha fazla öneri / buna benzer" komutları devre dışı.
+- "Teslim" sekmesi "Gönder" oldu: ekranda yalnız özet (tür, tarz, genel ölçü, ana malzeme) ve gönderim formu. Teknik çizim, parça listesi, DXF/SVG/CSV/GLB/JSON indirme ve "Kaydet/Dosya aç" kaldırıldı. Yalnız "Fotoğraf" indirilebilir.
+- Gönderimden sonra müşteri, gönderdiği tasarımın PDF'ini (görsel + ölçülü çizim) indirebilir; kayıt tarayıcıda proje numarasıyla tutulur.
+- Gönderim kapalıyken (sunucu ayarı yok) form pasif, indirme yok. Açmak için sunucuda `api/forma-secrets.php`: `submit_enabled`, `submit_recipient`, `submit_sender`, `submit_store_dir` (public_html dışı klasör).
+- Not: çizim tarayıcıda üretildiği için teknik bilgisi olan biri geliştirici araçlarıyla yine erişebilir. Kesin koruma için çizim/PDF üretimi sunucuya taşınmalı (Codex işi).

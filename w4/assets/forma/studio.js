@@ -1,6 +1,8 @@
-// AURA Forma design studio: family → style → diverse proposals → parts / dimensions / materials → designer package.
+// AURA Forma design studio: family → style (one starting form) → parts / dimensions / materials → send to the designer.
+// No ready-made proposal gallery: people build their own piece. Drawings, parts list and files never leave the
+// browser before sending; afterwards the customer can download the PDF of the design they sent.
 // Families: seating (sofa, loveseat, armchair) and tables (dining, coffee, side, console, desk).
-import {sample, variants, similar, blend, normalizeDesign, SCHEMA} from './generate.js';
+import {sample, normalizeDesign, SCHEMA} from './generate.js';
 import {FAMILIES, familyOf} from './families.js';
 import {buildMesh} from './build.js';
 import {styleName} from './styles.js';
@@ -14,6 +16,7 @@ import {aiStatus, interpret, designFromImage} from './ai.js';
 import {drawingSheet, drawingDxf} from './drawing.js';
 import {bom, bomCsv} from './bom.js';
 import {zip, jpegPdf, svgToJpeg, dataUrlJpeg, download} from './package.js';
+const designKey = d => JSON.stringify({p: d.params, m: d.materials, k: d.kind, f: d.family});
 import {t, partName, UI_LANGS} from './i18n.js';
 
 const $ = (sel, root = document) => root.querySelector(sel);
@@ -24,7 +27,7 @@ const params = new URLSearchParams(location.search);
 const browserLang = (navigator.language || 'en').slice(0, 2);
 const state = {
   lang: UI_LANGS[params.get('lang')] ? params.get('lang') : UI_LANGS[store.get('aura-forma-lang')] ? store.get('aura-forma-lang') : UI_LANGS[browserLang] ? browserLang : 'tr',
-  design: null, compiled: null, history: [], future: [], tab: 'style', proposals: [], round: 1, picked: [], structure: false, ai: {available: false, vision: false}, avoid: []
+  design: null, compiled: null, history: [], future: [], tab: 'style', sent: null, structure: false, ai: {available: false, vision: false}, avoid: []
 };
 const L = k => t(k, state.lang);
 const N = entry => nm(entry, state.lang);
@@ -43,7 +46,7 @@ function setDesign(next, {record = true, keepPanel = false} = {}) {
   viewer?.setDesign(state.compiled, next.materials);
   store.set('aura-forma-design-' + next.family, next); store.set('aura-forma-family', next.family);
   state.drawingCache = null;
-  if (familyChanged) { state.proposals = []; state.picked = []; shellNav(); }
+  if (familyChanged) shellNav();
   renderCaption();
   if (!keepPanel) renderPanel(); else refreshReadouts();
 }
@@ -107,9 +110,8 @@ function shell() {
       <p class="f-hint">${L('rotateHint')} ${L('concept')}</p>
     </section>
     <aside class="f-editor">
-      <nav class="f-tabs" role="tablist">${['style', 'ideas', 'parts', 'size', 'material', 'deliver'].map((k, i) => `<button role="tab" data-tab="${k}" aria-selected="${state.tab === k}"><span>${String(i + 1).padStart(2, '0')}</span>${L('tab' + k[0].toUpperCase() + k.slice(1))}</button>`).join('')}</nav>
+      <nav class="f-tabs" role="tablist">${['style', 'parts', 'size', 'material', 'deliver'].map((k, i) => `<button role="tab" data-tab="${k}" aria-selected="${state.tab === k}"><span>${String(i + 1).padStart(2, '0')}</span>${L('tab' + k[0].toUpperCase() + k.slice(1))}</button>`).join('')}</nav>
       <div id="panel" class="f-panel"></div>
-      <div class="f-filebar"><button id="saveBtn">${L('save')} ↓</button><button id="openBtn">${L('open')} ↑</button><input id="openFile" type="file" accept=".json,application/json" hidden></div>
     </aside>
   </main>`;
   viewer?.dispose(); viewer = null;
@@ -142,8 +144,7 @@ function feedback(text, level = 'info') { const f = $('#feedback'); f.textConten
 // ---- Panels ---------------------------------------------------------------------------
 function renderPanel() {
   for (const b of document.querySelectorAll('[data-tab]')) b.setAttribute('aria-selected', String(b.dataset.tab === state.tab));
-  $('#panel').innerHTML = {style: stylePanel, ideas: ideasPanel, parts: partsPanel, size: sizePanel, material: materialPanel, deliver: deliverPanel}[state.tab]();
-  if (state.tab === 'ideas') drawThumbnails();
+  $('#panel').innerHTML = {style: stylePanel, parts: partsPanel, size: sizePanel, material: materialPanel, deliver: deliverPanel}[state.tab]();
   if (state.tab === 'material') drawMaterialPreviews();
   if (state.tab === 'deliver') drawDeliverables();
 }
@@ -157,15 +158,6 @@ function stylePanel() {
   <div class="f-actions"><button class="f-primary" id="generateBtn">${L('generate')} →</button>
   ${d.family === 'seating' ? `<label class="f-secondary" id="imageLabel">${L('fromImage')} ↑<input id="imageFile" type="file" accept="image/jpeg,image/png,image/webp" hidden></label>` : ''}</div>
   ${d.family === 'seating' ? `<p class="f-note">${L('imageHint')}${state.ai.vision ? '' : ' ' + L('aiOff')}</p>` : ''}`;
-}
-
-function ideasPanel() {
-  const d = state.design;
-  if (!state.proposals.length) state.proposals = variants({family: d.family, style: d.style, kind: d.kind, round: state.round});
-  return `<h2>${L('tabIdeas')}</h2><p class="f-lead">${L('ideasHint')}</p>
-  <div class="f-actions"><button class="f-secondary" id="roundBtn">↻ ${L('newRound')}</button><button class="f-secondary" id="similarBtn">≈ ${L('similar')}</button><button class="f-secondary" id="blendBtn" ${state.picked.length === 2 ? '' : 'disabled'}>⊕ ${L('blend')}</button></div>
-  <p class="f-note">${L('blendHint')}</p>
-  <div class="f-cards">${state.proposals.map((p, i) => { const [a, b] = ui().card(p); return `<div class="f-card" data-card="${i}" aria-current="${p.seed === d.seed}"><button class="f-card-main" data-load="${i}"><span class="f-thumb" id="thumb${i}"></span><span class="f-card-text">${esc(a)}<small>${esc(b)}</small></span></button><label class="f-pick"><input type="checkbox" data-pick="${i}" ${state.picked.includes(i) ? 'checked' : ''}><span class="sr">${L('blend')}</span></label></div>`; }).join('')}</div>`;
 }
 
 function enumGroup(key, labelKey, ns = key, options = familyOf(state.design).mod.ENUMS[key]) {
@@ -276,35 +268,24 @@ function tableMaterialPanel() {
 }
 
 function deliverPanel() {
+  const d = state.design, c = state.compiled, sent = state.sent, changed = sent && sent.key !== designKey(d);
   return `<h2>${L('tabDeliver')}</h2><p class="f-lead">${L('sendIntro')}</p>
-  <h3>${L('drawings')}</h3><div class="f-sheet" id="sheet"><p class="f-note">${L('working')}</p></div>
-  <h3>${L('bom')}</h3><div class="f-bom" id="bomTable"></div>
-  <h3>${L('downloads')}</h3><div class="f-downloads">
-    <button class="f-primary" data-dl="zip">${L('packageZip')} ↓</button>
-    <button class="f-secondary" data-dl="pdf">PDF ↓</button><button class="f-secondary" data-dl="svg">SVG ↓</button><button class="f-secondary" data-dl="dxf">DXF ↓</button>
-    <button class="f-secondary" data-dl="csv">CSV ↓</button><button class="f-secondary" data-dl="glb">GLB (3D) ↓</button><button class="f-secondary" data-dl="json">JSON ↓</button></div>
-  <h3>${L('sendDesigner')}</h3>
+  <h3>${L('yourDesign')}</h3><dl class="f-readout">
+    <dt>${esc(L(d.family === 'table' ? d.kind : c.meta.kind))}</dt><dd>${esc(styleName(d.style, state.lang))}</dd>
+    <dt>${esc(L('overall'))}</dt><dd>${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height} mm</dd>
+    <dt>${esc(L(d.family === 'table' ? 'topMat' : 'fabric'))}</dt><dd>${esc(d.family === 'table' ? surfaceShort(d.materials.top) : `${N(FIBERS[d.materials.fabric.fiber])} · ${N(COLORS[d.materials.fabric.color])}`)}</dd>
+  </dl>
+  ${sent ? `<div class="f-sent"><p>${L('sent')} <b>${esc(sent.id)}</b></p>${sent.pdf || !changed ? `<button class="f-primary" data-dl="sentPdf">${L('sentPdf')} ↓</button>` : ''}${changed ? `<p class="f-note">${L('changedAfterSend')}</p>` : ''}</div>` : ''}
+  ${!sent || changed ? `<h3>${L('sendDesigner')}</h3>
   <form class="f-send" id="sendForm"><p class="f-note" id="sendState"></p>
-    <label>${L('name')} *<input name="name" required maxlength="120"></label><label>${L('email')}<input name="email" type="email" maxlength="160"></label>
+    <label>${L('name')} *<input name="name" required maxlength="120"></label><label>${L('email')} *<input name="email" type="email" required maxlength="160"></label>
     <label>${L('phone')}<input name="phone" type="tel" maxlength="40"></label><label>${L('city')}<input name="city" maxlength="120"></label>
     <label class="full">${L('note')}<textarea name="note" rows="3" maxlength="1500"></textarea></label>
     <label class="f-check full"><input type="checkbox" name="consent" required><span>${L('consent')} <a href="proje-gizlilik.html?lang=${state.lang}" target="_blank" rel="noopener">↗</a></span></label>
-    <button class="f-primary" type="submit">${L('send')} →</button></form>`;
+    <button class="f-primary" type="submit">${L('send')} →</button></form>` : ''}`;
 }
 
 // ---- Panel drawing helpers ---------------------------------------------------------------------
-let thumbJob = 0;
-async function drawThumbnails() {
-  const job = ++thumbJob, {renderThumbnail} = await import('./scene.js?v=20261016c');
-  for (let i = 0; i < state.proposals.length; i++) {
-    await new Promise(r => setTimeout(r, 0));
-    if (job !== thumbJob) return;
-    const slot = $(`#thumb${i}`); if (!slot) return;
-    const d = state.proposals[i], url = renderThumbnail(compileOf(d), d.materials);
-    slot.innerHTML = url ? `<img src="${url}" alt="">` : '';
-  }
-}
-
 function paintTile(canvas, maps, w, h, tileMmX, tileMmY, showMm = 60) {
   const g = canvas.getContext('2d'), tmp = document.createElement('canvas'); tmp.width = w; tmp.height = h;
   tmp.getContext('2d').putImageData(new ImageData(maps.albedo, w, h), 0, 0);
@@ -375,16 +356,11 @@ function deliverables() {
 const projectId = () => `F-${String(state.design.seed % 100000).padStart(5, '0')}`;
 
 function drawDeliverables() {
-  setTimeout(async () => {
-    const dv = deliverables(), host = $('#sheet'); if (!host) return;
-    host.innerHTML = dv.sheet.svg;
-    const b = dv.bom;
-    $('#bomTable').innerHTML = `<table><thead><tr><th>#</th><th>${state.lang === 'tr' ? 'Parça' : 'Part'}</th><th>×</th><th>mm</th><th>${L('tabMaterial')}</th></tr></thead><tbody>${b.rows.filter(r => !r.internal).map(r => `<tr><td>${r.code}</td><td>${esc(state.lang === 'tr' ? r.nameTr : r.nameEn)}</td><td>${r.qty}</td><td>${r.size.join(' × ')}</td><td>${esc(r.material)}</td></tr>`).join('')}</tbody></table>
-    <p class="f-note">${b.totals.fabricMetres !== undefined ? `${L('fabricNeed')}: ~${b.totals.fabricMetres} m · ${b.totals.fabricAreaM2} m²${b.totals.weltMetres ? ` · ${L('welt')} ${b.totals.weltMetres} m` : ''}` : `${L('weight')}: ~${b.totals.weightKg} kg${b.totals.seats ? ` · ${b.totals.seats} ${L('persons')}` : ''}`}</p>`;
-    const s = await fetch('api/forma-submit.php', {cache: 'no-store'}).then(r => r.json()).catch(() => ({available: false}));
+  fetch('api/forma-submit.php', {cache: 'no-store'}).then(r => r.json()).catch(() => ({available: false})).then(s => {
     state.canSend = !!s.available;
     const ss = $('#sendState'); if (ss) ss.textContent = state.canSend ? '' : L('sendOff');
-  }, 20);
+    const btn = $('#sendForm button[type=submit]'); if (btn) btn.disabled = !state.canSend;
+  });
 }
 
 // ---- Package -------------------------------------------------------------------------------
@@ -403,18 +379,14 @@ async function packageFiles() {
   return files;
 }
 async function downloadAs(kind) {
-  feedback(L('working'));
-  const dv = deliverables(), id = projectId();
-  try {
-    if (kind === 'svg') download(`${id}-drawings.svg`, dv.sheet.svg, 'image/svg+xml');
-    else if (kind === 'dxf') download(`${id}-drawings.dxf`, drawingDxf(state.compiled), 'application/dxf');
-    else if (kind === 'csv') download(`${id}-parts.csv`, bomCsv(dv.bom), 'text/csv');
-    else if (kind === 'json') download(`${id}.json`, JSON.stringify(state.design, null, 2), 'application/json');
-    else if (kind === 'glb' && viewer) download(`${id}.glb`, await viewer.exportGLB(), 'model/gltf-binary');
-    else if (kind === 'pdf') { const pages = [await svgToJpeg(dv.sheet.svg)]; if (viewer) pages.unshift(await dataUrlJpeg(await viewer.photo(2))); download(`${id}.pdf`, jpegPdf(pages), 'application/pdf'); }
-    else if (kind === 'zip') download(`${id}-designer-package.zip`, zip(await packageFiles()), 'application/zip');
-    feedback(L('applied'));
-  } catch (e) { feedback(String(e.message || e), 'error'); }
+  // The only file a customer can take is the PDF of a design already sent to the designer.
+  const sent = state.sent; if (kind !== 'sentPdf' || !sent) return;
+  if (!sent.pdf && sent.key === designKey(state.design)) {
+    const pages = [await svgToJpeg(deliverables().sheet.svg)];
+    if (viewer) pages.unshift(await dataUrlJpeg(await viewer.photo(2)));
+    sent.pdf = jpegPdf(pages);
+  }
+  if (sent.pdf) download(`AURA-${sent.id}.pdf`, sent.pdf, 'application/pdf');
 }
 
 // ---- Actions (shared by UI, commands and AI) ------------------------------------------------
@@ -422,7 +394,8 @@ const SPECIES_TO_STAIN = {oak: 'oak', ash: 'lightOak', beech: 'natural', walnut:
 function switchFamily(family, kind) {
   const prev = store.get('aura-forma-design-' + family);
   const next = prev?.schema === SCHEMA && !kind ? prev : sample({family, style: state.design.style, kind, seed: state.design.seed});
-  state.round = 1; setDesign(next);
+  setDesign(next);
+  const prevSent = store.get('aura-forma-sent-' + family); state.sent = prevSent?.key === designKey(state.design) ? prevSent : null;
 }
 function seatsToSize(d, n) {
   // Grow the top until the capacity rule (600 mm per person, 650 mm on curved perimeters) seats n people.
@@ -447,8 +420,6 @@ function applyActions(actions) {
       else if (a.name === 'redo') { redo(); return notes.concat(L('redo')); }
       else if (a.name === 'structure') toggleStructure();
       else if (a.name === 'photo') savePhoto();
-      else if (a.name === 'variants') { state.round++; state.proposals = []; state.tab = 'ideas'; renderPanel(); notes.push(L('tabIdeas')); }
-      else if (a.name === 'similar') { state.proposals = similar(state.design, {round: ++state.round}); state.tab = 'ideas'; renderPanel(); notes.push(L('similar')); }
       else if (a.name === 'drawings' || a.name === 'send' || a.name === 'package') { state.tab = 'deliver'; renderPanel(); notes.push(L('tabDeliver')); }
       continue;
     }
@@ -496,7 +467,7 @@ function materialLabel(a) {
 async function runCommand(text) {
   if (!text.trim()) return;
   const local = parse(text, {family: state.design.family});
-  if (local.understood) { const notes = applyActions(local.actions); feedback(`${L('applied')}: ${notes.join(' · ')}`); return; }
+  if (local.understood && local.actions.some(a => !(a.type === 'command' && ['variants', 'similar'].includes(a.name)))) { const notes = applyActions(local.actions); feedback(`${L('applied')}: ${notes.join(' · ')}`); return; }
   if (state.ai.available && state.design.family === 'seating') {
     feedback(L('working'));
     try { const actions = await interpret(text, state.design, state.lang); if (actions.length) { feedback(`${L('applied')}: ${applyActions(actions).join(' · ')}`); return; } } catch {}
@@ -535,21 +506,14 @@ function bindShell() {
   $('#commandForm').onsubmit = e => { e.preventDefault(); runCommand($('#command').value); };
   $('#micBtn').onclick = listen;
   for (const b of document.querySelectorAll('[data-tab]')) b.onclick = () => { state.tab = b.dataset.tab; renderPanel(); };
-  $('#saveBtn').onclick = () => download(`${projectId()}.json`, JSON.stringify(state.design, null, 2), 'application/json');
-  $('#openBtn').onclick = () => $('#openFile').click();
-  $('#openFile').onchange = async e => { const f = e.target.files[0]; if (!f) return; try { const d = JSON.parse(await f.text()); setDesign(d.design || d); } catch { feedback('JSON', 'error'); } e.target.value = ''; };
 
   const panel = $('#panel');
   panel.addEventListener('click', e => {
     const el = e.target.closest('button, [data-load]'); if (!el) return;
     const d = el.dataset;
-    if (d.kind) { state.proposals = []; setDesign(sample({family: state.design.family, style: state.design.style, kind: d.kind, seed: state.design.seed})); }
-    else if (d.style) { state.proposals = []; state.round = 1; setDesign(sample({family: state.design.family, style: d.style, kind: state.design.kind, seed: state.design.seed})); }
-    else if (el.id === 'generateBtn') { state.proposals = []; state.tab = 'ideas'; renderPanel(); }
-    else if (d.load !== undefined) { setDesign(state.proposals[+d.load], {keepPanel: true}); for (const c of document.querySelectorAll('.f-card')) c.setAttribute('aria-current', String(c.dataset.card === d.load)); }
-    else if (el.id === 'roundBtn') { state.round++; state.proposals = []; state.picked = []; renderPanel(); }
-    else if (el.id === 'similarBtn') { state.proposals = similar(state.design, {round: ++state.round}); state.picked = []; renderPanel(); }
-    else if (el.id === 'blendBtn' && state.picked.length === 2) { const [a, b] = state.picked.map(i => state.proposals[i]); setDesign(blend(a, b, 0.5, state.round)); state.proposals = similar(state.design, {round: ++state.round}); state.picked = []; renderPanel(); }
+    if (d.kind) { setDesign(sample({family: state.design.family, style: state.design.style, kind: d.kind, seed: state.design.seed})); }
+    else if (d.style) { setDesign(sample({family: state.design.family, style: d.style, kind: state.design.kind, seed: state.design.seed})); }
+    else if (el.id === 'generateBtn') { state.tab = 'parts'; renderPanel(); }
     else if (d.enum) setDesign(withParams({[d.enum]: d.value}));
     else if (d.count) setDesign(withParams({[d.count]: +d.value}));
     else if (d.baseSame) { const top = state.design.materials.top; setDesign(withMaterial('base', top.surface === 'lacquer' ? {surface: 'lacquer', color: top.color, finish: top.finish} : {surface: 'wood', species: top.species, stain: top.stain, finish: top.finish})); }
@@ -559,8 +523,7 @@ function bindShell() {
   });
   panel.addEventListener('change', e => {
     const el = e.target;
-    if (el.dataset.pick !== undefined) { const i = +el.dataset.pick; state.picked = el.checked ? [...state.picked.filter(x => x !== i), i].slice(-2) : state.picked.filter(x => x !== i); for (const c of document.querySelectorAll('[data-pick]')) c.checked = state.picked.includes(+c.dataset.pick); $('#blendBtn').disabled = state.picked.length !== 2; }
-    else if (el.dataset.param) setDesign(withParams({[el.dataset.param]: +el.value}));
+    if (el.dataset.param) setDesign(withParams({[el.dataset.param]: +el.value}));
     else if (el.dataset.num) setDesign(withParams({[el.dataset.num]: +el.value}));
     else if (el.dataset.fabricDensity !== undefined) setDesign(withMaterial('fabric', {density: +el.value}));
     else if (el.id === 'imageFile') readImage(el.files[0]);
@@ -575,14 +538,17 @@ function bindShell() {
   panel.addEventListener('submit', async e => {
     if (e.target.id !== 'sendForm') return; e.preventDefault();
     const fd = new FormData(e.target), ss = $('#sendState');
-    if (!state.canSend) { ss.textContent = L('sendOff'); downloadAs('zip'); return; }
+    if (!state.canSend) { ss.textContent = L('sendOff'); return; }
     ss.textContent = L('working');
     try {
-      const body = new FormData();
-      body.append('package', new Blob([zip(await packageFiles())], {type: 'application/zip'}), `${projectId()}.zip`);
+      const body = new FormData(), files = await packageFiles(), key = designKey(state.design);
+      body.append('package', new Blob([zip(files)], {type: 'application/zip'}), `${projectId()}.zip`);
       body.append('meta', JSON.stringify({name: fd.get('name'), email: fd.get('email'), phone: fd.get('phone'), city: fd.get('city'), note: fd.get('note'), consent: !!fd.get('consent'), lang: state.lang, summary: specRows(deliverables().bom).map(r => r.join(': ')).join(' | ')}));
       const r = await fetch('api/forma-submit.php', {method: 'POST', body}), j = await r.json();
-      ss.textContent = j.ok ? `${L('sent')} ${j.id}` : (j.error || 'Error');
+      if (!j.ok) { ss.textContent = j.error || 'Error'; return; }
+      state.sent = {id: j.id, key, pdf: files.find(f => f.name === 'drawings.pdf').data};
+      store.set('aura-forma-sent-' + state.design.family, {id: j.id, key});
+      renderPanel();
     } catch (err) { ss.textContent = String(err.message || err); }
   });
 }
@@ -629,6 +595,9 @@ function initialDesign() {
 window.formaDebug = {state, get viewer() { return viewer; }};
 const start = initialDesign();
 state.design = start.design; state.compiled = compileOf(state.design);
+store.set('aura-forma-design-' + state.design.family, state.design); store.set('aura-forma-family', state.design.family);
+store.set('aura-forma-lang', state.lang);
+{ const prev = store.get('aura-forma-sent-' + state.design.family); if (prev?.key === designKey(state.design)) state.sent = prev; }
 shell();
-if (start.note) { feedback(start.note); state.tab = 'ideas'; renderPanel(); }
+if (start.note) { feedback(start.note); state.tab = 'parts'; renderPanel(); }
 aiStatus().then(s => { state.ai = s; if (state.tab === 'style') renderPanel(); });
