@@ -1,5 +1,5 @@
 // Builds meshes from part geometry descriptors (shared by every family). Cached by descriptor.
-import {cushion, loft, lathe, tube, weltLoop, sphere, profiledSlab, transformPositions} from './mesh.js';
+import {cushion, loft, lathe, tube, weltLoop, sphere, profiledSlab, transformPositions, computeNormals} from './mesh.js';
 import {edgeProfile} from './table.js';
 
 const cache = new Map();
@@ -23,6 +23,7 @@ export function buildMesh(q) {
     }
     mesh = {positions, normals, uvs: inner.uvs, indices: inner.indices};
   }
+  else if (g.fn === 'ribbed') mesh = ribbed(g);
   else if (g.fn === 'buttons') {
     const one = sphere(g.r, {segments: 10}), n = g.points.length, vc = one.positions.length;
     const positions = new Float32Array(vc * n), normals = new Float32Array(vc * n), uvs = new Float32Array(one.uvs.length * n), indices = new Uint32Array(one.indices.length * n);
@@ -40,3 +41,24 @@ export function buildMesh(q) {
 
 /** World-space positions of a part (mm). */
 export function worldPositions(q) { return transformPositions(buildMesh(q).positions, q.pos, q.rot); }
+
+/** Reeded (fluted) face: half-round vertical reeds of a given pitch and depth, with top and bottom caps.
+ * Built at z = 0 (back) to z = depth (reed crowns), centred in x and y. */
+function ribbed({w, h, pitch = 24, depth = 6}) {
+  const n = Math.max(1, Math.round(w / pitch)), seg = 8, xs = [], zs = [];
+  for (let i = 0; i <= n * seg; i++) { const x = -w / 2 + w * i / (n * seg), u = (i % seg) / seg; xs.push(x); zs.push(depth * Math.sqrt(Math.max(0, 1 - (u * 2 - 1) ** 2))); }
+  const pos = [], idx = [], uv = [];
+  const v = (x, y, z) => { pos.push(x, y, z); uv.push(x / 1000 + 0.5, y / 1000 + 0.5); return pos.length / 3 - 1; };
+  // Front surface (smooth)
+  const base = pos.length / 3;
+  for (let i = 0; i < xs.length; i++) { v(xs[i], -h / 2, zs[i]); v(xs[i], h / 2, zs[i]); }
+  for (let i = 0; i < xs.length - 1; i++) { const a = base + 2 * i, b = a + 1, c = a + 2, d = a + 3; idx.push(a, c, b, b, c, d); }
+  // Caps (top and bottom strips between the back line and the reed profile)
+  for (const [y, flip] of [[h / 2, false], [-h / 2, true]]) {
+    const b0 = pos.length / 3;
+    for (let i = 0; i < xs.length; i++) { v(xs[i], y, 0); v(xs[i], y, zs[i]); }
+    for (let i = 0; i < xs.length - 1; i++) { const a = b0 + 2 * i, b = a + 1, c = a + 2, d = a + 3; if (flip) idx.push(a, c, b, b, c, d); else idx.push(a, b, c, b, d, c); }
+  }
+  const positions = new Float32Array(pos), indices = new Uint32Array(idx);
+  return {positions, normals: computeNormals(positions, indices), uvs: new Float32Array(uv), indices};
+}

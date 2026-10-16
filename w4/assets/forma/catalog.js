@@ -234,3 +234,15 @@ export function normalizeTableMaterials(m = {}) {
   if (!METALS[base.metal]) base.metal = 'black'; if (!METALS[hardware.metal]) hardware.metal = 'brass';
   return {top, base, hardware};
 }
+
+/** Bedroom materials: upholstery (fabric, welt), solid wood (legs, frames), case surface (bodies, panels, platforms),
+ * metal (pulls, sled), bedding colour. Beds and bedside units share one palette so a set reads as a set. */
+export const LINEN_COLORS = ['white', 'cream', 'sand', 'silver', 'greige', 'dustyRose', 'iceBlue', 'khaki', 'anthracite'];
+export function normalizeBedroomMaterials(m = {}) {
+  const base = normalizeMaterials({...m, wood: {species: 'oak', stain: 'natural', finish: 'oil', ...(m.wood || {})}});
+  const c = {surface: 'veneer', species: 'oak', stain: 'natural', finish: 'matte', color: 'cream', ...(m.case || {})};
+  if (!['wood', 'veneer', 'lacquer'].includes(c.surface)) c.surface = 'veneer';
+  if (!WOODS[c.species]) c.species = 'oak'; if (!STAINS[c.stain]) c.stain = 'natural'; if (!FINISHES[c.finish]) c.finish = 'matte'; if (!COLORS[c.color]) c.color = 'cream';
+  const linen = {color: LINEN_COLORS.includes(m.linen?.color) ? m.linen.color : 'white'};
+  return {...base, case: c, linen};
+}

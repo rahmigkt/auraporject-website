@@ -1,9 +1,11 @@
 // Family registry: each furniture family supplies its grammar, styles, kinds and sampling rules.
 import * as seating from './sofa.js';
 import * as table from './table.js';
+import * as bedroom from './bedroom.js';
+import {BEDROOM_STYLES, BEDROOM_STYLE_BY_ID} from './styles-bedroom.js';
 import {STYLES as SEAT_STYLES, STYLE_BY_ID as SEAT_BY_ID, KINDS as SEAT_KINDS} from './styles.js';
 import {TABLE_STYLES, TABLE_STYLE_BY_ID} from './styles-table.js';
-import {normalizeMaterials, normalizeTableMaterials, MARKET_NEAR} from './catalog.js';
+import {normalizeMaterials, normalizeTableMaterials, normalizeBedroomMaterials, MARKET_NEAR} from './catalog.js';
 import {buildMesh} from './build.js';
 
 /** Stain tone that keeps the style's intended wood colour on a gürgen (beech) frame. */
@@ -110,7 +112,59 @@ export const FAMILIES = {
       }
       return p;
     }
+  },
+  bedroom: {
+    id: 'bedroom', mod: bedroom, styles: BEDROOM_STYLES, byId: BEDROOM_STYLE_BY_ID, kinds: bedroom.KINDS, defaultKind: 'bed',
+    featureWeights: {headType: 1.6, headShape: 1.3, bedBase: 1.2, legType: 0.7, footboard: 0.5, frontStyle: 1.2, pull: 0.6, caseBase: 0.8, caseLayout: 0.8, mirror: 0.5},
+    similarEnums: ['headType', 'headShape', 'bedBase', 'legType', 'frontStyle', 'pull', 'caseBase'], fixedKeys: ['mattressWidth', 'mattressLength', 'rows', 'columns'],
+    normalizeMaterials: normalizeBedroomMaterials,
+    sampleParams(st, kind, r, locks) {
+      const {RANGES, ENUMS, KINDS, MATTRESS} = bedroom, p = {kind};
+      for (const key of Object.keys(ENUMS)) p[key] = st.enums[key] ? r.weighted(st.enums[key]) : r.pick(ENUMS[key]);
+      for (const key of Object.keys(RANGES)) { const [lo, hi] = st.ranges[key] || BEDROOM_SAMPLE_RANGES[key] || RANGES[key]; p[key] = r.range(lo, hi); }
+      p.storage = r.next() < 0.3 ? (p.bedBase === 'baza' || p.bedBase === 'platform' ? 'lift' : 'drawers') : 'none';
+      p.bedding = 'made';
+      if (kind === 'bed') {
+        const size = r.weighted({'160x200': 5, '180x200': 3, '150x200': 2, '140x190': 1, '120x200': 1, '90x190': 1});
+        [p.mattressWidth, p.mattressLength] = MATTRESS[size];
+        p.mattressThickness = r.range(220, 300);
+        if (p.bedBase === 'baza') { p.railHeight = r.range(280, 340); p.legHeight = p.legType === 'hidden' ? r.range(20, 60) : r.range(60, 110); }
+        if (p.headType === 'boiserie' || (p.integratedNight !== 'none')) p.headExtend = Math.max(p.headExtend, r.range(450, 650));
+        if (p.headType === 'channel' && p.headShape === 'scallop') p.channelCount = Math.round(p.scallops * 3);
+        // Keep the mattress top in the comfortable 450–600 mm band (sitting and getting up).
+        const inset = ['frame', 'upholsteredFrame', 'fourPoster'].includes(p.bedBase) ? Math.min(p.railHeight - 60, 120) : 0;
+        const top = () => p.legHeight + p.railHeight + p.mattressThickness - (['frame', 'upholsteredFrame', 'fourPoster'].includes(p.bedBase) ? Math.min(p.railHeight - 60, 120) : 0);
+        const lo = st.id === 'japandi' || st.id === 'wabi_sabi' || st.id === 'muji_modern' ? 400 : 450;
+        for (let i = 0; i < 20 && top() > 600; i++) { if (p.railHeight > 160) p.railHeight -= 20; else p.legHeight = Math.max(0, p.legHeight - 20); }
+        for (let i = 0; i < 20 && top() < lo; i++) p.railHeight += 20;
+        void inset;
+      } else {
+        const k = KINDS[kind];
+        p.width = r.range(...k.width); p.depth = r.range(...k.depth); p.height = r.range(...k.height);
+        if (kind === 'nightstand') { p.rows = r.int(1, 3); p.columns = 1; }
+        else { p.rows = p.height > 1000 ? r.int(5, 6) : r.int(3, 4); p.columns = p.width > 1200 ? r.int(2, 3) : 2; if (p.height > 1000) p.mirror = 'none'; }
+        p.baseHeight = p.caseBase === 'legs' || p.caseBase === 'sled' ? r.range(120, 220) : p.caseBase === 'wall' ? 0 : r.range(40, 90);
+      }
+      Object.assign(p, locks.params || {});
+      return p;
+    },
+    sampleMaterials(st, r) {
+      const m = st.mats, fiber = r.weighted(m.fiber);
+      let color = r.weighted(m.color), color2 = r.pick(['white', 'cream', 'anthracite', 'navy', 'mustard', 'camel']);
+      if (color2 === color) color2 = 'white';
+      const pattern = fiber === 'leather' ? 'none' : r.weighted(m.pattern);
+      const wood = {species: r.weighted(m.species), stain: r.weighted(m.stain), finish: r.weighted(m.finish)};
+      return normalizeBedroomMaterials({
+        fabric: {fiber, weave: 'plain', color, pattern, color2, scale: 1, density: r.int(2, 4)},
+        welt: {color: null}, wood, metal: {finish: r.weighted(m.metal)},
+        case: {surface: r.weighted(m.case), ...wood, color: r.weighted(m.lacquer)},
+        linen: {color: r.pick(['white', 'white', 'cream', 'sand', 'greige'])}
+      });
+    }
   }
 };
+
+/** Sensible sampling ranges for bedroom parameters a style does not set. */
+const BEDROOM_SAMPLE_RANGES = {legHeight: [60, 160], railHeight: [180, 300], border: [40, 140], plinthInset: [100, 200], headHeight: [1050, 1300], headThickness: [80, 130], headExtend: [0, 0], headRadius: [60, 300], scallops: [3, 4], channelCount: [8, 12], tuftSpacing: [160, 210], slatWidth: [45, 80], slatGap: [12, 30], wingDepth: [180, 260], frameWidth: [50, 80], footHeight: [350, 600], postSize: [50, 70], postHeight: [1900, 2100], legSize: [40, 60], legTaper: [0.6, 0.8], nightWidth: [420, 520], topThickness: [18, 30], topOverhang: [0, 15], cornerRadius: [0, 40], graduation: [0.2, 0.6], fluteWidth: [18, 30], mirrorHeight: [700, 1000], mirrorWidth: [0.5, 0.8]};
 
 export const familyOf = d => FAMILIES[d?.family] || FAMILIES.seating;

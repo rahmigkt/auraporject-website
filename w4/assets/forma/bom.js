@@ -2,6 +2,7 @@
 // Build specs are starting suggestions for the designer to confirm, not engineering approval.
 import {buildMesh} from './build.js';
 import {tableBom} from './table.js';
+import {bedroomBom} from './bedroom.js';
 import {bounds} from './mesh.js';
 import {FIBERS, WEAVE_NAMES, PATTERNS, COLORS, WOODS, FINISHES, METALS, STAINS, STONES, GLASS, MOTIF_NAMES, name as nm} from './catalog.js';
 import {yardage} from './textile.js';
@@ -69,6 +70,11 @@ export function bom(compiled, materials, lang = 'tr') {
     const text = slot => slot === 'top' ? surfaceText(materials.top, lang) : slot === 'base' ? surfaceText(materials.base.surface === 'same' ? materials.top : materials.base, lang) : slot === 'metal' ? nm(METALS[materials.base.surface === 'metal' ? materials.base.metal : materials.hardware.metal], lang) : slot === 'dark' ? (lang === 'tr' ? 'Siyah mat' : 'Black matt') : (lang === 'tr' ? 'Huş kontrplak / masif (iç)' : 'Birch ply / solid (internal)');
     return tableBom(compiled, materials, lang, buildMesh, text);
   }
+  if (compiled.family === 'bedroom') {
+    const tr = lang === 'tr';
+    const text = mat => mat === 'case' ? surfaceText(materials.case, lang) : mat === 'fabric' || mat === 'welt' || mat === 'wood' || mat === 'metal' ? materialText(mat, materials, lang) : mat === 'cane' ? (tr ? 'Rattan hasır (Viyana örgüsü)' : 'Rattan cane (Vienna weave)') : mat === 'mirror' ? (tr ? 'Ayna 5 mm' : 'Mirror 5 mm') : mat === 'leather' ? (tr ? 'Deri' : 'Leather') : mat === 'dark' || mat === 'shadow' ? (tr ? 'Siyah mat' : 'Black matt') : (tr ? 'Huş kontrplak / masif (iç)' : 'Birch ply / solid (internal)');
+    return bedroomBom(compiled, materials, lang, buildMesh, text);
+  }
   const groups = new Map();
   let fabricArea = 0, weltLength = 0, buttons = 0;
   for (const part of compiled.parts) {
@@ -96,6 +102,7 @@ export function bomCsv(b) {
   const lines = [head, ...b.rows.map(r => [r.code, r.nameTr, r.nameEn, r.qty, r.size.join(' × '), r.material, r.specTr, r.specEn, r.internal ? 'x' : ''])];
   lines.push([]);
   if (b.totals.fabricAreaM2 !== undefined) lines.push(['Kumaş alanı / Fabric area m²', b.totals.fabricAreaM2], ['Tahmini kumaş (1400 mm top) / Est. fabric (1400 mm roll) m', b.totals.fabricMetres], ['Biye / Welt m', b.totals.weltMetres], ['Düğme / Buttons', b.totals.buttons]);
-  if (b.totals.weightKg !== undefined) lines.push(['Tahmini ağırlık / Est. weight kg', b.totals.weightKg], ['Tabla ağırlığı / Top weight kg', b.totals.topKg], ['Kişi kapasitesi / Seats', b.totals.seats], ['Tabla alanı / Top area m²', b.totals.areaM2]);
+  if (b.totals.weightKg !== undefined && b.totals.topKg !== undefined) lines.push(['Tahmini ağırlık / Est. weight kg', b.totals.weightKg], ['Tabla ağırlığı / Top weight kg', b.totals.topKg], ['Kişi kapasitesi / Seats', b.totals.seats], ['Tabla alanı / Top area m²', b.totals.areaM2]);
+  else if (b.totals.weightKg !== undefined) lines.push(['Tahmini ağırlık / Est. weight kg', b.totals.weightKg], ...(b.totals.mattress ? [['Yatak ölçüsü / Mattress cm', b.totals.mattress]] : []), ...(b.totals.drawers ? [['Çekmece / Drawers', b.totals.drawers]] : []));
   return '﻿' + lines.map(l => l.map(csvCell).join(';')).join('\r\n');
 }
