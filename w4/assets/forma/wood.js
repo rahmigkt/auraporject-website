@@ -1,13 +1,14 @@
 // Procedural wood maps: species colour, growth rings, rays and figure; finish sets gloss.
 // Grain runs along v (texture height). Tile represents 300 × 600 mm of board.
-import {WOODS, FINISHES} from './catalog.js';
+import {WOODS, FINISHES, STAINS} from './catalog.js';
 import {fbm, valueNoise, clamp} from './rng.js';
 import {normalFromHeight} from './textile.js';
 
 const hex = h => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
 
-export function woodMaps(species, finish, {w = 512, h = 1024} = {}) {
-  const S = WOODS[species] || WOODS.oak, Fi = FINISHES[finish] || FINISHES.oil;
+export function woodMaps(species, finish, {w = 512, h = 1024, stain = 'natural'} = {}) {
+  const S = WOODS[species] || WOODS.gurgen, Fi = FINISHES[finish] || FINISHES.matte, St = STAINS[stain] || STAINS.natural;
+  const stainRgb = St.hex ? hex(St.hex) : null, baseLum = (hex(S.base)[0] + hex(S.base)[1] + hex(S.base)[2]) / 3;
   const base = hex(S.base), grain = hex(S.grain);
   const albedo = new Uint8ClampedArray(w * h * 4), rough = new Uint8ClampedArray(w * h * 4), height = new Float32Array(w * h);
   // Height field must be square for normalFromHeight; we compute the normal on a w×h grid with our own loop below.
@@ -25,6 +26,10 @@ export function woodMaps(species, finish, {w = 512, h = 1024} = {}) {
     const t = clamp(late * 0.7 + pores + (fbm(u * 8, v * 2, seed + 5, 3, 8) - 0.5) * 0.25, 0, 1);
     const k = (y * w + x) * 4;
     for (let c = 0; c < 3; c++) albedo[k + c] = clamp(base[c] + (grain[c] - base[c]) * t + ray * 40, 0, 255);
+    if (stainRgb) { // stain or paint over the timber: colour changes, grain still reads through
+      const lum = (albedo[k] + albedo[k + 1] + albedo[k + 2]) / 3 / baseLum, g = clamp(0.62 + 0.4 * lum, 0.55, 1.25);
+      for (let c = 0; c < 3; c++) albedo[k + c] = clamp(albedo[k + c] + (stainRgb[c] * g - albedo[k + c]) * St.k, 0, 255);
+    }
     albedo[k + 3] = 255;
     height[y * w + x] = 1 - late * 0.6 - pores * 2;
     rough[k] = rough[k + 1] = rough[k + 2] = clamp(Fi.rough + pores * 1.2 + late * 0.05, 0.04, 1) * 255; rough[k + 3] = 255;

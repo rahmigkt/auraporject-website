@@ -1,10 +1,15 @@
-// AURA Forma seating studio: style → diverse proposals → part/dimension/material editing → designer package.
-import {compile, validate, RANGES, ENUMS} from './sofa.js';
+// AURA Forma design studio: family → style → diverse proposals → parts / dimensions / materials → designer package.
+// Families: seating (sofa, loveseat, armchair) and tables (dining, coffee, side, console, desk).
 import {sample, variants, similar, blend, normalizeDesign, SCHEMA} from './generate.js';
-import {STYLES, STYLE_BY_ID, styleName, KINDS} from './styles.js';
-import {COLORS, FIBERS, WEAVES, WEAVE_NAMES, PATTERNS, WOODS, FINISHES, METALS, name as nm} from './catalog.js';
+import {FAMILIES, familyOf} from './families.js';
+import {buildMesh} from './build.js';
+import {styleName} from './styles.js';
+import {COLORS, FIBERS, WEAVES, WEAVE_NAMES, PATTERNS, MOTIF_CHOICES, MOTIF_NAMES, WOODS, FINISHES, STAINS, METALS, STONES, GLASS, SURFACES, colorGroup, name as nm} from './catalog.js';
 import {draft, fabricMaps} from './textile.js';
-import {parse, SPEECH_LANG} from './commands.js';
+import {stoneMaps} from './stone.js';
+import {woodMaps} from './wood.js';
+import {parse} from './commands.js';
+import {startVoice} from './voice.js';
 import {aiStatus, interpret, designFromImage} from './ai.js';
 import {drawingSheet, drawingDxf} from './drawing.js';
 import {bom, bomCsv} from './bom.js';
@@ -22,23 +27,56 @@ const state = {
   design: null, compiled: null, history: [], future: [], tab: 'style', proposals: [], round: 1, picked: [], structure: false, ai: {available: false, vision: false}, avoid: []
 };
 const L = k => t(k, state.lang);
+const N = entry => nm(entry, state.lang);
 let viewer = null;
 
+const compileOf = d => familyOf(d).mod.compile({...d.params, kind: d.kind});
+const issuesOf = (d, c) => d.family === 'table' ? familyOf(d).mod.validate(c, d.materials, buildMesh) : familyOf(d).mod.validate(c);
+const isTable = () => state.design.family === 'table';
+
 // ---- Design state --------------------------------------------------------------
-function setDesign(next, {record = true, keepPanel = false, quiet = false} = {}) {
+function setDesign(next, {record = true, keepPanel = false} = {}) {
   next = normalizeDesign(next);
   if (record && state.design) { state.history.push(state.design); if (state.history.length > 80) state.history.shift(); state.future = []; }
-  state.design = next; state.compiled = compile(next.params);
+  const familyChanged = state.design && state.design.family !== next.family;
+  state.design = next; state.compiled = compileOf(next);
   viewer?.setDesign(state.compiled, next.materials);
-  store.set('aura-forma-design', next);
+  store.set('aura-forma-design-' + next.family, next); store.set('aura-forma-family', next.family);
+  state.drawingCache = null;
+  if (familyChanged) { state.proposals = []; state.picked = []; shellNav(); }
   renderCaption();
   if (!keepPanel) renderPanel(); else refreshReadouts();
-  if (!quiet) state.drawingCache = null;
 }
 const undo = () => { if (!state.history.length) return; state.future.push(state.design); setDesign(state.history.pop(), {record: false}); };
 const redo = () => { if (!state.future.length) return; state.history.push(state.design); setDesign(state.future.pop(), {record: false}); };
 const withParams = patch => ({...state.design, params: {...state.design.params, ...patch}});
 const withMaterial = (slot, patch) => ({...state.design, materials: {...state.design.materials, [slot]: {...state.design.materials[slot], ...patch}}});
+
+// ---- Family-specific presentation ------------------------------------------------------
+const UI = {
+  seating: {
+    brand: 'VEREV', kinds: ['sofa', 'loveseat', 'armchair'],
+    styleSub: s => Object.keys(s.enums.armType).slice(0, 2).map(a => partName('armType', a, state.lang)).join(' · '),
+    card: d => [`${partName('armType', d.params.armType, state.lang)} · ${partName('backType', d.params.backType, state.lang)} · ${partName('baseType', d.params.baseType, state.lang)}`, `${d.params.width} × ${d.params.depth} · ${N(COLORS[d.materials.fabric.color])} ${N(FIBERS[d.materials.fabric.fiber]).toLowerCase()}${d.materials.fabric.pattern !== 'none' ? ' · ' + N(PATTERNS[d.materials.fabric.pattern]).toLowerCase() : ''}`],
+    dims: c => `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height} mm · ${L('seatHeightL')} ${c.params.seatHeight} mm`,
+    readout: m => [[L('seatDepth'), `${m.seatDepth} mm`], [L('innerWidth'), `${m.innerWidth} mm`], [L('seatWidth'), `${m.seatWidthEach} mm`]]
+  },
+  table: {
+    brand: 'MASİF', kinds: ['dining', 'coffee', 'side', 'console', 'desk'],
+    styleSub: s => Object.keys(s.enums.baseType).slice(0, 2).map(a => partName('tBaseType', a, state.lang)).join(' · '),
+    card: d => [`${partName('topShape', d.params.topShape, state.lang)} · ${partName('tBaseType', d.params.baseType, state.lang)}`, `${d.params.length} × ${d.params.width} · ${surfaceShort(d.materials.top)}`],
+    dims: c => `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height} mm${c.meta.seats ? ` · ${c.meta.seats} ${L('persons')}` : ''}${c.meta.extendedLength ? ` · ↔ ${c.meta.extendedLength} mm` : ''}`,
+    readout: m => [[L('knee'), `${m.knee} mm`], ...(m.seats ? [[L('persons'), String(m.seats)]] : []), [L('weight'), `~${weightOf()} kg`]]
+  }
+};
+const ui = () => UI[state.design.family];
+function surfaceShort(s) {
+  if (s.surface === 'stone') return N(STONES[s.stone]); if (s.surface === 'glass') return N(GLASS[s.glass]);
+  if (s.surface === 'lacquer') return `${N(SURFACES.lacquer)} · ${N(COLORS[s.color])}`;
+  return `${N(WOODS[s.species])}${s.stain !== 'natural' ? ' · ' + N(STAINS[s.stain]) : ''}`;
+}
+function weightOf() { try { return bomOf().totals.weightKg; } catch { return '—'; } }
+const bomOf = () => deliverables().bom;
 
 // ---- Layout --------------------------------------------------------------------------
 function shell() {
@@ -47,7 +85,7 @@ function shell() {
   $('#app').innerHTML = `
   <header class="f-header">
     <a class="f-brand" href="index.html?lang=${state.lang}">AURA<small>PROJECT / STUDIO</small></a>
-    <p class="f-header-title">VEREV · ${esc(L('title')).toUpperCase()}</p>
+    <nav class="f-families" id="families" aria-label="${esc(L('title'))}"></nav>
     <label class="f-lang"><span class="sr">Language</span><select id="lang">${Object.entries(UI_LANGS).map(([k, v]) => `<option value="${k}" ${k === state.lang ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
   </header>
   <main class="f-layout">
@@ -74,110 +112,167 @@ function shell() {
       <div class="f-filebar"><button id="saveBtn">${L('save')} ↓</button><button id="openBtn">${L('open')} ↑</button><input id="openFile" type="file" accept=".json,application/json" hidden></div>
     </aside>
   </main>`;
-  viewer?.dispose();
+  viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  // three.js is loaded lazily so the panel works even if WebGL fails.
-  import('./scene.js?v=20261016a').then(({createViewer}) => {
+  import('./scene.js?v=20261016c').then(({createViewer}) => {
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else viewer.setDesign(state.compiled, state.design.materials);
   }).catch(() => { host.innerHTML = '<p class="f-nogl">WebGL</p>'; });
-  bindShell();
+  bindShell(); shellNav();
   renderCaption(); renderPanel();
+}
+function shellNav() {
+  $('#families').innerHTML = [['seating', 'famSeating'], ['table', 'famTable']].map(([f, k]) => `<button data-family="${f}" aria-pressed="${state.design.family === f}">${esc(L(k))}</button>`).join('');
 }
 
 function renderCaption() {
-  const d = state.design, c = state.compiled, issues = validate(c);
-  $('#eyebrow').textContent = `AURA · VEREV · ${styleName(d.style, state.lang).toUpperCase()}`;
-  $('#designTitle').textContent = `${L(c.meta.kind)} · F-${String(d.seed % 100000).padStart(5, '0')}`;
-  $('#dims').textContent = `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height} mm · ${L('seatHeightL')} ${c.params.seatHeight} mm`;
+  const d = state.design, c = state.compiled, issues = issuesOf(d, c);
+  $('#eyebrow').textContent = `AURA · ${ui().brand} · ${styleName(d.style, state.lang).toUpperCase()}`;
+  $('#designTitle').textContent = `${L(d.family === 'table' ? d.kind : c.meta.kind)} · F-${String(d.seed % 100000).padStart(5, '0')}`;
+  $('#dims').textContent = ui().dims(c);
   const err = issues.filter(i => i.level === 'error'), warn = issues.filter(i => i.level === 'warn');
   const st = $('#status');
   st.dataset.level = err.length ? 'error' : warn.length ? 'warn' : 'ok';
   st.textContent = err.length || warn.length ? [...err, ...warn].map(i => L('issues.' + i.code)).join(' · ') : L('ok');
   $('#undoBtn').disabled = !state.history.length; $('#redoBtn').disabled = !state.future.length;
 }
-
 function feedback(text, level = 'info') { const f = $('#feedback'); f.textContent = text; f.dataset.level = level; }
 
 // ---- Panels ---------------------------------------------------------------------------
 function renderPanel() {
   for (const b of document.querySelectorAll('[data-tab]')) b.setAttribute('aria-selected', String(b.dataset.tab === state.tab));
-  const p = $('#panel');
-  p.innerHTML = {style: stylePanel, ideas: ideasPanel, parts: partsPanel, size: sizePanel, material: materialPanel, deliver: deliverPanel}[state.tab]();
+  $('#panel').innerHTML = {style: stylePanel, ideas: ideasPanel, parts: partsPanel, size: sizePanel, material: materialPanel, deliver: deliverPanel}[state.tab]();
   if (state.tab === 'ideas') drawThumbnails();
   if (state.tab === 'material') drawMaterialPreviews();
   if (state.tab === 'deliver') drawDeliverables();
 }
-
 const chip = (attrs, label, on, extra = '') => `<button class="f-chip" ${attrs} aria-pressed="${on}" ${extra}>${esc(label)}</button>`;
 
 function stylePanel() {
-  const d = state.design;
+  const d = state.design, fam = familyOf(d);
   return `<h2>${L('chooseStyle')}</h2><p class="f-lead">${L('styleHint')}</p>
-  <h3>${L('kind')}</h3><div class="f-seg">${Object.keys(KINDS).map(k => chip(`data-kind="${k}"`, L(k), d.kind === k)).join('')}</div>
-  <div class="f-styles">${STYLES.map(s => `<button class="f-style" data-style="${s.id}" aria-pressed="${d.style === s.id}" ${state.avoid.includes(s.id) ? 'data-avoid="1"' : ''}><b>${esc(styleName(s.id, state.lang))}</b><small>${esc(Object.keys(s.enums.armType).slice(0, 2).map(a => partName('armType', a, state.lang)).join(' · '))}</small></button>`).join('')}</div>
+  <h3>${L('kind')}</h3><div class="f-seg">${ui().kinds.map(k => chip(`data-kind="${k}"`, L(k), d.kind === k)).join('')}</div>
+  <div class="f-styles">${fam.styles.map(s => `<button class="f-style" data-style="${s.id}" aria-pressed="${d.style === s.id}" ${state.avoid.includes(s.id) ? 'data-avoid="1"' : ''}><b>${esc(styleName(s.id, state.lang))}</b><small>${esc(ui().styleSub(s))}</small></button>`).join('')}</div>
   <div class="f-actions"><button class="f-primary" id="generateBtn">${L('generate')} →</button>
-  <label class="f-secondary" id="imageLabel">${L('fromImage')} ↑<input id="imageFile" type="file" accept="image/jpeg,image/png,image/webp" hidden></label></div>
-  <p class="f-note">${L('imageHint')}${state.ai.vision ? '' : ' ' + L('aiOff')}</p>`;
+  ${d.family === 'seating' ? `<label class="f-secondary" id="imageLabel">${L('fromImage')} ↑<input id="imageFile" type="file" accept="image/jpeg,image/png,image/webp" hidden></label>` : ''}</div>
+  ${d.family === 'seating' ? `<p class="f-note">${L('imageHint')}${state.ai.vision ? '' : ' ' + L('aiOff')}</p>` : ''}`;
 }
 
 function ideasPanel() {
-  if (!state.proposals.length) state.proposals = variants({style: state.design.style, kind: state.design.kind, round: state.round});
+  const d = state.design;
+  if (!state.proposals.length) state.proposals = variants({family: d.family, style: d.style, kind: d.kind, round: state.round});
   return `<h2>${L('tabIdeas')}</h2><p class="f-lead">${L('ideasHint')}</p>
   <div class="f-actions"><button class="f-secondary" id="roundBtn">↻ ${L('newRound')}</button><button class="f-secondary" id="similarBtn">≈ ${L('similar')}</button><button class="f-secondary" id="blendBtn" ${state.picked.length === 2 ? '' : 'disabled'}>⊕ ${L('blend')}</button></div>
   <p class="f-note">${L('blendHint')}</p>
-  <div class="f-cards">${state.proposals.map((d, i) => `<div class="f-card" data-card="${i}" aria-current="${d.seed === state.design.seed}"><button class="f-card-main" data-load="${i}"><span class="f-thumb" id="thumb${i}"></span><span class="f-card-text">${esc(partName('armType', d.params.armType, state.lang))} · ${esc(partName('backType', d.params.backType, state.lang))} · ${esc(partName('baseType', d.params.baseType, state.lang))}<small>${d.params.width} × ${d.params.depth} · ${esc(nm(COLORS[d.materials.fabric.color], state.lang))} ${esc(nm(FIBERS[d.materials.fabric.fiber], state.lang).toLowerCase())}</small></span></button><label class="f-pick"><input type="checkbox" data-pick="${i}" ${state.picked.includes(i) ? 'checked' : ''}><span class="sr">${L('blend')}</span></label></div>`).join('')}</div>`;
+  <div class="f-cards">${state.proposals.map((p, i) => { const [a, b] = ui().card(p); return `<div class="f-card" data-card="${i}" aria-current="${p.seed === d.seed}"><button class="f-card-main" data-load="${i}"><span class="f-thumb" id="thumb${i}"></span><span class="f-card-text">${esc(a)}<small>${esc(b)}</small></span></button><label class="f-pick"><input type="checkbox" data-pick="${i}" ${state.picked.includes(i) ? 'checked' : ''}><span class="sr">${L('blend')}</span></label></div>`; }).join('')}</div>`;
 }
 
-function enumGroup(key, labelKey, options = ENUMS[key]) {
-  return `<h3>${L(labelKey)}</h3><div class="f-chips">${options.map(v => chip(`data-enum="${key}" data-value="${v}"`, partName(key, v, state.lang), state.design.params[key] === v)).join('')}</div>`;
+function enumGroup(key, labelKey, ns = key, options = familyOf(state.design).mod.ENUMS[key]) {
+  return `<h3>${L(labelKey)}</h3><div class="f-chips">${options.map(v => chip(`data-enum="${key}" data-value="${v}"`, partName(ns, v, state.lang), state.design.params[key] === v)).join('')}</div>`;
 }
+const counter = (key, label, values) => `<h3>${L(label)}</h3><div class="f-seg">${values.map(n => chip(`data-count="${key}" data-value="${n}"`, String(n), state.design.params[key] === n)).join('')}</div>`;
 
 function partsPanel() {
-  const p = state.design.params, legs = ['legs', 'frame'].includes(p.baseType);
-  return `<h2>${L('tabParts')}</h2>
-  ${enumGroup('armType', 'arm')}${enumGroup('backType', 'back')}${enumGroup('seatType', 'seat')}
-  <h3>${L('seats')}</h3><div class="f-seg">${[1, 2, 3, 4].map(n => chip(`data-seats="${n}"`, String(n), p.seatCount === n)).join('')}</div>
-  ${enumGroup('cushionEdge', 'cushionEdge')}${enumGroup('baseType', 'base')}${legs ? enumGroup('legType', 'legType') : ''}${enumGroup('welt', 'welt')}
-  <h3>${L('pillows')}</h3><div class="f-seg">${[0, 1, 2, 3, 4].map(n => chip(`data-pillows="${n}"`, String(n), p.pillows === n)).join('')}</div>`;
+  const p = state.design.params;
+  if (!isTable()) {
+    const legs = ['legs', 'frame'].includes(p.baseType);
+    return `<h2>${L('tabParts')}</h2>${enumGroup('armType', 'arm')}${enumGroup('backType', 'back')}${enumGroup('seatType', 'seat')}${counter('seatCount', 'seats', [1, 2, 3, 4])}
+    ${enumGroup('cushionEdge', 'cushionEdge')}${enumGroup('baseType', 'base')}${legs ? enumGroup('legType', 'legType') : ''}${enumGroup('welt', 'welt')}${counter('pillows', 'pillows', [0, 1, 2, 3, 4])}`;
+  }
+  const k = state.design.kind, legBases = ['legsApron', 'legsOnly', 'trestle', 'tripod'].includes(p.baseType);
+  return `<h2>${L('tabParts')}</h2>${enumGroup('topShape', 'topShape')}${enumGroup('edge', 'edge')}${enumGroup('baseType', 'baseType', 'tBaseType')}
+  ${legBases ? enumGroup('legType', 'legType', 'legTypeT') : ''}${['pedestal', 'doublePedestal'].includes(p.baseType) ? enumGroup('pedestalType', 'pedestalType') : ''}
+  ${['legsApron', 'legsOnly'].includes(p.baseType) ? enumGroup('stretcher', 'stretcher') : ''}
+  ${['coffee', 'side', 'console'].includes(k) && !['pedestal', 'doublePedestal', 'tripod', 'drum'].includes(p.baseType) ? enumGroup('shelf', 'shelf') : ''}
+  ${['console', 'desk', 'side', 'coffee'].includes(k) && p.baseType === 'legsApron' ? counter('drawers', 'drawers', [0, 1, 2, 3, 4]) + (p.drawers ? enumGroup('drawerPull', 'drawerPull') : '') : ''}
+  ${k === 'desk' ? enumGroup('backPanel', 'backPanel', 'stretcher', ['none', 'panel']).replace(/>panel</, `>${esc(L('backPanel'))}<`) : ''}
+  ${k === 'dining' && !['round', 'boat'].includes(p.topShape) && !['pedestal', 'drum', 'tripod'].includes(p.baseType) ? counter('leaves', 'leaves', [0, 1, 2]) + (p.leaves ? `<div class="f-actions"><button class="f-secondary" data-enum="extended" data-value="${p.extended === 'open' ? 'closed' : 'open'}" aria-pressed="${p.extended === 'open'}">↔ ${L('showOpen')}</button></div>` : '') : ''}`;
 }
 
-const SIZE_GROUPS = d => {
-  const p = d.params, g = [['general', ['width', 'depth', 'height', 'seatHeight']]];
-  if (p.armType !== 'none') g.push(['arm', ['armHeight', 'armWidth', ...(p.armType === 'wood' ? [] : ['armTop', 'armFlare', 'armSlope']), 'armSet']]);
-  g.push(['back', ['backRake', 'backThickness', ...(p.backType === 'camel' ? ['camel'] : []), ...(p.backType === 'channel' ? ['channelCount'] : []), ...(p.backType === 'tufted' ? ['tuftSpacing'] : [])]]);
-  g.push(['cushions', ['cushionThickness', 'cushionCrown']]);
-  g.push(['base', ['legHeight', ...(['legs', 'frame', 'sled'].includes(p.baseType) ? ['legSize'] : []), ...(['legs', 'frame'].includes(p.baseType) ? ['legTaper', 'legSplay', 'legInset'] : [])]]);
+const UNIT = {armTop: '', armFlare: '', armSlope: '', legTaper: '', backRake: '°', channelCount: '', seatCount: '', shapeN: '', boatBow: '', footSpread: '', legSplay: '°'};
+function sizeGroups() {
+  const d = state.design, p = d.params;
+  if (!isTable()) {
+    const g = [['general', ['width', 'depth', 'height', 'seatHeight']]];
+    if (p.armType !== 'none') g.push(['arm', ['armHeight', 'armWidth', ...(p.armType === 'wood' ? [] : ['armTop', 'armFlare', 'armSlope']), 'armSet']]);
+    g.push(['back', ['backRake', 'backThickness', ...(p.backType === 'camel' ? ['camel'] : []), ...(p.backType === 'channel' ? ['channelCount'] : []), ...(p.backType === 'tufted' ? ['tuftSpacing'] : [])]]);
+    g.push(['cushions', ['cushionThickness', 'cushionCrown']]);
+    g.push(['base', ['legHeight', ...(['legs', 'frame', 'sled'].includes(p.baseType) ? ['legSize'] : []), ...(['legs', 'frame'].includes(p.baseType) ? ['legTaper', 'legSplay', 'legInset'] : [])]]);
+    return g;
+  }
+  const bt = p.baseType, g = [['general', ['length', ...(p.topShape === 'round' ? [] : ['width']), 'height'].filter(Boolean)]];
+  g.push(['topShape', ['topThickness', ...(['rounded', 'boat'].includes(p.topShape) ? ['cornerRadius'] : []), ...(p.topShape === 'superellipse' ? ['shapeN'] : []), ...(p.topShape === 'boat' ? ['boatBow'] : []), 'edgeSize', 'overhang', 'sideOverhang']]);
+  const base = [];
+  if (['legsApron', 'legsOnly', 'trestle', 'tripod'].includes(bt)) base.push('legSize', 'legTaper', 'legSplay');
+  if (bt === 'legsApron') base.push('apronHeight', 'apronThickness', 'apronSetback');
+  if (p.stretcher !== 'none' || bt === 'trestle') base.push('stretcherHeight');
+  if (['pedestal', 'doublePedestal'].includes(bt)) base.push('columnSize', 'footSpread');
+  if (bt === 'slabEnds') base.push('panelThickness');
+  if (['sled', 'xBase', 'hairpin'].includes(bt)) base.push('tubeSize');
+  if (p.shelf !== 'none') base.push('shelfHeight', 'shelfThickness');
+  if (p.leaves) base.push('leafLength');
+  g.push(['baseType', base]);
   return g;
-};
-const UNIT = {armTop: '', armFlare: '', armSlope: '', legTaper: '', backRake: '°', channelCount: '', seatCount: ''};
-
+}
 function sizePanel() {
-  const p = state.design.params, m = state.compiled.meta;
-  return `<h2>${L('tabSize')}</h2>${SIZE_GROUPS(state.design).map(([g, keys]) => `<h3>${L(g)}</h3>${keys.map(k => { const [lo, hi, step] = RANGES[k], u = UNIT[k] ?? 'mm'; return `<div class="f-slider"><label for="r-${k}">${esc(partName('params', k, state.lang))}</label><input type="range" id="r-${k}" data-param="${k}" min="${lo}" max="${hi}" step="${step}" value="${p[k]}"><span class="f-num"><input type="number" data-num="${k}" min="${lo}" max="${hi}" step="${step}" value="${p[k]}" aria-label="${esc(partName('params', k, state.lang))}">${u}</span></div>`; }).join('')}`).join('')}
-  <h3>${L('derived')}</h3><dl class="f-readout" id="readout">${readout(m)}</dl>`;
+  const fam = familyOf(state.design), p = state.design.params;
+  return `<h2>${L('tabSize')}</h2>${sizeGroups().map(([g, keys]) => keys.length ? `<h3>${L(g)}</h3>${keys.map(k => { const [lo, hi, step] = fam.mod.RANGES[k], u = UNIT[k] ?? 'mm'; return `<div class="f-slider"><label for="r-${k}">${esc(partName('params', k, state.lang))}</label><input type="range" id="r-${k}" data-param="${k}" min="${lo}" max="${hi}" step="${step}" value="${p[k]}"><span class="f-num"><input type="number" data-num="${k}" min="${lo}" max="${hi}" step="${step}" value="${p[k]}" aria-label="${esc(partName('params', k, state.lang))}">${u}</span></div>`; }).join('')}` : '').join('')}
+  <h3>${L('derived')}</h3><dl class="f-readout" id="readout">${readout()}</dl>`;
 }
-function readout(m) { return `<dt>${L('seatDepth')}</dt><dd>${m.seatDepth} mm</dd><dt>${L('innerWidth')}</dt><dd>${m.innerWidth} mm</dd><dt>${L('seatWidth')}</dt><dd>${m.seatWidthEach} mm</dd>`; }
-function refreshReadouts() { const r = $('#readout'); if (r) r.innerHTML = readout(state.compiled.meta); for (const i of document.querySelectorAll('[data-num]')) if (document.activeElement !== i) i.value = state.design.params[i.dataset.num]; }
+const readout = () => ui().readout(state.compiled.meta).map(([a, b]) => `<dt>${esc(a)}</dt><dd>${esc(b)}</dd>`).join('');
+function refreshReadouts() { const r = $('#readout'); if (r) r.innerHTML = readout(); for (const i of document.querySelectorAll('[data-num]')) if (document.activeElement !== i) i.value = state.design.params[i.dataset.num]; }
 
-function swatches(attr, current, includeNone = false) {
-  return `<div class="f-swatches">${includeNone ? `<button class="f-swatch f-swatch-none" ${attr}="" aria-pressed="${!current}" title="${esc(L('sameAsFabric'))}">∅</button>` : ''}${Object.entries(COLORS).map(([k, c]) => `<button class="f-swatch" ${attr}="${k}" style="--c:${c.hex}" aria-pressed="${current === k}" title="${esc(nm(c, state.lang))}"><span class="sr">${esc(nm(c, state.lang))}</span></button>`).join('')}</div>`;
+function swatches(attr, current, {includeNone = false, groups = true} = {}) {
+  const sw = keys => keys.map(k => `<button class="f-swatch" ${attr}="${k}" style="--c:${COLORS[k].hex}" aria-pressed="${current === k}" title="${esc(N(COLORS[k]))}"><span class="sr">${esc(N(COLORS[k]))}</span></button>`).join('');
+  const market = Object.keys(COLORS).filter(k => colorGroup(k) === 'market'), heritage = Object.keys(COLORS).filter(k => colorGroup(k) !== 'market');
+  return `${includeNone ? `<div class="f-swatches"><button class="f-swatch f-swatch-none" ${attr}="" aria-pressed="${!current}" title="${esc(L('sameAsFabric'))}">∅</button></div>` : ''}
+  ${groups ? `<p class="f-sub">${L('marketColors')}</p>` : ''}<div class="f-swatches">${sw(market)}</div>${groups ? `<p class="f-sub">${L('heritageColors')}</p><div class="f-swatches">${sw(heritage)}</div>` : ''}`;
 }
+const woodChips = (slot, w) => `<div class="f-chips">${Object.keys(WOODS).map(k => `<button class="f-chip f-wood" data-mat="${slot}.species" data-value="${k}" aria-pressed="${w.species === k}" style="--c:${WOODS[k].base}">${esc(N(WOODS[k]))}</button>`).join('')}</div>`;
+const stainChips = (slot, w) => `<div class="f-chips">${Object.keys(STAINS).map(k => `<button class="f-chip f-wood" data-mat="${slot}.stain" data-value="${k}" aria-pressed="${w.stain === k}" style="--c:${STAINS[k].hex || WOODS[w.species]?.base || '#d9b48f'}">${esc(N(STAINS[k]))}</button>`).join('')}</div>`;
+const finishChips = (slot, w) => `<div class="f-chips">${Object.keys(FINISHES).map(k => chip(`data-mat="${slot}.finish" data-value="${k}"`, N(FINISHES[k]), w.finish === k)).join('')}</div>`;
+const metalChips = (attr, cur) => `<div class="f-chips">${Object.keys(METALS).map(k => `<button class="f-chip f-wood" ${attr} data-value="${k}" aria-pressed="${cur === k}" style="--c:${METALS[k].hex}">${esc(N(METALS[k]))}</button>`).join('')}</div>`;
 
-function materialPanel() {
-  const m = state.design.materials, f = m.fabric, F = FIBERS[f.fiber];
+function materialPanel() { return isTable() ? tableMaterialPanel() : seatingMaterialPanel(); }
+
+function seatingMaterialPanel() {
+  const m = state.design.materials, f = m.fabric, F = FIBERS[f.fiber], canPattern = f.fiber !== 'leather';
+  const motifs = MOTIF_CHOICES[f.pattern];
   return `<h2>${L('tabMaterial')}</h2>
-  <div class="f-fabric-preview"><canvas id="fabricPreview" width="320" height="320" aria-label="${esc(L('fabric'))}"></canvas><div><p class="f-eyebrow">${L('fabric')}</p><p class="f-fabric-name">${esc(nm(F, state.lang))}${F.weave ? ' · ' + esc(nm(WEAVE_NAMES[f.weave], state.lang)) : ''}<br>${esc(nm(COLORS[f.color], state.lang))}${f.pattern !== 'none' ? ' · ' + esc(nm(PATTERNS[f.pattern], state.lang)) : ''}</p><p class="f-note" id="tileNote"></p></div></div>
-  <h3>${L('fiber')}</h3><div class="f-chips">${Object.keys(FIBERS).map(k => chip(`data-mat="fabric.fiber" data-value="${k}"`, nm(FIBERS[k], state.lang), f.fiber === k)).join('')}</div>
-  ${F.weave ? `<h3>${L('weave')}</h3><div class="f-weaves">${Object.keys(WEAVES).map(k => `<button class="f-weave" data-mat="fabric.weave" data-value="${k}" aria-pressed="${f.weave === k}"><canvas data-draft="${k}" width="64" height="64"></canvas><span>${esc(nm(WEAVE_NAMES[k], state.lang))}</span></button>`).join('')}</div><p class="f-note">${L('weaveNote')}</p>` : ''}
-  ${F.weave ? `<h3>${L('pattern')}</h3><div class="f-chips">${Object.keys(PATTERNS).map(k => chip(`data-mat="fabric.pattern" data-value="${k}"`, nm(PATTERNS[k], state.lang), f.pattern === k)).join('')}</div>` : ''}
-  <h3>${L('color')}</h3>${swatches('data-color="fabric.color" data-value', f.color)}
-  ${f.pattern !== 'none' ? `<h3>${L('color2')}</h3>${swatches('data-color="fabric.color2" data-value', f.color2)}<div class="f-slider"><label for="r-scale">${L('scale')}</label><input type="range" id="r-scale" data-fabric-scale min="0.5" max="3" step="0.1" value="${f.scale}"><span class="f-num">${f.scale}×</span></div>` : ''}
-  ${state.design.params.welt !== 'none' || state.design.params.pillows ? `<h3>${L('weltColor')}</h3>${swatches('data-color="welt.color" data-value', m.welt.color, true)}` : ''}
-  <h3>${L('wood')}</h3><div class="f-chips">${Object.keys(WOODS).map(k => `<button class="f-chip f-wood" data-mat="wood.species" data-value="${k}" aria-pressed="${m.wood.species === k}" style="--c:${WOODS[k].base}">${esc(nm(WOODS[k], state.lang))}</button>`).join('')}</div>
-  <h3>${L('finish')}</h3><div class="f-chips">${Object.keys(FINISHES).map(k => chip(`data-mat="wood.finish" data-value="${k}"`, nm(FINISHES[k], state.lang), m.wood.finish === k)).join('')}</div>
-  <h3>${L('metal')}</h3><div class="f-chips">${Object.keys(METALS).map(k => `<button class="f-chip f-wood" data-mat="metal.finish" data-value="${k}" aria-pressed="${m.metal.finish === k}" style="--c:${METALS[k].hex}">${esc(nm(METALS[k], state.lang))}</button>`).join('')}</div>`;
+  <div class="f-fabric-preview"><canvas id="fabricPreview" width="320" height="320" aria-label="${esc(L('fabric'))}"></canvas><div><p class="f-eyebrow">${L('fabric')}</p><p class="f-fabric-name">${esc(N(F))}${F.weave ? ' · ' + esc(N(WEAVE_NAMES[f.weave])) : ''}<br>${esc(N(COLORS[f.color]))}${f.pattern !== 'none' ? ' · ' + esc(N(PATTERNS[f.pattern])) + (f.motif ? ' (' + esc(N(MOTIF_NAMES[f.motif])) + ')' : '') : ''}</p><p class="f-note" id="tileNote"></p></div></div>
+  <h3>1 · ${L('fiber')}</h3><div class="f-chips">${Object.keys(FIBERS).map(k => chip(`data-mat="fabric.fiber" data-value="${k}"`, N(FIBERS[k]), f.fiber === k)).join('')}</div>
+  ${F.weave ? `<h3>${L('weave')}</h3><div class="f-weaves">${Object.keys(WEAVES).map(k => `<button class="f-weave" data-mat="fabric.weave" data-value="${k}" aria-pressed="${f.weave === k}"><canvas data-draft="${k}" width="64" height="64"></canvas><span>${esc(N(WEAVE_NAMES[k]))}</span></button>`).join('')}</div><p class="f-note">${L('weaveNote')}</p>` : ''}
+  <h3>2 · ${L('color')}</h3>${swatches('data-color="fabric.color" data-value', f.color)}
+  ${canPattern ? `<h3>3 · ${L('pattern')}</h3><div class="f-chips">${Object.keys(PATTERNS).map(k => chip(`data-mat="fabric.pattern" data-value="${k}"`, N(PATTERNS[k]), f.pattern === k)).join('')}</div>` : ''}
+  ${motifs ? `<h3>${L('motif')}</h3><div class="f-chips">${motifs.map(k => chip(`data-mat="fabric.motif" data-value="${k}"`, N(MOTIF_NAMES[k]), f.motif === k)).join('')}</div>` : ''}
+  ${canPattern && f.pattern !== 'none' ? `<h3>4 · ${L('density')}</h3><div class="f-slider"><label for="r-density">${L('sparse')} ↔ ${L('dense')}</label><input type="range" id="r-density" data-fabric-density min="1" max="6" step="1" value="${f.density}"><span class="f-num">${f.density} / 6</span></div>
+  <h3>${L('color2')}</h3>${swatches('data-color="fabric.color2" data-value', f.color2)}` : ''}
+  ${state.design.params.welt !== 'none' || state.design.params.pillows ? `<h3>${L('weltColor')}</h3>${swatches('data-color="welt.color" data-value', m.welt.color, {includeNone: true, groups: false})}` : ''}
+  <h3>${L('wood')} · ${esc(N(WOODS[m.wood.species]))}</h3><p class="f-note">${L('woodNote')}</p>
+  <h3>${L('stain')}</h3>${stainChips('wood', m.wood)}
+  <h3>${L('finish')}</h3>${finishChips('wood', m.wood)}
+  <h3>${L('metal')}</h3>${metalChips('data-mat="metal.finish"', m.metal.finish)}`;
+}
+
+function surfaceOptions(slot, s, base = false) {
+  if (s.surface === 'wood' || s.surface === 'veneer') return `<h3>${L('wood')}</h3>${woodChips(slot, s)}<h3>${L('stain')}</h3>${stainChips(slot, s)}<h3>${L('finish')}</h3>${finishChips(slot, s)}`;
+  if (s.surface === 'stone') return `<h3>${L('stone')}</h3><div class="f-chips">${Object.keys(STONES).map(k => `<button class="f-chip f-wood" data-mat="${slot}.stone" data-value="${k}" aria-pressed="${s.stone === k}" style="--c:${STONES[k].base}">${esc(N(STONES[k]))}</button>`).join('')}</div><h3>${L('polish')}</h3><div class="f-chips">${['honed', 'polished'].map(k => chip(`data-mat="${slot}.polish" data-value="${k}"`, L(k), s.polish === k)).join('')}</div>`;
+  if (s.surface === 'glass') return `<h3>${L('glass')}</h3><div class="f-chips">${Object.keys(GLASS).map(k => `<button class="f-chip f-wood" data-mat="${slot}.glass" data-value="${k}" aria-pressed="${s.glass === k}" style="--c:${GLASS[k].hex}">${esc(N(GLASS[k]))}</button>`).join('')}</div>`;
+  if (s.surface === 'metal') return `<h3>${L('metal')}</h3>${metalChips(`data-mat="${slot}.metal"`, s.metal)}`;
+  if (s.surface === 'lacquer') return `<h3>${L('lacquerColor')}</h3>${swatches(`data-color="${slot}.color" data-value`, s.color, {groups: false})}<h3>${L('finish')}</h3><div class="f-chips">${['matte', 'lacquer'].map(k => chip(`data-mat="${slot}.finish" data-value="${k}"`, N(FINISHES[k]), s.finish === k)).join('')}</div>`;
+  return '';
+}
+function tableMaterialPanel() {
+  const m = state.design.materials;
+  const topKinds = ['wood', 'veneer', 'stone', 'glass', 'lacquer'], baseKinds = ['wood', 'metal', 'lacquer'];
+  return `<h2>${L('tabMaterial')}</h2>
+  <div class="f-fabric-preview"><canvas id="surfacePreview" width="320" height="320" aria-label="${esc(L('topMat'))}"></canvas><div><p class="f-eyebrow">${L('topMat')}</p><p class="f-fabric-name">${esc(surfaceShort(m.top))}</p><p class="f-note">${esc(L('baseMat'))}: ${esc(m.base.surface === 'metal' ? N(METALS[m.base.metal]) : surfaceShort(m.base))}</p></div></div>
+  <h3>${L('topMat')}</h3><div class="f-chips">${topKinds.map(k => chip(`data-mat="top.surface" data-value="${k}"`, N(SURFACES[k]), m.top.surface === k)).join('')}</div>
+  ${surfaceOptions('top', m.top)}
+  <h3>${L('baseMat')}</h3><div class="f-chips">${chip(`data-base-same="1"`, L('sameAsTop'), false)}${baseKinds.map(k => chip(`data-mat="base.surface" data-value="${k}"`, N(SURFACES[k]), m.base.surface === k)).join('')}</div>
+  ${surfaceOptions('base', m.base, true)}
+  <h3>${L('hardware')}</h3>${metalChips('data-mat="hardware.metal"', m.hardware.metal)}`;
 }
 
 function deliverPanel() {
@@ -200,16 +295,23 @@ function deliverPanel() {
 // ---- Panel drawing helpers ---------------------------------------------------------------------
 let thumbJob = 0;
 async function drawThumbnails() {
-  const job = ++thumbJob, {renderThumbnail} = await import('./scene.js?v=20261016a');
+  const job = ++thumbJob, {renderThumbnail} = await import('./scene.js?v=20261016c');
   for (let i = 0; i < state.proposals.length; i++) {
     await new Promise(r => setTimeout(r, 0));
     if (job !== thumbJob) return;
     const slot = $(`#thumb${i}`); if (!slot) return;
-    const d = state.proposals[i], url = renderThumbnail(compile(d.params), d.materials);
+    const d = state.proposals[i], url = renderThumbnail(compileOf(d), d.materials);
     slot.innerHTML = url ? `<img src="${url}" alt="">` : '';
   }
 }
 
+function paintTile(canvas, maps, w, h, tileMmX, tileMmY, showMm = 60) {
+  const g = canvas.getContext('2d'), tmp = document.createElement('canvas'); tmp.width = w; tmp.height = h;
+  tmp.getContext('2d').putImageData(new ImageData(maps.albedo, w, h), 0, 0);
+  const pattern = g.createPattern(tmp, 'repeat');
+  pattern.setTransform(new DOMMatrix().scale(canvas.width / showMm * tileMmX / w, canvas.width / showMm * tileMmY / h));
+  g.fillStyle = pattern; g.fillRect(0, 0, canvas.width, canvas.height);
+}
 function drawMaterialPreviews() {
   for (const c of document.querySelectorAll('[data-draft]')) {
     const g = c.getContext('2d'), grid = draft(c.dataset.draft, 8), s = c.width / 8;
@@ -217,50 +319,68 @@ function drawMaterialPreviews() {
     grid.forEach((row, j) => row.forEach((up, i) => { if (up) { g.fillStyle = '#2f3a33'; g.fillRect(i * s + 0.5, j * s + 0.5, s - 1, s - 1); } }));
     g.strokeStyle = '#c9c3b6'; g.lineWidth = 0.5; for (let k = 0; k <= 8; k++) { g.beginPath(); g.moveTo(k * s, 0); g.lineTo(k * s, c.height); g.moveTo(0, k * s); g.lineTo(c.width, k * s); g.stroke(); }
   }
-  const canvas = $('#fabricPreview'); if (!canvas) return;
-  const spec = state.design.materials.fabric;
   setTimeout(() => {
-    if (!canvas.isConnected) return;
-    const maps = fabricMaps(spec, {maxPx: 640}), g = canvas.getContext('2d');
-    const img = new ImageData(maps.albedo, maps.size, maps.size), tmp = document.createElement('canvas'); tmp.width = tmp.height = maps.size; tmp.getContext('2d').putImageData(img, 0, 0);
-    // Show 60 × 60 mm of fabric (true-scale tiles).
-    const px = canvas.width / 60 * maps.tileMm, pattern = g.createPattern(tmp, 'repeat');
-    pattern.setTransform(new DOMMatrix().scale(px / maps.size));
-    g.fillStyle = pattern; g.fillRect(0, 0, canvas.width, canvas.height);
-    const note = $('#tileNote'); if (note) note.textContent = `60 × 60 mm · ${state.lang === 'tr' ? 'rapor' : 'repeat'} ${maps.tileMm.toFixed(0)} mm`;
+    const fab = $('#fabricPreview'), surf = $('#surfacePreview');
+    if (fab?.isConnected) {
+      const spec = state.design.materials.fabric, maps = fabricMaps(spec, {maxPx: 720});
+      // Show a larger area when a motif repeats over a long distance.
+      const show = Math.max(60, Math.min(400, maps.tileMm * 1.6));
+      paintTile(fab, maps, maps.size, maps.size, maps.tileMm, maps.tileMm, show);
+      const note = $('#tileNote'); if (note) note.textContent = `${Math.round(show)} × ${Math.round(show)} mm · ${state.lang === 'tr' ? 'rapor' : 'repeat'} ${maps.tileMm.toFixed(0)} mm`;
+    }
+    if (surf?.isConnected) {
+      const s = state.design.materials.top;
+      if (s.surface === 'stone') { const m = stoneMaps(s.stone, s.polish, {size: 384}); paintTile(surf, m, 384, 384, 600, 600, 400); }
+      else if (s.surface === 'wood' || s.surface === 'veneer') { const m = woodMaps(s.species, s.finish, {stain: s.stain, w: 192, h: 384}); paintTile(surf, m, 192, 384, 300, 600, 300); }
+      else { const g = surf.getContext('2d'); g.fillStyle = s.surface === 'glass' ? GLASS[s.glass].hex : COLORS[s.color]?.hex || '#ccc'; g.fillRect(0, 0, surf.width, surf.height); }
+    }
   }, 30);
 }
 
 function sheetLabels() {
-  return {front: L('frontView'), side: L('sideView'), top: L('topView'), section: L('sectionView'), scale: L('scaleLabel'), units: L('units'), title: L(state.compiled.meta.kind), note: L('concept'), seatDepth: L('seatDepth'), rake: L('rake'), status: L('status'), spec: L('spec')};
+  return {front: L('frontView'), side: L('sideView'), top: L('topView'), section: L('sectionView'), scale: L('scaleLabel'), units: L('units'), title: L(state.design.kind), note: L('concept'), seatDepth: L('seatDepth'), rake: L('rake'), status: L('status'), spec: L('spec'), knee: L('knee'), edgeDetail: L('edgeDetail')};
 }
 function specRows(b) {
-  const d = state.design, c = state.compiled, m = d.materials, f = m.fabric;
+  const d = state.design, c = state.compiled, m = d.materials;
+  if (d.family === 'table') {
+    const p = c.params;
+    return [
+      [L('overall'), `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height}`],
+      ...(c.meta.extendedLength ? [[L('leaves'), `${p.leaves} × ${p.leafLength} → ${c.meta.extendedLength}`]] : []),
+      [L('topShape'), partName('topShape', p.topShape, state.lang)], [L('edge'), partName('edge', p.edge, state.lang)],
+      [L('baseType'), partName('tBaseType', p.baseType, state.lang)], [L('topMat'), `${surfaceShort(m.top)} · ${p.topThickness} mm`],
+      [L('baseMat'), m.base.surface === 'metal' ? N(METALS[m.base.metal]) : surfaceShort(m.base)],
+      ...(c.meta.seats ? [[L('persons'), String(c.meta.seats)]] : []), [L('knee'), `${c.meta.knee}`],
+      ...(p.drawers ? [[L('drawers'), String(p.drawers)]] : []), [L('weight'), `~${b.totals.weightKg} kg`]
+    ];
+  }
+  const f = m.fabric;
   return [
     [L('overall'), `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height}`],
     [L('seatHeightL'), `${c.params.seatHeight}`], [L('seatDepth'), `${c.meta.seatDepth}`], ...(c.meta.armHeight ? [[L('armHeightL'), `${c.meta.armHeight}`]] : []),
     [L('rake'), `${c.params.backRake}°`], [L('arm'), partName('armType', c.params.armType, state.lang)], [L('back'), partName('backType', c.params.backType, state.lang)],
     [L('seat'), `${partName('seatType', c.params.seatType, state.lang)} · ${c.params.seatCount}`], [L('base'), `${partName('baseType', c.params.baseType, state.lang)}${['legs', 'frame'].includes(c.params.baseType) ? ' · ' + partName('legType', c.params.legType, state.lang) : ''}`],
-    [L('fabric'), `${nm(FIBERS[f.fiber], state.lang)} · ${nm(COLORS[f.color], state.lang)}`], [L('weave'), FIBERS[f.fiber].weave ? nm(WEAVE_NAMES[f.weave], state.lang) : '—'], [L('pattern'), nm(PATTERNS[f.pattern], state.lang)],
-    [L('wood'), `${nm(WOODS[m.wood.species], state.lang)} · ${nm(FINISHES[m.wood.finish], state.lang)}`], [L('metal'), nm(METALS[m.metal.finish], state.lang)],
+    [L('fabric'), `${N(FIBERS[f.fiber])} · ${N(COLORS[f.color])}`], [L('pattern'), `${N(PATTERNS[f.pattern])}${f.motif ? ' · ' + N(MOTIF_NAMES[f.motif]) : ''}${f.pattern !== 'none' ? ' · ' + N(COLORS[f.color2]) : ''}`],
+    [L('wood'), `${N(WOODS[m.wood.species])} · ${N(STAINS[m.wood.stain])} · ${N(FINISHES[m.wood.finish])}`], [L('metal'), N(METALS[m.metal.finish])],
     [L('fabricNeed'), `~${b.totals.fabricMetres} m (1400 mm)`]
   ];
 }
 function deliverables() {
-  if (state.drawingCache?.key === JSON.stringify(state.design) + state.lang) return state.drawingCache;
+  const key = JSON.stringify(state.design) + state.lang;
+  if (state.drawingCache?.key === key) return state.drawingCache;
   const b = bom(state.compiled, state.design.materials, state.lang);
-  const sheet = drawingSheet(state.compiled, sheetLabels(), {title: `${L(state.compiled.meta.kind)} · ${styleName(state.design.style, state.lang)}`, style: styleName(state.design.style, state.lang), date: new Date().toISOString().slice(0, 10), id: projectId(), rows: specRows(b)});
-  state.drawingCache = {key: JSON.stringify(state.design) + state.lang, sheet, bom: b};
+  state.drawingCache = {key, bom: b, get sheet() { return this._sheet ??= drawingSheet(state.compiled, sheetLabels(), {title: `${L(state.design.family === 'table' ? state.design.kind : state.compiled.meta.kind)} · ${styleName(state.design.style, state.lang)}`, style: styleName(state.design.style, state.lang), date: new Date().toISOString().slice(0, 10), id: projectId(), rows: specRows(b)}); }};
   return state.drawingCache;
 }
 const projectId = () => `F-${String(state.design.seed % 100000).padStart(5, '0')}`;
 
 function drawDeliverables() {
   setTimeout(async () => {
-    const {sheet, bom: b} = deliverables();
-    const host = $('#sheet'); if (!host) return;
-    host.innerHTML = sheet.svg;
-    $('#bomTable').innerHTML = `<table><thead><tr><th>#</th><th>${state.lang === 'tr' ? 'Parça' : 'Part'}</th><th>×</th><th>mm</th><th>${L('tabMaterial')}</th></tr></thead><tbody>${b.rows.filter(r => !r.internal).map(r => `<tr><td>${r.code}</td><td>${esc(state.lang === 'tr' ? r.nameTr : r.nameEn)}</td><td>${r.qty}</td><td>${r.size.join(' × ')}</td><td>${esc(r.material)}</td></tr>`).join('')}</tbody></table><p class="f-note">${L('fabricNeed')}: ~${b.totals.fabricMetres} m · ${b.totals.fabricAreaM2} m²${b.totals.weltMetres ? ` · ${L('welt')} ${b.totals.weltMetres} m` : ''}</p>`;
+    const dv = deliverables(), host = $('#sheet'); if (!host) return;
+    host.innerHTML = dv.sheet.svg;
+    const b = dv.bom;
+    $('#bomTable').innerHTML = `<table><thead><tr><th>#</th><th>${state.lang === 'tr' ? 'Parça' : 'Part'}</th><th>×</th><th>mm</th><th>${L('tabMaterial')}</th></tr></thead><tbody>${b.rows.filter(r => !r.internal).map(r => `<tr><td>${r.code}</td><td>${esc(state.lang === 'tr' ? r.nameTr : r.nameEn)}</td><td>${r.qty}</td><td>${r.size.join(' × ')}</td><td>${esc(r.material)}</td></tr>`).join('')}</tbody></table>
+    <p class="f-note">${b.totals.fabricMetres !== undefined ? `${L('fabricNeed')}: ~${b.totals.fabricMetres} m · ${b.totals.fabricAreaM2} m²${b.totals.weltMetres ? ` · ${L('welt')} ${b.totals.weltMetres} m` : ''}` : `${L('weight')}: ~${b.totals.weightKg} kg${b.totals.seats ? ` · ${b.totals.seats} ${L('persons')}` : ''}`}</p>`;
     const s = await fetch('api/forma-submit.php', {cache: 'no-store'}).then(r => r.json()).catch(() => ({available: false}));
     state.canSend = !!s.available;
     const ss = $('#sendState'); if (ss) ss.textContent = state.canSend ? '' : L('sendOff');
@@ -269,38 +389,56 @@ function drawDeliverables() {
 
 // ---- Package -------------------------------------------------------------------------------
 async function packageFiles() {
-  const {sheet, bom: b} = deliverables();
-  const files = [];
-  const project = {schema: SCHEMA, id: projectId(), created: new Date().toISOString(), language: state.lang, design: state.design, derived: state.compiled.meta, issues: validate(state.compiled), bom: b, note: 'Concept design generated by AURA Forma. Requires review by an AURA designer before production.'};
+  const dv = deliverables(), files = [];
+  const project = {schema: SCHEMA, id: projectId(), created: new Date().toISOString(), language: state.lang, design: state.design, derived: state.compiled.meta, issues: issuesOf(state.design, state.compiled), bom: dv.bom, note: 'Concept design generated by AURA Forma. Requires review by an AURA designer before production.'};
   files.push({name: 'project.json', data: JSON.stringify(project, null, 2)});
-  files.push({name: 'drawings.svg', data: sheet.svg});
+  files.push({name: 'drawings.svg', data: dv.sheet.svg});
   files.push({name: 'drawings.dxf', data: drawingDxf(state.compiled)});
-  files.push({name: 'parts.csv', data: bomCsv(b)});
-  const pages = [await svgToJpeg(sheet.svg)];
+  files.push({name: 'parts.csv', data: bomCsv(dv.bom)});
+  const pages = [await svgToJpeg(dv.sheet.svg)];
   if (viewer) { const shot = await viewer.photo(2); pages.unshift(await dataUrlJpeg(shot)); files.push({name: 'render.jpg', data: pages[0].data}); }
   files.push({name: 'drawings.pdf', data: jpegPdf(pages)});
   if (viewer) { try { files.push({name: 'model.glb', data: new Uint8Array(await viewer.exportGLB())}); } catch {} }
-  files.push({name: 'README.txt', data: `AURA Forma ${projectId()}\n\nproject.json  design parameters, materials, derived dimensions, checks, parts list\ndrawings.pdf  render + A3 drawing sheet (print at 100% for the stated scale)\ndrawings.svg  vector drawing sheet (paper mm)\ndrawings.dxf  views in model space, real millimetres (layers FRONT, SIDE, TOP, SECTION_A)\nparts.csv     grouped parts with sizes, materials and suggested build (TR/EN)\nmodel.glb     3D model (metres)\n\nConcept design. Dimensions and build suggestions must be checked by the designer before production.\n`});
+  files.push({name: 'README.txt', data: `AURA Forma ${projectId()} (${state.design.family}/${state.design.kind})\n\nproject.json  design parameters, materials, derived dimensions, checks, parts list\ndrawings.pdf  render + A3 drawing sheet (print at 100% for the stated scale)\ndrawings.svg  vector drawing sheet (paper mm)\ndrawings.dxf  views in model space, real millimetres (layers FRONT, SIDE, TOP, SECTION_A)\nparts.csv     grouped parts with cut sizes, materials and suggested build (TR/EN)\nmodel.glb     3D model (metres)\n\nConcept design. Dimensions, structure and build suggestions must be checked by the designer before production.\n`});
   return files;
 }
 async function downloadAs(kind) {
   feedback(L('working'));
-  const {sheet, bom: b} = deliverables(), id = projectId();
+  const dv = deliverables(), id = projectId();
   try {
-    if (kind === 'svg') download(`${id}-drawings.svg`, sheet.svg, 'image/svg+xml');
+    if (kind === 'svg') download(`${id}-drawings.svg`, dv.sheet.svg, 'image/svg+xml');
     else if (kind === 'dxf') download(`${id}-drawings.dxf`, drawingDxf(state.compiled), 'application/dxf');
-    else if (kind === 'csv') download(`${id}-parts.csv`, bomCsv(b), 'text/csv');
+    else if (kind === 'csv') download(`${id}-parts.csv`, bomCsv(dv.bom), 'text/csv');
     else if (kind === 'json') download(`${id}.json`, JSON.stringify(state.design, null, 2), 'application/json');
     else if (kind === 'glb' && viewer) download(`${id}.glb`, await viewer.exportGLB(), 'model/gltf-binary');
-    else if (kind === 'pdf') { const pages = [await svgToJpeg(sheet.svg)]; if (viewer) pages.unshift(await dataUrlJpeg(await viewer.photo(2))); download(`${id}.pdf`, jpegPdf(pages), 'application/pdf'); }
+    else if (kind === 'pdf') { const pages = [await svgToJpeg(dv.sheet.svg)]; if (viewer) pages.unshift(await dataUrlJpeg(await viewer.photo(2))); download(`${id}.pdf`, jpegPdf(pages), 'application/pdf'); }
     else if (kind === 'zip') download(`${id}-designer-package.zip`, zip(await packageFiles()), 'application/zip');
     feedback(L('applied'));
   } catch (e) { feedback(String(e.message || e), 'error'); }
 }
 
 // ---- Actions (shared by UI, commands and AI) ------------------------------------------------
+const SPECIES_TO_STAIN = {oak: 'oak', ash: 'lightOak', beech: 'natural', walnut: 'walnut', cherry: 'cherry', teak: 'teak', smoked: 'darkWalnut', ebonized: 'black'};
+function switchFamily(family, kind) {
+  const prev = store.get('aura-forma-design-' + family);
+  const next = prev?.schema === SCHEMA && !kind ? prev : sample({family, style: state.design.style, kind, seed: state.design.seed});
+  state.round = 1; setDesign(next);
+}
+function seatsToSize(d, n) {
+  // Grow the top until the capacity rule (600 mm per person, 650 mm on curved perimeters) seats n people.
+  const p = {...d.params, kind: 'dining'}, round = p.topShape === 'round', mod = FAMILIES.table.mod;
+  if (n >= 6 && round) p.topShape = 'oval';
+  if (!round || n >= 6) { p.width = Math.max(p.width, n >= 6 ? 900 : 800); p.length = Math.max(800, Math.ceil(n / 2) * 600 - 200); }
+  else p.length = p.width = 800;
+  for (let i = 0; i < 40; i++) {
+    const c = mod.compile({...normalizeDesign({...d, params: p}).params, kind: 'dining'});
+    if (c.meta.seats >= n) break;
+    if (p.topShape === 'round') { p.length += 50; p.width = p.length; } else p.length += 50;
+  }
+  return p;
+}
 function applyActions(actions) {
-  let d = structuredClone(state.design), changed = false; const notes = [];
+  let d = structuredClone(state.design), changed = false, fam = familyOf(d); const notes = [];
   for (const a of actions) {
     if (a.type === 'command') {
       const v = {viewFront: 'front', viewSide: 'side', viewTop: 'top', viewAngle: 'angle'}[a.name];
@@ -314,27 +452,52 @@ function applyActions(actions) {
       else if (a.name === 'drawings' || a.name === 'send' || a.name === 'package') { state.tab = 'deliver'; renderPanel(); notes.push(L('tabDeliver')); }
       continue;
     }
+    if (a.type === 'family') {
+      if (a.value !== d.family) { const k = actions.find(x => x.type === 'kind' && FAMILIES[a.value].kinds[x.value])?.value; switchFamily(a.value, k); d = structuredClone(state.design); fam = familyOf(d); notes.push(L(a.value === 'table' ? 'famTable' : 'famSeating')); }
+      continue;
+    }
     changed = true;
-    if (a.type === 'set') { d.params[a.key] = a.value; notes.push(`${partName('params', a.key, state.lang)} ${Math.round(a.value)}`); }
-    else if (a.type === 'delta') { const before = d.params[a.key]; d.params[a.key] = before + a.value; notes.push(`${partName('params', a.key, state.lang)} ${Math.round(before)} → ${Math.round(before + a.value)}`); }
-    else if (a.type === 'enum') { d.params[a.key] = a.value; notes.push(partName(a.key, a.value, state.lang)); }
-    else if (a.type === 'style') { d = sample({style: a.value, kind: d.kind, seed: d.seed, locks: {materials: undefined}}); notes.push(styleName(a.value, state.lang)); }
-    else if (a.type === 'kind') { if (a.value !== d.kind) { const w = KINDS[a.value].width; d.kind = a.value; d.params.width = (w[0] + w[1]) / 2; d.params.seatCount = KINDS[a.value].seats[1]; notes.push(L(a.value)); } }
-    else if (a.type === 'material') { d.materials[a.slot] = {...d.materials[a.slot], [a.key]: a.value}; notes.push(materialLabel(a)); }
+    let key = a.key;
+    if (d.family === 'seating' && key === 'length') key = 'width';
+    if (d.family === 'table' && key === 'leaves' && a.value > 0) {
+      if (['pedestal', 'drum', 'tripod'].includes(d.params.baseType)) d.params.baseType = 'doublePedestal';
+      if (['round', 'boat'].includes(d.params.topShape)) d.params.topShape = 'oval';
+    }
+    if (a.type === 'set') { d.params[key] = a.value; notes.push(`${partName('params', key, state.lang)} ${Math.round(a.value)}`); }
+    else if (a.type === 'delta') { const before = d.params[key]; d.params[key] = before + a.value; notes.push(`${partName('params', key, state.lang)} ${Math.round(before)} → ${Math.round(before + a.value)}`); }
+    else if (a.type === 'enum') { d.params[key] = a.value; notes.push(partName(d.family === 'table' && key === 'baseType' ? 'tBaseType' : d.family === 'table' && key === 'legType' ? 'legTypeT' : key, a.value, state.lang)); }
+    else if (a.type === 'seats') { if (d.family === 'table') { d.params = FAMILIES.table.repair({...seatsToSize(d, a.value), kind: 'dining'}, d.materials); d.kind = 'dining'; notes.push(`${a.value} ${L('persons')}`); } }
+    else if (a.type === 'style') { d = sample({family: d.family, style: a.value, kind: d.kind, seed: d.seed}); notes.push(styleName(a.value, state.lang)); }
+    else if (a.type === 'kind') {
+      if (d.family === 'seating' && !fam.kinds[a.value]) { switchFamily('table', a.value); return notes.concat(L(a.value)); }
+      if (d.family === 'table' && !fam.kinds[a.value]) { switchFamily('seating', a.value); return notes.concat(L(a.value)); }
+      if (a.value !== d.kind) { d = sample({family: d.family, style: d.style, kind: a.value, seed: d.seed, locks: {materials: d.materials}}); notes.push(L(a.value)); }
+    }
+    else if (a.type === 'material') {
+      let {slot, key: mk, value} = a;
+      if (d.family === 'seating' && slot === 'wood' && mk === 'species' && value !== 'gurgen') { mk = 'stain'; value = SPECIES_TO_STAIN[value] || 'natural'; }
+      if (d.family === 'seating' && (slot === 'top' || slot === 'base')) continue;
+      if (d.family === 'table' && (slot === 'wood' || slot === 'fabric')) slot = 'top';
+      d.materials[slot] = {...d.materials[slot], [mk]: value};
+      if (d.family === 'table' && mk === 'species' && !['wood', 'veneer'].includes(d.materials[slot].surface)) d.materials[slot].surface = 'wood';
+      if (d.family === 'table' && mk === 'color' && !['lacquer'].includes(d.materials[slot].surface)) d.materials[slot].surface = 'lacquer';
+      notes.push(materialLabel({slot, key: mk, value}));
+    }
   }
   if (changed) setDesign(d);
   return notes;
 }
 function materialLabel(a) {
-  const tables = {fiber: FIBERS, weave: WEAVE_NAMES, pattern: PATTERNS, color: COLORS, color2: COLORS, species: WOODS, finish: a.slot === 'metal' ? METALS : FINISHES};
-  return nm(tables[a.key]?.[a.value], state.lang) || a.value;
+  const tables = {fiber: FIBERS, weave: WEAVE_NAMES, pattern: PATTERNS, color: COLORS, color2: COLORS, species: WOODS, stain: STAINS, stone: STONES, glass: GLASS, surface: SURFACES, metal: METALS, motif: MOTIF_NAMES, finish: a.slot === 'metal' ? METALS : FINISHES};
+  if (a.key === 'polish') return L(a.value);
+  return N(tables[a.key]?.[a.value]) || a.value;
 }
 
 async function runCommand(text) {
   if (!text.trim()) return;
-  const local = parse(text, state.design);
+  const local = parse(text, {family: state.design.family});
   if (local.understood) { const notes = applyActions(local.actions); feedback(`${L('applied')}: ${notes.join(' · ')}`); return; }
-  if (state.ai.available) {
+  if (state.ai.available && state.design.family === 'seating') {
     feedback(L('working'));
     try { const actions = await interpret(text, state.design, state.lang); if (actions.length) { feedback(`${L('applied')}: ${applyActions(actions).join(' · ')}`); return; } } catch {}
   }
@@ -346,22 +509,25 @@ function toggleStructure() { state.structure = !state.structure; viewer?.structu
 async function savePhoto() { if (!viewer) return; download(`${projectId()}.jpg`, (await dataUrlJpeg(await viewer.photo(2))).data, 'image/jpeg'); }
 
 // ---- Voice -----------------------------------------------------------------------------------
-let recognition = null;
 function listen() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { feedback(L('noSpeech'), 'warn'); return; }
-  if (recognition) { recognition.stop(); return; }
-  recognition = new SR(); recognition.lang = SPEECH_LANG[state.lang] || 'en-GB'; recognition.interimResults = true; recognition.maxAlternatives = 1;
-  const mic = $('#micBtn'); mic.dataset.on = '1'; feedback(L('listening'));
-  recognition.onresult = e => { const r = e.results[e.results.length - 1], text = r[0].transcript; $('#command').value = text; if (r.isFinal) runCommand(text); };
-  recognition.onerror = () => feedback(L('noSpeech'), 'warn');
-  recognition.onend = () => { recognition = null; delete mic.dataset.on; };
-  recognition.start();
+  const mic = $('#micBtn');
+  startVoice({
+    lang: state.lang,
+    onText: (text, final) => { $('#command').value = text; if (final && text.trim()) runCommand(text); },
+    onState: (s, info) => {
+      if (s === 'listening' || s === 'recording') { mic.dataset.on = '1'; feedback(s === 'recording' ? L('voiceRecording') : L('listening')); }
+      else if (s === 'loading') feedback(`${L('voiceLoading')} ${info?.total ? Math.round(info.loaded / info.total * 100) + '%' : ''}`);
+      else if (s === 'working') { delete mic.dataset.on; feedback(L('voiceWorking')); }
+      else if (s === 'error') { delete mic.dataset.on; feedback(L('voiceError'), 'warn'); }
+      else delete mic.dataset.on;
+    }
+  });
 }
 
 // ---- Events ----------------------------------------------------------------------------------
 function bindShell() {
   $('#lang').onchange = e => { state.lang = e.target.value; store.set('aura-forma-lang', state.lang); state.drawingCache = null; shell(); };
+  $('#families').onclick = e => { const b = e.target.closest('[data-family]'); if (b && b.dataset.family !== state.design.family) switchFamily(b.dataset.family); };
   for (const b of document.querySelectorAll('[data-view]')) b.onclick = () => { viewer?.view(b.dataset.view); markView(b.dataset.view); };
   for (const b of document.querySelectorAll('[data-zoom]')) b.onclick = () => viewer?.zoom(+b.dataset.zoom);
   $('#structureBtn').onclick = toggleStructure; $('#photoBtn').onclick = savePhoto;
@@ -377,35 +543,34 @@ function bindShell() {
   panel.addEventListener('click', e => {
     const el = e.target.closest('button, [data-load]'); if (!el) return;
     const d = el.dataset;
-    if (d.kind) { state.proposals = []; setDesign(sample({style: state.design.style, kind: d.kind, seed: state.design.seed})); }
-    else if (d.style) { state.proposals = []; state.round = 1; setDesign(sample({style: d.style, kind: state.design.kind, seed: state.design.seed})); }
+    if (d.kind) { state.proposals = []; setDesign(sample({family: state.design.family, style: state.design.style, kind: d.kind, seed: state.design.seed})); }
+    else if (d.style) { state.proposals = []; state.round = 1; setDesign(sample({family: state.design.family, style: d.style, kind: state.design.kind, seed: state.design.seed})); }
     else if (el.id === 'generateBtn') { state.proposals = []; state.tab = 'ideas'; renderPanel(); }
     else if (d.load !== undefined) { setDesign(state.proposals[+d.load], {keepPanel: true}); for (const c of document.querySelectorAll('.f-card')) c.setAttribute('aria-current', String(c.dataset.card === d.load)); }
     else if (el.id === 'roundBtn') { state.round++; state.proposals = []; state.picked = []; renderPanel(); }
     else if (el.id === 'similarBtn') { state.proposals = similar(state.design, {round: ++state.round}); state.picked = []; renderPanel(); }
     else if (el.id === 'blendBtn' && state.picked.length === 2) { const [a, b] = state.picked.map(i => state.proposals[i]); setDesign(blend(a, b, 0.5, state.round)); state.proposals = similar(state.design, {round: ++state.round}); state.picked = []; renderPanel(); }
     else if (d.enum) setDesign(withParams({[d.enum]: d.value}));
-    else if (d.seats) setDesign(withParams({seatCount: +d.seats}));
-    else if (d.pillows !== undefined) setDesign(withParams({pillows: +d.pillows}));
+    else if (d.count) setDesign(withParams({[d.count]: +d.value}));
+    else if (d.baseSame) { const top = state.design.materials.top; setDesign(withMaterial('base', top.surface === 'lacquer' ? {surface: 'lacquer', color: top.color, finish: top.finish} : {surface: 'wood', species: top.species, stain: top.stain, finish: top.finish})); }
     else if (d.mat) { const [slot, key] = d.mat.split('.'); setDesign(withMaterial(slot, {[key]: d.value})); }
-    else if (d.color) { const [slot, key] = d.color.split('.'); setDesign(withMaterial(slot, {[key]: d.value || null})); }
+    else if (d.color !== undefined) { const [slot, key] = d.color.split('.'); setDesign(withMaterial(slot, {[key]: d.value || null})); }
     else if (d.dl) downloadAs(d.dl);
   });
   panel.addEventListener('change', e => {
     const el = e.target;
     if (el.dataset.pick !== undefined) { const i = +el.dataset.pick; state.picked = el.checked ? [...state.picked.filter(x => x !== i), i].slice(-2) : state.picked.filter(x => x !== i); for (const c of document.querySelectorAll('[data-pick]')) c.checked = state.picked.includes(+c.dataset.pick); $('#blendBtn').disabled = state.picked.length !== 2; }
-    else if (el.dataset.param) setDesign(withParams({[el.dataset.param]: +el.value}), {keepPanel: false});
+    else if (el.dataset.param) setDesign(withParams({[el.dataset.param]: +el.value}));
     else if (el.dataset.num) setDesign(withParams({[el.dataset.num]: +el.value}));
-    else if (el.dataset.fabricScale !== undefined) setDesign(withMaterial('fabric', {scale: +el.value}));
+    else if (el.dataset.fabricDensity !== undefined) setDesign(withMaterial('fabric', {density: +el.value}));
     else if (el.id === 'imageFile') readImage(el.files[0]);
   });
-  // Live slider preview without flooding history; committed on change.
   let pending = 0;
   panel.addEventListener('input', e => {
     const el = e.target; if (!el.dataset.param) return;
     const num = el.parentElement.querySelector('[data-num]'); if (num) num.value = el.value;
     cancelAnimationFrame(pending);
-    pending = requestAnimationFrame(() => { const next = normalizeDesign(withParams({[el.dataset.param]: +el.value})); state.compiled = compile(next.params); viewer?.setDesign(state.compiled, next.materials); });
+    pending = requestAnimationFrame(() => { const next = normalizeDesign(withParams({[el.dataset.param]: +el.value})); state.compiled = compileOf(next); viewer?.setDesign(state.compiled, next.materials); });
   });
   panel.addEventListener('submit', async e => {
     if (e.target.id !== 'sendForm') return; e.preventDefault();
@@ -443,25 +608,27 @@ async function shrink(url, max) {
 
 // ---- Start -----------------------------------------------------------------------------------
 function initialDesign() {
-  const fromStore = store.get('aura-forma-design');
-  let style = 'japandi', note = null;
+  let family = FAMILIES[params.get('family')] ? params.get('family') : null, style = 'japandi', note = null;
   if (params.get('brief')) {
     try {
       const brief = JSON.parse(sessionStorage.getItem('aura-taste-handoff') || 'null');
-      const ids = (brief?.styles || []).map(s => (typeof s === 'string' ? s : s?.id)).filter(id => STYLE_BY_ID[id]);
-      state.avoid = (brief?.avoidStyleIds || []).filter(id => STYLE_BY_ID[id]);
+      const ids = (brief?.styles || []).map(s => (typeof s === 'string' ? s : s?.id)).filter(id => FAMILIES.seating.byId[id]);
+      state.avoid = (brief?.avoidStyleIds || []).filter(id => FAMILIES.seating.byId[id]);
       if (ids.length) { style = ids[0]; note = L('briefLoaded'); }
+      if (brief?.category === 'tables') family = 'table';
     } catch {}
   }
-  if (params.get('style') && STYLE_BY_ID[params.get('style')]) style = params.get('style');
-  const kind = KINDS[params.get('kind')] ? params.get('kind') : 'sofa';
-  if (!note && fromStore?.schema === SCHEMA && !params.get('style') && !params.get('kind')) return {design: normalizeDesign(fromStore)};
-  return {design: sample({style, kind, seed: 1 + Math.floor(Math.random() * 1e6)}), note};
+  family ??= store.get('aura-forma-family') === 'table' ? 'table' : 'seating';
+  if (params.get('style') && FAMILIES[family].byId[params.get('style')]) style = params.get('style');
+  const kind = FAMILIES[family].kinds[params.get('kind')] ? params.get('kind') : undefined;
+  const fromStore = store.get('aura-forma-design-' + family) || (family === 'seating' ? store.get('aura-forma-design') : null);
+  if (!note && fromStore?.schema === SCHEMA && !params.get('style') && !kind) return {design: normalizeDesign({...fromStore, family})};
+  return {design: sample({family, style, kind, seed: 1 + Math.floor(Math.random() * 1e6)}), note};
 }
 
 window.formaDebug = {state, get viewer() { return viewer; }};
 const start = initialDesign();
-state.design = start.design; state.compiled = compile(state.design.params);
+state.design = start.design; state.compiled = compileOf(state.design);
 shell();
 if (start.note) { feedback(start.note); state.tab = 'ideas'; renderPanel(); }
 aiStatus().then(s => { state.ai = s; if (state.tab === 'style') renderPanel(); });

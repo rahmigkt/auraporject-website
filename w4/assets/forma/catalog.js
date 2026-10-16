@@ -29,14 +29,65 @@ export const WEAVE_NAMES = {
 
 export const PATTERNS = {
   none: {tr: 'Düz', en: 'Solid', de: 'Uni', fr: 'Uni', nl: 'Effen', da: 'Ensfarvet', es: 'Liso', it: 'Tinta unita'},
+  floral: {tr: 'Çiçekli', en: 'Floral', de: 'Blumen', fr: 'Fleuri', nl: 'Bloemen', da: 'Blomstret', es: 'Floral', it: 'Floreale', motif: true},
+  polka: {tr: 'Puantiyeli', en: 'Polka dot', de: 'Punkte', fr: 'Pois', nl: 'Stippen', da: 'Prikket', es: 'Lunares', it: 'Pois'},
+  leaf: {tr: 'Yaprak', en: 'Leaf', de: 'Blätter', fr: 'Feuillage', nl: 'Bladeren', da: 'Blade', es: 'Hojas', it: 'Foglie', motif: true},
+  geometric: {tr: 'Geometrik', en: 'Geometric', de: 'Geometrisch', fr: 'Géométrique', nl: 'Geometrisch', da: 'Geometrisk', es: 'Geométrico', it: 'Geometrico'},
   stripe: {tr: 'Çizgili', en: 'Stripe', de: 'Streifen', fr: 'Rayé', nl: 'Streep', da: 'Stribet', es: 'Rayas', it: 'Righe'},
-  check: {tr: 'Kareli (pötikare)', en: 'Gingham check', de: 'Vichy-Karo', fr: 'Vichy', nl: 'Boerenbont ruit', da: 'Tern', es: 'Vichy', it: 'Quadretto vichy'},
+  check: {tr: 'Pötikare', en: 'Gingham check', de: 'Vichy-Karo', fr: 'Vichy', nl: 'Boerenbont ruit', da: 'Tern', es: 'Vichy', it: 'Quadretto vichy'},
   plaid: {tr: 'Ekose', en: 'Plaid', de: 'Schottenkaro', fr: 'Écossais', nl: 'Schotse ruit', da: 'Skotskternet', es: 'Escocés', it: 'Scozzese'},
-  damask: {tr: 'Damask', en: 'Damask', de: 'Damast', fr: 'Damassé', nl: 'Damast', da: 'Damask', es: 'Damasco', it: 'Damasco'}
+  houndstooth: {tr: 'Kazayağı', en: 'Houndstooth', de: 'Hahnentritt', fr: 'Pied-de-poule', nl: 'Pied-de-poule', da: 'Hanefod', es: 'Pata de gallo', it: 'Pied de poule'},
+  chevron: {tr: 'Zikzak', en: 'Chevron', de: 'Zickzack', fr: 'Zigzag', nl: 'Zigzag', da: 'Zigzag', es: 'Zigzag', it: 'Zigzag'},
+  damask: {tr: 'Damask', en: 'Damask', de: 'Damast', fr: 'Damassé', nl: 'Damast', da: 'Damask', es: 'Damasco', it: 'Damasco', motif: true}
+};
+
+/** Ornament motifs for floral / leaf / damask patterns, taken from the NAKIŞ motif library. */
+export const MOTIF_CHOICES = {
+  floral: ['cancicegi', 'suzani', 'iris', 'asma'],
+  leaf: ['kalpyaprak', 'asma', 'palmet'],
+  damask: ['damask', 'palmet']
+};
+export const MOTIF_NAMES = {
+  cancicegi: {tr: 'Çan çiçeği', en: 'Bellflower', de: 'Glockenblume', fr: 'Campanule', nl: 'Klokje', da: 'Klokkeblomst', es: 'Campanilla', it: 'Campanula'},
+  nilufer: {tr: 'Nilüfer', en: 'Water lily', de: 'Seerose', fr: 'Nénuphar', nl: 'Waterlelie', da: 'Åkande', es: 'Nenúfar', it: 'Ninfea'},
+  lotus: {tr: 'Lotus', en: 'Lotus', de: 'Lotus', fr: 'Lotus', nl: 'Lotus', da: 'Lotus', es: 'Loto', it: 'Loto'},
+  iris: {tr: 'Süsen', en: 'Iris', de: 'Iris', fr: 'Iris', nl: 'Iris', da: 'Iris', es: 'Lirio', it: 'Iris'},
+  suzani: {tr: 'Suzani', en: 'Suzani', de: 'Suzani', fr: 'Suzani', nl: 'Suzani', da: 'Suzani', es: 'Suzani', it: 'Suzani'},
+  kalpyaprak: {tr: 'Kalp yaprak', en: 'Heart leaf', de: 'Herzblatt', fr: 'Feuille cœur', nl: 'Hartblad', da: 'Hjerteblad', es: 'Hoja corazón', it: 'Foglia a cuore'},
+  asma: {tr: 'Asma', en: 'Vine', de: 'Weinranke', fr: 'Vigne', nl: 'Wijnrank', da: 'Vinranke', es: 'Vid', it: 'Vite'},
+  palmet: {tr: 'Palmet', en: 'Palmette', de: 'Palmette', fr: 'Palmette', nl: 'Palmet', da: 'Palmet', es: 'Palmeta', it: 'Palmetta'},
+  damask: {tr: 'Damask madalyon', en: 'Damask medallion', de: 'Damastmedaillon', fr: 'Médaillon damassé', nl: 'Damastmedaillon', da: 'Damaskmedaljon', es: 'Medallón damasco', it: 'Medaglione damascato'},
+  yildiz: {tr: 'Yıldız', en: 'Star', de: 'Stern', fr: 'Étoile', nl: 'Ster', da: 'Stjerne', es: 'Estrella', it: 'Stella'}
 };
 
 /** Fabric colours: heritage dye names (as in NAKIŞ) plus contemporary upholstery neutrals. */
 export const COLORS = {
+  // Market upholstery colours (common trade names)
+  white:      {hex: '#f1efe9', group: 'market', tr: 'Kırık beyaz', en: 'Off-white', de: 'Altweiß', fr: 'Blanc cassé', nl: 'Gebroken wit', da: 'Råhvid', es: 'Blanco roto', it: 'Bianco panna'},
+  cream:      {hex: '#e6dcc6', group: 'market', tr: 'Krem', en: 'Cream', de: 'Creme', fr: 'Crème', nl: 'Crème', da: 'Creme', es: 'Crema', it: 'Crema'},
+  sand:       {hex: '#cdbb9b', group: 'market', tr: 'Kum beji', en: 'Sand', de: 'Sand', fr: 'Sable', nl: 'Zand', da: 'Sand', es: 'Arena', it: 'Sabbia'},
+  mink:       {hex: '#9b8b7a', group: 'market', tr: 'Vizon', en: 'Mink', de: 'Nerz', fr: 'Vison', nl: 'Nerts', da: 'Mink', es: 'Visón', it: 'Visone'},
+  silver:     {hex: '#bdbcb7', group: 'market', tr: 'Açık gri', en: 'Light grey', de: 'Hellgrau', fr: 'Gris clair', nl: 'Lichtgrijs', da: 'Lysegrå', es: 'Gris claro', it: 'Grigio chiaro'},
+  smoke:      {hex: '#76736d', group: 'market', tr: 'Füme', en: 'Smoke grey', de: 'Rauchgrau', fr: 'Gris fumé', nl: 'Rookgrijs', da: 'Røggrå', es: 'Gris humo', it: 'Grigio fumo'},
+  anthracite: {hex: '#45464a', group: 'market', tr: 'Antrasit', en: 'Anthracite', de: 'Anthrazit', fr: 'Anthracite', nl: 'Antraciet', da: 'Antracit', es: 'Antracita', it: 'Antracite'},
+  camel:      {hex: '#b18456', group: 'market', tr: 'Taba', en: 'Camel', de: 'Camel', fr: 'Camel', nl: 'Camel', da: 'Kamel', es: 'Camel', it: 'Cammello'},
+  chocolate:  {hex: '#5a3e30', group: 'market', tr: 'Çikolata', en: 'Chocolate', de: 'Schokolade', fr: 'Chocolat', nl: 'Chocolade', da: 'Chokolade', es: 'Chocolate', it: 'Cioccolato'},
+  mustard:    {hex: '#c9a032', group: 'market', tr: 'Hardal', en: 'Mustard', de: 'Senfgelb', fr: 'Moutarde', nl: 'Mosterd', da: 'Sennep', es: 'Mostaza', it: 'Senape'},
+  coral:      {hex: '#e08e74', group: 'market', tr: 'Yavruağzı', en: 'Coral', de: 'Koralle', fr: 'Corail', nl: 'Koraal', da: 'Koral', es: 'Coral', it: 'Corallo'},
+  dustyRose:  {hex: '#c49a95', group: 'market', tr: 'Gül kurusu', en: 'Dusty rose', de: 'Altrosa', fr: 'Vieux rose', nl: 'Oudroze', da: 'Gammelrosa', es: 'Rosa palo', it: 'Rosa antico'},
+  cherryRed:  {hex: '#8f2430', group: 'market', tr: 'Vişne', en: 'Cherry red', de: 'Kirschrot', fr: 'Rouge cerise', nl: 'Kersenrood', da: 'Kirsebærrød', es: 'Rojo cereza', it: 'Rosso ciliegia'},
+  lilac:      {hex: '#a99ab8', group: 'market', tr: 'Lila', en: 'Lilac', de: 'Flieder', fr: 'Lilas', nl: 'Lila', da: 'Syren', es: 'Lila', it: 'Lilla'},
+  mint:       {hex: '#a9c9b4', group: 'market', tr: 'Mint', en: 'Mint', de: 'Mint', fr: 'Menthe', nl: 'Mint', da: 'Mint', es: 'Menta', it: 'Menta'},
+  pistachio:  {hex: '#a8b36e', group: 'market', tr: 'Çağla yeşili', en: 'Pistachio', de: 'Pistazie', fr: 'Pistache', nl: 'Pistache', da: 'Pistacie', es: 'Pistacho', it: 'Pistacchio'},
+  khaki:      {hex: '#7d7650', group: 'market', tr: 'Haki', en: 'Khaki', de: 'Khaki', fr: 'Kaki', nl: 'Kaki', da: 'Khaki', es: 'Caqui', it: 'Cachi'},
+  emerald:    {hex: '#1f5b48', group: 'market', tr: 'Zümrüt', en: 'Emerald', de: 'Smaragd', fr: 'Émeraude', nl: 'Smaragd', da: 'Smaragd', es: 'Esmeralda', it: 'Smeraldo'},
+  petrol:     {hex: '#2d5865', group: 'market', tr: 'Petrol mavisi', en: 'Petrol blue', de: 'Petrol', fr: 'Bleu pétrole', nl: 'Petrol', da: 'Petrolblå', es: 'Azul petróleo', it: 'Blu petrolio'},
+  turquoise:  {hex: '#3e9ea2', group: 'market', tr: 'Turkuaz', en: 'Turquoise', de: 'Türkis', fr: 'Turquoise', nl: 'Turquoise', da: 'Turkis', es: 'Turquesa', it: 'Turchese'},
+  iceBlue:    {hex: '#b8cad3', group: 'market', tr: 'Buz mavisi', en: 'Ice blue', de: 'Eisblau', fr: 'Bleu glacier', nl: 'IJsblauw', da: 'Isblå', es: 'Azul hielo', it: 'Azzurro ghiaccio'},
+  navy:       {hex: '#1f2a44', group: 'market', tr: 'Lacivert', en: 'Navy', de: 'Marineblau', fr: 'Bleu marine', nl: 'Marineblauw', da: 'Marineblå', es: 'Azul marino', it: 'Blu navy'},
+  greige:     {hex: '#b7ad9e', group: 'market', tr: 'Grej', en: 'Greige', de: 'Greige', fr: 'Grège', nl: 'Greige', da: 'Greige', es: 'Greige', it: 'Greige'},
+  black:      {hex: '#1d1d1d', group: 'market', tr: 'Siyah', en: 'Black', de: 'Schwarz', fr: 'Noir', nl: 'Zwart', da: 'Sort', es: 'Negro', it: 'Nero'},
+  // Heritage dye names (NAKIŞ palette)
   chalk:      {hex: '#e9e4d8', tr: 'Tebeşir', en: 'Chalk'},
   oat:        {hex: '#d8ccb4', tr: 'Yulaf', en: 'Oat'},
   naturalLinen:{hex: '#cbbb9c', tr: 'Doğal keten', en: 'Natural Linen'},
@@ -63,19 +114,67 @@ export const COLORS = {
   bogolan:    {hex: '#262320', tr: 'Bogolan siyahı', en: 'Bogolan Mud Black'}
 };
 
+export const colorGroup = k => COLORS[k]?.group || 'heritage';
+
 export const WOODS = {
-  oak:     {tr: 'Meşe', en: 'Oak', de: 'Eiche', fr: 'Chêne', nl: 'Eiken', da: 'Eg', es: 'Roble', it: 'Rovere', base: '#c39f72', grain: '#8e6a43', rays: 0.6, figure: 0.35, ring: 5.5},
-  ash:     {tr: 'Dişbudak', en: 'Ash', de: 'Esche', fr: 'Frêne', nl: 'Essen', da: 'Ask', es: 'Fresno', it: 'Frassino', base: '#d6c3a0', grain: '#a48a64', rays: 0.1, figure: 0.55, ring: 7},
-  beech:   {tr: 'Kayın', en: 'Beech', de: 'Buche', fr: 'Hêtre', nl: 'Beuken', da: 'Bøg', es: 'Haya', it: 'Faggio', base: '#d4a984', grain: '#b48563', rays: 0.35, figure: 0.15, ring: 4},
-  walnut:  {tr: 'Ceviz', en: 'Walnut', de: 'Nussbaum', fr: 'Noyer', nl: 'Notelaar', da: 'Valnød', es: 'Nogal', it: 'Noce', base: '#6e4a33', grain: '#3e281b', rays: 0.05, figure: 0.65, ring: 6},
-  cherry:  {tr: 'Kiraz', en: 'Cherry', de: 'Kirsche', fr: 'Merisier', nl: 'Kersen', da: 'Kirsebær', es: 'Cerezo', it: 'Ciliegio', base: '#a2603f', grain: '#7a4229', rays: 0.05, figure: 0.3, ring: 4.5},
-  teak:    {tr: 'Tik', en: 'Teak', de: 'Teak', fr: 'Teck', nl: 'Teak', da: 'Teak', es: 'Teca', it: 'Teak', base: '#9a6a3e', grain: '#6a4422', rays: 0.05, figure: 0.4, ring: 5},
-  smoked:  {tr: 'Füme meşe', en: 'Smoked oak', de: 'Räuchereiche', fr: 'Chêne fumé', nl: 'Gerookt eiken', da: 'Røget eg', es: 'Roble ahumado', it: 'Rovere affumicato', base: '#5e4633', grain: '#35261a', rays: 0.5, figure: 0.35, ring: 5.5},
+  gurgen:  {tr: 'Gürgen', en: 'Beech (gürgen)', de: 'Buche (Gürgen)', fr: 'Hêtre (gürgen)', nl: 'Beuken (gürgen)', da: 'Bøg (gürgen)', es: 'Haya (gürgen)', it: 'Faggio (gürgen)', base: '#d9b48f', grain: '#bc9472', rays: 0.3, figure: 0.12, ring: 3.6, density: 720},
+  oak:     {tr: 'Meşe', en: 'Oak', de: 'Eiche', fr: 'Chêne', nl: 'Eiken', da: 'Eg', es: 'Roble', it: 'Rovere', base: '#c39f72', grain: '#8e6a43', rays: 0.6, figure: 0.35, ring: 5.5, density: 720},
+  ash:     {tr: 'Dişbudak', en: 'Ash', de: 'Esche', fr: 'Frêne', nl: 'Essen', da: 'Ask', es: 'Fresno', it: 'Frassino', base: '#d6c3a0', grain: '#a48a64', rays: 0.1, figure: 0.55, ring: 7, density: 690},
+  beech:   {tr: 'Kayın', en: 'Beech', de: 'Buche', fr: 'Hêtre', nl: 'Beuken', da: 'Bøg', es: 'Haya', it: 'Faggio', base: '#d4a984', grain: '#b48563', rays: 0.35, figure: 0.15, ring: 4, density: 720},
+  walnut:  {tr: 'Ceviz', en: 'Walnut', de: 'Nussbaum', fr: 'Noyer', nl: 'Notelaar', da: 'Valnød', es: 'Nogal', it: 'Noce', base: '#6e4a33', grain: '#3e281b', rays: 0.05, figure: 0.65, ring: 6, density: 640},
+  cherry:  {tr: 'Kiraz', en: 'Cherry', de: 'Kirsche', fr: 'Merisier', nl: 'Kersen', da: 'Kirsebær', es: 'Cerezo', it: 'Ciliegio', base: '#a2603f', grain: '#7a4229', rays: 0.05, figure: 0.3, ring: 4.5, density: 600},
+  teak:    {tr: 'Tik', en: 'Teak', de: 'Teak', fr: 'Teck', nl: 'Teak', da: 'Teak', es: 'Teca', it: 'Teak', base: '#9a6a3e', grain: '#6a4422', rays: 0.05, figure: 0.4, ring: 5, density: 660},
+  smoked:  {tr: 'Füme meşe', en: 'Smoked oak', de: 'Räuchereiche', fr: 'Chêne fumé', nl: 'Gerookt eiken', da: 'Røget eg', es: 'Roble ahumado', it: 'Rovere affumicato', base: '#5e4633', grain: '#35261a', rays: 0.5, figure: 0.35, ring: 5.5, density: 720},
   ebonized:{tr: 'Siyah meşe', en: 'Ebonised oak', de: 'Schwarze Eiche', fr: 'Chêne noirci', nl: 'Zwart eiken', da: 'Sort eg', es: 'Roble ebonizado', it: 'Rovere ebanizzato', base: '#2b2622', grain: '#14110f', rays: 0.4, figure: 0.3, ring: 5.5}
 };
 
+/** Stain / colour tones applied over the timber (the species stays e.g. gürgen for strength). */
+export const STAINS = {
+  natural:   {hex: null, k: 0, tr: 'Doğal', en: 'Natural', de: 'Natur', fr: 'Naturel', nl: 'Naturel', da: 'Natur', es: 'Natural', it: 'Naturale'},
+  lightOak:  {hex: '#c9a676', k: 0.45, tr: 'Açık meşe tonu', en: 'Light oak tone', de: 'Eiche hell', fr: 'Ton chêne clair', nl: 'Licht eiken', da: 'Lys eg', es: 'Tono roble claro', it: 'Tono rovere chiaro'},
+  oak:       {hex: '#a77d4c', k: 0.55, tr: 'Meşe tonu', en: 'Oak tone', de: 'Eiche', fr: 'Ton chêne', nl: 'Eiken', da: 'Eg', es: 'Tono roble', it: 'Tono rovere'},
+  teak:      {hex: '#8a5a32', k: 0.6, tr: 'Tik tonu', en: 'Teak tone', de: 'Teak', fr: 'Ton teck', nl: 'Teak', da: 'Teak', es: 'Tono teca', it: 'Tono teak'},
+  cherry:    {hex: '#8c4a2f', k: 0.6, tr: 'Kiraz tonu', en: 'Cherry tone', de: 'Kirsche', fr: 'Ton merisier', nl: 'Kersen', da: 'Kirsebær', es: 'Tono cerezo', it: 'Tono ciliegio'},
+  walnut:    {hex: '#5e3f2a', k: 0.7, tr: 'Ceviz tonu', en: 'Walnut tone', de: 'Nussbaum', fr: 'Ton noyer', nl: 'Notelaar', da: 'Valnød', es: 'Tono nogal', it: 'Tono noce'},
+  darkWalnut:{hex: '#3e2a1d', k: 0.78, tr: 'Koyu ceviz tonu', en: 'Dark walnut tone', de: 'Nussbaum dunkel', fr: 'Noyer foncé', nl: 'Donker noten', da: 'Mørk valnød', es: 'Nogal oscuro', it: 'Noce scuro'},
+  wenge:     {hex: '#2d2119', k: 0.85, tr: 'Wenge', en: 'Wenge', de: 'Wenge', fr: 'Wengé', nl: 'Wengé', da: 'Wenge', es: 'Wengué', it: 'Wengé'},
+  black:     {hex: '#191715', k: 0.9, tr: 'Siyah', en: 'Black', de: 'Schwarz', fr: 'Noir', nl: 'Zwart', da: 'Sort', es: 'Negro', it: 'Nero'},
+  white:     {hex: '#efebe3', k: 0.82, tr: 'Beyaz boya', en: 'White paint', de: 'Weiß lackiert', fr: 'Blanc', nl: 'Wit', da: 'Hvid', es: 'Blanco', it: 'Bianco'},
+  greige:    {hex: '#b7ad9e', k: 0.75, tr: 'Grej', en: 'Greige', de: 'Greige', fr: 'Grège', nl: 'Greige', da: 'Greige', es: 'Greige', it: 'Greige'},
+  anthracite:{hex: '#3c3d3f', k: 0.88, tr: 'Antrasit boya', en: 'Anthracite paint', de: 'Anthrazit', fr: 'Anthracite', nl: 'Antraciet', da: 'Antracit', es: 'Antracita', it: 'Antracite'}
+};
+
+/** Natural stone and engineered surfaces for table tops. density kg/m³. */
+export const STONES = {
+  carrara:   {tr: 'Carrara mermer', en: 'Carrara marble', de: 'Carrara-Marmor', fr: 'Marbre de Carrare', nl: 'Carrara-marmer', da: 'Carrara-marmor', es: 'Mármol Carrara', it: 'Marmo di Carrara', base: '#e9e8e4', vein: '#8d9197', style: 'fine', density: 2700},
+  calacatta: {tr: 'Calacatta mermer', en: 'Calacatta marble', de: 'Calacatta-Marmor', fr: 'Marbre Calacatta', nl: 'Calacatta-marmer', da: 'Calacatta-marmor', es: 'Mármol Calacatta', it: 'Marmo Calacatta', base: '#f1eee8', vein: '#a58a62', style: 'bold', density: 2700},
+  nero:      {tr: 'Nero Marquina', en: 'Nero Marquina', de: 'Nero Marquina', fr: 'Nero Marquina', nl: 'Nero Marquina', da: 'Nero Marquina', es: 'Negro Marquina', it: 'Nero Marquina', base: '#1c1c1d', vein: '#e6e3dd', style: 'fine', density: 2700},
+  emperador: {tr: 'Emperador', en: 'Emperador', de: 'Emperador', fr: 'Emperador', nl: 'Emperador', da: 'Emperador', es: 'Emperador', it: 'Emperador', base: '#5b4232', vein: '#c9b39a', style: 'net', density: 2700},
+  verde:     {tr: 'Yeşil mermer', en: 'Verde marble', de: 'Grüner Marmor', fr: 'Marbre vert', nl: 'Groen marmer', da: 'Grøn marmor', es: 'Mármol verde', it: 'Marmo verde', base: '#244137', vein: '#c8d4c7', style: 'net', density: 2750},
+  travertine:{tr: 'Traverten', en: 'Travertine', de: 'Travertin', fr: 'Travertin', nl: 'Travertijn', da: 'Travertin', es: 'Travertino', it: 'Travertino', base: '#d6c3a3', vein: '#b49c78', style: 'bands', density: 2500},
+  terrazzo:  {tr: 'Terrazzo', en: 'Terrazzo', de: 'Terrazzo', fr: 'Terrazzo', nl: 'Terrazzo', da: 'Terrazzo', es: 'Terrazo', it: 'Terrazzo', base: '#e3ddd2', vein: '#8a6f5a', style: 'chips', density: 2400},
+  concrete:  {tr: 'Beton görünüm seramik', en: 'Concrete-look ceramic', de: 'Keramik Betonoptik', fr: 'Céramique effet béton', nl: 'Keramiek betonlook', da: 'Keramik betonlook', es: 'Cerámica efecto hormigón', it: 'Ceramica effetto cemento', base: '#a19d97', vein: '#7e7a74', style: 'cloud', density: 2400}
+};
+
+export const GLASS = {
+  clear:  {tr: 'Şeffaf cam', en: 'Clear glass', de: 'Klarglas', fr: 'Verre clair', nl: 'Helder glas', da: 'Klart glas', es: 'Vidrio claro', it: 'Vetro trasparente', hex: '#dfeee9', opacity: 0.18},
+  extra:  {tr: 'Ekstra şeffaf cam', en: 'Low-iron glass', de: 'Weißglas', fr: 'Verre extra-clair', nl: 'Extra helder glas', da: 'Ekstra klart glas', es: 'Vidrio extraclaro', it: 'Vetro extrachiaro', hex: '#f2f6f5', opacity: 0.12},
+  smoked: {tr: 'Füme cam', en: 'Smoked glass', de: 'Rauchglas', fr: 'Verre fumé', nl: 'Rookglas', da: 'Røget glas', es: 'Vidrio ahumado', it: 'Vetro fumé', hex: '#4a4b4c', opacity: 0.5},
+  bronze: {tr: 'Bronz cam', en: 'Bronze glass', de: 'Bronzeglas', fr: 'Verre bronze', nl: 'Bronsglas', da: 'Bronzeglas', es: 'Vidrio bronce', it: 'Vetro bronzo', hex: '#7a5d43', opacity: 0.45},
+  frosted:{tr: 'Buzlu cam', en: 'Frosted glass', de: 'Satiniertes Glas', fr: 'Verre dépoli', nl: 'Mat glas', da: 'Mattet glas', es: 'Vidrio esmerilado', it: 'Vetro satinato', hex: '#e7ecea', opacity: 0.65}
+};
+
+export const SURFACES = {
+  wood: {tr: 'Masif ahşap', en: 'Solid wood', de: 'Massivholz', fr: 'Bois massif', nl: 'Massief hout', da: 'Massivt træ', es: 'Madera maciza', it: 'Legno massello'},
+  veneer: {tr: 'Ahşap kaplama', en: 'Wood veneer', de: 'Furnier', fr: 'Placage bois', nl: 'Houtfineer', da: 'Træfiner', es: 'Chapa de madera', it: 'Impiallacciatura'},
+  stone: {tr: 'Doğal taş / seramik', en: 'Stone / ceramic', de: 'Stein / Keramik', fr: 'Pierre / céramique', nl: 'Steen / keramiek', da: 'Sten / keramik', es: 'Piedra / cerámica', it: 'Pietra / ceramica'},
+  glass: {tr: 'Cam', en: 'Glass', de: 'Glas', fr: 'Verre', nl: 'Glas', da: 'Glas', es: 'Vidrio', it: 'Vetro'},
+  lacquer: {tr: 'Lake', en: 'Lacquer', de: 'Lack', fr: 'Laque', nl: 'Lak', da: 'Lak', es: 'Laca', it: 'Laccato'},
+  metal: {tr: 'Metal', en: 'Metal', de: 'Metall', fr: 'Métal', nl: 'Metaal', da: 'Metal', es: 'Metal', it: 'Metallo'}
+};
+
 export const FINISHES = {
-  matte:   {tr: 'Mat', en: 'Matt', de: 'Matt', fr: 'Mat', nl: 'Mat', da: 'Mat', es: 'Mate', it: 'Opaco', rough: 0.78, clearcoat: 0},
+  matte:   {tr: 'Mat', en: 'Matt', de: 'Matt', fr: 'Mat', nl: 'Mat', da: 'Mat', es: 'Mate', it: 'Opaco', rough: 0.78, clearcoat: 0, density: 720},
   oil:     {tr: 'Yağ', en: 'Oiled', de: 'Geölt', fr: 'Huilé', nl: 'Geolied', da: 'Olieret', es: 'Aceitado', it: 'Oliato', rough: 0.6, clearcoat: 0.08},
   satin:   {tr: 'İpek mat', en: 'Satin', de: 'Seidenmatt', fr: 'Satiné', nl: 'Zijdemat', da: 'Silkemat', es: 'Satinado', it: 'Satinato', rough: 0.45, clearcoat: 0.25},
   lacquer: {tr: 'Parlak lake', en: 'Gloss lacquer', de: 'Hochglanzlack', fr: 'Laque brillante', nl: 'Hoogglanslak', da: 'Højglanslak', es: 'Laca brillante', it: 'Laccato lucido', rough: 0.18, clearcoat: 0.9}
@@ -90,9 +189,9 @@ export const METALS = {
 };
 
 export const DEFAULT_MATERIALS = {
-  fabric: {fiber: 'linen', weave: 'plain', color: 'oat', pattern: 'none', color2: 'charcoal', scale: 1},
+  fabric: {fiber: 'linen', weave: 'plain', color: 'oat', pattern: 'none', color2: 'charcoal', scale: 1, motif: null, density: 3},
   welt: {color: null},
-  wood: {species: 'oak', finish: 'oil'},
+  wood: {species: 'gurgen', stain: 'natural', finish: 'matte'},
   metal: {finish: 'black'}
 };
 
@@ -100,15 +199,38 @@ export function normalizeMaterials(m = {}) {
   const f = {...DEFAULT_MATERIALS.fabric, ...(m.fabric || {})};
   if (!FIBERS[f.fiber]) f.fiber = 'linen';
   if (!WEAVES[f.weave]) f.weave = 'plain';
-  if (!COLORS[f.color]) f.color = 'oat';
+  if (!COLORS[f.color]) f.color = 'cream';
   if (!COLORS[f.color2]) f.color2 = 'charcoal';
   if (!PATTERNS[f.pattern]) f.pattern = 'none';
   f.scale = Math.min(3, Math.max(0.5, Number(f.scale) || 1));
+  f.density = Math.min(6, Math.max(1, Math.round(Number(f.density) || 3)));
+  const motifs = MOTIF_CHOICES[f.pattern];
+  f.motif = motifs ? (motifs.includes(f.motif) ? f.motif : motifs[0]) : null;
   const w = {...DEFAULT_MATERIALS.wood, ...(m.wood || {})};
-  if (!WOODS[w.species]) w.species = 'oak';
-  if (!FINISHES[w.finish]) w.finish = 'oil';
+  if (!WOODS[w.species]) w.species = 'gurgen';
+  if (!STAINS[w.stain]) w.stain = 'natural';
+  if (!FINISHES[w.finish]) w.finish = 'matte';
   const metal = {...DEFAULT_MATERIALS.metal, ...(m.metal || {})};
   if (!METALS[metal.finish]) metal.finish = 'black';
   const welt = {color: COLORS[m.welt?.color] ? m.welt.color : null};
   return {fabric: f, welt, wood: w, metal};
+}
+
+/** Nearest market colour for a heritage dye (used when proposals should read as everyday upholstery). */
+export const MARKET_NEAR = {chalk: 'white', oat: 'cream', naturalLinen: 'sand', stone: 'silver', taupe: 'mink', ochre: 'mustard', weld: 'mustard', rust: 'camel', turkeyRed: 'cherryRed', cochineal: 'cherryRed', tyrian: 'lilac', mauve: 'dustyRose', blush: 'dustyRose', sage: 'mint', olive: 'khaki', verdigris: 'turquoise', bottle: 'emerald', turkishBlue: 'petrol', woad: 'iceBlue', indigo: 'navy', kakishibu: 'chocolate', cognac: 'camel', charcoal: 'anthracite', bogolan: 'black'};
+
+/** Table materials: top and base surfaces. */
+export const DEFAULT_TABLE_MATERIALS = {
+  top: {surface: 'wood', species: 'oak', stain: 'natural', finish: 'oil', stone: 'carrara', glass: 'clear', color: 'white', polish: 'honed'},
+  base: {surface: 'wood', species: 'oak', stain: 'natural', finish: 'oil', metal: 'black', color: 'black'},
+  hardware: {metal: 'brass'}
+};
+export function normalizeTableMaterials(m = {}) {
+  const top = {...DEFAULT_TABLE_MATERIALS.top, ...(m.top || {})}, base = {...DEFAULT_TABLE_MATERIALS.base, ...(m.base || {})}, hardware = {...DEFAULT_TABLE_MATERIALS.hardware, ...(m.hardware || {})};
+  if (!['wood', 'veneer', 'stone', 'glass', 'lacquer'].includes(top.surface)) top.surface = 'wood';
+  if (!['wood', 'metal', 'lacquer', 'same'].includes(base.surface)) base.surface = 'wood';
+  for (const o of [top, base]) { if (!WOODS[o.species]) o.species = 'oak'; if (!STAINS[o.stain]) o.stain = 'natural'; if (!FINISHES[o.finish]) o.finish = 'oil'; if (!COLORS[o.color]) o.color = o === top ? 'white' : 'black'; }
+  if (!STONES[top.stone]) top.stone = 'carrara'; if (!GLASS[top.glass]) top.glass = 'clear'; if (!['honed', 'polished'].includes(top.polish)) top.polish = 'honed';
+  if (!METALS[base.metal]) base.metal = 'black'; if (!METALS[hardware.metal]) hardware.metal = 'brass';
+  return {top, base, hardware};
 }

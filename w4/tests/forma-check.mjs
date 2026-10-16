@@ -103,4 +103,44 @@ assert.deepEqual(sanitizeActions([{type: 'set', key: 'width', value: 2000}, {typ
 const read = mapVisionToDesign({kind: 'armchair', style: 'neo_gothic', params: {armType: 'scroll', width: 900, legType: 'nonsense'}, measured: ['width'], confidence: 0.6});
 assert.equal(read.design.params.armType, 'scroll'); assert.ok(!read.estimated.includes('width') && read.estimated.includes('depth'));
 
+
+// 7. Tables: every style × kind × seed is valid, proposals differ, drawings/BOM/commands work.
+const T = await import('../assets/forma/table.js');
+const {TABLE_STYLES} = await import('../assets/forma/styles-table.js');
+const {stoneMaps} = await import('../assets/forma/stone.js');
+const {woodMaps} = await import('../assets/forma/wood.js');
+let tables = 0;
+for (const st of TABLE_STYLES) for (const kind of Object.keys(T.KINDS)) for (let seed = 1; seed <= 4; seed++) {
+  const td = sample({family: 'table', style: st.id, kind, seed}), tc = T.compile({...td.params, kind});
+  const errs = T.validate(tc, td.materials, buildMesh).filter(i => i.level === 'error');
+  assert.equal(errs.length, 0, `${st.id}/${kind}/${seed}: ${JSON.stringify(errs)}`);
+  for (const part of tc.parts) { const m = buildMesh(part); assert.ok(m.positions.length && m.positions.every(Number.isFinite), `${st.id}/${kind} ${part.id} mesh`); }
+  tables++;
+}
+const tv = variants({family: 'table', style: 'japandi', kind: 'dining'});
+assert.ok(new Set(tv.map(x => `${x.params.topShape}/${x.params.baseType}`)).size >= 5, 'table proposals vary');
+const td = sample({family: 'table', style: 'art_deco', kind: 'dining', seed: 3}), tc = T.compile({...td.params, kind: 'dining'});
+const ts = drawingSheet(tc, {...labels, knee: 'Knee', edgeDetail: 'Edge'}, {rows: [['A', 'B']]});
+assert.ok(ts.svg.startsWith('<svg') && !ts.svg.includes('undefined') && !ts.svg.includes('NaN'), 'table sheet');
+assert.ok(drawingDxf(tc).includes('ENTITIES'), 'table dxf');
+const tb = bom(tc, td.materials, 'en');
+assert.ok(tb.totals.weightKg > 10 && tb.totals.weightKg < 200 && tb.rows.some(r => /top/i.test(r.nameEn)), `table bom ${tb.totals.weightKg}`);
+const tp = (text, want) => { const a = parse(text, {family: 'table'}).actions; for (const w of want) assert.ok(a.some(x => Object.entries(w).every(([k, v]) => x[k] === v)), `table "${text}" → ${JSON.stringify(a)} lacks ${JSON.stringify(w)}`); };
+tp('6 kişilik oval ceviz yemek masası', [{type: 'seats', value: 6}, {key: 'topShape', value: 'oval'}, {value: 'walnut'}]);
+tp('mermer tabla', [{slot: 'top', key: 'surface', value: 'stone'}]);
+tp('füme cam', [{key: 'glass', value: 'smoked'}]);
+tp('Make it 20 cm longer', [{type: 'delta', key: 'length', value: 200}]);
+tp('round coffee table', [{key: 'topShape', value: 'round'}, {type: 'kind', value: 'coffee'}]);
+tp('Esstisch aus Eiche', [{type: 'kind', value: 'dining'}, {value: 'oak'}]);
+assert.equal(parse('yemek masası').actions.some(a => a.type === 'family' || a.type === 'kind'), true, 'family switch from seating');
+for (const id of ['carrara', 'travertine', 'terrazzo']) { const m = stoneMaps(id, 'polished', {size: 64}); assert.equal(m.albedo.length, 64 * 64 * 4); }
+const wm = woodMaps('gurgen', 'matte', {w: 32, h: 64, stain: 'walnut'}), wn = woodMaps('gurgen', 'matte', {w: 32, h: 64, stain: 'natural'});
+assert.ok(wm.albedo[0] < wn.albedo[0], 'walnut stain darkens gürgen');
+for (const pattern of ['floral', 'polka', 'leaf', 'geometric', 'chevron', 'houndstooth', 'damask']) for (const density of [1, 6]) {
+  const fm = fabricMaps({fiber: 'cotton', weave: 'plain', color: 'cream', color2: 'navy', pattern, density}, {maxPx: 256});
+  let lo = 255, hi = 0; for (let i = 0; i < fm.albedo.length; i += 4 * 7) { lo = Math.min(lo, fm.albedo[i]); hi = Math.max(hi, fm.albedo[i]); }
+  assert.ok(hi - lo > 40, `${pattern}/${density} visible`);
+}
+
+console.log(`PASS forma: ${tables} table designs valid; patterns, stain and stone maps;`);
 console.log(`PASS forma: ${designs} style/kind/seed designs valid; 4 styles × 12 diverse proposals; ${Object.keys(WEAVES).length} weave drafts; 8-language commands; drawings, DXF, BOM, ZIP, PDF; AI output sanitised.`);

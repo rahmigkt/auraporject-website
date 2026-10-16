@@ -1,6 +1,7 @@
 // Seating family: sofa, loveseat and armchair from one parametric assembly grammar.
 // Units: millimetres and degrees. Origin: floor centre; front faces +z.
-import {cushion, loft, lathe, tube, weltLoop, sphere, tuftGrid, transformPositions, bounds} from './mesh.js';
+import {tuftGrid, transformPositions, bounds} from './mesh.js';
+import {buildMesh} from './build.js';
 import {armSection, armOverhang, legProfile, isSquareLeg, ARM_TYPES, LEG_TYPES} from './profiles.js';
 import {clamp} from './rng.js';
 
@@ -286,35 +287,5 @@ export function validate(design) {
   return issues;
 }
 
-// ---- Mesh construction ------------------------------------------------------
-const cache = new Map();
-export function buildMesh(q) {
-  const key = JSON.stringify(q.geom);
-  if (cache.has(key)) return cache.get(key);
-  const g = q.geom; let mesh;
-  if (g.fn === 'cushion') mesh = cushion(g);
-  else if (g.fn === 'box') mesh = cushion({w: g.w, h: g.h, d: g.d, r: 1.5});
-  else if (g.fn === 'loft') mesh = loft(g.section, {length: g.length, noseFront: g.noseFront, noseBack: g.noseBack, shape: t => ({sy: 1 - g.slope * (1 - Math.min(1, (1 - t) * 3.2)) })});
-  else if (g.fn === 'lathe') mesh = lathe(g.profile, {square: g.square});
-  else if (g.fn === 'tube') mesh = tube(g.points, g.r);
-  else if (g.fn === 'welt') mesh = weltLoop(g.w, g.d, g.r, g.cord);
-  else if (g.fn === 'buttons') {
-    const one = sphere(g.r, {segments: 10}), n = g.points.length, vc = one.positions.length;
-    const positions = new Float32Array(vc * n), normals = new Float32Array(vc * n), uvs = new Float32Array(one.uvs.length * n), indices = new Uint32Array(one.indices.length * n);
-    g.points.forEach((pt, k) => {
-      for (let v = 0; v < vc; v += 3) { positions[k * vc + v] = one.positions[v] + pt[0]; positions[k * vc + v + 1] = one.positions[v + 1] + pt[1]; positions[k * vc + v + 2] = one.positions[v + 2] * 0.6 + pt[2]; }
-      normals.set(one.normals, k * vc); uvs.set(one.uvs, k * one.uvs.length);
-      for (let i = 0; i < one.indices.length; i++) indices[k * one.indices.length + i] = one.indices[i] + k * vc / 3;
-    });
-    mesh = {positions, normals, uvs, indices};
-  }
-  if (cache.size > 400) cache.clear();
-  cache.set(key, mesh);
-  return mesh;
-}
-
-/** World-space positions of a part (mm). */
-export function worldPositions(q) {
-  const m = buildMesh(q);
-  return transformPositions(m.positions, q.pos, q.rot);
-}
+// Mesh construction is shared by all families.
+export {buildMesh, worldPositions} from './build.js';
