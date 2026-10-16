@@ -220,7 +220,8 @@ const KIND_TABLE = {
   desk: L('calisma masasi|yazi masasi|desk|schreibtisch|bureau|bureau|skrivebord|escritorio|scrivania'),
   dining: L('yemek masasi|masa|dining table|esstisch|table a manger|eettafel|spisebord|mesa de comedor|tavolo da pranzo|tavolo')
 };
-const FAMILY_WORDS = {table: L('masa|sehpa|konsol|dresuar|table|tisch|tafel|bord|mesa|tavolo|tavolino|desk|bureau|escritorio|scrivania'), seating: L('koltuk|kanepe|berjer|sofa|couch|canape|divano|sessel|fauteuil|sillon|poltrona|lenestol|laenestol')};
+const FAMILY_WORDS = {table: L('masa|sehpa|konsol|dresuar|table|tisch|tafel|bord|mesa|tavolo|tavolino|desk|bureau|escritorio|scrivania'), seating: L('koltuk|kanepe|berjer|sofa|couch|canape|divano|sessel|fauteuil|sillon|poltrona|lenestol|laenestol'),
+  bedroom: L('yatak|karyola|yatak odasi|baslik|komodin|sifonyer|bed|bedroom|headboard|bett|kopfteil|schlafzimmer|nachttisch|kommode|lit|tete de lit|chevet|commode|chambre|hoofdbord|nachtkast|nachtkastje|ladekast|slaapkamer|seng|sengegavl|natbord|sovevaerelse|cama|cabecero|mesita de noche|comoda|dormitorio|letto|testiera|comodino|cassettiera|camera da letto|nightstand|bedside|dresser|chest of drawers')};
 const PERSON_UNITS = L('kisilik|kisi|people|persons|personen|person|personnes|personnes|personer|personas|persone|seats|places|zitplaatsen|pladser|plazas|posti');
 
 const DELTA_WORDS = L('daha|ilave|more|extra|another|mehr|noch|weitere|plus|encore|meer|nog|mere|endnu|mas|otro|piu|ancora|altri');
@@ -238,9 +239,12 @@ const pickMap = (text, map) => { let best = null, len = 0; for (const [k, list] 
 /** Parse one utterance. Returns {actions, understood}. */
 export function parse(raw, current = {}) {
   const text = fold(raw), actions = [];
-  if (current.family === 'table') return parseTable(text);
-  // A table word while seating is open switches family, then the rest is read with the table grammar.
-  if (text && pickMap(text, FAMILY_WORDS) === 'table') { const r = parseTable(text); return {actions: [{type: 'family', value: 'table'}, ...r.actions.filter(a => a.type !== 'family')], understood: true}; }
+  // A word of another family switches family, then the rest is read with that family's grammar.
+  const fam = text ? pickMap(text, FAMILY_WORDS) : null, cur = current.family || 'seating';
+  if (fam && fam !== cur && fam !== 'seating') { const r = (fam === 'table' ? parseTable : parseBedroom)(text); return {actions: [{type: 'family', value: fam}, ...r.actions.filter(a => a.type !== 'family')], understood: true}; }
+  if (fam === 'seating' && cur !== 'seating') return {actions: [{type: 'family', value: 'seating'}, ...parse(raw, {family: 'seating'}).actions.filter(a => a.type !== 'family')], understood: true};
+  if (cur === 'table') return parseTable(text);
+  if (cur === 'bedroom') return parseBedroom(text);
   if (!text) return {actions, understood: false};
   for (const [name, list] of Object.entries(COMMANDS)) if (any(text, list)) { actions.push({type: 'command', name}); }
   if (actions.some(a => a.name === 'similar')) for (let i = actions.length - 1; i >= 0; i--) if (actions[i].name === 'variants') actions.splice(i, 1);
@@ -335,7 +339,6 @@ function parseTable(text) {
   for (const [name, list] of Object.entries(COMMANDS)) if (any(text, list)) actions.push({type: 'command', name});
   if (actions.some(a => a.name === 'similar')) for (let i = actions.length - 1; i >= 0; i--) if (actions[i].name === 'variants') actions.splice(i, 1);
   for (const [id, list] of STYLE_WORDS) if (any(text, list)) { actions.push({type: 'style', value: id}); break; }
-  const fam = pickMap(text, FAMILY_WORDS); if (fam === 'seating') actions.push({type: 'family', value: 'seating'});
   const kind = pickMap(text, KIND_TABLE); if (kind) actions.push({type: 'kind', value: kind});
   const slotBase = any(text, SLOTS.leg) || any(text, SLOTS.base) || /\b(ayag|ayak|govde|kaide)/.test(text);
   for (const [key, map] of Object.entries(TABLE_ENUM_WORDS)) { const v = pickMap(text, map); if (v) actions.push({type: 'enum', key, value: v}); }
@@ -379,6 +382,107 @@ function parseTable(text) {
       actions.push(dir ? {type: 'delta', key: target, value: dir * Math.abs(mm)} : {type: 'set', key: target, value: mm});
     } else if (dir) {
       const steps = {length: [50, 100, 200], width: [20, 50, 100], height: [10, 20, 40], topThickness: [2, 5, 10], legSize: [3, 6, 12], overhang: [20, 50, 100]}[target] || [10, 20, 40];
+      actions.push({type: 'delta', key: target, value: dir * (any(text, SIZE.big) ? steps[2] : any(text, SIZE.small) ? steps[0] : steps[1])});
+    }
+  }
+  return {actions: dedupe(actions), understood: actions.length > 0};
+}
+
+// ---- Bedroom vocabulary ---------------------------------------------------------------
+const BED_KIND = {
+  bed: L('yatak|karyola|baza|baslik|bed|bett|lit|seng|cama|letto|headboard|kopfteil|tete de lit|hoofdbord|sengegavl|cabecero|testiera'),
+  nightstand: L('komodin|nightstand|bedside|bedside table|nachttisch|nachtschrank|table de chevet|chevet|nachtkastje|nachtkast|natbord|mesita|mesilla|comodino'),
+  dresser: L('sifonyer|dresser|chest of drawers|chest|kommode|commode|ladekast|kommode|comoda|cassettiera|cajonera')
+};
+const BED_ENUM_WORDS = {
+  headType: {tufted: L('kapitone|chester|tufted|capitonne|capitone|knappet|capitone|buttoned'), channel: L('kanal|kanalli|dikey kanal|channel|channels|channelled|kanalstepp|cannele|kanaal|kanaler|canales|canali'), hChannel: L('yatay kanal|yatay dilim|horizontal channel|horizontal channels|horizontale kanale|cotes horizontales|horizontale kanalen|vandrette kanaler|canales horizontales|canali orizzontali'),
+    cane: L('hasir|rattan|cane|viyana|wiener geflecht|geflecht|cannage|weens|wienerflet|rejilla|paglia di vienna|paglia'), slats: L('citali|cita|slat|slats|slatted|latten|lattes|lamel|lameller|listones|listelli|ribber'), wingback: L('kanatli|kanat|wingback|wing|ohren|oreilles|orejas|ali|oren|orer'),
+    split: L('asma yastik|asili yastik|hanging cushion|hanging cushions|hangekissen|haengekissen|coussins suspendus|hangkussens|haengepuder|cojines colgantes|cuscini appesi'), boiserie: L('boiserie|duvar paneli|wall panel|wandpaneel|lambri|vaegpanel'),
+    framed: L('cerceveli|cerceve|framed|frame|gerahmt|encadre|omlijst|indrammet|enmarcado|cornice'), panels: L('panelli|kareli baslik|padded panels|polsterfelder|panneaux|panelen|felter|paneles|pannelli'), panel: L('duz panel|ahsap baslik|flat panel|wooden headboard|holzkopfteil|tete de lit en bois|houten hoofdbord|traegavl|cabecero de madera|testiera in legno'), upholstered: L('dosemeli|dolgulu|upholstered|gepolstert|rembourre|gestoffeerd|polstret|tapizado|imbottit')},
+  headShape: {arch: L('kemer|kemerli|arch|arched|bogen|arche|cintre|boog|bue|arco|ad arco'), scallop: L('deniz kabugu|istiridye|dilimli|dalgali|scallop|scalloped|shell|muschel|feston|festonne|coquillage|schelp|geschulpt|musling|festoneado|concha|smerlato|conchiglia'), capsule: L('kapsul|hap|pill|capsule|kapsel|capsula'), stepped: L('kademeli|basamakli|stepped|gestuft|a gradins|getrapt|trappet|escalonado|a gradoni'), rounded: L('yuvarlak kose|koseleri yuvarlak|rounded|abgerundet|arrondi|afgerond|afrundet|redondeado|arrotondat'), rect: L('duz kenar|kosesiz|straight|square|gerade|droite|recht|lige|recto|dritta')},
+  bedBase: {baza: L('baza|bazali|box base|boxspring|box spring|sommier|canape abatible|boxmadras|box contenitore'), platform: L('platform|plateforme|podest|plataforma|piattaforma'), floating: L('havada|asili gibi|ucan|floating|schwebend|flottant|zwevend|svaevende|flotante|sospeso'), fourPoster: L('dort direkli|direkli|cibinlik|tente|four poster|canopy|himmelbett|baldaquin|hemelbed|himmelseng|dosel|baldacchino'), upholsteredFrame: L('dosemeli kasa|upholstered frame|gepolsterter rahmen|cadre rembourre|gestoffeerd frame|polstret ramme|bastidor tapizado|telaio imbottito'), frame: L('ahsap kasa|ayakli karyola|wooden frame|timber frame|holzrahmen|cadre en bois|houten frame|traeramme|bastidor de madera|telaio in legno')},
+  storage: {lift: L('sandik|sandikli|amortisor|storage|lift|stauraum|coffre|opbergruimte|opberg|opbevaring|almacenaje|canape|contenitore'), drawers: L('cekmeceli baza|yan cekmece|side drawers|seitliche schubladen|tiroirs lateraux|zijlades|sideskuffer|cajones laterales|cassetti laterali'), none: L('sandiksiz|no storage|ohne stauraum|sans coffre|zonder opberg|uden opbevaring|sin almacenaje|senza contenitore')},
+  footboard: {high: L('yuksek ayak tahtasi|high footboard|hohes fussteil|pied de lit haut|hoog voeteneind|hoj fodgavl|piecero alto|pediera alta'), low: L('ayak tahtasi|ayak ucu|footboard|fussteil|pied de lit|voeteneind|fodgavl|piecero|pediera'), none: L('ayak tahtasiz|no footboard|ohne fussteil|sans pied de lit|zonder voeteneind|uden fodgavl|sin piecero|senza pediera')},
+  integratedNight: {drawer: L('entegre komodin|asma komodin|baslik komodini|built in bedside|floating bedside|integrierter nachttisch|chevet integre|geintegreerd nachtkastje|integreret natbord|mesita integrada|comodino integrato'), shelf: L('asma raf|baslik rafi|floating shelf|schwebende ablage|tablette suspendue|zwevende plank|svaevende hylde|estante flotante|mensola sospesa')},
+  frontStyle: {fluted: L('oluklu|citali on|fluted|reeded|geriffelt|cannele|geribd|riflet|acanalado|cannettat'), framed: L('cerceveli on|shaker|kapakli cerceve|framed front|rahmenfront|facade a cadre|kaderfront|rammefront|frente enmarcado|anta a telaio'), cane: L('hasir|rattan|cane|geflecht|cannage|vlechtwerk|flet|rejilla|paglia'), grooved: L('yivli|cizgili on|grooved|gerillt|rainure|gegroefd|rillet|ranurado|scanalat'), flat: L('duz on|sade on|flat front|glatte front|facade lisse|vlakke front|glat front|frente liso|anta liscia')},
+  pull: {knob: L('topuz|dugme kulp|knob|knauf|bouton|knop|pomo|pomolo'), ring: L('halka|ring|anneau|anilla|anello'), leather: L('deri kulp|deri|leather|leder|cuir|leer|laeder|cuero|pelle'), none: L('kulpsuz|it ac|push|grifflos|sans poignee|greeploos|grebsfri|sin tirador|senza maniglia'), edge: L('gizli kulp|tirnak|finger|griffleiste|prise de main|greeplijst|grebskant|unero|gola'), bar: L('cubuk kulp|kulp|bar handle|griffstange|poignee|greep|greb|tirador|maniglia')},
+  caseBase: {wall: L('duvara asili|asma|wall hung|wall mounted|wandhangend|suspendu|hangend|vaegophaengt|suspendido|sospeso'), sled: L('kizak|sled|kufe|luge|slede|mede|patin|slitta'), recessed: L('gizli kaide|recessed plinth|zuruckgesetzter sockel|socle en retrait|verzonken plint|tilbagetrukket sokkel|zocalo retranqueado|zoccolo arretrato'), plinth: L('kaide|plinth|sockel|socle|plint|sokkel|zocalo|zoccolo'), legs: L('ayakli|legs|beine|pieds|poten|ben|patas|gambe')},
+  mirror: {arch: L('kemerli ayna|arched mirror|bogenspiegel|miroir arche|boogspiegel|buespejl|espejo de arco|specchio ad arco'), round: L('yuvarlak ayna|round mirror|runder spiegel|miroir rond|ronde spiegel|rundt spejl|espejo redondo|specchio tondo'), rect: L('ayna|aynali|mirror|spiegel|miroir|spejl|espejo|specchio'), none: L('aynasiz|no mirror|ohne spiegel|sans miroir|zonder spiegel|uden spejl|sin espejo|senza specchio')}
+};
+const BED_SIZES = {'160x200': L('cift kisilik|double bed|queen|doppelbett|lit double|tweepersoons|dobbeltseng|cama de matrimonio|matrimoniale'), '180x200': L('king|king size|genis cift'), '90x190': L('tek kisilik|single|einzelbett|lit simple|eenpersoons|enkeltseng|cama individual|singolo'), '120x200': L('bir bucuk kisilik|small double|french bed')};
+const BED_TARGETS = [
+  ['headHeight', L('baslik yuksekli|headboard height|kopfteilhohe|hauteur de la tete de lit|hoogte hoofdbord|gavlhojde|altura del cabecero|altezza testiera')],
+  ['headExtend', L('baslik tasmasi|baslik genisli|headboard width|headboard extension|kopfteilbreite|largeur tete de lit|breedte hoofdbord|gavlbredde|ancho del cabecero|larghezza testiera')],
+  ['mattressThickness', L('yatak kalinli|mattress thickness|matratzenhohe|epaisseur du matelas|matrasdikte|madrastykkelse|grosor del colchon|spessore materasso')],
+  ['legHeight', L('ayak yuksekli|leg height|beinhohe|hauteur des pieds|poothoogte|benhojde|altura de las patas|altezza gambe')],
+  ['depth', L('derinlik|derinli|depth|deep|tiefe|profondeur|diepte|dybde|profundidad|profondita')],
+  ['width', L('genislik|genisli|en|eni|width|wide|breite|largeur|breedte|bredde|ancho|anchura|larghezza')],
+  ['height', L('yukseklik|yuksekli|height|tall|hohe|hauteur|hoogte|hojde|altura|altezza')]
+];
+
+/** Bedroom commands: bed / bedside / chest, headboard type and shape, base, mattress size, fronts, pulls, mirror, materials, sizes. */
+function parseBedroom(text) {
+  const actions = [];
+  if (!text) return {actions, understood: false};
+  for (const [name, list] of Object.entries(COMMANDS)) if (name !== 'variants' && name !== 'similar' && any(text, list)) actions.push({type: 'command', name});
+  for (const [id, list] of STYLE_WORDS) if (any(text, list)) { actions.push({type: 'style', value: id}); break; }
+  const fam = pickMap(text, FAMILY_WORDS); if (fam && fam !== 'bedroom') actions.push({type: 'family', value: fam});
+  const kind = pickMap(text, BED_KIND); if (kind) actions.push({type: 'kind', value: kind});
+  const isBed = kind === 'bed' || (!kind && /(yatak|karyola|baza|basl|bed|bett|kopfteil|lit|seng|cama|letto|headboard|cabecero|testiera)/.test(text));
+  for (const [key, map] of Object.entries(BED_ENUM_WORDS)) {
+    const v = pickMap(text, map); if (!v) continue;
+    // Shared words: "hasır" is a headboard on beds and a front on chests; "kaide" a bed base or a chest base.
+    if ((key === 'headType' || key === 'headShape') && ((kind && kind !== 'bed') || (!isBed && pickMap(text, BED_ENUM_WORDS.mirror)))) continue;
+    if (key === 'frontStyle' && (isBed || (v === 'cane' && !kind))) continue;
+    if (key === 'caseBase' && isBed) continue;
+    if (key === 'storage' && !isBed && kind) continue;
+    actions.push({type: 'enum', key, value: v});
+  }
+  if (actions.some(a => a.key === 'mirror' && a.value !== 'none') && /(kemer|arch|bogen|arche|boog|bue|arco)/.test(text)) actions.find(a => a.key === 'mirror').value = 'arch';
+  if (actions.some(a => a.key === 'mirror' && a.value !== 'none') && !actions.some(a => a.type === 'kind')) actions.push({type: 'kind', value: 'dresser'});
+  // Mattress size: "160x200", "180 x 200", "çift kişilik".
+  const ms = text.match(/(\d{2,3})\s*[x×*]\s*(\d{3})/);
+  if (ms) { const w = +ms[1], l = +ms[2]; actions.push({type: 'mattress', value: [w < 300 ? w * 10 : w, l < 300 ? l * 10 : l]}); }
+  else { const size = pickMap(text, BED_SIZES); if (size) actions.push({type: 'mattress', value: size.split('x').map(v => +v * 10)}); }
+  // Drawers: "3 çekmeceli".
+  const dm = text.match(/(\d)\s*(cekmece|drawer|schublade|tiroir|lade|skuffe|cajon|cassett)/); if (dm) actions.push({type: 'set', key: 'rows', value: +dm[1]});
+  // Materials
+  const species = pickMap(text, WOOD_WORDS), metal = pickMap(text, METAL_WORDS), finish = pickMap(text, FINISH_WORDS);
+  const surf = pickMap(text, SURFACE_WORDS);
+  if (surf && ['wood', 'veneer', 'lacquer'].includes(surf)) actions.push({type: 'material', slot: 'case', key: 'surface', value: surf});
+  if (species) actions.push({type: 'material', slot: 'case', key: 'species', value: species});
+  if (finish) actions.push({type: 'material', slot: 'case', key: 'finish', value: finish});
+  if (metal) actions.push({type: 'material', slot: 'metal', key: 'finish', value: metal});
+  for (const key of ['fiber', 'weave', 'pattern']) { const v = pickMap(text, FABRIC_WORDS[key]); if (v) actions.push({type: 'material', slot: 'fabric', key, value: v}); }
+  if (!species && !metal) {
+    let colour = null, len = 0;
+    for (const [id, list] of COLOR_WORDS) for (const s of list) if (s.length > len && has(text, s)) { colour = id; len = s.length; }
+    if (colour) {
+      const toCase = surf === 'lacquer' || (!isBed && !actions.some(a => a.slot === 'fabric'));
+      actions.push(toCase ? {type: 'material', slot: 'case', key: 'color', value: MARKET_OF[colour] || colour} : {type: 'material', slot: 'fabric', key: 'color', value: colour});
+    }
+  }
+  // Dimensions
+  const num = text.match(/(-?\d+(?:[.,]\d+)?)\s*(mm|cm|m)?(?![a-z0-9x×])/);
+  let target = null, targetStem = '';
+  for (const [key, list] of BED_TARGETS) { const m = any(text, list); if (m) { target = key; targetStem = m; break; } }
+  let dir = 0, compWord = '', compKey = null;
+  for (const [d, key, list] of COMPARATIVES) { const m = any(text, list); if (m) { dir = d; compWord = m; if (key && !compKey) compKey = key; if (key) break; } }
+  if (!target && compKey) target = compKey === 'cushionThickness' ? null : compKey;
+  if (!target && dir && /(basl|headboard|kopfteil|tete|hoofdbord|gavl|cabecero|testiera)/.test(text)) target = 'headHeight';
+  if (target && num && !any(text, DELTA_WORDS) && !(compWord && compWord.length > targetStem.length)) dir = 0;
+  // Bed-specific meanings: height → headboard height, width → mattress width (in 10 cm steps).
+  const bed = isBed || (!kind && actions.some(a => ['headType', 'headShape', 'bedBase'].includes(a.key)));
+  if (target === 'height' && bed) target = 'headHeight';
+  if (target === 'width' && bed) target = 'mattressWidth';
+  if (target === 'legHeight' && !bed && kind) target = 'baseHeight';
+  if (target && !(dm && num && +num[1] === +dm[1]) && !ms) {
+    if (num) {
+      const v = parseFloat(num[1].replace(',', '.')), unit = num[2] || '';
+      const mm = unit === 'mm' ? v : unit === 'm' ? v * 1000 : unit === 'cm' ? v * 10 : v <= 3 ? v * 1000 : v < 300 ? v * 10 : v;
+      actions.push(dir ? {type: 'delta', key: target, value: dir * Math.abs(mm)} : {type: 'set', key: target, value: mm});
+    } else if (dir) {
+      const steps = {mattressWidth: [100, 200, 400], headHeight: [50, 100, 200], width: [50, 100, 200], height: [20, 50, 100], depth: [20, 40, 80], headExtend: [50, 100, 200], legHeight: [20, 40, 80], baseHeight: [20, 40, 80], mattressThickness: [20, 40, 60]}[target] || [10, 20, 40];
       actions.push({type: 'delta', key: target, value: dir * (any(text, SIZE.big) ? steps[2] : any(text, SIZE.small) ? steps[0] : steps[1])});
     }
   }

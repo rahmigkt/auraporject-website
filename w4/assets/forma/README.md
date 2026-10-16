@@ -1,4 +1,4 @@
-# AURA Forma — parametric furniture studio (seating + tables)
+# AURA Forma — parametric furniture studio (seating, tables, bedroom)
 
 Page: `w4/tasarla.html` · Tests: `node w4/tests/forma-check.mjs`
 
@@ -30,6 +30,9 @@ technical drawings and the designer package.
 | `build.js` | Shared `buildMesh` (cached) for every part kind, including profiled slabs (table tops with edge profiles). |
 | `table.js` | Table grammar (dining, coffee, side, console, desk): 7 top shapes, 6 edge profiles, 11 base systems, 7 leg types, 6 pedestals, stretchers, shelves, drawers, extension leaves. `validate` checks height, knee room (≥ 630 mm), top deflection (5wL⁴/384EI), tipping under a kind-based edge load, weight, wood movement. `tableBom` gives cut sizes (staves, tenon allowances, Z-clips, glides). |
 | `styles-table.js` | 26 table style distributions (same ids as seating). |
+| `bedroom.js` | Bedroom grammar: bed (12 headboard types × 6 silhouettes, 6 bases, footboard, storage, built-in bedside units, mattress sizes TR/EU), bedside table and chest (layouts incl. 2:3:2 top row, graduated drawers, 5 front styles, 6 pulls, 5 bases, rounded plan, mirror). Checks and parts list. Research: `knowledge/AURA-YATAK-ODASI-ARASTIRMA.md`. |
+| `styles-bedroom.js` | 26 bedroom style distributions. |
+| `cane.js` | Vienna-cane map. |
 | `stone.js` | Procedural marble / travertine / terrazzo / concrete-look maps (600 mm tile). |
 | `voice.js`, `whisper-worker.js` | Voice: browser speech recognition; if the browser has none (Firefox, some Chromium builds) Whisper runs in the browser via transformers.js (≈80 MB once, cached). Needs `microphone=(self)` in `Permissions-Policy` (.htaccess). |
 | `studio.js`, `i18n.js`, `studio.css` | Interface; family switch in the header, `?family=table&kind=dining`. |
@@ -56,3 +59,6 @@ fibre → weave → colour (24 market colours, then heritage dyes) → pattern (
 * Fabric metres are an estimate from surface area with waste allowance.
 * Colour hex values are representative, not measured.
 * Image reading needs the server AI; without it the button explains that it is off.
+
+## Tests
+`node w4/tests/forma-check.mjs` (all families) · `node w4/tests/table-geometry.mjs` (8865 table combinations: supports under the top, no gaps, on the floor, nothing floating).

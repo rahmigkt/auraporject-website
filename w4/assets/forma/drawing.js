@@ -109,13 +109,13 @@ function section(part, xCut) {
   return loops;
 }
 
-const FILL = {fabric: '#f3efe7', welt: '#e8e1d4', wood: '#efe3cf', metal: '#e4e4e2', dark: '#d9d6d0', frame: '#f6ecda'};
+const FILL = {fabric: '#f3efe7', welt: '#e8e1d4', wood: '#efe3cf', metal: '#e4e4e2', dark: '#d9d6d0', frame: '#f6ecda', case: '#efe6d6', mattress: '#ffffff', mirror: '#e9eef0', cane: '#f2e6c9', leather: '#e6d6c4', shadow: '#cfcac0'};
 
 /**
  * Build all views. Returns {views:{front,side,top,section}, extents, xCut}. Coordinates in mm (model space).
  */
 export function buildViews(compiled) {
-  const visible = compiled.parts.filter(p => !p.internal);
+  const shown = compiled.parts.filter(p => p.decor !== 'bedding'), visible = shown.filter(p => !p.internal);
   const views = {};
   for (const view of ['front', 'side', 'top']) {
     views[view] = visible.map(p => ({id: p.id, mat: p.mat, role: p.role, ...silhouette(p, view)})).sort((a, b) => a.depth - b.depth);
@@ -123,7 +123,7 @@ export function buildViews(compiled) {
   const m = compiled.meta, seatW = m.seatWidthEach;
   const xCut = compiled.sectionX ?? Math.round(-m.innerWidth / 2 + seatW / 2);
   views.sideBehind = views.side.filter(s => s.dmin < xCut);
-  views.section = compiled.parts.map(p => ({id: p.id, mat: p.mat, internal: !!p.internal, loops: section(p, xCut)})).filter(s => s.loops.length);
+  views.section = shown.map(p => ({id: p.id, mat: p.mat, internal: !!p.internal, loops: section(p, xCut)})).filter(s => s.loops.length);
   return {views, xCut};
 }
 
@@ -158,7 +158,7 @@ export function drawingSheet(compiled, labels, info = {}) {
   if (compiled.family === 'table') for (const s of views.top) if (!['top', 'leaf', 'grommet'].includes(s.role)) out.push(`<path d="${path('top', s.loops, 0)}" fill="none" stroke="#1f2420" stroke-width="0.18" stroke-dasharray="1.2 0.8"/>`);
   // Section: everything beyond the cut in light line, then cut faces hatched.
   for (const s of views.sideBehind) out.push(`<path d="${path('section', s.loops, Hm)}" fill="#fbfaf7" stroke="#9aa096" stroke-width="0.15"/>`);
-  for (const s of views.section) out.push(`<path d="${path('section', s.loops, Hm)}" fill="url(#${s.internal ? 'hatchWood' : s.mat === 'wood' ? 'hatchWood' : 'hatchFoam'})" fill-rule="evenodd" stroke="#1f2420" stroke-width="0.35"/>`);
+  for (const s of views.section) out.push(`<path d="${path('section', s.loops, Hm)}" fill="url(#${s.internal || ['wood', 'case', 'frame'].includes(s.mat) ? 'hatchWood' : 'hatchFoam'})" fill-rule="evenodd" stroke="#1f2420" stroke-width="0.35"/>`);
   out.push(`</g>`);
   // Ground lines
   for (const v of ['front', 'side', 'section']) { const [x0, y0] = T(v, [v === 'front' ? -Wm / 2 - 60 : -Dm / 2 - 60, 0], Hm), [x1] = T(v, [v === 'front' ? Wm / 2 + 60 : Dm / 2 + 60, 0], Hm); out.push(`<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y0}" stroke="#1f2420" stroke-width="0.35"/>`); }

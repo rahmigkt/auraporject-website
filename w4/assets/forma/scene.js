@@ -12,6 +12,7 @@ import {COLORS, FIBERS, METALS, WOODS, FINISHES, STAINS, STONES, GLASS} from './
 import {fabricMaps} from './textile.js';
 import {woodMaps} from './wood.js';
 import {stoneMaps} from './stone.js';
+import {caneMaps} from './cane.js';
 
 // ---- Map generation (worker with synchronous fallback) ----------------------
 let worker = null, jobs = 0;
@@ -43,7 +44,7 @@ function dataTexture(data, w, h, srgb) {
 const hexColor = h => new THREE.Color(h);
 
 /** Material set for one design. Starts with flat colours; textures arrive asynchronously. */
-function materialSet(materials, opts = {}) { return materials.top ? tableMaterialSet(materials, opts) : seatingMaterialSet(materials, opts); }
+function materialSet(materials, opts = {}) { return materials.top ? tableMaterialSet(materials, opts) : materials.case ? bedroomMaterialSet(materials, opts) : seatingMaterialSet(materials, opts); }
 
 function applyMaps(set, mat, out, tileMmX, tileMmY, {rotate = false} = {}) {
   if (!out || set.disposed) return;
@@ -117,6 +118,31 @@ function tableMaterialSet(materials, {detail = true, onReady} = {}) {
   return set;
 }
 
+/** Bedroom: upholstery and solid wood as seating, plus case surface, mattress, bedding, cane, mirror, leather. */
+let CANE = null;
+function bedroomMaterialSet(materials, {detail = true, onReady} = {}) {
+  let ready = 0;
+  const done = () => { if (++ready === 2) onReady?.(); };
+  const set = seatingMaterialSet(materials, {detail, onReady: done});
+  const jobs = [];
+  set.case = surfaceMaterial(materials.case, set, detail ? jobs : []);
+  set.mattress = new THREE.MeshPhysicalMaterial({color: '#f3f1ec', roughness: 0.9, sheen: 0.4, sheenRoughness: 0.8, sheenColor: new THREE.Color('#ffffff')});
+  const L = COLORS[materials.linen?.color] || COLORS.white;
+  set.linen = new THREE.MeshPhysicalMaterial({color: hexColor(L.hex), roughness: 0.92, sheen: 0.5, sheenRoughness: 0.85, sheenColor: hexColor(L.hex).lerp(new THREE.Color('#fff'), 0.4)});
+  set.leather = new THREE.MeshPhysicalMaterial({color: '#6b4428', roughness: 0.55, clearcoat: 0.2});
+  set.mirror = new THREE.MeshPhysicalMaterial({color: '#d3dcdf', metalness: 0.55, roughness: 0.08, clearcoat: 1, clearcoatRoughness: 0.02});
+  set.shadow = new THREE.MeshStandardMaterial({color: '#191714', roughness: 1});
+  set.cane = new THREE.MeshStandardMaterial({color: '#d6b880', roughness: 0.6, side: THREE.DoubleSide});
+  if (detail) {
+    jobs.push(makeMaps('fabric', {fiber: 'linen', weave: 'plain', color: materials.linen?.color || 'white', pattern: 'none', color2: 'white', scale: 1, density: 3}, 512).then(out => { applyMaps(set, set.linen, out, out?.tileMm, out?.tileMm); }));
+  }
+  { const cane = CANE ??= caneMaps(); applyMaps(set, set.cane, cane, cane.tileMm, cane.tileMm); }
+  Promise.all(jobs).then(done);
+  const base = set.dispose;
+  set.dispose = () => { base(); for (const m of new Set([set.case, set.mattress, set.linen, set.leather, set.mirror, set.shadow, set.cane])) m.dispose(); };
+  return set;
+}
+
 function geometryFor(part) {
   const m = buildMesh(part), g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.BufferAttribute(m.positions, 3));
@@ -132,7 +158,8 @@ function buildGroup(compiled, mats, {structure = false} = {}) {
   for (const part of compiled.parts) {
     if (part.internal && !structure) continue;
     let mat = mats[part.mat] || mats.fabric;
-    if (structure && !part.internal && ['fabric', 'welt', 'top'].includes(part.mat)) {
+    if (structure && part.decor) continue;
+    if (structure && !part.internal && ['fabric', 'welt', 'top', 'case'].includes(part.mat)) {
       mat = mat.clone(); mat.transparent = true; mat.opacity = 0.16; mat.depthWrite = false; mat.userData.temp = true;
     }
     const mesh = new THREE.Mesh(geometryFor(part), mat);

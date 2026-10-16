@@ -380,3 +380,7 @@ Yayındaki sayfa: `w4/tasarla.html`. Kod: `w4/assets/forma/` (ayrıntı: `w4/ass
 - Gönderimden sonra müşteri, gönderdiği tasarımın PDF'ini (görsel + ölçülü çizim) indirebilir; kayıt tarayıcıda proje numarasıyla tutulur.
 - Gönderim kapalıyken (sunucu ayarı yok) form pasif, indirme yok. Açmak için sunucuda `api/forma-secrets.php`: `submit_enabled`, `submit_recipient`, `submit_sender`, `submit_store_dir` (public_html dışı klasör).
 - Not: çizim tarayıcıda üretildiği için teknik bilgisi olan biri geliştirici araçlarıyla yine erişebilir. Kesin koruma için çizim/PDF üretimi sunucuya taşınmalı (Codex işi).
+
+## 10. Masa geometrisi ve yatak odası (2026-10-17)
+- Masa: ayak sistemleri tablanın alt yüzüne (kenar profili dahil) her şekilde sığdırılıyor; eğik ayaklar zemine ve tablaya düz kesiliyor; köprü ayak tek dikmeli; çıtalı raf taşıyıcı kayıtlı; devrilme gerçek zemin izinden hesaplanıyor. `tests/table-geometry.mjs` 8865 kombinasyonda boşluk/taşma/askıda parça kontrol ediyor.
+- Yatak odası ailesi eklendi (karyola, komodin, şifonyer): ayrıntı ve kaynaklar `knowledge/AURA-YATAK-ODASI-ARASTIRMA.md`.
