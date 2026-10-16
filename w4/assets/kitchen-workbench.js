@@ -1,5 +1,5 @@
 import {buildKitchenStudy,KITCHEN_STYLES,KITCHEN_TYPES} from './kitchen-studies.js?v=20261016k';
-import {createFurnitureScene} from './furniture-scene.js?v=20261016i';
+import {createFurnitureScene} from './furniture-scene.js?v=20261016n';
 import {referenceDrawing} from './reference-drawing.js?v=20261016i';
 const $=id=>document.getElementById(id),scene=await createFurnitureScene($('referenceStage'));
 const notes={cabinets:'Dengeli 60 cm modüller, gizli tutamak çizgisi, boy fırın dolabı ve ince üst dolaplar.',worktop:'L dönüşlü çalışma yüzeyi, gerçek evye boşluğu ve alçak arkalık.',island:'240 cm depolama gövdesi, oturma için taşan tabla; meşede ritmik çıtalar, grafitte şelale kenarlar.'};

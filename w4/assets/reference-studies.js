@@ -1,6 +1,6 @@
 // Reference studies are simplified, editable concept geometry, never supplier CAD.
 import {PRODUCTS} from './furniture-taxonomy.js?v=20261016m';
-import {compileStudio} from './design-library.js?v=20261016b';
+import {compileStudio} from './design-library.js?v=20261016n';
 export function transformStudyPoint(p,v){const [rx,ry,rz]=p.rotation||[0,0,0],yaw=p.yaw||0;let [x,y,z]=v;[x,y]=[x*Math.cos(rz)-y*Math.sin(rz),x*Math.sin(rz)+y*Math.cos(rz)];[x,z]=[x*Math.cos(ry)+z*Math.sin(ry),-x*Math.sin(ry)+z*Math.cos(ry)];[y,z]=[y*Math.cos(rx)-z*Math.sin(rx),y*Math.sin(rx)+z*Math.cos(rx)];[x,z]=[x*Math.cos(yaw)+z*Math.sin(yaw),-x*Math.sin(yaw)+z*Math.cos(yaw)];return [x+p.position[0],y+p.position[1],z+p.position[2]];}
 export function partCorners(p){const result=[];for(const a of [-1,1])for(const b of [-1,1])for(const c of [-1,1])result.push(transformStudyPoint(p,[a*p.size[0]/2,b*p.size[1]/2,c*p.size[2]/2]));return result;}
 

@@ -1,7 +1,7 @@
 import {MAIN_PRODUCTS as PRODUCTS,GROUPS} from './furniture-taxonomy.js?v=20261016m';
 import {buildReferenceStudy} from './reference-studies.js?v=20261016m';
 import {referenceDrawing} from './reference-drawing.js?v=20261016i';
-import {createFurnitureScene} from './furniture-scene.js?v=20261016i';
+import {createFurnitureScene} from './furniture-scene.js?v=20261016n';
 import refs from './reference-sources.js?v=20261016i';
 const $=id=>document.getElementById(id),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let id=new URLSearchParams(location.search).get('product')||'sofa',options={fabric:'taupe',wood:'oak',pose:'open',scale:1};if(!Object.hasOwn(PRODUCTS,id))id='sofa';
