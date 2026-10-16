@@ -92,7 +92,7 @@ export const FAMILIES = {
     },
     /** Raise stability when a light base would tip: widen the foot or change to four legs. */
     repair(p, materials) {
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 18; i++) {
         const issues = table.validate(table.compile(p), materials, buildMesh), has = code => issues.some(x => x.code === code && x.level === 'error');
         if (!has('tipping') && !has('topThin') && !has('sag') && !has('kneeRoom')) return p;
         if (has('kneeRoom')) { if (p.topThickness > 30) p.topThickness = 30; else if (p.height < 760) p.height = 760; else p.drawers = 0; }
@@ -100,8 +100,12 @@ export const FAMILIES = {
         if (has('sag')) p.topThickness = Math.min(80, Math.round(p.topThickness * 1.3));
         if (has('tipping')) {
           if (['pedestal', 'doublePedestal'].includes(p.baseType) && p.footSpread < 0.9) p.footSpread = Math.min(0.95, p.footSpread + 0.15);
-          else if (p.sideOverhang > 30) { p.sideOverhang = Math.max(20, p.sideOverhang * 0.5); p.overhang = Math.max(30, p.overhang * 0.7); }
-          else p.baseType = 'legsOnly';
+          else if (p.sideOverhang > 30 || p.overhang > 40) { p.sideOverhang = Math.max(15, p.sideOverhang * 0.5); p.overhang = Math.max(25, p.overhang * 0.6); }
+          else if (!['legsOnly', 'legsApron'].includes(p.baseType)) p.baseType = 'legsOnly';
+          else if ((p.legSplay || 0) < 7 && p.legType !== 'square' && p.legType !== 'blade') p.legSplay = 8;
+          else if (p.legSize < 40) p.legSize = Math.min(55, p.legSize + 15);
+          else if (p.topThickness < 45) p.topThickness = Math.min(60, p.topThickness + 10);
+          else { const k = table.KINDS[p.kind]; p.width = Math.min(k.width[1], p.width + 60); if (p.topShape === 'round') p.length = p.width; }
         }
       }
       return p;

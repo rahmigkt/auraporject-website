@@ -116,7 +116,7 @@ function shell() {
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261016c').then(({createViewer}) => {
+  import('./scene.js?v=20261017a').then(({createViewer}) => {
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else viewer.setDesign(state.compiled, state.design.materials);
