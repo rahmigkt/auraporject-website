@@ -1,0 +1,851 @@
+# =============================================================================
+# FDE / styles / bauhaus.yaml   (schema: ../schemas/style_ontology.schema.json v1.0.0)
+# Form follows function · geometric primitives · machine reproducibility
+# match_threshold = 0.58
+# =============================================================================
+
+schema_version: '1.0.0'
+style_id: bauhaus
+name: Bauhaus / Functionalist Modernism
+name_tr: Bauhaus / İşlevselci Modernizm
+family: modernist
+era: 1919-1933 (kaynak) / 1945-günümüz (devam)
+origin_regions: [Almanya (Weimar, Dessau, Berlin), Hollanda, İsviçre]
+description: 'Bauhaus furniture language treats the object as a machine for sitting, storing or working: form derived from function, structure derived from material properties, and geometry reduced to circle, square, triangle and the straight tube. Ornament is abolished; the aesthetic comes from precise industrial geometry, primary-colour accents used as compositional information (not decoration), and the honest exposure of the joint. Everything must be reproducible by machine and flat-packable. '
+description_tr: 'Bauhaus mobilya dili nesneyi oturma, depolama veya çalışma için bir makine olarak ele alır: form işlevden, yapı malzemenin özelliklerinden türetilir; geometri daire, kare, üçgen ve düz boruya indirgenir. Süsleme kaldırılmıştır; estetik, endüstriyel hassas geometriden, kompozisyon bilgisi olarak kullanılan (süs değil) ana renk vurgularından ve birleşimin dürüstçe görünmesinden gelir. Her şey makineyle üretilebilir ve demonte paketlenebilir olmalıdır. '
+# -----------------------------------------------------------------------------
+# ÇEKİRDEK İLKELER (ağırlıklı, test_edilebilir)
+core_principles:
+  - id: form_follows_function
+    statement: Every element must justify itself by a measurable function; anything purely expressive is removed.
+    statement_tr: Her eleman ölçülebilir bir işlevle kendini gerekçelendirmeli; salt ifade amaçlı olan çıkarılır.
+    weight: 1.0
+    testable_via: [minimalism_index, structural_expression, part_count_leanness]
+  - id: geometric_primitives
+    statement: Composition is built from circle, square, rectangle, triangle and the straight line/tube.
+    statement_tr: Kompozisyon daire, kare, dikdörtgen, üçgen ve düz çizgi/borudan kurulur.
+    weight: 0.95
+    testable_via: [geometric_strictness, curvature_organic, modularity_index]
+  - id: industrial_reproducibility
+    statement: 'Design for machine production: standard sections, standard fasteners, no hand-only geometry.'
+    statement_tr: 'Makine üretimi için tasarla: standart kesitler, standart bağlantılar, el işi geometri yok.'
+    weight: 0.95
+    testable_via: [industrial_index, modular_grid_index, structural_plausibility]
+  - id: material_truth
+    statement: Tubular steel is tubular steel, cane is cane, plywood is plywood. No material imitates another.
+    statement_tr: Boru çelik boru çeliktir, hasır hasırdır, kontrplak kontrplaktır. Hiçbir malzeme başkasını taklit etmez.
+    weight: 0.9
+    testable_via: [material_honesty, faux_finish_absence]
+  - id: colour_as_information
+    statement: Colour marks zones and functions (seat/back/frame), following the primary triad, never decorates surfaces.
+    statement_tr: Renk bölgeleri ve işlevleri işaretler (oturma/sırt/çerçeve), ana renk üçlüsünü izler; asla yüzey süslemez.
+    weight: 0.8
+    testable_via: [chroma_restraint, low_key_palette]
+  - id: lightness_and_air
+    statement: 'The object should look weightless and allow air/light through: cantilever, thin membranes, open frames.'
+    statement_tr: 'Nesne ağırlıksız görünmeli, hava/ışık geçirmeli: konsol, ince zarlar, açık çerçeveler.'
+    weight: 0.85
+    testable_via: [lightness_visual, void_ratio, massiveness]
+  - id: universal_type_not_unique_object
+    statement: Aim at a reproducible TYPE (a standard chair), not a one-off art object.
+    statement_tr: Tek seferlik sanat nesnesi değil, çoğaltılabilir bir TİP (standart bir sandalye) hedefle.
+    weight: 0.8
+    testable_via: [modularity_index, sculptural_index]
+# -----------------------------------------------------------------------------
+# FORM DİLİ
+forms:
+  silhouettes:
+    - cantilevered tubular steel frame (S-curve continuous tube)
+    - cube-based casegood on a recessed plinth
+    - circular/oval tube frame with a taut woven membrane
+    - stackable chair with a four-leg tubular frame
+    - flat-plane table on hairpin or square tube legs
+    - modular grid shelf with constant bay size
+  geometry_language:
+    - continuous bent tube, single radius family (R40-R120 mm)
+    - orthogonal grid, 32/40 mm module
+    - pure circle as seat or table outline
+    - 45° diagonal brace as a triangle
+    - flat plane membranes (canvas, cane, plywood)
+    - 'chamfer-free: crisp 90° edges or full round tube'
+  line_quality:
+    - constant-section tube
+    - unbroken continuous line
+    - no taper
+    - no freehand curve
+  edge_treatment:
+    - square tube with 1-2 mm edge radius
+    - round tube, constant diameter
+    - plywood edge sealed and visible as laminations
+    - no applied edge banding in contrasting colour
+  mass_vs_void: 'Void dominates: the frame is a line drawing in space. Solid panels only where function demands (table top, shelf, seat).'
+  preferred_archetypes:
+    - chair
+    - stool
+    - desk
+    - dining_table
+    - coffee_table
+    - side_table
+    - shelf_unit
+    - bookshelf
+    - bench
+    - bar_stool
+    - sideboard
+  forbidden_forms:
+    - cabriole leg
+    - carved or turned ornament
+    - ogee / S-mould profile
+    - monolithic stone mass
+    - upholstered plush volume with piping
+    - organic blob silhouette
+    - rustic irregular hand-hewn member
+# -----------------------------------------------------------------------------
+# MALZEMELER (primary / secondary / accent / forbidden / combination_rules)
+materials:
+  primary:
+    - material_id: steel_chromed_tube
+      material_tr: Kromlu boru çelik
+      finish: polished
+      why: 'The signature structural material: high strength at 20-25 mm diameter, mirror-honest industrial surface.'
+      why_tr: 'İmza yapısal malzeme: 20-25 mm çapta yüksek dayanım, dürüst endüstriyel yüzey.'
+      applies_to_parts: [frame, leg, stretcher, rail, arm_support]
+      cost_tier: 3
+      weight: 1.0
+    - material_id: plywood_birch
+      material_tr: Huş kontrplak
+      finish: matte_lacquer
+      why: Machine-formable plane; the honest flat surface of modernism.
+      why_tr: Makinede şekillendirilebilir düzlem; modernizmin dürüst düz yüzeyi.
+      applies_to_parts: [seat, panel, shelf, top_surface, back_support]
+      cost_tier: 2
+      weight: 0.85
+    - material_id: steel_black_powder_coated
+      material_tr: Siyah toz boyalı çelik
+      finish: powder_coated
+      why: Matte alternative to chrome for a stricter, later-modern reading.
+      why_tr: Daha sert, geç-modern bir okuma için kroma mat alternatif.
+      applies_to_parts: [frame, leg, stretcher, hardware]
+      cost_tier: 2
+      weight: 0.7
+  secondary:
+    - material_id: cane_webbing
+      material_tr: Hasır örgü
+      finish: raw
+      why: Light, air-permeable membrane for seat and back; historically exact.
+      why_tr: Oturma ve sırt için hafif, hava geçirgen zar; tarihsel olarak doğru.
+      applies_to_parts: [seat, back_support, panel]
+      cost_tier: 2
+      weight: 0.75
+    - material_id: canvas_waxed
+      material_tr: Mumlu kanvas
+      finish: raw
+      why: Taut textile membrane, natural black or ecru.
+      why_tr: Gergin tekstil zarı, doğal siyah veya ekru.
+      applies_to_parts: [seat, back_support, upholstery]
+      cost_tier: 1
+      weight: 0.6
+    - material_id: leather_vegetable_tanned
+      material_tr: Bitkisel tabaklanmış deri
+      finish: raw
+      why: Black or cognac strap for seat/back; ages honestly.
+      why_tr: Oturma/sırt için siyah veya konyak kayış; dürüstçe yaşlanır.
+      applies_to_parts: [seat, back_support, upholstery]
+      cost_tier: 3
+      weight: 0.5
+    - material_id: glass_clear_tempered
+      material_tr: Şeffaf temperli cam
+      finish: polished
+      why: Transparent table plane that keeps the frame readable.
+      why_tr: Çerçeveyi okunur tutan şeffaf tabla düzlemi.
+      applies_to_parts: [top_surface, shelf]
+      cost_tier: 2
+      weight: 0.4
+  accent:
+    - material_id: lacquer_primary_red
+      material_tr: Ana kırmızı lake
+      finish: matte_lacquer
+      why: Compositional marker for one component only (seat or a single panel).
+      why_tr: Yalnızca bir bileşen için kompozisyon işareti (oturma veya tek panel).
+      applies_to_parts: [seat, panel, top_surface]
+      cost_tier: 2
+      weight: 0.6
+    - material_id: lacquer_primary_blue
+      material_tr: Ana mavi lake
+      finish: matte_lacquer
+      why: Second compositional marker; never both on the same component.
+      why_tr: İkinci kompozisyon işareti; asla aynı bileşende ikisi birden.
+      applies_to_parts: [panel, seat, drawer_front]
+      cost_tier: 2
+      weight: 0.5
+    - material_id: lacquer_primary_yellow
+      material_tr: Ana sarı lake
+      finish: matte_lacquer
+      why: Third marker; use sparingly, max one small element.
+      why_tr: Üçüncü işaret; ölçülü kullan, en fazla bir küçük eleman.
+      applies_to_parts: [drawer_front, panel]
+      cost_tier: 2
+      weight: 0.4
+  forbidden_materials:
+    - carved solid hardwood with decorative profile
+    - marble / granite / stone slabs
+    - concrete
+    - antique brass or aged patina hardware
+    - velvet, silk, brocade
+    - printed laminates imitating wood or stone
+    - rattan frame structures (cane is allowed only as a woven membrane)
+    - rust-effect or corten steel
+    - reclaimed barn wood
+  combination_rules:
+    - pair:
+        - steel_chromed_tube
+        - cane_webbing
+      verdict: signature
+      note: 'The canonical combination: metal line + air-permeable membrane.'
+    - pair:
+        - steel_chromed_tube
+        - plywood_birch
+      verdict: signature
+      note: Frame + flat plane; keep ply edges visible and sealed.
+    - pair:
+        - steel_black_powder_coated
+        - lacquer_primary_red
+      verdict: allowed
+      note: One coloured component max; the rest black/grey/natural.
+    - pair:
+        - plywood_birch
+        - canvas_waxed
+      verdict: allowed
+      note: All-soft version for stacking/contract use.
+    - pair:
+        - steel_chromed_tube
+        - marble_honed
+      verdict: forbidden
+      note: Stone mass contradicts weightlessness and machine logic.
+    - pair:
+        - steel_chromed_tube
+        - brass_aged
+      verdict: forbidden
+      note: Aged patina is anti-industrial; use chrome or black oxide only.
+  material_honesty_rules:
+    - Plywood edges must show laminations, not be faced over.
+    - 'Tube must be genuinely tube: constant diameter, visible bend radii, no fake tube profiles in MDF.'
+    - Welds ground smooth but not concealed with filler to fake a seamless cast.
+    - If cane is used it must be real cane or an honest synthetic declared in the BOM.
+# -----------------------------------------------------------------------------
+# RENK
+colors:
+  palette:
+    - { hex: '#C8C9CB', name: Chrome Silver, name_tr: Krom Gümüş, role: dominant, max_coverage: 0.35 }
+    - { hex: '#111111', name: Frame Black, name_tr: Çerçeve Siyahı, role: dominant, max_coverage: 0.25 }
+    - hex: '#E8E2D5'
+      name: Natural Ply / Ecru Canvas
+      name_tr: Doğal Kontrplak / Ekru Kanvas
+      role: secondary
+      max_coverage: 0.25
+    - { hex: '#D9C7A3', name: Natural Cane, name_tr: Doğal Hasır, role: secondary, max_coverage: 0.2 }
+    - { hex: '#C8202E', name: Primary Red, name_tr: Ana Kırmızı, role: accent, max_coverage: 0.08 }
+    - { hex: '#1F4E9C', name: Primary Blue, name_tr: Ana Mavi, role: accent, max_coverage: 0.06 }
+    - { hex: '#F2C230', name: Primary Yellow, name_tr: Ana Sarı, role: accent, max_coverage: 0.04 }
+    - { hex: '#8A8D90', name: Neutral Grey, name_tr: Nötr Gri, role: highlight, max_coverage: 0.1 }
+  value_range: full range allowed but structure stays neutral (25-85 L*); colour reserved for accents
+  saturation_range: accents high saturation (C* 60-90); everything else near-neutral (C* < 10)
+  contrast_rule: Strong graphic contrast between neutral structure and one saturated zone. Contrast is zoning, not decoration.
+  forbidden_colors:
+    - pastel gradients
+    - earth-tone boho palette (terracotta, sage, mustard combos)
+    - neon / fluorescent
+    - iridescent or metallic pearl
+    - wood-grain printed brown on non-wood
+    - more than two saturated hues on one piece
+# -----------------------------------------------------------------------------
+# DOKU
+textures:
+  dominant:
+    - smooth polished chrome
+    - matte powder-coat micro-texture
+    - flat plywood face with visible edge laminations
+    - tight-woven cane grid
+  contrast_textures:
+    - waxed canvas weave
+    - vegetable-tanned leather grain (single component)
+  scale_of_texture: micro
+  reflectance_profile: structure 60-90 gloss (chrome) or 10-20 (powder coat); planes 5-25 gloss
+  forbidden_textures:
+    - hand-carved grain
+    - hammered / forged facets
+    - distressed or patinated surfaces
+    - shaggy or bouclé pile
+    - stone porosity
+    - board-form concrete imprint
+# -----------------------------------------------------------------------------
+# SÜSLEME KURALLARI
+ornament_rules:
+  max_level: none
+  allowed:
+    - the joint itself as visible detail
+    - colour zoning on one component
+    - constant-interval repetition (grid, weave)
+    - visible fastener as a graphic dot (black cap nuts on a regular grid)
+  discouraged: [inlay lines, fluting or reeding, any applied moulding]
+  forbidden:
+    - carving of any kind
+    - turned decorative profiles
+    - gilding, brass inlay, marquetry
+    - figurative imagery, logos, decals
+    - tufting, piping, nail-head trim
+    - curvilinear Art Nouveau / Art Deco motifs
+  placement_rules:
+    - There is no ornament budget. Any 'decoration' must be re-justified as structure, colour zoning or repetition.
+    - Colour accent placement must correspond to a functional zone (seat plane, storage door), never to a decorative band.
+  motif_vocabulary: [circle, square, triangle, straight tube, grid, weave, cantilever curve]
+  ornament_must_be: [structural, functional, machine-reproducible, zone-marking]
+# -----------------------------------------------------------------------------
+# ORANLAR
+proportions:
+  dominant_direction: balanced
+  ratio_presets:
+    - { name: overall cube, value: 1.0, applies_to: casegoods height/width for modular units }
+    - { name: table height ratio, value: 0.42, applies_to: dining table height / width (750mm on 1800mm) }
+    - { name: seat to total height, value: 0.55, applies_to: 'chair: seat height / total height' }
+    - { name: tube bend radius to diameter, value: 4.0, applies_to: R = 4 x tube OD (e.g. 25mm tube -> R100) }
+    - { name: bay module, value: 1.0, applies_to: all bays equal, module 300/360/400 mm: null }
+  module_grid_mm: 32
+  leg_to_body_ratio: 'chairs: leg height 55-62% of total; casegoods: 0-12% (plinth or full to floor)'
+  seat_height_bias: 450-470 mm (dining), 400-430 mm (lounge/cantilever)
+  void_ratio_target: 0.55
+  scale_bias: human
+  symmetry_preference: loose_bilateral
+# -----------------------------------------------------------------------------
+# IŞIK VE GÖLGE (render direktifleri dahil)
+lighting_and_shadow:
+  light_direction:
+    - broad diffused daylight from a large window
+    - even studio softbox
+    - secondary fill from the opposite side
+  light_quality: neutral, evenly distributed, 4000-5000K; shadows are informational (they reveal the frame line), not dramatic
+  shadow_role: Secondary. Shadow draws the frame as a line drawing on the floor — that floor shadow IS the composition.
+  highlight_strategy: Specular highlights running along the chrome tube; one continuous highlight line per tube run.
+  render_notes: 'White or light grey seamless backdrop (#EDEDED), soft diffused key, gentle contact shadow. Camera 35-50 mm at 110 cm, straight-on or 30° three-quarter. Do NOT use chiaroscuro, do not darken the scene. Include a second orthographic-style view (front + side elevation) because this style is best judged as a line drawing. '
+# -----------------------------------------------------------------------------
+# DUYGUSAL ANAHTAR KELİMELER
+emotional_keywords:
+  - rational
+  - light
+  - precise
+  - democratic
+  - machine-honest
+  - airy
+  - optimistic
+  - standardised
+  - graphic
+  - unornamented
+emotional_keywords_tr:
+  - rasyonel
+  - hafif
+  - hassas
+  - demokratik
+  - makine-dürüstü
+  - havadar
+  - iyimser
+  - standartlaştırılmış
+  - grafik
+  - süsmesiz
+# -----------------------------------------------------------------------------
+# YASAK SİNYALLER (hard = tasarım reddedilir, soft = skor düşer)
+forbidden_signals:
+  - id: fb_carved_ornament
+    signal: Any carving, turnery, moulding or applied decorative profile.
+    signal_tr: Her türlü oyma, torna, profil veya uygulanmış dekoratif eleman.
+    severity: hard
+    detected_by: [ornament_density, figurative_ornament, handcraft_index]
+  - id: fb_stone_mass
+    signal: Stone, concrete or other heavy monolithic mass as the dominant volume.
+    signal_tr: Taş, beton veya ağır monolitik kütlenin baskın hacim olması.
+    severity: hard
+    detected_by: [massiveness, lightness_visual]
+  - id: fb_organic_curve
+    signal: Freehand organic curves, blob forms, asymmetrical sculptural silhouette.
+    signal_tr: Serbest organik eğriler, amip formlar, asimetrik heykelsi siluet.
+    severity: hard
+    detected_by: [curvature_organic, geometric_strictness]
+  - id: fb_gothic_verticality
+    signal: Ecclesiastical vertical aspiration, pointed arches, lancet voids, chiaroscuro drama.
+    signal_tr: Kilisevari dikey yükseliş, sivri kemerler, lancet boşluklar, gölge dramı.
+    severity: hard
+    detected_by: [verticality, pointed_arch_presence, shadow_as_design_element]
+  - id: fb_deco_luxury
+    signal: Marble, brass, exotic veneer, sunburst, symmetrical luxury glamour.
+    signal_tr: Mermer, pirinç, egzotik kaplama, güneş ışını, simetrik lüks gösteriş.
+    severity: hard
+    detected_by: [material_honesty, chroma_restraint, ornament_density]
+  - id: fb_pastel_softness
+    signal: Pastel palette, rounded soft edges, cosy hygge mood.
+    signal_tr: Pastel palet, yuvarlatılmış yumuşak kenarlar, rahat hygge havası.
+    severity: soft
+    detected_by: [low_key_palette, geometric_strictness]
+  - id: fb_nonreproducible
+    signal: Geometry that cannot be made by standard tube bending, CNC or press forming.
+    signal_tr: Standart boru bükme, CNC veya pres ile yapılamayan geometri.
+    severity: hard
+    detected_by: [industrial_index, structural_plausibility]
+  - id: fb_copyright_copy
+    signal: Silhouette identical to a canonical named modernist chair.
+    signal_tr: Siluetin kanonik isimli bir modernist sandalyeyle aynı olması.
+    severity: hard
+    detected_by: [originality_check]
+# -----------------------------------------------------------------------------
+# POZİTİF PROMPT TOKEN'LARI
+positive_prompt_tokens:
+  core:
+    - bauhaus furniture
+    - functionalist modern design
+    - industrial precision
+    - form follows function
+  form:
+    - continuous bent tubular steel frame
+    - cantilevered chair structure
+    - 'pure geometric primitives: circle square triangle'
+    - flat plane seat and back
+    - orthogonal modular grid
+    - constant tube diameter 25mm
+    - clean 90 degree edges
+    - visible bolt connections on a regular grid
+    - weightless floating frame
+  material:
+    - polished chromed tubular steel
+    - birch plywood with visible laminated edge
+    - natural cane webbing membrane
+    - waxed ecru canvas
+    - matte black powder-coated steel
+    - tempered clear glass top
+  light:
+    - even diffused daylight
+    - soft neutral studio lighting
+    - crisp graphic floor shadow
+    - specular highlight running along the tube
+    - no dramatic chiaroscuro
+  camera:
+    - 50mm lens at eye level
+    - three-quarter view showing the frame as a line drawing
+    - additional orthographic front and side elevation
+    - light grey seamless backdrop
+  mood:
+    - rational clarity
+    - machine-age optimism
+    - democratic standardisation
+    - graphic precision
+  quality:
+    - photorealistic product photography
+    - exact bend radii
+    - sharp weld seams
+    - 8k, high dynamic range
+  weight_hint:
+    core: 1.3
+    form: 1.25
+    material: 1.15
+    light: 0.9
+    camera: 0.9
+    mood: 1.0
+    quality: 1.0
+  template: '{subject}, {form}, {material}, {light}, {mood}, {camera}, {quality}'
+# -----------------------------------------------------------------------------
+# NEGATİF PROMPT TOKEN'LARI
+negative_prompt_tokens:
+  core:
+    - ornament
+    - carving
+    - moulding
+    - decorative trim
+    - gilding
+    - inlay
+    - marquetry
+    - tufting
+    - piping
+  style_specific:
+    - gothic arch
+    - pointed arch
+    - tracery
+    - dark chiaroscuro
+    - monastic mood
+    - art deco sunburst
+    - art nouveau whiplash curve
+    - marble top
+    - brass accents
+    - aged patina
+    - concrete
+    - stone plinth
+    - rustic wood grain
+    - reclaimed timber
+    - shabby chic
+    - japandi warm wood cosiness
+    - memphis squiggle pattern
+    - pastel gradient
+    - neon
+    - velvet upholstery
+    - bouclé
+  anatomy_defects:
+    - mismatched legs
+    - asymmetric tube diameter
+    - frame not continuous where continuity intended
+    - seat membrane not tensioned
+    - floating furniture with no ground contact
+    - impossible bend radius (sharper than 2 x tube OD)
+    - parts merging
+    - duplicated components
+    - warped frame
+  physics_defects:
+    - cantilever tube too thin to carry the load (<20mm OD for a seating cantilever)
+    - no load path from seat to floor
+    - plywood span beyond 700mm unsupported
+    - glass top without tempered thickness
+    - top-heavy with no base width
+  copyright_guards:
+    - exact replica of a named designer chair
+    - branded furniture
+    - visible logo
+    - trademarked product
+# -----------------------------------------------------------------------------
+# ÜRETİM NOTLARI
+manufacturing_notes:
+  preferred_processes:
+    - cold_bending
+    - tube_laser_cutting
+    - welding_tig
+    - press_forming
+    - cnc_routing
+    - powder_coating
+    - chrome_plating
+    - webbing
+  avoid_processes:
+    - hand_carving
+    - lathe_turning (decorative)
+    - casting_sand
+    - steam_bending with irregular sections
+  joint_language:
+    - TIG-welded tube node, ground smooth
+    - cast or machined steel node for multi-tube junctions
+    - black cap-nut through-bolt for demountable joints
+    - 'framed membrane: cane/canvas laced into a 20 mm tube rebate'
+    - plywood seat bolted to frame with rubber isolation washer
+  joinery_visibility: celebrated
+  typical_thickness_mm:
+    tube_od: 25
+    tube_wall: 1.5
+    plywood_seat: 12
+    plywood_panel: 18
+    cane_membrane: 3
+    canvas_membrane: 2
+    glass_top: 10
+  tolerance_notes: 'Bend radius must be >= 2 x OD to avoid wrinkling (25 mm tube -> R50 minimum, R100 preferred for a clean look). Weld distortion on cantilever frames: jig the full assembly and allow 1.5 mm spring-back compensation. Demountable joints: ISO metric M6/M8 with threaded inserts, positional tolerance +/-0.2 mm. '
+  finishing_notes: 'Chrome: copper-nickel-chromium triple plate for a durable mirror. Alternative: matte black powder coat RAL 9005 at 20-30 gloss. Plywood: 2 coats matte water-based lacquer, edges sanded 240 and sealed.'
+  cost_drivers:
+    - chrome plating
+    - bending jigs for continuous frames
+    - cane lacing labour (hand-laced is expensive; machine-woven sheet is cheap)
+  sustainability_notes: Steel is infinitely recyclable; specify mechanical fasteners instead of adhesive so the piece can be disassembled. Avoid chrome where possible (hexavalent chromium) — use trivalent chrome or powder coat.
+  flat_pack_feasible: true
+  difficulty: 2
+# -----------------------------------------------------------------------------
+# TARİHSEL REFERANSLAR (yalnızca ilke/oran çıkarımı; birebir kopya YOK)
+historical_references:
+  - kind: movement
+    title: Staatliches Bauhaus (Weimar 1919, Dessau 1926, Berlin 1933)
+    title_tr: Devlet Bauhaus'u
+    date: 1919-1933
+    region: Almanya
+    why_relevant: Origin of the standardisation + material truth + colour-as-information logic.
+    what_to_extract:
+      - tube frame standardisation
+      - colour zoning of functional planes
+      - demountable joint design
+      - type over individual object
+    source_api: wikidata_sparql
+    license: not_applicable
+    query_hint: SELECT ?item ?itemLabel WHERE { ?item wdt:P126 wd:Q46907 }
+  - kind: movement
+    title: De Stijl / Neoplasticism (Mondrian, Rietveld)
+    title_tr: De Stijl / Neoplastisizm
+    date: 1917-1931
+    region: Hollanda
+    why_relevant: Source of the primary-colour compositional logic and the rectilinear line-frame.
+    what_to_extract:
+      - primary triad as zoning
+      - orthogonal line composition
+      - floating plane relationships
+    source_api: rijksmuseum
+    license: public_domain
+    query_hint: 'Rijksmuseum API: s=De+Stijl&f.type=furniture (CC0 filtered)'
+  - kind: technique
+    title: Cold tube bending + chrome plating for furniture frames
+    title_tr: Mobilya çerçeveleri için soğuk boru bükme + krom kaplama
+    date: 1925-1930
+    region: Almanya
+    why_relevant: The manufacturing breakthrough that made the cantilever possible.
+    what_to_extract:
+      - minimum bend radius rules
+      - node design for multi-tube junctions
+      - spring-back compensation
+    source_api: manual
+    license: not_applicable
+  - kind: object_type
+    title: Tubular steel stacking and cantilever chairs (anonymous/standard types)
+    title_tr: Boru çelik istiflenebilir ve konsol sandalyeler (anonim/standart tipler)
+    date: 1927-1935
+    region: Almanya / Çekoslovakya
+    why_relevant: 'Defines the TYPE logic: a reproducible standard, not an authorial sculpture.'
+    what_to_extract:
+      - cantilever tube path
+      - seat/back membrane attachment
+      - stackability geometry
+    source_api: europeana
+    license: public_domain
+    query_hint: 'Europeana: ''tubular steel chair 1930'' + public domain mark filter'
+  - kind: museum_collection
+    title: Bauhaus-Archiv / Museum für Gestaltung collection metadata
+    title_tr: Bauhaus-Archiv / Museum für Gestaltung koleksiyon metadata'sı
+    date: '-'
+    region: Berlin / Zürih
+    why_relevant: Reference for dimensions, materials and terminology of the period (metadata only — do not replicate specific designs).
+    what_to_extract: [dimension ranges, material terminology, type taxonomy]
+    source_api: europeana
+    license: unknown
+    query_hint: Europeana provider:Bauhaus-Archiv, metadata only
+# -----------------------------------------------------------------------------
+# SKORLAMA İMZASI — rules/style_scoring_rules.json feature_id'leri ile eşleşir
+scoring_signature:
+  target_vector:
+    verticality: 0.5
+    pointed_arch_presence: 0.0
+    ornament_restraint: 1.0
+    minimalism_index: 0.92
+    material_honesty: 0.95
+    dark_materiality: 0.15
+    low_key_palette: 0.25
+    chroma_restraint: 0.55
+    contrast_ratio: 0.7
+    structural_expression: 0.95
+    void_ratio: 0.78
+    geometric_strictness: 0.92
+    symmetry_strictness: 0.7
+    curvature_organic: 0.1
+    warmth_index: 0.3
+    gloss_absence: 0.15
+    shadow_as_design_element: 0.35
+    handcraft_index: 0.15
+    industrial_index: 0.98
+    sacred_geometry: 0.0
+    ritual_stillness: 0.3
+    sculptural_index: 0.3
+    figurative_ornament: 0.0
+    ornament_density: 0.0
+    part_count_leanness: 0.9
+    gesture_count: 0.9
+    historical_reference_index: 0.55
+    futuristic_index: 0.45
+    modular_grid_index: 0.95
+    modularity_index: 0.9
+    massiveness: 0.12
+    lightness_visual: 0.92
+    ergonomic_compliance: 1.0
+    structural_plausibility: 1.0
+    faux_finish_absence: 1.0
+    originality_check: 0.85
+  weights:
+    industrial_index: 1.0
+    structural_expression: 0.95
+    geometric_strictness: 0.9
+    modular_grid_index: 0.85
+    lightness_visual: 0.85
+    void_ratio: 0.75
+    ornament_restraint: 0.9
+    material_honesty: 0.85
+    part_count_leanness: 0.8
+    curvature_organic: 0.7
+    dark_materiality: 0.6
+    sacred_geometry: 0.5
+    ergonomic_compliance: 1.0
+    structural_plausibility: 1.0
+    originality_check: 0.7
+  hard_gates:
+    - { feature_id: industrial_index, op: '>=', value: 0.75, penalty: 35 }
+    - { feature_id: ornament_density, op: <=, value: 0.08, penalty: 35 }
+    - { feature_id: figurative_ornament, op: <=, value: 0.02, penalty: 40 }
+    - { feature_id: geometric_strictness, op: '>=', value: 0.7, penalty: 25 }
+    - { feature_id: structural_plausibility, op: '>=', value: 0.75, penalty: 40 }
+    - { feature_id: ergonomic_compliance, op: '>=', value: 0.7, penalty: 40 }
+    - { feature_id: faux_finish_absence, op: '>=', value: 0.9, penalty: 25 }
+    - { feature_id: massiveness, op: <=, value: 0.35, penalty: 20 }
+    - { feature_id: originality_check, op: '>=', value: 0.6, penalty: 50 }
+  match_threshold: 0.58
+  confidence_floor: 0.45
+# -----------------------------------------------------------------------------
+# PARÇA DİREKTİFLERİ — her parça bu stilde nasıl davranır?
+# part_role değerleri schemas/furniture_parts.schema.json -> $defs.partRoleId
+part_directives:
+  - part_role: frame
+    directive: One continuous tube path where possible; constant OD 20-32 mm; bend radius >= 2x OD; nodes welded and ground.
+    directive_tr: Mümkünse tek sürekli boru yolu; sabit dış çap 20-32 mm; büküm yarıçapı >= 2x çap; düğümler kaynaklı ve taşlanmış.
+    typical_material: steel_chromed_tube
+    typical_dimension_hint: OD 25mm, wall 1.5mm, R100
+    ornament_level: none
+    priority: must
+  - part_role: leg
+    directive: Straight tube or a single-radius cantilever runner. No taper, no foot ornament; optional black nylon glide 8 mm.
+    directive_tr: Düz boru veya tek yarıçaplı konsol ayağı. Koniklik yok, ayak süsü yok; opsiyonel 8 mm siyah naylon kaydırıcı.
+    typical_material: steel_chromed_tube
+    typical_dimension_hint: OD 22-25mm; chair leg height 430-470mm
+    ornament_level: none
+    priority: must
+  - part_role: seat
+    directive: 'Flat plane: 10-14 mm birch ply, woven cane, or taut canvas laced into the frame rebate. No padding over 20 mm.'
+    directive_tr: 'Düz düzlem: 10-14 mm huş kontrplak, dokuma hasır veya çerçeve yuvasına gerilmiş kanvas. 20 mm üstü dolgu yok.'
+    typical_material: cane_webbing
+    typical_dimension_hint: seat height 440-470mm; depth 400-440mm
+    ornament_level: none
+    priority: must
+  - part_role: back_support
+    directive: Flat plane or a single gentle curve (one radius only). Height 300-450 mm above seat. No lumbar bulge, no headrest.
+    directive_tr: Düz düzlem veya tek hafif eğri (yalnızca bir yarıçap). Oturmadan 300-450 mm yukarıda. Bel çıkıntısı ve baş dayama yok.
+    typical_material: plywood_birch
+    typical_dimension_hint: back height 300-450mm above seat; recline 95-105°
+    ornament_level: none
+    priority: must
+  - part_role: arm_support
+    directive: Either a continuous extension of the frame tube, or a flat ply pad on the tube. Height 200-230 mm above seat.
+    directive_tr: Ya çerçeve borusunun sürekli uzantısı ya boru üzerinde düz kontrplak ped. Oturmadan 200-230 mm yukarıda.
+    typical_material: steel_chromed_tube
+    typical_dimension_hint: arm height 640-680mm from floor
+    ornament_level: none
+    priority: should
+  - part_role: top_surface
+    directive: 12-20 mm ply, 10-12 mm tempered glass, or 18-25 mm solid-core panel. Square edge, no bullnose, no bevel ornament.
+    directive_tr: 12-20 mm kontrplak, 10-12 mm temperli cam veya 18-25 mm masif özlü panel. Keskin kenar, yuvarlatma ve pah süsü yok.
+    typical_material: plywood_birch
+    typical_dimension_hint: table height 720-750mm; overhang 30-60mm
+    ornament_level: none
+    priority: must
+  - part_role: shelf
+    directive: Constant bay module (300/360/400 mm), 18 mm ply, span <= 700 mm, adjustable on a 32 mm system hole line.
+    directive_tr: Sabit göz modülü (300/360/400 mm), 18 mm kontrplak, açıklık <= 700 mm, 32 mm sistem delik hattında ayarlanabilir.
+    typical_material: plywood_birch
+    typical_dimension_hint: 18mm thick; 32mm system holes at 32mm pitch
+    ornament_level: none
+    priority: must
+  - part_role: panel
+    directive: Flat, unframed, colour-zoned. One saturated component maximum per piece.
+    directive_tr: Düz, çerçevesiz, renk bölgeli. Parça başına en fazla bir doygun bileşen.
+    typical_material: lacquer_primary_red
+    typical_dimension_hint: 12-18mm; colour zone <= 8% of total area
+    ornament_level: none
+    priority: should
+  - part_role: hardware
+    directive: Visible black or chrome cap nuts/bolts on a regular grid; no decorative handles — use a 20 mm finger recess or a tube-pull.
+    directive_tr: Düzenli ızgarada görünür siyah veya krom kapak somun/cıvata; dekoratif kulp yok — 20 mm parmak oyuk veya boru çekme kullan.
+    typical_material: steel_black_powder_coated
+    typical_dimension_hint: M6/M8; recess 20x40mm
+    ornament_level: none
+    priority: must
+  - part_role: joint
+    directive: 'Celebrated as a graphic node: visible weld seam or exposed bolt. Never hidden behind filler or trim.'
+    directive_tr: 'Grafik düğüm olarak kutlanır: görünür kaynak dikişi veya açık cıvata. Asla macun veya çıta arkasına gizlenmez.'
+    typical_material: steel_chromed_tube
+    typical_dimension_hint: node diameter <= 1.4 x tube OD
+    ornament_level: none
+    priority: must
+  - part_role: stretcher
+    directive: Only if structurally required; a single straight tube at 1/3 height. Cantilever frames omit it entirely.
+    directive_tr: Yalnızca yapısal gereklilikte; 1/3 yükseklikte tek düz boru. Konsol çerçevelerde tamamen kaldırılır.
+    typical_material: steel_chromed_tube
+    typical_dimension_hint: OD 16-22mm
+    ornament_level: none
+    priority: may
+  - part_role: upholstery
+    directive: 'Thin, taut, flat: 8-20 mm foam under canvas or leather, no piping, no buttons, single perimeter seam.'
+    directive_tr: 'İnce, gergin, düz: kanvas veya deri altında 8-20 mm sünger; biye, düğme yok, tek çevre dikişi.'
+    typical_material: canvas_waxed
+    typical_dimension_hint: 8-20mm total pad
+    ornament_level: none
+    priority: should
+  - part_role: edge_treatment
+    directive: Square edge with 1 mm break only (safety, not decoration). Ply edges sanded and sealed, laminations visible.
+    directive_tr: Yalnızca 1 mm kırıklı keskin kenar (güvenlik, süs değil). Kontrplak kenarları zımparalı ve mühürlü, katmanlar görünür.
+    typical_material: null
+    typical_dimension_hint: 1mm arris break
+    ornament_level: none
+    priority: must
+# -----------------------------------------------------------------------------
+# CANLI ÇİZİM GERİ BİLDİRİM CÜMLELERİ
+sketch_feedback:
+  on_good_signal:
+    - 'Continuous tube path detected — that is the correct Bauhaus logic: one line, bent, not assembled from many sticks.'
+    - Bend radius is 4x the tube diameter. Clean and bendable.
+    - Colour is confined to one functional plane. Correct zoning.
+    - Grid bays are constant. Modularity reads well.
+  on_weak_signal:
+    - Frame is broken into many short members. Try to merge them into one continuous tube run.
+    - Void ratio is low — the piece reads heavy. Remove a panel or thin the section.
+    - Two saturated colours compete. Pick one zone.
+  on_violation:
+    - Organic curve detected. Bauhaus curvature must be a single constant radius, not freehand.
+    - Carved/turned profile detected. This style has zero ornament budget.
+    - Stone or concrete mass detected. The style requires weightlessness and machine logic.
+    - Taper found on a tube member. Tube must be constant section.
+    - Bend radius is sharper than 2x OD — this cannot be manufactured without wrinkling.
+    - Load path from seat to floor is not continuous. Add a node or a stretcher.
+  on_violation_tr:
+    - Organik eğri tespit edildi. Bauhaus eğriliği sabit tek yarıçap olmalı, serbest el değil.
+    - Oyma/torna profil tespit edildi. Bu stilin süsleme bütçesi sıfırdır.
+    - Taş veya beton kütle tespit edildi. Stil ağırlıksızlık ve makine mantığı gerektirir.
+    - Boru elemanda koniklik bulundu. Boru sabit kesitli olmalı.
+    - Büküm yarıçapı 2x çaptan keskin — buruşmadan üretilemez.
+    - Oturmadan zemine yük yolu kesintisiz değil. Bir düğüm veya kiriş ekle.
+  suggested_next_strokes:
+    - 'Draw the continuous tube path in one stroke: floor -> back -> seat -> floor.'
+    - Add the flat seat plane as a single rectangle.
+    - Insert a 32 mm module grid for the storage bays.
+    - Mark one component in a primary colour.
+# -----------------------------------------------------------------------------
+# STİL UYUMLULUĞU VE HİBRİT TARİFLERİ
+compatibility:
+  blends_well_with: [high_tech, de_stijl, minimalism, scandinavian_modern, industrial]
+  conflicts_with:
+    - gothic_minimalism
+    - art_deco
+    - rococo_revival
+    - wabi_sabi
+    - memphis
+    - dark_academia
+    - tropical_resort
+  hybrid_recipes:
+    - result_style_id: bauhaus_hightech
+      mix:
+        - { style_id: bauhaus, ratio: 0.6 }
+        - { style_id: high_tech, ratio: 0.4 }
+      note: Keep tube logic, add tension cables and visible adjustment mechanisms; swap chrome for anodised aluminium.
+    - result_style_id: bauhaus_japandi
+      mix:
+        - { style_id: bauhaus, ratio: 0.5 }
+        - { style_id: japandi, ratio: 0.5 }
+      note: Soften chrome to matte black, replace cane with light oak slats, drop saturated colour to a single muted ochre.
+# -----------------------------------------------------------------------------
+# YASAL / ETİK UYUM
+compliance:
+  cultural_sensitivity_notes: No religious or political symbolism. Bauhaus was politically suppressed in 1933 — avoid any iconography that references that history literally.
+  religious_symbol_policy: forbidden_as_content
+  do_not_replicate:
+    - canonical named chairs (recognisable authorial silhouettes) — extract the TYPE logic only
+    - any specific museum object under a no-derivatives licence
+# -----------------------------------------------------------------------------
+# META
+meta:
+  author: FDE stil ontolojisi katmanı
+  created: '2026-10-16'
+  updated: '2026-10-16'
+  status: production
+  confidence: 0.88
+  evidence_sources:
+    - Bauhaus/De Stijl material and colour logic — design history consensus
+    - Tube bending and chrome plating manufacturing practice
+    - 32 mm system standard for casegoods
+    - Rijksmuseum / Europeana / Wikidata public-domain metadata
+  notes: 'confidence 0.88: iyi belgelenmiş tarihsel bir akım; risk alanı yalnızca telif (kanonik sandalyelerin birebir kopyası).'

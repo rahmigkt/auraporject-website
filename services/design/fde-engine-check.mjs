@@ -1,0 +1,37 @@
+import assert from 'node:assert/strict';
+import {compileStudio,normalizeStudio} from '../../w4/assets/design-library.js';
+import {buildTechnicalPacket} from '../../w4/assets/technical-packet.js';
+import {STYLE_PROFILES,styleRecipe,explainPart,assessDesign,knowledgeBrief,taxonomyFor} from '../../w4/assets/fde-engine.js';
+import {restoreCatalogue,catalogueSelect} from '../../w4/assets/catalogue-flow.js';
+assert.equal(STYLE_PROFILES.length,5);
+assert.equal(taxonomyFor('armchair'),null,'do not pretend sofa taxonomy fully describes armchairs');
+assert.equal(explainPart('sofa','leg').partId,'legs');
+assert.equal(explainPart('sofa','tuft-button').mapped,false);
+assert.equal(styleRecipe({family:'sofa',configuration:'cornerLeft'},'japandi'),null);
+assert.equal(styleRecipe({family:'bed'},'japandi'),null);
+assert.equal(styleRecipe({family:'sofa'},'__proto__'),null);
+const restored=restoreCatalogue(normalizeStudio({family:'sofa'}),{room:'living',group:'seating',product:'sofa',familyChosen:true,styleIntent:'japandi'});
+assert.equal(restored.brief.styleIntent,'japandi');
+assert.equal(catalogueSelect(restored.state,restored.brief,'room','kitchen').brief.styleIntent,null);
+assert.equal(restoreCatalogue(restored.state,{...restored.brief,styleIntent:'__proto__'}).brief.styleIntent,null);
+let count=0;
+for(const family of ['sofa','armchair','console','shelf','wardrobe','dresser','nightstand','tv'])for(const profile of STYLE_PROFILES){
+ const initial=normalizeStudio({family,archetype:'modern'}),patch=styleRecipe(initial,profile.style_id);
+ assert.ok(patch);const model=compileStudio({...initial,...patch}),packet=buildTechnicalPacket(model),report=knowledgeBrief(model,packet,profile.style_id);
+ assert.ok(model.parts.every(p=>p.size.every(n=>Number.isFinite(n)&&n>0)));
+ assert.equal(report.components.length,packet.groups.length);assert.equal(report.productionApproval,false);
+ assert.equal(report.assessment.checks.length+report.assessment.unevaluatedRuleIds.length,45);
+ assert.equal(report.imageAnalysis,'not-connected');assert.equal(report.styleIntent.interpretationOnly,true);
+ count++;
+}
+const short=assessDesign(compileStudio({family:'table',height:65}));
+assert.equal(short.checks.find(c=>c.id==='ERG-007').status,'review');
+const normal=assessDesign(compileStudio({family:'table',height:75}));
+assert.equal(normal.checks.find(c=>c.id==='ERG-007').status,'within-reference');
+const bed=assessDesign(compileStudio({family:'bed'}));
+assert.equal(bed.taxonomyType,null);
+assert.ok(bed.checks.every(c=>c.id==='STR-003'),'only the generic wooden-leg pre-check is supported here');
+const sofa=compileStudio({family:'sofa',archetype:'chester'}),check=assessDesign(sofa);
+assert.equal(check.checks.find(c=>c.id==='ERG-003').status,'review','three Chester seats are narrower than the source reference minimum');
+assert.ok(parseInt(check.checks.find(c=>c.id==='ERG-003').value)<600);
+console.log(`FDE: ${count} profile/family interpretations; honest coverage, dimensional checks and structured component briefs passed.`);

@@ -1,0 +1,922 @@
+# =============================================================================
+# FDE / styles / japandi.yaml   (schema: ../schemas/style_ontology.schema.json v1.0.0)
+# İskandinav işlevsel sıcaklığı + Japon birleşim disiplini + wabi-sabi
+# match_threshold = 0.60
+# =============================================================================
+
+schema_version: '1.0.0'
+style_id: japandi
+name: Japandi
+name_tr: Japandi (Japon-İskandinav sentezi)
+family: hybrid
+era: '2016-günümüz (ticari akım); kökler: 1950''ler İskandinav modern + Japon geleneksel marangozluk'
+origin_regions: [İskandinavya, Japonya]
+description: 'Japandi fuses Scandinavian functional warmth with Japanese joinery discipline and wabi-sabi acceptance of imperfection. Light, low, quiet furniture: pale woods, matte surfaces, round-but-restrained edges, visible hand-cut joints, low seat heights, generous emptiness. Contrast comes from one dark element, a textural pairing (smooth wood vs. rough linen), and the softness of daylight — never from ornament, gloss or saturated colour. '
+description_tr: 'Japandi, İskandinav işlevsel sıcaklığını Japon birleşim ustalığı ve wabi-sabi''nin kusuru kabulüyle birleştirir. Açık renkli ahşaplar, mat yüzeyler, yuvarlatılmış ama ölçülü kenarlar, görünür el işi birleşimler, alçak oturma yükseklikleri, cömert boşluk. Karşıtlık; tek bir koyu elemandan, dokusal eşleşmeden (pürüzsüz ahşap ve kaba keten) ve gün ışığının yumuşaklığından gelir — asla süslemeden, parlaklıktan veya doygun renkten değil. '
+# -----------------------------------------------------------------------------
+# ÇEKİRDEK İLKELER (ağırlıklı, test_edilebilir)
+core_principles:
+  - id: quiet_function
+    statement: Every element serves a daily ritual (sitting, pouring, folding). Nothing exists to impress.
+    statement_tr: Her eleman günlük bir ritüele hizmet eder (oturma, dökme, katlama). Hiçbir şey etkilemek için var olmaz.
+    weight: 1.0
+    testable_via: [minimalism_index, part_count_leanness, sculptural_index]
+  - id: pale_and_warm
+    statement: Dominant palette is light, warm-neutral wood (L* 55-78) with one dark anchor element.
+    statement_tr: Baskın palet açık, sıcak-nötr ahşaptır (L* 55-78) ve tek bir koyu çapa eleman bulunur.
+    weight: 0.9
+    testable_via: [warmth_index, low_key_palette, contrast_ratio]
+  - id: joinery_as_detail
+    statement: 'The joint is the only decoration: visible hand-cut or precisely machined connection.'
+    statement_tr: 'Birleşim tek süslemedir: görünür el işi veya hassas makine bağlantısı.'
+    weight: 0.9
+    testable_via: [handcraft_index, structural_expression, ornament_density]
+  - id: low_and_grounded
+    statement: Furniture sits low to the floor; visual centre of gravity is below 500 mm.
+    statement_tr: Mobilya zemine alçak oturur; görsel ağırlık merkezi 500 mm'nin altındadır.
+    weight: 0.85
+    testable_via: [lightness_visual, massiveness, seat_height_bias]
+  - id: imperfect_perfection
+    statement: Small natural variation is allowed (grain, knot, slight colour shift); defects are not.
+    statement_tr: Küçük doğal varyasyon kabul edilir (damar, budak, hafif renk değişimi); kusur edilmez.
+    weight: 0.75
+    testable_via: [material_honesty, handcraft_index]
+  - id: generous_void
+    statement: Empty space around and within the object is designed, not leftover.
+    statement_tr: Nesnenin çevresindeki ve içindeki boşluk tasarlanmıştır, artakalan değildir.
+    weight: 0.85
+    testable_via: [void_ratio, minimalism_index]
+  - id: soft_light_only
+    statement: Diffused daylight, no hard shadow drama. Shadow is soft, short and gentle.
+    statement_tr: Yumuşak gün ışığı, sert gölge dramı yok. Gölge yumuşak, kısa ve naziktir.
+    weight: 0.8
+    testable_via: [shadow_as_design_element, contrast_ratio]
+# -----------------------------------------------------------------------------
+# FORM DİLİ
+forms:
+  silhouettes:
+    - low platform sofa on short tapered legs
+    - rounded-rectangle table with softly eased edges
+    - open shelf with a single dark vertical
+    - spindle-back chair with a gentle curved crest
+    - slatted screen / room divider
+    - cylinder-based side table (single turned column)
+    - bench with woven paper-cord seat
+  geometry_language:
+    - soft rectangle with 4-12 mm radius corners
+    - gentle taper (3-6°) on legs
+    - shallow continuous curve (single radius, R300-R1200) for crest rails
+    - constant slat pitch 25-45 mm
+    - flat plane panels with 2-3 mm shadow gap
+    - circle as a rare, deliberate exception (turned stool top)
+  line_quality:
+    - soft continuous line
+    - hand-eased arris
+    - no hard 90° visual corner
+    - no freehand wobble
+  edge_treatment:
+    - 'eased edge: 3-6 mm radius or a soft 45° break'
+    - hand-planed chamfer on visible top arris
+    - shadow gap 3 mm between panel and frame
+  mass_vs_void: Balanced-to-light. Solid volumes stay low and small; verticals are thin and widely spaced. Void 30-50%.
+  preferred_archetypes:
+    - sofa
+    - armchair
+    - lounge_chair
+    - chair
+    - bench
+    - coffee_table
+    - side_table
+    - dining_table
+    - sideboard
+    - shelf_unit
+    - bed
+    - headboard
+    - nightstand
+    - tv_unit
+  forbidden_forms:
+    - monolithic heavy plinth
+    - pointed arch / ogive
+    - sharp chamfer-only brutal edge
+    - high-back throne silhouette
+    - exposed industrial tube frame
+    - curvilinear baroque scroll
+    - asymmetric sculptural blob
+# -----------------------------------------------------------------------------
+# MALZEMELER (primary / secondary / accent / forbidden / combination_rules)
+materials:
+  primary:
+    - material_id: ash_light_oiled
+      material_tr: Açık yağlı dişbudak
+      finish: oiled
+      why: Pale, straight grain, excellent for steam bending and visible joinery.
+      why_tr: Açık renk, düz damar; buharla bükme ve görünür birleşim için mükemmel.
+      applies_to_parts: [frame, leg, rail, seat, back_support, shelf, panel]
+      cost_tier: 2
+      weight: 1.0
+    - material_id: oak_white_soaped
+      material_tr: Beyaz sabunlu meşe
+      finish: soap_finished
+      why: 'The Scandinavian signature: near-white, matte, silky touch.'
+      why_tr: 'İskandinav imzası: beyaza yakın, mat, ipeksi dokunuş.'
+      applies_to_parts: [top_surface, panel, shelf, door, drawer_front]
+      cost_tier: 3
+      weight: 0.85
+    - material_id: hinoki_or_light_softwood
+      material_tr: Hinoki / açık renk yumuşak ağaç
+      finish: raw
+      why: Japanese reference; warm scent, very pale, soft edges.
+      why_tr: Japon referansı; sıcak koku, çok açık renk, yumuşak kenarlar.
+      applies_to_parts: [panel, slats, door, top_surface]
+      cost_tier: 3
+      weight: 0.55
+  secondary:
+    - material_id: linen_natural
+      material_tr: Doğal keten
+      finish: raw
+      why: Textural counterpoint to smooth wood; the essential softness.
+      why_tr: Pürüzsüz ahşaba dokusal karşıtlık; temel yumuşaklık.
+      applies_to_parts: [upholstery, cushion, panel]
+      cost_tier: 2
+      weight: 0.85
+    - material_id: paper_cord
+      material_tr: Kağıt ip (danish cord)
+      finish: raw
+      why: 'Woven seat: light, repairable, warm, historically exact for both traditions.'
+      why_tr: 'Dokuma oturma: hafif, tamir edilebilir, sıcak; iki gelenek için de tarihsel olarak doğru.'
+      applies_to_parts: [seat, back_support]
+      cost_tier: 2
+      weight: 0.8
+    - material_id: wool_boucle_light
+      material_tr: Açık renk yün buklet
+      finish: raw
+      why: Adds a soft light-catching texture on lounge seating only.
+      why_tr: Yalnızca dinlenme oturmalarında ışık yakalayan yumuşak doku katar.
+      applies_to_parts: [upholstery, cushion]
+      cost_tier: 3
+      weight: 0.5
+    - material_id: ceramic_glazed
+      material_tr: Sırlı seramik
+      finish: matte_lacquer
+      why: Small accessory/detail; matte, uneven glaze reads as handmade.
+      why_tr: Küçük aksesuar/detay; mat, düzensiz sır el yapımı okunur.
+      applies_to_parts: [ornament, hardware]
+      cost_tier: 2
+      weight: 0.3
+  accent:
+    - material_id: walnut_dark_oiled
+      material_tr: Koyu yağlı ceviz
+      finish: oiled
+      why: 'The single dark anchor: one component (a leg pair, a handle, a shelf edge) — never more.'
+      why_tr: 'Tek koyu çapa: bir bileşen (bir ayak çifti, bir kulp, bir raf kenarı) — asla daha fazlası.'
+      applies_to_parts: [leg, hardware, edge_treatment, rail, drawer_front]
+      cost_tier: 4
+      weight: 0.9
+    - material_id: blackened_steel_thin
+      material_tr: İnce karartılmış çelik
+      finish: blackened
+      why: Optional 6-10 mm structural accent (a pin, a stretcher rod, a hinge).
+      why_tr: Opsiyonel 6-10 mm yapısal vurgu (bir pim, bir gergi çubuğu, bir menteşe).
+      applies_to_parts: [stretcher, hardware, joint]
+      cost_tier: 2
+      weight: 0.4
+    - material_id: iron_black_matte
+      material_tr: Mat siyah demir
+      finish: matte_lacquer
+      why: Handle and hinge family; matte, small, recessed.
+      why_tr: Kulp ve menteşe ailesi; mat, küçük, içerlek.
+      applies_to_parts: [hardware, joint]
+      cost_tier: 2
+      weight: 0.5
+  forbidden_materials:
+    - high-gloss lacquer
+    - chrome / mirror metal
+    - marble, granite, any polished stone
+    - concrete
+    - gilded brass
+    - plastic in saturated colour
+    - printed laminate with fake grain
+    - velvet in jewel tones
+    - shou sugi ban heavy char (too dark/too dramatic for japandi; belongs to gothic_minimalism/brutalism)
+    - rattan in tropical styling
+  combination_rules:
+    - pair:
+        - ash_light_oiled
+        - linen_natural
+      verdict: signature
+      note: Smooth pale wood + rough natural textile = the core textural contrast.
+    - pair:
+        - oak_white_soaped
+        - walnut_dark_oiled
+      verdict: signature
+      note: Light body, dark accent component. Max 10% dark coverage.
+    - pair:
+        - ash_light_oiled
+        - paper_cord
+      verdict: signature
+      note: Woven seat on a light frame; repairable and warm.
+    - pair:
+        - hinoki_or_light_softwood
+        - ceramic_glazed
+      verdict: allowed
+      note: Small ceramic detail on wood; keep the ceramic matte and neutral.
+    - pair:
+        - ash_light_oiled
+        - blackened_steel_thin
+      verdict: allowed
+      note: Thin black pin/stretcher only; never a full black frame (that becomes Bauhaus/high-tech).
+    - pair:
+        - oak_white_soaped
+        - marble_honed
+      verdict: forbidden
+      note: Stone coldness and weight contradict the soft, low, warm logic.
+    - pair:
+        - ash_light_oiled
+        - chrome
+      verdict: forbidden
+      note: Mirror metal breaks the matte quiet.
+  material_honesty_rules:
+    - Solid wood must be solid on visible faces; veneer only on large flat panels and declared.
+    - No printed grain, no whitewash that hides the grain structure.
+    - Textile must be natural fibre (linen, cotton, wool, paper) or an honest declared blend.
+    - Knots and grain variation are features; filler is not — if filler is used, it must be tinted and recessed.
+# -----------------------------------------------------------------------------
+# RENK
+colors:
+  palette:
+    - { hex: '#D8C7AC', name: Oiled Ash, name_tr: Yağlı Dişbudak, role: dominant, max_coverage: 0.4 }
+    - hex: '#EDE6DA'
+      name: Soaped Oak / Natural Linen
+      name_tr: Sabunlu Meşe / Doğal Keten
+      role: dominant
+      max_coverage: 0.3
+    - { hex: '#C4B49C', name: Paper Cord, name_tr: Kağıt İp, role: secondary, max_coverage: 0.15 }
+    - { hex: '#9A8B77', name: Warm Greige Shadow, name_tr: Sıcak Gölge Griji, role: secondary, max_coverage: 0.1 }
+    - { hex: '#4A3A2C', name: Dark Walnut Anchor, name_tr: Koyu Ceviz Çapa, role: accent, max_coverage: 0.07 }
+    - { hex: '#2A2724', name: Matte Black Detail, name_tr: Mat Siyah Detay, role: accent, max_coverage: 0.03 }
+    - hex: '#7C8A6E'
+      name: Muted Moss (optional)
+      name_tr: Soluk Yosun (opsiyonel)
+      role: accent
+      max_coverage: 0.02
+    - { hex: '#B0A293', name: Ceramic Grey, name_tr: Seramik Grisi, role: highlight, max_coverage: 0.05 }
+  value_range: mid-to-high lightness; 55-80 L* for 80% of the object, dark accent 20-30 L*
+  saturation_range: very low; C* < 15 for woods/textiles, accent C* < 25
+  contrast_rule: Low overall contrast with ONE dark anchor. Contrast must be textural first, tonal second.
+  forbidden_colors:
+    - saturated red, orange, purple, teal, pink
+    - neon / fluorescent
+    - pure black as a dominant surface
+    - pure clinical white
+    - metallic gold / silver
+    - gradient or ombre
+    - more than one dark anchor colour
+# -----------------------------------------------------------------------------
+# DOKU
+textures:
+  dominant:
+    - open-pore oiled wood grain, fine and straight
+    - natural linen slub weave
+    - twisted paper cord weave
+    - soap-finished matte silky wood
+  contrast_textures:
+    - one rougher hand-planed facet
+    - matte ceramic glaze with slight pooling
+    - soft wool bouclé on a single lounge component
+  scale_of_texture: fine
+  reflectance_profile: 'all matte: 3-12 gloss units. No surface above 20 gloss units anywhere.'
+  forbidden_textures:
+    - gloss / mirror
+    - hammered metal
+    - heavy charred timber
+    - stone porosity
+    - shaggy long pile
+    - printed pattern / graphic
+    - quilted diamond tufting
+    - distressed paint
+# -----------------------------------------------------------------------------
+# SÜSLEME KURALLARI
+ornament_rules:
+  max_level: subtle
+  allowed:
+    - visible joinery (through-wedge tenon, finger joint, dowel pattern)
+    - constant-pitch slats / spindles
+    - a single dark accent component
+    - hand-planed facet on one arris
+    - woven pattern of the seat membrane (functional weave)
+    - soft radius corner
+  discouraged: [carved line motifs, inlay beyond a single 3 mm line, engraving]
+  forbidden:
+    - applied mouldings / trim
+    - gilding, brass inlay, marquetry figurative patterns
+    - tufting, buttons, nail-head trim, piping
+    - figurative imagery, animals, florals, logos
+    - gothic tracery, arches, religious motifs
+    - geometric pattern painting on surfaces
+    - fringe, tassels, macramé
+  placement_rules:
+    - Ornament may only be a by-product of construction (the joint, the weave, the slat rhythm).
+    - Dark accent must be on ONE component and must not exceed 10% of visible area.
+    - Never decorate a user-contact surface.
+  motif_vocabulary:
+    - wedge tenon
+    - finger joint
+    - spindle rhythm
+    - slat screen
+    - soft radius
+    - single dark line
+  ornament_must_be:
+    - structural
+    - functional_weave
+    - single-accent
+    - non-figurative
+    - repairable
+# -----------------------------------------------------------------------------
+# ORANLAR
+proportions:
+  dominant_direction: horizontal
+  ratio_presets:
+    - { name: low lounge height, value: 0.62, applies_to: sofa/armchair total height / width }
+    - { name: table height ratio, value: 0.4, applies_to: dining table height / width (700mm on 1750mm) }
+    - { name: leg taper, value: 0.65, applies_to: leg top section / leg bottom section width }
+    - { name: slat pitch to width, value: 1.8, applies_to: slat centre-to-centre / slat width }
+    - { name: seat to total height, value: 0.48, applies_to: 'low lounge: seat height / total height' }
+  module_grid_mm: 30
+  leg_to_body_ratio: legs 10-22% of total height for casegoods (low look); chairs 50-58%
+  seat_height_bias: 'low: 380-420 mm (lounge), 340-380 mm (platform sofa), 430-450 mm (dining chair)'
+  void_ratio_target: 0.42
+  scale_bias: compact
+  symmetry_preference: loose_bilateral
+# -----------------------------------------------------------------------------
+# IŞIK VE GÖLGE (render direktifleri dahil)
+lighting_and_shadow:
+  light_direction:
+    - large diffused window light from one side
+    - soft overhead bounce
+    - no direct spot
+  light_quality: soft, diffused, 3000-4200K, large source relative to the object; shadows soft-edged
+  shadow_role: Gentle. A short soft contact shadow grounds the object; there is no dramatic shadow play.
+  highlight_strategy: Broad soft sheen across the wood grain; a single subtle specular line along the eased arris.
+  render_notes: 'Warm-neutral interior backdrop (#E9E4DC wall, #D9CDBB floor), morning daylight, soft shadow. Include a minimal styling context (one ceramic vessel, one textile) to communicate the calm domestic ritual. Camera 35 mm at 100 cm, straight-on three-quarter. Exposure +0.3 EV. Absolutely no chiaroscuro. '
+# -----------------------------------------------------------------------------
+# DUYGUSAL ANAHTAR KELİMELER
+emotional_keywords:
+  - calm
+  - warm
+  - quiet
+  - domestic
+  - tactile
+  - unhurried
+  - clean
+  - humble
+  - repairable
+  - daylit
+emotional_keywords_tr:
+  - sakin
+  - sıcak
+  - sessiz
+  - evcil
+  - dokunsal
+  - acelesiz
+  - temiz
+  - mütevazı
+  - tamir edilebilir
+  - gün ışıklı
+# -----------------------------------------------------------------------------
+# YASAK SİNYALLER (hard = tasarım reddedilir, soft = skor düşer)
+forbidden_signals:
+  - id: fb_gloss
+    signal: Any surface above 20 gloss units; chrome, mirror, piano finish.
+    signal_tr: 20 gloss birimi üstü yüzey; krom, ayna, piyano cila.
+    severity: hard
+    detected_by: [gloss_absence, reflectance_profile]
+  - id: fb_dark_drama
+    signal: Dominant dark palette with hard chiaroscuro; the piece reads as gothic or brutalist.
+    signal_tr: Sert gölge dramıyla baskın koyu palet; parça gotik veya brutalist okunuyor.
+    severity: hard
+    detected_by: [dark_materiality, low_key_palette, shadow_as_design_element]
+  - id: fb_stone_cold
+    signal: Stone, marble, concrete or other cold heavy mass.
+    signal_tr: Taş, mermer, beton veya soğuk ağır kütle.
+    severity: hard
+    detected_by: [warmth_index, massiveness]
+  - id: fb_ornament_bloat
+    signal: Carving, applied trim, tufting, figurative pattern.
+    signal_tr: Oyma, uygulanmış çıta, kapitone, figüratif desen.
+    severity: hard
+    detected_by: [ornament_density, figurative_ornament]
+  - id: fb_industrial_exposure
+    signal: Exposed tubular steel frame, visible industrial fasteners as the dominant aesthetic.
+    signal_tr: Açık boru çelik çerçeve, baskın estetik olarak görünür endüstriyel bağlantılar.
+    severity: soft
+    detected_by: [industrial_index, handcraft_index]
+  - id: fb_tall_monument
+    signal: High vertical aspiration, height/width > 1.8 on seating, throne-like back.
+    signal_tr: Yüksek dikey yükseliş, oturmada yükseklik/genişlik > 1.8, taht benzeri sırt.
+    severity: hard
+    detected_by: [verticality, height_width_bias]
+  - id: fb_saturated_pop
+    signal: More than one saturated hue, or a saturated hue above 5% coverage.
+    signal_tr: Birden fazla doygun renk veya %5 üstü kapsama sahip doygun renk.
+    severity: hard
+    detected_by: [chroma_restraint]
+  - id: fb_sharp_brutal_edge
+    signal: Hard knife edges and 45° chamfers everywhere with no easing — reads brutalist, not japandi.
+    signal_tr: Her yerde sert bıçak kenar ve 45° pah, yumuşatma yok — japandi değil brutalist okunur.
+    severity: soft
+    detected_by: [geometric_strictness, edge_softness]
+  - id: fb_copyright_copy
+    signal: Silhouette identical to a named Scandinavian or Japanese designer piece.
+    signal_tr: Siluetin isimli bir İskandinav veya Japon tasarımcı parçasıyla aynı olması.
+    severity: hard
+    detected_by: [originality_check]
+# -----------------------------------------------------------------------------
+# POZİTİF PROMPT TOKEN'LARI
+positive_prompt_tokens:
+  core:
+    - japandi furniture
+    - scandinavian japanese hybrid
+    - quiet domestic modernism
+    - wabi-sabi restraint
+  form:
+    - low grounded proportions
+    - soft rounded rectangle volumes
+    - gently tapered round legs
+    - visible wedge-through tenon joint
+    - constant pitch wooden spindles
+    - slatted screen
+    - thin flat planes with 3mm shadow gap
+    - generous negative space
+  material:
+    - pale oiled ash wood, open pore
+    - soap-finished white oak
+    - natural linen upholstery
+    - woven paper cord seat
+    - one dark walnut accent component
+    - matte ceramic detail
+    - light hinoki slats
+  light:
+    - soft diffused morning daylight from a large window
+    - gentle short contact shadow
+    - warm neutral interior
+    - broad soft sheen along the grain
+    - no dramatic shadow
+  camera:
+    - 35mm lens at 100cm height
+    - straight-on three-quarter view
+    - calm domestic interior context
+    - one ceramic vessel and one textile as minimal props
+  mood:
+    - calm
+    - humble domestic ritual
+    - warm minimalism
+    - unhurried
+    - tactile and repairable
+  quality:
+    - photorealistic interior photography
+    - accurate wood grain
+    - sharp joinery detail
+    - 8k, natural colour, matte finish
+  weight_hint:
+    core: 1.3
+    form: 1.2
+    material: 1.25
+    light: 1.1
+    mood: 1.1
+    camera: 0.9
+    quality: 1.0
+  template: '{subject}, {form}, {material}, {light}, {mood}, {camera}, {quality}'
+# -----------------------------------------------------------------------------
+# NEGATİF PROMPT TOKEN'LARI
+negative_prompt_tokens:
+  core:
+    - ornate carving
+    - applied moulding
+    - decorative trim
+    - gilding
+    - tufting
+    - piping
+    - nail-head trim
+    - figurative pattern
+  style_specific:
+    - gothic arch
+    - pointed arch
+    - dark chiaroscuro
+    - blackened oak dominance
+    - concrete
+    - board-formed concrete
+    - marble top
+    - granite
+    - stone plinth
+    - chrome
+    - mirror finish
+    - high gloss lacquer
+    - brass gold
+    - art deco sunburst
+    - baroque
+    - rococo
+    - memphis pattern
+    - neon colours
+    - saturated red
+    - pastel pink
+    - velvet jewel tones
+    - shabby chic
+    - distressed paint
+    - farmhouse rustic heavy grain
+    - tropical rattan resort
+    - industrial exposed pipe frame
+    - heavy charred timber
+  anatomy_defects:
+    - mismatched legs
+    - legs of different lengths
+    - floating furniture with no ground contact
+    - backrest not connected to seat frame
+    - seat membrane sagging
+    - parts merging
+    - duplicated components
+    - warped frame
+    - impossible joint
+  physics_defects:
+    - slender leg under a heavy stone top
+    - unsupported shelf span over 800mm in softwood
+    - paper cord seat without a supporting frame perimeter
+    - cross-grain load path
+    - top-heavy without base width
+    - no visible load path to the floor
+  copyright_guards:
+    - exact replica of a named designer chair
+    - branded furniture
+    - visible logo
+    - trademarked product
+# -----------------------------------------------------------------------------
+# ÜRETİM NOTLARI
+manufacturing_notes:
+  preferred_processes:
+    - mortise_tenon
+    - doweling
+    - steam_bending
+    - lathe_turning
+    - cnc_routing
+    - hand_carving
+    - webbing
+    - oil_finishing
+    - finger_joint
+  avoid_processes:
+    - injection_molding
+    - chrome_plating
+    - casting_sand
+    - concrete_casting
+    - gloss polyurethane spraying
+  joint_language:
+    - through-wedge tenon with a 2 mm proud wedge (the signature visible joint)
+    - round dowel grid on panel-to-frame connections
+    - finger joint on drawer boxes, glued and sanded flush
+    - steam-bent crest rail into a round mortise
+    - paper cord laced over a 20 mm frame rebate with a 3 mm rounding
+    - concealed hinge with soft-close, recessed 12 mm
+  joinery_visibility: celebrated
+  typical_thickness_mm:
+    frame_member: 28
+    leg: 34
+    seat_frame: 22
+    panel: 18
+    shelf: 20
+    top_surface: 25
+    slat: 12
+    spindle: 16
+  tolerance_notes: 'Visible joints demand tight tolerance: tenon fit +/-0.1 mm, wedge slot 2.0 mm +/-0.1. Moisture movement is the main risk — build at 8-10% MC for EU indoor use, leave 1.5 mm per 400 mm of cross-grain width in frame-and-panel construction, and use slotted holes on all top fixings. Steam bending: ash, 20 min per 25 mm of thickness at 100 °C, over-bend 8-12% for spring-back. '
+  finishing_notes: 'Hardwax oil or soap finish only. Soap finish recipe: pure soap flakes dissolved in warm water (1:20), applied 3 coats, sanded 320 between. Never polyurethane gloss. Textiles: untreated or OEKO-TEX certified, removable covers with a hidden zip. '
+  cost_drivers:
+    - hand-laced paper cord seats
+    - visible joinery tolerance
+    - steam-bent components
+    - solid pale hardwood selection (colour consistency)
+  sustainability_notes: FSC ash/oak, water-based finishes, mechanical joints for repair and disassembly, natural fibre textiles, no foam where a woven membrane works.
+  flat_pack_feasible: true
+  difficulty: 3
+# -----------------------------------------------------------------------------
+# TARİHSEL REFERANSLAR (yalnızca ilke/oran çıkarımı; birebir kopya YOK)
+historical_references:
+  - kind: movement
+    title: Scandinavian Modern / Danish functionalism (1940-1960)
+    title_tr: İskandinav Modern / Danimarka işlevselciliği
+    date: 1940-1960
+    region: Danimarka, İsveç
+    why_relevant: Source of pale wood, visible joinery, low proportions, woven seats.
+    what_to_extract:
+      - wedge tenon language
+      - tapered round leg geometry
+      - paper cord seat construction
+      - soft eased edges
+    source_api: europeana
+    license: unknown
+    query_hint: 'Europeana: ''Scandinavian furniture 1950'' (metadata only)'
+  - kind: technique
+    title: Japanese traditional joinery (sashimono / kumiko discipline)
+    title_tr: Japon geleneksel birleşim ustalığı (sashimono / kumiko disiplini)
+    date: 17.-20. yy
+    region: Japonya
+    why_relevant: Supplies the joint-as-ornament logic and the slat/screen geometry.
+    what_to_extract:
+      - wedge and pin joints without metal fasteners
+      - slat pitch discipline
+      - frame-and-panel with shadow gap
+    source_api: wikidata_sparql
+    license: not_applicable
+    query_hint: SELECT ?item WHERE { ?item wdt:P31/wdt:P279* wd:Q1057564 }
+  - kind: concept
+    title: 'Wabi-sabi: acceptance of imperfection and material ageing'
+    title_tr: 'Wabi-sabi: kusurun ve malzemenin yaşlanmasının kabulü'
+    date: 15. yy - günümüz
+    region: Japonya
+    why_relevant: Justifies natural grain variation, matte surfaces, repairability over perfection.
+    what_to_extract:
+      - allowed variation ranges
+      - matte finish discipline
+      - repair-first construction
+    source_api: manual
+    license: not_applicable
+  - kind: concept
+    title: 'Ma (間): designed negative space'
+    title_tr: 'Ma (間): tasarlanmış negatif alan'
+    date: geleneksel
+    region: Japonya
+    why_relevant: The theoretical basis for void_ratio_target and the low-density composition.
+    what_to_extract: [void as a designed part, spacing rhythm rules]
+    source_api: manual
+    license: not_applicable
+  - kind: museum_collection
+    title: Nordic design museum collections (Designmuseum Danmark, Röhsska, Nationalmuseum)
+    title_tr: İskandinav tasarım müzesi koleksiyonları
+    date: '-'
+    region: Danimarka, İsveç
+    why_relevant: Dimension and material reference for the type forms (metadata only).
+    what_to_extract: [dimension ranges, joint typologies, material pairings]
+    source_api: europeana
+    license: unknown
+    query_hint: 'Europeana provider filter: Nationalmuseum / Designmuseum Danmark, CC0 or public domain mark only'
+# -----------------------------------------------------------------------------
+# SKORLAMA İMZASI — rules/style_scoring_rules.json feature_id'leri ile eşleşir
+scoring_signature:
+  target_vector:
+    verticality: 0.22
+    pointed_arch_presence: 0.0
+    ornament_restraint: 0.9
+    minimalism_index: 0.85
+    material_honesty: 0.9
+    dark_materiality: 0.15
+    low_key_palette: 0.12
+    chroma_restraint: 0.88
+    contrast_ratio: 0.42
+    structural_expression: 0.8
+    void_ratio: 0.68
+    geometric_strictness: 0.55
+    edge_softness: 0.85
+    symmetry_strictness: 0.6
+    curvature_organic: 0.28
+    warmth_index: 0.9
+    gloss_absence: 0.97
+    shadow_as_design_element: 0.25
+    handcraft_index: 0.82
+    industrial_index: 0.35
+    sacred_geometry: 0.0
+    ritual_stillness: 0.82
+    sculptural_index: 0.25
+    figurative_ornament: 0.0
+    ornament_density: 0.08
+    part_count_leanness: 0.85
+    gesture_count: 0.85
+    historical_reference_index: 0.6
+    futuristic_index: 0.05
+    modular_grid_index: 0.7
+    modularity_index: 0.6
+    massiveness: 0.2
+    lightness_visual: 0.72
+    ergonomic_compliance: 1.0
+    structural_plausibility: 1.0
+    faux_finish_absence: 1.0
+    originality_check: 0.85
+  weights:
+    warmth_index: 1.0
+    gloss_absence: 0.95
+    handcraft_index: 0.85
+    minimalism_index: 0.8
+    void_ratio: 0.75
+    edge_softness: 0.8
+    dark_materiality: 0.85
+    shadow_as_design_element: 0.7
+    verticality: 0.6
+    chroma_restraint: 0.75
+    ornament_density: 0.7
+    industrial_index: 0.5
+    massiveness: 0.6
+    ergonomic_compliance: 1.0
+    structural_plausibility: 1.0
+    originality_check: 0.7
+  hard_gates:
+    - { feature_id: gloss_absence, op: '>=', value: 0.9, penalty: 30 }
+    - { feature_id: warmth_index, op: '>=', value: 0.6, penalty: 25 }
+    - { feature_id: dark_materiality, op: <=, value: 0.3, penalty: 30 }
+    - { feature_id: verticality, op: <=, value: 0.45, penalty: 20 }
+    - { feature_id: ornament_density, op: <=, value: 0.2, penalty: 25 }
+    - { feature_id: figurative_ornament, op: <=, value: 0.02, penalty: 40 }
+    - { feature_id: chroma_restraint, op: '>=', value: 0.8, penalty: 25 }
+    - { feature_id: structural_plausibility, op: '>=', value: 0.7, penalty: 40 }
+    - { feature_id: ergonomic_compliance, op: '>=', value: 0.7, penalty: 40 }
+    - { feature_id: originality_check, op: '>=', value: 0.6, penalty: 50 }
+  match_threshold: 0.6
+  confidence_floor: 0.45
+# -----------------------------------------------------------------------------
+# PARÇA DİREKTİFLERİ — her parça bu stilde nasıl davranır?
+# part_role değerleri schemas/furniture_parts.schema.json -> $defs.partRoleId
+part_directives:
+  - part_role: leg
+    directive: Round or softly square, tapered 3-6°, 28-40 mm at top to 20-28 mm at floor; height 120-200 mm for casegoods, 400-450 mm for dining chairs.
+    directive_tr: Yuvarlak veya yumuşak kare, 3-6° konik, üstte 28-40 mm zemine doğru 20-28 mm; dolaplarda 120-200 mm, yemek sandalyesinde 400-450 mm yükseklik.
+    typical_material: ash_light_oiled
+    typical_dimension_hint: top 34mm -> floor 24mm; taper 4°
+    ornament_level: none
+    priority: must
+  - part_role: foot
+    directive: Same timber continues to the floor with a 2 mm eased end and a felt glide. No metal cap, no plinth.
+    directive_tr: Aynı ahşap 2 mm yumuşatılmış uç ve keçe kaydırıcıyla zemine iner. Metal pabuç yok, kaide yok.
+    typical_material: ash_light_oiled
+    typical_dimension_hint: felt glide 12mm dia, 3mm thick
+    ornament_level: none
+    priority: should
+  - part_role: seat
+    directive: Woven paper cord on a 20 mm rebate, or 18-22 mm solid timber with a 4 mm eased edge, or a 60-90 mm linen cushion over a webbing base.
+    directive_tr: 20 mm yuvada dokuma kağıt ip, ya 4 mm yumuşatılmış kenarlı 18-22 mm masif ahşap, ya da dokuma taban üstünde 60-90 mm keten minder.
+    typical_material: paper_cord
+    typical_dimension_hint: seat height 380-450mm; depth 400-460mm
+    ornament_level: subtle
+    priority: must
+  - part_role: back_support
+    directive: Low, wide, gently curved crest rail (single radius R400-R900) or 4-7 vertical spindles at 35-50 mm pitch. Recline 100-108°.
+    directive_tr: Alçak, geniş, nazikçe kavisli tepe çıtası (tek yarıçap R400-R900) veya 35-50 mm adımda 4-7 dikey mil. Eğim 100-108°.
+    typical_material: ash_light_oiled
+    typical_dimension_hint: back height 280-420mm above seat
+    ornament_level: subtle
+    priority: must
+  - part_role: arm_support
+    directive: Soft continuous curve flowing from the crest rail, 200-240 mm above seat, section 22x30 mm with fully eased edges.
+    directive_tr: Tepe çıtasından akan yumuşak sürekli eğri, oturmada 200-240 mm yukarıda, tamamen yumuşatılmış kenarlı 22x30 mm kesit.
+    typical_material: ash_light_oiled
+    typical_dimension_hint: arm height 600-660mm from floor
+    ornament_level: none
+    priority: should
+  - part_role: frame
+    directive: Solid timber frame with visible through-wedge tenons at every major junction; member section constant 22-32 mm.
+    directive_tr: Her ana kavşakta görünür kamalı geçer zıvanalı masif ahşap çerçeve; eleman kesiti sabit 22-32 mm.
+    typical_material: ash_light_oiled
+    typical_dimension_hint: 28x28mm typical; tenon = 1/3 thickness
+    ornament_level: subtle
+    priority: must
+  - part_role: top_surface
+    directive: 22-30 mm solid timber or 20 mm ply with a solid lipped edge; all arrises eased 4-6 mm; overhang 30-50 mm.
+    directive_tr: 22-30 mm masif ahşap veya masif kenarlı 20 mm kontrplak; tüm kenarlar 4-6 mm yumuşatılmış; taşma 30-50 mm.
+    typical_material: oak_white_soaped
+    typical_dimension_hint: table height 680-720mm; thickness 25mm
+    ornament_level: none
+    priority: must
+  - part_role: shelf
+    directive: 18-22 mm, span <= 700 mm in ash, adjustable on a 30 mm pitch; back edge 3 mm shadow gap.
+    directive_tr: 18-22 mm, dişbudakta açıklık <= 700 mm, 30 mm adımda ayarlanabilir; arka kenar 3 mm gölge aralığı.
+    typical_material: ash_light_oiled
+    typical_dimension_hint: 20mm thick, 30mm pitch adjustment
+    ornament_level: none
+    priority: must
+  - part_role: panel
+    directive: Flat, 15-18 mm, frame-and-panel with 3 mm movement gap; never a raised field, never a moulded edge.
+    directive_tr: Düz, 15-18 mm, 3 mm hareket boşluklu çerçeve-panel; asla yükseltilmiş alan, asla profilli kenar.
+    typical_material: hinoki_or_light_softwood
+    typical_dimension_hint: 15-18mm; gap 3mm
+    ornament_level: none
+    priority: should
+  - part_role: door
+    directive: Full-height or slatted; recessed 12 mm handle groove or a single matte black pull. Soft-close concealed hinge.
+    directive_tr: Tam boy veya çıtalı; 12 mm içerlek kulp oyuğu veya tek mat siyah çekme. Yumuşak kapanan gizli menteşe.
+    typical_material: ash_light_oiled
+    typical_dimension_hint: gap 3mm; handle recess 12x80mm
+    ornament_level: subtle
+    priority: should
+  - part_role: hardware
+    directive: Matte black or dark walnut, small and recessed. One family per piece. No brass, no chrome.
+    directive_tr: Mat siyah veya koyu ceviz, küçük ve içerlek. Parça başına bir aile. Pirinç yok, krom yok.
+    typical_material: iron_black_matte
+    typical_dimension_hint: pull 96-128mm; diameter 10-12mm
+    ornament_level: subtle
+    priority: must
+  - part_role: joint
+    directive: The decoration of this style. Through-wedge tenon, finger joint or dowel pattern must be visible, precise, and consistent.
+    directive_tr: Bu stilin süslemesi. Kamalı geçer zıvana, parmak birleşim veya dübel deseni görünür, hassas ve tutarlı olmalı.
+    typical_material: ash_light_oiled
+    typical_dimension_hint: wedge 2mm; tenon fit +/-0.1mm
+    ornament_level: subtle
+    priority: must
+  - part_role: upholstery
+    directive: Natural linen or light wool, 60-110 mm, removable cover, hidden zip, single seam line. No tufting, no piping.
+    directive_tr: Doğal keten veya açık yün, 60-110 mm, çıkarılabilir kılıf, gizli fermuar, tek dikiş çizgisi. Kapitone yok, biye yok.
+    typical_material: linen_natural
+    typical_dimension_hint: cushion 80-110mm; removable cover
+    ornament_level: none
+    priority: should
+  - part_role: edge_treatment
+    directive: Eased 4-6 mm radius or a soft hand-planed break. Never a knife edge, never a hard 90° visual corner.
+    directive_tr: 4-6 mm yumuşatılmış yarıçap veya yumuşak el rendesi kırığı. Asla bıçak kenar, asla sert 90° görsel köşe.
+    typical_material: null
+    typical_dimension_hint: R4-6mm
+    ornament_level: subtle
+    priority: must
+  - part_role: ornament
+    directive: One dark walnut accent component OR one visible joint family. Never both plus anything else.
+    directive_tr: Bir koyu ceviz vurgu bileşeni VEYA bir görünür birleşim ailesi. Asla ikisi artı başka bir şey.
+    typical_material: walnut_dark_oiled
+    typical_dimension_hint: dark coverage <= 10% of visible area
+    ornament_level: subtle
+    priority: may
+# -----------------------------------------------------------------------------
+# CANLI ÇİZİM GERİ BİLDİRİM CÜMLELERİ
+sketch_feedback:
+  on_good_signal:
+    - Leg taper is in the 3-6° band — reads calm and grounded.
+    - Visible wedge tenon detected. That joint is the decoration; keep it precise.
+    - 'Edges are eased. Good: nothing here is sharp.'
+    - One dark accent component only. Contrast is correctly restrained.
+  on_weak_signal:
+    - Void ratio is low — the piece feels heavy for japandi. Remove a panel or thin the slats.
+    - The back is getting tall. Japandi keeps the visual centre of gravity below 500 mm.
+    - 'Texture pairing is missing: add one rough textile against the smooth wood.'
+  on_violation:
+    - Glossy surface detected. Japandi is matte only (3-12 gloss units).
+    - Stone/concrete mass detected. This style is warm timber and textile only.
+    - Two saturated colours detected. Keep one dark anchor and neutrals.
+    - Hard 45° chamfer everywhere — that reads brutalist, not japandi. Ease the edges.
+    - Vertical aspiration too strong (h/w > 1.8). Lower the silhouette.
+    - Applied ornament detected. Ornament may only be a by-product of construction.
+    - Seat-to-floor load path is broken. Add a stretcher or thicken the leg.
+  on_violation_tr:
+    - Parlak yüzey tespit edildi. Japandi yalnızca mattır (3-12 gloss birimi).
+    - Taş/beton kütle tespit edildi. Bu stil yalnızca sıcak ahşap ve tekstildir.
+    - İki doygun renk tespit edildi. Bir koyu çapa ve nötrler korunmalı.
+    - Her yerde sert 45° pah — bu japandi değil brutalist okunur. Kenarları yumuşat.
+    - Dikey yükseliş çok güçlü (h/g > 1.8). Silueti alçalt.
+    - Uygulanmış süsleme tespit edildi. Süsleme yalnızca inşaatin yan ürünü olabilir.
+    - Oturmadan zemine yük yolu kesik. Bir kiriş ekle veya ayağı kalınlaştır.
+  suggested_next_strokes:
+    - Draw the ground line, then four tapered legs at 3-6°.
+    - Add the seat plane with a 4-6 mm eased edge.
+    - Mark one wedge tenon at the leg-to-rail junction.
+    - 'Lower the crest rail: keep total height under 800 mm for a lounge piece.'
+    - Insert 5 spindles at a constant 40 mm pitch for the back.
+# -----------------------------------------------------------------------------
+# STİL UYUMLULUĞU VE HİBRİT TARİFLERİ
+compatibility:
+  blends_well_with:
+    - wabi_sabi
+    - scandinavian_modern
+    - minimalism
+    - muji_modern
+    - craft_modern
+  conflicts_with:
+    - brutalism
+    - gothic_minimalism
+    - art_deco
+    - memphis
+    - high_tech
+    - rococo_revival
+    - dark_academia
+  hybrid_recipes:
+    - result_style_id: gothic_japandi
+      mix:
+        - { style_id: gothic_minimalism, ratio: 0.5 }
+        - { style_id: japandi, ratio: 0.5 }
+      note: Keep the lancet void and chamfer discipline from gothic; lighten the palette to 40-65 L*, swap concrete for smoked oak, keep shadow soft rather than dramatic.
+    - result_style_id: japandi_wabisabi
+      mix:
+        - { style_id: japandi, ratio: 0.7 }
+        - { style_id: wabi_sabi, ratio: 0.3 }
+      note: Allow more grain variation, hand-planed marks, one repaired/patched detail; drop gloss_absence gate to 0.85.
+# -----------------------------------------------------------------------------
+# YASAL / ETİK UYUM
+compliance:
+  cultural_sensitivity_notes: '"Japandi" is a commercial hybrid term, not a Japanese tradition. Do not use religious or sacred Japanese objects (butsudan cabinets, torii forms, temple fittings) as decorative motifs. Use construction logic (joinery, slat rhythm, proportion), not sacred iconography. Attribute the joinery tradition correctly and avoid presenting it as a generic "exotic" aesthetic. '
+  religious_symbol_policy: forbidden_as_content
+  do_not_replicate:
+    - named Scandinavian designer chair silhouettes
+    - specific kumiko patterns that are the signature of an identified workshop
+    - temple/shrine architectural elements as furniture decoration
+# -----------------------------------------------------------------------------
+# META
+meta:
+  author: FDE stil ontolojisi katmanı
+  created: '2026-10-16'
+  updated: '2026-10-16'
+  status: production
+  confidence: 0.8
+  evidence_sources:
+    - Scandinavian modern + Japanese joinery practice — craft/marangozluk consensus
+    - Wabi-sabi / ma concepts — design theory
+    - Moisture movement, steam bending, oil/soap finishing — manufacturing practice
+    - Europeana / Wikidata / Rijksmuseum public-domain metadata
+  notes: 'confidence 0.8: hibrit ticari bir akım; tarihsel referanslar gerçek ama ''japandi'' adı pazarlama kökenli. Palet değerleri editoryal.'

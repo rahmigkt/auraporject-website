@@ -1,0 +1,243 @@
+{
+  "version": "1.0.0",
+  "description": "FDE negatif prompt kütüphanesi ve birleştirme motoru. Amaç: AI'ın anatomik olarak imkânsız, fiziksel olarak saçma, stille çelişen veya telif riski taşıyan mobilya üretmesini engellemek.",
+  "assumptions": [
+    "ASSUMPTION N1: Hedef üretim motoru negatif prompt destekleyen bir diffusion modeli (SDXL/SD3/Flux-dev with negative guidance veya ComfyUI workflow). Flux gibi modellerde 'negative' guidance_scale düşük tutulmalı; token'lar pozitif prompt içinde 'avoid X' olarak da eklenebilir.",
+    "ASSUMPTION N2: Negatif prompt uzunluğu ~225 token ile sınırlıdır (CLIP text encoder). Bu yüzden assembly.max_tokens uygulanır ve priority sırasına göre kırpılır.",
+    "ASSUMPTION N3: Stil özel negatifler, stil YAML dosyalarındaki negative_prompt_tokens alanından da okunabilir; bu dosya global + kategori tabanını sağlar ve stil dosyasıyla birleştirilir."
+  ],
+
+  "assembly": {
+    "order": ["legal", "anatomy", "physics", "quality", "style_specific", "scene", "copyright"],
+    "dedupe": true,
+    "lowercase": true,
+    "max_tokens": 225,
+    "separator": ", ",
+    "truncation_policy": "priority_first: düşük öncelikli kategorilerden kırp; 'legal' ve 'anatomy' asla kırpılmaz",
+    "template": "{negative_tokens}",
+    "flux_mode_note": "Flux/SD3 için: bu token'ları guidance_embed yerine pozitif prompt sonuna ', avoiding: {top_12_tokens}' olarak ekle ve negative guidance_scale <= 2.0 tut."
+  },
+
+  "global": {
+    "legal": {
+      "priority": 1,
+      "tokens": [
+        "ivory",
+        "tortoiseshell",
+        "rhinoceros horn",
+        "endangered wood species",
+        "illegal wildlife product",
+        "asbestos",
+        "lead paint"
+      ],
+      "notes": "Her zaman eklenir. Yasal risk sıfır tolerans."
+    },
+    "anatomy": {
+      "priority": 2,
+      "tokens": [
+        "mismatched legs",
+        "legs of different lengths",
+        "extra legs",
+        "missing legs",
+        "three-legged chair",
+        "five-legged chair",
+        "floating furniture",
+        "furniture with no ground contact",
+        "parts merging together",
+        "fused components",
+        "duplicated components",
+        "doubled backrest",
+        "backrest not connected to the frame",
+        "twisted frame",
+        "warped structure",
+        "melted geometry",
+        "broken symmetry where symmetry is intended",
+        "impossible joint",
+        "joint floating in space",
+        "chair seat tilted sideways",
+        "table top not horizontal",
+        "sagging seat membrane",
+        "chair with no seat",
+        "staircase-like seat",
+        "handle emerging from the wrong face",
+        "door opening into the carcass",
+        "shelf intersecting a panel",
+        "asymmetric drawer stack where a symmetric grid is intended"
+      ],
+      "notes": "AI mobilya görsellerinde en sık görülen hatalar. En yüksek etki burada."
+    },
+    "physics": {
+      "priority": 3,
+      "tokens": [
+        "impossibly thin legs",
+        "paper-thin stone slab",
+        "unsupported cantilever",
+        "floating mass with no support",
+        "top-heavy with no base",
+        "no visible load path",
+        "cross-grain load bearing",
+        "glass shelf too thin for the span",
+        "concrete slab too thin",
+        "bent member under load",
+        "deflected shelf",
+        "cracked joint",
+        "furniture levitating",
+        "shadow direction inconsistent with the light source",
+        "contact shadow missing",
+        "wrong scale relative to the room"
+      ]
+    },
+    "quality": {
+      "priority": 4,
+      "tokens": [
+        "blurry",
+        "low resolution",
+        "jpeg artifacts",
+        "oversharpened",
+        "halo artifacts",
+        "plastic look on wood",
+        "waxy skin-like surface",
+        "cartoon",
+        "illustration",
+        "3d render look",
+        "video game asset",
+        "clay render",
+        "wireframe",
+        "sketch lines left in the render",
+        "watermark",
+        "signature",
+        "text",
+        "logo",
+        "brand name",
+        "ui overlay",
+        "measurement annotations",
+        "grid overlay",
+        "extra objects",
+        "clutter",
+        "people",
+        "hands",
+        "mannequin",
+        "duplicated furniture in frame",
+        "cropped furniture",
+        "fisheye distortion",
+        "perspective distortion",
+        "color banding",
+        "overexposed highlights",
+        "crushed blacks",
+        "noise",
+        "grain artifacts"
+      ]
+    },
+    "scene": {
+      "priority": 6,
+      "tokens": [
+        "busy background",
+        "patterned wallpaper",
+        "plants obscuring the object",
+        "props on the surface",
+        "books and magazines",
+        "vases covering the design",
+        "curtains",
+        "people in frame",
+        "pets",
+        "food",
+        "outdoor scene when indoor was requested",
+        "inconsistent interior style"
+      ],
+      "notes": "Yalnızca 'product_isolated' ve 'studio' render modlarında eklenir. 'interior_context' modunda bu kategori kaldırılır."
+    },
+    "copyright": {
+      "priority": 1,
+      "tokens": [
+        "exact replica",
+        "copy of a designer chair",
+        "recognisable branded furniture",
+        "branded product",
+        "visible brand logo",
+        "trademarked design",
+        "photograph of an existing product",
+        "catalogue shot of a known model",
+        "specific designer name in the output"
+      ]
+    }
+  },
+
+  "by_render_mode": {
+    "product_isolated": {
+      "extra_positive_context": "seamless studio backdrop, single product, centred, no props",
+      "extra_negative": ["environment", "room interior", "floor texture variety", "wall", "window", "shadow of other objects"]
+    },
+    "studio_three_quarter": {
+      "extra_positive_context": "three-quarter view, controlled studio light, dark or light seamless backdrop",
+      "extra_negative": ["front-only flat view", "top-down view", "dutch angle"]
+    },
+    "interior_context": {
+      "extra_positive_context": "realistic interior, correct human scale, consistent light direction",
+      "extra_negative": ["empty white void", "unrealistic scale", "floating in space", "inconsistent perspective"]
+    },
+    "technical_orthographic": {
+      "extra_positive_context": "orthographic front elevation, side elevation and plan, thin line work, no perspective",
+      "extra_negative": ["perspective", "shading", "photorealism", "colour gradients", "camera angle", "depth of field"]
+    },
+    "sketch_render_hybrid": {
+      "extra_positive_context": "design sketch with rendered materials, construction lines visible, annotation-free",
+      "extra_negative": ["finished photograph", "text annotations", "dimension lines", "title block"]
+    }
+  },
+
+  "by_material_context": {
+    "wood": ["plastic look", "printed wood grain", "laminate sheen", "waxy surface", "unnatural grain repetition", "grain direction inconsistent across members"],
+    "concrete": ["plastic concrete", "painted concrete look", "fake texture map", "smooth plaster instead of cast concrete"],
+    "stone": ["printed marble", "laminate marble", "plastic stone", "impossible veining continuity across a corner"],
+    "metal": ["plastic metal", "chrome on wood", "impossible mirror reflection", "metal looking like painted plastic"],
+    "glass": ["opaque glass", "glass without refraction", "glass edges not polished", "glass floating without support"],
+    "textile": ["plastic fabric", "paper-like cloth", "impossible drape", "fabric clipping through the frame", "printed textile pattern where a solid colour was requested"],
+    "leather": ["plastic leather look", "PU sheen on aniline leather", "impossible stitching", "leather stretching through the frame"]
+  },
+
+  "by_furniture_type": {
+    "chair": ["chair with no back support where one was requested", "seat lower than the floor line", "legs passing through the seat", "armrests at head height", "seat surface tilted"],
+    "sofa": ["cushions floating above the frame", "impossible upholstery seams", "sofa with a single giant cushion where separate seats were requested", "back cushions merging with the seat"],
+    "table": ["table top thinner than 5 mm", "legs at the very corner with no inset", "table with a sagging top", "apron intersecting the seat zone"],
+    "sideboard": ["doors of unequal size in a symmetric design", "handles at inconsistent heights", "shelves visible through a closed door", "carcass floating above the plinth"],
+    "bookshelf": ["shelves of random thickness", "books rendered where an empty shelf was requested", "upright thinner than 12 mm", "no wall anchor on a tall unit"],
+    "bed": ["headboard detached from the bed", "mattress thicker than the frame allows", "impossible slat spacing"],
+    "wardrobe": ["doors not reaching the floor line consistently", "mirrored doors reflecting an impossible room", "hinges on the wrong side"],
+    "desk": ["no cable management where requested", "desk height like a coffee table", "monitor arm clipping through the top"]
+  },
+
+  "style_specific_defaults": {
+    "notes": "Bunlar yedek değerlerdir. Asıl kaynak her stilin YAML dosyasındaki negative_prompt_tokens bloğudur. Stil dosyası yüklenemezse bunlar kullanılır.",
+    "gothic_minimalism": ["baroque", "rococo", "ornate carving", "pastel", "neon", "high gloss", "chrome", "plastic", "rattan", "shabby chic", "stained glass", "religious iconography", "gothic horror", "skulls", "spikes", "rose window", "quatrefoil"],
+    "bauhaus": ["ornament", "carving", "gothic arch", "marble", "brass", "concrete", "rustic wood", "velvet", "pastel gradient", "art deco sunburst", "art nouveau curve"],
+    "japandi": ["gloss", "chrome", "concrete", "marble", "dark chiaroscuro", "gothic arch", "saturated colour", "art deco", "baroque", "heavy charred timber", "industrial pipe frame"],
+    "art_deco": ["asymmetry", "organic carving", "matte austerity", "board-formed concrete", "rough sawn timber", "gothic arch", "japandi pale wood", "natural linen", "cane webbing", "plastic", "pastel"],
+    "brutalism": ["gloss", "chrome", "ornament", "inlay", "pale oiled wood", "linen", "cane", "tubular steel frame", "slender legs", "pastel", "faux concrete texture", "applied pattern"]
+  },
+
+  "usage_examples": {
+    "example_1_gothic_minimal_chair": {
+      "note": "Gotik minimal bir sandalye için birleştirilmiş negatif prompt (kısaltılmış gösterim).",
+      "assembled": "ivory, tortoiseshell, endangered wood species, exact replica, copy of a designer chair, visible brand logo, mismatched legs, legs of different lengths, floating furniture, parts merging together, backrest not connected to the frame, twisted frame, melted geometry, impossible joint, table top not horizontal, impossibly thin legs, unsupported cantilever, floating mass with no support, no visible load path, cross-grain load bearing, blurry, low resolution, plastic look on wood, cartoon, illustration, watermark, text, logo, people, extra objects, clutter, baroque, rococo, ornate carving, acanthus leaves, decorative trim, gilding, pastel colours, neon colours, high gloss lacquer, chrome, mirror finish, plastic, acrylic, printed wood grain, rattan, cane webbing, shabby chic, distressed paint, farmhouse rustic, stained glass, gothic tracery overload, rose window, quatrefoil, religious iconography, gothic horror, skulls, spikes for decoration, busy background, patterned wallpaper, props on the surface"
+    },
+    "example_2_japandi_sideboard_technical": {
+      "note": "Japandi büfe, teknik ortografik görünüm modu.",
+      "assembled": "ivory, tortoiseshell, exact replica, visible brand logo, mismatched legs, floating furniture, parts merging together, door opening into the carcass, shelves intersecting a panel, blurry, low resolution, text, logo, watermark, gloss, chrome, concrete, marble, dark chiaroscuro, gothic arch, saturated colour, art deco, baroque, heavy charred timber, industrial pipe frame, perspective, shading, photorealism, colour gradients, camera angle, depth of field"
+    }
+  },
+
+  "positive_prompt_assembly": {
+    "description": "Negatifin karşı tarafı: pozitif prompt'un nasıl kurulacağı.",
+    "order": ["subject", "furniture_type_and_archetype", "style_core", "form", "parts_and_dimensions", "material", "light", "mood", "camera", "quality"],
+    "template": "{subject}, {style_core}, {form}, {parts_and_dimensions}, {material}, {light}, {mood}, {camera}, {quality}",
+    "max_tokens": 165,
+    "rules": [
+      "Boyutları metrik ve gerçekçi yaz: 'a 1850 mm tall gothic minimalist oak sideboard' — 'a tall cabinet' değil.",
+      "Her parçayı ayrı token olarak belirt; bu ControlNet/segment koşullarıyla birleşir.",
+      "Stil token'larını stil YAML'ındaki weight_hint'e göre sırala (ağır olan önce).",
+      "'original design, not a replica of any existing product' ifadesini pozitif promptun sonuna ekle (telif koruması).",
+      "Tek bir malzeme ailesi baskın olsun; model kararsızsa malzeme karışır."
+    ],
+    "example_positive": "original furniture design, gothic minimalist armchair, tall vertical proportions with a pointed ogival arch backrest apex rising 60 mm, backrest height 620 mm above a 440 mm seat, four chamfered blackened oak legs 34 mm section tapering 2 degrees, blackened oak frame with visible through-tenon joints, dark wool felt seat pad 12 mm, single aged brass foot cap, one hard directional light from a high side window, deep chiaroscuro with long legible cast shadows, ritual silence and monastic austerity, 45mm lens at eye level, front three-quarter view, dark neutral studio backdrop, no props, photorealistic product photography, physically accurate materials, 8k, matte finish, not a replica of any existing product"
+  }
+}

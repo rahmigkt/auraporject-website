@@ -1,0 +1,977 @@
+{
+  "version": "1.0.0",
+  "description": "FDE Stil Skorlama Motoru. Bir tasarımın (görsel, çizim veya üretilmiş tasarım) feature vektörünü ölçer, stil ontolojilerindeki hedef vektörlerle karşılaştırır, hard gate'leri uygular ve style_consistency_score üretir.",
+  "assumptions": [
+    "ASSUMPTION A1: Feature değerleri 0-1 aralığında normalize edilir. Ham ölçümler (mm, gloss birimi, yüzde) her feature'ın normalizer'ı ile 0-1'e çevrilir.",
+    "ASSUMPTION A2: İlk sürümde feature'lar bir VLM tarafından 0-100 tam sayı olarak tahmin edilir (image_to_parts_prompt.txt içindeki SCORES bloğu). Geometrik feature'lar (verticality, void_ratio) çizim modunda stroke verisinden deterministik hesaplanır ve VLM tahmininin yerine geçer.",
+    "ASSUMPTION A3: VLM tahminine her zaman 0.85 güven katsayısı uygulanır; deterministik hesaplanan feature'larda 1.0.",
+    "ASSUMPTION A4: Stil kümesi genişletilebilir. Yeni stil eklemek yalnızca yeni bir YAML + bu dosyada eksik feature tanımı gerektirir."
+  ],
+  "score_formula": {
+    "name": "weighted_deviation_blend_with_hard_gates",
+    "steps": [
+      "1. measured_vector M: feature_id -> 0..1 (gözlem; ölçülmeyenler registry'deki default_value ile doldurulur ve evidence_coverage düşer)",
+      "2. target_vector T ve weights W: stilin scoring_signature alanından. W'de olmayan feature için varsayılan ağırlık 0.5.",
+      "3. weighted_cosine = sum(W*M*T) / ( sqrt(sum(W*M^2)) * sqrt(sum(W*T^2)) )",
+      "4. weighted_mad = sum(W*|M-T|) / sum(W)   (ağırlıklı ortalama mutlak sapma)",
+      "5. deviation_score = max(0, 100 - 200 * weighted_mad)   → mad 0 = 100, mad 0.25 = 50, mad >= 0.5 = 0",
+      "6. similarity = 0.25 * (100 * weighted_cosine) + 0.75 * deviation_score",
+      "7. gate_penalty = sum(ihlal edilen her hard_gate için gate.penalty)",
+      "8. style_consistency_score = clamp(round(similarity - gate_penalty, 1), 0, 100)",
+      "9. matched = style_consistency_score >= match_threshold*100 AND gate_penalty == 0",
+      "10. confidence = 0.85 * evidence_coverage   (0.85 = VLM güven katsayısı, ASSUMPTION A3)",
+      "11. primary_style = confidence >= confidence_floor olan en yüksek skorlu stil; hiçbiri yoksa 'unclassified'"
+    ],
+    "ranking": "Tüm stiller skorlanır, azalan sıraya dizilir. matched bayrağı true olan en yüksek skorlu stil primary_style olur. Hiçbir stil matched değilse: primary_style = 'unclassified', en yüksek iki skor 'secondary_styles' olarak raporlanır ve verdict 'stil belirlenemedi' olur. confidence_floor'ın altındaki sonuçlar primary olarak atanamaz.",
+    "grade_bands": {
+      "A": [
+        85,
+        100
+      ],
+      "B": [
+        70,
+        84
+      ],
+      "C": [
+        55,
+        69
+      ],
+      "D": [
+        40,
+        54
+      ],
+      "F": [
+        0,
+        39
+      ]
+    },
+    "why_not_pure_cosine": "Saf ağırlıklı kosinüs, tüm bileşenleri negatif olmayan vektörlerde ayrıştırma gücünü kaybeder: ölçülen 'kötü' bir tasarım bile her stile 0.85-0.92 kosinüs benzerliği verir. Bu yüzden formül, yön benzerliğini (kosinüs, %25 ağırlık) büyüklük sapmasıyla (ağırlıklı MAD, %75 ağırlık) harmanlar. Kalibrasyon verisi toplandıkça 200 katsayısı ve 0.25/0.75 ağırlıkları ayarlanmalıdır.",
+    "reference_measurements": {
+      "description": "Kalibrasyon öncesi referans ölçümler (tools/reference_scorer.py --demo ile yeniden üretilebilir).",
+      "good_gothic_minimal_chair": {
+        "gothic_minimalism": 93.6,
+        "brutalism": 76.3,
+        "art_deco": 62.6,
+        "bauhaus": 60.2,
+        "japandi": 59.8,
+        "expected_primary": "gothic_minimalism"
+      },
+      "bad_glossy_pastel_carved_chair": {
+        "art_deco": 67.1,
+        "gothic_minimalism": 66.5,
+        "bauhaus": 62.0,
+        "brutalism": 58.4,
+        "japandi": 53.9,
+        "after_gates": "tüm stiller 0'a kilitlenir (hard gate ihlalleri)",
+        "expected_primary": "unclassified"
+      }
+    }
+  },
+  "features": [
+    {
+      "feature_id": "verticality",
+      "name_tr": "Dikeylik",
+      "scale": "0-1",
+      "definition": "Dominant axis orientation and height bias of the whole piece.",
+      "measurement_method": [
+        "geometric: height/width of the frontal silhouette bounding box, normalized",
+        "VLM: 'does the piece read as ascending?'"
+      ],
+      "normalizer": "clamp((hw_ratio - 0.3) / (2.4 - 0.3), 0, 1) where hw_ratio = total_height / total_width",
+      "default_value": 0.5,
+      "source_priority": [
+        "sketch_geometry",
+        "segmentation_bbox",
+        "vlm"
+      ]
+    },
+    {
+      "feature_id": "height_width_bias",
+      "name_tr": "Boy/En Eğilimi",
+      "scale": "0-1",
+      "definition": "Raw h/w ratio normalized; used as a secondary check on verticality.",
+      "measurement_method": [
+        "geometric"
+      ],
+      "normalizer": "clamp((hw - 0.3)/2.1, 0, 1)",
+      "default_value": 0.5,
+      "source_priority": [
+        "sketch_geometry",
+        "segmentation_bbox"
+      ]
+    },
+    {
+      "feature_id": "pointed_arch_presence",
+      "name_tr": "Sivri Kemer Varlığı",
+      "scale": "0-1",
+      "definition": "Presence and dominance of ogival/pointed arch geometry in openings, top rails or silhouettes.",
+      "measurement_method": [
+        "VLM: count pointed arches, judge dominance",
+        "geometric (sketch): detect two-centre arc via curvature sign change at apex"
+      ],
+      "normalizer": "vlm_score/100",
+      "default_value": 0.0,
+      "source_priority": [
+        "vlm",
+        "sketch_geometry"
+      ]
+    },
+    {
+      "feature_id": "ornament_restraint",
+      "name_tr": "Süsleme Dizgini",
+      "scale": "0-1",
+      "definition": "INVERSE of ornament richness. 1.0 = zero decoration.",
+      "measurement_method": [
+        "derived: 1 - ornament_density"
+      ],
+      "normalizer": "1 - ornament_density",
+      "default_value": 0.7,
+      "derived_from": [
+        "ornament_density"
+      ]
+    },
+    {
+      "feature_id": "ornament_density",
+      "name_tr": "Süsleme Yoğunluğu",
+      "scale": "0-1",
+      "definition": "Fraction of visible surface covered by decorative (non-structural, non-functional) pattern.",
+      "measurement_method": [
+        "VLM: estimate % of surface covered by applied decoration, mapped to 0-1",
+        "sketch: count ornament_hint regions / total regions"
+      ],
+      "normalizer": "clamp(percent_coverage / 40%, 0, 1)",
+      "default_value": 0.15,
+      "source_priority": [
+        "vlm",
+        "sketch_regions"
+      ]
+    },
+    {
+      "feature_id": "ornament_is_applied",
+      "name_tr": "Süsleme Uygulanmış mı",
+      "scale": "0-1",
+      "definition": "Is the decoration applied onto a surface (1.0) or generated by the structure/process (0.0)?",
+      "measurement_method": [
+        "VLM: judge whether motifs could be removed without changing structure"
+      ],
+      "normalizer": "vlm_score/100",
+      "default_value": 0.3,
+      "source_priority": [
+        "vlm"
+      ]
+    },
+    {
+      "feature_id": "ornament_is_structural",
+      "name_tr": "Süsleme Yapısal mı",
+      "scale": "0-1",
+      "definition": "INVERSE of ornament_is_applied.",
+      "measurement_method": [
+        "derived"
+      ],
+      "normalizer": "1 - ornament_is_applied",
+      "default_value": 0.7,
+      "derived_from": [
+        "ornament_is_applied"
+      ]
+    },
+    {
+      "feature_id": "figurative_ornament",
+      "name_tr": "Figüratif Süsleme",
+      "scale": "0-1",
+      "definition": "Presence of recognizable figures: humans, animals, deities, plants rendered representationally, lettering, religious iconography.",
+      "measurement_method": [
+        "VLM binary + count",
+        "object detection for text/logo"
+      ],
+      "normalizer": "0.0 if none, 0.5 if one small motif, 1.0 if dominant",
+      "default_value": 0.0,
+      "source_priority": [
+        "vlm",
+        "object_detection"
+      ]
+    },
+    {
+      "feature_id": "minimalism_index",
+      "name_tr": "Minimalizm İndeksi",
+      "scale": "0-1",
+      "definition": "Overall degree of reduction: few parts, no applied decoration, generous empty surface.",
+      "measurement_method": [
+        "composite: 0.4*(1-ornament_density) + 0.3*part_count_leanness + 0.3*void_ratio"
+      ],
+      "normalizer": "composite",
+      "default_value": 0.6,
+      "derived_from": [
+        "ornament_density",
+        "part_count_leanness",
+        "void_ratio"
+      ]
+    },
+    {
+      "feature_id": "part_count_leanness",
+      "name_tr": "Parça Sayısı Yalınlığı",
+      "scale": "0-1",
+      "definition": "Fewer primary parts = higher. Counts only visually distinct primary members.",
+      "measurement_method": [
+        "deterministic: number of part instances with distinct part_role"
+      ],
+      "normalizer": "clamp(1 - (n_parts - 3) / 12, 0, 1)",
+      "default_value": 0.7,
+      "source_priority": [
+        "parts_json"
+      ]
+    },
+    {
+      "feature_id": "gesture_count",
+      "name_tr": "Jest Sayısı (tek jest kuralı)",
+      "scale": "0-1",
+      "definition": "INVERSE of the number of distinct expressive gestures. 1.0 = exactly one gesture, 0.0 = five or more.",
+      "measurement_method": [
+        "VLM: count distinct expressive gestures (an arch, an inlay, a colour block, a carving system)"
+      ],
+      "normalizer": "clamp(1 - (n_gestures - 1) / 4, 0, 1)",
+      "default_value": 0.7,
+      "source_priority": [
+        "vlm"
+      ]
+    },
+    {
+      "feature_id": "material_honesty",
+      "name_tr": "Malzeme Dürüstlüğü",
+      "scale": "0-1",
+      "definition": "Does each material present itself as what it is? Penalizes faux finishes, printed grain, imitations.",
+      "measurement_method": [
+        "VLM: check for printed grain, laminate imitating stone/wood, paint hiding material"
+      ],
+      "normalizer": "vlm_score/100",
+      "default_value": 0.8,
+      "source_priority": [
+        "vlm"
+      ]
+    },
+    {
+      "feature_id": "faux_finish_absence",
+      "name_tr": "Sahte Bitiş Yokluğu",
+      "scale": "0-1",
+      "definition": "1.0 = no faux finish detected. Hard safety feature.",
+      "measurement_method": [
+        "VLM binary checklist"
+      ],
+      "normalizer": "1.0 - faux_finish_confidence",
+      "default_value": 0.9,
+      "source_priority": [
+        "vlm"
+      ]
+    },
+    {
+      "feature_id": "dark_materiality",
+      "name_tr": "Koyu Malzeme Karakteri",
+      "scale": "0-1",
+      "definition": "Share of the visible surface in low-value (dark) materials: blackened wood, charred timber, black steel, dark stone.",
+      "measurement_method": [
+        "pixel statistics: fraction of pixels with L* < 30",
+        "VLM material identification"
+      ],
+      "normalizer": "fraction_of_dark_pixels",
+      "default_value": 0.3,
+      "source_priority": [
+        "pixel_stats",
+        "vlm"
+      ]
+    },
+    {
+      "feature_id": "low_key_palette",
+      "name_tr": "Düşük Açıklıklı Palet",
+      "scale": "0-1",
+      "definition": "How far the palette sits toward the dark end. 1.0 = everything L* < 35.",
+      "measurement_method": [
+        "pixel statistics on the masked object"
+      ],
+      "normalizer": "clamp((60 - mean_L) / 50, 0, 1)",
+      "default_value": 0.4,
+      "source_priority": [
+        "pixel_stats"
+      ]
+    },
+    {
+      "feature_id": "chroma_restraint",
+      "name_tr": "Renk Dizgini",
+      "scale": "0-1",
+      "definition": "INVERSE of chroma/saturation load. 1.0 = fully neutral palette.",
+      "measurement_method": [
+        "pixel statistics: mean C*ab of the object mask, plus count of saturated hue clusters"
+      ],
+      "normalizer": "clamp(1 - (mean_chroma / 40), 0, 1) * (1 - 0.2*saturated_cluster_count)",
+      "default_value": 0.75,
+      "source_priority": [
+        "pixel_stats"
+      ]
+    },
+    {
+      "feature_id": "contrast_ratio",
+      "name_tr": "Kontrast Oranı",
+      "scale": "0-1",
+      "definition": "Tonal (value) contrast within the object: L* difference between the darkest and lightest significant regions.",
+      "measurement_method": [
+        "pixel statistics: p95(L*) - p5(L*), normalized"
+      ],
+      "normalizer": "clamp((p95_L - p5_L) / 80, 0, 1)",
+      "default_value": 0.5,
+      "source_priority": [
+        "pixel_stats"
+      ]
+    },
+    {
+      "feature_id": "gloss_absence",
+      "name_tr": "Parlaklık Yokluğu",
+      "scale": "0-1",
+      "definition": "1.0 = fully matte. Penalizes specular highlights, mirror surfaces, chrome, gloss lacquer.",
+      "measurement_method": [
+        "pixel statistics: fraction of pixels in saturated specular highlights + sharpness of highlight edges",
+        "VLM: 'describe the surface reflectance'"
+      ],
+      "normalizer": "clamp(1 - specular_fraction*4 - highlight_sharpness*0.5, 0, 1)",
+      "default_value": 0.7,
+      "source_priority": [
+        "pixel_stats",
+        "vlm"
+      ]
+    },
+    {
+      "feature_id": "reflectance_profile",
+      "name_tr": "Yansıma Profili",
+      "scale": "0-1",
+      "definition": "Continuous reflectance measure (0 = matte, 1 = mirror). Complement of gloss_absence.",
+      "measurement_method": [
+        "derived"
+      ],
+      "normalizer": "1 - gloss_absence",
+      "default_value": 0.3,
+      "derived_from": [
+        "gloss_absence"
+      ]
+    },
+    {
+      "feature_id": "structural_expression",
+      "name_tr": "Yapısal İfade",
+      "scale": "0-1",
+      "definition": "Is the load path visible and legible? Can you trace force from surface to floor?",
+      "measurement_method": [
+        "VLM: 'can the load path be traced?' 0-100",
+        "rule engine: check that every part marked load_bearing has a connected parent chain to a foot/plinth"
+      ],
+      "normalizer": "0.6*(vlm_score/100) + 0.4*load_path_continuity",
+      "default_value": 0.6,
+      "source_priority": [
+        "vlm",
+        "rule_engine"
+      ]
+    },
+    {
+      "feature_id": "void_ratio",
+      "name_tr": "Boşluk Oranı",
+      "scale": "0-1",
+      "definition": "Fraction of the frontal envelope bounding box that is readable negative space (background visible through the object).",
+      "measurement_method": [
+        "segmentation: 1 - (object_mask_area / frontal_bbox_area)",
+        "sketch: enclosed-area analysis"
+      ],
+      "normalizer": "1 - mask_area/bbox_area",
+      "default_value": 0.4,
+      "source_priority": [
+        "segmentation",
+        "pixel_stats"
+      ]
+    },
+    {
+      "feature_id": "geometric_strictness",
+      "name_tr": "Geometrik Kesinlik",
+      "scale": "0-1",
+      "definition": "Are lines straight, angles exact, radii constant, repeats on a constant pitch?",
+      "measurement_method": [
+        "VLM: precision of geometry",
+        "geometric (sketch): line-fit residual (R²), radius variance, pitch variance"
+      ],
+      "normalizer": "0.5*vlm/100 + 0.5*mean_line_fit_r2",
+      "default_value": 0.6,
+      "source_priority": [
+        "sketch_geometry",
+        "vlm"
+      ]
+    },
+    {
+      "feature_id": "edge_softness",
+      "name_tr": "Kenar Yumuşaklığı",
+      "scale": "0-1",
+      "definition": "1.0 = fully eased/rounded edges. 0.0 = knife-sharp arrises.",
+      "measurement_method": [
+        "VLM: 'describe the edge treatment'",
+        "geometric: corner radius detection"
+      ],
+      "normalizer": "vlm_score/100",
+      "default_value": 0.4,
+      "source_priority": [
+        "vlm"
+      ]
+    },
+    {
+      "feature_id": "symmetry_strictness",
+      "name_tr": "Simetri Katılığı",
+      "scale": "0-1",
+      "definition": "Degree of bilateral symmetry about the vertical central axis.",
+      "measurement_method": [
+        "pixel/mask: mirror the mask about the vertical centre axis, compute IoU",
+        "VLM cross-check"
+      ],
+      "normalizer": "mirror_iou",
+      "default_value": 0.6,
+      "source_priority": [
+        "segmentation",
+        "pixel_stats"
+      ]
+    },
+    {
+      "feature_id": "curvature_organic",
+      "name_tr": "Organik Eğrilik",
+      "scale": "0-1",
+      "definition": "Share of the silhouette that is freehand/organic curvature rather than constant-radius arcs or straight lines.",
+      "measurement_method": [
+        "VLM: organic vs geometric curve judgement",
+        "geometric: arc-fitting residual on outline segments"
+      ],
+      "normalizer": "0.6*vlm/100 + 0.4*(1 - mean_arc_fit_r2)",
+      "default_value": 0.2,
+      "source_priority": [
+        "vlm",
+        "sketch_geometry"
+      ]
+    },
+    {
+      "feature_id": "warmth_index",
+      "name_tr": "Sıcaklık İndeksi",
+      "scale": "0-1",
+      "definition": "Perceived material/colour warmth: pale oiled woods, natural textiles, warm hues score high; concrete, steel, stone score low.",
+      "measurement_method": [
+        "pixel: mean hue angle + saturation weighted by warmth lookup",
+        "VLM material list -> warmth lookup table"
+      ],
+      "normalizer": "material_warmth_lookup weighted by area",
+      "default_value": 0.5,
+      "source_priority": [
+        "vlm",
+        "pixel_stats"
+      ]
+    },
+    {
+      "feature_id": "shadow_as_design_element",
+      "name_tr": "Tasarım Aracı Olarak Gölge",
+      "scale": "0-1",
+      "definition": "Does the design deliberately use deep shadow (reveals, chamfers, voids) as an aesthetic device?",
+      "measurement_method": [
+        "VLM: 'are deep shadows deliberately composed?'",
+        "pixel: fraction of the object in deep shadow (L* < 15) that is NOT background"
+      ],
+      "normalizer": "0.6*vlm/100 + 0.4*deep_shadow_fraction*3",
+      "default_value": 0.3,
+      "source_priority": [
+        "vlm",
+        "pixel_stats"
+      ]
+    },
+    {
+      "feature_id": "handcraft_index",
+      "name_tr": "El İşi İndeksi",
+      "scale": "0-1",
+      "definition": "Evidence of hand work: hand-planed facets, visible joinery, hand-laced weave, tool marks.",
+      "measurement_method": [
+        "VLM: craft vs industrial judgement"
+      ],
+      "normalizer": "vlm_score/100",
+      "default_value": 0.5,
+      "source_priority": [
+        "vlm"
+      ]
+    },
+    {
+      "feature_id": "industrial_index",
+      "name_tr": "Endüstriyel İndeks",
+      "scale": "0-1",
+      "definition": "Evidence of machine production: constant tube sections, standard fasteners, laser-cut plates, moulded components, modular repetition.",
+      "measurement_method": [
+        "VLM: industrial vs craft judgement",
+        "rule engine: count standardized processes in parts_json.manufacturability"
+      ],
+      "normalizer": "0.6*vlm/100 + 0.4*standardized_process_ratio",
+      "default_value": 0.5,
+      "source_priority": [
+        "vlm",
+        "parts_json"
+      ]
+    },
+    {
+      "feature_id": "sacred_geometry",
+      "name_tr": "Kutsal Geometri",
+      "scale": "0-1",
+      "definition": "Use of geometry associated with sacred/proportional systems: ogive, lancet, golden section, rose/radial symmetry, keel ridge — as ABSTRACT geometry only.",
+      "measurement_method": [
+        "VLM + geometric checks"
+      ],
+      "normalizer": "vlm_score/100",
+      "default_value": 0.1,
+      "source_priority": [
+        "vlm",
+        "sketch_geometry"
+      ]
+    },
+    {
+      "feature_id": "ritual_stillness",
+      "name_tr": "Ritüel Dinginliği",
+      "scale": "0-1",
+      "definition": "Composite mood feature: does the object read as quiet, still, ceremonial rather than busy, playful, functional-industrial?",
+      "measurement_method": [
+        "VLM: mood judgement against a rubric"
+      ],
+      "normalizer": "vlm_score/100",
+      "default_value": 0.4,
+      "source_priority": [
+        "vlm"
+      ]
+    },
+    {
+      "feature_id": "sculptural_index",
+      "name_tr": "Heykelsi İndeks",
+      "scale": "0-1",
+      "definition": "Does the object read as a gallery sculpture rather than a utilitarian product?",
+      "measurement_method": [
+        "VLM"
+      ],
+      "normalizer": "vlm_score/100",
+      "default_value": 0.3,
+      "source_priority": [
+        "vlm"
+      ]
+    },
+    {
+      "feature_id": "massiveness",
+      "name_tr": "Kütlilik",
+      "scale": "0-1",
+      "definition": "Perceived mass and thickness: heavy sections, monolithic volumes, low void ratio.",
+      "measurement_method": [
+        "VLM + geometric: mean member thickness / overall dimension"
+      ],
+      "normalizer": "0.5*vlm/100 + 0.5*clamp(mean_thickness_ratio*8, 0, 1)",
+      "default_value": 0.4,
+      "source_priority": [
+        "vlm",
+        "sketch_geometry"
+      ]
+    },
+    {
+      "feature_id": "lightness_visual",
+      "name_tr": "Görsel Hafiflik",
+      "scale": "0-1",
+      "definition": "INVERSE-leaning complement of massiveness: thin sections, high void ratio, tapered legs, floating reads.",
+      "measurement_method": [
+        "derived + VLM"
+      ],
+      "normalizer": "clamp(1 - 0.7*massiveness + 0.3*void_ratio, 0, 1)",
+      "default_value": 0.5,
+      "derived_from": [
+        "massiveness",
+        "void_ratio"
+      ]
+    },
+    {
+      "feature_id": "modular_grid_index",
+      "name_tr": "Modüler Izgara İndeksi",
+      "scale": "0-1",
+      "definition": "Are bays, pitches and dimensions on a consistent module (e.g. 32 mm system)?",
+      "measurement_method": [
+        "geometric: GCD analysis of repeated intervals",
+        "VLM"
+      ],
+      "normalizer": "clamp(modular_fit_quality, 0, 1)",
+      "default_value": 0.5,
+      "source_priority": [
+        "sketch_geometry",
+        "vlm"
+      ]
+    },
+    {
+      "feature_id": "modularity_index",
+      "name_tr": "Modülerlik İndeksi",
+      "scale": "0-1",
+      "definition": "Can the piece be reconfigured/extended by repeating units, and demounted with standard fasteners?",
+      "measurement_method": [
+        "VLM + parts_json joint types"
+      ],
+      "normalizer": "vlm_score/100",
+      "default_value": 0.4,
+      "source_priority": [
+        "vlm",
+        "parts_json"
+      ]
+    },
+    {
+      "feature_id": "historical_reference_index",
+      "name_tr": "Tarihsel Referans İndeksi",
+      "scale": "0-1",
+      "definition": "How strongly the piece references a specific historical style vocabulary.",
+      "measurement_method": [
+        "VLM: identify period references"
+      ],
+      "normalizer": "vlm_score/100",
+      "default_value": 0.3,
+      "source_priority": [
+        "vlm"
+      ]
+    },
+    {
+      "feature_id": "futuristic_index",
+      "name_tr": "Fütüristik İndeks",
+      "scale": "0-1",
+      "definition": "Forward-looking signals: tension cables, anodized aluminium, integrated lighting, parametric surfaces.",
+      "measurement_method": [
+        "VLM"
+      ],
+      "normalizer": "vlm_score/100",
+      "default_value": 0.2,
+      "source_priority": [
+        "vlm"
+      ]
+    },
+    {
+      "feature_id": "leg_verticality",
+      "name_tr": "Ayak Dikeyliği",
+      "scale": "0-1",
+      "definition": "Are legs vertical (1.0) or splayed/raked (0.0)?",
+      "measurement_method": [
+        "geometric (sketch): angle of leg strokes from vertical",
+        "VLM"
+      ],
+      "normalizer": "clamp(1 - mean_rake_deg/15, 0, 1)",
+      "default_value": 0.7,
+      "source_priority": [
+        "sketch_geometry",
+        "vlm"
+      ]
+    },
+    {
+      "feature_id": "material_legality",
+      "name_tr": "Malzeme Yasallığı",
+      "scale": "0-1",
+      "definition": "SAFETY/LEGAL GATE. 1.0 = no prohibited materials (ivory, tortoiseshell, CITES-listed timber, endangered species). Any detection sets this to 0.",
+      "measurement_method": [
+        "VLM material list -> prohibited_materials.json check"
+      ],
+      "normalizer": "1.0 if no prohibited material else 0.0",
+      "default_value": 1.0,
+      "source_priority": [
+        "vlm",
+        "rule_engine"
+      ],
+      "is_gate": true
+    },
+    {
+      "feature_id": "ergonomic_compliance",
+      "name_tr": "Ergonomik Uyum",
+      "scale": "0-1",
+      "definition": "Does the piece satisfy manufacturing_constraints.json ergonomic_envelope for its type?",
+      "measurement_method": [
+        "rule engine against parts_json dimensions"
+      ],
+      "normalizer": "passed_checks / total_checks",
+      "default_value": 0.8,
+      "source_priority": [
+        "rule_engine"
+      ],
+      "is_gate": true
+    },
+    {
+      "feature_id": "structural_plausibility",
+      "name_tr": "Yapısal Makullük",
+      "scale": "0-1",
+      "definition": "Does every load have a continuous path to the floor with realistic sections and spans?",
+      "measurement_method": [
+        "rule engine: manufacturing_constraints.json structural_rules"
+      ],
+      "normalizer": "passed_checks / total_checks",
+      "default_value": 0.8,
+      "source_priority": [
+        "rule_engine"
+      ],
+      "is_gate": true
+    },
+    {
+      "feature_id": "originality_check",
+      "name_tr": "Özgünlük Kontrolü",
+      "scale": "0-1",
+      "definition": "LEGAL/ETHICAL GATE. 1.0 = clearly original. Penalized if the silhouette matches a known designer piece (via image retrieval) or if the reference usage_mode was violated.",
+      "measurement_method": [
+        "image embedding retrieval against a licensed reference index",
+        "silhouette IoU against known-design embeddings",
+        "source.license check"
+      ],
+      "normalizer": "clamp(1 - max_similarity_to_known_design, 0, 1); hard 0 if source.usage_mode == extract_principles_only AND silhouette IoU > 0.85",
+      "default_value": 0.8,
+      "source_priority": [
+        "retrieval",
+        "rule_engine"
+      ],
+      "is_gate": true
+    }
+  ],
+  "style_registry": {
+    "description": "Sistemde yüklü stil profilleri. Her stilin hedef vektörü kendi YAML dosyasındadır; bu kayıt yalnızca indeks ve hızlı eleme içindir.",
+    "styles": [
+      {
+        "style_id": "gothic_minimalism",
+        "file": "styles/gothic_minimalism.yaml",
+        "name_tr": "Gotik Minimalizm",
+        "family": "hybrid",
+        "status": "production",
+        "signature_features": [
+          "verticality",
+          "pointed_arch_presence",
+          "ornament_restraint",
+          "dark_materiality",
+          "gloss_absence",
+          "ritual_stillness"
+        ],
+        "notes": ""
+      },
+      {
+        "style_id": "bauhaus",
+        "file": "styles/bauhaus.yaml",
+        "name_tr": "Bauhaus",
+        "family": "modernist",
+        "status": "production",
+        "signature_features": [
+          "industrial_index",
+          "structural_expression",
+          "lightness_visual",
+          "modular_grid_index",
+          "geometric_strictness"
+        ],
+        "notes": ""
+      },
+      {
+        "style_id": "japandi",
+        "file": "styles/japandi.yaml",
+        "name_tr": "Japandi",
+        "family": "hybrid",
+        "status": "production",
+        "signature_features": [
+          "warmth_index",
+          "handcraft_index",
+          "edge_softness",
+          "gloss_absence",
+          "lightness_visual"
+        ],
+        "notes": ""
+      },
+      {
+        "style_id": "art_deco",
+        "file": "styles/art_deco.yaml",
+        "name_tr": "Art Deco",
+        "family": "historical",
+        "status": "production",
+        "signature_features": [
+          "symmetry_strictness",
+          "geometric_strictness",
+          "ornament_density",
+          "contrast_ratio",
+          "historical_reference_index"
+        ],
+        "notes": ""
+      },
+      {
+        "style_id": "brutalism",
+        "file": "styles/brutalism.yaml",
+        "name_tr": "Brutalizm",
+        "family": "artistic",
+        "status": "production",
+        "signature_features": [
+          "massiveness",
+          "material_honesty",
+          "faux_finish_absence",
+          "structural_expression",
+          "ornament_restraint"
+        ],
+        "notes": ""
+      }
+    ],
+    "planned_styles": [
+      {
+        "style_id": "wabi_sabi",
+        "name_tr": "Wabi-Sabi",
+        "priority": 2,
+        "note": "japandi'den türetilebilir; warmth + handcraft + imperfection hedeflerini yükselt, geometric_strictness'i düşür."
+      },
+      {
+        "style_id": "de_stijl",
+        "name_tr": "De Stijl",
+        "priority": 2,
+        "note": "bauhaus'tan türet; chroma_restraint'i düşür (ana renkler serbest), geometric_strictness'i 1.0 yap."
+      },
+      {
+        "style_id": "memphis",
+        "name_tr": "Memphis",
+        "priority": 3,
+        "note": "chroma_restraint ~0.1, ornament_density ~0.7, geometric_strictness ~0.4, curvature_organic ~0.6."
+      },
+      {
+        "style_id": "high_tech",
+        "name_tr": "High-Tech",
+        "priority": 3,
+        "note": "industrial_index ~0.95, structural_expression ~0.95, futuristic_index ~0.8."
+      },
+      {
+        "style_id": "scandinavian_modern",
+        "name_tr": "İskandinav Modern",
+        "priority": 1,
+        "note": "japandi ile büyük örtüşme; warmth 0.8, handcraft 0.7, minimalism 0.75."
+      },
+      {
+        "style_id": "neo_gothic",
+        "name_tr": "Neo-Gotik",
+        "priority": 2,
+        "note": "gothic_minimalism'den türet; ornament_density 0.55, ornament_is_applied 0.8, pointed_arch_presence 0.9."
+      },
+      {
+        "style_id": "dark_academia",
+        "name_tr": "Dark Academia",
+        "priority": 2,
+        "note": "dark_materiality 0.75, warmth_index 0.55, historical_reference_index 0.8, handcraft_index 0.7."
+      },
+      {
+        "style_id": "industrial",
+        "name_tr": "Endüstriyel",
+        "priority": 3
+      },
+      {
+        "style_id": "mid_century_modern",
+        "name_tr": "Mid-Century Modern",
+        "priority": 1
+      },
+      {
+        "style_id": "minimalism",
+        "name_tr": "Minimalizm (saf)",
+        "priority": 1
+      },
+      {
+        "style_id": "streamline_moderne",
+        "name_tr": "Streamline Moderne",
+        "priority": 3
+      },
+      {
+        "style_id": "wabi_sabi_rustic",
+        "name_tr": "Rustik Wabi-Sabi",
+        "priority": 4
+      },
+      {
+        "style_id": "rococo_revival",
+        "name_tr": "Rococo Revival",
+        "priority": 4,
+        "note": " Stil uyumluluk matrislerinde referans veriliyor; profil dosyası henüz yazılmadı. Yazılana kadar blends_well_with/conflicts_with yalnızca bilgi amaçlıdır."
+      },
+      {
+        "style_id": "tropical_resort",
+        "name_tr": "Tropical Resort",
+        "priority": 4,
+        "note": " Stil uyumluluk matrislerinde referans veriliyor; profil dosyası henüz yazılmadı. Yazılana kadar blends_well_with/conflicts_with yalnızca bilgi amaçlıdır."
+      },
+      {
+        "style_id": "scandinavian_pastel",
+        "name_tr": "Scandinavian Pastel",
+        "priority": 4,
+        "note": " Stil uyumluluk matrislerinde referans veriliyor; profil dosyası henüz yazılmadı. Yazılana kadar blends_well_with/conflicts_with yalnızca bilgi amaçlıdır."
+      },
+      {
+        "style_id": "hollywood_regency",
+        "name_tr": "Hollywood Regency",
+        "priority": 3,
+        "note": " Stil uyumluluk matrislerinde referans veriliyor; profil dosyası henüz yazılmadı. Yazılana kadar blends_well_with/conflicts_with yalnızca bilgi amaçlıdır."
+      },
+      {
+        "style_id": "streamliner",
+        "name_tr": "Streamliner",
+        "priority": 3,
+        "note": " Stil uyumluluk matrislerinde referans veriliyor; profil dosyası henüz yazılmadı. Yazılana kadar blends_well_with/conflicts_with yalnızca bilgi amaçlıdır."
+      },
+      {
+        "style_id": "neo_classical_restrained",
+        "name_tr": "Neo-Classical (Restrained)",
+        "priority": 3,
+        "note": " Stil uyumluluk matrislerinde referans veriliyor; profil dosyası henüz yazılmadı. Yazılana kadar blends_well_with/conflicts_with yalnızca bilgi amaçlıdır."
+      },
+      {
+        "style_id": "high_gloss_contemporary",
+        "name_tr": "High-Gloss Contemporary",
+        "priority": 4,
+        "note": " Stil uyumluluk matrislerinde referans veriliyor; profil dosyası henüz yazılmadı. Yazılana kadar blends_well_with/conflicts_with yalnızca bilgi amaçlıdır."
+      },
+      {
+        "style_id": "muji_modern",
+        "name_tr": "Muji Modern",
+        "priority": 3,
+        "note": " Stil uyumluluk matrislerinde referans veriliyor; profil dosyası henüz yazılmadı. Yazılana kadar blends_well_with/conflicts_with yalnızca bilgi amaçlıdır."
+      },
+      {
+        "style_id": "craft_modern",
+        "name_tr": "Craft Modern",
+        "priority": 3,
+        "note": " Stil uyumluluk matrislerinde referans veriliyor; profil dosyası henüz yazılmadı. Yazılana kadar blends_well_with/conflicts_with yalnızca bilgi amaçlıdır."
+      }
+    ]
+  },
+  "verdict_generation": {
+    "description": "'Bu tasarım gotik minimal mi, değil mi? Neden?' sorusunun cevabını üreten şablon.",
+    "template_tr": "{furniture_type_tr} '{name}' için birincil stil **{primary_style_tr}** (skor {score}/100, güven {confidence}). Gerekçe: {top_3_matched_reasons}. Uyuşmayan sinyaller: {top_3_violations}. Karar: {verdict}.",
+    "template_en": "For {furniture_type} '{name}' the primary style is **{primary_style}** (score {score}/100, confidence {confidence}). Reasons: {top_3_matched_reasons}. Conflicting signals: {top_3_violations}. Verdict: {verdict}.",
+    "verdict_rules": [
+      {
+        "condition": "score >= 85 AND gate_penalty == 0",
+        "verdict_tr": "Kesin {style_tr}. Bu tasarım stilin çekirdek kurallarını tam karşılıyor.",
+        "verdict_en": "Definitively {style}."
+      },
+      {
+        "condition": "70 <= score < 85 AND gate_penalty == 0",
+        "verdict_tr": "Güçlü {style_tr}. Küçük sapmalar var: {top_violation}.",
+        "verdict_en": "Strongly {style} with minor deviations."
+      },
+      {
+        "condition": "55 <= score < 70 AND gate_penalty == 0",
+        "verdict_tr": "Kısmen {style_tr}. Stil hibrit okunuyor; {secondary_style} etkisi belirgin.",
+        "verdict_en": "Partially {style}; reads as a hybrid."
+      },
+      {
+        "condition": "score < 55 OR gate_penalty > 0",
+        "verdict_tr": "{style_tr} DEĞİL. Engeller: {gate_failures}. En yakın stil: {closest_style} ({closest_score}).",
+        "verdict_en": "NOT {style}. Blocking failures: {gate_failures}."
+      }
+    ]
+  },
+  "calibration": {
+    "notes": "Bu değerler editoryal başlangıç değerleridir. Üretimde kalibre edilmelidir.",
+    "calibration_loop": [
+      "1. 30-50 adet insan etiketli örnek topla (stil + parça + beğeni).",
+      "2. Her örnek için feature vektörünü çıkar, mevcut skorları hesapla.",
+      "3. İnsan etiketi ile motor çıktısı arasındaki korelasyonu ölç (Spearman rho).",
+      "4. rho < 0.6 olan feature'ların normalizer sınırlarını yeniden ayarla.",
+      "5. Gate eşiklerini false-positive oranı %10'un altına inecek şekilde sıkılaştır.",
+      "6. Her kalibrasyonu rules/calibration_log.jsonl'e ekle (tarih, değişiklik, örnek sayısı, rho)."
+    ],
+    "known_weak_features": [
+      "ritual_stillness",
+      "sculptural_index",
+      "sacred_geometry"
+    ],
+    "known_strong_features": [
+      "gloss_absence",
+      "chroma_restraint",
+      "verticality",
+      "void_ratio",
+      "part_count_leanness"
+    ]
+  }
+}
