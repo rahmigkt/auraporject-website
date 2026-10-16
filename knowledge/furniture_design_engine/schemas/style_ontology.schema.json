@@ -1,0 +1,381 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fde/schemas/style_ontology.schema.json",
+  "title": "Furniture Style Ontology Schema",
+  "description": "Her stil YAML/JSON profilinin uyması gereken şema. Stiller hem tanımlayıcı (descriptive) hem kural koyucu (prescriptive) hem de prompt üretici (generative) olmak zorundadır.",
+  "type": "object",
+  "required": [
+    "schema_version", "style_id", "name", "name_tr", "description", "core_principles",
+    "forms", "materials", "colors", "textures", "ornament_rules", "proportions",
+    "emotional_keywords", "forbidden_signals", "positive_prompt_tokens",
+    "negative_prompt_tokens", "manufacturing_notes", "historical_references",
+    "scoring_signature", "part_directives"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "1.0.0" },
+    "style_id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+    "name": { "type": "string" },
+    "name_tr": { "type": "string" },
+    "family": {
+      "type": "string",
+      "enum": ["historical", "modernist", "minimalist", "hybrid", "regional", "speculative", "industrial", "artistic"]
+    },
+    "era": { "type": "string" },
+    "origin_regions": { "type": "array", "items": { "type": "string" } },
+    "description": { "type": "string", "minLength": 40 },
+    "description_tr": { "type": "string" },
+
+    "core_principles": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["id", "statement", "weight"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+          "statement": { "type": "string" },
+          "statement_tr": { "type": "string" },
+          "weight": { "type": "number", "minimum": 0, "maximum": 1 },
+          "testable_via": { "type": "array", "items": { "type": "string" }, "description": "Bu ilkeyi doğrulayan feature_id listesi." }
+        }
+      }
+    },
+
+    "forms": {
+      "type": "object",
+      "required": ["silhouettes", "geometry_language"],
+      "properties": {
+        "silhouettes": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "geometry_language": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "line_quality": { "type": "array", "items": { "type": "string" } },
+        "edge_treatment": { "type": "array", "items": { "type": "string" } },
+        "mass_vs_void": { "type": "string" },
+        "preferred_archetypes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Bu stile en uygun mobilya türleri (furniture_type id)."
+        },
+        "forbidden_forms": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "materials": {
+      "type": "object",
+      "required": ["primary", "accent"],
+      "properties": {
+        "primary": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/materialEntry" } },
+        "secondary": { "type": "array", "items": { "$ref": "#/$defs/materialEntry" } },
+        "accent": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/materialEntry" } },
+        "forbidden_materials": { "type": "array", "items": { "type": "string" } },
+        "combination_rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "pair": { "type": "array", "items": { "type": "string" }, "minItems": 2, "maxItems": 2 },
+              "verdict": { "type": "string", "enum": ["signature", "allowed", "discouraged", "forbidden"] },
+              "note": { "type": "string" }
+            }
+          }
+        },
+        "material_honesty_rules": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "colors": {
+      "type": "object",
+      "required": ["palette"],
+      "properties": {
+        "palette": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["hex", "role"],
+            "properties": {
+              "hex": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+              "name": { "type": "string" },
+              "name_tr": { "type": "string" },
+              "role": { "type": "string", "enum": ["dominant", "secondary", "accent", "shadow", "highlight", "upholstery"] },
+              "max_coverage": { "type": "number", "minimum": 0, "maximum": 1 }
+            }
+          }
+        },
+        "value_range": { "type": "string", "description": "Örn. 'low-key, 5-45 L*' veya 'high contrast 10-90 L*'." },
+        "saturation_range": { "type": "string" },
+        "contrast_rule": { "type": "string" },
+        "forbidden_colors": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "textures": {
+      "type": "object",
+      "required": ["dominant"],
+      "properties": {
+        "dominant": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "contrast_textures": { "type": "array", "items": { "type": "string" } },
+        "scale_of_texture": { "type": "string", "enum": ["micro", "fine", "medium", "coarse", "monumental"] },
+        "reflectance_profile": { "type": "string" },
+        "forbidden_textures": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "ornament_rules": {
+      "type": "object",
+      "required": ["max_level", "allowed"],
+      "properties": {
+        "max_level": { "type": "string", "enum": ["none", "subtle", "moderate", "rich", "ornate"] },
+        "allowed": { "type": "array", "items": { "type": "string" } },
+        "discouraged": { "type": "array", "items": { "type": "string" } },
+        "forbidden": { "type": "array", "items": { "type": "string" } },
+        "placement_rules": { "type": "array", "items": { "type": "string" } },
+        "motif_vocabulary": { "type": "array", "items": { "type": "string" } },
+        "ornament_must_be": { "type": "array", "items": { "type": "string" }, "description": "Örn. 'structural', 'shadow-casting', 'single-accent'." }
+      }
+    },
+
+    "proportions": {
+      "type": "object",
+      "required": ["dominant_direction"],
+      "properties": {
+        "dominant_direction": { "type": "string", "enum": ["vertical", "horizontal", "balanced", "monolithic", "floating"] },
+        "ratio_presets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "value": { "type": "number" },
+              "applies_to": { "type": "string" }
+            }
+          }
+        },
+        "module_grid_mm": { "type": "number" },
+        "leg_to_body_ratio": { "type": "string" },
+        "seat_height_bias": { "type": "string" },
+        "void_ratio_target": { "type": "number", "minimum": 0, "maximum": 1 },
+        "scale_bias": { "type": "string", "enum": ["monumental", "generous", "human", "compact", "petite"] },
+        "symmetry_preference": { "type": "string", "enum": ["strict_bilateral", "loose_bilateral", "asymmetric_balanced", "free"] }
+      }
+    },
+
+    "lighting_and_shadow": {
+      "type": "object",
+      "properties": {
+        "light_direction": { "type": "array", "items": { "type": "string" } },
+        "light_quality": { "type": "string" },
+        "shadow_role": { "type": "string" },
+        "highlight_strategy": { "type": "string" },
+        "render_notes": { "type": "string" }
+      }
+    },
+
+    "emotional_keywords": {
+      "type": "array",
+      "minItems": 3,
+      "items": { "type": "string" }
+    },
+    "emotional_keywords_tr": { "type": "array", "items": { "type": "string" } },
+
+    "forbidden_signals": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "signal"],
+        "properties": {
+          "id": { "type": "string" },
+          "signal": { "type": "string" },
+          "signal_tr": { "type": "string" },
+          "severity": { "type": "string", "enum": ["soft", "hard"] },
+          "detected_by": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+
+    "positive_prompt_tokens": {
+      "type": "object",
+      "required": ["core"],
+      "properties": {
+        "core": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "form": { "type": "array", "items": { "type": "string" } },
+        "material": { "type": "array", "items": { "type": "string" } },
+        "light": { "type": "array", "items": { "type": "string" } },
+        "camera": { "type": "array", "items": { "type": "string" } },
+        "mood": { "type": "array", "items": { "type": "string" } },
+        "quality": { "type": "array", "items": { "type": "string" } },
+        "weight_hint": { "type": "object", "additionalProperties": { "type": "number" } },
+        "template": { "type": "string", "description": "Token'ların birleştirme şablonu. {subject} {form} {material} {light} {mood} {quality}" }
+      }
+    },
+
+    "negative_prompt_tokens": {
+      "type": "object",
+      "required": ["core"],
+      "properties": {
+        "core": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "style_specific": { "type": "array", "items": { "type": "string" } },
+        "anatomy_defects": { "type": "array", "items": { "type": "string" } },
+        "physics_defects": { "type": "array", "items": { "type": "string" } },
+        "copyright_guards": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "manufacturing_notes": {
+      "type": "object",
+      "required": ["preferred_processes"],
+      "properties": {
+        "preferred_processes": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "avoid_processes": { "type": "array", "items": { "type": "string" } },
+        "joint_language": { "type": "array", "items": { "type": "string" } },
+        "joinery_visibility": { "type": "string", "enum": ["celebrated", "visible", "neutral", "concealed"] },
+        "typical_thickness_mm": { "type": "object", "additionalProperties": { "type": "number" } },
+        "tolerance_notes": { "type": "string" },
+        "finishing_notes": { "type": "string" },
+        "cost_drivers": { "type": "array", "items": { "type": "string" } },
+        "sustainability_notes": { "type": "string" },
+        "flat_pack_feasible": { "type": "boolean" },
+        "difficulty": { "type": "integer", "minimum": 1, "maximum": 5 }
+      }
+    },
+
+    "historical_references": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["kind", "title"],
+        "properties": {
+          "kind": { "type": "string", "enum": ["movement", "building", "object_type", "period", "technique", "museum_collection", "concept"] },
+          "title": { "type": "string" },
+          "title_tr": { "type": "string" },
+          "date": { "type": "string" },
+          "region": { "type": "string" },
+          "why_relevant": { "type": "string" },
+          "what_to_extract": { "type": "array", "items": { "type": "string" } },
+          "source_api": {
+            "type": "string",
+            "enum": ["met_openaccess", "smithsonian_openaccess", "rijksmuseum", "europeana", "wikidata_sparql", "vanda", "manual", "user_upload"]
+          },
+          "license": { "type": "string", "enum": ["cc0", "public_domain", "cc_by", "unknown", "not_applicable"] },
+          "query_hint": { "type": "string", "description": "İlgili API için hazır arama sorgusu / SPARQL deseni." }
+        }
+      }
+    },
+
+    "scoring_signature": {
+      "type": "object",
+      "description": "style_scoring_rules.json ile birlikte çalışır: bu stilin feature uzayındaki hedef vektörü.",
+      "required": ["target_vector", "weights"],
+      "properties": {
+        "target_vector": { "type": "object", "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 }, "minProperties": 5 },
+        "weights": { "type": "object", "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 } },
+        "hard_gates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["feature_id", "op", "value"],
+            "properties": {
+              "feature_id": { "type": "string" },
+              "op": { "type": "string", "enum": [">=", "<=", "==", "!=", "in", "not_in"] },
+              "value": {},
+              "penalty": { "type": "number", "default": 25 }
+            }
+          }
+        },
+        "match_threshold": { "type": "number", "default": 0.6 },
+        "confidence_floor": { "type": "number", "default": 0.4 }
+      }
+    },
+
+    "part_directives": {
+      "type": "array",
+      "description": "Parça bazlı stil direktifleri: 'bu parça bu stilde nasıl davranır?'",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["part_role", "directive"],
+        "properties": {
+          "part_role": { "type": "string" },
+          "applies_to_furniture": { "type": "array", "items": { "type": "string" } },
+          "directive": { "type": "string" },
+          "directive_tr": { "type": "string" },
+          "typical_material": { "type": ["string", "null"] },
+          "typical_dimension_hint": { "type": "string" },
+          "ornament_level": { "type": "string", "enum": ["none", "subtle", "moderate", "rich", "ornate"] },
+          "priority": { "type": "string", "enum": ["must", "should", "may"] }
+        }
+      }
+    },
+
+    "sketch_feedback": {
+      "type": "object",
+      "description": "Canlı çizim sırasında kullanıcıya verilecek geri bildirim cümle şablonları.",
+      "properties": {
+        "on_good_signal": { "type": "array", "items": { "type": "string" } },
+        "on_weak_signal": { "type": "array", "items": { "type": "string" } },
+        "on_violation": { "type": "array", "items": { "type": "string" } },
+        "on_violation_tr": { "type": "array", "items": { "type": "string" } },
+        "suggested_next_strokes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "compatibility": {
+      "type": "object",
+      "properties": {
+        "blends_well_with": { "type": "array", "items": { "type": "string" } },
+        "conflicts_with": { "type": "array", "items": { "type": "string" } },
+        "hybrid_recipes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "result_style_id": { "type": "string" },
+              "mix": { "type": "array", "items": { "type": "object", "properties": { "style_id": { "type": "string" }, "ratio": { "type": "number" } } } },
+              "note": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "compliance": {
+      "type": "object",
+      "properties": {
+        "cultural_sensitivity_notes": { "type": "string" },
+        "religious_symbol_policy": { "type": "string" },
+        "do_not_replicate": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "meta": {
+      "type": "object",
+      "properties": {
+        "author": { "type": "string" },
+        "created": { "type": "string", "format": "date" },
+        "updated": { "type": "string", "format": "date" },
+        "status": { "type": "string", "enum": ["draft", "review", "production"] },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "evidence_sources": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  },
+
+  "$defs": {
+    "materialEntry": {
+      "type": "object",
+      "required": ["material_id"],
+      "properties": {
+        "material_id": { "type": "string" },
+        "material_tr": { "type": "string" },
+        "finish": { "type": "string" },
+        "why": { "type": "string" },
+        "why_tr": { "type": "string" },
+        "applies_to_parts": { "type": "array", "items": { "type": "string" } },
+        "cost_tier": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "weight": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  }
+}

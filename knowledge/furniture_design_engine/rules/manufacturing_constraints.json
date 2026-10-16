@@ -1,0 +1,2970 @@
+{
+  "version": "1.0.0",
+  "description": "FDE Üretim ve Kalite Kontrol Kural Motoru. AI'ın 'saçma mobilya' üretmesini engelleyen fiziksel, ergonomik, üretim ve tasarım-mantığı kuralları. Her kural bir check_id, severity, uygulanabilirlik koşulu ve skor katkısı taşır.",
+  "units": "mm",
+  "load_assumptions": {
+    "standard_user_mass_kg": 95,
+    "design_user_mass_kg": 120,
+    "dynamic_sit_factor": 1.6,
+    "notes": "ASSUMPTION: Oturma mobilyası 120 kg statik + 1.6 dinamik çarpan = 192 kg tasarım yükü ile doğrulanır. EN 1728 (domestic seating) ve EN 12520 referans alınmıştır; nihai üründe gerçek test zorunludur."
+  },
+  "severity_levels": {
+    "hard_fail": {
+      "description": "İhlal = tasarım reddedilir. release_decision = 'rejected'. Skor 0'a kilitlenir.",
+      "score_effect": "multiply_overall_by_0"
+    },
+    "major": {
+      "description": "Ciddi ihlal. Tasarım revizyon ister.",
+      "score_effect": "penalty_25"
+    },
+    "minor": {
+      "description": "Küçük sapma. Uyarı verilir, üretim devam edebilir.",
+      "score_effect": "penalty_8"
+    },
+    "info": {
+      "description": "Bilgilendirme. Skor etkisi yok.",
+      "score_effect": "penalty_0"
+    }
+  },
+  "structural_rules": [
+    {
+      "check_id": "STR-001",
+      "name": "load_path_continuity",
+      "name_tr": "Sürekli Yük Yolu",
+      "statement": "Every part marked load_bearing must have an unbroken chain of connections to a part that contacts the floor (foot, leg, plinth, base_plate).",
+      "statement_tr": "load_bearing işaretli her parça, zemine temas eden bir parçaya (ayak, pabuç, kaide, taban plakası) kesintisiz bir bağlantı zinciriyle bağlanmalı.",
+      "severity": "hard_fail",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "graph_traversal(parts, assembly_relations) from each load_bearing part to a ground-contact part",
+      "user_feedback_tr": "Yük yolu kesik: {part_name_tr} zemine bağlanmıyor. Bir kiriş, ayak veya kaide ekle.",
+      "feature_impact": {
+        "structural_plausibility": -0.5,
+        "structural_expression": -0.3
+      }
+    },
+    {
+      "check_id": "STR-002",
+      "name": "leg_count_and_coplanarity",
+      "name_tr": "Ayak Sayısı ve Düzlemsellik",
+      "statement": "A freestanding piece must have >= 3 ground contact points; all contact points must be coplanar within 0.5 mm (or have adjustable feet).",
+      "statement_tr": "Serbest duran bir parça en az 3 zemin temas noktasına sahip olmalı; tüm temas noktaları 0.5 mm içinde düzlemdeş olmalı (veya ayarlanabilir ayak bulunmalı).",
+      "severity": "hard_fail",
+      "applies_to": [
+        "chair",
+        "armchair",
+        "stool",
+        "bench",
+        "dining_table",
+        "coffee_table",
+        "side_table",
+        "desk",
+        "console_table"
+      ],
+      "test": "count(foot|leg instances with ground contact) >= 3 AND coplanarity_error <= 0.5",
+      "user_feedback_tr": "Denge sorunu: {n} temas noktası var veya ayaklar aynı düzlemde değil. Mobilya sallar.",
+      "feature_impact": {
+        "structural_plausibility": -0.6
+      }
+    },
+    {
+      "check_id": "STR-003",
+      "name": "leg_slenderness_limit",
+      "name_tr": "Ayak Narinlik Sınırı",
+      "statement": "Leg slenderness ratio (unsupported height / minimum cross-section dimension) must not exceed: solid hardwood 18, solid softwood 14, steel solid 30, steel tube 40 (with wall >= 1.5 mm), aluminium 25, concrete 8.",
+      "statement_tr": "Ayak narinlik oranı (desteksiz yükseklik / minimum kesit ölçüsü) şunları aşmamalı: masif sert ağaç 18, masif yumuşak ağaç 14, masif çelik 30, çelik boru 40 (et kalınlığı >= 1.5 mm), alüminyum 25, beton 8.",
+      "severity": "hard_fail",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "slenderness = leg_height / min_section_dim; compare against material limit table",
+      "user_feedback_tr": "{part_name_tr} çok narin (oran {ratio}, {material_tr} için üst sınır {limit}). Kesiti büyüt veya bir kiriş ekle.",
+      "feature_impact": {
+        "structural_plausibility": -0.4
+      }
+    },
+    {
+      "check_id": "STR-004",
+      "name": "shelf_deflection_span_limit",
+      "name_tr": "Raf Sehim/Açıklık Sınırı",
+      "statement": "Shelf span must satisfy deflection <= span/200 under a 30 kg/m distributed load. Practical maxima: 18 mm chipboard 600 mm, 18 mm plywood 700 mm, 25 mm solid hardwood 800 mm, 32 mm solid hardwood 1000 mm, 6 mm folded steel 900 mm, 10 mm glass 800 mm, 40 mm concrete 600 mm.",
+      "statement_tr": "Raf açıklığı, 30 kg/m yayılı yük altında sehim <= açıklık/200 koşulunu sağlamalı. Pratik üst sınırlar: 18 mm suntalam 600 mm, 18 mm kontrplak 700 mm, 25 mm masif sert ağaç 800 mm, 32 mm masif 1000 mm, 6 mm bükümlü çelik 900 mm, 10 mm cam 800 mm, 40 mm beton 600 mm.",
+      "severity": "major",
+      "applies_to": [
+        "bookshelf",
+        "shelf_unit",
+        "sideboard",
+        "wardrobe",
+        "cabinet",
+        "tv_unit",
+        "coffee_table"
+      ],
+      "test": "span <= material_span_limit[material_id][thickness_mm] (interpolate between table entries)",
+      "user_feedback_tr": "{part_name_tr} açıklığı {span} mm — {material_tr} {thickness} mm için üst sınır {limit} mm. Gözle görülür sehim oluşur. Kalınlığı artır veya bir ayırıcı ekle.",
+      "feature_impact": {
+        "structural_plausibility": -0.25
+      }
+    },
+    {
+      "check_id": "STR-005",
+      "name": "concrete_slab_span_depth",
+      "name_tr": "Beton Tabla Açıklık/Kalınlık Oranı",
+      "statement": "Cast concrete slabs must satisfy thickness >= span/12 and >= 40 mm absolute minimum, with fibre or mesh reinforcement declared. Cantilever <= span/4.",
+      "statement_tr": "Dökme beton tablalar kalınlık >= açıklık/12 ve mutlak minimum >= 40 mm koşulunu sağlamalı; lif veya donatı beyan edilmeli. Konsol <= açıklık/4.",
+      "severity": "hard_fail",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "material_id contains 'concrete' AND thickness >= span/12 AND thickness >= 40 AND cantilever <= span/4",
+      "user_feedback_tr": "Beton tabla çok ince: {span} mm açıklık için minimum {required} mm gerekir (şu an {actual} mm). Çatlar veya göçer.",
+      "feature_impact": {
+        "structural_plausibility": -0.5
+      }
+    },
+    {
+      "check_id": "STR-006",
+      "name": "stone_top_support",
+      "name_tr": "Taş Tabla Desteği",
+      "statement": "Stone tops (marble, granite, limestone, terrazzo) must be >= 20 mm thick and supported continuously around >= 70% of the perimeter, or on 4 points within 150 mm of each corner. Point-loaded unsupported stone is forbidden.",
+      "statement_tr": "Taş tablalar (mermer, granit, kireçtaşı, terazzo) >= 20 mm kalınlığında olmalı ve çevresinin >= %70'i boyunca sürekli, ya da her köşeye 150 mm içinde 4 noktada desteklenmeli. Noktasal yüklü desteksiz taş yasaktır.",
+      "severity": "hard_fail",
+      "applies_to": [
+        "dining_table",
+        "coffee_table",
+        "side_table",
+        "console_table",
+        "sideboard",
+        "desk"
+      ],
+      "test": "perimeter_support_ratio >= 0.7 OR (point_supports >= 4 AND inset_from_corner <= 150)",
+      "user_feedback_tr": "Taş tabla yeterli desteklenmiyor. Çevre desteğini %70'e çıkar veya köşelere 150 mm içinde 4 destek noktası koy.",
+      "feature_impact": {
+        "structural_plausibility": -0.45
+      }
+    },
+    {
+      "check_id": "STR-007",
+      "name": "glass_thickness_and_treatment",
+      "name_tr": "Cam Kalınlığı ve İşlemi",
+      "statement": "Any structural or load-bearing glass must be tempered (or laminated tempered) with: shelf 10 mm min (span <= 800), top 12 mm min (span <= 1200), door 6 mm min in a frame or 8 mm framed-less with polished edges. Annealed glass is forbidden anywhere.",
+      "statement_tr": "Yapısal veya yük taşıyan her cam temperli (veya lamine temperli) olmalı: raf min 10 mm (açıklık <= 800), tabla min 12 mm (açıklık <= 1200), kapak çerçevede min 6 mm ya da çerçevesiz min 8 mm cilalı kenarlı. Tavlı (annealed) cam hiçbir yerde kullanılamaz.",
+      "severity": "hard_fail",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "material_id contains 'glass' AND process includes tempering AND thickness >= table limit",
+      "user_feedback_tr": "Cam belirtilmemiş veya çok ince. Temperli cam, min {required} mm olmalı.",
+      "feature_impact": {
+        "structural_plausibility": -0.5
+      }
+    },
+    {
+      "check_id": "STR-008",
+      "name": "joint_engagement",
+      "name_tr": "Birleşim Geçme Derinliği",
+      "statement": "Tenon engagement >= 5x tenon thickness and >= 30 mm; dowel embedment >= 1.5x dowel diameter in each member; screw purchase into end grain is forbidden (use inserts or cross-grain fixing).",
+      "statement_tr": "Zıvana geçme derinliği >= 5x zıvana kalınlığı ve >= 30 mm; dübel gömme her elemanda >= 1.5x dübel çapı; uç damarına vida tutturma yasak (insert kullan veya damar yönüne dik bağla).",
+      "severity": "major",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "joint_geometry checks from parts_json",
+      "user_feedback_tr": "{joint_type} geçme derinliği yetersiz ({actual} mm, gereken {required} mm). Bu birleşim zamanla gevşer.",
+      "feature_impact": {
+        "structural_plausibility": -0.2,
+        "handcraft_index": -0.1
+      }
+    },
+    {
+      "check_id": "STR-009",
+      "name": "backrest_moment_resistance",
+      "name_tr": "Sırtlık Moment Direnci",
+      "statement": "A backrest must resist a 560 N horizontal rearward force applied 300 mm above the seat without joint failure. Back posts must either continue into the rear legs or be tenoned into them with >= 60 mm engagement; a backrest attached only to the seat rail is forbidden.",
+      "statement_tr": "Sırtlık, oturma yüzeyinden 300 mm yukarıda uygulanan 560 N yatay geri kuvvete birleşim göçmesi olmadan direnmeli. Sırt dikmeleri ya arka bacaklarla devam etmeli ya da >= 60 mm geçme ile bağlanmalı; yalnızca oturma kuşağına bağlanmış sırtlık yasaktır.",
+      "severity": "hard_fail",
+      "applies_to": [
+        "chair",
+        "armchair",
+        "lounge_chair",
+        "bench",
+        "sofa",
+        "bar_stool"
+      ],
+      "test": "backrest.attachment in ['continues_into_rear_leg', 'tenoned_into_rear_leg'] OR backrest.support includes a dedicated back post to the floor",
+      "user_feedback_tr": "Sırtlık yalnızca oturma kuşağına bağlı — bu bir klasik garanti arızasıdır. Sırt dikmesini arka bacağa taşı veya ayrı bir dikey destek ekle.",
+      "feature_impact": {
+        "structural_plausibility": -0.5
+      }
+    },
+    {
+      "check_id": "STR-010",
+      "name": "tip_over_stability",
+      "name_tr": "Devrilme Kararlılığı",
+      "statement": "Static stability: the centre of mass must fall inside the support polygon with a margin >= 40 mm under a 250 N horizontal force applied at the top. Storage units taller than 900 mm MUST include a wall anchor part.",
+      "statement_tr": "Statik kararlılık: ağırlık merkezi, tepe noktasında uygulanan 250 N yatay kuvvet altında destek çokgeninin içinde en az 40 mm payla kalmalı. 900 mm'den yüksek depolama ünitelerinde duvar ankrajı parçası ZORUNLU.",
+      "severity": "hard_fail",
+      "applies_to": [
+        "bookshelf",
+        "shelf_unit",
+        "wardrobe",
+        "sideboard",
+        "cabinet",
+        "tv_unit",
+        "drawer_chest",
+        "shoe_rack"
+      ],
+      "test": "com_margin >= 40 AND (height <= 900 OR wall_anchor part present)",
+      "user_feedback_tr": "Devrilme riski: {height} mm yüksekliğindeki ünite duvar ankrajı içermiyor. Bir anti-tip kit ekle (EN 16121 / ASTM F2057).",
+      "feature_impact": {
+        "structural_plausibility": -0.4
+      }
+    },
+    {
+      "check_id": "STR-011",
+      "name": "wood_movement_allowance",
+      "name_tr": "Ahşap Çalışma Payı",
+      "statement": "Any solid-timber panel wider than 250 mm fixed into a rigid frame must declare a movement allowance of >= 1.5 mm per 400 mm of cross-grain width, and use slotted holes, figure-8 clips or a floating groove.",
+      "statement_tr": "Sabit bir çerçeveye bağlanan 250 mm'den geniş her masif ahşap panel, damar yönüne dik her 400 mm için >= 1.5 mm çalışma payı beyan etmeli ve yuvarlatılmış delik, figure-8 klips veya yüzer kanal kullanmalı.",
+      "severity": "major",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "if material is solid timber AND cross_grain_width > 250 AND fixing in ['rigid_screw', 'glued_full_perimeter'] -> fail",
+      "user_feedback_tr": "Masif tabla sabit bağlanmış — bir ısıtma sezonunda çatlar. Yuvarlatılmış delik veya figure-8 klips belirt.",
+      "feature_impact": {
+        "structural_plausibility": -0.2,
+        "material_honesty": 0
+      }
+    },
+    {
+      "check_id": "STR-012",
+      "name": "grain_direction_in_load_path",
+      "name_tr": "Yük Yolunda Damar Yönü",
+      "statement": "Load-bearing timber members must have grain running along their length. Short-grain (cross-grain loaded) sections are forbidden at joints, leg tops and any cantilever.",
+      "statement_tr": "Yük taşıyan ahşap elemanlarda damar boyuna ilerlemeli. Birleşimlerde, bacak üstlerinde ve her konsolda kısa damar (damara dik yüklenen) kesitler yasaktır.",
+      "severity": "hard_fail",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "for each load_bearing timber part: grain_direction == 'along_length'",
+      "user_feedback_tr": "{part_name_tr} damara dik yükleniyor — kısa damar kırılması kaçınılmaz. Parçayı döndür veya malzemeyi değiştir.",
+      "feature_impact": {
+        "structural_plausibility": -0.45
+      }
+    },
+    {
+      "check_id": "STR-013",
+      "name": "cantilever_depth_limit",
+      "name_tr": "Konsol Derinliği Sınırı",
+      "statement": "Cantilever overhang limits: solid hardwood 120 mm (top over frame), veneered MDF 150 mm with a steel core, folded steel 6 mm plate 250 mm, concrete span/4, stone 0 (forbidden).",
+      "statement_tr": "Konsol taşma sınırları: masif sert ağaç 120 mm (çerçeve üstünde tabla), çelik özlü kaplamalı MDF 150 mm, 6 mm bükümlü çelik 250 mm, beton açıklık/4, taş 0 (yasak).",
+      "severity": "major",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "overhang <= limit[material_id]",
+      "user_feedback_tr": "{part_name_tr} taşması {actual} mm — {material_tr} için sınır {limit} mm. Destek ekle veya taşmayı azalt.",
+      "feature_impact": {
+        "structural_plausibility": -0.25
+      }
+    },
+    {
+      "check_id": "STR-014",
+      "name": "weight_handling_feasibility",
+      "name_tr": "Ağırlık ve Taşınabilirlik",
+      "statement": "Estimated total mass must be <= 80 kg for a two-person domestic delivery, or the design must declare lifting points/modular split. Any single component over 45 kg must declare a handling method.",
+      "statement_tr": "Tahmini toplam kütle iki kişilik ev teslimatı için <= 80 kg olmalı, aksi halde tasarım kaldırma noktaları/modüler bölünme beyan etmeli. 45 kg üstü tek bir bileşen taşıma yöntemi beyan etmeli.",
+      "severity": "minor",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "sum(part_volume * material_density) <= 80 OR handling_method declared",
+      "user_feedback_tr": "Tahmini ağırlık {mass} kg. Kaldırma noktası veya modüler bölünme ekle; aksi halde teslimat mümkün değil.",
+      "feature_impact": {
+        "manufacturability": -0.1
+      }
+    }
+  ],
+  "ergonomic_rules": [
+    {
+      "check_id": "ERG-001",
+      "name": "seat_height_range",
+      "name_tr": "Oturma Yüksekliği Aralığı",
+      "statement": "Seat height (uncompressed) must fall within the type envelope: dining chair 420-480, lounge chair 380-430, sofa 380-450, stool 440-500 (counter 640-680, bar 740-790), bench 420-470.",
+      "statement_tr": "Oturma yüksekliği (sıkışmamış) tür zarfı içinde olmalı: yemek sandalyesi 420-480, dinlenme koltuğu 380-430, kanepeler 380-450, tabure 440-500 (tezgâh 640-680, bar 740-790), bank 420-470.",
+      "severity": "major",
+      "applies_to": [
+        "chair",
+        "armchair",
+        "lounge_chair",
+        "sofa",
+        "stool",
+        "bench",
+        "bar_stool"
+      ],
+      "test": "seat_height in envelope[furniture_type]",
+      "user_feedback_tr": "Oturma yüksekliği {value} mm — {type_tr} için uygun aralık {min}-{max} mm. {direction} {delta} mm.",
+      "feature_impact": {
+        "ergonomic_compliance": -0.35
+      }
+    },
+    {
+      "check_id": "ERG-002",
+      "name": "seat_depth_range",
+      "name_tr": "Oturma Derinliği Aralığı",
+      "statement": "Seat depth: dining/upright chair 380-450, lounge chair 480-560, sofa 520-620, bench 300-450. Depth beyond the range causes either thigh pressure or an unsupported back.",
+      "statement_tr": "Oturma derinliği: yemek/dik sandalye 380-450, dinlenme koltuğu 480-560, kanepe 520-620, bank 300-450. Aralık dışı derinlik ya uyluk baskısı ya desteksiz sırt yaratır.",
+      "severity": "major",
+      "applies_to": [
+        "chair",
+        "armchair",
+        "lounge_chair",
+        "sofa",
+        "bench",
+        "stool"
+      ],
+      "test": "seat_depth in envelope[furniture_type]",
+      "user_feedback_tr": "Oturma derinliği {value} mm — uygun aralık {min}-{max} mm.",
+      "feature_impact": {
+        "ergonomic_compliance": -0.3
+      }
+    },
+    {
+      "check_id": "ERG-003",
+      "name": "seat_width_minimum",
+      "name_tr": "Minimum Oturma Genişliği",
+      "statement": "Seat width >= 400 mm (single chair), >= 450 mm (armchair between arms), >= 600 mm per sofa seat, >= 900 mm (2-person bench).",
+      "statement_tr": "Oturma genişliği >= 400 mm (tekli sandalye), >= 450 mm (kolçaklar arası), kanepe kişi başı >= 600 mm, >= 900 mm (2 kişilik bank).",
+      "severity": "major",
+      "applies_to": [
+        "chair",
+        "armchair",
+        "lounge_chair",
+        "sofa",
+        "bench",
+        "stool"
+      ],
+      "test": "seat_width >= minimum[type]",
+      "user_feedback_tr": "Oturma genişliği {value} mm — minimum {min} mm. Kullanıcı sığmaz.",
+      "feature_impact": {
+        "ergonomic_compliance": -0.35
+      }
+    },
+    {
+      "check_id": "ERG-004",
+      "name": "backrest_recline_angle",
+      "name_tr": "Sırtlık Eğim Açısı",
+      "statement": "Recline from vertical: dining chair 5-17° (95-112° from the seat plane), lounge 15-30°, sofa 10-28°. A 90° upright dining chair is uncomfortable; over 120° requires a headrest.",
+      "statement_tr": "Dikeyden eğim: yemek sandalyesi 5-17° (oturma düzleminden 95-112°), dinlenme 15-30°, kanepeler 10-28°. 90° dik yemek sandalyesi rahatsızdır; 120° üstü baş dayama gerektirir.",
+      "severity": "minor",
+      "applies_to": [
+        "chair",
+        "armchair",
+        "lounge_chair",
+        "sofa",
+        "bench"
+      ],
+      "test": "recline_angle in envelope[type]",
+      "user_feedback_tr": "Sırtlık eğimi {value}° — {type_tr} için {min}-{max}° önerilir.",
+      "feature_impact": {
+        "ergonomic_compliance": -0.15
+      }
+    },
+    {
+      "check_id": "ERG-005",
+      "name": "arm_height",
+      "name_tr": "Kolçak Yüksekliği",
+      "statement": "Arm top 200-250 mm above the seat surface (600-680 mm from the floor for a dining chair). Arms must be set back 20-40 mm from the seat front edge to allow table approach.",
+      "statement_tr": "Kolçak üstü oturma yüzeyinden 200-250 mm yukarıda (yemek sandalyesinde zeminden 600-680 mm). Kolçaklar masaya yanaşmaya izin vermek için oturma ön kenarından 20-40 mm geride olmalı.",
+      "severity": "minor",
+      "applies_to": [
+        "armchair",
+        "chair",
+        "lounge_chair",
+        "sofa"
+      ],
+      "test": "arm_height_above_seat in [200,250] AND arm_front_setback >= 20",
+      "user_feedback_tr": "Kolçak yüksekliği {value} mm (önerilen 200-250 mm) veya masaya yanaşmayı engelliyor.",
+      "feature_impact": {
+        "ergonomic_compliance": -0.12
+      }
+    },
+    {
+      "check_id": "ERG-006",
+      "name": "lumbar_zone",
+      "name_tr": "Bel Destek Bölgesi",
+      "statement": "For any seat used longer than 30 minutes, back support must exist in the 150-260 mm zone above the seat. A backrest that starts above 300 mm provides no lumbar support.",
+      "statement_tr": "30 dakikadan uzun kullanılan her oturmada, oturma yüzeyinden 150-260 mm bölgesinde sırt desteği bulunmalı. 300 mm üstünde başlayan bir sırtlık bel desteği sağlamaz.",
+      "severity": "minor",
+      "applies_to": [
+        "chair",
+        "armchair",
+        "lounge_chair",
+        "sofa",
+        "desk"
+      ],
+      "test": "back_support_zone intersects [150,260] above seat",
+      "user_feedback_tr": "Bel bölgesinde (150-260 mm) destek yok. Bir çıta, ped veya sırtlık alt kenarı ekle.",
+      "feature_impact": {
+        "ergonomic_compliance": -0.15
+      }
+    },
+    {
+      "check_id": "ERG-007",
+      "name": "table_height",
+      "name_tr": "Masa Yüksekliği",
+      "statement": "Dining/desk working surface 720-760 mm (740 nominal). Coffee table 300-450 mm and within +/-50 mm of the adjacent seat height. Console 750-900 mm. Bar 1050-1100 mm.",
+      "statement_tr": "Yemek/çalışma yüzeyi 720-760 mm (nominal 740). Sehpa 300-450 mm ve komşu oturma yüksekliğinin +/-50 mm içinde. Konsol 750-900 mm. Bar 1050-1100 mm.",
+      "severity": "major",
+      "applies_to": [
+        "dining_table",
+        "desk",
+        "coffee_table",
+        "console_table",
+        "side_table"
+      ],
+      "test": "top_height in envelope[type]",
+      "user_feedback_tr": "Tabla yüksekliği {value} mm — {type_tr} için {min}-{max} mm.",
+      "feature_impact": {
+        "ergonomic_compliance": -0.3
+      }
+    },
+    {
+      "check_id": "ERG-008",
+      "name": "knee_and_thigh_clearance",
+      "name_tr": "Diz ve Uyluk Boşluğu",
+      "statement": "Under any table/desk: minimum 600 mm wide x 600 mm deep x 600 mm high clear knee space. Under a chair seat, thigh clearance >= 180 mm from the apron underside to the seat front.",
+      "statement_tr": "Her masa/çalışma masası altında: minimum 600 mm genişlik x 600 mm derinlik x 600 mm yükseklik boş diz alanı. Sandalye oturma altında, kuşak altından oturma önüne uyluk boşluğu >= 180 mm.",
+      "severity": "major",
+      "applies_to": [
+        "dining_table",
+        "desk",
+        "chair",
+        "armchair"
+      ],
+      "test": "clearance measurements from parts_json",
+      "user_feedback_tr": "Diz/uyluk boşluğu yetersiz ({value} mm, gereken {min} mm). Kuşağı yukarı al veya incelt.",
+      "feature_impact": {
+        "ergonomic_compliance": -0.3
+      }
+    },
+    {
+      "check_id": "ERG-009",
+      "name": "reach_zone",
+      "name_tr": "Erişim Bölgesi",
+      "statement": "Storage: frequently used shelves must be within 400-1600 mm of the floor. Nothing essential above 1900 mm without a step. Drawer pull zone 400-1200 mm.",
+      "statement_tr": "Depolama: sık kullanılan raflar zeminden 400-1600 mm içinde olmalı. Basamaksız 1900 mm üstünde zorunlu hiçbir şey olmamalı. Çekmece çekme bölgesi 400-1200 mm.",
+      "severity": "minor",
+      "applies_to": [
+        "bookshelf",
+        "shelf_unit",
+        "sideboard",
+        "wardrobe",
+        "cabinet",
+        "drawer_chest"
+      ],
+      "test": "primary_shelf_zone intersects [400,1600]",
+      "user_feedback_tr": "Ana raf bölgesi erişim aralığının ({min}-{max} mm) dışında.",
+      "feature_impact": {
+        "ergonomic_compliance": -0.1
+      }
+    },
+    {
+      "check_id": "ERG-010",
+      "name": "edge_safety",
+      "name_tr": "Kenar Güvenliği",
+      "statement": "Any user-contact edge within 900 mm of the floor must be eased (radius >= 2 mm) or chamfered. Knife-sharp arrises on contact surfaces are forbidden. Glass edges must be arrised or polished.",
+      "statement_tr": "Zeminden 900 mm içindeki her kullanıcı temas kenarı yumuşatılmalı (yarıçap >= 2 mm) veya pahlı olmalı. Temas yüzeylerinde bıçak keskinliği yasaktır. Cam kenarları rodajlı veya cilalı olmalı.",
+      "severity": "major",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "contact_edge_treatment != 'knife_edge' for edges below 900 mm",
+      "user_feedback_tr": "Temas bölgesinde keskin kenar var. 2 mm yumuşatma veya bir pah ekle — bu bir yaralanma riski.",
+      "feature_impact": {
+        "ergonomic_compliance": -0.25
+      }
+    },
+    {
+      "check_id": "ERG-011",
+      "name": "surface_temperature_comfort",
+      "name_tr": "Yüzey Sıcaklık Konforu",
+      "statement": "Long-duration skin-contact surfaces (seats, arm tops, headboards) must not be bare stone, concrete or metal. A 4-12 mm textile/leather/wood interface is required.",
+      "statement_tr": "Uzun süreli ten teması olan yüzeyler (oturaklar, kolçak üstleri, yatak başları) çıplak taş, beton veya metal olmamalı. 4-12 mm tekstil/deri/ahşap arayüzü gerekir.",
+      "severity": "minor",
+      "applies_to": [
+        "chair",
+        "armchair",
+        "sofa",
+        "bench",
+        "headboard",
+        "lounge_chair"
+      ],
+      "test": "contact_surface material not in ['concrete', 'stone', 'steel'] OR an interface layer is declared",
+      "user_feedback_tr": "{part_name_tr} çıplak {material_tr} — uzun temasta soğuk/sert. Bir keçe, deri veya ahşap arayüz ekle.",
+      "feature_impact": {
+        "ergonomic_compliance": -0.12
+      }
+    }
+  ],
+  "manufacturing_rules": [
+    {
+      "check_id": "MFG-001",
+      "name": "minimum_section_thickness",
+      "name_tr": "Minimum Kesit Kalınlığı",
+      "statement": "Minimum thickness by material: solid hardwood 12 mm (structural 18), softwood 16, plywood 6 (structural 12), MDF 9 (structural 16), steel plate 3 (structural 5), steel tube wall 1.2 (structural 1.5), aluminium 3, concrete 40, stone 20, glass 6 (shelf 10), acrylic 5, ceramic 8.",
+      "statement_tr": "Malzemeye göre minimum kalınlık: masif sert ağaç 12 mm (yapısal 18), yumuşak ağaç 16, kontrplak 6 (yapısal 12), MDF 9 (yapısal 16), çelik sac 3 (yapısal 5), çelik boru et kalınlığı 1.2 (yapısal 1.5), alüminyum 3, beton 40, taş 20, cam 6 (raf 10), akrilik 5, seramik 8.",
+      "severity": "hard_fail",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "part.thickness >= min_thickness[material_id] (structural grade raises the limit)",
+      "user_feedback_tr": "{part_name_tr} kalınlığı {actual} mm — {material_tr} için minimum {min} mm. Üretilemez veya kırılır.",
+      "feature_impact": {
+        "manufacturability": -0.3
+      }
+    },
+    {
+      "check_id": "MFG-002",
+      "name": "process_material_compatibility",
+      "name_tr": "Süreç-Malzeme Uyumu",
+      "statement": "Every proposed process must be valid for the proposed material (see materials[].valid_processes). E.g. steam_bending requires solid hardwood with straight grain; concrete_casting requires a mould and cannot produce 8 mm sections.",
+      "statement_tr": "Önerilen her süreç önerilen malzeme için geçerli olmalı (bkz. materials[].valid_processes). Örn. buharla bükme düz damarlı masif sert ağaç gerektirir; beton döküm bir kalıp gerektirir ve 8 mm kesit üretemez.",
+      "severity": "hard_fail",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "process in materials[material_id].valid_processes",
+      "user_feedback_tr": "{process} süreci {material_tr} ile uyumlu değil. {alternatives} süreçlerinden birini kullan.",
+      "feature_impact": {
+        "manufacturability": -0.35
+      }
+    },
+    {
+      "check_id": "MFG-003",
+      "name": "bend_radius_feasibility",
+      "name_tr": "Büküm Yarıçapı Fizibilitesi",
+      "statement": "Cold tube bending: inner radius >= 2 x outer diameter (3 x OD preferred for a clean look). Steam bending solid timber: inner radius >= 8 x thickness. Kerf bending: >= 15 x thickness with a declared kerf pattern.",
+      "statement_tr": "Soğuk boru bükme: iç yarıçap >= 2 x dış çap (temiz görünüm için 3 x çap tercih). Masif ahşap buharla bükme: iç yarıçap >= 8 x kalınlık. Kerf bükme: beyan edilmiş kerf deseniyle >= 15 x kalınlık.",
+      "severity": "hard_fail",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "bend_radius >= limit[process][material]",
+      "user_feedback_tr": "Büküm yarıçapı {actual} mm — {process} ile {material_tr} için minimum {min} mm. Malzeme buruşur veya kırılır.",
+      "feature_impact": {
+        "manufacturability": -0.3,
+        "structural_plausibility": -0.2
+      }
+    },
+    {
+      "check_id": "MFG-004",
+      "name": "cnc_tool_access",
+      "name_tr": "CNC Takım Erişimi",
+      "statement": "Internal corners produced by a router must have radius >= 3 mm (typical tool radius). A declared 0 mm internal corner requires a different process (laser, waterjet, saw, hand chisel) and must be flagged in the BOM.",
+      "statement_tr": "Freze ile üretilen iç köşeler >= 3 mm yarıçapa sahip olmalı (tipik takım yarıçapı). Beyan edilen 0 mm iç köşe farklı bir süreç gerektirir (lazer, su jeti, testere, el iskarpilesi) ve BOM'da işaretlenmeli.",
+      "severity": "minor",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "internal_corner_radius >= 3 OR process in ['laser_cutting','waterjet','hand_carving']",
+      "user_feedback_tr": "İç köşe yarıçapı 0 mm ama süreç {process}. Freze ile imkânsız — 3 mm yarıçap koy veya süreci değiştir.",
+      "feature_impact": {
+        "manufacturability": -0.12
+      }
+    },
+    {
+      "check_id": "MFG-005",
+      "name": "flat_pack_and_assembly",
+      "name_tr": "Demonte Paket ve Montaj",
+      "statement": "If flat_pack_feasible is true, every sub-assembly must fit within 1200 x 600 x 200 mm and weigh <= 30 kg, use only hand-tool fasteners, and require <= 40 assembly steps with a printed instruction sheet.",
+      "statement_tr": "flat_pack_feasible true ise her alt montaj 1200 x 600 x 200 mm içine sığmalı, <= 30 kg olmalı, yalnızca el aleti bağlantıları kullanmalı ve basılı talimatla <= 40 montaj adımı gerektirmeli.",
+      "severity": "minor",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "sub_assembly_dimensions and fastener type checks",
+      "user_feedback_tr": "Demonte paket iddiası var ama {part_name_tr} {dim} mm — kutuya sığmıyor.",
+      "feature_impact": {
+        "manufacturability": -0.1
+      }
+    },
+    {
+      "check_id": "MFG-006",
+      "name": "hardware_availability",
+      "name_tr": "Donanım Bulunabilirliği",
+      "statement": "All hardware must be a catalogue-standard item (metric M4-M10, 32 mm system, 35 mm cup hinge, standard drawer runner lengths 250-600 mm). Custom hardware requires a declared tooling cost.",
+      "statement_tr": "Tüm donanım katalog standardı bir ürün olmalı (metrik M4-M10, 32 mm sistem, 35 mm fincan menteşe, standart çekmece ray boyları 250-600 mm). Özel donanım beyan edilmiş bir kalıp maliyeti gerektirir.",
+      "severity": "minor",
+      "applies_to": [
+        "ALL_STORAGE",
+        "desk",
+        "wardrobe"
+      ],
+      "test": "hardware_id in standard_catalogue OR tooling_cost declared",
+      "user_feedback_tr": "{hardware} standart katalog ürünü değil. Özel kalıp maliyeti eklenmeli veya standart bir alternatife geçilmeli.",
+      "feature_impact": {
+        "manufacturability": -0.1
+      }
+    },
+    {
+      "check_id": "MFG-007",
+      "name": "finish_process_validity",
+      "name_tr": "Yüzey İşlem Geçerlili",
+      "statement": "Finish must be compatible with material and style. E.g. 'gloss_lacquer' on raw concrete is invalid; 'chrome_plating' on timber is invalid; 'soap_finished' requires a pale open-grain hardwood.",
+      "statement_tr": "Bitiş malzeme ve stille uyumlu olmalı. Örn. ham betonda 'gloss_lacquer' geçersizdir; ahşapta 'chrome_plating' geçersizdir; 'soap_finished' açık damarlı açık renk bir sert ağaç gerektirir.",
+      "severity": "major",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "finish in materials[material_id].valid_finishes",
+      "user_feedback_tr": "{finish} bitişi {material_tr} üzerinde uygulanamaz. {alternatives} seçeneklerinden birini kullan.",
+      "feature_impact": {
+        "manufacturability": -0.25,
+        "material_honesty": -0.3
+      }
+    },
+    {
+      "check_id": "MFG-008",
+      "name": "tolerance_stack_up",
+      "name_tr": "Tolerans Birikimi",
+      "statement": "Adjacent fitted components (doors, drawers, shelves) must declare a gap of 2-4 mm per side. Lacquered/painted parts need +0.4 mm per coated side added to the nominal gap.",
+      "statement_tr": "Bitişik oturan bileşenler (kapaklar, çekmeceler, raflar) taraf başına 2-4 mm aralık beyan etmeli. Lakeli/boyalı parçalarda nominal aralığa kaplanan taraf başına +0.4 mm eklenmeli.",
+      "severity": "minor",
+      "applies_to": [
+        "sideboard",
+        "wardrobe",
+        "cabinet",
+        "desk",
+        "drawer_chest",
+        "bookshelf"
+      ],
+      "test": "gap in [2,4] + finish_allowance",
+      "user_feedback_tr": "Kapak/çekmece aralığı {actual} mm — lake bitişiyle {required} mm olmalı, aksi halde sürtünür.",
+      "feature_impact": {
+        "manufacturability": -0.1
+      }
+    },
+    {
+      "check_id": "MFG-009",
+      "name": "mould_and_pattern_feasibility",
+      "name_tr": "Kalıp ve Model Fizibilitesi",
+      "statement": "Cast parts (concrete, resin, metal) must be demouldable: no undercuts beyond 3° draft, no closed internal voids without a declared core, no section thinner than the material minimum.",
+      "statement_tr": "Döküm parçalar (beton, reçine, metal) kalıptan çıkarılabilir olmalı: 3° çekme payı üstünde negatif açı yok, beyan edilmiş bir maça olmadan kapalı iç boşluk yok, malzeme minimumundan ince kesit yok.",
+      "severity": "hard_fail",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "draft_angle >= 3 AND no_closed_void AND min_section respected",
+      "user_feedback_tr": "{part_name_tr} kalıptan çıkmaz: {reason}. Çekme payı ekle veya maça beyan et.",
+      "feature_impact": {
+        "manufacturability": -0.4
+      }
+    },
+    {
+      "check_id": "MFG-010",
+      "name": "bom_completeness",
+      "name_tr": "BOM Tamlığı",
+      "statement": "A design is only 'manufacturable' if the BOM lists, for every part: material_id, thickness/section, process, finish, quantity, and the fastener family for each joint. Missing fields cap the manufacturability score at 60.",
+      "statement_tr": "Bir tasarım yalnızca BOM her parça için şunları listeliyorsa 'üretilebilir'dir: material_id, kalınlık/kesit, süreç, bitiş, adet ve her birleşim için bağlantı ailesi. Eksik alanlar üretilebilirlik skorunu 60'ta sınırlar.",
+      "severity": "major",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "all required BOM fields present for all parts",
+      "user_feedback_tr": "BOM eksik: {missing_fields}. Üretim planlanamaz.",
+      "feature_impact": {
+        "manufacturability": -0.4
+      }
+    }
+  ],
+  "design_logic_rules": [
+    {
+      "check_id": "DL-001",
+      "name": "material_form_coherence",
+      "name_tr": "Malzeme-Form Uyumu",
+      "statement": "The form must be achievable in the chosen material: concrete cannot be slender/lacy, glass cannot be carved, textile cannot be a primary structure, stone cannot cantilever. Cross-check against the style's forbidden_materials and materials[].structural_grade.",
+      "statement_tr": "Form seçilen malzemeyle yapılabilir olmalı: beton narin/dantel gibi olamaz, cam oyulamaz, tekstil birincil yapı olamaz, taş konsol yapamaz. Stilin forbidden_materials ve materials[].structural_grade alanlarıyla çapraz kontrol.",
+      "severity": "hard_fail",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "material_capability_check(form, material)",
+      "user_feedback_tr": "{material_tr} bu formu taşıyamaz: {reason}. Malzemeyi veya formu değiştir.",
+      "feature_impact": {
+        "material_honesty": -0.4,
+        "structural_plausibility": -0.3
+      }
+    },
+    {
+      "check_id": "DL-002",
+      "name": "ornament_style_consistency",
+      "name_tr": "Süsleme-Stil Tutarlılığı",
+      "statement": "Ornament level of every part must be <= the style's ornament_rules.max_level, and every motif must appear in the style's motif_vocabulary (or be explicitly justified as a variation_axis).",
+      "statement_tr": "Her parçanın süsleme düzeyi stilin ornament_rules.max_level değerini aşmamalı ve her motif stilin motif_vocabulary listesinde bulunmalı (veya bir variation_axis olarak açıkça gerekçelendirilmeli).",
+      "severity": "major",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "for each part: ornament_level <= style.ornament_rules.max_level AND motifs subset of style.motif_vocabulary",
+      "user_feedback_tr": "{part_name_tr} süslemesi ({actual}) stilin sınırını ({max}) aşıyor veya motif ({motif}) bu stile ait değil.",
+      "feature_impact": {
+        "ornament_density": 0.2,
+        "style_consistency": -0.2
+      }
+    },
+    {
+      "check_id": "DL-003",
+      "name": "style_forbidden_signal_absence",
+      "name_tr": "Stil Yasak Sinyallerinin Yokluğu",
+      "statement": "No forbidden_signal of the selected style may be present at 'hard' severity. Soft-severity signals reduce the style score but do not reject.",
+      "statement_tr": "Seçilen stilin 'hard' önem derecesindeki hiçbir yasak sinyali bulunmamalı. 'Soft' sinyaller stil skorunu düşürür ama reddetmez.",
+      "severity": "hard_fail",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "for each style.forbidden_signals where severity == 'hard': detected_by features must not violate",
+      "user_feedback_tr": "Stil ihlali: {signal_tr} ({style_tr}). Bu sinyal {severity} seviyesinde yasak.",
+      "feature_impact": {
+        "style_consistency": -0.35
+      }
+    },
+    {
+      "check_id": "DL-004",
+      "name": "single_material_family_discipline",
+      "name_tr": "Malzeme Ailesi Disiplini",
+      "statement": "Max 3 material families per piece (e.g. timber + metal + textile). A 4th family requires an explicit design justification and reduces the coherence score.",
+      "statement_tr": "Parça başına en fazla 3 malzeme ailesi (örn. ahşap + metal + tekstil). 4. aile açık bir tasarım gerekçesi gerektirir ve tutarlılık skorunu düşürür.",
+      "severity": "minor",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "count(distinct material_family) <= 3",
+      "user_feedback_tr": "{n} farklı malzeme ailesi kullanılmış (önerilen en fazla 3). Tasarım dağınık okunuyor.",
+      "feature_impact": {
+        "aesthetic_coherence": -0.15
+      }
+    },
+    {
+      "check_id": "DL-005",
+      "name": "sculpture_vs_usability",
+      "name_tr": "Heykel mi Kullanılabilir mi",
+      "statement": "A piece may be sculptural, but if its furniture_type has a functional purpose it MUST pass all ERG rules for that type at 'major' severity or above. Artistic freedom applies to form and material, not to the ergonomic envelope.",
+      "statement_tr": "Bir parça heykelsi olabilir ama furniture_type'ının işlevsel bir amacı varsa o tür için tüm ERG kurallarını 'major' ve üstü önem derecesinde GEÇMELİDİR. Sanatsal serbestlik form ve malzemede geçerlidir, ergonomik zarfta değil.",
+      "severity": "hard_fail",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "all ERG rules with severity >= major must pass",
+      "user_feedback_tr": "Bu tasarım heykel gibi duruyor ama {type_tr} olarak kullanılamıyor: {failed_ergonomic_checks}. Sanatsal serbestlik ergonomik zarfı kapsamaz.",
+      "feature_impact": {
+        "ergonomic_compliance": -0.5
+      }
+    },
+    {
+      "check_id": "DL-006",
+      "name": "proportion_consistency",
+      "name_tr": "Oran Tutarlılığı",
+      "statement": "Measured proportions must fall within the taxonomy's canonical_proportions bands, or within the style's proportion overrides. Deviation beyond 2x tolerance is a major issue.",
+      "statement_tr": "Ölçülen oranlar taksonominin canonical_proportions bantları içinde veya stilin proportion geçersiz kılmaları içinde olmalı. Toleransın 2 katını aşan sapma ciddi bir sorundur.",
+      "severity": "major",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "for each proportion: value in [min - tolerance, max + tolerance]",
+      "user_feedback_tr": "{proportion_name} oranı {value} — beklenen {min}-{max}. Bu parça {type_tr} olarak yanlış okunuyor.",
+      "feature_impact": {
+        "aesthetic_coherence": -0.2
+      }
+    },
+    {
+      "check_id": "DL-007",
+      "name": "colour_palette_compliance",
+      "name_tr": "Renk Paleti Uyumu",
+      "statement": "Every part colour must map to the style palette within deltaE <= 25, and no role's max_coverage may be exceeded. Forbidden colours are a hard fail.",
+      "statement_tr": "Her parça rengi deltaE <= 25 içinde stil paletine eşleşmeli ve hiçbir rolün max_coverage değeri aşılmamalı. Yasak renkler hard fail'dir.",
+      "severity": "major",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "deltaE(part_color, nearest_palette_entry) <= 25 AND coverage[role] <= max_coverage AND color not in forbidden_colors",
+      "user_feedback_tr": "{part_name_tr} rengi {hex} stil paletinin dışında (en yakın {nearest}, deltaE {de}). {coverage_note}",
+      "feature_impact": {
+        "chroma_restraint": -0.2,
+        "style_consistency": -0.15
+      }
+    },
+    {
+      "check_id": "DL-008",
+      "name": "no_anatomy_impossible",
+      "name_tr": "Anatomik Olarak İmkânsız Yapı Yok",
+      "statement": "FORBIDDEN in any output: mismatched leg counts/lengths, parts merging into each other, floating objects with no ground contact, duplicated components, a backrest unconnected to the frame, twisted frames, melted geometry, symmetric-where-asymmetric-intended. This is the primary guard against AI hallucination.",
+      "statement_tr": "Her çıktıda YASAK: uyumsuz bacak sayısı/uzunluğu, birbirine karışan parçalar, zemine teması olmayan yüzen nesneler, tekrarlanmış bileşenler, çerçeveye bağlı olmayan sırtlık, çarpık çerçeveler, erimiş geometri, asimetrik olması gereken yerde simetri. Bu, AI halüsinasyonuna karşı birincil korumadır.",
+      "severity": "hard_fail",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "VLM anatomy_checklist + geometric consistency checks (leg length variance <= 3%, part count matches instance_count)",
+      "user_feedback_tr": "Anatomi hatası: {defect_tr}. Bu bir üretim hatası değil, bir üretim (AI) hatası — yeniden üret.",
+      "feature_impact": {
+        "structural_plausibility": -0.6,
+        "aesthetic_coherence": -0.4
+      }
+    },
+    {
+      "check_id": "DL-009",
+      "name": "novelty_guard",
+      "name_tr": "Özgünlük Koruması",
+      "statement": "The output must not reproduce the reference silhouette. Require >= design_dna.novelty_guard.min_variation_axes_used variation axes to be exercised, forbid_direct_silhouette_copy must be true, and originality_check >= 0.6.",
+      "statement_tr": "Çıktı referans silueti yeniden üretmemeli. En az design_dna.novelty_guard.min_variation_axes_used varyasyon ekseni kullanılmalı, forbid_direct_silhouette_copy true olmalı ve originality_check >= 0.6 olmalı.",
+      "severity": "hard_fail",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "variation_axes_used >= min_variation_axes_used AND silhouette_iou_vs_reference < 0.85 AND originality_check >= 0.6",
+      "user_feedback_tr": "Çıktı referansa çok benziyor (siluet benzerliği {iou}). En az {n} varyasyon ekseni kullan: {axes}.",
+      "feature_impact": {
+        "originality_check": -0.5
+      }
+    },
+    {
+      "check_id": "DL-010",
+      "name": "prohibited_materials_legal",
+      "name_tr": "Yasaklı Malzemeler (Yasal)",
+      "statement": "HARD LEGAL GATE: no ivory, tortoiseshell, rhinoceros horn, CITES Appendix I timber (e.g. certain Dalbergia/rosewood species), endangered-species leather, or asbestos-containing material may be specified anywhere in the design.",
+      "statement_tr": "SERT YASAL GEÇİT: tasarımda hiçbir yerde fildişi, bağa, gergedan boynuzu, CITES Ek I ahşabı (örn. belirli Dalbergia/gül ağacı türleri), nesli tehlikedeki türlerin derisi veya asbest içeren malzeme belirtilemez.",
+      "severity": "hard_fail",
+      "applies_to": [
+        "ALL"
+      ],
+      "test": "material_id not in prohibited_materials.legal_bans",
+      "user_feedback_tr": "YASAL SORUN: {material_tr} yasaklı/kısıtlı malzeme ({reason}). {alternatives} ile değiştir.",
+      "feature_impact": {
+        "material_legality": -1.0
+      }
+    }
+  ],
+  "scoring_rubrics": {
+    "style_consistency_score": {
+      "name_tr": "Stil Tutarlılık Skoru",
+      "range": [
+        0,
+        100
+      ],
+      "formula": "computed by rules/style_scoring_rules.json (weighted cosine similarity minus gate penalties)",
+      "inputs": [
+        "measured feature vector",
+        "style target_vector",
+        "style weights",
+        "hard_gates"
+      ],
+      "thresholds": {
+        "release_min": 70,
+        "showcase_min": 85,
+        "reject_below": 40
+      },
+      "reported_as": "scores.style_consistency.value + .grade + .breakdown[]"
+    },
+    "manufacturability_score": {
+      "name_tr": "Üretilebilirlik Skoru",
+      "range": [
+        0,
+        100
+      ],
+      "formula": "100 * (0.35*structural_pass_ratio + 0.30*process_feasibility + 0.20*bom_completeness + 0.15*cost_realism) - penalties",
+      "components": {
+        "structural_pass_ratio": {
+          "weight": 0.35,
+          "definition": "passed STR checks / total applicable STR checks"
+        },
+        "process_feasibility": {
+          "weight": 0.3,
+          "definition": "1 - mean(difficulty/5 adjusted by MFG failures); penalized by MFG-001..MFG-009 failures"
+        },
+        "bom_completeness": {
+          "weight": 0.2,
+          "definition": "present BOM fields / required BOM fields"
+        },
+        "cost_realism": {
+          "weight": 0.15,
+          "definition": "1 if all parts have a cost_tier within the declared budget band, else scaled down"
+        }
+      },
+      "penalties": {
+        "hard_fail": 100,
+        "major": 12,
+        "minor": 4,
+        "info": 0
+      },
+      "thresholds": {
+        "release_min": 65,
+        "production_ready_min": 80,
+        "reject_below": 35
+      },
+      "reported_as": "scores.manufacturability.value + .grade + .breakdown[]"
+    },
+    "structural_integrity_score": {
+      "name_tr": "Yapısal Bütünlük Skoru",
+      "range": [
+        0,
+        100
+      ],
+      "formula": "100 * (passed STR + ERG checks weighted by severity) / total applicable",
+      "weights": {
+        "hard_fail": 1.0,
+        "major": 0.6,
+        "minor": 0.25
+      },
+      "thresholds": {
+        "release_min": 75,
+        "reject_below": 50
+      }
+    },
+    "ergonomics_score": {
+      "name_tr": "Ergonomi Skoru",
+      "range": [
+        0,
+        100
+      ],
+      "formula": "100 * passed ERG checks / applicable ERG checks (severity-weighted)",
+      "thresholds": {
+        "release_min": 70,
+        "reject_below": 45
+      },
+      "note": "Kullanılabilir iddiası olan her mobilya için zorunlu; 'pure sculpture' modunda bile raporlanır ama release_decision'ı bloklamaz (kullanıcı beyanı gerekir)."
+    },
+    "aesthetic_coherence_score": {
+      "name_tr": "Estetik Tutarlılık Skoru",
+      "range": [
+        0,
+        100
+      ],
+      "formula": "100 * (0.4*proportion_compliance + 0.25*palette_compliance + 0.2*material_family_discipline + 0.15*gesture_discipline)",
+      "thresholds": {
+        "release_min": 60
+      }
+    },
+    "originality_score": {
+      "name_tr": "Özgünlük Skoru",
+      "range": [
+        0,
+        100
+      ],
+      "formula": "100 * originality_check feature (from retrieval + silhouette IoU)",
+      "thresholds": {
+        "release_min": 60,
+        "hard_reject_below": 30
+      },
+      "note": "30'un altında = bilinen bir tasarıma tehlikeli derecede benzer. Çıktı yayımlanmaz."
+    },
+    "overall_score": {
+      "name_tr": "Genel Skor",
+      "range": [
+        0,
+        100
+      ],
+      "formula": "weighted mean: style 0.25, manufacturability 0.25, structural 0.2, ergonomics 0.15, aesthetic 0.1, originality 0.05 — then multiply by 0 if any hard_fail is active",
+      "release_decision": {
+        "approved": "overall >= 75 AND no hard_fail AND style >= 70 AND manufacturability >= 65",
+        "needs_revision": "overall 50-74 OR one major failure",
+        "rejected": "overall < 50 OR any hard_fail"
+      }
+    }
+  },
+  "materials": {
+    "description": "Malzeme özellikleri tablosu. Kural motoru tüm fiziksel kontrolleri buradan okur.",
+    "families": {
+      "timber": [
+        "solid_walnut",
+        "solid_oak",
+        "blackened_oak",
+        "ash_light_oiled",
+        "oak_white_soaped",
+        "beech",
+        "hinoki_or_light_softwood",
+        "timber_rough_sawn",
+        "timber_charred",
+        "bamboo_laminated",
+        "walnut_dark_oiled"
+      ],
+      "panel": [
+        "plywood_birch",
+        "mdf_lacquered",
+        "macassar_ebony_veneer",
+        "walnut_burl_veneer",
+        "linoleum_furniture_grade"
+      ],
+      "stone": [
+        "marble_honed",
+        "marble_honed_or_polished",
+        "granite_flamed",
+        "stone_honed_granite",
+        "limestone_honed",
+        "terrazzo_coarse"
+      ],
+      "concrete": [
+        "concrete_cast",
+        "concrete_board_formed",
+        "concrete_pigmented_dark"
+      ],
+      "metal": [
+        "steel_blackened",
+        "steel_folded_raw",
+        "steel_chromed_tube",
+        "steel_black_powder_coated",
+        "aluminium_anodized",
+        "brass_aged",
+        "brass_polished",
+        "raw_brass_unlacquered",
+        "bronze_patinated",
+        "copper_raw",
+        "chrome_polished",
+        "iron_black_matte",
+        "blackened_steel_thin"
+      ],
+      "glass": [
+        "glass_clear_tempered",
+        "glass_smoked",
+        "glass_mirrored"
+      ],
+      "textile": [
+        "linen_natural",
+        "linen_heavy",
+        "wool_boucle",
+        "wool_boucle_light",
+        "wool_felt_dark",
+        "felt_wool",
+        "canvas_waxed",
+        "velvet_deep",
+        "paper_cord",
+        "cane_webbing",
+        "rattan"
+      ],
+      "leather": [
+        "leather_vegetable_tanned",
+        "leather_aniline_black",
+        "leather_thick_natural",
+        "shagreen_or_stingray"
+      ],
+      "polymer": [
+        "acrylic_cast",
+        "rubber_isolation_pad",
+        "foam_hr_35kg",
+        "ivory_alternative_resin",
+        "lacquer_black_gloss",
+        "lacquer_primary_red",
+        "lacquer_primary_blue",
+        "lacquer_primary_yellow"
+      ],
+      "ceramic": [
+        "ceramic_glazed"
+      ]
+    },
+    "entries": [
+      {
+        "material_id": "solid_walnut",
+        "name_tr": "Masif ceviz",
+        "family": "timber",
+        "density_kg_m3": 660,
+        "modulus_of_rupture_mpa": 100,
+        "modulus_of_elasticity_gpa": 11.6,
+        "janka_n": 4490,
+        "structural_grade": "primary_load_bearing",
+        "min_thickness_mm": 12,
+        "min_structural_thickness_mm": 18,
+        "max_shelf_span_mm": {
+          "18": 600,
+          "25": 800,
+          "32": 1000
+        },
+        "slenderness_limit": 18,
+        "valid_processes": [
+          "cnc_milling",
+          "cnc_routing",
+          "lathe_turning",
+          "mortise_tenon",
+          "dovetail",
+          "doweling",
+          "steam_bending",
+          "hand_carving",
+          "oil_finishing",
+          "adhesive_bonding"
+        ],
+        "invalid_processes": [
+          "concrete_casting",
+          "chrome_plating",
+          "injection_molding"
+        ],
+        "valid_finishes": [
+          "oiled",
+          "waxed",
+          "matte_lacquer",
+          "satin_lacquer",
+          "soap_finished",
+          "raw"
+        ],
+        "movement_mm_per_400mm": 1.8,
+        "cost_tier": 4,
+        "weight_class": "medium",
+        "thermal_conductivity_w_mk": 0.15,
+        "skin_contact_comfort": "good",
+        "cites_restricted": false,
+        "notes": "Stabil, iyi işlenir, pahalı. Çekirdek odun rengi değişkendir — parti eşleştirmesi gerekir."
+      },
+      {
+        "material_id": "blackened_oak",
+        "name_tr": "Karartılmış meşe",
+        "family": "timber",
+        "density_kg_m3": 720,
+        "modulus_of_rupture_mpa": 99,
+        "modulus_of_elasticity_gpa": 12.2,
+        "janka_n": 5990,
+        "structural_grade": "primary_load_bearing",
+        "min_thickness_mm": 12,
+        "min_structural_thickness_mm": 18,
+        "max_shelf_span_mm": {
+          "18": 620,
+          "25": 820,
+          "32": 1050
+        },
+        "slenderness_limit": 18,
+        "valid_processes": [
+          "cnc_milling",
+          "cnc_routing",
+          "lathe_turning",
+          "mortise_tenon",
+          "doweling",
+          "steam_bending",
+          "shou_sugi_ban",
+          "oil_finishing",
+          "hand_carving"
+        ],
+        "valid_finishes": [
+          "blackened",
+          "charred",
+          "oiled",
+          "matte_lacquer"
+        ],
+        "movement_mm_per_400mm": 2.0,
+        "cost_tier": 3,
+        "skin_contact_comfort": "good",
+        "cites_restricted": false,
+        "notes": "Demir-asetat (ebonising) ile karartma tanen reaksiyonuna dayanır; meşede iyi çalışır, çamda çalışmaz."
+      },
+      {
+        "material_id": "ash_light_oiled",
+        "name_tr": "Açık yağlı dişbudak",
+        "family": "timber",
+        "density_kg_m3": 690,
+        "modulus_of_rupture_mpa": 103,
+        "modulus_of_elasticity_gpa": 12.0,
+        "janka_n": 5870,
+        "structural_grade": "primary_load_bearing",
+        "min_thickness_mm": 12,
+        "min_structural_thickness_mm": 18,
+        "max_shelf_span_mm": {
+          "18": 640,
+          "25": 850
+        },
+        "slenderness_limit": 18,
+        "valid_processes": [
+          "steam_bending",
+          "cnc_milling",
+          "lathe_turning",
+          "mortise_tenon",
+          "doweling",
+          "oil_finishing"
+        ],
+        "valid_finishes": [
+          "oiled",
+          "soap_finished",
+          "matte_lacquer",
+          "raw"
+        ],
+        "movement_mm_per_400mm": 2.2,
+        "cost_tier": 2,
+        "skin_contact_comfort": "good",
+        "cites_restricted": false,
+        "notes": "En iyi buharla bükme ağaçlarından biri. Emerald ash borer nedeniyle tedarik riski var — alternatif: kayın."
+      },
+      {
+        "material_id": "oak_white_soaped",
+        "name_tr": "Beyaz sabunlu meşe",
+        "family": "timber",
+        "density_kg_m3": 720,
+        "structural_grade": "primary_load_bearing",
+        "min_thickness_mm": 12,
+        "min_structural_thickness_mm": 18,
+        "max_shelf_span_mm": {
+          "18": 620,
+          "25": 820
+        },
+        "slenderness_limit": 18,
+        "valid_processes": [
+          "cnc_milling",
+          "mortise_tenon",
+          "steam_bending",
+          "oil_finishing"
+        ],
+        "valid_finishes": [
+          "soap_finished",
+          "oiled",
+          "limed",
+          "matte_lacquer"
+        ],
+        "cost_tier": 3,
+        "skin_contact_comfort": "good",
+        "notes": "Sabun bitişi düzenli bakım ister (yılda 1-2 kez)."
+      },
+      {
+        "material_id": "plywood_birch",
+        "name_tr": "Huş kontrplak",
+        "family": "panel",
+        "density_kg_m3": 680,
+        "modulus_of_rupture_mpa": 60,
+        "modulus_of_elasticity_gpa": 10.0,
+        "structural_grade": "structural",
+        "min_thickness_mm": 6,
+        "min_structural_thickness_mm": 12,
+        "max_shelf_span_mm": {
+          "12": 500,
+          "18": 700,
+          "25": 900
+        },
+        "slenderness_limit": 25,
+        "valid_processes": [
+          "cnc_routing",
+          "press_forming",
+          "laser_cutting",
+          "doweling",
+          "biscuit_joint",
+          "veneer_pressing"
+        ],
+        "valid_finishes": [
+          "matte_lacquer",
+          "oiled",
+          "soap_finished",
+          "raw"
+        ],
+        "cost_tier": 2,
+        "skin_contact_comfort": "good",
+        "notes": "Çapraz bantlı olduğu için masif ahşaba göre çok daha stabil. Kenarlar katmanları gösterir — bu bir özelliktir, kusur değil."
+      },
+      {
+        "material_id": "mdf_lacquered",
+        "name_tr": "Lakeli MDF",
+        "family": "panel",
+        "density_kg_m3": 750,
+        "modulus_of_rupture_mpa": 40,
+        "structural_grade": "semi_structural",
+        "min_thickness_mm": 9,
+        "min_structural_thickness_mm": 16,
+        "max_shelf_span_mm": {
+          "16": 500,
+          "19": 600,
+          "25": 750
+        },
+        "valid_processes": [
+          "cnc_routing",
+          "veneer_pressing",
+          "adhesive_bonding",
+          "surface_grinding"
+        ],
+        "valid_finishes": [
+          "matte_lacquer",
+          "satin_lacquer",
+          "gloss_lacquer",
+          "powder_coated"
+        ],
+        "cost_tier": 2,
+        "skin_contact_comfort": "fair",
+        "notes": "Vida tutma zayıf — insert veya vida dübeli kullan. Nemden şişer; altı yüzü de mühürle."
+      },
+      {
+        "material_id": "concrete_cast",
+        "name_tr": "Dökme beton",
+        "family": "concrete",
+        "density_kg_m3": 2300,
+        "compressive_strength_mpa": 30,
+        "tensile_strength_mpa": 2.5,
+        "structural_grade": "structural",
+        "min_thickness_mm": 40,
+        "min_structural_thickness_mm": 60,
+        "span_depth_ratio": 12,
+        "max_cantilever_ratio": 0.25,
+        "max_shelf_span_mm": {
+          "40": 500,
+          "60": 600
+        },
+        "slenderness_limit": 8,
+        "valid_processes": [
+          "concrete_casting",
+          "surface_grinding",
+          "waterjet"
+        ],
+        "valid_finishes": [
+          "raw",
+          "honed",
+          "matte_lacquer"
+        ],
+        "cost_tier": 3,
+        "weight_class": "very_heavy",
+        "thermal_conductivity_w_mk": 1.4,
+        "skin_contact_comfort": "poor",
+        "notes": "28 günlük kür. Çekme dayanımı çok düşük — lif veya donatı zorunlu. Kalıp sızdırmazlığı kenar kalitesini belirler."
+      },
+      {
+        "material_id": "concrete_board_formed",
+        "name_tr": "Kalıp izli beton",
+        "family": "concrete",
+        "density_kg_m3": 2300,
+        "compressive_strength_mpa": 30,
+        "tensile_strength_mpa": 2.5,
+        "structural_grade": "structural",
+        "min_thickness_mm": 40,
+        "min_structural_thickness_mm": 60,
+        "span_depth_ratio": 12,
+        "slenderness_limit": 8,
+        "valid_processes": [
+          "concrete_casting",
+          "surface_grinding"
+        ],
+        "valid_finishes": [
+          "raw",
+          "honed"
+        ],
+        "cost_tier": 3,
+        "weight_class": "very_heavy",
+        "skin_contact_comfort": "poor",
+        "notes": "Kalıp: melamin kaplı kontrplak veya işlenmiş MDF, sızdırmaz vidalı birleşim. Kalıp yağı şart."
+      },
+      {
+        "material_id": "marble_honed",
+        "name_tr": "Honlu mermer",
+        "family": "stone",
+        "density_kg_m3": 2700,
+        "modulus_of_rupture_mpa": 12,
+        "structural_grade": "semi_structural",
+        "min_thickness_mm": 20,
+        "min_structural_thickness_mm": 30,
+        "max_cantilever_mm": 0,
+        "max_shelf_span_mm": {
+          "20": 500,
+          "30": 700
+        },
+        "slenderness_limit": 6,
+        "valid_processes": [
+          "waterjet",
+          "surface_grinding",
+          "cnc_milling",
+          "polishing"
+        ],
+        "valid_finishes": [
+          "honed",
+          "polished",
+          "flamed"
+        ],
+        "cost_tier": 5,
+        "weight_class": "very_heavy",
+        "thermal_conductivity_w_mk": 2.5,
+        "skin_contact_comfort": "poor",
+        "notes": "Asit lekelenmesi (limon, şarap) — imprenye edici sızdırmazlık şart, topical değil. Kırılgan: noktasal yük yasak."
+      },
+      {
+        "material_id": "stone_honed_granite",
+        "name_tr": "Honlu granit",
+        "family": "stone",
+        "density_kg_m3": 2750,
+        "modulus_of_rupture_mpa": 18,
+        "structural_grade": "semi_structural",
+        "min_thickness_mm": 20,
+        "min_structural_thickness_mm": 30,
+        "max_cantilever_mm": 50,
+        "max_shelf_span_mm": {
+          "30": 800
+        },
+        "slenderness_limit": 6,
+        "valid_processes": [
+          "waterjet",
+          "surface_grinding",
+          "flamed",
+          "cnc_milling"
+        ],
+        "valid_finishes": [
+          "honed",
+          "flamed",
+          "polished"
+        ],
+        "cost_tier": 5,
+        "weight_class": "very_heavy",
+        "skin_contact_comfort": "poor"
+      },
+      {
+        "material_id": "limestone_honed",
+        "name_tr": "Honlu kireçtaşı",
+        "family": "stone",
+        "density_kg_m3": 2500,
+        "modulus_of_rupture_mpa": 9,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 25,
+        "min_structural_thickness_mm": 30,
+        "max_cantilever_mm": 0,
+        "valid_processes": [
+          "waterjet",
+          "cnc_milling",
+          "surface_grinding"
+        ],
+        "valid_finishes": [
+          "honed",
+          "sandblasted",
+          "raw"
+        ],
+        "cost_tier": 4,
+        "weight_class": "heavy",
+        "skin_contact_comfort": "fair",
+        "notes": "Gözenekli — leke tutar. Sızdırmazlık zorunlu."
+      },
+      {
+        "material_id": "terrazzo_coarse",
+        "name_tr": "Kaba terazzo",
+        "family": "stone",
+        "density_kg_m3": 2350,
+        "structural_grade": "semi_structural",
+        "min_thickness_mm": 25,
+        "valid_processes": [
+          "concrete_casting",
+          "surface_grinding",
+          "waterjet"
+        ],
+        "valid_finishes": [
+          "honed",
+          "polished"
+        ],
+        "cost_tier": 3,
+        "weight_class": "heavy",
+        "skin_contact_comfort": "fair"
+      },
+      {
+        "material_id": "steel_blackened",
+        "name_tr": "Karartılmış çelik",
+        "family": "metal",
+        "density_kg_m3": 7850,
+        "yield_strength_mpa": 250,
+        "structural_grade": "primary_load_bearing",
+        "min_thickness_mm": 3,
+        "min_structural_thickness_mm": 5,
+        "max_shelf_span_mm": {
+          "6": 900,
+          "10": 1200
+        },
+        "slenderness_limit": 30,
+        "valid_processes": [
+          "laser_cutting",
+          "waterjet",
+          "welding_mig",
+          "welding_tig",
+          "press_forming",
+          "cold_bending",
+          "surface_grinding",
+          "powder_coating"
+        ],
+        "valid_finishes": [
+          "blackened",
+          "powder_coated",
+          "brushed",
+          "raw",
+          "matte_lacquer"
+        ],
+        "cost_tier": 3,
+        "weight_class": "heavy",
+        "thermal_conductivity_w_mk": 45,
+        "skin_contact_comfort": "poor",
+        "notes": "Siyah oksit ince bir dönüşüm kaplamasıdır, koruyucu değildir — üstüne mum veya yağ gerekir."
+      },
+      {
+        "material_id": "steel_folded_raw",
+        "name_tr": "Ham bükümlü çelik",
+        "family": "metal",
+        "density_kg_m3": 7850,
+        "yield_strength_mpa": 250,
+        "structural_grade": "primary_load_bearing",
+        "min_thickness_mm": 3,
+        "min_structural_thickness_mm": 6,
+        "slenderness_limit": 30,
+        "valid_processes": [
+          "laser_cutting",
+          "press_forming",
+          "welding_mig",
+          "welding_tig",
+          "cold_bending"
+        ],
+        "valid_finishes": [
+          "raw",
+          "blackened",
+          "powder_coated",
+          "oiled"
+        ],
+        "cost_tier": 3,
+        "weight_class": "heavy",
+        "skin_contact_comfort": "poor",
+        "notes": "Büküm iç yarıçapı >= 1x kalınlık (tercihen 1.5x) yoksa dış yüzeyde çatlak."
+      },
+      {
+        "material_id": "steel_chromed_tube",
+        "name_tr": "Kromlu boru çelik",
+        "family": "metal",
+        "density_kg_m3": 7850,
+        "yield_strength_mpa": 235,
+        "structural_grade": "primary_load_bearing",
+        "min_thickness_mm": 1.5,
+        "min_structural_thickness_mm": 1.5,
+        "min_outer_diameter_mm": 20,
+        "slenderness_limit": 40,
+        "min_bend_radius_multiplier": 2.0,
+        "preferred_bend_radius_multiplier": 4.0,
+        "valid_processes": [
+          "cold_bending",
+          "welding_tig",
+          "chrome_plating",
+          "laser_cutting"
+        ],
+        "valid_finishes": [
+          "polished",
+          "brushed",
+          "powder_coated"
+        ],
+        "cost_tier": 3,
+        "weight_class": "medium",
+        "skin_contact_comfort": "poor",
+        "notes": "Hexavalent chrome çevresel risk; trivalent chrome veya toz boya tercih et."
+      },
+      {
+        "material_id": "aluminium_anodized",
+        "name_tr": "Anodize alüminyum",
+        "family": "metal",
+        "density_kg_m3": 2700,
+        "yield_strength_mpa": 200,
+        "structural_grade": "structural",
+        "min_thickness_mm": 3,
+        "min_structural_thickness_mm": 4,
+        "slenderness_limit": 25,
+        "valid_processes": [
+          "cnc_milling",
+          "press_forming",
+          "anodizing",
+          "laser_cutting"
+        ],
+        "valid_finishes": [
+          "anodized",
+          "brushed",
+          "powder_coated"
+        ],
+        "cost_tier": 3,
+        "weight_class": "light",
+        "skin_contact_comfort": "fair"
+      },
+      {
+        "material_id": "brass_aged",
+        "name_tr": "Eskitilmiş pirinç",
+        "family": "metal",
+        "density_kg_m3": 8500,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 2,
+        "valid_processes": [
+          "casting_investment",
+          "lathe_turning",
+          "press_forming",
+          "patinated",
+          "polishing"
+        ],
+        "valid_finishes": [
+          "patinated",
+          "brushed",
+          "polished",
+          "raw"
+        ],
+        "cost_tier": 4,
+        "weight_class": "heavy",
+        "skin_contact_comfort": "good",
+        "notes": "Yapısal değil — yalnızca donanım, kakma ve pabuç."
+      },
+      {
+        "material_id": "brass_polished",
+        "name_tr": "Parlak pirinç",
+        "family": "metal",
+        "density_kg_m3": 8500,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 2,
+        "valid_processes": [
+          "casting_investment",
+          "lathe_turning",
+          "polishing"
+        ],
+        "valid_finishes": [
+          "polished",
+          "brushed",
+          "satin_lacquer"
+        ],
+        "cost_tier": 4,
+        "notes": "Parmak izi tutar; lake kaplama gerekir."
+      },
+      {
+        "material_id": "chrome_polished",
+        "name_tr": "Parlak krom",
+        "family": "metal",
+        "density_kg_m3": 7850,
+        "structural_grade": "non_structural",
+        "valid_processes": [
+          "chrome_plating"
+        ],
+        "valid_finishes": [
+          "polished",
+          "mirror"
+        ],
+        "cost_tier": 3,
+        "notes": "Kaplama katmanı (Cu-Ni-Cr üçlü). Alt malzeme çelik veya pirinç olmalı; tek başına yapısal değildir.",
+        "min_thickness_mm": 0.05
+      },
+      {
+        "material_id": "glass_clear_tempered",
+        "name_tr": "Şeffaf temperli cam",
+        "family": "glass",
+        "density_kg_m3": 2500,
+        "modulus_of_rupture_mpa": 120,
+        "structural_grade": "semi_structural",
+        "min_thickness_mm": 6,
+        "min_structural_thickness_mm": 10,
+        "max_shelf_span_mm": {
+          "8": 600,
+          "10": 800,
+          "12": 1000,
+          "19": 1400
+        },
+        "valid_processes": [
+          "waterjet",
+          "tempering",
+          "polishing",
+          "adhesive_bonding"
+        ],
+        "valid_finishes": [
+          "polished",
+          "matte_lacquer"
+        ],
+        "cost_tier": 3,
+        "weight_class": "heavy",
+        "skin_contact_comfort": "fair",
+        "notes": "Temperleme SONRA işlem yapılamaz — tüm delik/kesim temperlemeden önce. Kenar rodajı zorunlu."
+      },
+      {
+        "material_id": "glass_smoked",
+        "name_tr": "Füme cam",
+        "family": "glass",
+        "density_kg_m3": 2500,
+        "structural_grade": "semi_structural",
+        "min_thickness_mm": 6,
+        "min_structural_thickness_mm": 8,
+        "max_shelf_span_mm": {
+          "8": 600,
+          "10": 800
+        },
+        "valid_processes": [
+          "tempering",
+          "polishing",
+          "waterjet"
+        ],
+        "valid_finishes": [
+          "polished"
+        ],
+        "cost_tier": 3,
+        "notes": "Tintli cam ısıyı emer — güneş altında termal kırılma riski; temperli olmalı."
+      },
+      {
+        "material_id": "linen_natural",
+        "name_tr": "Doğal keten",
+        "family": "textile",
+        "density_kg_m3": 300,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 1,
+        "valid_processes": [
+          "hand_stitching",
+          "upholstery_stapling"
+        ],
+        "valid_finishes": [
+          "raw",
+          "washed"
+        ],
+        "cost_tier": 2,
+        "martindale_min": 30000,
+        "skin_contact_comfort": "excellent",
+        "notes": "Kırışır — bu bir özelliktir. Ön yıkama (pre-shrunk) şart, aksi halde %3-5 çeker."
+      },
+      {
+        "material_id": "wool_felt_dark",
+        "name_tr": "Koyu yün keçe",
+        "family": "textile",
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 3,
+        "valid_processes": [
+          "cnc_routing",
+          "hand_stitching",
+          "press_forming"
+        ],
+        "valid_finishes": [
+          "raw"
+        ],
+        "cost_tier": 2,
+        "skin_contact_comfort": "good",
+        "notes": "Akustik absorpsiyon sağlar; kendinden destekli panel olarak 9-12 mm kullanılabilir."
+      },
+      {
+        "material_id": "paper_cord",
+        "name_tr": "Kağıt ip",
+        "family": "textile",
+        "structural_grade": "semi_structural",
+        "min_thickness_mm": 3,
+        "valid_processes": [
+          "webbing",
+          "hand_stitching"
+        ],
+        "valid_finishes": [
+          "raw"
+        ],
+        "cost_tier": 2,
+        "skin_contact_comfort": "good",
+        "notes": "20 mm kenar yuvasına gerilir. Islanmamalı. 10-15 yıl ömür, tamir edilebilir."
+      },
+      {
+        "material_id": "cane_webbing",
+        "name_tr": "Hasır örgü",
+        "family": "textile",
+        "structural_grade": "semi_structural",
+        "min_thickness_mm": 2,
+        "valid_processes": [
+          "webbing"
+        ],
+        "valid_finishes": [
+          "raw"
+        ],
+        "cost_tier": 2,
+        "skin_contact_comfort": "good",
+        "notes": "Nemle gevşer, kuruyunca gerilir — montajda ıslatılarak gerilmeli."
+      },
+      {
+        "material_id": "leather_aniline_black",
+        "name_tr": "Siyah anilin deri",
+        "family": "leather",
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 1.2,
+        "valid_processes": [
+          "hand_stitching",
+          "upholstery_stapling"
+        ],
+        "valid_finishes": [
+          "aniline",
+          "semi_aniline",
+          "polished"
+        ],
+        "cost_tier": 4,
+        "skin_contact_comfort": "good",
+        "notes": "Anilin leke tutar; kontrat kullanımı için semi-anilin tercih et."
+      },
+      {
+        "material_id": "leather_thick_natural",
+        "name_tr": "Kalın doğal deri",
+        "family": "leather",
+        "structural_grade": "semi_structural",
+        "min_thickness_mm": 4,
+        "valid_processes": [
+          "hand_stitching",
+          "adhesive_bonding",
+          "press_forming"
+        ],
+        "valid_finishes": [
+          "raw",
+          "oiled"
+        ],
+        "cost_tier": 4,
+        "skin_contact_comfort": "good",
+        "notes": "4-6 mm eyer derisi yapısal bir zar olarak çalışabilir (vida/rivet ile)."
+      },
+      {
+        "material_id": "foam_hr_35kg",
+        "name_tr": "HR sünger 35 kg/m³",
+        "family": "polymer",
+        "density_kg_m3": 35,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 20,
+        "valid_processes": [
+          "foam_cutting",
+          "adhesive_bonding"
+        ],
+        "cost_tier": 3,
+        "skin_contact_comfort": "excellent",
+        "notes": "Oturma için min 30 kg/m³ HR; sırt için 25 kg/m³ yeterli. Yanmazlık standardı: EN 1021-1/2 veya bölgesel eşdeğeri."
+      },
+      {
+        "material_id": "solid_oak",
+        "name_tr": "Açık renk meşe",
+        "family": "timber",
+        "density_kg_m3": 710,
+        "structural_grade": "primary_load_bearing",
+        "min_thickness_mm": 12,
+        "min_structural_thickness_mm": 18,
+        "valid_processes": [
+          "cnc_milling",
+          "cnc_routing",
+          "lathe_turning",
+          "mortise_tenon",
+          "doweling",
+          "oil_finishing",
+          "adhesive_bonding",
+          "steam_bending",
+          "hand_carving"
+        ],
+        "valid_finishes": [
+          "oiled",
+          "waxed",
+          "matte_lacquer",
+          "soap_finished",
+          "raw"
+        ],
+        "cost_tier": 3,
+        "skin_contact_comfort": "good",
+        "modulus_of_rupture_mpa": 98,
+        "modulus_of_elasticity_gpa": 12.0,
+        "janka_n": 5900,
+        "max_shelf_span_mm": {
+          "18": 620,
+          "25": 820,
+          "32": 1050
+        },
+        "slenderness_limit": 18,
+        "movement_mm_per_400mm": 2.0
+      },
+      {
+        "material_id": "beech",
+        "name_tr": "Kayın",
+        "family": "timber",
+        "density_kg_m3": 710,
+        "structural_grade": "primary_load_bearing",
+        "min_thickness_mm": 12,
+        "min_structural_thickness_mm": 18,
+        "valid_processes": [
+          "cnc_milling",
+          "cnc_routing",
+          "lathe_turning",
+          "mortise_tenon",
+          "doweling",
+          "oil_finishing",
+          "adhesive_bonding",
+          "steam_bending"
+        ],
+        "valid_finishes": [
+          "oiled",
+          "waxed",
+          "matte_lacquer",
+          "soap_finished",
+          "raw"
+        ],
+        "cost_tier": 2,
+        "skin_contact_comfort": "good",
+        "modulus_of_rupture_mpa": 105,
+        "modulus_of_elasticity_gpa": 11.7,
+        "janka_n": 5360,
+        "max_shelf_span_mm": {
+          "18": 600,
+          "25": 800
+        },
+        "slenderness_limit": 18,
+        "movement_mm_per_400mm": 2.3
+      },
+      {
+        "material_id": "hinoki_or_light_softwood",
+        "name_tr": "Hinoki / açık yumuşak ağaç",
+        "family": "timber",
+        "density_kg_m3": 430,
+        "structural_grade": "semi_structural",
+        "min_thickness_mm": 14,
+        "min_structural_thickness_mm": 20,
+        "valid_processes": [
+          "cnc_milling",
+          "cnc_routing",
+          "lathe_turning",
+          "mortise_tenon",
+          "doweling",
+          "oil_finishing",
+          "adhesive_bonding",
+          "steam_bending"
+        ],
+        "valid_finishes": [
+          "oiled",
+          "waxed",
+          "matte_lacquer",
+          "soap_finished",
+          "raw"
+        ],
+        "cost_tier": 3,
+        "skin_contact_comfort": "good",
+        "modulus_of_rupture_mpa": 60,
+        "modulus_of_elasticity_gpa": 8.8,
+        "janka_n": 2140,
+        "max_shelf_span_mm": {
+          "18": 500,
+          "25": 650
+        },
+        "slenderness_limit": 14,
+        "movement_mm_per_400mm": 3.0
+      },
+      {
+        "material_id": "timber_rough_sawn",
+        "name_tr": "Kaba biçilmiş kereste",
+        "family": "timber",
+        "density_kg_m3": 620,
+        "structural_grade": "structural",
+        "min_thickness_mm": 16,
+        "min_structural_thickness_mm": 25,
+        "valid_processes": [
+          "cnc_milling",
+          "cnc_routing",
+          "lathe_turning",
+          "mortise_tenon",
+          "doweling",
+          "oil_finishing",
+          "adhesive_bonding",
+          "hand_carving"
+        ],
+        "valid_finishes": [
+          "oiled",
+          "waxed",
+          "matte_lacquer",
+          "soap_finished",
+          "raw"
+        ],
+        "cost_tier": 2,
+        "skin_contact_comfort": "good",
+        "modulus_of_rupture_mpa": 75,
+        "modulus_of_elasticity_gpa": 9.5,
+        "janka_n": 3600,
+        "max_shelf_span_mm": {
+          "25": 700,
+          "50": 1000
+        },
+        "slenderness_limit": 15,
+        "movement_mm_per_400mm": 2.2
+      },
+      {
+        "material_id": "timber_charred",
+        "name_tr": "Yakılmış ahşap (shou sugi ban)",
+        "family": "timber",
+        "density_kg_m3": 600,
+        "structural_grade": "structural",
+        "min_thickness_mm": 16,
+        "min_structural_thickness_mm": 22,
+        "valid_processes": [
+          "cnc_milling",
+          "cnc_routing",
+          "lathe_turning",
+          "mortise_tenon",
+          "doweling",
+          "oil_finishing",
+          "adhesive_bonding",
+          "shou_sugi_ban"
+        ],
+        "valid_finishes": [
+          "charred",
+          "oiled",
+          "raw"
+        ],
+        "cost_tier": 3,
+        "skin_contact_comfort": "good",
+        "modulus_of_rupture_mpa": 70,
+        "modulus_of_elasticity_gpa": 9.0,
+        "janka_n": 3400,
+        "max_shelf_span_mm": {
+          "22": 650
+        },
+        "slenderness_limit": 15,
+        "movement_mm_per_400mm": 2.2
+      },
+      {
+        "material_id": "bamboo_laminated",
+        "name_tr": "Lamine bambu",
+        "family": "timber",
+        "density_kg_m3": 700,
+        "structural_grade": "structural",
+        "min_thickness_mm": 10,
+        "min_structural_thickness_mm": 15,
+        "valid_processes": [
+          "cnc_milling",
+          "cnc_routing",
+          "lathe_turning",
+          "mortise_tenon",
+          "doweling",
+          "oil_finishing",
+          "adhesive_bonding",
+          "lamination_bending"
+        ],
+        "valid_finishes": [
+          "oiled",
+          "waxed",
+          "matte_lacquer",
+          "soap_finished",
+          "raw"
+        ],
+        "cost_tier": 2,
+        "skin_contact_comfort": "good",
+        "modulus_of_rupture_mpa": 90,
+        "modulus_of_elasticity_gpa": 14.0,
+        "janka_n": 4000,
+        "max_shelf_span_mm": {
+          "18": 750
+        },
+        "slenderness_limit": 22,
+        "movement_mm_per_400mm": 1.2
+      },
+      {
+        "material_id": "walnut_dark_oiled",
+        "name_tr": "Koyu yağlı ceviz",
+        "family": "timber",
+        "density_kg_m3": 660,
+        "structural_grade": "primary_load_bearing",
+        "min_thickness_mm": 12,
+        "min_structural_thickness_mm": 18,
+        "valid_processes": [
+          "cnc_milling",
+          "cnc_routing",
+          "lathe_turning",
+          "mortise_tenon",
+          "doweling",
+          "oil_finishing",
+          "adhesive_bonding",
+          "hand_carving",
+          "steam_bending"
+        ],
+        "valid_finishes": [
+          "oiled",
+          "waxed",
+          "matte_lacquer",
+          "soap_finished",
+          "raw"
+        ],
+        "cost_tier": 4,
+        "skin_contact_comfort": "good",
+        "modulus_of_rupture_mpa": 100,
+        "modulus_of_elasticity_gpa": 11.6,
+        "janka_n": 4490,
+        "max_shelf_span_mm": {
+          "18": 600,
+          "25": 800
+        },
+        "slenderness_limit": 18,
+        "movement_mm_per_400mm": 1.8
+      },
+      {
+        "material_id": "linoleum_furniture_grade",
+        "name_tr": "Mobilya sınıfı linolyum",
+        "family": "panel",
+        "density_kg_m3": 1200,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 2,
+        "min_structural_thickness_mm": 2,
+        "valid_processes": [
+          "cnc_routing",
+          "veneer_pressing",
+          "adhesive_bonding",
+          "surface_grinding"
+        ],
+        "valid_finishes": [
+          "matte_lacquer",
+          "satin_lacquer",
+          "gloss_lacquer",
+          "oiled",
+          "raw"
+        ],
+        "cost_tier": 2,
+        "skin_contact_comfort": "good",
+        "modulus_of_rupture_mpa": 25,
+        "modulus_of_elasticity_gpa": 4.0
+      },
+      {
+        "material_id": "concrete_pigmented_dark",
+        "name_tr": "Koyu pigmentli beton",
+        "family": "concrete",
+        "density_kg_m3": 2300,
+        "structural_grade": "structural",
+        "min_thickness_mm": 40,
+        "min_structural_thickness_mm": 60,
+        "valid_processes": [
+          "concrete_casting",
+          "surface_grinding",
+          "waterjet"
+        ],
+        "valid_finishes": [
+          "raw",
+          "honed"
+        ],
+        "cost_tier": 3,
+        "skin_contact_comfort": "poor",
+        "modulus_of_rupture_mpa": 30,
+        "modulus_of_elasticity_gpa": 2.5,
+        "max_shelf_span_mm": {
+          "60": 600
+        },
+        "slenderness_limit": 8,
+        "span_depth_ratio": 12,
+        "max_cantilever_ratio": 0.25,
+        "weight_class": "heavy"
+      },
+      {
+        "material_id": "steel_black_powder_coated",
+        "name_tr": "Siyah toz boyalı çelik",
+        "family": "metal",
+        "density_kg_m3": 7850,
+        "structural_grade": "primary_load_bearing",
+        "min_thickness_mm": 3,
+        "min_structural_thickness_mm": 5,
+        "valid_processes": [
+          "laser_cutting",
+          "press_forming",
+          "welding_tig",
+          "surface_grinding",
+          "powder_coating",
+          "cold_bending"
+        ],
+        "valid_finishes": [
+          "powder_coated",
+          "matte_lacquer"
+        ],
+        "cost_tier": 2,
+        "skin_contact_comfort": "poor",
+        "modulus_of_rupture_mpa": 250,
+        "max_shelf_span_mm": {
+          "6": 900
+        },
+        "slenderness_limit": 30,
+        "weight_class": "heavy"
+      },
+      {
+        "material_id": "bronze_patinated",
+        "name_tr": "Patinalı bronz",
+        "family": "metal",
+        "density_kg_m3": 8800,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 3,
+        "min_structural_thickness_mm": 3,
+        "valid_processes": [
+          "laser_cutting",
+          "press_forming",
+          "welding_tig",
+          "surface_grinding",
+          "casting_sand",
+          "polishing"
+        ],
+        "valid_finishes": [
+          "patinated"
+        ],
+        "cost_tier": 5,
+        "skin_contact_comfort": "fair",
+        "modulus_of_rupture_mpa": 200,
+        "weight_class": "heavy"
+      },
+      {
+        "material_id": "copper_raw",
+        "name_tr": "Ham bakır",
+        "family": "metal",
+        "density_kg_m3": 8900,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 1,
+        "min_structural_thickness_mm": 1,
+        "valid_processes": [
+          "laser_cutting",
+          "press_forming",
+          "welding_tig",
+          "surface_grinding",
+          "forging"
+        ],
+        "valid_finishes": [
+          "raw",
+          "blackened",
+          "brushed",
+          "polished",
+          "patinated",
+          "powder_coated",
+          "matte_lacquer"
+        ],
+        "cost_tier": 4,
+        "skin_contact_comfort": "fair",
+        "modulus_of_rupture_mpa": 70,
+        "weight_class": "heavy"
+      },
+      {
+        "material_id": "raw_brass_unlacquered",
+        "name_tr": "Lakesiz ham pirinç",
+        "family": "metal",
+        "density_kg_m3": 8500,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 2,
+        "min_structural_thickness_mm": 2,
+        "valid_processes": [
+          "laser_cutting",
+          "press_forming",
+          "welding_tig",
+          "surface_grinding"
+        ],
+        "valid_finishes": [
+          "raw",
+          "patinated"
+        ],
+        "cost_tier": 4,
+        "skin_contact_comfort": "good",
+        "modulus_of_rupture_mpa": 200,
+        "weight_class": "heavy"
+      },
+      {
+        "material_id": "blackened_steel_thin",
+        "name_tr": "İnce karartılmış çelik",
+        "family": "metal",
+        "density_kg_m3": 7850,
+        "structural_grade": "structural",
+        "min_thickness_mm": 3,
+        "min_structural_thickness_mm": 5,
+        "valid_processes": [
+          "laser_cutting",
+          "press_forming",
+          "welding_tig",
+          "surface_grinding"
+        ],
+        "valid_finishes": [
+          "raw",
+          "blackened",
+          "brushed",
+          "polished",
+          "patinated",
+          "powder_coated",
+          "matte_lacquer"
+        ],
+        "cost_tier": 3,
+        "skin_contact_comfort": "poor",
+        "modulus_of_rupture_mpa": 250,
+        "max_shelf_span_mm": {
+          "5": 700
+        },
+        "slenderness_limit": 26,
+        "weight_class": "heavy"
+      },
+      {
+        "material_id": "iron_black_matte",
+        "name_tr": "Mat siyah demir",
+        "family": "metal",
+        "density_kg_m3": 7800,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 3,
+        "min_structural_thickness_mm": 3,
+        "valid_processes": [
+          "laser_cutting",
+          "press_forming",
+          "welding_tig",
+          "surface_grinding",
+          "forging",
+          "powder_coating"
+        ],
+        "valid_finishes": [
+          "matte_lacquer",
+          "blackened"
+        ],
+        "cost_tier": 2,
+        "skin_contact_comfort": "fair",
+        "modulus_of_rupture_mpa": 180,
+        "weight_class": "heavy"
+      },
+      {
+        "material_id": "glass_mirrored",
+        "name_tr": "Aynalı cam",
+        "family": "glass",
+        "density_kg_m3": 2500,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 4,
+        "min_structural_thickness_mm": 5,
+        "valid_processes": [
+          "waterjet",
+          "polishing",
+          "adhesive_bonding"
+        ],
+        "valid_finishes": [
+          "mirror"
+        ],
+        "cost_tier": 3,
+        "skin_contact_comfort": "fair",
+        "modulus_of_rupture_mpa": 100,
+        "weight_class": "heavy"
+      },
+      {
+        "material_id": "linen_heavy",
+        "name_tr": "Ağır keten",
+        "family": "textile",
+        "density_kg_m3": 350,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 1,
+        "min_structural_thickness_mm": 1,
+        "valid_processes": [
+          "hand_stitching",
+          "upholstery_stapling",
+          "webbing"
+        ],
+        "valid_finishes": [
+          "raw",
+          "washed"
+        ],
+        "cost_tier": 3,
+        "skin_contact_comfort": "excellent",
+        "weight_class": "light"
+      },
+      {
+        "material_id": "wool_boucle",
+        "name_tr": "Yün buklet",
+        "family": "textile",
+        "density_kg_m3": 320,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 5,
+        "min_structural_thickness_mm": 5,
+        "valid_processes": [
+          "hand_stitching",
+          "upholstery_stapling",
+          "webbing"
+        ],
+        "valid_finishes": [
+          "raw",
+          "washed"
+        ],
+        "cost_tier": 4,
+        "skin_contact_comfort": "excellent",
+        "weight_class": "light"
+      },
+      {
+        "material_id": "wool_boucle_light",
+        "name_tr": "Açık renk yün buklet",
+        "family": "textile",
+        "density_kg_m3": 300,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 5,
+        "min_structural_thickness_mm": 5,
+        "valid_processes": [
+          "hand_stitching",
+          "upholstery_stapling",
+          "webbing"
+        ],
+        "valid_finishes": [
+          "raw",
+          "washed"
+        ],
+        "cost_tier": 4,
+        "skin_contact_comfort": "excellent",
+        "weight_class": "light"
+      },
+      {
+        "material_id": "felt_wool",
+        "name_tr": "Yün keçe",
+        "family": "textile",
+        "density_kg_m3": 300,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 3,
+        "min_structural_thickness_mm": 3,
+        "valid_processes": [
+          "hand_stitching",
+          "upholstery_stapling",
+          "webbing"
+        ],
+        "valid_finishes": [
+          "raw",
+          "washed"
+        ],
+        "cost_tier": 2,
+        "skin_contact_comfort": "good",
+        "weight_class": "light"
+      },
+      {
+        "material_id": "canvas_waxed",
+        "name_tr": "Mumlu kanvas",
+        "family": "textile",
+        "density_kg_m3": 380,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 1,
+        "min_structural_thickness_mm": 1,
+        "valid_processes": [
+          "hand_stitching",
+          "upholstery_stapling",
+          "webbing"
+        ],
+        "valid_finishes": [
+          "raw",
+          "washed"
+        ],
+        "cost_tier": 1,
+        "skin_contact_comfort": "good",
+        "weight_class": "light"
+      },
+      {
+        "material_id": "velvet_deep",
+        "name_tr": "Koyu kadife",
+        "family": "textile",
+        "density_kg_m3": 280,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 1,
+        "min_structural_thickness_mm": 1,
+        "valid_processes": [
+          "hand_stitching",
+          "upholstery_stapling",
+          "webbing"
+        ],
+        "valid_finishes": [
+          "raw",
+          "washed"
+        ],
+        "cost_tier": 4,
+        "skin_contact_comfort": "excellent",
+        "weight_class": "light"
+      },
+      {
+        "material_id": "rattan",
+        "name_tr": "Rattan",
+        "family": "textile",
+        "density_kg_m3": 450,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 3,
+        "min_structural_thickness_mm": 3,
+        "valid_processes": [
+          "hand_stitching",
+          "upholstery_stapling",
+          "webbing"
+        ],
+        "valid_finishes": [
+          "raw",
+          "washed"
+        ],
+        "cost_tier": 2,
+        "skin_contact_comfort": "good",
+        "weight_class": "light"
+      },
+      {
+        "material_id": "leather_vegetable_tanned",
+        "name_tr": "Bitkisel tabaklanmış deri",
+        "family": "leather",
+        "density_kg_m3": 900,
+        "structural_grade": "semi_structural",
+        "min_thickness_mm": 2,
+        "min_structural_thickness_mm": 2,
+        "valid_processes": [
+          "hand_stitching",
+          "adhesive_bonding",
+          "press_forming"
+        ],
+        "valid_finishes": [
+          "raw",
+          "aniline",
+          "oiled",
+          "polished"
+        ],
+        "cost_tier": 4,
+        "skin_contact_comfort": "good"
+      },
+      {
+        "material_id": "shagreen_or_stingray",
+        "name_tr": "Şagren / vatoz derisi",
+        "family": "leather",
+        "density_kg_m3": 1000,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 1,
+        "min_structural_thickness_mm": 1,
+        "valid_processes": [
+          "hand_stitching",
+          "adhesive_bonding",
+          "press_forming"
+        ],
+        "valid_finishes": [
+          "raw",
+          "aniline",
+          "oiled",
+          "polished"
+        ],
+        "cost_tier": 5,
+        "skin_contact_comfort": "fair"
+      },
+      {
+        "material_id": "acrylic_cast",
+        "name_tr": "Döküm akrilik",
+        "family": "polymer",
+        "density_kg_m3": 1180,
+        "structural_grade": "semi_structural",
+        "min_thickness_mm": 5,
+        "min_structural_thickness_mm": 8,
+        "valid_processes": [
+          "press_forming",
+          "adhesive_bonding",
+          "casting_investment"
+        ],
+        "valid_finishes": [
+          "raw",
+          "gloss_lacquer",
+          "matte_lacquer"
+        ],
+        "cost_tier": 3,
+        "skin_contact_comfort": "fair",
+        "modulus_of_rupture_mpa": 70,
+        "modulus_of_elasticity_gpa": 3.2,
+        "max_shelf_span_mm": {
+          "10": 600
+        },
+        "weight_class": "light"
+      },
+      {
+        "material_id": "rubber_isolation_pad",
+        "name_tr": "Kauçuk izolasyon pedi",
+        "family": "polymer",
+        "density_kg_m3": 1200,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 2,
+        "min_structural_thickness_mm": 2,
+        "valid_processes": [
+          "press_forming",
+          "adhesive_bonding",
+          "casting_investment"
+        ],
+        "valid_finishes": [
+          "raw"
+        ],
+        "cost_tier": 1,
+        "skin_contact_comfort": "fair",
+        "weight_class": "light"
+      },
+      {
+        "material_id": "ivory_alternative_resin",
+        "name_tr": "Fildişi alternatifi reçine",
+        "family": "polymer",
+        "density_kg_m3": 1300,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 2,
+        "min_structural_thickness_mm": 2,
+        "valid_processes": [
+          "press_forming",
+          "adhesive_bonding",
+          "casting_investment"
+        ],
+        "valid_finishes": [
+          "polished"
+        ],
+        "cost_tier": 2,
+        "skin_contact_comfort": "fair",
+        "modulus_of_rupture_mpa": 60,
+        "modulus_of_elasticity_gpa": 3.0,
+        "weight_class": "light"
+      },
+      {
+        "material_id": "lacquer_black_gloss",
+        "name_tr": "Siyah parlak lake",
+        "family": "polymer",
+        "density_kg_m3": 1100,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 0,
+        "min_structural_thickness_mm": 0,
+        "valid_processes": [
+          "press_forming",
+          "adhesive_bonding",
+          "casting_investment"
+        ],
+        "valid_finishes": [
+          "gloss_lacquer"
+        ],
+        "cost_tier": 4,
+        "skin_contact_comfort": "fair",
+        "weight_class": "light"
+      },
+      {
+        "material_id": "lacquer_primary_red",
+        "name_tr": "Ana kırmızı lake",
+        "family": "polymer",
+        "density_kg_m3": 1100,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 0,
+        "min_structural_thickness_mm": 0,
+        "valid_processes": [
+          "press_forming",
+          "adhesive_bonding",
+          "casting_investment"
+        ],
+        "valid_finishes": [
+          "gloss_lacquer",
+          "matte_lacquer"
+        ],
+        "cost_tier": 3,
+        "skin_contact_comfort": "fair",
+        "weight_class": "light"
+      },
+      {
+        "material_id": "lacquer_primary_blue",
+        "name_tr": "Ana mavi lake",
+        "family": "polymer",
+        "density_kg_m3": 1100,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 0,
+        "min_structural_thickness_mm": 0,
+        "valid_processes": [
+          "press_forming",
+          "adhesive_bonding",
+          "casting_investment"
+        ],
+        "valid_finishes": [
+          "gloss_lacquer",
+          "matte_lacquer"
+        ],
+        "cost_tier": 3,
+        "skin_contact_comfort": "fair",
+        "weight_class": "light"
+      },
+      {
+        "material_id": "lacquer_primary_yellow",
+        "name_tr": "Ana sarı lake",
+        "family": "polymer",
+        "density_kg_m3": 1100,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 0,
+        "min_structural_thickness_mm": 0,
+        "valid_processes": [
+          "press_forming",
+          "adhesive_bonding",
+          "casting_investment"
+        ],
+        "valid_finishes": [
+          "gloss_lacquer",
+          "matte_lacquer"
+        ],
+        "cost_tier": 3,
+        "skin_contact_comfort": "fair",
+        "weight_class": "light"
+      },
+      {
+        "material_id": "ceramic_glazed",
+        "name_tr": "Sırlı seramik",
+        "family": "ceramic",
+        "density_kg_m3": 2300,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 8,
+        "min_structural_thickness_mm": 8,
+        "valid_processes": [
+          "casting_investment",
+          "surface_grinding",
+          "polishing"
+        ],
+        "valid_finishes": [
+          "matte_lacquer",
+          "polished"
+        ],
+        "cost_tier": 2,
+        "skin_contact_comfort": "fair",
+        "modulus_of_rupture_mpa": 40
+      },
+      {
+        "material_id": "granite_flamed",
+        "name_tr": "Alevle işlenmiş granit",
+        "family": "stone",
+        "density_kg_m3": 2750,
+        "modulus_of_rupture_mpa": 18,
+        "structural_grade": "semi_structural",
+        "min_thickness_mm": 20,
+        "min_structural_thickness_mm": 30,
+        "max_cantilever_mm": 50,
+        "max_shelf_span_mm": {
+          "30": "800"
+        },
+        "slenderness_limit": 6,
+        "span_depth_ratio": 10,
+        "valid_processes": [
+          "waterjet",
+          "surface_grinding",
+          "flamed",
+          "cnc_milling"
+        ],
+        "valid_finishes": [
+          "flamed",
+          "honed",
+          "polished"
+        ],
+        "cost_tier": 5,
+        "weight_class": "very_heavy",
+        "skin_contact_comfort": "poor"
+      },
+      {
+        "material_id": "marble_honed_or_polished",
+        "name_tr": "Honlu veya parlak mermer",
+        "family": "stone",
+        "density_kg_m3": 2700,
+        "modulus_of_rupture_mpa": 12,
+        "structural_grade": "semi_structural",
+        "min_thickness_mm": 20,
+        "min_structural_thickness_mm": 30,
+        "max_cantilever_mm": 0,
+        "max_shelf_span_mm": {
+          "20": "500",
+          "30": "700"
+        },
+        "slenderness_limit": 6,
+        "span_depth_ratio": 10,
+        "valid_processes": [
+          "waterjet",
+          "surface_grinding",
+          "cnc_milling",
+          "polishing"
+        ],
+        "valid_finishes": [
+          "honed",
+          "polished"
+        ],
+        "cost_tier": 5,
+        "weight_class": "very_heavy",
+        "skin_contact_comfort": "poor",
+        "notes": "marble_honed ile aynı fizik; bitiş seçeneği geniş olduğu için ayrı kimlik."
+      },
+      {
+        "material_id": "macassar_ebony_veneer",
+        "name_tr": "Makasar abanoz kaplama",
+        "family": "panel",
+        "density_kg_m3": 700,
+        "modulus_of_rupture_mpa": 0,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 0.6,
+        "min_structural_thickness_mm": 0.6,
+        "valid_processes": [
+          "veneer_pressing",
+          "surface_grinding",
+          "laser_cutting",
+          "cnc_routing"
+        ],
+        "valid_finishes": [
+          "gloss_lacquer",
+          "satin_lacquer",
+          "matte_lacquer"
+        ],
+        "cost_tier": 5,
+        "weight_class": "light",
+        "skin_contact_comfort": "fair",
+        "cites_restricted": true,
+        "notes": "⚠ Gerçek Diospyros celebica CITES II kapsamındadır; belge olmadan ticareti yapılamaz. Üretimde FSC belgeli alternatif veya beyan edilmiş bir muadil kaplama kullan — bu kayıt tarihsel/stil referansı içindir."
+      },
+      {
+        "material_id": "walnut_burl_veneer",
+        "name_tr": "Ceviz kök kaplama",
+        "family": "panel",
+        "density_kg_m3": 660,
+        "structural_grade": "non_structural",
+        "min_thickness_mm": 0.6,
+        "min_structural_thickness_mm": 0.6,
+        "valid_processes": [
+          "veneer_pressing",
+          "surface_grinding",
+          "cnc_routing"
+        ],
+        "valid_finishes": [
+          "satin_lacquer",
+          "gloss_lacquer",
+          "matte_lacquer"
+        ],
+        "cost_tier": 4,
+        "weight_class": "light",
+        "skin_contact_comfort": "fair",
+        "notes": "Damarlı (figured) kaplama; altlık MDF veya kontrplak olmalı, masif olarak kullanılmaz."
+      }
+    ]
+  },
+  "prohibited_materials": {
+    "legal_bans": [
+      {
+        "material_id": "ivory",
+        "name_tr": "Fildişi",
+        "reason": "CITES Appendix I — uluslararası ticaret yasağı.",
+        "alternative": "ivory_alternative_resin, kemik (beyan edilmiş), tagua cevizi"
+      },
+      {
+        "material_id": "tortoiseshell",
+        "name_tr": "Bağa",
+        "reason": "CITES Appendix I (hawksbill turtle).",
+        "alternative": "asetat, reçine, boynuz alternatifi"
+      },
+      {
+        "material_id": "rhinoceros_horn",
+        "name_tr": "Gergedan boynuzu",
+        "reason": "CITES Appendix I.",
+        "alternative": "yok — hiç kullanma"
+      },
+      {
+        "material_id": "dalbergia_spp_rosewood",
+        "name_tr": "Dalbergia (gül ağacı) türleri",
+        "reason": "CITES Appendix II, bazıları Appendix I (D. nigra). Belge olmadan ticaret edilemez.",
+        "alternative": "FSC sertifikalı alternatifler, boyanmış kayın, ceviz"
+      },
+      {
+        "material_id": "ebony_diospyros_unverified",
+        "name_tr": "Belgesiz abanoz",
+        "reason": "Bazı Diospyros türleri CITES II. Kaynak beyanı zorunlu.",
+        "alternative": "karartılmış meşe (ebonised oak), boyanmış sert ağaç, makasar görünümlü FSC alternatifi",
+        "related_material_ids": [
+          "macassar_ebony_veneer"
+        ]
+      },
+      {
+        "material_id": "asbestos_containing",
+        "name_tr": "Asbest içeren malzeme",
+        "reason": "Sağlık yasağı.",
+        "alternative": "herhangi bir modern mineral lif"
+      },
+      {
+        "material_id": "lead_based_finish",
+        "name_tr": "Kurşun bazlı boya/bitiş",
+        "reason": "Sağlık yasağı.",
+        "alternative": "su bazlı veya yüksek katılı lake"
+      },
+      {
+        "material_id": "endangered_species_leather",
+        "name_tr": "Nesli tehlikedeki türlerin derisi",
+        "reason": "CITES.",
+        "alternative": "sığır/koyun derisi, bitkisel tabaklı, mantar derisi"
+      }
+    ],
+    "policy_bans": [
+      {
+        "material_id": "unlicensed_designer_replica",
+        "reason": "Telif/tasarım hakkı ihlali.",
+        "policy": "Bilinen bir tasarımcının tanınabilir siluetini birebir üretme; yalnızca ilke çıkar."
+      },
+      {
+        "material_id": "museum_object_scan_direct_use",
+        "reason": "Koleksiyon hakları.",
+        "policy": "Müze taramalarını doğrudan mesh olarak kullanma; yalnızca ölçü/oran/ilke referansı al ve lisansı doğrula."
+      }
+    ]
+  },
+  "qc_pipeline": {
+    "description": "Üretilen her tasarımın geçtiği kontrol sırası.",
+    "stages": [
+      {
+        "order": 1,
+        "stage": "legality_gate",
+        "checks": [
+          "DL-010",
+          "MFG-002:prohibited_materials"
+        ],
+        "on_fail": "reject_immediately",
+        "notes": "Yasal geçit her şeyden önce çalışır. Ucuz ve kesindir."
+      },
+      {
+        "order": 2,
+        "stage": "anatomy_gate",
+        "checks": [
+          "DL-008"
+        ],
+        "on_fail": "regenerate_image",
+        "notes": "AI halüsinasyonu kontrolü. Başarısızsa tasarım değil görsel yeniden üretilir (aynı brief, farklı seed)."
+      },
+      {
+        "order": 3,
+        "stage": "structural_check",
+        "checks": [
+          "STR-001",
+          "STR-002",
+          "STR-003",
+          "STR-005",
+          "STR-006",
+          "STR-007",
+          "STR-009",
+          "STR-010",
+          "STR-012"
+        ],
+        "on_fail": "flag_for_revision"
+      },
+      {
+        "order": 4,
+        "stage": "ergonomic_check",
+        "checks": [
+          "ERG-001",
+          "ERG-002",
+          "ERG-003",
+          "ERG-007",
+          "ERG-008",
+          "ERG-010"
+        ],
+        "on_fail": "flag_for_revision"
+      },
+      {
+        "order": 5,
+        "stage": "manufacturing_check",
+        "checks": [
+          "MFG-001",
+          "MFG-002",
+          "MFG-003",
+          "MFG-009",
+          "MFG-010"
+        ],
+        "on_fail": "flag_for_revision"
+      },
+      {
+        "order": 6,
+        "stage": "style_check",
+        "checks": [
+          "DL-001",
+          "DL-002",
+          "DL-003",
+          "DL-006",
+          "DL-007"
+        ],
+        "on_fail": "flag_for_revision"
+      },
+      {
+        "order": 7,
+        "stage": "originality_check",
+        "checks": [
+          "DL-009"
+        ],
+        "on_fail": "regenerate_with_more_variation"
+      },
+      {
+        "order": 8,
+        "stage": "score_and_release",
+        "checks": [
+          "scoring_rubrics.*"
+        ],
+        "on_fail": "needs_revision"
+      }
+    ],
+    "max_regeneration_attempts": 3,
+    "on_all_attempts_failed": "present_best_candidate_with_explicit_warnings_and_a_blocking_banner"
+  },
+  "bom_template": {
+    "description": "Üretilebilirlik skoru bu şemanın doluluk oranına bakar.",
+    "required_fields_per_part": [
+      "part_id",
+      "name_en",
+      "name_tr",
+      "material_id",
+      "thickness_or_section_mm",
+      "quantity",
+      "primary_process",
+      "finish",
+      "joint_to_parent",
+      "estimated_cost_tier"
+    ],
+    "optional_fields": [
+      "grain_direction",
+      "tolerance_mm",
+      "surface_area_m2",
+      "linear_length_mm",
+      "weight_kg",
+      "supplier_hint",
+      "tooling_note",
+      "assembly_step_order"
+    ],
+    "output_formats": [
+      "json",
+      "csv",
+      "cutlist_dxf_reference"
+    ]
+  }
+}

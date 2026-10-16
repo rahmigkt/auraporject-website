@@ -1,0 +1,965 @@
+# =============================================================================
+# FDE / styles / art_deco.yaml   (schema: ../schemas/style_ontology.schema.json v1.0.0)
+# Kompozisyonel lüks · katı simetri · basamaklı kütle · geometrik süsleme
+# match_threshold = 0.56
+# =============================================================================
+
+schema_version: '1.0.0'
+style_id: art_deco
+name: Art Deco
+name_tr: Art Deco
+family: historical
+era: 1920-1939 (zirve); 1930'lar Streamline Moderne alt kolu
+origin_regions: [Fransa (Paris), ABD (New York), Belçika, İtalya]
+description: 'Art Deco furniture is composed luxury: strict bilateral symmetry, stepped and ziggurat massing, sunburst and chevron geometry, exotic veneers book-matched into mirror patterns, lacquered surfaces, and restrained metal inlay in chrome, brass or shagreen. The style is ornamental but disciplined — decoration is applied as precise geometric patterns, never as organic carving. It communicates speed, wealth and machine-age confidence while remaining handcrafted at the surface level. '
+description_tr: 'Art Deco mobilyası kompozisyonel lükstür: katı iki taraflı simetri, basamaklı/ziggurat kütleleme, güneş ışını ve şevron geometrisi, ayna desen halinde eşleştirilmiş egzotik kaplamalar, lake yüzeyler ve krom, pirinç veya şagren içinde ölçülü metal kakma. Stil süslemelidir ama disiplinlidir — dekorasyon organik oyma olarak değil, hassas geometrik desenler olarak uygulanır. Hızı, zenginliği ve makine çağı özgüvenini anlatırken yüzey düzeyinde el işçiliğini korur. '
+# -----------------------------------------------------------------------------
+# ÇEKİRDEK İLKELER (ağırlıklı, test_edilebilir)
+core_principles:
+  - id: symmetric_spectacle
+    statement: Strict bilateral symmetry around a central axis; the piece is composed like a façade.
+    statement_tr: Merkez eksen etrafında katı iki taraflı simetri; parça bir cephe gibi kompoze edilir.
+    weight: 1.0
+    testable_via: [symmetry_strictness, geometric_strictness]
+  - id: stepped_geometry
+    statement: Ziggurat/stepped profiles, chevrons, sunburst rays, fluting, and concentric arcs are the motif vocabulary.
+    statement_tr: Ziggurat/basamaklı profiller, şevronlar, güneş ışını çubukları, oluklar ve eş merkezli yaylar motif sözlüğüdür.
+    weight: 0.95
+    testable_via: [ornament_density, geometric_strictness, sacred_geometry]
+  - id: luxurious_surface
+    statement: 'High-craft surfaces: polished lacquer, book-matched veneer, shagreen, chrome, brass, mirrored glass.'
+    statement_tr: 'Yüksek işçilikli yüzeyler: parlak lake, eşleştirilmiş kaplama, şagren, krom, pirinç, aynalı cam.'
+    weight: 0.9
+    testable_via: [gloss_absence, material_honesty, contrast_ratio]
+  - id: ornament_is_geometry
+    statement: Decoration must be geometric and measurable (inlay lines, stepped moulds), never organic or figurative.
+    statement_tr: Dekorasyon geometrik ve ölçülebilir olmalı (kakma çizgileri, basamaklı profiller); asla organik veya figüratif değil.
+    weight: 0.95
+    testable_via: [figurative_ornament, ornament_density]
+  - id: vertical_grace
+    statement: Elongated vertical proportions with a tapered, streamlined silhouette; height dominates width.
+    statement_tr: Uzatılmış dikey oranlar ve konikleşen akıcı bir siluet; yükseklik genişliğe baskındır.
+    weight: 0.85
+    testable_via: [verticality, height_width_bias]
+  - id: restrained_excess
+    statement: 'Rich materials but tight composition: max 3 material families, max 2 metal accents, one focal motif.'
+    statement_tr: 'Zengin malzeme ama sıkı kompozisyon: en fazla 3 malzeme ailesi, en fazla 2 metal vurgu, bir odak motif.'
+    weight: 0.85
+    testable_via: [gesture_count, part_count_leanness, chroma_restraint]
+  - id: machine_age_confidence
+    statement: 'Surfaces should read as machine-precise even when handmade: crisp lines, exact repeats, zero wobble.'
+    statement_tr: 'Yüzeyler el yapımı olsa da makine hassasiyetinde okunmalı: keskin çizgiler, tam tekrarlar, sıfır titreme.'
+    weight: 0.8
+    testable_via: [industrial_index, geometric_strictness, handcraft_index]
+# -----------------------------------------------------------------------------
+# FORM DİLİ
+forms:
+  silhouettes:
+    - stepped/ziggurat cabinet with a radiused top corner
+    - tall mirrored-glass sideboard with chrome pilasters
+    - sunburst-inlaid round table on a fluted pedestal
+    - armchair with a fan-shaped fluted back
+    - streamlined desk with waterfall edges and recessed plinth
+    - chevron-parquetry door front
+    - columnar bed headboard with a central stepped crest
+  geometry_language:
+    - ziggurat step (3-5 steps, constant increment 15-40 mm)
+    - chevron / herringbone at 45° and 60°
+    - sunburst rays radiating from a single centre
+    - 'fluting: constant-pitch semicircular grooves, 8-20 mm pitch'
+    - concentric arcs and quarter-rounds
+    - waterfall edge (top plane continues down the side in one radius)
+    - strict bilateral mirror composition
+    - tapered column / pilaster
+  line_quality:
+    - crisp, exact, machine-drawn
+    - repeating rhythm with zero drift
+    - no freehand curve
+  edge_treatment:
+    - radius 6-25 mm on horizontal arrises
+    - waterfall wrap with R15-R40
+    - metal edge banding 2-5 mm (chrome/brass)
+    - stepped moulding profile (2-3 offsets)
+  mass_vs_void: Mass dominates. Void is used only as a deliberate framing device (a mirrored recess, a shadow gap under a floating top). Void 10-25%.
+  preferred_archetypes:
+    - sideboard
+    - cabinet
+    - console_table
+    - dining_table
+    - coffee_table
+    - armchair
+    - bed
+    - headboard
+    - nightstand
+    - desk
+    - wardrobe
+    - bar_stool
+    - tv_unit
+  forbidden_forms:
+    - asymmetric free composition
+    - organic blob / amoeba silhouette
+    - exposed industrial tube frame
+    - rough board-formed concrete
+    - slatted blade rhythm (reads japandi/brutalist)
+    - pointed gothic arch
+    - floating weightless minimal box with no base logic
+# -----------------------------------------------------------------------------
+# MALZEMELER (primary / secondary / accent / forbidden / combination_rules)
+materials:
+  primary:
+    - material_id: macassar_ebony_veneer
+      material_tr: Makasar abanoz kaplama
+      finish: gloss_lacquer
+      why: The signature dark striped veneer, book-matched for a mirrored flame pattern.
+      why_tr: İmza koyu çizgili kaplama; aynalı alev deseni için eşleştirilir.
+      applies_to_parts: [panel, door, top_surface, drawer_front]
+      cost_tier: 5
+      weight: 1.0
+    - material_id: lacquer_black_gloss
+      material_tr: Siyah parlak lake
+      finish: gloss_lacquer
+      why: Deep mirror-black surface that carries chrome and brass inlay.
+      why_tr: Krom ve pirinç kakmayı taşıyan derin ayna siyahı yüzey.
+      applies_to_parts: [panel, top_surface, frame, door]
+      cost_tier: 4
+      weight: 0.9
+    - material_id: walnut_burl_veneer
+      material_tr: Ceviz kök kaplama
+      finish: satin_lacquer
+      why: Figured, luxurious, historically exact for 1930s casegoods.
+      why_tr: Damarlı, lüks; 1930'lar dolapları için tarihsel olarak doğru.
+      applies_to_parts: [panel, door, top_surface, drawer_front]
+      cost_tier: 4
+      weight: 0.75
+  secondary:
+    - material_id: marble_honed_or_polished
+      material_tr: Honlu veya parlak mermer
+      finish: polished
+      why: Table tops and plinths; veined stone as a controlled natural pattern.
+      why_tr: Tablalar ve kaideler; kontrollü doğal desen olarak damarlı taş.
+      applies_to_parts: [top_surface, base_plinth]
+      cost_tier: 5
+      weight: 0.6
+    - material_id: glass_mirrored
+      material_tr: Aynalı cam
+      finish: mirror
+      why: Doubles the light and the geometry; used as a recess backdrop or door panel.
+      why_tr: Işığı ve geometriyi katlar; içerlek arka plan veya kapak paneli olarak.
+      applies_to_parts: [panel, door, top_surface]
+      cost_tier: 3
+      weight: 0.55
+    - material_id: glass_smoked
+      material_tr: Füme cam
+      finish: polished
+      why: Shelves and vitrine panels; keeps the mass dark and glossy.
+      why_tr: Raflar ve vitrin panelleri; kütleyi koyu ve parlak tutar.
+      applies_to_parts: [shelf, door, panel]
+      cost_tier: 3
+      weight: 0.4
+    - material_id: shagreen_or_stingray
+      material_tr: Şagren / vatoz derisi
+      finish: polished
+      why: Historically exact accent panel; granular texture that catches light.
+      why_tr: Tarihsel olarak doğru vurgu paneli; ışığı yakalayan taneli doku.
+      applies_to_parts: [drawer_front, panel]
+      cost_tier: 5
+      weight: 0.35
+    - material_id: leather_aniline_black
+      material_tr: Siyah anilin deri
+      finish: polished
+      why: Upholstery and desk inlay panels; taut, glossy, no pattern.
+      why_tr: Döşeme ve masa kakma panelleri; gergin, parlak, desensiz.
+      applies_to_parts: [upholstery, seat, back_support, panel]
+      cost_tier: 4
+      weight: 0.5
+    - material_id: velvet_deep
+      material_tr: Koyu kadife
+      finish: raw
+      why: Optional upholstery in one deep jewel tone (emerald, oxblood, midnight blue).
+      why_tr: Opsiyonel döşeme, tek koyu mücevher tonunda (zümrüt, öküz kanı, gece mavisi).
+      applies_to_parts: [upholstery, cushion, back_support]
+      cost_tier: 3
+      weight: 0.3
+  accent:
+    - material_id: chrome_polished
+      material_tr: Parlak krom
+      finish: polished
+      why: Pilasters, edge banding, inlay lines, handles. The machine-age signature.
+      why_tr: Pilasterler, kenar bandı, kakma çizgileri, kulplar. Makine çağı imzası.
+      applies_to_parts: [frame, edge_treatment, hardware, ornament, leg]
+      cost_tier: 3
+      weight: 1.0
+    - material_id: brass_polished
+      material_tr: Parlak pirinç
+      finish: polished
+      why: Warmer alternative to chrome; inlay, sunburst rays, feet.
+      why_tr: Kroma sıcak alternatif; kakma, güneş ışını çubukları, ayaklar.
+      applies_to_parts: [ornament, hardware, foot, edge_treatment]
+      cost_tier: 4
+      weight: 0.8
+    - material_id: ivory_alternative_resin
+      material_tr: Fildişi alternatifi reçine
+      finish: polished
+      why: Historic ivory inlay is FORBIDDEN — use a declared synthetic/bone alternative for the same white line.
+      why_tr: Tarihi fildişi kakma YASAKTIR — aynı beyaz çizgi için beyan edilen sentetik/kemik alternatifi kullan.
+      applies_to_parts: [ornament, edge_treatment]
+      cost_tier: 2
+      weight: 0.3
+  forbidden_materials:
+    - ivory, tortoiseshell, endangered-species materials (legal + ethical ban)
+    - raw/board-formed concrete
+    - rough-sawn or charred timber
+    - rattan / cane webbing
+    - plywood with visible laminations on show faces
+    - powder-coated matte black steel tube as the dominant structure
+    - unbleached linen / burlap
+    - reclaimed barn wood
+    - plastic laminates imitating stone or wood
+  combination_rules:
+    - pair:
+        - macassar_ebony_veneer
+        - chrome_polished
+      verdict: signature
+      note: Dark striped veneer + bright chrome line = the canonical Deco pairing.
+    - pair:
+        - lacquer_black_gloss
+        - brass_polished
+      verdict: signature
+      note: Black lacquer field with a brass sunburst or inlay geometry.
+    - pair:
+        - marble_honed_or_polished
+        - chrome_polished
+      verdict: signature
+      note: Stone top on a chrome-detailed base; keep the base stepped or fluted.
+    - pair:
+        - walnut_burl_veneer
+        - shagreen_or_stingray
+      verdict: allowed
+      note: Two luxury textures on one piece; keep the shagreen to a single drawer front.
+    - pair:
+        - glass_mirrored
+        - chrome_polished
+      verdict: allowed
+      note: Mirrored recess + chrome pilasters; risk of nightclub excess — cap at one elevation.
+    - pair:
+        - macassar_ebony_veneer
+        - concrete_cast
+      verdict: forbidden
+      note: Concrete roughness destroys the polished-luxury surface logic.
+    - pair:
+        - lacquer_black_gloss
+        - cane_webbing
+      verdict: forbidden
+      note: Cane reads casual/tropical; contradicts composed luxury.
+  material_honesty_rules:
+    - Veneer is legitimate in this style, but it must be real wood veneer, not a printed laminate.
+    - Book-matching must be genuine mirrored grain, not a printed symmetric image.
+    - If ivory-look inlay is used, the material must be declared as synthetic/bone — never real ivory.
+    - Shagreen may be substituted with a declared synthetic only if labelled in the BOM.
+# -----------------------------------------------------------------------------
+# RENK
+colors:
+  palette:
+    - hex: '#0B0B0D'
+      name: Piano Black Lacquer
+      name_tr: Piyano Siyahı Lake
+      role: dominant
+      max_coverage: 0.35
+    - { hex: '#2E1F14', name: Macassar Ebony, name_tr: Makasar Abanoz, role: dominant, max_coverage: 0.3 }
+    - { hex: '#5A3D28', name: Walnut Burl, name_tr: Ceviz Kök, role: secondary, max_coverage: 0.2 }
+    - { hex: '#D8D8DA', name: Polished Chrome, name_tr: Parlak Krom, role: accent, max_coverage: 0.08 }
+    - { hex: '#C9A227', name: Polished Brass, name_tr: Parlak Pirinç, role: accent, max_coverage: 0.06 }
+    - hex: '#EDE7DA'
+      name: Ivory-Alternative Line
+      name_tr: Fildişi Alternatifi Çizgi
+      role: highlight
+      max_coverage: 0.05
+    - { hex: '#F2F0EC', name: Marble White, name_tr: Mermer Beyazı, role: secondary, max_coverage: 0.12 }
+    - hex: '#0F3D3E'
+      name: Emerald Velvet (optional)
+      name_tr: Zümrüt Kadife (opsiyonel)
+      role: upholstery
+      max_coverage: 0.1
+    - hex: '#4A1220'
+      name: Oxblood (optional)
+      name_tr: Öküz Kanı (opsiyonel)
+      role: upholstery
+      max_coverage: 0.08
+  value_range: 'extreme low-key + high specular: 5-30 L* fields with 85-95 L* metal/marble highlights'
+  saturation_range: neutrals near zero; upholstery jewel tone C* 30-55 max, single hue only
+  contrast_rule: Very high value contrast driven by gloss and metal, not by colour pairs. One jewel-tone upholstery hue permitted.
+  forbidden_colors:
+    - pastel palette
+    - neon / fluorescent
+    - earthy terracotta and sage boho palette
+    - multi-hue rainbow or gradient
+    - pure matte off-white as a dominant (reads japandi/minimalist)
+    - more than one jewel tone on a single piece
+    - matte grey concrete tones
+# -----------------------------------------------------------------------------
+# DOKU
+textures:
+  dominant:
+    - mirror-polished lacquer
+    - figured book-matched veneer grain
+    - polished metal specular
+    - veined stone
+  contrast_textures:
+    - granular shagreen on a single small panel
+    - smooth taut aniline leather
+    - fluted semicircular grooves (geometric texture)
+    - dense short-pile velvet on one upholstered component
+  scale_of_texture: medium
+  reflectance_profile: 60% of visible area at gloss 60-95 units; metal at 90-98; matte areas limited to upholstery and stone
+  forbidden_textures:
+    - rough sawn timber
+    - board-formed concrete imprint
+    - hand-planed facet
+    - woven natural cane
+    - bouclé / shaggy pile
+    - distressed or scraped paint
+    - matte open-pore oiled wood
+# -----------------------------------------------------------------------------
+# SÜSLEME KURALLARI
+ornament_rules:
+  max_level: rich
+  allowed:
+    - 'geometric inlay: chevron, sunburst, stepped band, concentric arc (2-5 mm metal or light wood line)'
+    - fluting on columns, pilasters, drawer fronts (8-20 mm pitch)
+    - stepped/ziggurat moulding profile (2-3 offsets, 5-15 mm each)
+    - book-matched veneer mirroring
+    - a single stylised non-figurative motif at the centre of a symmetrical composition
+    - chrome edge banding and reveal lines
+  discouraged:
+    - inlay covering more than 20% of a face
+    - more than one motif family per piece
+    - ornament on user-contact surfaces (seat, table top working area)
+  forbidden:
+    - organic foliate carving (acanthus, roses, scrolls)
+    - figurative sculpture (human/animal forms) as applied ornament
+    - gothic tracery, pointed arches, religious iconography
+    - hand-carved irregular rustic relief
+    - applied decals, transfers, printed patterns
+    - asymmetric random ornament placement
+    - ivory or endangered-species material
+    - graffiti, logos, lettering
+  placement_rules:
+    - All ornament is mirrored about the central vertical axis. Any element on the left must exist on the right.
+    - One focal motif per piece, placed on the central axis, in the upper third.
+    - Repeating ornament (fluting, chevron) must have constant pitch with zero drift across the full run.
+    - Inlay lines must be inset 15-40 mm from the face edge, never at the arris.
+  motif_vocabulary:
+    - sunburst / ray fan
+    - chevron band
+    - ziggurat step
+    - fluted column
+    - concentric arc
+    - waterfall radius
+    - mirrored book-match
+    - stylised geometric fleur (non-figurative)
+  ornament_must_be:
+    - geometric
+    - mirrored_symmetric
+    - machine_precise
+    - non_figurative
+    - repeating_with_constant_pitch
+# -----------------------------------------------------------------------------
+# ORANLAR
+proportions:
+  dominant_direction: vertical
+  ratio_presets:
+    - { name: casegood elevation, value: 1.6, applies_to: sideboard/cabinet height / width }
+    - { name: step increment, value: 1.0, applies_to: ziggurat steps must be equal, 15-40 mm: null }
+    - { name: flute pitch, value: 1.0, applies_to: constant 8-20 mm centre-to-centre }
+    - { name: plinth recess, value: 0.08, applies_to: plinth height / total height, recessed 30-50 mm: null }
+    - { name: table height ratio, value: 0.42, applies_to: dining table height / width }
+    - { name: armchair back fan, value: 1.25, applies_to: back height / back width at the top (fan shape) }
+  module_grid_mm: 25
+  leg_to_body_ratio: 'casegoods: 0-10% (recessed plinth, floating read); chairs: 45-55% with tapered columnar legs'
+  seat_height_bias: 430-460 mm (dining), 400-430 mm (lounge armchair)
+  void_ratio_target: 0.18
+  scale_bias: generous
+  symmetry_preference: strict_bilateral
+# -----------------------------------------------------------------------------
+# IŞIK VE GÖLGE (render direktifleri dahil)
+lighting_and_shadow:
+  light_direction:
+    - two symmetric sources at 45° left and right
+    - warm downlight above
+    - rim light along the metal edges
+  light_quality: 'controlled and theatrical but even: 2700-3200K, medium hardness, deliberate specular highlights on metal and lacquer'
+  shadow_role: Defining the stepped massing. Each ziggurat step must cast a crisp horizontal shadow line.
+  highlight_strategy: Continuous specular streaks along chrome/brass; a broad soft reflection across the lacquer field.
+  render_notes: 'Dark elegant interior backdrop (#14120F) with a warm marble floor, symmetrical composition, camera 45 mm at 120 cm, dead-centre or symmetric three-quarter. Include a subtle mirrored reflection on the floor. Exposure +0.3 EV to keep the lacquer highlight from clipping. No clutter, no plants, no people. '
+# -----------------------------------------------------------------------------
+# DUYGUSAL ANAHTAR KELİMELER
+emotional_keywords:
+  - glamorous
+  - composed
+  - theatrical
+  - confident
+  - luxurious
+  - symmetrical
+  - streamlined
+  - metropolitan
+  - celebratory
+  - precise
+emotional_keywords_tr:
+  - göz alıcı
+  - kompoze
+  - tiyatral
+  - özgüvenli
+  - lüks
+  - simetrik
+  - akıcı
+  - metropoliten
+  - kutlayıcı
+  - hassas
+# -----------------------------------------------------------------------------
+# YASAK SİNYALLER (hard = tasarım reddedilir, soft = skor düşer)
+forbidden_signals:
+  - id: fb_asymmetry
+    signal: Asymmetric composition or unbalanced ornament placement.
+    signal_tr: Asimetrik kompozisyon veya dengesiz süsleme yerleşimi.
+    severity: hard
+    detected_by: [symmetry_strictness]
+  - id: fb_organic_carving
+    signal: Organic foliate carving, figurative sculpture, irregular hand relief.
+    signal_tr: Organik yaprak oyma, figüratif heykel, düzensiz el relifi.
+    severity: hard
+    detected_by: [figurative_ornament, curvature_organic, geometric_strictness]
+  - id: fb_matte_austerity
+    signal: All-matte, low-contrast, austerity-driven surface with no specular element.
+    signal_tr: Tamamen mat, düşük kontrastlı, speküler eleman içermeyen çileci yüzey.
+    severity: hard
+    detected_by: [gloss_absence, contrast_ratio]
+  - id: fb_industrial_rough
+    signal: Board-formed concrete, rough sawn timber, exposed weld, industrial patina.
+    signal_tr: Kalıp izli beton, kaba biçilmiş ahşap, açık kaynak, endüstriyel patina.
+    severity: hard
+    detected_by: [material_honesty, handcraft_index, industrial_index]
+  - id: fb_organic_wobble
+    signal: Freehand curves, drifting pitch, imprecise repeats.
+    signal_tr: Serbest eğriler, kayan adım, hassas olmayan tekrarlar.
+    severity: hard
+    detected_by: [geometric_strictness, ornament_density]
+  - id: fb_gothic_vertical
+    signal: Pointed arch, lancet void, ecclesiastical chiaroscuro.
+    signal_tr: Sivri kemer, lancet boşluk, kilisevari gölge dramı.
+    severity: hard
+    detected_by: [pointed_arch_presence, sacred_geometry, dark_materiality]
+  - id: fb_endangered_material
+    signal: Ivory, tortoiseshell, rosewood of restricted species, or any CITES-listed material.
+    signal_tr: Fildişi, bağa, kısıtlı türlerden gül ağacı veya CITES listesindeki herhangi bir malzeme.
+    severity: hard
+    detected_by: [material_legality]
+  - id: fb_ornament_overload
+    signal: More than one motif family, or inlay above 20% face coverage, or ornament on contact surfaces.
+    signal_tr: Birden fazla motif ailesi, %20 üstü kakma kapsaması veya temas yüzeylerinde süsleme.
+    severity: soft
+    detected_by: [ornament_density, gesture_count]
+  - id: fb_pastel_softness
+    signal: Pastel palette with rounded soft forms and matte textile (reads Scandinavian, not Deco).
+    signal_tr: Yuvarlak yumuşak formlar ve mat tekstille pastel palet (Deco değil İskandinav okunur).
+    severity: soft
+    detected_by: [low_key_palette, chroma_restraint, warmth_index]
+  - id: fb_copyright_copy
+    signal: Silhouette identical to a named 1920-40 designer piece or an existing branded reproduction.
+    signal_tr: Siluetin isimli bir 1920-40 tasarımcı parçasıyla veya mevcut markalı bir reprodüksiyonla aynı olması.
+    severity: hard
+    detected_by: [originality_check]
+# -----------------------------------------------------------------------------
+# POZİTİF PROMPT TOKEN'LARI
+positive_prompt_tokens:
+  core:
+    - art deco furniture
+    - 1930s composed luxury
+    - streamline moderne elegance
+    - machine-age glamour
+  form:
+    - strict bilateral symmetry
+    - stepped ziggurat massing
+    - sunburst inlay geometry
+    - chevron banding
+    - fluted columns and pilasters
+    - waterfall edge with continuous radius
+    - tapered columnar legs
+    - recessed plinth base
+    - concentric arc motifs
+  material:
+    - book-matched macassar ebony veneer
+    - deep gloss black lacquer
+    - polished chrome edge banding
+    - polished brass inlay line
+    - veined white marble top
+    - mirrored glass recess
+    - shagreen accent panel
+    - taut black aniline leather
+    - emerald velvet upholstery
+  light:
+    - symmetrical warm lighting from both sides
+    - continuous specular highlights along the chrome
+    - crisp horizontal shadow under each step
+    - broad soft reflection across the lacquer
+    - 2900K warm theatrical glow
+  camera:
+    - 45mm lens at 120cm, dead-centre symmetric composition
+    - dark elegant interior backdrop
+    - polished marble floor with a subtle reflection
+    - no props, no people
+  mood:
+    - metropolitan glamour
+    - celebratory precision
+    - confident luxury
+    - 1930s ocean-liner elegance
+  quality:
+    - photorealistic product photography
+    - mirror-accurate reflections
+    - exact repeating geometry
+    - 8k, high dynamic range, deep gloss
+  weight_hint:
+    core: 1.3
+    form: 1.25
+    material: 1.3
+    light: 1.1
+    mood: 1.0
+    camera: 0.95
+    quality: 1.0
+  template: '{subject}, {form}, {material}, {light}, {mood}, {camera}, {quality}'
+# -----------------------------------------------------------------------------
+# NEGATİF PROMPT TOKEN'LARI
+negative_prompt_tokens:
+  core:
+    - organic carving
+    - acanthus leaves
+    - baroque scrollwork
+    - rococo
+    - figurative sculpture
+    - asymmetric composition
+    - handmade irregularity
+  style_specific:
+    - gothic arch
+    - pointed arch
+    - tracery
+    - monastic austerity
+    - board-formed concrete
+    - brutalist raw concrete
+    - rough sawn timber
+    - shou sugi ban charred wood
+    - rattan
+    - cane webbing
+    - bamboo
+    - exposed tubular steel frame
+    - industrial weld seam
+    - visible plywood laminations
+    - japandi pale oiled ash
+    - wabi sabi imperfection
+    - memphis squiggle
+    - pastel palette
+    - neon
+    - matte off-white minimalism
+    - shabby chic
+    - farmhouse rustic
+    - burlap
+    - linen slub
+    - ivory
+    - tortoiseshell
+  anatomy_defects:
+    - mismatched legs
+    - asymmetric where symmetry intended
+    - fluting pitch drifting across the run
+    - steps of unequal height
+    - inlay lines not parallel
+    - parts merging
+    - duplicated components
+    - floating furniture with no ground contact
+    - veneer grain not mirrored at the book-match
+  physics_defects:
+    - thin marble slab spanning without support
+    - unsupported cantilever over 200mm in veneered MDF
+    - heavy stone top on slender chrome legs without a load spreader
+    - glass shelf over 900mm span at 8mm
+    - no load path to the floor
+    - top-heavy without base mass
+  copyright_guards:
+    - exact replica of a named designer piece
+    - branded furniture
+    - visible logo
+    - trademarked product
+    - copy of a specific historic building interior
+# -----------------------------------------------------------------------------
+# ÜRETİM NOTLARI
+manufacturing_notes:
+  preferred_processes:
+    - veneer_pressing
+    - laser_cutting
+    - cnc_routing
+    - surface_grinding
+    - polishing
+    - chrome_plating
+    - lathe_turning
+    - adhesive_bonding
+    - hand_carving
+  avoid_processes:
+    - concrete_casting
+    - injection_molding
+    - shou_sugi_ban
+    - rough sandblasting
+  joint_language:
+    - dado + adhesive for case construction, reinforced with hidden steel brackets
+    - mitred and splined corners on veneered carcasses
+    - concealed cam-lock for demountable plinth
+    - brass dowel pins as a visible graphic dot grid (functional + decorative)
+    - metal edge banding crimped over the substrate arris
+  joinery_visibility: concealed
+  typical_thickness_mm:
+    carcass_panel: 19
+    veneer: 0.6
+    lacquer_build: 0.4
+    marble_top: 20
+    glass_shelf: 10
+    chrome_banding: 2
+    inlay_line: 3
+    plinth: 40
+  tolerance_notes: 'Veneer work demands +/-0.2 mm on book-match alignment or the mirror reads as a defect. Fluting pitch must hold +/-0.3 mm across the full run. Lacquer build: 8-12 coats, wet-sanded 600/1200/2000 then machine-polished; expect 0.4 mm total build and account for it in door gaps (3 mm nominal -> cut to 3.4 mm before finishing). MDF/ply substrate must be sealed on all six faces to prevent veneer telegraphing. '
+  finishing_notes: 'Polyester or PU gloss lacquer for a true mirror. Veneer: pore-filled before the gloss build, otherwise the grain telegraphs. Metal: triple-plate chrome (copper-nickel-chrome). Marble: honed 400 grit then impregnating sealer — never a topical gloss coat on stone. '
+  cost_drivers:
+    - gloss lacquer coats and polishing labour (the single biggest cost)
+    - book-matched figured veneer selection
+    - marble fabrication and freight
+    - chrome plating on curved parts
+    - shagreen (or its declared synthetic substitute)
+  sustainability_notes: 'ABSOLUTELY no ivory, tortoiseshell, or CITES-listed timber (use FSC-certified macassar-look alternatives or declared substitutes). Prefer E0/E1 low-formaldehyde substrates and water-based or high-solids lacquers to reduce VOC. Design the carcass for re-lacquering instead of replacement. '
+  flat_pack_feasible: false
+  difficulty: 5
+# -----------------------------------------------------------------------------
+# TARİHSEL REFERANSLAR (yalnızca ilke/oran çıkarımı; birebir kopya YOK)
+historical_references:
+  - kind: movement
+    title: Exposition Internationale des Arts Décoratifs et Industriels Modernes, Paris 1925
+    title_tr: 1925 Paris Uluslararası Modern Dekoratif ve Endüstriyel Sanatlar Sergisi
+    date: '1925'
+    region: Paris
+    why_relevant: The event that named the style and set its material vocabulary.
+    what_to_extract:
+      - stepped massing
+      - exotic veneer + chrome pairing
+      - symmetrical composition
+      - luxury surface discipline
+    source_api: europeana
+    license: public_domain
+    query_hint: 'Europeana: ''Exposition arts decoratifs 1925'' (public domain filtered)'
+  - kind: movement
+    title: Streamline Moderne (1930s American phase)
+    title_tr: Streamline Moderne (1930'lar Amerikan evresi)
+    date: 1933-1940
+    region: ABD
+    why_relevant: Supplies the waterfall edge, horizontal speed lines, chrome banding and aerodynamic radius.
+    what_to_extract:
+      - waterfall radius rules
+      - horizontal banding
+      - chrome reveal lines
+    source_api: wikidata_sparql
+    license: not_applicable
+    query_hint: SELECT ?item WHERE { ?item wdt:P126 wd:Q913232 }
+  - kind: technique
+    title: 'French ébénisterie: veneer marquetry and high-gloss lacquer (vernissage)'
+    title_tr: 'Fransız ébénisterie: kaplama marküteri ve yüksek parlak lake'
+    date: 18.-20. yy
+    region: Fransa
+    why_relevant: 'The craft process behind the surface: pore filling, multi-coat gloss, polishing.'
+    what_to_extract:
+      - coat counts
+      - wet sanding progression
+      - pore filling sequence
+      - book-match layout rules
+    source_api: met_openaccess
+    license: public_domain
+    query_hint: 'Met Open Access: q=art+deco+furniture&isPublicDomain=true'
+  - kind: period
+    title: Ziggurat / sunburst geometry from Mesopotamian and Egyptian revival sources
+    title_tr: Mezopotamya ve Mısır canlanma kaynaklarından ziggurat / güneş ışını geometrisi
+    date: MÖ 2100 - 1930 canlanması
+    region: Mezopotamya / Mısır
+    why_relevant: Explains the motif grammar; use the GEOMETRY only, never the religious/figurative content.
+    what_to_extract:
+      - step increment logic
+      - ray fan angles (15/30/45°)
+      - symmetry axis rules
+    source_api: met_openaccess
+    license: public_domain
+    query_hint: 'Met Open Access: departmentId=3 (Egyptian Art), isPublicDomain=true — geometry reference only'
+  - kind: object_type
+    title: '1925-1937 French cabinetmaking: sideboards, consoles, armoire-vitrines'
+    title_tr: '1925-1937 Fransız dolapçılığı: büfeler, konsollar, armoire-vitrinler'
+    date: 1925-1937
+    region: Fransa
+    why_relevant: Defines the canonical type forms and their dimensional ranges.
+    what_to_extract:
+      - elevation ratios
+      - plinth recess depth
+      - flute pitch ranges
+      - inlay offset from edge
+    source_api: europeana
+    license: public_domain
+    query_hint: 'Europeana: ''buffet art deco 1930'' + public domain mark'
+# -----------------------------------------------------------------------------
+# SKORLAMA İMZASI — rules/style_scoring_rules.json feature_id'leri ile eşleşir
+scoring_signature:
+  target_vector:
+    verticality: 0.68
+    pointed_arch_presence: 0.0
+    ornament_restraint: 0.45
+    ornament_density: 0.62
+    minimalism_index: 0.25
+    material_honesty: 0.7
+    dark_materiality: 0.72
+    low_key_palette: 0.7
+    chroma_restraint: 0.72
+    contrast_ratio: 0.9
+    structural_expression: 0.35
+    void_ratio: 0.22
+    geometric_strictness: 0.88
+    edge_softness: 0.45
+    symmetry_strictness: 0.98
+    curvature_organic: 0.05
+    warmth_index: 0.45
+    gloss_absence: 0.05
+    shadow_as_design_element: 0.55
+    handcraft_index: 0.75
+    industrial_index: 0.5
+    sacred_geometry: 0.1
+    ritual_stillness: 0.2
+    sculptural_index: 0.5
+    figurative_ornament: 0.0
+    part_count_leanness: 0.55
+    gesture_count: 0.6
+    historical_reference_index: 0.9
+    futuristic_index: 0.3
+    modular_grid_index: 0.6
+    modularity_index: 0.3
+    massiveness: 0.62
+    lightness_visual: 0.3
+    ergonomic_compliance: 1.0
+    structural_plausibility: 1.0
+    faux_finish_absence: 0.85
+    material_legality: 1.0
+    originality_check: 0.85
+  weights:
+    symmetry_strictness: 1.0
+    geometric_strictness: 0.9
+    gloss_absence: 0.85
+    contrast_ratio: 0.85
+    ornament_density: 0.8
+    figurative_ornament: 0.9
+    curvature_organic: 0.75
+    historical_reference_index: 0.6
+    material_legality: 1.0
+    minimalism_index: 0.5
+    verticality: 0.6
+    ergonomic_compliance: 1.0
+    structural_plausibility: 1.0
+    originality_check: 0.7
+  hard_gates:
+    - { feature_id: symmetry_strictness, op: '>=', value: 0.85, penalty: 35 }
+    - { feature_id: figurative_ornament, op: <=, value: 0.03, penalty: 40 }
+    - { feature_id: material_legality, op: '>=', value: 1.0, penalty: 60 }
+    - { feature_id: gloss_absence, op: <=, value: 0.25, penalty: 30 }
+    - { feature_id: curvature_organic, op: <=, value: 0.15, penalty: 25 }
+    - { feature_id: geometric_strictness, op: '>=', value: 0.7, penalty: 25 }
+    - { feature_id: structural_plausibility, op: '>=', value: 0.7, penalty: 40 }
+    - { feature_id: ergonomic_compliance, op: '>=', value: 0.7, penalty: 40 }
+    - { feature_id: originality_check, op: '>=', value: 0.6, penalty: 50 }
+  match_threshold: 0.56
+  confidence_floor: 0.45
+# -----------------------------------------------------------------------------
+# PARÇA DİREKTİFLERİ — her parça bu stilde nasıl davranır?
+# part_role değerleri schemas/furniture_parts.schema.json -> $defs.partRoleId
+part_directives:
+  - part_role: leg
+    directive: Tapered columnar leg (fluted or plain), 40-60 mm at top to 25-35 mm at floor; or a recessed plinth. Chrome/brass sabots 10-20 mm at the foot.
+    directive_tr: Konik kolon bacak (oluklu veya düz), üstte 40-60 mm, zeminde 25-35 mm; ya da içerlek kaide. Ayakta 10-20 mm krom/pirinç pabuç.
+    typical_material: macassar_ebony_veneer
+    typical_dimension_hint: height 100-180mm (casegoods), 400-450mm (chairs)
+    ornament_level: moderate
+    priority: must
+  - part_role: foot
+    directive: Polished metal sabot or a 3-5 mm chrome band wrapping the base; never a raw timber end grain on the floor.
+    directive_tr: Parlak metal pabuç veya kaideyi saran 3-5 mm krom bant; zeminde asla ham ahşap uç damarı.
+    typical_material: chrome_polished
+    typical_dimension_hint: sabot height 10-20mm
+    ornament_level: moderate
+    priority: should
+  - part_role: base_plinth
+    directive: Recessed 30-50 mm from the body face, 40-90 mm high, black lacquer or veneer; creates the floating luxury read.
+    directive_tr: Gövdeden 30-50 mm içerlek, 40-90 mm yüksek, siyah lake veya kaplama; yüzme hissini veren lüks okumayı yaratır.
+    typical_material: lacquer_black_gloss
+    typical_dimension_hint: recess 30-50mm; height 40-90mm
+    ornament_level: subtle
+    priority: must
+  - part_role: panel
+    directive: Book-matched veneer with a mirrored grain axis, 15-40 mm inset border, or a black lacquer field carrying one inlay geometry.
+    directive_tr: Aynalı damar eksenli eşleştirilmiş kaplama, 15-40 mm içerlek bordür, veya tek bir kakma geometrisi taşıyan siyah lake alan.
+    typical_material: macassar_ebony_veneer
+    typical_dimension_hint: veneer 0.6mm on 19mm substrate; inset 20-40mm
+    ornament_level: rich
+    priority: must
+  - part_role: door
+    directive: Full-height mirrored pair, chevron or sunburst parquetry, 3.4 mm gap pre-lacquer, recessed chrome pull or a single brass bar.
+    directive_tr: Tam boy aynalı çift kanat, şevron veya güneş ışını parkesi, lake öncesi 3.4 mm aralık, içerlek krom çekme veya tek pirinç çubuk.
+    typical_material: walnut_burl_veneer
+    typical_dimension_hint: height/width >= 1.8; pair symmetric about the centre axis
+    ornament_level: rich
+    priority: should
+  - part_role: top_surface
+    directive: 20 mm veined marble with a polished or eased edge, or a waterfall-wrapped veneer/lacquer top with R15-R40 continuing down the sides.
+    directive_tr: Parlak veya yumuşatılmış kenarlı 20 mm damarlı mermer, ya da kenarlardan aşağı devam eden R15-R40 ile şelale sarmalı kaplama/lake tabla.
+    typical_material: marble_honed_or_polished
+    typical_dimension_hint: marble 20mm; waterfall radius 15-40mm; overhang 20-40mm
+    ornament_level: moderate
+    priority: must
+  - part_role: shelf
+    directive: 10 mm smoked glass on concealed chrome pins, or 19 mm veneered shelf with a 2 mm chrome reveal under the front edge.
+    directive_tr: Gizli krom pimlerde 10 mm füme cam, ya da ön kenarın altında 2 mm krom çizgili 19 mm kaplamalı raf.
+    typical_material: glass_smoked
+    typical_dimension_hint: glass 10mm, span <= 800mm; wood 19mm, span <= 700mm
+    ornament_level: subtle
+    priority: should
+  - part_role: hardware
+    directive: 'Polished chrome or brass only: a stepped bar pull, a cylindrical knob, or a recessed finger pull with a chrome reveal. Symmetrically placed.'
+    directive_tr: 'Yalnızca parlak krom veya pirinç: basamaklı çubuk kulp, silindirik topuz veya krom çizgili içerlek parmak çekme. Simetrik yerleşim.'
+    typical_material: chrome_polished
+    typical_dimension_hint: pull 128-256mm; diameter 12-16mm
+    ornament_level: rich
+    priority: must
+  - part_role: ornament
+    directive: 'One focal geometric motif on the central axis in the upper third: sunburst fan, chevron band, or stepped ziggurat relief. Mirrored, exact pitch, non-figurative.'
+    directive_tr: 'Üst üçte birde merkez eksende bir odak geometrik motif: güneş ışını yelpazesi, şevron bant veya basamaklı ziggurat relifi. Aynalı, tam adım, figüratif değil.'
+    typical_material: brass_polished
+    typical_dimension_hint: inlay line 2-5mm; step increment 15-40mm; flute pitch 8-20mm
+    ornament_level: rich
+    priority: must
+  - part_role: edge_treatment
+    directive: Radius 6-25 mm on horizontal arrises, or a 2-5 mm metal band wrapping the edge. Never a raw square edge on a show face.
+    directive_tr: Yatay kenarlarda 6-25 mm yarıçap veya kenarı saran 2-5 mm metal bant. Görünür yüzde asla ham keskin kenar.
+    typical_material: chrome_polished
+    typical_dimension_hint: R6-25mm; banding 2-5mm
+    ornament_level: moderate
+    priority: must
+  - part_role: upholstery
+    directive: Taut black aniline leather or one deep jewel-tone velvet; fluted or channel-stitched in a constant pitch is allowed, tufting is not.
+    directive_tr: Gergin siyah anilin deri veya tek koyu mücevher tonu kadife; sabit adımda oluklu veya kanal dikişli kabul edilir, kapitone yok.
+    typical_material: leather_aniline_black
+    typical_dimension_hint: pad 60-110mm; channel pitch 60-120mm
+    ornament_level: moderate
+    priority: should
+  - part_role: seat
+    directive: Firm, 60-100 mm, taut upholstery over webbing + foam; seat height 430-460 mm; no loose cushion look.
+    directive_tr: Sert, 60-100 mm, dokuma + sünger üstünde gergin döşeme; oturma yüksekliği 430-460 mm; gevşek minder görünümü yok.
+    typical_material: leather_aniline_black
+    typical_dimension_hint: seat height 430-460mm; depth 430-480mm
+    ornament_level: subtle
+    priority: must
+  - part_role: back_support
+    directive: Fan-shaped or stepped crest, upholstered or veneered, symmetric about the centre; height 380-520 mm above seat.
+    directive_tr: Yelpaze şeklinde veya basamaklı tepe, döşemeli veya kaplamalı, merkez etrafında simetrik; oturmada 380-520 mm yükseklik.
+    typical_material: macassar_ebony_veneer
+    typical_dimension_hint: back height 380-520mm above seat
+    ornament_level: rich
+    priority: must
+  - part_role: frame
+    directive: 'Hidden behind veneer/lacquer: 19 mm MDF or birch ply carcass, sealed on all six faces, mitred and splined corners.'
+    directive_tr: 'Kaplama/lake arkasında gizli: 19 mm MDF veya huş kontrplak gövde, altı yüzü de mühürlü, gönyeli ve lamelli köşeler.'
+    typical_material: lacquer_black_gloss
+    typical_dimension_hint: 19mm carcass; 0.6mm veneer; 0.4mm lacquer build
+    ornament_level: none
+    priority: must
+# -----------------------------------------------------------------------------
+# CANLI ÇİZİM GERİ BİLDİRİM CÜMLELERİ
+sketch_feedback:
+  on_good_signal:
+    - Symmetry axis detected and both halves match. That is the foundation of the style.
+    - Step increments are equal — the ziggurat reads correctly.
+    - Flute pitch is constant across the run. Machine precision achieved by hand.
+    - One focal motif on the centre axis. Correct restraint within an ornamental style.
+  on_weak_signal:
+    - Contrast is low. Add a specular element (chrome banding, marble, lacquer) — Deco needs gloss.
+    - Void ratio is high; Deco prefers mass. Close some openings or thicken the frame.
+    - The silhouette is squat. Elongate vertically to reach h/w >= 1.4 for casegoods.
+  on_violation:
+    - Asymmetry detected. Art Deco requires strict bilateral symmetry about the central axis.
+    - Organic/freehand curve detected. Curves must be constant-radius arcs, waterfall wraps or concentric circles.
+    - Figurative ornament detected. Motifs must be geometric and non-figurative.
+    - All-matte surface detected. This style requires at least one high-gloss or polished metal field.
+    - More than one motif family detected. Pick sunburst OR chevron OR fluting — one focal system.
+    - Inlay covering more than 20% of a face. Pull it back to line-work.
+    - Prohibited material detected (ivory/tortoiseshell/CITES timber). Substitute a declared legal alternative.
+    - 'Load path failed: a heavy stone top is spanning without a supporting frame.'
+  on_violation_tr:
+    - Asimetri tespit edildi. Art Deco merkez eksen etrafında katı iki taraflı simetri gerektirir.
+    - Organik/serbest eğri tespit edildi. Eğriler sabit yarıçaplı yay, şelale sarmalı veya eş merkezli daire olmalı.
+    - Figüratif süsleme tespit edildi. Motifler geometrik ve figüratif olmayan olmalı.
+    - Tamamen mat yüzey tespit edildi. Bu stil en az bir yüksek parlak veya cilalı metal alan gerektirir.
+    - Birden fazla motif ailesi tespit edildi. Güneş ışını VEYA şevron VEYA oluk seçin — tek odak sistem.
+    - Kakma bir yüzün %20'sini aşıyor. Çizgi işine geri çek.
+    - Yasaklı malzeme tespit edildi (fildişi/bağa/CITES ahşabı). Beyan edilen yasal bir alternatif kullan.
+    - 'Yük yolu başarısız: ağır bir taş tabla destek çerçevesi olmadan açıklık geçiyor.'
+  suggested_next_strokes:
+    - Draw the central vertical axis first, then mirror every element across it.
+    - Add 3-5 equal steps to the top profile (ziggurat), increment 15-40 mm.
+    - Insert a sunburst fan centred on the axis in the upper third.
+    - Draw a constant-pitch fluted column at each side.
+    - Recess the plinth 30-50 mm to make the body float.
+    - Add a 2-5 mm chrome band along the top arris.
+# -----------------------------------------------------------------------------
+# STİL UYUMLULUĞU VE HİBRİT TARİFLERİ
+compatibility:
+  blends_well_with:
+    - hollywood_regency
+    - streamliner
+    - neo_classical_restrained
+    - high_gloss_contemporary
+  conflicts_with:
+    - japandi
+    - wabi_sabi
+    - brutalism
+    - bauhaus
+    - memphis
+    - gothic_minimalism
+    - scandinavian_modern
+    - industrial
+  hybrid_recipes:
+    - result_style_id: deco_streamline
+      mix:
+        - { style_id: art_deco, ratio: 0.6 }
+        - { style_id: high_tech, ratio: 0.4 }
+      note: Drop the sunburst, keep waterfall radius and chrome banding; increase horizontal speed lines; reduce ornament_density to 0.4.
+    - result_style_id: deco_noir
+      mix:
+        - { style_id: art_deco, ratio: 0.55 }
+        - { style_id: gothic_minimalism, ratio: 0.45 }
+      note: Keep strict symmetry and stepped massing; remove all inlay and metal shine except one aged brass line; drop gloss_absence gate to <= 0.5; raise dark_materiality to 0.9.
+# -----------------------------------------------------------------------------
+# YASAL / ETİK UYUM
+compliance:
+  cultural_sensitivity_notes: 'Art Deco borrowed heavily from Egyptian, Mesopotamian, African and Mesoamerican sources. Use GEOMETRY (steps, rays, chevrons) rather than sacred or funerary imagery (deities, hieroglyphs, masks, totems). Never render religious or funerary symbols as decoration. '
+  religious_symbol_policy: forbidden_as_content / permitted_as_abstract_geometry
+  do_not_replicate:
+    - ivory, tortoiseshell, or any CITES-listed material (hard legal ban)
+    - named 1920-40 designer pieces (recognisable authorial silhouettes)
+    - specific historic building interiors (e.g. a named cinema foyer) as a 1:1 transfer
+    - sacred or funerary iconography from source cultures
+# -----------------------------------------------------------------------------
+# META
+meta:
+  author: FDE stil ontolojisi katmanı
+  created: '2026-10-16'
+  updated: '2026-10-16'
+  status: production
+  confidence: 0.9
+  evidence_sources:
+    - 1925 Paris Exposition / Streamline Moderne — design history consensus
+    - French ébénisterie veneer + gloss lacquer process knowledge
+    - Met Open Access (public domain filtered), Europeana, Wikidata
+    - CITES material restrictions
+  notes: 'confidence 0.9: iyi belgelenmiş tarihsel akım. En yüksek risk alanları: telif (isimli tasarımcı parçaları) ve yasal malzeme (fildişi/bağa/CITES).'

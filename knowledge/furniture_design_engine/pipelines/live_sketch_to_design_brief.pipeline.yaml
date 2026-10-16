@@ -1,0 +1,654 @@
+# =============================================================================
+# FDE / pipelines / live_sketch_to_design_brief.pipeline.yaml
+# CANLI ÇİZİM -> YAPISAL TASARIM BİLGİSİ -> BRIEF -> PROMPT -> CAD-JSON
+#
+# ÖNEMLİ: Bu pipeline mevcut canlı çizim modülünü DEĞİŞTİRMEZ. Çizim motorunun
+# ÇIKTISINI tüketir ve üzerine bir "tasarım beyni" katmanı ekler.
+# =============================================================================
+
+pipeline_id: live_sketch_to_design_brief
+version: "1.0.0"
+description: >
+  Kullanıcının canlı çiziminden (veya yüklediği görselden) yapısal bir mobilya
+  tasarım bilgisi üretir: tür tespiti, parçalara ayırma, parça başına metadata,
+  tarz skorlaması, tasarım DNA'sı, üretim brief'i, görsel üretim prompt'u ve
+  3D/CAD'e taşınabilir JSON. Çizim motoruna tek yönlü bağımlılık vardır:
+  yalnızca stroke/region olaylarını ve dışa aktarılmış rasteri okur.
+
+# -----------------------------------------------------------------------------
+# VARSAYIMLAR (açıkça beyan edilir)
+# -----------------------------------------------------------------------------
+assumptions:
+  - id: ASM-1
+    statement: "Canlı çizim modülü stroke düzeyinde veri yayınlayabilir (pointer events / SVG path). Yayınlayamıyorsa yalnızca raster modu kullanılır ve STAGE-2'deki deterministik geometri adımları devre dışı kalır."
+    fallback: "raster_only_mode"
+  - id: ASM-2
+    statement: "Çizim düzlemi 2D'dir (x, y). Derinlik yoktur; z bilgisi yalnızca VLM/rule tabanlı tahminle üretilir ve 'inferred' olarak işaretlenir."
+    fallback: "mark_all_depth_as_inferred"
+  - id: ASM-3
+    statement: "Kullanıcı çizimi tek bir mobilya nesnesini içerir. Çoklu nesne varsa STAGE-1'de bölünür."
+    fallback: "multi_object_split"
+  - id: ASM-4
+    statement: "Birim mm'dir. Kullanıcı çizim ölçeğini vermezse sistem referans bir ölçüden (ör. oturma yüksekliği 440 mm) ölçek çözer ve 'scale_inferred' bayrağını koyar."
+    fallback: "scale_inferred"
+  - id: ASM-5
+    statement: "Bir VLM (görsel-dil modeli) API'si mevcuttur ve yapılandırılmış JSON dönebilir (JSON mode / function calling). Yoksa STAGE-3 ve STAGE-6 çalışmaz, yalnızca geometri türetilir."
+    fallback: "geometry_only_mode"
+  - id: ASM-6
+    statement: "Segmentasyon (SAM/Grounded-SAM) raster modda isteğe bağlıdır. Sketch modda stroke bölgeleri zaten maske olarak kullanılabilir, bu yüzden SAM yalnızca raster yüklemede zorunludur."
+    fallback: "use_stroke_regions_as_masks"
+
+# -----------------------------------------------------------------------------
+# GİRDİ SÖZLEŞMESİ  (mevcut canlı çizim modülünün yayınlaması gereken veri)
+# -----------------------------------------------------------------------------
+input_contract:
+  sketch_stream:
+    transport: "websocket veya server-sent events; her stroke sonunda bir olay"
+    event_name: "sketch.stroke_committed"
+    payload_schema:
+      session_id: { type: string, required: true, description: "Çizim oturumu kimliği" }
+      stroke_id: { type: string, required: true }
+      stroke_index: { type: integer, required: true, description: "Oturumdaki sıfır tabanlı sıra" }
+      timestamp_ms: { type: integer, required: true }
+      points:
+        type: "array<[x:number, y:number, pressure?:number, t_ms?:number]>"
+        required: true
+        description: "Çizim düzlemi koordinatları. origin sol-üst, +y aşağı."
+      view:
+        type: object
+        required: true
+        fields:
+          canvas_width_px: { type: integer }
+          canvas_height_px: { type: integer }
+          zoom: { type: number, default: 1.0 }
+          pan_x: { type: number, default: 0 }
+          pan_y: { type: number, default: 0 }
+          scale_mm_per_px: { type: number, required: false, description: "Verilirse ASM-4 çözülür; verilmezse sistem tahmin eder." }
+      stroke_attrs:
+        type: object
+        required: false
+        fields:
+          color_hex: { type: string, description: "Kullanıcının seçtiği renk — malzeme ipucu olarak kullanılabilir" }
+          width_px: { type: number, description: "Kalem kalınlığı — kesit kalınlığı ipucu" }
+          tool: { type: string, enum: [pen, pencil, line, rect, ellipse, polygon, eraser, fill], description: "Kullanıcı 'line/rect/ellipse' aracı kullandıysa geometri deterministiktir" }
+          layer_name: { type: string, description: "Kullanıcı katman adlandırdıysa bu bir region_type ipucudur (ör. 'legs', 'ornament')" }
+          user_label: { type: string, description: "Kullanıcı stroke'a bir etiket verdiyse en yüksek öncelikli sinyal" }
+    example:
+      session_id: "sk_9f2c1a"
+      stroke_id: "st_0042"
+      stroke_index: 42
+      timestamp_ms: 1734528193120
+      points: [[412, 188, 0.62, 0], [413, 305, 0.58, 22], [414, 512, 0.61, 47]]
+      view: { canvas_width_px: 1920, canvas_height_px: 1080, zoom: 1.0, pan_x: 0, pan_y: 0, scale_mm_per_px: 1.4 }
+      stroke_attrs: { color_hex: "#2B2724", width_px: 4, tool: "line", layer_name: "legs" }
+
+  raster_export:
+    transport: "HTTP POST /v1/sketch/raster"
+    payload_schema:
+      session_id: { type: string, required: true }
+      png_uri: { type: string, required: true, description: "data: URI veya object storage key" }
+      width_px: { type: integer, required: true }
+      height_px: { type: integer, required: true }
+      background: { type: string, enum: [transparent, white, custom], default: transparent }
+      scale_mm_per_px: { type: number, required: false }
+
+  image_upload:
+    transport: "HTTP POST /v1/image/upload"
+    payload_schema:
+      image_uri: { type: string, required: true }
+      license: { type: string, enum: [cc0, public_domain, cc_by, cc_by_sa, user_uploaded, unknown], required: true }
+      source_url: { type: string, required: false }
+      user_intent: { type: string, enum: [extract_principles_only, style_reference, geometry_reference], default: extract_principles_only }
+      notes: { type: string, required: false }
+
+  text_brief:
+    transport: "HTTP POST /v1/brief/text"
+    payload_schema:
+      text: { type: string, required: true }
+      style_id: { type: string, required: false }
+      furniture_type: { type: string, required: false }
+
+# -----------------------------------------------------------------------------
+# ÇIKTI SÖZLEŞMESİ (bölge/stroke metadata) — kullanıcının istediği 7 alan
+# -----------------------------------------------------------------------------
+output_contract:
+  region_metadata_schema:
+    description: >
+      Her stroke veya çizim bölgesi için üretilen metadata. Kullanıcının istediği
+      yedi alanın tamamı burada: region_type, structural_role, material_hint,
+      proportion_hint, ornament_hint, style_signal, confidence.
+    fields:
+      region_id: { type: string, description: "stroke_id veya cluster id" }
+      source_strokes: { type: "array<string>", description: "Bu bölgeyi oluşturan stroke kimlikleri" }
+      bbox_norm: { type: "array<number>[4]", description: "[x0, y0, x1, y1] 0-1 normalize" }
+      mask_uri: { type: string, description: "PNG maske (opsiyonel)" }
+      region_type:
+        type: string
+        enum: [structural, surface, leg, backrest, seat, armrest, frame, panel, door, drawer, shelf,
+               top_surface, plinth, stretcher, hardware, ornament, void, upholstery, edge, light, unknown]
+      structural_role:
+        type: string
+        enum: [primary_structure, load_path, seating_surface, back_support, arm_support, leg, foot,
+               stretcher, rail, post, frame, panel, door, drawer, drawer_front, shelf, shelf_support,
+               hardware, joint, upholstery, cushion, padding, spring_system, finish_surface, ornament,
+               void, light_channel, edge_treatment, base_plinth, top_surface, connection_plate]
+      material_hint:
+        type: object
+        fields:
+          material_id: { type: string, description: "manufacturing_constraints.json materials.entries[].material_id" }
+          material_tr: { type: string }
+          finish: { type: string }
+          color_hex: { type: string }
+          evidence: { type: "array<string>", description: "Örn. ['stroke width 4px at 1.4 mm/px => 5.6mm section => too thin for a leg', 'user picked dark brown']" }
+      proportion_hint:
+        type: object
+        fields:
+          ratio_id: { type: string, description: "Örn. 'height_to_width', 'leg_to_body_height'" }
+          measured_value: { type: number }
+          expected_range: { type: "array<number>[2]" }
+          in_range: { type: boolean }
+          deviation_pct: { type: number }
+      ornament_hint:
+        type: object
+        fields:
+          level: { type: string, enum: [none, subtle, moderate, rich, ornate] }
+          motifs: { type: "array<string>" }
+          is_structural: { type: boolean, description: "true ise süsleme yapıdan türüyor (iyi); false ise uygulanmış (stil kontrolünden geçer)" }
+      style_signal:
+        type: object
+        fields:
+          top_style: { type: string }
+          top_style_score: { type: number }
+          contributing_features: { type: "array<object>", description: "[{feature_id, value, delta_vs_target}]" }
+          secondary_styles: { type: "array<string>" }
+      confidence: { type: number, range: [0, 1] }
+      provenance:
+        type: object
+        fields:
+          derived_from: { type: string, enum: [deterministic_geometry, vlm, segmentation, user_label, ontology_lookup, rule_engine] }
+          model_id: { type: string }
+          latency_ms: { type: integer }
+
+  design_brief_schema:
+    description: "STAGE-7 çıktısı. Yeni bir tasarım üretmek için gereken tüm bilgiler."
+    fields:
+      brief_id: { type: string }
+      title: { type: string }
+      title_tr: { type: string }
+      furniture_type: { type: string }
+      furniture_type_tr: { type: string }
+      target_style: { type: string }
+      style_confidence: { type: number }
+      design_dna: { "$ref": "schemas/furniture_parts.schema.json#/$defs/designDna" }
+      part_program: { type: "array<object>", description: "Her parça için: role, target material, target dimensions, ornament level, style directive" }
+      proportions: { "$ref": "schemas/furniture_parts.schema.json#/$defs/proportionBlock" }
+      material_palette: { type: "array<string>" }
+      color_palette: { type: "array<object>" }
+      light_direction: { type: string }
+      mood_keywords: { type: "array<string>" }
+      variation_axes: { type: "array<object>" }
+      constraints_must: { type: "array<string>" }
+      constraints_must_not: { type: "array<string>" }
+      ergonomics: { "$ref": "schemas/furniture_parts.schema.json#/$defs/ergonomicEnvelope" }
+      manufacturing_plan: { type: "object" }
+      open_questions: { type: "array<string>", description: "Kullanıcıya sorulacak netleştirme soruları" }
+
+  prompt_bundle_schema:
+    fields:
+      positive_prompt: { type: string }
+      negative_prompt: { type: string }
+      prompt_mode: { type: string, enum: [text_to_image, img2img_from_sketch, controlnet_scribble, controlnet_canny, controlnet_depth, controlnet_segmentation] }
+      controlnet_conditions: { type: "array<object>", description: "[{type, uri, weight, start_percent, end_percent}]" }
+      sampler_hint: { type: object, description: "{steps, cfg, sampler, seed_strategy}" }
+      per_part_prompts: { type: "array<object>", description: "Parça bazlı bölgesel prompt'lar (inpaint/regional conditioning)" }
+
+  cad_json_schema:
+    description: "STAGE-9 çıktısı: 3D/CAD/parametrik üretime taşınabilir yapı."
+    fields:
+      units: { type: string, default: mm }
+      assembly:
+        type: object
+        fields:
+          furniture_type: { type: string }
+          overall_dimensions: { "$ref": "schemas/furniture_parts.schema.json#/$defs/dimensions" }
+          parts:
+            type: "array<object>"
+            item_fields:
+              part_id: { type: string }
+              parent_id: { type: string }
+              primitive: { type: string, enum: [box, cylinder, sphere, extrusion, revolution, swept_profile, mesh_reference, plane] }
+              parameters: { type: object, description: "primitive'e göre: box => {w,h,d}; cylinder => {r,h}; extrusion => {profile_uri, depth, path_uri}" }
+              transform: { type: object, description: "{origin:[x,y,z], rotation:[rx,ry,rz], scale:[sx,sy,sz]}" }
+              profile_2d: { type: string, description: "SVG path veya DXF referansı (extrusion için)" }
+              material_id: { type: string }
+              finish: { type: string }
+              process: { type: string }
+              joints: { type: "array<object>", description: "[{to_part_id, joint_type, fastener, position:[x,y,z], axis:[x,y,z]}]" }
+              parameters_exposed: { type: "array<object>", description: "Parametrik sürücüler: [{name, type, value, min, max, drives}] — ShopPrentice/Fusion360 tarzı" }
+              symmetry: { type: object, description: "{plane, mirrored_part_ids}" }
+              bom_entry: { type: object }
+          constraints: { type: "array<object>", description: "CAD constraint grafiği: coincident, parallel, perpendicular, distance, angle, symmetric" }
+          assembly_order: { type: "array<object>" }
+          export_targets: { type: "array<string>", enum: [step, iges, dxf_cutlist, stl, glb, f3d_script, revit_family_params, blender_python] }
+
+# -----------------------------------------------------------------------------
+# REAL-TIME GERİ BİLDİRİM OLAYLARI (çizim arayüzüne giden)
+# -----------------------------------------------------------------------------
+feedback_contract:
+  transport: "websocket; sunucu -> istemci"
+  debounce_ms: 220
+  max_events_per_second: 4
+  events:
+    - event: "fde.part.detected"
+      description: "'Bu çizim hangi mobilya parçasına dönüşüyor?'"
+      payload: { region_id, region_type, structural_role, part_name_tr, confidence, bbox_norm, latency_ms }
+      ui_hint: "Bölgeyi ince bir renkle çerçevele + etiket göster (ör. 'sırtlık · %82')"
+    - event: "fde.type.detected"
+      description: "Tüm çizimin hangi mobilya türü olduğuna dair tahmin."
+      payload: { furniture_type, furniture_type_tr, confidence, alternatives: [{type, score}] }
+      ui_hint: "Üst barda tür rozetini güncelle"
+    - event: "fde.style.signal"
+      description: "'Bu çizim hangi tarz sinyalini veriyor?'"
+      payload: { top_style, top_style_tr, score, delta_from_previous, contributing_features: [{feature_id, value, delta}], secondary_styles }
+      ui_hint: "Stil çubuğunu doldur: gothic_minimalism %74 · japandi %12"
+    - event: "fde.rule.violation"
+      description: "'Hangi kural ihlal ediliyor?'"
+      payload: { check_id, severity, message_tr, message_en, affected_regions: [region_id], suggestion_tr, feature_impact }
+      ui_hint: "İlgili stroke'u kırmızı/turuncu işaretle + tooltip; severity hard_fail ise yanıp söner"
+    - event: "fde.proportion.hint"
+      description: "Oran geri bildirimi."
+      payload: { ratio_id, ratio_name_tr, measured, expected_range, in_range, deviation_pct, suggestion_tr }
+      ui_hint: "Ölçü çizgisi overlay'i + '1.32 (beklenen 1.6-2.4)'"
+    - event: "fde.suggestion.next"
+      description: "Bir sonraki çizim önerisi."
+      payload: { suggestions_tr: [string], reason_tr, priority }
+      ui_hint: "Yan panelde öneri kartı"
+    - event: "fde.brief.ready"
+      description: "Kullanıcı 'brief üret'e bastığında veya pipeline tamamlandığında."
+      payload: { brief_id, design_brief }
+    - event: "fde.prompt.ready"
+      payload: { prompt_bundle }
+    - event: "fde.cad.ready"
+      payload: { cad_json }
+    - event: "fde.scores.ready"
+      payload: { scores }
+    - event: "fde.error"
+      payload: { stage, code, message_tr, recoverable, fallback_used }
+
+# -----------------------------------------------------------------------------
+# AŞAMALAR
+# -----------------------------------------------------------------------------
+stages:
+
+  - stage: 0
+    id: ingest_normalize
+    name_tr: "Al ve Normalize Et"
+    trigger: "her sketch.stroke_committed olayı (debounce 220 ms) veya raster/image POST"
+    latency_budget_ms: 30
+    model: null
+    steps:
+      - "Stroke'ları view transform ile normalize: ekran px -> canvas px -> mm (scale_mm_per_px varsa; yoksa ASM-4 tahmini)."
+      - "Basitleştir: Ramer-Douglas-Peucker, epsilon = 1.2 px. Nokta sayısını ~%70 azaltır."
+      - "Stroke birleştirme: 12 px içinde ve 15° içindeki ardışık stroke'ları tek polyline olarak birleştir."
+      - "Geometri primitif tespiti: her polyline için line/arc/circle/ellipse/spline fit; R² > 0.98 ise primitif kabul et."
+      - "Kapalı bölge tespiti: tüm stroke'lardan planar subdivision üret, kapalı yüzleri çıkar (region candidates)."
+      - "Ölçek çözümü: bilinen bir referans ölçü yoksa furniture_type tahmini sonrası ergonomik zarftan geri çöz (ör. seat_height = 440 mm)."
+      - "Snapshot üret: transparent PNG (raster fallback ve ControlNet scribble için)."
+    outputs:
+      - "normalized_strokes[]"
+      - "closed_regions[]"
+      - "primitives[]"
+      - "snapshot_png_uri"
+      - "scale_resolution {mode, mm_per_px, confidence, reference}"
+    emits_events: []
+
+  - stage: 1
+    id: furniture_type_detection
+    name_tr: "Mobilya Türü Tespiti"
+    trigger: "stage 0 sonrası, >= 6 stroke olduğunda"
+    latency_budget_ms: 900
+    model:
+      primary: "VLM (structured JSON mode) — snapshot + primitive özetini alır"
+      secondary: "hafif bir CNN/ViT sınıflandırıcı (opsiyonel, kendi verinle eğitilir)"
+      fallback: "kullanıcıya sor (bir tık ile tür seçimi)"
+    prompt_ref: "prompts/image_to_parts_prompt.txt#TASK_A_TYPE_ONLY"
+    steps:
+      - "VLM'e snapshot + primitive özeti + kapalı bölge sayısını gönder."
+      - "furniture_parts.json -> cross_type_part_index ve types[] listesini allowed_types olarak zorla (constrained decoding / enum validation)."
+      - "Top-3 tür ve skorlarını al; 0.6 üstü güven yoksa kullanıcıya tek tık seçim göster."
+    outputs: ["furniture_type", "furniture_type_tr", "type_confidence", "type_alternatives[]"]
+    emits_events: ["fde.type.detected"]
+    difficulty: 2
+
+  - stage: 2
+    id: part_segmentation
+    name_tr: "Parçalara Ayırma"
+    trigger: "stage 1 sonrası ve her yeni stroke kümesinde (incremental)"
+    latency_budget_ms: 700
+    model:
+      sketch_mode:
+        primary: "deterministik bölge kümeleme (kapalı bölgeler + primitif ailesi + konum)"
+        secondary: "VLM ile bölge -> parça rolü eşleme"
+      raster_mode:
+        primary: "Grounded-SAM2: metin prompt'u furniture_parts.json'daki name_en + aliases listesinden gelir"
+        secondary: "SAM2 mask refinement + VLM rol ataması"
+    steps:
+      - "Her kapalı bölge için: merkezi konum (üst/orta/alt, sol/merkez/sağ), en-boy oranı, yön, stroke yoğunluğu, kullanıcı layer_name/user_label."
+      - "Kural tabanlı ilk atama (taksonomi şablonundan):"
+      - "  * en altta + dikey + ince + tekrar eden => leg"
+      - "  * üstte + yatay + geniş => back_support / top_surface"
+      - "  * ortada + yatay + geniş + kapalı => seating_surface"
+      - "  * yanlarda + dikey + orta => arm_support / side_panel"
+      - "  * içi boş + kemer/daire/dikdörtgen => void"
+      - "  * küçük + tekrar eden + düzenli adım => ornament veya shelf rhythm"
+      - "VLM ile doğrula ve eksikleri tamamla (allowed part_role enum'u zorunlu)."
+      - "Simetri tespiti: bölgeleri dikey merkez eksene göre eşleştir; eşleşen çiftleri 'mirrored' olarak işaretle ve tek bir part_id + instance_count olarak birleştir."
+      - "parent/child hiyerarşisini taksonomi şablonuna göre kur (assembly_relations)."
+    outputs: ["parts[] (region_metadata_schema ile)", "symmetry_map", "part_tree"]
+    emits_events: ["fde.part.detected"]
+    difficulty: 4
+    notes: >
+      En zor aşama. Çizim modunda deterministik kurallar VLM'den daha güvenilirdir ve
+      çok daha hızlıdır; VLM yalnızca belirsiz durumlarda çağrılır. Raster modda
+      Grounded-SAM2 + VLM kombinasyonu gerekir.
+
+  - stage: 3
+    id: per_part_extraction
+    name_tr: "Parça Başına Geometri / Malzeme / Oran / İşlev Çıkarımı"
+    trigger: "stage 2 sonrası, her parça için"
+    latency_budget_ms: 500
+    model: "deterministik geometri + VLM (yalnızca malzeme ve sembolik işlev için)"
+    prompt_ref: "prompts/image_to_parts_prompt.txt#TASK_B_PART_EXTRACTION"
+    steps:
+      - "GEOMETRİ (deterministik, confidence 1.0):"
+      - "  * bbox, bbox_norm, alan, çevre"
+      - "  * dominant_axis: bbox h/w > 1.6 => vertical; w/h > 1.6 => horizontal; else none"
+      - "  * silhouette_family: primitif fit sonuçlarından (pointed_arch = iki arc + apex tepe noktası; cylindrical = ellipse fit; rectilinear = line fit R²>0.99)"
+      - "  * cross_section: stroke kalınlığı ve çift çizgi mesafesinden"
+      - "  * estimated_dimensions: mm cinsinden (stage 0 ölçeği ile)"
+      - "  * symmetry: mirror IoU"
+      - "MALZEME (VLM + kural, confidence 0.5-0.85):"
+      - "  * stroke renk/kalınlık ipuçları + kullanıcı layer adı + stil paleti karşılaştırması"
+      - "  * manufacturing_constraints.json materials.entries[] ile doğrula; geçersiz malzeme+süreç kombinasyonunu reddet"
+      - "  * 'evidence' dizisini doldur — kullanıcıya gösterilecek gerekçe"
+      - "ORAN (deterministik + taksonomi karşılaştırması):"
+      - "  * furniture_parts.json canonical_proportions ile karşılaştır"
+      - "  * proportion_hint {ratio_id, measured, expected_range, in_range, deviation_pct} üret"
+      - "İŞLEV (taksonomi lookup + VLM onayı):"
+      - "  * structural_role -> function.primary / primary_tr doğrudan taksonomiden alınır"
+      - "  * load_bearing ve user_contact bayrakları taksonomiden gelir, VLM yalnızca çelişki varsa düzeltir"
+      - "SÜSLEME:"
+      - "  * ornament_hint: motif tespiti (tekrar eden küçük bölgeler, arc desenleri, kakma çizgileri)"
+      - "  * is_structural: motifin bir parçanın geometrisinden mi yoksa yüzeye eklenmiş mi olduğu"
+    outputs: ["parts[] (zenginleştirilmiş)", "proportion_report[]", "material_report[]"]
+    emits_events: ["fde.proportion.hint", "fde.part.detected"]
+    difficulty: 3
+
+  - stage: 4
+    id: style_scoring
+    name_tr: "Tarz Skorlaması"
+    trigger: "stage 3 sonrası"
+    latency_budget_ms: 400
+    model: "VLM (feature tahmini) + kural motoru (deterministik feature'lar) + skorlayıcı"
+    config_ref: "rules/style_scoring_rules.json"
+    prompt_ref: "prompts/image_to_parts_prompt.txt#TASK_C_STYLE_FEATURES"
+    steps:
+      - "Deterministik feature'ları hesapla: verticality, height_width_bias, void_ratio, symmetry_strictness, part_count_leanness, leg_verticality, modular_grid_index, geometric_strictness (sketch modunda çizimden; raster modunda maskeden)."
+      - "Pixel-stat feature'larını hesapla (yalnızca raster/görsel modda): dark_materiality, low_key_palette, chroma_restraint, contrast_ratio, gloss_absence."
+      - "VLM'e kalan feature'ları sor: pointed_arch_presence, ornament_density, ornament_is_applied, figurative_ornament, material_honesty, faux_finish_absence, structural_expression, edge_softness, curvature_organic, warmth_index, shadow_as_design_element, handcraft_index, industrial_index, sacred_geometry, ritual_stillness, sculptural_index, massiveness, historical_reference_index, futuristic_index."
+      - "Kural motoru feature'larını hesapla: ergonomic_compliance, structural_plausibility, material_legality."
+      - "Her stil için: weighted cosine similarity + hard gate kontrolü (style_scoring_rules.json score_formula)."
+      - "Sırala, primary_style seç, verdict_tr/verdict_en üret (verdict_generation şablonu)."
+    outputs: ["style_scores (schemas/furniture_parts.schema.json#/$defs/styleScores)", "feature_vector", "gate_failures[]"]
+    emits_events: ["fde.style.signal"]
+    difficulty: 3
+
+  - stage: 5
+    id: rule_validation
+    name_tr: "Kural Doğrulama ve Kalite Kontrolü"
+    trigger: "stage 3 ve stage 4 sonrası"
+    latency_budget_ms: 250
+    model: "kural motoru (deterministik, model yok)"
+    config_ref: "rules/manufacturing_constraints.json"
+    steps:
+      - "qc_pipeline stage sırasına göre tüm kontrolleri çalıştır: legality -> anatomy -> structural -> ergonomic -> manufacturing -> style -> originality."
+      - "Her başarısız kontrol için: check_id, severity, message_tr, affected_regions, suggestion_tr, feature_impact üret."
+      - "hard_fail varsa: release_decision = rejected, overall = 0."
+      - "Rubrik skorlarını hesapla: style_consistency, manufacturability, structural_integrity, ergonomics, aesthetic_coherence, originality, overall."
+      - "Kullanıcıya gerçek zamanlı geri bildirim olaylarını yayınla (severity major+ için anında, minor için toplu)."
+    outputs: ["violations[]", "scores (schemas/furniture_parts.schema.json#/$defs/qualityScores)", "release_decision"]
+    emits_events: ["fde.rule.violation", "fde.scores.ready"]
+    difficulty: 3
+
+  - stage: 6
+    id: design_dna_synthesis
+    name_tr: "Tasarım DNA'sı Sentezi"
+    trigger: "stage 4 + stage 5 sonrası"
+    latency_budget_ms: 800
+    model: "VLM (structured JSON) + stil ontolojisi birleştirme"
+    prompt_ref: "prompts/image_to_parts_prompt.txt#TASK_D_DESIGN_DNA"
+    steps:
+      - "Girdiler: parts[], style_scores, violations, seçilen stil YAML'ı, kaynak lisansı."
+      - "preserve[] üret: referanstan korunması gereken ilkeler (oranlar, malzeme mantığı, ışık mantığı, yapısal jest). Her biri bir rule_id + weight taşır."
+      - "forbid[] üret: stilin forbidden_signals'ı + ihlal edilen kurallar + kaynağın lisans kısıtları."
+      - "ratios_to_keep: ölçülen ve başarılı olan oranları hedef olarak yaz (tolerans ile)."
+      - "material_palette: detected materials, stilin material combination_rules'ı ile filtrelenmiş."
+      - "variation_axes[] üret: özgün varyasyon için güvenli serbestlik eksenleri (ör. slat_count 3-7, arch_rise 30-80mm, leg_taper 0-3deg). Her eksende risk seviyesi."
+      - "novelty_guard: min_variation_axes_used = 2, forbid_direct_silhouette_copy = true."
+      - "TELİF KONTROLÜ: source.usage_mode == 'extract_principles_only' ise preserve[] içinde siluet/ölçü birebir kopyası olan hiçbir madde bırakma; yalnızca oran-oranı (ratio) ve ilke düzeyinde ifadeler kalır."
+    outputs: ["design_dna (schemas/furniture_parts.schema.json#/$defs/designDna)"]
+    emits_events: []
+    difficulty: 4
+    legal_note: "Bu aşama telif güvenliğin merkezidir. DNA = ilke kümesi, geometri kopyası değil."
+
+  - stage: 7
+    id: brief_generation
+    name_tr: "Tasarım Brief'i Üretimi"
+    trigger: "stage 6 sonrası veya kullanıcı 'yeni tasarım üret'e bastığında"
+    latency_budget_ms: 1200
+    model: "VLM (structured JSON) + ontoloji birleştirme + varyasyon örnekleyici"
+    steps:
+      - "Hedef stili seç: kullanıcının seçtiği stil > primary_style > en yakın iki stilin hibrit tarifi."
+      - "Stil YAML'ından part_directives[] çek; her part_role için directive, typical_material, typical_dimension_hint, ornament_level, priority."
+      - "design_dna.preserve ile part_directives'ı birleştir; çelişki varsa preserve kazanır (kullanıcı referansı > genel stil)."
+      - "variation_axes'ten örnek al (min_variation_axes_used kadar) — bu özgünlüğü garanti eder."
+      - "part_program[] üret: her parça için {role, material_id, dimensions, process, joint, ornament_level, style_directive_tr}."
+      - "ergonomics bloğunu taksonomi ergonomic_envelope'ından doldur."
+      - "manufacturing_plan: BOM taslağı, süreç listesi, zorluk, tahmini maliyet katmanı."
+      - "open_questions[] üret: kullanıcının karar vermesi gerekenler (ör. 'Arka sırt çıta sayısı 4 mü 6 mı?', 'Pirinç vurgu olsun mu?')."
+      - "constraints_must / constraints_must_not listelerini design_dna.preserve / .forbid'dan türet."
+    outputs: ["design_brief (output_contract.design_brief_schema)"]
+    emits_events: ["fde.brief.ready"]
+    difficulty: 4
+
+  - stage: 8
+    id: prompt_generation
+    name_tr: "Görsel Üretim Prompt'u"
+    trigger: "stage 7 sonrası"
+    latency_budget_ms: 300
+    model: "şablon motoru (model yok) + istenirse VLM ile zenginleştirme"
+    config_ref: "rules/negative_prompts.json"
+    steps:
+      - "Stil YAML'ından positive_prompt_tokens'ı weight_hint sırasına göre diz."
+      - "design_brief'ten subject, furniture_type, part program, dimensions, material palette, light, mood, camera, quality token'larını doldur."
+      - "Şablona yerleştir: '{subject}, {style_core}, {form}, {parts_and_dimensions}, {material}, {light}, {mood}, {camera}, {quality}'"
+      - "Sonuna 'original design, not a replica of any existing product' ekle."
+      - "Negatifi birleştir: negative_prompts.json assembly order + stil YAML negative_prompt_tokens + by_material_context + by_furniture_type + by_render_mode. Dedupe, lowercase, max_tokens'a kırp."
+      - "ControlNet koşullarını kur:"
+      - "  * sketch modunda: scribble (weight 0.55-0.75) + canny (weight 0.3-0.45, ince detay için)"
+      - "  * parça maskeleri varsa: segmentation controlnet (weight 0.6) — her bölgeye kendi materyal prompt'u"
+      - "  * derinlik tahmini varsa: depth (weight 0.4)"
+      - "per_part_prompts[] üret: regional prompting / inpaint için her parçanın kendi material+finish ifadesi."
+    outputs: ["prompt_bundle (output_contract.prompt_bundle_schema)"]
+    emits_events: ["fde.prompt.ready"]
+    difficulty: 2
+
+  - stage: 9
+    id: cad_json_export
+    name_tr: "3D / CAD / Parametrik JSON"
+    trigger: "stage 7 sonrası (isteğe bağlı) veya kullanıcı 'CAD'e aktar' dediğinde"
+    latency_budget_ms: 1500
+    model: "şablon motoru + VLM (yalnızca eksik derinlik/kesit tahmini için)"
+    steps:
+      - "Her parça için bir primitif seç: box (paneller, tablalar), cylinder (bacaklar, miller, borular), extrusion (profilli elemanlar), revolution (torna parçaları), swept_profile (bükümlü boru), plane (zarlar/döşeme)."
+      - "2D çizimden derinlik (z) tahmini: ASM-2 gereği 'inferred' bayrağı ile. Kural: leg section = çizim genişliği; panel depth = tipolojik varsayılan (kapak 18, tabla 25, raf 20); seat depth = ergonomik zarf."
+      - "transform hesapla: origin + rotation (mm, derece)."
+      - "profile_2d üret: extrusion gereken parçalar için SVG path (çizimden doğrudan türetilir)."
+      - "joints[] doldur: assembly_relations + part_directives.joint_language."
+      - "parameters_exposed[] üret: kullanıcının sonradan kaydırıcıyla değiştirebileceği sürücüler (seat_height, leg_taper, slat_count, arch_rise, top_thickness, overall_width)."
+      - "constraints[] üret: coincident/parallel/perpendicular/distance/symmetric ilişkileri — bu, CAD'e aktarıldığında modelin çökmemesini sağlar."
+      - "symmetry: mirror edilen parçaları tek bir sürücüye bağla."
+      - "bom_entry: manufacturing_constraints.json bom_template'e göre doldur."
+      - "export_targets belirle ve hedefe özel dönüştürücü çağır:"
+      - "  * step/iges => FreeCAD headless (Python API) veya CadQuery"
+      - "  * dxf_cutlist => nesting için 2D profil dışa aktarımı"
+      - "  * stl/glb => trimesh"
+      - "  * f3d_script => ShopPrentice MCP üzerinden Fusion 360"
+      - "  * blender_python => bpy script"
+    outputs: ["cad_json (output_contract.cad_json_schema)", "bom[]", "cutlist[]"]
+    emits_events: ["fde.cad.ready"]
+    difficulty: 5
+
+# -----------------------------------------------------------------------------
+# ORKESTRASYON
+# -----------------------------------------------------------------------------
+orchestration:
+  realtime_mode:
+    description: "Kullanıcı çizerken çalışan hafif döngü."
+    runs: ["stage_0", "stage_1 (throttled: her 3. stroke'ta)", "stage_2 (incremental)", "stage_3 (yalnızca değişen bölgeler)", "stage_4 (yalnızca deterministik feature'lar)", "stage_5 (yalnızca hard_fail kontrolleri)"]
+    latency_budget_ms: 350
+    notes: "VLM çağrıları bu modda minimum tutulur; cache'lenmiş tür/stil tahmini yeniden kullanılır. Amaç: çizim akışını bozmamak."
+  on_demand_mode:
+    description: "Kullanıcı 'analiz et' veya 'brief üret'e bastığında çalışan tam döngü."
+    runs: ["stage_0..stage_9"]
+    latency_budget_ms: 6000
+  incremental_cache:
+    keys: ["session_id", "stage_id", "input_hash"]
+    policy: "stage_2 ve stage_3 sonuçları bölge bazında cache'lenir; değişmeyen bölgeler yeniden hesaplanmaz."
+    invalidation: "stroke eklenince etkilenen bbox + 40 px içindeki bölgeler geçersiz olur."
+
+# -----------------------------------------------------------------------------
+# MODEL / KAYNAK EŞLEMESİ  (hangi açık kaynak hangi katmanda)
+# -----------------------------------------------------------------------------
+model_stack:
+  - layer: "sketch ingestion"
+    use: "MEVCUT canlı çizim modülün (değiştirilmez)"
+    responsibility: "stroke events, view transform, raster export"
+    integration: "input_contract.sketch_stream"
+  - layer: "geometry preprocessing"
+    use: "kendi kodun: Ramer-Douglas-Peucker + potrace/svgtrace + shapely"
+    alternatives: ["paper.js pathops", "skimage.measure", "opencv2 (fitLine, minAreaRect, HoughCircles)"]
+    responsibility: "primitif fit, kapalı bölge çıkarma, simetri"
+  - layer: "raster part segmentation"
+    use: "Grounded-SAM 2 (grounding DINO + SAM2)"
+    text_prompts: "furniture_parts.json cross_type_part_index[].name_en + aliases"
+    alternatives: ["SAM2 + kendi sınıflandırıcı başlığın", "MontageNet ile eğitilmiş bir U-Net/Mask2Former", "YOLOv8-seg kendi parça verinle"]
+    responsibility: "görsel yüklemelerinde parça maskeleri"
+    license_note: "SAM2 Apache-2.0; Grounding DINO Apache-2.0. Model ağırlıklarını kendi sunucunda barındır."
+  - layer: "part taxonomy & semantics"
+    use: "kendi furniture_parts.json taksonomin (bu paket)"
+    reference_only: ["PartNet / PartNet-Mobility hiyerarşisi (LİSANS: yalnızca ticari olmayan araştırma — üretimde doğrudan veri kullanma)", "3DCoMPaT200 (parça-malzeme-dil eşlemesi; HuggingFace üzerinden erişim)", "MontageNet (gerçek görsel bileşen etiketleri — sınıflandırıcı eğitmek için)"]
+    responsibility: "parça adları, roller, işlevler, malzeme olasılıkları, montaj ilişkileri"
+  - layer: "style understanding"
+    use: "kendi stil ontolojin (styles/*.yaml) + rules/style_scoring_rules.json"
+    reference_only: ["TIRG-BonnFurniture (stil retrieval/embedding fikri)", "furniture-style-classifier (baseline yaklaşım)", "Met / Europeana / Rijksmuseum / Smithsonian / Wikidata (tarihsel doğrulama, yalnızca metadata ve public-domain görseller)"]
+    responsibility: "stil hedef vektörleri, yasak sinyaller, parça direktifleri"
+  - layer: "VLM (semantic extraction)"
+    use: "yapılandırılmış JSON döndürebilen bir VLM (GPT-4o / Claude / Gemini / açık: Qwen2.5-VL, InternVL, LLaVA-OneVision)"
+    responsibility: "malzeme tahmini, stil feature tahmini, tasarım DNA'sı, brief, parça açıklamaları"
+    contract: "her çağrı bir JSON schema ile kısıtlanır; enum alanlar doğrulanır; başarısız parse -> 1 retry -> kural tabanlı fallback"
+  - layer: "image generation"
+    use: "ComfyUI workflow: SDXL/Flux-dev + ControlNet (scribble, canny, depth, segmentation) + regional prompting"
+    alternatives: ["T2I-Adapter (daha hafif kontrol)", "IP-Adapter (malzeme/doku referansı için)", "Sketch-a-Sketch tarzı aşamalı üretim"]
+    responsibility: "brief -> nihai görsel"
+  - layer: "3D from image (opsiyonel, Faz 5)"
+    use: "PartCrafter (tek RGB -> parçalı 3D mesh)"
+    alternatives: ["TripoSR / TRELLIS (hızlı tek-görsel 3D)", "Img2CAD (araştırma; CAD'e daha yakın)", "FamFab (Revit family yaklaşımı)"]
+    responsibility: "parça bazlı 3D mesh önerisi"
+  - layer: "parametric CAD (opsiyonel, Faz 5)"
+    use: "CadQuery veya FreeCAD headless (STEP/IGES/DXF)"
+    alternatives: ["ShopPrentice + Fusion 360 MCP (doğal dil/foto -> parametrik Fusion modeli)", "build123d", "OpenSCAD (basit parametrik)", "Blender bpy (görselleştirme)"]
+    responsibility: "cad_json -> gerçek CAD dosyası ve kesim listesi"
+  - layer: "assembly semantics (opsiyonel)"
+    use: "IKEA ASM / IKEA 3D Assembly / IKEA Assembly in the Wild — yalnızca montaj ilişkisi ve parça rolü eğitim verisi olarak"
+    responsibility: "assembly_relations mantığını zenginleştirmek"
+    license_note: "Her birinin kendi lisansı var; üretim sisteminde veri setini yeniden dağıtma, yalnızca öğrendiğin ilişkileri kendi şemanda kodla."
+
+# -----------------------------------------------------------------------------
+# HATA YÖNETİMİ
+# -----------------------------------------------------------------------------
+error_handling:
+  vlm_parse_failure: { retries: 1, then: "kural tabanlı fallback + confidence *= 0.6", emit: "fde.error" }
+  low_confidence: { threshold: 0.5, then: "kullanıcıya tek tık doğrulama sor (parça rolü / tür / malzeme)", emit: "fde.suggestion.next" }
+  segmentation_failure: { then: "stroke bölgelerini maske olarak kullan (ASM-6)", emit: "fde.error" }
+  hard_fail_violation: { then: "release_decision = rejected; görsel üretimine izin verme; kullanıcıya düzeltme önerisi göster", emit: "fde.rule.violation" }
+  originality_fail: { then: "stage 7'yi variation_axes zorunlu artırarak yeniden çalıştır (max 3 kez)", emit: "fde.error" }
+  scale_unresolved: { then: "ergonomik zarftan geri çöz; scale_inferred = true; tüm ölçüleri '~' ile göster", emit: "fde.proportion.hint" }
+  timeout: { budget_exceeded_then: "kısmi sonuç döndür (hangi aşamaların tamamlandığını belirterek)", emit: "fde.error" }
+
+# -----------------------------------------------------------------------------
+# ÖRNEK UÇTAN UCA VERİ AKIŞI
+# -----------------------------------------------------------------------------
+example_flow:
+  narrative_tr: "Kullanıcı gotik minimal bir sandalye çiziyor. Sistem her aşamada ne üretir?"
+  steps:
+    - step: 1
+      user_action: "Yatay bir çizgi çizer (zemin referansı), sonra iki dikey çizgi (arka bacaklar)."
+      system_output:
+        events:
+          - { event: "fde.part.detected", payload: { region_type: "leg", structural_role: "leg", part_name_tr: "arka sol ayak", confidence: 0.61 } }
+          - { event: "fde.type.detected", payload: { furniture_type: "chair", furniture_type_tr: "Sandalye", confidence: 0.52 } }
+    - step: 2
+      user_action: "Oturma düzlemini çizer (yatay, iki bacak arasında)."
+      system_output:
+        events:
+          - { event: "fde.part.detected", payload: { region_type: "seat", structural_role: "seating_surface", part_name_tr: "oturma yüzeyi", confidence: 0.88 } }
+          - { event: "fde.proportion.hint", payload: { ratio_id: "seat_to_total_height", ratio_name_tr: "oturma/toplam yükseklik", measured: 0.48, expected_range: [0.42, 0.64], in_range: true } }
+    - step: 3
+      user_action: "Sırtlığı çizer: iki dikey dikme + üstte bir tepe noktası (üçgen/ogive)."
+      system_output:
+        events:
+          - { event: "fde.part.detected", payload: { region_type: "backrest", structural_role: "back_support", part_name_tr: "sırtlık", confidence: 0.91 } }
+          - { event: "fde.style.signal", payload: { top_style: "gothic_minimalism", top_style_tr: "Gotik Minimalizm", score: 0.71, delta_from_previous: 0.24, contributing_features: [{ feature_id: "verticality", value: 0.84, delta_vs_target: -0.04 }, { feature_id: "pointed_arch_presence", value: 0.55, delta_vs_target: -0.07 }] } }
+          - { event: "fde.suggestion.next", payload: { suggestions_tr: ["Tepe noktasını 30-80 mm yükselterek ogive'i netleştir", "Sırtlığa 3 dikey çıta ekle (sabit adım, 40-60 mm)", "Görünür kenarlara 3-8 mm 45° pah çiz"], reason_tr: "Gotik Minimalizm hedef vektörüne en çok bu üç değişiklik yaklaştırır." } }
+    - step: 4
+      user_action: "Sırtlığa 4 dikey çıta çizer, sabit adımla."
+      system_output:
+        events:
+          - { event: "fde.style.signal", payload: { top_style: "gothic_minimalism", score: 0.79, delta_from_previous: 0.08 } }
+          - { event: "fde.proportion.hint", payload: { ratio_id: "slat_spacing_to_slat_width", measured: 1.55, expected_range: [1.4, 1.8], in_range: true } }
+    - step: 5
+      user_action: "Kullanıcı 'analiz et'e basar."
+      system_output:
+        events:
+          - { event: "fde.rule.violation", payload: { check_id: "STR-009", severity: "hard_fail", message_tr: "Sırtlık yalnızca oturma kuşağına bağlı. Sırt dikmesini arka bacaklara taşı veya >= 60 mm geçme ile bağla.", affected_regions: ["rg_backrest"], suggestion_tr: "Arka bacakları sırtlık dikmesiyle birleştir (tek parça olarak yukarı uzat)." } }
+          - { event: "fde.scores.ready", payload: { scores: { style_consistency: { value: 79, grade: "B" }, manufacturability: { value: 41, grade: "D" }, structural_integrity: { value: 38, grade: "F" }, ergonomics: { value: 82, grade: "B" }, overall: { value: 0, grade: "F" } }, release_decision: "rejected" } }
+    - step: 6
+      user_action: "Kullanıcı arka bacakları sırtlığa kadar uzatır, yeniden analiz eder."
+      system_output:
+        events:
+          - { event: "fde.scores.ready", payload: { scores: { style_consistency: { value: 81, grade: "B" }, manufacturability: { value: 74, grade: "B" }, structural_integrity: { value: 88, grade: "A" }, ergonomics: { value: 84, grade: "B" }, overall: { value: 79, grade: "B" } }, release_decision: "needs_revision" } }
+          - { event: "fde.brief.ready", payload: { brief_id: "br_001", design_brief: { title: "Lancet Chair No.1", furniture_type: "chair", target_style: "gothic_minimalism", material_palette: ["blackened_oak", "wool_felt_dark", "brass_aged"], part_program: [{ role: "back_support", material_id: "blackened_oak", ornament_level: "subtle", style_directive_tr: "Yüksek, dar, lancet oranlı; üst kenar tek bir ogive tepe noktasıyla biter (yükselme 60 mm)." }] } } }
+          - { event: "fde.prompt.ready", payload: { prompt_bundle: { prompt_mode: "controlnet_scribble", positive_prompt: "original furniture design, gothic minimalist chair, tall vertical proportions with a pointed ogival backrest apex rising 60 mm, four chamfered blackened oak legs, four vertical blades at constant 45 mm pitch, dark wool felt seat pad, single aged brass foot cap, one hard directional light from a high side window, deep chiaroscuro, ritual silence, 45mm lens eye level, dark neutral studio backdrop, photorealistic, 8k, not a replica of any existing product", negative_prompt: "ivory, exact replica, mismatched legs, floating furniture, parts merging, melted geometry, baroque, ornate carving, pastel, neon, high gloss, chrome, plastic, rattan, shabby chic, religious iconography, blurry, watermark, text, logo, people, clutter", controlnet_conditions: [{ type: "scribble", weight: 0.68, start_percent: 0.0, end_percent: 0.85 }, { type: "canny", weight: 0.35, start_percent: 0.0, end_percent: 0.5 }] } } }
+          - { event: "fde.cad.ready", payload: { cad_json: { units: "mm", assembly: { furniture_type: "chair", overall_dimensions: { width: 460, depth: 500, height: 1060, seat_height: 445 }, parts: [{ part_id: "legs.rear_left", primitive: "extrusion", parameters: { profile_2d: "M0,0 L34,0 L30,-1060 L4,-1060 Z", depth: 34 }, material_id: "blackened_oak", process: "cnc_milling", parameters_exposed: [{ name: "leg_taper_deg", type: "float", value: 2, min: 0, max: 6, drives: ["profile_2d"] }] }] } } } }
+
+# -----------------------------------------------------------------------------
+# UYGULAMA NOTLARI
+# -----------------------------------------------------------------------------
+implementation_notes:
+  minimum_viable_slice: >
+    Faz 1'de yalnızca stage 0, 1, 2 (kural tabanlı), 3 (geometri kısmı) ve 4
+    (deterministik feature'lar) çalıştır. VLM olmadan bile "bu çizim bir sandalye,
+    bu bölge bir bacak, oranlar bu aralıkta" geri bildirimini verebilirsin. VLM'i
+    stage 3 malzeme ve stage 6-7'de ekle.
+  performance:
+    - "stage 0 ve stage 2'nin deterministik kısmı 30-70 ms içinde bitmeli — çizim akışını bozmaz."
+    - "VLM çağrılarını debounce et (220 ms) ve yalnızca anlamlı değişiklikte tetikle."
+    - "stage 4'ün deterministik feature'larını her stroke'ta, VLM feature'larını yalnızca on-demand hesapla."
+  observability:
+    - "Her stage çıktısını {stage_id, input_hash, output_hash, latency_ms, model_id, prompt_hash} ile logla."
+    - "Kullanıcının kabul ettiği/reddettiği geri bildirimleri kaydet — bu kalibrasyon veri setin olur."
+  testing:
+    - "20 çizimden oluşan bir golden set kur (5 tür x 4 stil). Her sürümde stage 1-4 çıktılarını karşılaştır."
+    - "Kural motoru için birim testler: her STR/ERG/MFG/DL kuralı için bir geçen ve bir başarısız örnek."
+    - "Prompt assembly için snapshot testleri: aynı brief -> aynı prompt (deterministik olmalı)."

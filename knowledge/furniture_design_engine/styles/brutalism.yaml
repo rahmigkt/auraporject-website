@@ -1,0 +1,953 @@
+# =============================================================================
+# FDE / styles / brutalism.yaml   (schema: ../schemas/style_ontology.schema.json v1.0.0)
+# Malzeme olduğu gibi · kütle mesajdır · yük yolu kompozisyondur
+# match_threshold = 0.62
+# =============================================================================
+
+schema_version: '1.0.0'
+style_id: brutalism
+name: Brutalism / Brutalist Furniture
+name_tr: Brutalizm / Brutalist Mobilya
+family: artistic
+era: 1953-1980 (mimari kaynak); 2015-günümüz (mobilya canlanması)
+origin_regions: [İngiltere, Fransa, Yugoslavya, Japonya (metabolism kolu)]
+description: 'Brutalist furniture keeps the material exactly as it leaves the process: board-formed concrete with visible timber imprint and tie holes, raw cast or folded steel with ground welds, charred or rough-sawn timber, honed stone. Mass is celebrated rather than hidden; the load path is the composition. There is no applied decoration — the only patterns allowed are the ones the manufacturing process leaves behind (formwork pitch, tool marks, aggregate exposure, weld beads). Everything is heavy, low, monolithic and deliberately unfinished-looking, yet dimensionally exact. '
+description_tr: 'Brutalist mobilya malzemeyi süreçten çıktığı haliyle korur: kalıp izi ve bağlantı delikleri görünür beton, taşlanmış kaynaklı ham döküm veya büküm çelik, yakılmış veya kaba biçilmiş ahşap, honlu taş. Kütle gizlenmek yerine kutlanır; yük yolu kompozisyonun kendisidir. Uygulanmış dekorasyon yoktur — izin verilen tek desenler üretim sürecinin bıraktıklarıdır (kalıp adımı, alet izleri, agrega açığa çıkması, kaynak dikişleri). Her şey ağır, alçak, monolitik ve kasıtlı olarak bitmemiş görünür, yine de ölçüsel olarak tamdır. '
+# -----------------------------------------------------------------------------
+# ÇEKİRDEK İLKELER (ağırlıklı, test_edilebilir)
+core_principles:
+  - id: material_as_found
+    statement: 'The material is presented as it exits the process: formwork imprint, weld bead, saw mark, tool facet are all kept.'
+    statement_tr: 'Malzeme süreçten çıktığı haliyle sunulur: kalıp izi, kaynak dikişi, testere izi, alet yüzeyi korunur.'
+    weight: 1.0
+    testable_via: [material_honesty, handcraft_index, faux_finish_absence]
+  - id: mass_is_the_message
+    statement: Weight, thickness and monolithic volume are the aesthetic. Nothing is thinned to look light.
+    statement_tr: Ağırlık, kalınlık ve monolitik hacim estetiğin kendisidir. Hiçbir şey hafif görünmek için inceltilmez.
+    weight: 0.95
+    testable_via: [massiveness, lightness_visual]
+  - id: load_path_as_composition
+    statement: 'The visible structure IS the design: you must be able to trace the load from surface to floor.'
+    statement_tr: 'Görünür yapı tasarımın kendisidir: yükü yüzeyden zemine kadar takip edebilmelisin.'
+    weight: 0.95
+    testable_via: [structural_expression, structural_plausibility]
+  - id: process_imprint_only
+    statement: 'The only permitted pattern is left by manufacturing: formwork board pitch, tie-hole grid, grind marks, chamfer from the mould.'
+    statement_tr: 'İzin verilen tek desen üretimden kalandır: kalıp tahtası adımı, bağlantı deliği ızgarası, taşlama izleri, kalıptan gelen pah.'
+    weight: 0.9
+    testable_via: [ornament_density, figurative_ornament, industrial_index]
+  - id: monolithic_silhouette
+    statement: Few parts, big volumes, blunt geometry. Target 2-5 primary masses per piece.
+    statement_tr: Az parça, büyük hacimler, küt geometri. Parça başına 2-5 ana kütle hedefle.
+    weight: 0.9
+    testable_via: [part_count_leanness, minimalism_index]
+  - id: exact_despite_rough
+    statement: Surfaces may look rough, but every dimension, gap and arris is precise. Roughness is a finish, not an error.
+    statement_tr: Yüzeyler kaba görünebilir ama her ölçü, aralık ve kenar hassastır. Kabalık bir bitiş türüdür, hata değil.
+    weight: 0.85
+    testable_via: [geometric_strictness, structural_plausibility]
+  - id: shadow_by_mass
+    statement: Shadow comes from deep reveals, heavy overhangs and thick chamfers — not from applied ornament.
+    statement_tr: Gölge derin içerleklerden, ağır çıkmalar ve kalın pahlardan gelir — uygulanmış süslemeden değil.
+    weight: 0.8
+    testable_via: [shadow_as_design_element, contrast_ratio]
+# -----------------------------------------------------------------------------
+# FORM DİLİ
+forms:
+  silhouettes:
+    - single monolithic slab volume on a recessed shadow-gap plinth
+    - stacked offset blocks (each block shifted 20-60 mm)
+    - board-formed concrete bench with a deep horizontal reveal
+    - folded steel plate shell on a welded base frame
+    - charred timber monolith with a single rectangular void
+    - massive plinth + floating heavy top with a 40-80 mm shadow gap
+    - cantilevered concrete volume from a single thick core
+  geometry_language:
+    - blunt orthogonal boxes
+    - single 20-45° chamfer from the mould edge
+    - deep reveal / shadow gap 20-80 mm
+    - offset stacking with a consistent shift
+    - circular void as a rare, deliberate exception (core-drilled)
+    - folded plate planes at 90° or 45°
+    - no radius except the mould arris (0-8 mm)
+  line_quality:
+    - heavy straight line
+    - deliberate blunt edge
+    - process-driven irregularity on the surface only, never on the outline
+  edge_treatment:
+    - mould arris as-cast (0-8 mm natural radius)
+    - single 20-45° chamfer on one family of edges only
+    - ground-flush weld with visible bead
+    - sawn end grain left visible and sealed
+  mass_vs_void: Mass dominates heavily. Void 5-20%, used only as a deep reveal, a single rectangular opening or the shadow gap under a plinth.
+  preferred_archetypes:
+    - bench
+    - coffee_table
+    - side_table
+    - console_table
+    - dining_table
+    - sideboard
+    - shelf_unit
+    - stool
+    - desk
+    - bed
+    - tv_unit
+    - cabinet
+  forbidden_forms:
+    - tapered slender legs
+    - spindle or slat rhythm (reads japandi)
+    - cantilevered tubular steel frame
+    - organic curved silhouette
+    - pointed arch / ogive
+    - stepped ziggurat with inlay (reads art deco)
+    - floating weightless volume with no mass logic
+    - upholstered plush body
+# -----------------------------------------------------------------------------
+# MALZEMELER (primary / secondary / accent / forbidden / combination_rules)
+materials:
+  primary:
+    - material_id: concrete_board_formed
+      material_tr: Kalıp izli beton
+      finish: raw
+      why: 'The core material: timber board imprint, tie-hole grid, honest aggregate.'
+      why_tr: 'Ana malzeme: ahşap kalıp izi, bağlantı deliği ızgarası, dürüst agrega.'
+      applies_to_parts: [top_surface, base_plinth, panel, leg, frame]
+      cost_tier: 3
+      weight: 1.0
+    - material_id: steel_folded_raw
+      material_tr: Ham bükümlü çelik
+      finish: raw
+      why: Folded plate construction; welds ground flush but visible, then oiled or blackened.
+      why_tr: Bükümlü sac konstrüksiyon; kaynaklar taşlanıp düzleştirilir ama görünür, sonra yağlanır veya karartılır.
+      applies_to_parts: [frame, leg, panel, top_surface, base_plinth]
+      cost_tier: 3
+      weight: 0.85
+    - material_id: timber_rough_sawn
+      material_tr: Kaba biçilmiş kereste
+      finish: raw
+      why: Saw marks kept, sealed with oil. Honest, heavy, warm counterweight to concrete.
+      why_tr: Testere izleri korunur, yağla mühürlenir. Dürüst, ağır, betona sıcak bir karşı ağırlık.
+      applies_to_parts: [top_surface, panel, leg, seat, shelf]
+      cost_tier: 2
+      weight: 0.7
+    - material_id: timber_charred
+      material_tr: Yakılmış ahşap (shou sugi ban)
+      finish: charred
+      why: Deep black textured surface, matte, weather resistant; the style's darkest register.
+      why_tr: Derin siyah dokulu yüzey, mat, hava koşullarına dayanıklı; stilin en karanlık kaydı.
+      applies_to_parts: [panel, leg, top_surface, base_plinth]
+      cost_tier: 3
+      weight: 0.6
+  secondary:
+    - material_id: stone_honed_granite
+      material_tr: Honlu granit
+      finish: honed
+      why: Flamed or honed stone tops; extreme mass and honest mineral texture.
+      why_tr: Alevle işlenmiş veya honlu taş tablalar; aşırı kütle ve dürüst mineral dokusu.
+      applies_to_parts: [top_surface, base_plinth]
+      cost_tier: 5
+      weight: 0.5
+    - material_id: terrazzo_coarse
+      material_tr: Kaba terazzo
+      finish: honed
+      why: Exposed large aggregate; process-honest pattern without any applied motif.
+      why_tr: Açığa çıkarılmış iri agrega; uygulanmış motif olmadan sürece dürüst desen.
+      applies_to_parts: [top_surface, panel]
+      cost_tier: 3
+      weight: 0.35
+    - material_id: steel_blackened
+      material_tr: Karartılmış çelik
+      finish: blackened
+      why: Black oxide or hot-blued finish for base frames and hardware.
+      why_tr: Kaide çerçeveleri ve donanım için siyah oksit veya sıcak mavileştirilmiş bitiş.
+      applies_to_parts: [frame, leg, hardware, base_plinth]
+      cost_tier: 3
+      weight: 0.6
+    - material_id: leather_thick_natural
+      material_tr: Kalın doğal deri
+      finish: raw
+      why: 4-6 mm saddle leather strap or pad; the only permitted softness, kept structural.
+      why_tr: 4-6 mm eyer derisi kayış veya ped; izin verilen tek yumuşaklık, yapısal tutulur.
+      applies_to_parts: [seat, upholstery, cushion]
+      cost_tier: 4
+      weight: 0.4
+  accent:
+    - material_id: concrete_pigmented_dark
+      material_tr: Koyu pigmentli beton
+      finish: raw
+      why: One dark-cast element against a pale concrete body (or vice versa) as the sole contrast.
+      why_tr: Açık renk beton gövdeye karşı (veya tersi) tek koyu döküm eleman, yegâne karşıtlık olarak.
+      applies_to_parts: [panel, top_surface, base_plinth]
+      cost_tier: 3
+      weight: 0.6
+    - material_id: raw_brass_unlacquered
+      material_tr: Lakesiz ham pirinç
+      finish: raw
+      why: A single unlacquered brass element that patinas visibly over time (a pin, a foot, a pull).
+      why_tr: Zamanla görünür şekilde patina yapan tek bir lakesiz pirinç eleman (bir pim, bir ayak, bir kulp).
+      applies_to_parts: [hardware, foot, joint]
+      cost_tier: 4
+      weight: 0.5
+    - material_id: rubber_isolation_pad
+      material_tr: Kauçuk izolasyon pedi
+      finish: raw
+      why: 'Functional and honest: visible black pad between concrete and floor/stone.'
+      why_tr: 'İşlevsel ve dürüst: beton ile zemin/taş arasında görünür siyah ped.'
+      applies_to_parts: [foot, joint]
+      cost_tier: 1
+      weight: 0.4
+  forbidden_materials:
+    - gloss lacquer / piano finish
+    - chrome or mirror-polished metal
+    - gilded or polished brass
+    - marble with dramatic veining used as a decorative feature
+    - pale oiled ash / soap-finished oak (reads japandi)
+    - natural linen, bouclé, cane webbing, paper cord
+    - printed laminate or veneer with figured grain
+    - plastic in any colour
+    - velvet
+    - glass as a dominant material (allowed only as a small shelf insert)
+  combination_rules:
+    - pair:
+        - concrete_board_formed
+        - steel_blackened
+      verdict: signature
+      note: 'The canonical pair: cast mass + welded frame, with a visible rubber isolation pad between them.'
+    - pair:
+        - concrete_board_formed
+        - timber_rough_sawn
+      verdict: signature
+      note: The formwork timber becomes a real component — the process imprint turns into material logic.
+    - pair:
+        - timber_charred
+        - steel_folded_raw
+      verdict: signature
+      note: Darkest register; keep one pale reveal so the piece is not a black hole.
+    - pair:
+        - stone_honed_granite
+        - concrete_board_formed
+      verdict: allowed
+      note: Extreme mass; requires a structural check and a freight warning.
+    - pair:
+        - concrete_board_formed
+        - raw_brass_unlacquered
+      verdict: allowed
+      note: One small patinating element only; cap at 3% of the surface.
+    - pair:
+        - concrete_board_formed
+        - chrome_polished
+      verdict: forbidden
+      note: Mirror chrome destroys material honesty and reads deco/office.
+    - pair:
+        - concrete_board_formed
+        - linen_natural
+      verdict: forbidden
+      note: Soft natural textile pulls the piece toward japandi/scandi.
+  material_honesty_rules:
+    - Concrete must be real cast concrete — no stone-effect laminate, no printed texture, no resin cast pretending to be concrete.
+    - Welds must be real welds, not filler sculpted to imitate a bead.
+    - Saw marks must come from sawing, not from a texture map or a hand-scratched imitation.
+    - If a piece is lightweight (foam-core with a concrete skin), the construction must be declared in the BOM.
+    - Charring must be genuine combustion (shou sugi ban), not black stain over raw wood.
+# -----------------------------------------------------------------------------
+# RENK
+colors:
+  palette:
+    - { hex: '#8E8B84', name: Raw Concrete Grey, name_tr: Ham Beton Grisi, role: dominant, max_coverage: 0.4 }
+    - { hex: '#3A3A3C', name: Blackened Steel, name_tr: Karartılmış Çelik, role: dominant, max_coverage: 0.25 }
+    - { hex: '#17171A', name: Charred Timber, name_tr: Yakılmış Ahşap, role: secondary, max_coverage: 0.2 }
+    - { hex: '#6B5A45', name: Rough-Sawn Oak, name_tr: Kaba Biçilmiş Meşe, role: secondary, max_coverage: 0.15 }
+    - hex: '#B4B0A7'
+      name: Pale Cast Highlight
+      name_tr: Açık Döküm Vurgusu
+      role: highlight
+      max_coverage: 0.1
+    - hex: '#0F0F11'
+      name: Deep Reveal Shadow
+      name_tr: Derin İçerlek Gölgesi
+      role: shadow
+      max_coverage: 0.35
+    - hex: '#7A6A3E'
+      name: Unlacquered Brass (patinating)
+      name_tr: Lakesiz Pirinç (patinalanıyor)
+      role: accent
+      max_coverage: 0.03
+  value_range: low-to-mid key; 20-58 L* for the body, reveals dropping to 8-12 L*
+  saturation_range: near zero (C* < 8); the only chromatic note is a small patinating brass
+  contrast_rule: High tonal contrast from deep reveals and shadow gaps; chromatic contrast forbidden.
+  forbidden_colors:
+    - any saturated colour
+    - pastel
+    - neon
+    - white as a dominant field (allowed only as a pale cast highlight)
+    - warm honey/oiled pale wood tones
+    - polished gold
+    - multi-colour
+# -----------------------------------------------------------------------------
+# DOKU
+textures:
+  dominant:
+    - board-formed concrete imprint (board pitch 90-150 mm, grain visible)
+    - tie-hole grid at 300-450 mm centres
+    - ground weld bead with visible grind arc
+    - rough-sawn timber with 0.5-2 mm saw kerf texture
+    - alligator char pattern of shou sugi ban
+  contrast_textures:
+    - one honed-smooth face against the rough field (a single 60-200 mm band)
+    - coarse exposed aggregate on one edge
+    - thick saddle leather with visible grain
+  scale_of_texture: coarse
+  reflectance_profile: 'matte throughout: 2-12 gloss units. Only a honed stone band may reach 20-30.'
+  forbidden_textures:
+    - gloss / mirror
+    - polished metal
+    - fine silky soap-finished wood
+    - woven cane or paper cord
+    - linen slub weave
+    - printed or applied pattern
+    - quilted / tufted
+# -----------------------------------------------------------------------------
+# SÜSLEME KURALLARI
+ornament_rules:
+  max_level: none
+  allowed:
+    - formwork board imprint and its pitch
+    - tie-hole grid
+    - grind marks and weld beads
+    - saw kerf texture
+    - a single deep reveal / shadow gap
+    - one core-drilled circular void
+    - exposed aggregate on one arris
+    - a chamfer created by the mould
+  discouraged:
+    - any pattern not produced by the manufacturing process
+    - more than one circular void
+    - coloured pigment beyond a dark/light concrete contrast
+  forbidden:
+    - inlay of any material
+    - applied mouldings, trim, banding
+    - carving, engraving, etching, lettering
+    - figurative or geometric applied motifs (sunburst, chevron, tracery)
+    - gilding or polished metal accents
+    - paint in any colour except a penetrating matte sealer
+    - decals, logos, transfers
+    - decorative perforation patterns (laser-cut screens)
+  placement_rules:
+    - There is no ornament budget. Anything decorative must be re-justified as a process imprint or a structural reveal.
+    - Reveals must be constant-depth and parallel; a wandering reveal reads as a formwork failure.
+    - Tie holes must be on a regular grid or all removed and patched consistently — never a random scatter.
+  motif_vocabulary:
+    - board imprint
+    - tie-hole grid
+    - weld bead
+    - saw kerf
+    - deep reveal
+    - mould chamfer
+    - exposed aggregate
+  ornament_must_be: [process_generated, structural, non_applied, non_figurative]
+# -----------------------------------------------------------------------------
+# ORANLAR
+proportions:
+  dominant_direction: monolithic
+  ratio_presets:
+    - name: slab thickness to span
+      value: 0.08
+      applies_to: 'concrete top: min thickness = span/12, target span/12.5'
+    - { name: plinth recess, value: 0.1, applies_to: plinth recessed 30-60 mm from the body face }
+    - { name: reveal depth, value: 1.0, applies_to: constant 20-80 mm deep reveal }
+    - { name: block offset, value: 1.0, applies_to: stacked blocks offset by a constant 20-60 mm }
+    - name: chamfer angle
+      value: 45.0
+      applies_to: single mould chamfer family
+      20-45°: null
+      width 8-25 mm: null
+    - { name: overall low massing, value: 0.55, applies_to: bench/table height / width }
+  module_grid_mm: 50
+  leg_to_body_ratio: '0-12%: plinth, recessed base, or the mass lands directly on the floor. Slender legs are forbidden.'
+  seat_height_bias: 'low and heavy: 420-460 mm (bench), 380-420 mm (lounge block), 720-750 mm (table)'
+  void_ratio_target: 0.12
+  scale_bias: monumental
+  symmetry_preference: asymmetric_balanced
+# -----------------------------------------------------------------------------
+# IŞIK VE GÖLGE (render direktifleri dahil)
+lighting_and_shadow:
+  light_direction:
+    - single hard raking light at 20-40° to reveal surface texture
+    - high side window
+    - no fill
+  light_quality: hard, directional, 3000-4500K; texture-revealing raking light is essential
+  shadow_role: Structural evidence. The deep reveals and shadow gaps must read as black voids; that is where the design lives.
+  highlight_strategy: One grazing highlight along a honed arris; everything else falls into shadow.
+  render_notes: 'Neutral grey backdrop (#4A4A4C) or a raw concrete wall, hard raking light from one side, deep shadows retained (do not lift the blacks). Camera 35 mm at 90 cm, slightly low angle to exaggerate mass. Include a human-scale reference in the framing (a doorway edge or a step) so the weight reads correctly. Exposure -0.3 EV. '
+# -----------------------------------------------------------------------------
+# DUYGUSAL ANAHTAR KELİMELER
+emotional_keywords:
+  - heavy
+  - raw
+  - uncompromising
+  - monolithic
+  - honest
+  - weathered
+  - imposing
+  - silent strength
+  - industrial-ritual
+  - permanent
+emotional_keywords_tr:
+  - ağır
+  - ham
+  - tavizsiz
+  - monolitik
+  - dürüst
+  - hava görmüş
+  - heybetli
+  - sessiz güç
+  - endüstriyel-ritüel
+  - kalıcı
+# -----------------------------------------------------------------------------
+# YASAK SİNYALLER (hard = tasarım reddedilir, soft = skor düşer)
+forbidden_signals:
+  - id: fb_lightness
+    signal: Thin sections, slender legs, floating weightless look, visual lightness as the goal.
+    signal_tr: İnce kesitler, narin bacaklar, yüzme hissi veren ağırlıksız görünüm, hedef olarak görsel hafiflik.
+    severity: hard
+    detected_by: [massiveness, lightness_visual]
+  - id: fb_applied_ornament
+    signal: Inlay, moulding, carving, sunburst, chevron, lettering, perforation pattern.
+    signal_tr: Kakma, çıta, oyma, güneş ışını, şevron, yazı, delikli desen.
+    severity: hard
+    detected_by: [ornament_density, figurative_ornament, ornament_is_applied]
+  - id: fb_gloss
+    signal: Gloss lacquer, chrome, mirror, polished brass.
+    signal_tr: Parlak lake, krom, ayna, cilalı pirinç.
+    severity: hard
+    detected_by: [gloss_absence]
+  - id: fb_soft_warmth
+    signal: Pale oiled wood, natural linen, cane, bouclé, hygge cosiness.
+    signal_tr: Açık yağlı ahşap, doğal keten, hasır, buklet, hygge rahatlığı.
+    severity: hard
+    detected_by: [warmth_index, material_honesty]
+  - id: fb_fake_raw
+    signal: Printed concrete texture, faux weld, laminate stone effect, stain pretending to be char.
+    signal_tr: Baskılı beton dokusu, sahte kaynak, laminat taş efekti, yakma taklidi boya.
+    severity: hard
+    detected_by: [faux_finish_absence, material_honesty]
+  - id: fb_slender_frame
+    signal: Tubular steel frame, cantilever, industrial lightweight structure as the dominant read.
+    signal_tr: Boru çelik çerçeve, konsol, baskın okuma olarak endüstriyel hafif yapı.
+    severity: hard
+    detected_by: [industrial_index, massiveness]
+  - id: fb_vertical_gothic
+    signal: Ecclesiastical verticality, pointed arch, lancet void.
+    signal_tr: Kilisevari dikeylik, sivri kemer, lancet boşluk.
+    severity: soft
+    detected_by: [verticality, pointed_arch_presence]
+  - id: fb_symmetric_luxury
+    signal: Strict bilateral symmetry with luxury materials (reads art deco).
+    signal_tr: Lüks malzemelerle katı iki taraflı simetri (art deco okunur).
+    severity: soft
+    detected_by: [symmetry_strictness, gloss_absence]
+  - id: fb_load_path_missing
+    signal: 'Mass without a visible load path: heavy top on thin supports, cantilever with no core.'
+    signal_tr: 'Görünür yük yolu olmayan kütle: ince destekler üzerinde ağır tabla, çekirdeksiz konsol.'
+    severity: hard
+    detected_by: [structural_plausibility, structural_expression]
+  - id: fb_copyright_copy
+    signal: Silhouette identical to a known brutalist designer piece or a specific building façade transfer.
+    signal_tr: Siluetin bilinen bir brutalist tasarımcı parçasıyla aynı olması veya belirli bir bina cephesinin aktarımı.
+    severity: hard
+    detected_by: [originality_check]
+# -----------------------------------------------------------------------------
+# POZİTİF PROMPT TOKEN'LARI
+positive_prompt_tokens:
+  core:
+    - brutalist furniture
+    - raw material honesty
+    - monolithic mass
+    - béton brut object
+  form:
+    - single monolithic slab volume
+    - stacked offset concrete blocks
+    - deep shadow gap reveal
+    - recessed plinth base
+    - blunt orthogonal geometry
+    - single 45 degree mould chamfer
+    - folded steel plate shell
+    - heavy cantilever from a thick core
+    - one core-drilled circular void
+  material:
+    - board-formed concrete with visible timber imprint
+    - tie-hole grid
+    - raw folded steel with ground visible welds
+    - rough-sawn oak with saw marks
+    - shou sugi ban charred timber
+    - honed granite
+    - coarse exposed aggregate terrazzo
+    - thick natural saddle leather
+    - black rubber isolation pad
+  light:
+    - single hard raking light revealing surface texture
+    - deep retained shadows, blacks not lifted
+    - one grazing highlight along a honed arris
+    - high side window, no fill
+  camera:
+    - 35mm lens at 90cm, slightly low angle
+    - neutral grey concrete backdrop
+    - human-scale reference in frame
+    - front three-quarter view emphasising mass
+  mood:
+    - uncompromising weight
+    - silent permanence
+    - industrial ritual
+    - honest roughness
+    - imposing calm
+  quality:
+    - photorealistic product photography
+    - physically accurate concrete and steel
+    - visible process texture
+    - 8k, high dynamic range, matte finish
+  weight_hint:
+    core: 1.3
+    form: 1.25
+    material: 1.35
+    light: 1.15
+    mood: 1.05
+    camera: 0.9
+    quality: 1.0
+  template: '{subject}, {form}, {material}, {light}, {mood}, {camera}, {quality}'
+# -----------------------------------------------------------------------------
+# NEGATİF PROMPT TOKEN'LARI
+negative_prompt_tokens:
+  core:
+    - ornament
+    - inlay
+    - moulding
+    - carving
+    - engraving
+    - lettering
+    - decal
+    - logo
+    - perforated decorative screen
+  style_specific:
+    - gloss lacquer
+    - piano black shine
+    - chrome
+    - mirror finish
+    - polished brass
+    - gilding
+    - marble dramatic veining
+    - art deco sunburst
+    - art deco chevron
+    - gothic arch
+    - pointed arch
+    - tracery
+    - pale oiled ash
+    - soap finished oak
+    - natural linen
+    - cane webbing
+    - paper cord
+    - bouclé
+    - velvet
+    - rattan
+    - bamboo
+    - tubular steel frame
+    - cantilever chair
+    - plastic
+    - pastel colours
+    - neon
+    - saturated colour
+    - white minimalism
+    - hygge cosy
+    - shabby chic
+    - farmhouse
+    - printed concrete texture
+    - faux finish
+    - laminate
+  anatomy_defects:
+    - mismatched legs
+    - thin slender legs under heavy mass
+    - floating furniture with no ground contact
+    - wandering reveal depth
+    - random tie-hole scatter
+    - parts merging
+    - warped monolith
+    - unequal block offsets
+  physics_defects:
+    - concrete slab spanning beyond span/12 thickness
+    - unsupported concrete cantilever over 300mm
+    - heavy stone top on slender supports
+    - no visible load path to the floor
+    - concrete in tension without reinforcement depth
+    - top-heavy monolith with a narrow footprint
+    - sharp concrete arris that would spall
+  copyright_guards:
+    - exact replica of a named designer piece
+    - copy of a specific building façade
+    - branded furniture
+    - visible logo
+# -----------------------------------------------------------------------------
+# ÜRETİM NOTLARI
+manufacturing_notes:
+  preferred_processes:
+    - concrete_casting
+    - welding_mig
+    - welding_tig
+    - press_forming
+    - laser_cutting
+    - waterjet
+    - surface_grinding
+    - shou_sugi_ban
+    - cnc_milling
+  avoid_processes:
+    - chrome_plating
+    - veneer_pressing
+    - injection_molding
+    - hand_carving (decorative)
+    - gloss lacquer spraying
+  joint_language:
+    - cast-in threaded inserts (M10/M12) for demountable concrete-to-steel connections
+    - visible rubber or neoprene isolation pad between concrete and steel/stone
+    - full-penetration welded steel frame, ground flush with the bead visible
+    - epoxy-bonded stone-to-concrete with a declared 3 mm movement joint
+    - through-bolt with a recessed washer pocket, plug-filled or left honest
+    - mortise-and-housed timber-to-concrete with a stainless pin
+  joinery_visibility: celebrated
+  typical_thickness_mm:
+    concrete_slab: 60
+    concrete_min: 40
+    steel_plate: 6
+    steel_frame_member: 12
+    timber_slab: 50
+    charred_cladding: 22
+    stone_top: 30
+    isolation_pad: 5
+    reveal_depth: 30
+  tolerance_notes: 'Concrete casting tolerance is the hard part: dimensional +/-2 mm, arris quality depends on mould seal (use melamine-faced ply or machined MDF, sealed with release agent, screwed not nailed). Demould at 24 h minimum, cure 28 days before full load. Shrinkage cracking: control with a maximum 1:2000 unreinforced span and fibre reinforcement. Steel: cut tolerance +/-0.5 mm, weld distortion control by jigging and back-step welding. Concrete-to-steel interface: always an isolation pad, never direct bearing (staining + point loading). '
+  finishing_notes: 'Concrete: penetrating silane/siloxane sealer, matte, no film. Do NOT use a topical gloss coat — it fakes the material. Steel: hot black oxide or a matte two-pack at 10-15 gloss. Timber: hardwax oil over rough-sawn faces; charred faces brushed and sealed with a matte penetrating oil. '
+  cost_drivers:
+    - mould making (each new geometry needs a new sealed mould)
+    - 'weight: freight and handling for 40-120 kg pieces'
+    - 28-day cure cycle (inventory cash flow)
+    - stone fabrication
+    - manual grinding and finishing of large welds
+  sustainability_notes: 'Concrete has high embodied carbon: use GGBS/fly-ash replacement (40-60%) where structural calculations allow, or consider a lightweight aggregate core with a dense facing. Design for demountability (threaded inserts) so steel and stone can be reused. Never specify CITES timber. '
+  flat_pack_feasible: false
+  difficulty: 4
+# -----------------------------------------------------------------------------
+# TARİHSEL REFERANSLAR (yalnızca ilke/oran çıkarımı; birebir kopya YOK)
+historical_references:
+  - kind: movement
+    title: New Brutalism (Smithson, Reyner Banham 'The New Brutalism', 1955)
+    title_tr: Yeni Brütalizm
+    date: 1953-1980
+    region: İngiltere
+    why_relevant: 'Origin of ''as-found material'' ethics: the material is shown as it is made.'
+    what_to_extract:
+      - as-found material rule
+      - process imprint as the only pattern
+      - legible structure
+    source_api: wikidata_sparql
+    license: not_applicable
+    query_hint: SELECT ?item WHERE { ?item wdt:P126 wd:Q852059 }
+  - kind: technique
+    title: Béton brut / board-formed concrete (Le Corbusier, Unité d'Habitation)
+    title_tr: Béton brut / kalıp izli beton
+    date: 1947-1952
+    region: Marsilya, Fransa
+    why_relevant: Defines the board imprint pitch, tie-hole grid and the honest casting surface.
+    what_to_extract:
+      - board pitch 90-150 mm
+      - tie-hole grid 300-450 mm
+      - mould arris quality
+      - sealer type
+    source_api: europeana
+    license: public_domain
+    query_hint: 'Europeana: ''beton brut Le Corbusier'' (public domain filtered)'
+  - kind: movement
+    title: Japanese Metabolism + shou sugi ban tradition
+    title_tr: Japon Metabolizmi + shou sugi ban geleneği
+    date: 1960-1975
+    region: Japonya
+    why_relevant: Supplies the charred timber register and the modular capsule/offset stacking logic.
+    what_to_extract:
+      - char depth 1-3 mm
+      - brushed char finish
+      - offset stacking increments
+    source_api: manual
+    license: not_applicable
+  - kind: object_type
+    title: 1960-70s cast concrete and steel plinths, benches, planters
+    title_tr: 1960-70'ler dökme beton ve çelik kaideler, banklar, saksılıklar
+    date: 1960-1979
+    region: Avrupa / ABD
+    why_relevant: Direct dimensional precedent for mass, thickness and reveal depth.
+    what_to_extract:
+      - slab thickness to span ratios
+      - reveal depth ranges
+      - plinth recess depth
+    source_api: smithsonian_openaccess
+    license: cc0
+    query_hint: 'Smithsonian Open Access: search ''concrete bench'' + CC0 filter (metadata + geometry reference only)'
+  - kind: concept
+    title: '''Truth to materials'' (Arts & Crafts -> modernist ethics)'
+    title_tr: '''Malzemeye sadakat'''
+    date: 19.-20. yy
+    region: İngiltere / Almanya
+    why_relevant: The ethical rule that forbids faux finishes — the core of this profile's material gates.
+    what_to_extract: [faux_finish_absence gate, declared construction rule]
+    source_api: wikidata_sparql
+    license: not_applicable
+    query_hint: SELECT ?item WHERE { ?item wdt:P31 wd:Q33104697 }
+# -----------------------------------------------------------------------------
+# SKORLAMA İMZASI — rules/style_scoring_rules.json feature_id'leri ile eşleşir
+scoring_signature:
+  target_vector:
+    verticality: 0.35
+    pointed_arch_presence: 0.0
+    ornament_restraint: 1.0
+    ornament_density: 0.05
+    ornament_is_applied: 0.0
+    minimalism_index: 0.8
+    material_honesty: 1.0
+    dark_materiality: 0.62
+    low_key_palette: 0.68
+    chroma_restraint: 0.97
+    contrast_ratio: 0.78
+    structural_expression: 0.95
+    void_ratio: 0.2
+    geometric_strictness: 0.78
+    edge_softness: 0.1
+    symmetry_strictness: 0.3
+    curvature_organic: 0.03
+    warmth_index: 0.25
+    gloss_absence: 0.96
+    shadow_as_design_element: 0.75
+    handcraft_index: 0.45
+    industrial_index: 0.72
+    sacred_geometry: 0.0
+    ritual_stillness: 0.55
+    sculptural_index: 0.6
+    figurative_ornament: 0.0
+    part_count_leanness: 0.95
+    gesture_count: 0.85
+    historical_reference_index: 0.65
+    futuristic_index: 0.15
+    modular_grid_index: 0.55
+    modularity_index: 0.35
+    massiveness: 0.92
+    lightness_visual: 0.1
+    ergonomic_compliance: 1.0
+    structural_plausibility: 1.0
+    faux_finish_absence: 1.0
+    originality_check: 0.85
+  weights:
+    massiveness: 1.0
+    material_honesty: 1.0
+    faux_finish_absence: 1.0
+    structural_expression: 0.9
+    gloss_absence: 0.9
+    ornament_density: 0.85
+    lightness_visual: 0.85
+    warmth_index: 0.6
+    part_count_leanness: 0.8
+    chroma_restraint: 0.75
+    industrial_index: 0.55
+    ergonomic_compliance: 1.0
+    structural_plausibility: 1.0
+    originality_check: 0.7
+  hard_gates:
+    - { feature_id: massiveness, op: '>=', value: 0.7, penalty: 35 }
+    - { feature_id: faux_finish_absence, op: '>=', value: 0.95, penalty: 40 }
+    - { feature_id: ornament_density, op: <=, value: 0.12, penalty: 35 }
+    - { feature_id: gloss_absence, op: '>=', value: 0.88, penalty: 30 }
+    - { feature_id: warmth_index, op: <=, value: 0.4, penalty: 25 }
+    - { feature_id: lightness_visual, op: <=, value: 0.25, penalty: 25 }
+    - { feature_id: figurative_ornament, op: <=, value: 0.02, penalty: 40 }
+    - { feature_id: structural_plausibility, op: '>=', value: 0.8, penalty: 40 }
+    - { feature_id: ergonomic_compliance, op: '>=', value: 0.7, penalty: 40 }
+    - { feature_id: originality_check, op: '>=', value: 0.6, penalty: 50 }
+  match_threshold: 0.62
+  confidence_floor: 0.45
+# -----------------------------------------------------------------------------
+# PARÇA DİREKTİFLERİ — her parça bu stilde nasıl davranır?
+# part_role değerleri schemas/furniture_parts.schema.json -> $defs.partRoleId
+part_directives:
+  - part_role: leg
+    directive: 'Not a leg — a plinth, a block, or a welded steel base frame. If a leg must exist: 60-120 mm square section, concrete or 6-12 mm folded steel. Never slender.'
+    directive_tr: 'Bir bacak değil — bir kaide, bir blok veya kaynaklı çelik kaide çerçevesi. Bacak zorunluysa: 60-120 mm kare kesit, beton veya 6-12 mm bükümlü çelik. Asla narin.'
+    typical_material: concrete_board_formed
+    typical_dimension_hint: section 60-120mm; height 40-160mm (plinth) or 380-440mm (bench block)
+    ornament_level: none
+    priority: must
+  - part_role: foot
+    directive: Lands directly on the floor through a 3-5 mm black rubber isolation pad, or is recessed 30-60 mm to create a shadow gap. Never a decorative cap.
+    directive_tr: 3-5 mm siyah kauçuk izolasyon pedi üzerinden doğrudan zemine basar, ya da gölge aralığı için 30-60 mm içerlektir. Asla dekoratif pabuç.
+    typical_material: rubber_isolation_pad
+    typical_dimension_hint: pad 3-5mm; recess 30-60mm
+    ornament_level: none
+    priority: must
+  - part_role: base_plinth
+    directive: 'The signature element: 40-120 mm high, recessed 30-60 mm from the body face, cast in one pour with the body or bolted with a visible isolation pad.'
+    directive_tr: 'İmza eleman: 40-120 mm yüksek, gövdeden 30-60 mm içerlek, gövdeyle tek döküm ya da görünür izolasyon pediyle cıvatalı.'
+    typical_material: concrete_board_formed
+    typical_dimension_hint: height 40-120mm; recess 30-60mm
+    ornament_level: none
+    priority: must
+  - part_role: top_surface
+    directive: 60-120 mm cast concrete (span/12 minimum), 30-50 mm honed stone, or 50-80 mm rough-sawn timber. One mould chamfer 8-25 mm at 20-45°. No radius beyond the mould arris.
+    directive_tr: 60-120 mm dökme beton (minimum açıklık/12), 30-50 mm honlu taş veya 50-80 mm kaba biçilmiş ahşap. 20-45° açıda tek kalıp pahi 8-25 mm. Kalıp kenarı dışında yarıçap yok.
+    typical_material: concrete_board_formed
+    typical_dimension_hint: concrete 60-120mm; stone 30-50mm; timber 50-80mm
+    ornament_level: none
+    priority: must
+  - part_role: panel
+    directive: Thick, board-formed, with the imprint pitch running in one direction only. Tie holes on a 300-450 mm grid, all kept or all patched.
+    directive_tr: Kalın, kalıp izli, iz adımı yalnızca bir yönde ilerler. Bağlantı delikleri 300-450 mm ızgarada, ya hepsi korunur ya hepsi kapanır.
+    typical_material: concrete_board_formed
+    typical_dimension_hint: 40-80mm thick; board pitch 90-150mm
+    ornament_level: none
+    priority: must
+  - part_role: frame
+    directive: Folded or welded steel, 6-12 mm plate, full-penetration welds ground flush with the bead still visible. Black oxide or matte two-pack.
+    directive_tr: Bükümlü veya kaynaklı çelik, 6-12 mm sac, tam nüfuziyetli kaynaklar taşlanıp düz, dikiş yine görünür. Siyah oksit veya mat iki bileşenli boya.
+    typical_material: steel_folded_raw
+    typical_dimension_hint: plate 6-12mm; member 40x40 to 80x80mm
+    ornament_level: none
+    priority: must
+  - part_role: seat
+    directive: Solid concrete/stone/timber with an optional 4-6 mm thick saddle leather pad, or a 60-90 mm firm pad in dark full-grain leather. No fabric, no soft cushion look.
+    directive_tr: Opsiyonel 4-6 mm kalın eyer derisi pedli masif beton/taş/ahşap, ya da koyu tam deride 60-90 mm sert ped. Kumaş yok, yumuşak minder görünümü yok.
+    typical_material: leather_thick_natural
+    typical_dimension_hint: seat height 420-460mm; pad 4-90mm depending on type
+    ornament_level: none
+    priority: must
+  - part_role: shelf
+    directive: Cast concrete shelf 40-60 mm thick, span <= 600 mm, or 8-12 mm steel plate span <= 700 mm. Support by deep housing into the side panels, not by small pins.
+    directive_tr: 40-60 mm kalın dökme beton raf, açıklık <= 600 mm, ya da 8-12 mm çelik sac açıklık <= 700 mm. Küçük pimlerle değil yan panellere derin yuva ile destek.
+    typical_material: concrete_board_formed
+    typical_dimension_hint: 40-60mm thick; span <= 600mm; housing depth >= 25mm
+    ornament_level: none
+    priority: should
+  - part_role: hardware
+    directive: Recessed finger pull cut into the mass (20-30 mm deep reveal), a raw brass bar that patinas, or nothing at all (push-to-open). Never chrome, never decorative.
+    directive_tr: Kütlenin içine oyulmuş içerlek parmak çekme (20-30 mm derin içerlek), patina yapan ham pirinç çubuk ya da hiç yok (bas-aç). Asla krom, asla dekoratif.
+    typical_material: raw_brass_unlacquered
+    typical_dimension_hint: recess 20-30mm deep, 80-160mm long
+    ornament_level: none
+    priority: should
+  - part_role: joint
+    directive: 'Declared and visible: cast-in threaded insert + through bolt with a recessed washer pocket, or a full-penetration weld. Never hidden behind trim.'
+    directive_tr: 'Beyan edilir ve görünür: döküm içi dişli insert + içerlek pul yuvalı geçer cıvata, ya da tam nüfuziyetli kaynak. Asla çıta arkasına gizlenmez.'
+    typical_material: steel_blackened
+    typical_dimension_hint: M10/M12 insert; washer pocket 24mm dia x 8mm deep
+    ornament_level: none
+    priority: must
+  - part_role: ornament
+    directive: Does not exist as a separate part. Any 'ornament' must be re-expressed as a process imprint, a reveal or a chamfer.
+    directive_tr: Ayrı bir parça olarak yoktur. Her 'süsleme' bir süreç izi, içerlek veya pah olarak yeniden ifade edilmelidir.
+    typical_material: null
+    typical_dimension_hint: n/a
+    ornament_level: none
+    priority: must
+  - part_role: edge_treatment
+    directive: Mould arris as-cast (0-8 mm) or one chamfer family at 20-45°, 8-25 mm wide. Never eased, never rounded, never banded.
+    directive_tr: Dökümden çıkan kalıp kenarı (0-8 mm) veya 20-45° açıda 8-25 mm genişliğinde tek bir pah ailesi. Asla yumuşatılmış, asla yuvarlatılmış, asla bantlı.
+    typical_material: null
+    typical_dimension_hint: chamfer 8-25mm @20-45°
+    ornament_level: none
+    priority: must
+  - part_role: void
+    directive: One rectangular opening or one core-drilled circle, 60-200 mm, positioned off-axis. Depth of the reveal must be constant and parallel.
+    directive_tr: Bir dikdörtgen açıklık veya bir karotla delinmiş daire, 60-200 mm, eksen dışı yerleşim. İçerlek derinliği sabit ve paralel olmalı.
+    typical_material: null
+    typical_dimension_hint: opening 60-200mm; reveal depth constant +/-2mm
+    ornament_level: none
+    priority: should
+  - part_role: stretcher
+    directive: A welded steel plate gusset or a concrete rib, never a slim rod. Its purpose is visibly structural.
+    directive_tr: Kaynaklı çelik sac köşebent veya beton kaburga, asla ince çubuk. Amacı görünür biçimde yapısal.
+    typical_material: steel_folded_raw
+    typical_dimension_hint: gusset 6-10mm plate; rib 40-60mm
+    ornament_level: none
+    priority: may
+# -----------------------------------------------------------------------------
+# CANLI ÇİZİM GERİ BİLDİRİM CÜMLELERİ
+sketch_feedback:
+  on_good_signal:
+    - Massing reads heavy and low. That is the correct brutalist gravity.
+    - Deep reveal detected at a constant depth — the shadow gap is doing the work.
+    - Load path is traceable from the top surface to the floor through visible members.
+    - No applied ornament. The only pattern is the process imprint.
+  on_weak_signal:
+    - Sections are getting thin. Brutalism needs 40-120 mm mass to read correctly.
+    - The silhouette is too symmetric and refined. Offset one block by 20-60 mm.
+    - Contrast is low. Deepen one reveal to 40-80 mm to create a true shadow void.
+  on_violation:
+    - Slender legs detected. Replace with a plinth, a block, or a 60-120 mm section.
+    - Gloss/polished surface detected. This style is matte only (2-12 gloss units).
+    - Applied ornament detected (inlay, moulding, pattern). Remove it; the process imprint is the only decoration.
+    - Pale warm wood or natural textile detected. Swap to rough-sawn, charred timber, concrete or blackened steel.
+    - Concrete slab thickness is below span/12 — it will crack or fail.
+    - Heavy top with no visible load path to the floor. Add a core, a plinth or a welded frame.
+    - Wandering reveal depth. Reveals must be constant and parallel or they read as formwork failure.
+    - Faux-raw surface detected (printed texture / fake weld). Declare the real construction or change the material.
+  on_violation_tr:
+    - Narin bacaklar tespit edildi. Kaide, blok veya 60-120 mm kesitle değiştir.
+    - Parlak/cilalı yüzey tespit edildi. Bu stil yalnızca mattır (2-12 gloss birimi).
+    - Uygulanmış süsleme tespit edildi (kakma, çıta, desen). Kaldır; tek süsleme süreç izidir.
+    - Açık sıcak ahşap veya doğal tekstil tespit edildi. Kaba biçilmiş, yakılmış ahşap, beton veya karartılmış çeliğe geç.
+    - Beton tabla kalınlığı açıklık/12'nin altında — çatlar veya göçer.
+    - Zemine görünür yük yolu olmayan ağır tabla. Bir çekirdek, kaide veya kaynaklı çerçeve ekle.
+    - Kayan içerlek derinliği. İçerlekler sabit ve paralel olmalı, yoksa kalıp hatası gibi okunur.
+    - Sahte-ham yüzey tespit edildi (baskılı doku / sahte kaynak). Gerçek inşaati beyan et veya malzemeyi değiştir.
+  suggested_next_strokes:
+    - Draw one big monolithic volume first; resist adding parts.
+    - Recess the base 30-60 mm to create the plinth shadow gap.
+    - Cut a single deep reveal (30-80 mm) as the only void.
+    - Add one 45° mould chamfer along the top arris.
+    - Offset one stacked block by a constant 20-60 mm.
+# -----------------------------------------------------------------------------
+# STİL UYUMLULUĞU VE HİBRİT TARİFLERİ
+compatibility:
+  blends_well_with: [gothic_minimalism, high_tech, industrial, wabi_sabi]
+  conflicts_with:
+    - art_deco
+    - japandi
+    - bauhaus
+    - memphis
+    - rococo_revival
+    - scandinavian_modern
+    - tropical_resort
+  hybrid_recipes:
+    - result_style_id: gothic_brutalist
+      mix:
+        - { style_id: gothic_minimalism, ratio: 0.5 }
+        - { style_id: brutalism, ratio: 0.5 }
+      note: Board-formed concrete mass + a single ogival void + chamfer discipline. Raise verticality target to 0.7, keep ornament_density <= 0.08.
+    - result_style_id: brutalist_wabisabi
+      mix:
+        - { style_id: brutalism, ratio: 0.65 }
+        - { style_id: wabi_sabi, ratio: 0.35 }
+      note: Allow visible weathering, staining and repair patches; reduce massiveness target to 0.7; keep gloss_absence at 0.95.
+# -----------------------------------------------------------------------------
+# YASAL / ETİK UYUM
+compliance:
+  cultural_sensitivity_notes: No political iconography. Brutalism is often associated with specific state architecture; keep the output about material ethics, not ideology.
+  religious_symbol_policy: forbidden_as_content
+  do_not_replicate:
+    - a specific building's façade geometry transferred 1:1 onto furniture
+    - named brutalist designer pieces
+    - any memorial or monument form
+# -----------------------------------------------------------------------------
+# META
+meta:
+  author: FDE stil ontolojisi katmanı
+  created: '2026-10-16'
+  updated: '2026-10-16'
+  status: production
+  confidence: 0.86
+  evidence_sources:
+    - New Brutalism / béton brut — mimarlık tarihi konsensüsü
+    - Concrete casting, weld distortion control, stone fabrication — üretim pratiği
+    - Shou sugi ban charring process
+    - Wikidata / Europeana / Smithsonian Open Access (CC0) metadata
+  notes: 'confidence 0.86: iyi belgelenmiş bir malzeme etiği. En büyük pratik risk: ağırlık (nakliye), 28 günlük kür süresi ve beton çatlak kontrolü.'

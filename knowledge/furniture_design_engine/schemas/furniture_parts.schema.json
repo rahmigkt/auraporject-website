@@ -1,0 +1,1643 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/fde/schemas/furniture_parts.schema.json",
+  "title": "Furniture Part Taxonomy Schema",
+  "description": "Mobilya parça taksonomisi ve tekil bir mobilyanın parçalanmış (decomposed) tasarım kaydı. İki ana kök: taxonomy (tür şablonu / type template) ve instance (somut tasarım örneği).",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "kind"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "taxonomy",
+        "taxonomy_set",
+        "instance"
+      ]
+    },
+    "taxonomy_set": {
+      "type": "object",
+      "description": "kind == 'taxonomy_set' iken zorunlu. Birden çok türün taksonomisini tek dosyada toplar.",
+      "required": [
+        "taxonomy_set_id",
+        "types"
+      ],
+      "properties": {
+        "taxonomy_set_id": {
+          "type": "string"
+        },
+        "units": {
+          "type": "string",
+          "enum": [
+            "mm",
+            "cm",
+            "m"
+          ],
+          "default": "mm"
+        },
+        "language_policy": {
+          "type": "object",
+          "properties": {
+            "canonical_ids": {
+              "type": "string"
+            },
+            "display_languages": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        },
+        "licensing_note": {
+          "type": "object"
+        },
+        "types": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/typeTemplate"
+          }
+        },
+        "cross_type_part_index": {
+          "type": "object",
+          "properties": {
+            "notes": {
+              "type": "string"
+            },
+            "parts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "part_id",
+                  "structural_role"
+                ],
+                "properties": {
+                  "part_id": {
+                    "$ref": "#/$defs/partId"
+                  },
+                  "name_en": {
+                    "type": "string"
+                  },
+                  "name_tr": {
+                    "type": "string"
+                  },
+                  "structural_role": {
+                    "$ref": "#/$defs/partRoleId"
+                  },
+                  "applies_to": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "taxonomy": {
+      "$ref": "#/$defs/typeTemplate",
+      "description": "kind == 'taxonomy' iken zorunlu. Tek bir mobilya türünün parça hiyerarşisi şablonu."
+    },
+    "instance": {
+      "type": "object",
+      "description": "kind == 'instance' iken zorunlu. Somut bir tasarımın (görselden veya çizimden çözülmüş) parça kaydı.",
+      "required": [
+        "instance_id",
+        "furniture_type",
+        "parts",
+        "source"
+      ],
+      "properties": {
+        "instance_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "furniture_type": {
+          "$ref": "#/$defs/furnitureTypeId"
+        },
+        "source": {
+          "type": "object",
+          "required": [
+            "modality"
+          ],
+          "properties": {
+            "modality": {
+              "type": "string",
+              "enum": [
+                "image_upload",
+                "live_sketch",
+                "text_brief",
+                "3d_model",
+                "synthetic"
+              ]
+            },
+            "asset_uri": {
+              "type": "string"
+            },
+            "license": {
+              "type": "string",
+              "enum": [
+                "cc0",
+                "public_domain",
+                "cc_by",
+                "cc_by_sa",
+                "user_uploaded",
+                "internal_render",
+                "unknown"
+              ],
+              "description": "unknown ise telif güvenli modu açılır: referans yalnızca ilke çıkarımı için kullanılır, görsel çıktıya birebir taşınmaz."
+            },
+            "usage_mode": {
+              "type": "string",
+              "enum": [
+                "extract_principles_only",
+                "style_reference",
+                "geometry_reference"
+              ],
+              "default": "extract_principles_only"
+            }
+          }
+        },
+        "units": {
+          "type": "string",
+          "enum": [
+            "mm",
+            "cm",
+            "m"
+          ],
+          "default": "mm"
+        },
+        "bounding_box": {
+          "$ref": "#/$defs/vec3"
+        },
+        "overall_dimensions": {
+          "$ref": "#/$defs/dimensions"
+        },
+        "parts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/partInstance"
+          }
+        },
+        "design_dna": {
+          "$ref": "#/$defs/designDna"
+        },
+        "style_scores": {
+          "$ref": "#/$defs/styleScores"
+        },
+        "scores": {
+          "$ref": "#/$defs/qualityScores"
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "engine_version": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "taxonomy"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "taxonomy"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "taxonomy_set"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "taxonomy_set"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "instance"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "instance"
+        ]
+      }
+    }
+  ],
+  "$defs": {
+    "furnitureTypeId": {
+      "type": "string",
+      "enum": [
+        "chair",
+        "armchair",
+        "lounge_chair",
+        "stool",
+        "bench",
+        "sofa",
+        "sectional_sofa",
+        "dining_table",
+        "coffee_table",
+        "side_table",
+        "console_table",
+        "desk",
+        "wardrobe",
+        "sideboard",
+        "cabinet",
+        "bookshelf",
+        "shelf_unit",
+        "drawer_chest",
+        "bed",
+        "headboard",
+        "nightstand",
+        "tv_unit",
+        "shoe_rack",
+        "coat_rack",
+        "bar_stool",
+        "outdoor_chair"
+      ]
+    },
+    "partRoleId": {
+      "type": "string",
+      "description": "Parçanın yapısal rol kimliği. partId ile 1:1 eşleşmez; bir rol birden fazla parçada tekrarlanabilir (4 ayak = 4 part, 1 role).",
+      "enum": [
+        "arm_support",
+        "back_support",
+        "base_plinth",
+        "connection_plate",
+        "cushion",
+        "door",
+        "drawer",
+        "drawer_front",
+        "edge_treatment",
+        "finish_surface",
+        "foot",
+        "frame",
+        "hardware",
+        "joint",
+        "leg",
+        "light_channel",
+        "load_path",
+        "ornament",
+        "padding",
+        "panel",
+        "post",
+        "primary_structure",
+        "rail",
+        "seat",
+        "seat_deck",
+        "seating_surface",
+        "shelf",
+        "shelf_support",
+        "spring_system",
+        "stretcher",
+        "top_surface",
+        "upholstery",
+        "void"
+      ]
+    },
+    "partId": {
+      "type": "string",
+      "description": "Serbest ama önerilen kanonik kimlik. Örnek: backrest, backrest.top_rail, backrest.slat[0], leg.front_left"
+    },
+    "vec3": {
+      "type": "object",
+      "required": [
+        "x",
+        "y",
+        "z"
+      ],
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "z": {
+          "type": "number"
+        },
+        "unit": {
+          "type": "string",
+          "enum": [
+            "mm",
+            "cm",
+            "m"
+          ],
+          "default": "mm"
+        }
+      }
+    },
+    "dimensions": {
+      "type": "object",
+      "properties": {
+        "width": {
+          "type": "number"
+        },
+        "depth": {
+          "type": "number"
+        },
+        "height": {
+          "type": "number"
+        },
+        "seat_height": {
+          "type": "number"
+        },
+        "seat_depth": {
+          "type": "number"
+        },
+        "seat_width": {
+          "type": "number"
+        },
+        "arm_height": {
+          "type": "number"
+        },
+        "backrest_height": {
+          "type": "number"
+        },
+        "top_surface_height": {
+          "type": "number"
+        },
+        "clearance_under": {
+          "type": "number"
+        },
+        "unit": {
+          "type": "string",
+          "enum": [
+            "mm",
+            "cm",
+            "m"
+          ],
+          "default": "mm"
+        }
+      }
+    },
+    "proportionBlock": {
+      "type": "object",
+      "description": "Oran kuralları. Sayı = hedef oran, tolerance = kabul bandı.",
+      "properties": {
+        "height_to_width": {
+          "$ref": "#/$defs/ratio"
+        },
+        "depth_to_width": {
+          "$ref": "#/$defs/ratio"
+        },
+        "leg_to_body_height": {
+          "$ref": "#/$defs/ratio"
+        },
+        "seat_to_total_height": {
+          "$ref": "#/$defs/ratio"
+        },
+        "backrest_to_seat_height": {
+          "$ref": "#/$defs/ratio"
+        },
+        "slat_spacing_to_slat_width": {
+          "$ref": "#/$defs/ratio"
+        },
+        "void_to_solid": {
+          "$ref": "#/$defs/ratio"
+        },
+        "golden_section_markers": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "ratio": {
+      "type": "object",
+      "required": [
+        "target"
+      ],
+      "properties": {
+        "target": {
+          "type": "number"
+        },
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        },
+        "tolerance": {
+          "type": "number",
+          "default": 0.1
+        },
+        "hard": {
+          "type": "boolean",
+          "default": false,
+          "description": "true ise ihlal üretilebilirlik skorunu bloklar."
+        }
+      }
+    },
+    "ergonomicEnvelope": {
+      "type": "object",
+      "description": "Kullanılabilirlik zarfı. 'Heykel gibi ama oturulabilir' kuralının sayısallaştırılmış hali.",
+      "properties": {
+        "seat_height_range": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "seat_depth_range": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "seat_width_min": {
+          "type": "number"
+        },
+        "backrest_recline_range_deg": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "lumbar_support_zone_mm": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "arm_height_range": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "table_height_range": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "knee_clearance_min": {
+          "type": "number"
+        },
+        "load_capacity_kg_min": {
+          "type": "number",
+          "default": 120
+        },
+        "reach_envelope_mm": {
+          "type": "number"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "materialOption": {
+      "type": "object",
+      "required": [
+        "material_id"
+      ],
+      "properties": {
+        "material_id": {
+          "type": "string",
+          "examples": [
+            "blackened_oak",
+            "solid_walnut",
+            "ash",
+            "beech",
+            "plywood_birch",
+            "mdf_lacquered",
+            "concrete_cast",
+            "micro_cement",
+            "travertine",
+            "marble_honed",
+            "granite_flamed",
+            "steel_blackened",
+            "steel_brushed",
+            "aluminium_anodized",
+            "brass_aged",
+            "bronze_patinated",
+            "copper_raw",
+            "glass_clear_tempered",
+            "glass_smoked",
+            "acrylic_cast",
+            "leather_vegetable_tanned",
+            "leather_aniline_black",
+            "wool_boucle",
+            "linen_heavy",
+            "canvas_waxed",
+            "felt_wool",
+            "rattan",
+            "bamboo_laminated",
+            "ceramic_glazed",
+            "terrazzo"
+          ]
+        },
+        "material_tr": {
+          "type": "string"
+        },
+        "finish": {
+          "type": "string",
+          "enum": [
+            "raw",
+            "oiled",
+            "waxed",
+            "matte_lacquer",
+            "satin_lacquer",
+            "gloss_lacquer",
+            "charred",
+            "blackened",
+            "brushed",
+            "polished",
+            "honed",
+            "flamed",
+            "sandblasted",
+            "patinated",
+            "oxidized",
+            "powder_coated",
+            "anodized",
+            "soap_finished",
+            "limed",
+            "smoked"
+          ]
+        },
+        "suitability": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "cost_tier": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "structural_grade": {
+          "type": "string",
+          "enum": [
+            "non_structural",
+            "semi_structural",
+            "structural",
+            "primary_load_bearing"
+          ]
+        },
+        "processes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/processId"
+          }
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "style_affinity": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "processId": {
+      "type": "string",
+      "enum": [
+        "adhesive_bonding",
+        "anodizing",
+        "biscuit_joint",
+        "brazing",
+        "cam_lock",
+        "casting_investment",
+        "casting_sand",
+        "chrome_plating",
+        "cnc_milling",
+        "cnc_routing",
+        "cold_bending",
+        "concrete_casting",
+        "dovetail",
+        "doweling",
+        "finger_joint",
+        "flamed",
+        "foam_cutting",
+        "forging",
+        "hand_carving",
+        "hand_stitching",
+        "injection_molding",
+        "kerf_bending",
+        "lamination_bending",
+        "laser_cutting",
+        "lathe_turning",
+        "mortise_tenon",
+        "oil_finishing",
+        "patinated",
+        "pocket_screw",
+        "polishing",
+        "powder_coating",
+        "press_forming",
+        "shou_sugi_ban",
+        "steam_bending",
+        "surface_grinding",
+        "tempering",
+        "threaded_insert",
+        "through_bolting",
+        "upholstery_stapling",
+        "veneer_pressing",
+        "waterjet",
+        "webbing",
+        "welding_mig",
+        "welding_tig"
+      ]
+    },
+    "jointType": {
+      "type": "string",
+      "enum": [
+        "adhesive_bonded",
+        "adhesive_only",
+        "biscuit",
+        "brazed",
+        "cam_lock_eccentric",
+        "cast_node",
+        "dovetail",
+        "dowel",
+        "finger_joint",
+        "hand_stitched",
+        "hidden_bracket",
+        "laced",
+        "lap_joint",
+        "magnetic",
+        "mechanical_clamp",
+        "mortise_and_tenon",
+        "pocket_screw",
+        "scarf_joint",
+        "sliding_dado",
+        "threaded_insert_bolt",
+        "through_bolt",
+        "tongue_and_groove",
+        "webbed",
+        "welded_permanent"
+      ]
+    },
+    "partTemplate": {
+      "type": "object",
+      "description": "Taksonomi şablonundaki bir parça tanımı.",
+      "required": [
+        "part_id",
+        "name_en",
+        "name_tr",
+        "structural_role",
+        "function"
+      ],
+      "properties": {
+        "part_id": {
+          "$ref": "#/$defs/partId"
+        },
+        "parent_id": {
+          "$ref": "#/$defs/partId"
+        },
+        "name_en": {
+          "type": "string"
+        },
+        "name_tr": {
+          "type": "string"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "structural_role": {
+          "$ref": "#/$defs/partRoleId"
+        },
+        "is_optional": {
+          "type": "boolean",
+          "default": false
+        },
+        "instance_count": {
+          "type": "object",
+          "properties": {
+            "typical": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "min": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "max": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "function": {
+          "type": "object",
+          "required": [
+            "primary"
+          ],
+          "properties": {
+            "primary": {
+              "type": "string",
+              "description": "Mekanik/ergonomik işlev. EN."
+            },
+            "primary_tr": {
+              "type": "string"
+            },
+            "secondary": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "symbolic": {
+              "type": "string",
+              "description": "Anlamsal/heykelsi işlev: örn. 'dikey yükseliş hissi', 'ritüel eşik'."
+            },
+            "symbolic_tr": {
+              "type": "string"
+            },
+            "load_bearing": {
+              "type": "boolean",
+              "default": false
+            },
+            "user_contact": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "style_contribution": {
+          "type": "object",
+          "description": "Bu parçanın stile katkısı: hangi stil sinyallerini üretir.",
+          "properties": {
+            "signal_weight": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.5
+            },
+            "signals": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "feature_id",
+                  "direction"
+                ],
+                "properties": {
+                  "feature_id": {
+                    "type": "string",
+                    "description": "style_scoring_rules.json içindeki özellik kimliği"
+                  },
+                  "direction": {
+                    "type": "string",
+                    "enum": [
+                      "increases",
+                      "decreases",
+                      "neutral"
+                    ]
+                  },
+                  "magnitude": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                }
+              }
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        },
+        "material_options": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/materialOption"
+          }
+        },
+        "manufacturing": {
+          "type": "object",
+          "properties": {
+            "primary_processes": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/processId"
+              }
+            },
+            "alternative_processes": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/processId"
+              }
+            },
+            "typical_joint_to_parent": {
+              "$ref": "#/$defs/jointType"
+            },
+            "min_thickness_mm": {
+              "type": "number"
+            },
+            "max_span_mm": {
+              "type": "number"
+            },
+            "grain_direction": {
+              "type": "string",
+              "enum": [
+                "along_length",
+                "along_width",
+                "irrelevant",
+                "cross_banded"
+              ]
+            },
+            "tolerance_mm": {
+              "type": "number",
+              "default": 0.5
+            },
+            "difficulty": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "scrap_risk": {
+              "type": "string",
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        },
+        "proportion_rules": {
+          "$ref": "#/$defs/proportionBlock"
+        },
+        "ornament_capacity": {
+          "type": "object",
+          "properties": {
+            "allowed": {
+              "type": "boolean",
+              "default": true
+            },
+            "max_level": {
+              "type": "string",
+              "enum": [
+                "none",
+                "subtle",
+                "moderate",
+                "rich",
+                "ornate"
+              ]
+            },
+            "typical_motifs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/partTemplate"
+          }
+        }
+      }
+    },
+    "partInstance": {
+      "type": "object",
+      "description": "Somut tasarımdaki bir parça: görselden/çizimden çıkarılmış gözlem + türetilmiş bilgi.",
+      "required": [
+        "part_id",
+        "part_role",
+        "observed"
+      ],
+      "properties": {
+        "part_id": {
+          "$ref": "#/$defs/partId"
+        },
+        "parent_id": {
+          "$ref": "#/$defs/partId"
+        },
+        "template_ref": {
+          "$ref": "#/$defs/partId",
+          "description": "Taksonomideki eşleşen şablon parçası."
+        },
+        "part_role": {
+          "$ref": "#/$defs/partRoleId"
+        },
+        "name_en": {
+          "type": "string"
+        },
+        "name_tr": {
+          "type": "string"
+        },
+        "observed": {
+          "type": "object",
+          "description": "Görsel/çizimden ölçülen ham gözlem.",
+          "properties": {
+            "mask_uri": {
+              "type": "string",
+              "description": "SAM/Grounded-SAM mask dosyası (PNG)."
+            },
+            "bbox_2d": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 4,
+              "maxItems": 4
+            },
+            "bbox_2d_norm": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 4,
+              "maxItems": 4
+            },
+            "silhouette_family": {
+              "type": "string",
+              "enum": [
+                "rectilinear",
+                "tapered",
+                "curved_organic",
+                "pointed_arch",
+                "round_arch",
+                "ogee_arch",
+                "trefoil",
+                "cylindrical",
+                "conical",
+                "pyramidal",
+                "blades_slats",
+                "shell",
+                "lattice",
+                "monolithic_slab",
+                "tube_frame",
+                "cantilever",
+                "spindle",
+                "cabriole",
+                "fluted"
+              ]
+            },
+            "dominant_axis": {
+              "type": "string",
+              "enum": [
+                "vertical",
+                "horizontal",
+                "diagonal",
+                "radial",
+                "none"
+              ]
+            },
+            "cross_section": {
+              "type": "string",
+              "enum": [
+                "square",
+                "rectangular",
+                "round",
+                "oval",
+                "octagonal",
+                "tapered_square",
+                "i_beam",
+                "hollow_tube",
+                "freeform"
+              ]
+            },
+            "estimated_dimensions": {
+              "$ref": "#/$defs/dimensions"
+            },
+            "volume_ratio": {
+              "type": "number",
+              "description": "Parçanın toplam hacme oranı (0-1)."
+            },
+            "symmetry": {
+              "type": "string",
+              "enum": [
+                "mirror_x",
+                "mirror_z",
+                "radial",
+                "asymmetric",
+                "unknown"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        },
+        "material": {
+          "type": "object",
+          "properties": {
+            "material_id": {
+              "type": "string"
+            },
+            "material_tr": {
+              "type": "string"
+            },
+            "finish": {
+              "type": "string"
+            },
+            "color_hex": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "texture": {
+              "type": "string",
+              "enum": [
+                "smooth",
+                "grained",
+                "coarse",
+                "porous",
+                "woven",
+                "brushed",
+                "polished",
+                "matte",
+                "glossy",
+                "hammered",
+                "fluted",
+                "cracked",
+                "patinated"
+              ]
+            },
+            "reflectance": {
+              "type": "string",
+              "enum": [
+                "matte",
+                "satin",
+                "semi_gloss",
+                "gloss",
+                "mirror"
+              ]
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Malzeme çıkarımını destekleyen görsel kanıtlar."
+            },
+            "confidence": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        },
+        "function": {
+          "type": "object",
+          "properties": {
+            "primary": {
+              "type": "string"
+            },
+            "load_bearing": {
+              "type": "boolean"
+            },
+            "user_contact": {
+              "type": "boolean"
+            },
+            "ergonomic_role": {
+              "type": "string"
+            }
+          }
+        },
+        "style_role": {
+          "type": "object",
+          "description": "'Bu parça hangi stil kuralına hizmet ediyor?' sorusunun cevabı.",
+          "properties": {
+            "serves_rules": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "style YAML içindeki rule id'leri."
+            },
+            "signals": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ornament_level": {
+              "type": "string",
+              "enum": [
+                "none",
+                "subtle",
+                "moderate",
+                "rich",
+                "ornate"
+              ]
+            },
+            "narrative_tr": {
+              "type": "string",
+              "description": "Kullanıcıya gösterilecek 1-2 cümlelik Türkçe açıklama."
+            },
+            "narrative_en": {
+              "type": "string"
+            }
+          }
+        },
+        "manufacturability": {
+          "type": "object",
+          "properties": {
+            "proposed_process": {
+              "$ref": "#/$defs/processId"
+            },
+            "proposed_joint": {
+              "$ref": "#/$defs/jointType"
+            },
+            "part_count_estimate": {
+              "type": "integer"
+            },
+            "estimated_cost_tier": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "flags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "properties": {
+            "derived_from": {
+              "type": "string",
+              "enum": [
+                "vlm",
+                "segmentation_model",
+                "sketch_strokes",
+                "user_input",
+                "ontology_lookup",
+                "rule_engine"
+              ]
+            },
+            "model_id": {
+              "type": "string"
+            },
+            "prompt_hash": {
+              "type": "string"
+            },
+            "confidence": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        }
+      }
+    },
+    "assemblyRelation": {
+      "type": "object",
+      "required": [
+        "from",
+        "to",
+        "relation"
+      ],
+      "properties": {
+        "from": {
+          "$ref": "#/$defs/partId"
+        },
+        "to": {
+          "$ref": "#/$defs/partId"
+        },
+        "relation": {
+          "type": "string",
+          "enum": [
+            "supports",
+            "is_supported_by",
+            "attaches_to",
+            "encloses",
+            "spans",
+            "braces",
+            "hinges_on",
+            "slides_in",
+            "floats_above",
+            "cantilevers_from",
+            "wraps",
+            "is_hidden_by"
+          ]
+        },
+        "joint_type": {
+          "$ref": "#/$defs/jointType"
+        },
+        "assembly_order": {
+          "type": "integer"
+        },
+        "load_transferred_kg": {
+          "type": "number"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "designDna": {
+      "type": "object",
+      "description": "Referanstan çıkarılan, yeni tasarıma taşınacak genetik kod. Birebir kopya DEĞİL; ilke kümesi.",
+      "required": [
+        "preserve",
+        "forbid"
+      ],
+      "properties": {
+        "essence_tr": {
+          "type": "string",
+          "description": "Tasarımın özü 1 cümle."
+        },
+        "essence_en": {
+          "type": "string"
+        },
+        "preserve": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "rule_id",
+              "statement"
+            ],
+            "properties": {
+              "rule_id": {
+                "type": "string"
+              },
+              "statement": {
+                "type": "string"
+              },
+              "statement_tr": {
+                "type": "string"
+              },
+              "weight": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "applies_to_parts": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "forbid": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "rule_id",
+              "statement"
+            ],
+            "properties": {
+              "rule_id": {
+                "type": "string"
+              },
+              "statement": {
+                "type": "string"
+              },
+              "statement_tr": {
+                "type": "string"
+              },
+              "weight": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            }
+          }
+        },
+        "ratios_to_keep": {
+          "$ref": "#/$defs/proportionBlock"
+        },
+        "material_palette": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "light_logic": {
+          "type": "string"
+        },
+        "variation_axes": {
+          "type": "array",
+          "description": "Özgün varyasyon üretmek için güvenli serbestlik eksenleri.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "axis": {
+                "type": "string",
+                "examples": [
+                  "leg_taper",
+                  "arch_pointing",
+                  "slat_count",
+                  "seat_depth",
+                  "edge_chamfer"
+                ]
+              },
+              "range": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 2,
+                "maxItems": 2
+              },
+              "risk": {
+                "type": "string",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              }
+            }
+          }
+        },
+        "novelty_guard": {
+          "type": "object",
+          "properties": {
+            "min_variation_axes_used": {
+              "type": "integer",
+              "default": 2
+            },
+            "forbid_direct_silhouette_copy": {
+              "type": "boolean",
+              "default": true
+            },
+            "require_original_name": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        }
+      }
+    },
+    "styleScores": {
+      "type": "object",
+      "required": [
+        "primary_style",
+        "features",
+        "rankings"
+      ],
+      "properties": {
+        "primary_style": {
+          "type": "string"
+        },
+        "primary_style_tr": {
+          "type": "string"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "rankings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "style_id",
+              "score"
+            ],
+            "properties": {
+              "style_id": {
+                "type": "string"
+              },
+              "score": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "matched_rules": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "violated_rules": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "features": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "description": "style_scoring_rules.json içindeki feature_id -> 0..1 ölçülen değer"
+        },
+        "verdict_tr": {
+          "type": "string",
+          "description": "'Bu tasarım gotik minimal mi, değil mi? Neden?' sorusunun cevabı."
+        },
+        "verdict_en": {
+          "type": "string"
+        }
+      }
+    },
+    "qualityScores": {
+      "type": "object",
+      "properties": {
+        "style_consistency": {
+          "$ref": "#/$defs/scoreBlock"
+        },
+        "manufacturability": {
+          "$ref": "#/$defs/scoreBlock"
+        },
+        "structural_integrity": {
+          "$ref": "#/$defs/scoreBlock"
+        },
+        "ergonomics": {
+          "$ref": "#/$defs/scoreBlock"
+        },
+        "aesthetic_coherence": {
+          "$ref": "#/$defs/scoreBlock"
+        },
+        "originality": {
+          "$ref": "#/$defs/scoreBlock"
+        },
+        "overall": {
+          "$ref": "#/$defs/scoreBlock"
+        },
+        "hard_failures": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "release_decision": {
+          "type": "string",
+          "enum": [
+            "approved",
+            "needs_revision",
+            "rejected"
+          ]
+        }
+      }
+    },
+    "scoreBlock": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "grade": {
+          "type": "string",
+          "enum": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "F"
+          ]
+        },
+        "breakdown": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "check_id": {
+                "type": "string"
+              },
+              "passed": {
+                "type": "boolean"
+              },
+              "points": {
+                "type": "number"
+              },
+              "detail_tr": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "typeTemplate": {
+      "type": "object",
+      "description": "Bir mobilya türünün parça hiyerarşisi şablonu.",
+      "required": [
+        "furniture_type",
+        "parts"
+      ],
+      "properties": {
+        "furniture_type": {
+          "$ref": "#/$defs/furnitureTypeId"
+        },
+        "furniture_type_tr": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "seating",
+            "surface",
+            "storage",
+            "sleeping",
+            "support",
+            "lighting",
+            "decorative",
+            "hybrid"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "canonical_proportions": {
+          "$ref": "#/$defs/proportionBlock"
+        },
+        "ergonomic_envelope": {
+          "$ref": "#/$defs/ergonomicEnvelope"
+        },
+        "parts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/partTemplate"
+          }
+        },
+        "assembly_relations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assemblyRelation"
+          }
+        }
+      }
+    }
+  }
+}
