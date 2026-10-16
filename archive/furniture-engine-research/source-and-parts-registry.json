@@ -1,0 +1,1512 @@
+{
+  "date": "2026-10-16",
+  "scope": "13 public GitHub repository indices, selected source and license inspection; not an exhaustive audit of GitHub or every mesh",
+  "currentEngineFinding": "14 family templates; sofa/armchair/chair/bench share a primitive compiler. No chesterfield archetype or tufted upholstery surface exists. Current options mostly change the same topology.",
+  "repositories": [
+    {
+      "repository": "princeton-vl/infinigen",
+      "url": "https://github.com/princeton-vl/infinigen",
+      "commit": "224598d4a2ff95b4fc928e72c222598b7122c698",
+      "licenseReviewed": "BSD-3-Clause",
+      "scope": "Koltuk / berjer / sandalye geometrisi",
+      "observed": "SofaFactory ve ChairFactory kaynakları okundu; kolçak tipi, sırt açısı, ayak, minder oranları değişebiliyor. Blender/Python bağımlı.",
+      "decision": "Öncelikli görsel üretim adayı. Tarayıcıya doğrudan taşınmaz; kontrollü üretim ve glTF aktarımı gerekir. Chester kapitone yapısı doğrulanmadı.",
+      "evaluation": "static-source-review-not-runtime-qualified",
+      "indexedFiles": 1745
+    },
+    {
+      "repository": "dprojects/Woodworking",
+      "url": "https://github.com/dprojects/Woodworking",
+      "commit": "4264b5af016c2776a68896564cff5101b5d075bd",
+      "licenseReviewed": "MIT",
+      "scope": "Dolap, kapak, çekmece, ahşap bağlantılar",
+      "observed": "Parametrik FCStd örnekleri; ölçü listesi, dübel ve delik araçları belgelenmiş.",
+      "decision": "Ahşap tasarımcı araç zinciri için güçlü aday. Çalışan FreeCAD uyarlaması ayrıca doğrulanmalı; döşemeli kanepeyi çözmez.",
+      "evaluation": "static-source-review-not-runtime-qualified",
+      "indexedFiles": 668
+    },
+    {
+      "repository": "chemrich/cabineteer",
+      "url": "https://github.com/chemrich/cabineteer",
+      "commit": "191ab1f9cf8ab9c3c9425312cbef07457db99b15",
+      "licenseReviewed": "Apache-2.0",
+      "scope": "Panel gövde, çekmece ve donanım",
+      "observed": "drawer.py, hardware.py, joinery.py okundu. Çekmece ölçüleri seçilen ray tanımına göre hesaplanıyor; bağlantı ve donanım tanımları mevcut.",
+      "decision": "Panel motoru için en güçlü adaylardan. Üretici donanım bilgileri gerçek katalogla teyit edilmeden üretim garantisi sayılmaz. Eğri döşeme/Chester kapsam dışı.",
+      "evaluation": "static-source-review-not-runtime-qualified",
+      "indexedFiles": 138
+    },
+    {
+      "repository": "RajwanYair/WoodworkingShop",
+      "url": "https://github.com/RajwanYair/WoodworkingShop",
+      "commit": "db927cad3213a69f10dcdd7e29eb8c3fcb907c7f",
+      "licenseReviewed": "MIT",
+      "scope": "Tarayıcıda panel parçaları, çekmece ve delikler",
+      "observed": "parts.ts, drawer-box.ts, hinge-bore.ts, mortise-tenon.ts incelendi. Parça listesi gerçek koddan üretiliyor. parts.ts içinde her yanda 13 mm ray payı varsayımı var.",
+      "decision": "Web entegrasyonu için güçlü aday. Sabit ray boşluğu tüm raylara uygulanmamalı; donanıma bağlı kurala dönüştürülmeli. README kapsamı tam olarak çalıştırılıp test edilmedi.",
+      "evaluation": "static-source-review-not-runtime-qualified",
+      "indexedFiles": 2345
+    },
+    {
+      "repository": "s-leger/archipack",
+      "url": "https://github.com/s-leger/archipack",
+      "commit": "5a6243bf1edf08a6b429661ce291dacb551e5f8a",
+      "licenseReviewed": "GPL-3.0",
+      "scope": "Mutfak dolabı, kaide, tezgâh, modüller",
+      "observed": "archipack_kitchen.py içinde create_cabinet, create_counter, update_modules işlevleri mevcut. Depo Blender 2.79 sürümünü hedefliyor.",
+      "decision": "Modüler mutfak mimarisi için referans. Eski Blender API uyarlaması ve GPL dağıtım koşulları değerlendirilmeden doğrudan web kodu olarak alınmaz.",
+      "evaluation": "static-source-review-not-runtime-qualified",
+      "indexedFiles": 234
+    },
+    {
+      "repository": "FreeCAD/FreeCAD-library",
+      "url": "https://github.com/FreeCAD/FreeCAD-library",
+      "commit": "f5ca01cdcaa2f69b9295a6382719c2d90628780c",
+      "licenseReviewed": "CC-BY-3.0 (README)",
+      "scope": "Çeşitli CAD mobilya ve mekanik referanslar",
+      "observed": "Depo dosya indeksi tarandı; mobilya görselleri ve CAD dosyaları var. Her CAD dosyası tek tek açılmadı.",
+      "decision": "Parça/model bazında ayıklanacak arşiv. Bütün kütüphaneyi kullanıcı menüsüne dökmek ve parametrik varsaymak uygun değil.",
+      "evaluation": "static-source-review-not-runtime-qualified",
+      "indexedFiles": 10475
+    },
+    {
+      "repository": "opendesk/design-playground",
+      "url": "https://github.com/opendesk/design-playground",
+      "commit": "b1e9727cbe5fd3c30d5bee68b56fc8ccff95cde4",
+      "licenseReviewed": "MIT yazılım; incelenen 2 tasarım CC-BY-4.0",
+      "scope": "CNC levha mobilya, masa ve sandalye",
+      "observed": "Yazılım lisansı ve Desk/Slim-Chair tasarım lisansları ayrı okundu. Tasarım klasörlerinde DXF ve montaj dosyaları var.",
+      "decision": "Levha mobilya için seçici kullanım. Her tasarım kendi lisansıyla kaydedilecek; döşemeli ürün çözümü değil.",
+      "evaluation": "static-source-review-not-runtime-qualified",
+      "indexedFiles": 864
+    },
+    {
+      "repository": "yuyou-dev/OpenHome3D",
+      "url": "https://github.com/yuyou-dev/OpenHome3D",
+      "commit": "cb52afc00201b4b7ed90b24631e977112ba07869",
+      "licenseReviewed": "MIT kod; incelenen KayKit paketi CC0",
+      "scope": "Hazır glTF model yükleme ve parça kataloglama",
+      "observed": "Dosya indeksi ve KayKit Furniture Bits lisansı incelendi; koltuk/sandalye/dolap GLB dosyaları mevcut.",
+      "decision": "Altyapı örneği. Çizgi film/low-poly mobilyaları AURA premium ürününün yerine koymak kalite sorununu çözmez.",
+      "evaluation": "static-source-review-not-runtime-qualified",
+      "indexedFiles": 521
+    },
+    {
+      "repository": "CadQuery/cadquery",
+      "url": "https://github.com/CadQuery/cadquery",
+      "commit": "5f5bc62b255f62e3512105740025361b6c31eddd",
+      "licenseReviewed": "Apache-2.0 (LICENSE)",
+      "scope": "Katı model / STEP ve teknik CAD altyapısı",
+      "observed": "LICENSE ve proje belgeleri okundu. Bir mobilya koleksiyonu değil, geometri motoru.",
+      "decision": "Teknik üretim katmanına aday. Gerçek ölçü kuralları ve parçalar AURA tarafından ayrıca tanımlanacak.",
+      "evaluation": "static-source-review-not-runtime-qualified",
+      "indexedFiles": 219
+    },
+    {
+      "repository": "donmccurdy/glTF-Transform",
+      "url": "https://github.com/donmccurdy/glTF-Transform",
+      "commit": "3797aad585021e68cf5fbf3f2fba37783596ffac",
+      "licenseReviewed": "MIT",
+      "scope": "GLB optimizasyonu / web aktarımı",
+      "observed": "Lisans ve API belgeleri incelendi.",
+      "decision": "Model boyutu, malzeme ve aktarım hattı için kullanılabilir; yeni mobilya biçimi üretmez.",
+      "evaluation": "static-source-review-not-runtime-qualified",
+      "indexedFiles": 561
+    },
+    {
+      "repository": "gkjohnson/three-bvh-csg",
+      "url": "https://github.com/gkjohnson/three-bvh-csg",
+      "commit": "7f00d37cf6cf67ac73c3f770815d2e72636946a6",
+      "licenseReviewed": "MIT",
+      "scope": "Tarayıcıda görsel kesme/birleştirme",
+      "observed": "README sayısal hassasiyet ve manifold sorunlarını açıkça belirtiyor.",
+      "decision": "Evye ve görsel boşluklar için aday; tek başına güvenilir üretim CAD çekirdeği olarak seçilmez.",
+      "evaluation": "static-source-review-not-runtime-qualified",
+      "indexedFiles": 98
+    },
+    {
+      "repository": "BelfrySCAD/BOSL2",
+      "url": "https://github.com/BelfrySCAD/BOSL2",
+      "commit": "d2c95f399fe575f48353203769b8aa34cbba0dab",
+      "licenseReviewed": "BSD-2-Clause",
+      "scope": "OpenSCAD bağlantı ve geometrik yardımcılar",
+      "observed": "Lisans, README ve hinges.scad dosyası kaydedildi; dosya indeksi tarandı.",
+      "decision": "Bağlantı/standart geometri araştırması. Mobilya menteşesi veya döşeme üretim standardı gibi genellenmez.",
+      "evaluation": "static-source-review-not-runtime-qualified",
+      "indexedFiles": 184
+    },
+    {
+      "repository": "RealBadVolf/Cabinet-Builder",
+      "url": "https://github.com/RealBadVolf/Cabinet-Builder",
+      "commit": "bdea95496d1d9a5fd6ba43ed8752789f1465c4ef",
+      "licenseReviewed": "Lisans bulunamadı",
+      "scope": "Kapak türleri ve CNC mimarisi",
+      "observed": "README ve cabinet route dosyası incelendi; açık kullanım lisansı bulunamadı.",
+      "decision": "Kod/model kopyalamak için şimdilik elendi; teknik fikirler düzeyinde referans.",
+      "evaluation": "static-source-review-not-runtime-qualified",
+      "indexedFiles": 30
+    }
+  ],
+  "targetParts": [
+    {
+      "id": "sofa.frame.1",
+      "slot": "sofa.frame",
+      "name": "Düz ahşap karkas",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.frame.2",
+      "slot": "sofa.frame",
+      "name": "Alçak modüler platform",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.frame.3",
+      "slot": "sofa.frame",
+      "name": "Yüksek klasik gövde",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.frame.4",
+      "slot": "sofa.frame",
+      "name": "Açık ahşap iskelet",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.frame.5",
+      "slot": "sofa.frame",
+      "name": "Kavisli karkas",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.arm.1",
+      "slot": "sofa.arm",
+      "name": "Dar düz kolçak",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.arm.2",
+      "slot": "sofa.arm",
+      "name": "Geniş blok kolçak",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.arm.3",
+      "slot": "sofa.arm",
+      "name": "Yuvarlanmış klasik kolçak",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.arm.4",
+      "slot": "sofa.arm",
+      "name": "İngiliz eğimli kolçak",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.arm.5",
+      "slot": "sofa.arm",
+      "name": "Tuxedo eş yüksek kolçak",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.arm.6",
+      "slot": "sofa.arm",
+      "name": "Açık ahşap kolçak",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.arm.7",
+      "slot": "sofa.arm",
+      "name": "Kavisli saran kolçak",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.arm.8",
+      "slot": "sofa.arm",
+      "name": "Kolçaksız bitiş",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.back.1",
+      "slot": "sofa.back",
+      "name": "Sabit düz sırt",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.back.2",
+      "slot": "sofa.back",
+      "name": "Gevşek sırt minderleri",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.back.3",
+      "slot": "sofa.back",
+      "name": "Dikey kanallı sırt",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.back.4",
+      "slot": "sofa.back",
+      "name": "Elmas kapitone yüzey",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.back.5",
+      "slot": "sofa.back",
+      "name": "Tek parça saran kavisli sırt",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.back.6",
+      "slot": "sofa.back",
+      "name": "Ahşap kafes sırt",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.seat.1",
+      "slot": "sofa.seat",
+      "name": "İki bağımsız minder",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.seat.2",
+      "slot": "sofa.seat",
+      "name": "Üç bağımsız minder",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.seat.3",
+      "slot": "sofa.seat",
+      "name": "Tek bank minder",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.seat.4",
+      "slot": "sofa.seat",
+      "name": "Sabit döşemeli oturum",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.seat.5",
+      "slot": "sofa.seat",
+      "name": "Derin lounge oturumu",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.seat.6",
+      "slot": "sofa.seat",
+      "name": "Uzanma modülü",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.base.1",
+      "slot": "sofa.base",
+      "name": "Konik ahşap ayak",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.base.2",
+      "slot": "sofa.base",
+      "name": "Silindirik ahşap ayak",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.base.3",
+      "slot": "sofa.base",
+      "name": "Tornalı klasik ayak",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.base.4",
+      "slot": "sofa.base",
+      "name": "Metal bıçak ayak",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.base.5",
+      "slot": "sofa.base",
+      "name": "Metal kızak",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.base.6",
+      "slot": "sofa.base",
+      "name": "Gizli baza",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.trim.1",
+      "slot": "sofa.trim",
+      "name": "Biyeli dikiş",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.trim.2",
+      "slot": "sofa.trim",
+      "name": "Düz dikiş",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.trim.3",
+      "slot": "sofa.trim",
+      "name": "Kapitone düğmesi",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.trim.4",
+      "slot": "sofa.trim",
+      "name": "Çivi şerit detayı",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.module.1",
+      "slot": "sofa.module",
+      "name": "Düz oturum modülü",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.module.2",
+      "slot": "sofa.module",
+      "name": "Gerçek köşe modülü",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.module.3",
+      "slot": "sofa.module",
+      "name": "Terminal uzanma",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.module.4",
+      "slot": "sofa.module",
+      "name": "Ara servis modülü",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.module.5",
+      "slot": "sofa.module",
+      "name": "Açılır yatak mekanizması",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "sofa.module.6",
+      "slot": "sofa.module",
+      "name": "Dinlenme mekanizması",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "casework.carcass.1",
+      "slot": "casework.carcass",
+      "name": "Çerçevesiz panel gövde",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "casework.carcass.2",
+      "slot": "casework.carcass",
+      "name": "Çerçeveli gövde",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "casework.carcass.3",
+      "slot": "casework.carcass",
+      "name": "Ayaklı gövde",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "casework.carcass.4",
+      "slot": "casework.carcass",
+      "name": "Askılı gövde",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "casework.front.1",
+      "slot": "casework.front",
+      "name": "Düz kapak",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "casework.front.2",
+      "slot": "casework.front",
+      "name": "Çerçeveli Shaker kapak",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "casework.front.3",
+      "slot": "casework.front",
+      "name": "Bombeli/oymalı panel kapak",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "casework.front.4",
+      "slot": "casework.front",
+      "name": "Camlı çerçeve kapak",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "casework.front.5",
+      "slot": "casework.front",
+      "name": "Çıtalı tambur kapak",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "casework.front.6",
+      "slot": "casework.front",
+      "name": "Kavisli kapak",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "casework.drawer.1",
+      "slot": "casework.drawer",
+      "name": "Yan raylı çekmece",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "casework.drawer.2",
+      "slot": "casework.drawer",
+      "name": "Alttan raylı çekmece",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "casework.drawer.3",
+      "slot": "casework.drawer",
+      "name": "Gizli iç çekmece",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "casework.drawer.4",
+      "slot": "casework.drawer",
+      "name": "Metal yanaklı çekmece",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "casework.hardware.1",
+      "slot": "casework.hardware",
+      "name": "Tam bindirme menteşe",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "casework.hardware.2",
+      "slot": "casework.hardware",
+      "name": "İç kapak menteşesi",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "casework.hardware.3",
+      "slot": "casework.hardware",
+      "name": "Kaldırma mekanizması",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "casework.hardware.4",
+      "slot": "casework.hardware",
+      "name": "Sürgü rayı",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "casework.hardware.5",
+      "slot": "casework.hardware",
+      "name": "Dübel bağlantı",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "casework.hardware.6",
+      "slot": "casework.hardware",
+      "name": "Minifix bağlantı",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "kitchen.structure.1",
+      "slot": "kitchen.structure",
+      "name": "Alt modül",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "kitchen.structure.2",
+      "slot": "kitchen.structure",
+      "name": "Üst modül",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "kitchen.structure.3",
+      "slot": "kitchen.structure",
+      "name": "Boy modül",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "kitchen.structure.4",
+      "slot": "kitchen.structure",
+      "name": "Köşe modül",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "kitchen.structure.5",
+      "slot": "kitchen.structure",
+      "name": "Ada gövdesi",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "kitchen.structure.6",
+      "slot": "kitchen.structure",
+      "name": "Bitiş paneli",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "kitchen.structure.7",
+      "slot": "kitchen.structure",
+      "name": "Kaide",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "kitchen.top.1",
+      "slot": "kitchen.top",
+      "name": "Düz taş tabla",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "kitchen.top.2",
+      "slot": "kitchen.top",
+      "name": "Şelale yan bitiş",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "kitchen.top.3",
+      "slot": "kitchen.top",
+      "name": "Ahşap tabla",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "kitchen.top.4",
+      "slot": "kitchen.top",
+      "name": "Evye boşluklu tabla",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "kitchen.top.5",
+      "slot": "kitchen.top",
+      "name": "Ocak boşluklu tabla",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "kitchen.top.6",
+      "slot": "kitchen.top",
+      "name": "L birleşim",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "table.structure.1",
+      "slot": "table.structure",
+      "name": "Dört ayak",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "table.structure.2",
+      "slot": "table.structure",
+      "name": "Tek pedestal",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "table.structure.3",
+      "slot": "table.structure",
+      "name": "Çift pedestal",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "table.structure.4",
+      "slot": "table.structure",
+      "name": "Kızak taşıyıcı",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "table.structure.5",
+      "slot": "table.structure",
+      "name": "Çapraz taşıyıcı",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "table.structure.6",
+      "slot": "table.structure",
+      "name": "Açılır tabla",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "bed.structure.1",
+      "slot": "bed.structure",
+      "name": "Ahşap platform",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "bed.structure.2",
+      "slot": "bed.structure",
+      "name": "Döşemeli baza",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "bed.structure.3",
+      "slot": "bed.structure",
+      "name": "Kaldırmalı baza",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "bed.structure.4",
+      "slot": "bed.structure",
+      "name": "Yüksek ayaklı karyola",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "bed.structure.5",
+      "slot": "bed.structure",
+      "name": "Kapitone başlık",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    },
+    {
+      "id": "bed.structure.6",
+      "slot": "bed.structure",
+      "name": "Kanatlı başlık",
+      "status": "target-component-not-implemented",
+      "requiredBeforeUse": [
+        "independent-geometry",
+        "connection-anchors",
+        "compatible-archetypes",
+        "dimension-rules",
+        "material-slots",
+        "part-and-source-provenance",
+        "designer-production-review"
+      ]
+    }
+  ],
+  "sofaArchetypes": [
+    {
+      "id": "track-modern",
+      "name": "Modern düz kolçak",
+      "distinctGeometry": "Ayrı minderler, alçak sırt, dar düz kolçak, yükseltilmiş ayak"
+    },
+    {
+      "id": "chesterfield",
+      "name": "Chesterfield",
+      "distinctGeometry": "Aynı yüksekliğe bağlanan sırt ve sarmal kol, gerçek çökertmeli elmas kapitone, tornalı ayak; yalnız düğme eklemek yeterli değil"
+    },
+    {
+      "id": "tuxedo",
+      "name": "Tuxedo",
+      "distinctGeometry": "Düz ve eş yüksek sırt-kol kabuğu; Chester sarmalından farklı kesit"
+    },
+    {
+      "id": "english-roll",
+      "name": "İngiliz yuvarlak kollu",
+      "distinctGeometry": "Alçak ve öne yuvarlanan kol, daha yüksek bağımsız sırt minderleri"
+    },
+    {
+      "id": "low-modular",
+      "name": "Alçak modüler lounge",
+      "distinctGeometry": "Derin ve alçak modüller, köşe birleşimleri, geniş oturum; klasik ayaklı gövdeyi ölçeklemek yeterli değil"
+    },
+    {
+      "id": "organic-curve",
+      "name": "Organik kavisli",
+      "distinctGeometry": "Kavis boyunca üretilen karkas ve döşeme, devamlı saran sırt; kutuları döndürmek yeterli değil"
+    },
+    {
+      "id": "exposed-timber",
+      "name": "Açık ahşap karkas",
+      "distinctGeometry": "Görünen ahşap taşıyıcı, bağlantı yuvaları ve bağımsız döşeme parçaları"
+    }
+  ],
+  "runtimeStatus": "No third-party engine installed, no live integration, no production validation.",
+  "architecture": {
+    "units": "millimetres internally, centimetres only at UI",
+    "assembly": [
+      "archetype",
+      "frame",
+      "seat",
+      "back",
+      "left-arm",
+      "right-arm",
+      "base",
+      "trim",
+      "mechanism"
+    ],
+    "geometry": [
+      "named independent meshes with anchors and material slots",
+      "parametric regeneration instead of uniform scaling",
+      "browser preview from light geometry or GLB",
+      "offline Blender generator for complex upholstery",
+      "separate solid-CAD and BOM path for manufacturing"
+    ],
+    "llmRole": "validated parameter proposals only; no arbitrary geometry code execution",
+    "plainFabric": true
+  },
+  "acceptance": [
+    "Same size and fabric must still show distinct silhouettes from front, side, top and perspective.",
+    "Changing archetype must change real part topology and geometry, not just labels or materials.",
+    "Every UI choice must change a documented compatible component.",
+    "Unknown or incompatible parts must be rejected.",
+    "Source, license and revision recorded per imported component.",
+    "Seams, capitone and mechanisms must not be advertised as ready before actual geometry and tests exist.",
+    "Manufacturing output requires specified material thickness, hardware, tolerances, joinery and human sign-off."
+  ]
+}
