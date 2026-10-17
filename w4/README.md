@@ -90,3 +90,7 @@ Line details (`assets/forma/lines.js`, geometry fn `line`): seat-cushion topstit
 The homepage (`index.html`) no longer has the style library banner, product-line names or category cards: a slim header, the studio's own front-elevation sketch of three sample pieces, four families as text rows and one line to AURA AI, in the eight site languages.
 
 QA: `tests/forma-check.mjs` (line-detail section added) and `tests/table-geometry.mjs`; browser checks of all families in sketch and colour, zoomed line details, material/send tabs and 390 px layouts.
+
+## Curated styles and starting models (2026-10-18)
+
+The studio offers ten styles: AURA (house style) plus nine widely used styles with clear lines (`assets/forma/curated.js`). Each family and kind opens on hand-picked starting models (`assets/forma/starts.js`, 270 entries, three per style), chosen by rendering six candidates each and keeping only on-style, distinct, well-proportioned ones. Models are browsed full size in the sketch with ‹ › on the drawing; the parameters are stored so sampler changes do not alter them. `tests/forma-check.mjs` validates every entry.

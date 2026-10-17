@@ -14,7 +14,7 @@ const LINE_KEYS = ['stitch', 'inlay', 'caseLine'];
 /** Stain tone that keeps the style's intended wood colour on a gürgen (beech) frame. */
 const STAIN_FOR = {oak: 'oak', ash: 'lightOak', beech: 'natural', gurgen: 'natural', walnut: 'walnut', cherry: 'cherry', teak: 'teak', smoked: 'darkWalnut', ebonized: 'black'};
 /** Extra pattern ideas per style so upholstery is not always plain. */
-const PATTERN_HINTS = {rococo_revival: 'floral:3 damask:2 stripe:1', tropical_resort: 'leaf:3 stripe:2', memphis: 'polka:2 geometric:2 chevron:1', scandinavian_pastel: 'floral:2 polka:1 check:1', dark_academia: 'plaid:2 houndstooth:2', neo_classical_restrained: 'damask:2 stripe:2 floral:1', mid_century_modern: 'geometric:2 houndstooth:1', industrial: 'houndstooth:1', japandi: 'stripe:1', craft_modern: 'check:1 houndstooth:1', neo_gothic: 'damask:3', hollywood_regency: 'stripe:2 geometric:1', art_deco: 'geometric:2 chevron:1', wabi_sabi_rustic: 'stripe:1 check:1'};
+const PATTERN_HINTS = {rococo_revival: 'floral:3 damask:2 stripe:1', tropical_resort: 'leaf:3 stripe:2', memphis: 'polka:2 geometric:2 chevron:1', scandinavian_pastel: 'floral:2 polka:1 check:1', dark_academia: 'plaid:2 houndstooth:2', neo_classical_restrained: 'damask:2 stripe:2 floral:1', mid_century_modern: 'geometric:2 houndstooth:1', industrial: 'houndstooth:1', japandi: 'stripe:1', aura: 'check:1 houndstooth:1', neo_gothic: 'damask:3', hollywood_regency: 'stripe:2 geometric:1', art_deco: 'geometric:2 chevron:1', wabi_sabi_rustic: 'stripe:1 check:1'};
 const weights = text => Object.fromEntries(text.split(' ').map(t => { const [k, v] = t.split(':'); return [k, +v]; }));
 
 /** Sensible sampling ranges for table parameters a style does not set. */

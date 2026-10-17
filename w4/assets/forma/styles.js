@@ -7,7 +7,8 @@ const W = text => Object.fromEntries(text.trim().split(/\s+/).map(t => { const [
 
 const S = (id, tr, en, enums, ranges, mats) => ({id, names: {tr, en}, enums: Object.fromEntries(Object.entries(enums).map(([k, v]) => [k, W(v)])), ranges, mats: Object.fromEntries(Object.entries(mats).map(([k, v]) => [k, typeof v === 'string' ? W(v) : v]))});
 
-export const STYLES = [
+import {curate} from './curated.js';
+const ALL = [
   S('japandi', 'Japandi', 'Japandi',
     {armType: 'track:3 slim:3 wood:3 square:1', backType: 'loose:3 tight:2 low:2', seatType: 'split:2 bench:3', cushionEdge: 'boxed:2 soft:2', baseType: 'legs:3 frame:3 plinth:1', legType: 'tapered:3 squareTaper:3 cylinder:2', welt: 'none:5 self:1'},
     {seatHeight: [375, 415], height: [690, 790], depth: [880, 1000], armHeight: [520, 585], armWidth: [60, 150], legHeight: [110, 200], legSize: [15, 24], legTaper: [0.55, 0.8], backRake: [8, 13], cushionThickness: [120, 165], cushionCrown: [3, 12], armTop: [0.3, 0.7], pillows: [0, 1]},
@@ -16,7 +17,7 @@ export const STYLES = [
     {armType: 'panel:3 square:3 slim:2', backType: 'tight:4 loose:1 low:1', seatType: 'bench:2 split:2 tight:2', cushionEdge: 'boxed:4 knife:1', baseType: 'sled:4 legs:2 floating:1', legType: 'cylinder:3 castor:1 block:1', welt: 'none:3 self:2'},
     {seatDepth: [500, 560], seatHeight: [395, 440], height: [700, 800], depth: [800, 900], armHeight: [560, 640], armWidth: [60, 140], legHeight: [100, 180], legSize: [12, 20], backRake: [6, 12], cushionThickness: [110, 150], cushionCrown: [0, 6], armTop: [0, 0.25], pillows: [0, 0]},
     {fiber: 'leather:3 wool:2 cotton:1', weave: 'plain:3 twill22:1', color: 'charcoal:3 bogolan:2 turkeyRed:1 indigo:1 chalk:1 weld:1', pattern: 'none:10', wood: 'ebonized:2 oak:1', finish: 'satin:2 matte:1', metal: 'chrome:4 black:2'}),
-  S('brutalism', 'Brütalizm', 'Brutalism',
+  S('brutalism', 'Brütalist', 'Brutalist',
     {armType: 'panel:5 square:3', backType: 'tight:3 low:2 channel:1', seatType: 'tight:2 bench:3 split:1', cushionEdge: 'boxed:3 soft:1', baseType: 'plinth:4 floating:2 legs:1', legType: 'block:4', welt: 'none:4'},
     {seatDepth: [580, 680], seatHeight: [375, 420], height: [640, 760], depth: [950, 1180], armHeight: [520, 620], armWidth: [200, 320], legHeight: [60, 120], legSize: [35, 48], backRake: [5, 10], cushionThickness: [150, 220], cushionCrown: [0, 8], armTop: [0, 0.2], pillows: [0, 1]},
     {fiber: 'wool:3 boucle:2 leather:1 linen:1', weave: 'basket:2 plain:2 twill22:1', color: 'stone:3 charcoal:3 taupe:2 rust:1 oat:1', pattern: 'none:10', wood: 'smoked:2 ebonized:2 oak:1', finish: 'matte:4', metal: 'black:2 bronze:1'}),
@@ -44,7 +45,7 @@ export const STYLES = [
     {armType: 'slim:3 panel:2 none:1', backType: 'tight:3 channel:2 low:1', seatType: 'bench:2 tight:2', cushionEdge: 'boxed:2 knife:2', baseType: 'sled:4 legs:2', legType: 'castor:2 cylinder:2', welt: 'none:3 contrast:1'},
     {seatHeight: [400, 440], height: [700, 820], depth: [820, 920], armHeight: [560, 640], armWidth: [40, 110], legHeight: [120, 200], legSize: [12, 20], backRake: [8, 14], cushionThickness: [100, 140], cushionCrown: [0, 6], pillows: [0, 0]},
     {fiber: 'leather:3 wool:2', weave: 'plain:2 twill22:1', color: 'charcoal:3 stone:2 chalk:1 bogolan:1', pattern: 'none:10', wood: 'ebonized:1', finish: 'satin:1', metal: 'chrome:4 nickel:2'}),
-  S('scandinavian_modern', 'İskandinav Modern', 'Scandinavian Modern',
+  S('scandinavian_modern', 'İskandinav', 'Scandinavian',
     {armType: 'wood:4 track:2 slim:2', backType: 'loose:4 tight:1', seatType: 'split:3 bench:1', cushionEdge: 'boxed:3 soft:1', baseType: 'frame:3 legs:3', legType: 'tapered:3 squareTaper:2 cone:1', welt: 'self:2 none:2'},
     {seatHeight: [390, 425], height: [740, 840], depth: [820, 920], armHeight: [560, 620], armWidth: [50, 140], legHeight: [130, 220], legSize: [16, 24], legSplay: [0, 6], backRake: [9, 15], cushionThickness: [120, 160], cushionCrown: [4, 12], pillows: [0, 2]},
     {fiber: 'wool:4 linen:2 cotton:1', weave: 'twill22:2 herringbone:2 plain:2 basket:1', color: 'oat:2 sage:2 woad:2 ochre:1 stone:2 charcoal:1', pattern: 'none:10 stripe:1', wood: 'oak:3 teak:2 ash:2', finish: 'oil:4 matte:2', metal: 'black:1'}),
@@ -64,7 +65,7 @@ export const STYLES = [
     {armType: 'track:3 slim:2 wood:2 slope:1', backType: 'tight:3 channel:2 loose:2 tufted:1', seatType: 'bench:3 split:2', cushionEdge: 'boxed:4', baseType: 'legs:5 frame:1', legType: 'cone:4 tapered:3', welt: 'self:3 none:1'},
     {seatHeight: [395, 430], height: [740, 830], depth: [800, 900], armHeight: [560, 630], armWidth: [60, 160], legHeight: [140, 220], legSize: [16, 24], legTaper: [0.35, 0.55], legSplay: [5, 12], backRake: [8, 13], cushionThickness: [110, 150], cushionCrown: [2, 8], tuftSpacing: [150, 210], pillows: [0, 2]},
     {fiber: 'wool:4 cotton:2 velvet:1', weave: 'plain:2 twill22:2 basket:1', color: 'ochre:3 rust:2 olive:2 turkishBlue:2 bottle:1 oat:1 charcoal:1', pattern: 'none:10', wood: 'teak:4 walnut:3', finish: 'oil:4 satin:1', metal: 'brass:1'}),
-  S('minimalism', 'Minimalizm', 'Minimalism',
+  S('minimalism', 'Minimalist', 'Minimalist',
     {armType: 'panel:3 square:3 slim:2 none:1', backType: 'tight:4 low:2', seatType: 'tight:3 bench:2', cushionEdge: 'boxed:4', baseType: 'plinth:3 floating:3 legs:1', legType: 'block:2 cylinder:1', welt: 'none:5'},
     {seatDepth: [540, 640], seatHeight: [390, 430], height: [680, 780], depth: [880, 1000], armHeight: [540, 610], armWidth: [80, 200], legHeight: [60, 120], legSize: [14, 24], backRake: [6, 11], cushionThickness: [120, 170], cushionCrown: [0, 4], armTop: [0, 0.2], pillows: [0, 0]},
     {fiber: 'linen:2 wool:2 boucle:1', weave: 'plain:4', color: 'chalk:4 stone:2 charcoal:2 oat:1', pattern: 'none:10', wood: 'oak:2 ash:1', finish: 'matte:3', metal: 'black:1'}),
@@ -108,13 +109,14 @@ export const STYLES = [
     {armType: 'slim:3 wood:3 track:2', backType: 'loose:4 tight:1', seatType: 'split:2 bench:2', cushionEdge: 'boxed:2 soft:2', baseType: 'legs:3 frame:3', legType: 'tapered:2 cylinder:2 squareTaper:2', welt: 'none:5'},
     {seatHeight: [385, 420], height: [720, 800], depth: [820, 920], armHeight: [540, 600], armWidth: [50, 120], legHeight: [130, 200], legSize: [16, 22], backRake: [9, 14], cushionThickness: [120, 160], cushionCrown: [4, 14], pillows: [0, 1]},
     {fiber: 'cotton:3 linen:3', weave: 'plain:3 twill22:1', color: 'oat:3 chalk:2 stone:2 naturalLinen:2 charcoal:1', pattern: 'none:9 stripe:1', wood: 'ash:3 beech:2 oak:2', finish: 'matte:3', metal: 'black:1'}),
-  S('craft_modern', 'Zanaat Odaklı Modern', 'Craft Modern',
+  S('aura', 'AURA', 'AURA',
     {armType: 'wood:4 track:1 square:1', backType: 'loose:3 tight:2 channel:1', seatType: 'split:3 bench:1', cushionEdge: 'boxed:3', baseType: 'frame:5 legs:2', legType: 'squareTaper:3 tapered:2', welt: 'self:3 none:1'},
     {seatHeight: [390, 425], height: [740, 840], depth: [840, 960], armHeight: [560, 620], armWidth: [60, 110], legHeight: [130, 200], legSize: [20, 30], backRake: [9, 14], cushionThickness: [130, 170], cushionCrown: [4, 14], pillows: [0, 2]},
     {fiber: 'wool:3 linen:3', weave: 'herringbone:2 basket:2 twill22:2', color: 'kakishibu:2 olive:2 ochre:2 woad:2 oat:2', pattern: 'none:8 check:1', wood: 'oak:4 walnut:2', finish: 'oil:5', metal: 'bronze:1'})
 ];
 
-export const STYLE_BY_ID = Object.fromEntries(STYLES.map(s => [s.id, s]));
+export const STYLES = curate(ALL);
+export const STYLE_BY_ID = Object.fromEntries(ALL.map(s => [s.id, s]));
 export const styleName = (id, lang) => STYLE_BY_ID[id]?.names[lang === 'tr' ? 'tr' : 'en'] ?? id;
 
 /** Proportions per product kind: width range and seat count. */

@@ -7,6 +7,7 @@ import {sample, normalizeDesign, SCHEMA} from './generate.js';
 import {FAMILIES, familyOf} from './families.js';
 import {buildMesh} from './build.js';
 import {styleName} from './styles.js';
+import {STARTS} from './starts.js';
 import {COLORS, FIBERS, WEAVES, WEAVE_NAMES, PATTERNS, MOTIF_CHOICES, MOTIF_NAMES, WOODS, FINISHES, STAINS, METALS, STONES, GLASS, SURFACES, LINEN_COLORS, colorGroup, name as nm} from './catalog.js';
 import {MATTRESS} from './bedroom.js';
 import {harmonize} from './set.js';
@@ -68,6 +69,9 @@ const redo = () => { if (!state.future.length) return; state.history.push(state.
 function designForKind(d, kind) {
   const prev = store.get(`aura-forma-kind-${d.family}-${kind}`);
   if (prev?.schema === SCHEMA && prev.family === d.family) return structuredClone(prev);
+  // A new kind opens on a curated model of the same style when there is one.
+  const list = startList(d.family, kind), e = list.find(x => x.style === d.style) || list[0];
+  if (e) return {...startDesign(e, d.family, kind), materials: d.materials};
   return sample({family: d.family, style: d.style, kind, seed: d.seed, locks: {materials: d.materials}});
 }
 const withParams = patch => ({...state.design, params: {...state.design.params, ...patch}});
@@ -118,7 +122,7 @@ function shell() {
   <main class="f-layout">
     <section class="f-visual" aria-label="3D">
       <div class="f-caption"><div><p class="f-eyebrow" id="eyebrow"></p><h1 id="designTitle"></h1><p class="f-dims" id="dims"></p></div><p class="f-status" id="status"></p></div>
-      <div class="f-stage" id="stage" aria-label="${esc(L('perspective'))}"></div>
+      <div class="f-stage" id="stage" aria-label="${esc(L('perspective'))}"><button class="f-step f-prev" data-step="-1" aria-label="${esc(L('prevModel'))}">‹</button><button class="f-step f-next" data-step="1" aria-label="${esc(L('nextModel'))}">›</button><p class="f-start" id="startLabel"></p></div>
       <div class="f-toolbar" role="toolbar">
         <button data-view="angle" aria-pressed="true">${L('perspective')}</button><button data-view="front">${L('front')}</button><button data-view="side">${L('side')}</button><button data-view="top">${L('top')}</button>
         <button id="modeBtn" aria-pressed="${!state.sketch}">${L(state.sketch ? 'modeRender' : 'modeSketch')}</button><button id="structureBtn" aria-pressed="false">${L('structure')}</button><button id="photoBtn">${L('photo')} ↓</button>
@@ -140,7 +144,7 @@ function shell() {
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261018b').then(({createViewer}) => {
+  import('./scene.js?v=20261018c').then(({createViewer}) => {
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(state.compiled, state.design.materials); }
@@ -155,6 +159,7 @@ function shellNav() {
 function renderCaption() {
   const d = state.design, c = state.compiled, issues = issuesOf(d, c);
   $('#eyebrow').textContent = `F-${String(d.seed % 100000).padStart(5, '0')} · ${L(state.sketch ? 'modeSketch' : 'modeRender')}`;
+  renderStartLabel();
   $('#designTitle').textContent = d.family === 'bedroom' ? (d.params.view === 'set' ? L('bedroomSet') : L(d.kind)) : L(d.family === 'table' ? d.kind : c.meta.kind);
   $('#dims').textContent = ui().dims(c);
   const err = issues.filter(i => i.level === 'error'), warn = issues.filter(i => i.level === 'warn');
@@ -174,12 +179,31 @@ function renderPanel() {
 }
 const chip = (attrs, label, on, extra = '') => `<button class="f-chip" ${attrs} aria-pressed="${on}" ${extra}>${esc(label)}</button>`;
 
-// Style is optional: a quiet list to borrow a starting form from, never a required first step.
-function inspireSection() {
-  const d = state.design, fam = familyOf(d);
-  return `<details class="f-inspire" ${state.inspire ? 'open' : ''}><summary>${L('inspire')}</summary><p class="f-note">${L('inspireHint')}</p>
-  <ul class="f-list">${fam.styles.map(s => `<li><button data-style="${s.id}" aria-pressed="${d.style === s.id}"><b>${esc(styleName(s.id, state.lang))}</b><small>${esc(ui().styleSub(s))}</small></button></li>`).join('')}</ul>
-  ${d.family === 'seating' ? `<div class="f-actions"><label class="f-secondary" id="imageLabel">${L('fromImage')} ↑<input id="imageFile" type="file" accept="image/jpeg,image/png,image/webp" hidden></label></div><p class="f-note">${L('imageHint')}${state.ai.vision ? '' : ' ' + L('aiOff')}</p>` : ''}</details>`;
+// Starting models: curated, on-style forms (reviewed by eye) shown full size in the sketch; the user browses them
+// with ‹ › on the drawing or picks a style here, then shapes the piece further.
+const startList = (family = state.design.family, kind = state.design.kind) => STARTS[family]?.[family === 'bedroom' ? 'bed' : kind] || [];
+function startDesign(e, family = state.design.family, kind = state.design.kind) {
+  const d = sample({family, style: e.style, kind, seed: e.seed}), mod = FAMILIES[family].mod;
+  return normalizeDesign({...d, kind, params: {...mod.DEFAULTS, ...e.p, kind}});
+}
+const startIndex = () => startList().findIndex(e => e.style === state.design.style && e.seed === state.design.seed);
+function stepStart(dir) {
+  const list = startList(); if (!list.length) return;
+  const i = startIndex(), next = list[((i < 0 ? (dir > 0 ? -1 : 0) : i) + dir + list.length) % list.length];
+  setDesign(startDesign(next)); feedback(`${styleName(next.style, state.lang)} · ${L('startModel')}`);
+}
+function startSection() {
+  const d = state.design, list = startList(), styles = [...new Set(list.map(e => e.style))];
+  if (!styles.length) return '';
+  return `<section class="f-starts"><h3>${L('startModel')}</h3><div class="f-chips">${styles.map(id => chip(`data-start-style="${id}"`, styleName(id, state.lang), d.style === id)).join('')}</div>
+  <p class="f-note">${L('startHint')}</p>
+  ${d.family === 'seating' ? `<div class="f-actions"><label class="f-secondary" id="imageLabel">${L('fromImage')} ↑<input id="imageFile" type="file" accept="image/jpeg,image/png,image/webp" hidden></label></div>${state.ai.vision ? '' : `<p class="f-note">${L('aiOff')}</p>`}` : ''}</section>`;
+}
+function renderStartLabel() {
+  const el = $('#startLabel'); if (!el) return;
+  const list = startList(), i = startIndex(), d = state.design;
+  const mine = list.filter(e => e.style === d.style), j = mine.findIndex(e => e.seed === d.seed);
+  el.innerHTML = `<b>${esc(styleName(d.style, state.lang))}</b>${i >= 0 ? `<span>${j + 1} / ${mine.length}</span>` : ''}`;
 }
 // Line details: the simple lines that make a form one's own (stitching, inlay, groove), drawn in red in the sketch.
 function linesSection() {
@@ -202,7 +226,7 @@ const counter = (key, label, values) => `<h3>${L(label)}</h3><div class="f-seg">
 
 function partsPanel() {
   const head = `<h2>${L('tabParts')}</h2>`, body = partsBody();
-  return body.replace(head, head + kindRow()) + linesSection() + inspireSection();
+  return body.replace(head, head + kindRow() + startSection()) + linesSection();
 }
 function partsBody() {
   const p = state.design.params;
@@ -502,7 +526,8 @@ async function downloadAs(kind) {
 const SPECIES_TO_STAIN = {oak: 'oak', ash: 'lightOak', beech: 'natural', walnut: 'walnut', cherry: 'cherry', teak: 'teak', smoked: 'darkWalnut', ebonized: 'black'};
 function switchFamily(family, kind) {
   const prev = store.get('aura-forma-design-' + family);
-  const next = prev?.schema === SCHEMA && (!kind || prev.kind === kind) ? prev : sample({family, style: state.design.style, kind, seed: state.design.seed});
+  const k = FAMILIES[family].kinds[kind] ? kind : FAMILIES[family].defaultKind, list = startList(family, k), e = list.find(x => x.style === state.design.style) || list[0];
+  const next = prev?.schema === SCHEMA && (!kind || prev.kind === kind) ? prev : e ? startDesign(e, family, k) : sample({family, style: state.design.style, kind, seed: state.design.seed});
   setDesign(next);
   const prevSent = store.get('aura-forma-sent-' + family); state.sent = prevSent?.key === designKey(state.design) ? prevSent : null;
 }
@@ -647,14 +672,14 @@ function bindShell() {
   $('#micBtn').onclick = listen;
   for (const b of document.querySelectorAll('[data-tab]')) b.onclick = () => { state.tab = b.dataset.tab; setSketch(!['material', 'deliver'].includes(state.tab)); renderPanel(); };
   $('#modeBtn').onclick = () => setSketch(!state.sketch);
+  for (const b of document.querySelectorAll('[data-step]')) b.onclick = () => stepStart(+b.dataset.step);
 
   const panel = $('#panel');
-  panel.addEventListener('toggle', e => { if (e.target.classList?.contains('f-inspire')) state.inspire = e.target.open; }, true);
   panel.addEventListener('click', e => {
     const el = e.target.closest('button, [data-load]'); if (!el) return;
     const d = el.dataset;
     if (d.kind) { if (d.kind !== state.design.kind) setDesign(isBedroom() ? {...state.design, kind: d.kind, params: {...state.design.params, kind: d.kind}} : designForKind(state.design, d.kind)); }
-    else if (d.style) { setDesign(sample({family: state.design.family, style: d.style, kind: state.design.kind, seed: state.design.seed})); }
+    else if (d.startStyle) { const e = startList().find(x => x.style === d.startStyle); if (e) setDesign(startDesign(e)); }
     else if (d.enum) setDesign(withParams({[d.enum]: d.value}));
     else if (d.count) setDesign(withParams({[d.count]: +d.value}));
     else if (d.mattress) { const [w, l] = MATTRESS[d.mattress]; setDesign(withParams({mattressWidth: w, mattressLength: l})); }
@@ -732,6 +757,10 @@ function initialDesign() {
   const kind = FAMILIES[family].kinds[params.get('kind')] ? params.get('kind') : undefined;
   const fromStore = store.get('aura-forma-design-' + family) || (family === 'seating' ? store.get('aura-forma-design') : null);
   if (!note && fromStore?.schema === SCHEMA && !params.get('style') && !kind) return {design: normalizeDesign({...fromStore, family})};
+  // A fresh visit opens on a curated starting model (the requested style when given, otherwise the first: AURA).
+  const k = kind || FAMILIES[family].defaultKind, list = startList(family, k);
+  const e = list.find(x => x.style === style && (params.get('style') || note)) || (params.get('style') || note ? null : list[0]);
+  if (e) return {design: startDesign(e, family, k), note};
   return {design: sample({family, style, kind, seed: 1 + Math.floor(Math.random() * 1e6)}), note};
 }
 
@@ -743,4 +772,4 @@ store.set('aura-forma-lang', state.lang);
 { const prev = store.get('aura-forma-sent-' + state.design.family); if (prev?.key === designKey(state.design)) state.sent = prev; }
 shell();
 if (start.note) { feedback(start.note); state.tab = 'parts'; renderPanel(); }
-aiStatus().then(s => { state.ai = s; if (state.tab === 'parts' && state.inspire) renderPanel(); });
+aiStatus().then(s => { state.ai = s; if (state.tab === 'parts') renderPanel(); });

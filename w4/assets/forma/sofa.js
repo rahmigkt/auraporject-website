@@ -114,7 +114,7 @@ export function compile(raw) {
   }
 
   // ---- Back ---------------------------------------------------------------
-  const backTop = H, backBottom = p.baseType === 'frame' ? deckTop - 30 : y0 + 10;
+  const backTop = H, backBottom = p.baseType === 'frame' ? deckTop : y0 + 10;
   let seatBackZ; // z where seat cushions end (front of back construction at seat level)
   const backW = timberArms ? innerW : bodyW - 8;
   if (p.backType === 'loose') {
@@ -191,7 +191,7 @@ export function compile(raw) {
       parts.push(part(`arm-top-${side}`, 'arm-top', 'wood', {fn: 'cushion', w: aw, h: 28, d: D - p.armSet + 10, r: 6}, [ax, p.armHeight + 14, -p.armSet / 2 + 5]));
       continue;
     }
-    const armBottom = p.baseType === 'frame' ? deckTop - 60 : y0;
+    const armBottom = p.baseType === 'frame' ? deckTop : y0; // on a timber frame the arm sits on the side rail (no coplanar faces)
     const h = p.armHeight - armBottom, len = D - p.armSet;
     let sec = armSection(p.armType, aw, h, {topRadius: p.armTop, flare: p.armFlare});
     if (s < 0) sec = sec.map(([x, y]) => [-x, y]).reverse();

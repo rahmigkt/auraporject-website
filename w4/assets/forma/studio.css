@@ -120,3 +120,11 @@
 @media (max-width:620px){.f-header{height:auto;flex-wrap:wrap;padding:6px 16px 0;gap:4px 16px}.f-families{order:3;width:100%;gap:16px;overflow-x:auto}.f-families button{padding:8px 0}
   .f-caption{flex-direction:column;align-items:start}.f-status{max-width:none;text-align:left}.f-toolbar{overflow-x:auto;flex-wrap:nowrap}.f-toolbar button{white-space:nowrap}
   .f-slider{grid-template-columns:1fr 92px}.f-slider input[type=range]{grid-column:1/-1;grid-row:2}.f-send{grid-template-columns:1fr}.f-fabric-preview{grid-template-columns:110px 1fr}.f-fabric-preview canvas{width:110px;height:110px}.f-list{columns:1}.f-tabs button{padding-left:10px;font-size:11px}}
+/* Starting models: browse on the drawing itself */
+.f-step{position:absolute;top:50%;transform:translateY(-50%);z-index:2;border:0;background:none;font:300 44px/1 var(--serif);color:var(--muted);padding:18px 14px;cursor:pointer}
+.f-step:hover{color:var(--red)}.f-prev{left:2px}.f-next{right:2px}
+.f-start{position:absolute;left:16px;bottom:12px;margin:0;z-index:2;display:flex;gap:10px;align-items:baseline;pointer-events:none}
+.f-start b{font:400 18px var(--serif);color:var(--ink)}.f-start span{font:10.5px var(--mono);color:var(--red)}
+.f-starts{margin:20px 0 8px;padding-bottom:16px;border-bottom:1px solid var(--hair)}.f-starts h3{margin-top:0}
+.f-starts .f-chip{font:400 15px var(--serif)}
+@media (max-width:620px){.f-step{font-size:34px;padding:12px 6px}}
