@@ -2,7 +2,7 @@
 // Build specs are starting suggestions for the designer to confirm, not engineering approval.
 import {buildMesh} from './build.js';
 import {tableBom} from './table.js';
-import {bedroomBom} from './bedroom.js';
+import {setBom} from './set.js';
 import {bounds} from './mesh.js';
 import {FIBERS, WEAVE_NAMES, PATTERNS, COLORS, WOODS, FINISHES, METALS, STAINS, STONES, GLASS, MOTIF_NAMES, name as nm} from './catalog.js';
 import {yardage} from './textile.js';
@@ -73,7 +73,7 @@ export function bom(compiled, materials, lang = 'tr') {
   if (compiled.family === 'bedroom') {
     const tr = lang === 'tr';
     const text = mat => mat === 'case' ? surfaceText(materials.case, lang) : mat === 'fabric' || mat === 'welt' || mat === 'wood' || mat === 'metal' ? materialText(mat, materials, lang) : mat === 'cane' ? (tr ? 'Rattan hasır (Viyana örgüsü)' : 'Rattan cane (Vienna weave)') : mat === 'mirror' ? (tr ? 'Ayna 5 mm' : 'Mirror 5 mm') : mat === 'leather' ? (tr ? 'Deri' : 'Leather') : mat === 'dark' || mat === 'shadow' ? (tr ? 'Siyah mat' : 'Black matt') : (tr ? 'Huş kontrplak / masif (iç)' : 'Birch ply / solid (internal)');
-    return bedroomBom(compiled, materials, lang, buildMesh, text);
+    return setBom(compiled, materials, lang, buildMesh, text);
   }
   const groups = new Map();
   let fabricArea = 0, weltLength = 0, buttons = 0;

@@ -163,7 +163,7 @@ function legFor(p, id, x, z, h, mat) {
 }
 
 // ---- Bed ----------------------------------------------------------------------------------------
-function compileBed(p) {
+export function compileBed(p) {
   const parts = [], W0 = p.mattressWidth, L0 = p.mattressLength;
   const framed = ['frame', 'upholsteredFrame', 'fourPoster'].includes(p.bedBase);
   const railT = p.bedBase === 'upholsteredFrame' ? 90 : framed ? 40 : 0;
@@ -352,7 +352,7 @@ function bedDims(p, m, zBack) {
 }
 
 // ---- Case pieces (nightstand, dresser) -----------------------------------------------------------
-function compileCase(p) {
+export function compileCase(p) {
   const parts = [], W = p.width, D = p.depth, H = p.height, T = p.topThickness, fr = 18;
   const wall = p.caseBase === 'wall';
   const yb = wall ? Math.max(0, H - Math.max(200, H * 0.45)) : p.caseBase === 'legs' || p.caseBase === 'sled' ? p.baseHeight : p.baseHeight;
@@ -502,7 +502,7 @@ export function validate(design, materials = null, buildMesh = null) {
   return issues;
 }
 
-const ROLE = {
+export const ROLE = {
   baza: ['Baza gövdesi', 'Box base', '18 mm kontrplak/MDF kasa, 30 mm sünger, kumaş kaplama; 4 köşe taşıyıcı', '18 mm ply/MDF box, 30 mm foam, fabric cover; four corner supports'],
   platform: ['Platform', 'Platform base', 'Kasa + kapak, kenar profilli; çıtalı taban', 'Box with profiled edges; slatted deck'],
   rail: ['Kasa kayıtı', 'Bed rail', 'Masif / kontrplak; köşe bağlantısı çelik karyola köşebendi', 'Solid / ply; steel bed-rail fittings at the corners'],
@@ -548,7 +548,7 @@ export function bedroomBom(compiled, materials, lang, buildMesh, materialText) {
   const metres = +(fabricArea / 1e6 / 1.4 * 1.15).toFixed(1);
   return {rows, totals: {weightKg: weights(compiled, materials, buildMesh), fabricMetres: fabricArea > 0 ? metres : undefined, fabricAreaM2: fabricArea > 0 ? +(fabricArea / 1e6).toFixed(2) : undefined, mattress: compiled.meta.mattress, drawers: compiled.meta.drawers}};
 }
-function meshArea(m) {
+export function meshArea(m) {
   let a = 0; const p = m.positions, idx = m.indices;
   for (let t = 0; t < idx.length; t += 3) {
     const i = idx[t] * 3, j = idx[t + 1] * 3, k = idx[t + 2] * 3;

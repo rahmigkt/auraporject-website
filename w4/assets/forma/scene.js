@@ -45,6 +45,19 @@ const hexColor = h => new THREE.Color(h);
 
 /** Material set for one design. Starts with flat colours; textures arrive asynchronously. */
 function materialSet(materials, opts = {}) { return materials.top ? tableMaterialSet(materials, opts) : materials.case ? bedroomMaterialSet(materials, opts) : seatingMaterialSet(materials, opts); }
+/** Room shell and room textiles on top of the bedroom set. */
+function roomMaterials(set, materials, detail, jobs) {
+  if (!materials.wall) return;
+  const Wc = COLORS[materials.wall.color] || COLORS.cream;
+  set.wall = new THREE.MeshStandardMaterial({color: hexColor(Wc.hex), roughness: 0.92});
+  set.wallcut = new THREE.MeshStandardMaterial({color: '#3a3934', roughness: 0.9});
+  set.floor = surfaceMaterial({...materials.floor, surface: materials.floor.surface === 'stone' ? 'stone' : 'wood'}, set, detail ? jobs : [], {rotate: false});
+  const Rc = COLORS[materials.rug?.color] || COLORS.cream;
+  set.rug = new THREE.MeshPhysicalMaterial({color: hexColor(Rc.hex), roughness: 1, sheen: 0.6, sheenRoughness: 0.9, sheenColor: hexColor(Rc.hex).lerp(new THREE.Color('#fff'), 0.3)});
+  if (detail) jobs.push(makeMaps('fabric', {fiber: 'wool', weave: 'basket', color: materials.rug?.color || 'cream', pattern: 'none', color2: 'white', scale: 1, density: 3}, 512).then(out => applyMaps(set, set.rug, out, out?.tileMm, out?.tileMm)));
+  set.led = new THREE.MeshStandardMaterial({color: '#fff1d6', emissive: new THREE.Color('#ffd9a0'), emissiveIntensity: 2.2, roughness: 0.5});
+  set.extra = [set.wall, set.wallcut, set.floor, set.rug, set.led];
+}
 
 function applyMaps(set, mat, out, tileMmX, tileMmY, {rotate = false} = {}) {
   if (!out || set.disposed) return;
@@ -133,13 +146,14 @@ function bedroomMaterialSet(materials, {detail = true, onReady} = {}) {
   set.mirror = new THREE.MeshPhysicalMaterial({color: '#d3dcdf', metalness: 0.55, roughness: 0.08, clearcoat: 1, clearcoatRoughness: 0.02});
   set.shadow = new THREE.MeshStandardMaterial({color: '#191714', roughness: 1});
   set.cane = new THREE.MeshStandardMaterial({color: '#d6b880', roughness: 0.6, side: THREE.DoubleSide});
+  roomMaterials(set, materials, detail, jobs);
   if (detail) {
     jobs.push(makeMaps('fabric', {fiber: 'linen', weave: 'plain', color: materials.linen?.color || 'white', pattern: 'none', color2: 'white', scale: 1, density: 3}, 512).then(out => { applyMaps(set, set.linen, out, out?.tileMm, out?.tileMm); }));
   }
   { const cane = CANE ??= caneMaps(); applyMaps(set, set.cane, cane, cane.tileMm, cane.tileMm); }
   Promise.all(jobs).then(done);
   const base = set.dispose;
-  set.dispose = () => { base(); for (const m of new Set([set.case, set.mattress, set.linen, set.leather, set.mirror, set.shadow, set.cane])) m.dispose(); };
+  set.dispose = () => { base(); for (const m of new Set([set.case, set.mattress, set.linen, set.leather, set.mirror, set.shadow, set.cane, ...(set.extra || [])])) m.dispose(); };
   return set;
 }
 
@@ -157,6 +171,7 @@ function buildGroup(compiled, mats, {structure = false} = {}) {
   const group = new THREE.Group(); group.scale.setScalar(0.001);
   for (const part of compiled.parts) {
     if (part.internal && !structure) continue;
+    if (part.planOnly) continue;
     let mat = mats[part.mat] || mats.fabric;
     if (structure && part.decor) continue;
     if (structure && !part.internal && ['fabric', 'welt', 'top', 'case'].includes(part.mat)) {
@@ -164,7 +179,7 @@ function buildGroup(compiled, mats, {structure = false} = {}) {
     }
     const mesh = new THREE.Mesh(geometryFor(part), mat);
     mesh.position.set(...part.pos); mesh.rotation.set(...part.rot);
-    mesh.castShadow = !structure || part.internal; mesh.receiveShadow = true;
+    mesh.castShadow = !part.noShadow && (!structure || part.internal); mesh.receiveShadow = true;
     mesh.userData.part = part.id;
     group.add(mesh);
   }
@@ -208,9 +223,9 @@ export function createViewer(host, {onRotate} = {}) {
   host.appendChild(canvas);
   let renderer;
   try { renderer = makeRenderer(canvas, {alpha: false}); } catch { host.dataset.webgl = 'off'; return null; }
-  const {scene, contact} = makeStage(renderer);
+  const {scene, contact, sun} = makeStage(renderer);
   const persp = new THREE.PerspectiveCamera(30, 1, 0.05, 60), ortho = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.05, 60);
-  let camera = persp, view = 'angle', yaw = 0.62, pitch = 0.2, zoom = 1, group = null, mats = null, compiled = null, materials = null, structure = false, size = [1, 1, 1];
+  let userMoved = false, camera = persp, view = 'angle', yaw = 0.62, pitch = 0.2, zoom = 1, group = null, mats = null, compiled = null, materials = null, structure = false, size = [1, 1, 1];
   const composer = new EffectComposer(renderer);
   const renderPass = new RenderPass(scene, camera), ao = new GTAOPass(scene, camera, 1, 1), smaa = new SMAAPass(), out = new OutputPass();
   ao.blendIntensity = 0.85; ao.updateGtaoMaterial({radius: 0.35, distanceExponent: 1.4, thickness: 1.2, scale: 1.0, samples: 16});
@@ -239,7 +254,7 @@ export function createViewer(host, {onRotate} = {}) {
   // Orbit with pointer; wheel zoom; arrow keys.
   let drag = null;
   canvas.addEventListener('pointerdown', e => { drag = {x: e.clientX, y: e.clientY, yaw, pitch}; canvas.setPointerCapture(e.pointerId); });
-  canvas.addEventListener('pointermove', e => { if (!drag) return; view = 'angle'; yaw = drag.yaw - (e.clientX - drag.x) * 0.008; pitch = Math.max(-0.05, Math.min(1.2, drag.pitch + (e.clientY - drag.y) * 0.005)); draw(); onRotate?.(); });
+  canvas.addEventListener('pointermove', e => { if (!drag) return; userMoved = true; view = 'angle'; yaw = drag.yaw - (e.clientX - drag.x) * 0.008; pitch = Math.max(-0.05, Math.min(1.2, drag.pitch + (e.clientY - drag.y) * 0.005)); draw(); onRotate?.(); });
   for (const ev of ['pointerup', 'pointercancel']) canvas.addEventListener(ev, () => { drag = null; });
   canvas.addEventListener('wheel', e => { e.preventDefault(); zoom = Math.min(2.5, Math.max(0.6, zoom * (e.deltaY > 0 ? 0.93 : 1.07))); draw(); }, {passive: false});
   canvas.addEventListener('keydown', e => { const k = {ArrowLeft: [0.12, 0], ArrowRight: [-0.12, 0], ArrowUp: [0, 0.08], ArrowDown: [0, -0.08]}[e.key]; if (k) { e.preventDefault(); view = 'angle'; yaw += k[0]; pitch = Math.max(-0.05, Math.min(1.2, pitch + k[1])); draw(); } });
@@ -250,6 +265,12 @@ export function createViewer(host, {onRotate} = {}) {
     group = buildGroup(compiled, mats, {structure}); scene.add(group);
     const b = new THREE.Box3().setFromObject(group), s = b.getSize(new THREE.Vector3());
     size = [s.x, s.y, s.z]; contact.scale.set(s.x * 1.25, s.z * 1.45, 1);
+    // Rooms: light through the open corner, a shadow camera that covers the floor, no contact blob.
+    const isRoom = !!compiled.meta?.room, e = Math.max(2.5, Math.max(s.x, s.z) * 0.62);
+    contact.visible = !isRoom;
+    if (isRoom) sun.position.set(-(compiled.meta.cameraYaw > 0 ? -1 : 1) * 2.6, 4.6, 3.4); else sun.position.set(-1.6, 4.2, 3.2);
+    Object.assign(sun.shadow.camera, {left: -e, right: e, top: e, bottom: -e}); sun.shadow.camera.updateProjectionMatrix();
+    if (isRoom && !userMoved) { yaw = compiled.meta.cameraYaw; pitch = 0.32; }
     draw();
   }
   return {
@@ -258,7 +279,7 @@ export function createViewer(host, {onRotate} = {}) {
       if (!mats || matKey !== JSON.stringify(materials)) { mats?.dispose(); mats = materialSet(nextMaterials, {onReady: () => rebuild()}); materials = structuredClone(nextMaterials); }
       compiled = next; rebuild();
     },
-    view(kind) { view = kind; zoom = 1; if (kind === 'angle') { yaw = 0.62; pitch = 0.2; } draw(); },
+    view(kind) { view = kind; zoom = 1; if (kind === 'angle') { yaw = compiled?.meta?.room ? compiled.meta.cameraYaw : 0.62; pitch = 0.2; userMoved = false; } draw(); },
     zoom(f) { zoom = Math.min(2.5, Math.max(0.6, zoom * f)); draw(); },
     structure(on) { structure = on; rebuild(); },
     /** High-resolution still (longer AO sampling). */
@@ -300,15 +321,18 @@ export function renderThumbnail(compiled, materials, {width = 360, height = 240}
     catch { return null; }
     thumb.renderer.shadowMap.type = THREE.PCFShadowMap;
   }
-  const {renderer, scene, camera, contact} = thumb;
+  const {renderer, scene, camera, contact, sun} = thumb;
   renderer.setPixelRatio(1.5); renderer.setSize(width, height, false);
   const mats = materialSet(materials, {detail: false});
   const group = buildGroup(compiled, mats); scene.add(group);
   const b = new THREE.Box3().setFromObject(group), s = b.getSize(new THREE.Vector3());
   contact.scale.set(s.x * 1.25, s.z * 1.45, 1);
+  const room = !!compiled.meta?.room, yaw = room ? compiled.meta.cameraYaw : 0.62, e = Math.max(2.5, Math.max(s.x, s.z) * 0.62);
+  contact.visible = !room; sun.position.set(room ? Math.sign(yaw) * 2.6 : -1.6, room ? 4.6 : 4.2, room ? 3.4 : 3.2);
+  Object.assign(sun.shadow.camera, {left: -e, right: e, top: e, bottom: -e}); sun.shadow.camera.updateProjectionMatrix();
   const aspect = width / height, radius = Math.hypot(s.x, s.y, s.z) * 0.5, fov = camera.fov * Math.PI / 180;
   const dist = radius / Math.sin(Math.min(fov, 2 * Math.atan(Math.tan(fov / 2) * aspect)) / 2) * 0.86;
-  camera.aspect = aspect; camera.position.set(Math.sin(0.62) * Math.cos(0.22) * dist, s.y * 0.45 + Math.sin(0.22) * dist, Math.cos(0.62) * Math.cos(0.22) * dist);
+  camera.aspect = aspect; const pt = room ? 0.32 : 0.22; camera.position.set(Math.sin(yaw) * Math.cos(pt) * dist, s.y * 0.45 + Math.sin(pt) * dist, Math.cos(yaw) * Math.cos(pt) * dist);
   camera.lookAt(0, s.y * 0.45, 0); camera.updateProjectionMatrix();
   renderer.render(scene, camera);
   const url = thumb.canvas.toDataURL('image/jpeg', 0.86);

@@ -24,6 +24,11 @@ export function buildMesh(q) {
     mesh = {positions, normals, uvs: inner.uvs, indices: inner.indices};
   }
   else if (g.fn === 'ribbed') mesh = ribbed(g);
+  else if (g.fn === 'quad') {
+    // One-sided rectangle in the x–y plane facing +z (room walls seen only from inside).
+    const w = g.w / 2, h = g.h / 2;
+    mesh = {positions: new Float32Array([-w, -h, 0, w, -h, 0, w, h, 0, -w, h, 0]), normals: new Float32Array([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]), uvs: new Float32Array([0, 0, g.w / 1000, 0, g.w / 1000, g.h / 1000, 0, g.h / 1000]), indices: new Uint32Array([0, 1, 2, 0, 2, 3])};
+  }
   else if (g.fn === 'buttons') {
     const one = sphere(g.r, {segments: 10}), n = g.points.length, vc = one.positions.length;
     const positions = new Float32Array(vc * n), normals = new Float32Array(vc * n), uvs = new Float32Array(one.uvs.length * n), indices = new Uint32Array(one.indices.length * n);

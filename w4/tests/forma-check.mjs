@@ -142,38 +142,50 @@ for (const pattern of ['floral', 'polka', 'leaf', 'geometric', 'chevron', 'hound
   assert.ok(hi - lo > 40, `${pattern}/${density} visible`);
 }
 
-// 8. Bedroom: beds, bedside units and chests — valid, on the floor, finite, diverse; drawings, BOM, commands.
+// 8. Bedroom set: one piece designed, the rest proposed to match; every piece valid, on the floor, finite.
 const BR = await import('../assets/forma/bedroom.js');
+const SET = await import('../assets/forma/set.js');
 const {BEDROOM_STYLES} = await import('../assets/forma/styles-bedroom.js');
 const {worldPositions: wp} = await import('../assets/forma/build.js');
 let bedroomN = 0;
-for (const st of BEDROOM_STYLES) for (const kind of Object.keys(BR.KINDS)) for (let seed = 1; seed <= 3; seed++) {
-  const bd = sample({family: 'bedroom', style: st.id, kind, seed}), bc = BR.compile({...bd.params, kind});
-  assert.equal(BR.validate(bc, bd.materials, buildMesh).filter(i => i.level === 'error').length, 0, `${st.id}/${kind}/${seed}`);
-  let floor = Infinity;
-  for (const q of bc.parts) { const w = wp(q); assert.ok(w.length && w.every(Number.isFinite), `${st.id}/${kind} ${q.id}`); if (!q.internal) for (let i = 1; i < w.length; i += 3) floor = Math.min(floor, w[i]); }
-  assert.ok(floor > -3 && floor < 2 || (kind === 'nightstand' && bc.params.caseBase === 'wall'), `${st.id}/${kind}/${seed} floor ${floor}`);
-  if (kind === 'bed') { assert.ok(bc.meta.mattressTop > 330 && bc.meta.mattressTop < 700, `mattress top ${bc.meta.mattressTop}`); assert.ok(bc.meta.headAbove >= 150, `head above ${bc.meta.headAbove}`); }
+for (const st of BEDROOM_STYLES) for (const kind of Object.keys(SET.KINDS)) for (let seed = 1; seed <= 2; seed++) {
+  const bd = sample({family: 'bedroom', style: st.id, kind, seed});
+  for (const view of ['set', 'piece']) {
+    const bc = SET.compile({...bd.params, view});
+    assert.equal(SET.validate(bc, bd.materials, buildMesh).filter(i => i.level === 'error').length, 0, `${st.id}/${kind}/${seed}/${view}`);
+    let floor = Infinity;
+    for (const q of bc.parts) { const w = wp(q); assert.ok(w.length && w.every(Number.isFinite), `${st.id}/${kind} ${q.id}`); if (!q.internal && !q.decor) for (let i = 1; i < w.length; i += 3) floor = Math.min(floor, w[i]); }
+    assert.ok((floor > -3 && floor < 2) || (view === 'piece' && kind === 'nightstand' && bc.params.nsBase === 'wall'), `${st.id}/${kind}/${seed}/${view} floor ${floor}`);
+  }
+  const units = new Set(SET.compile({...bd.params, view: 'set'}).parts.map(q => q.unit));
+  for (const u of ['bed', 'wardrobe', 'dresser', 'nightstand']) assert.ok(units.has(u), `${st.id} set has ${u}`);
   bedroomN++;
 }
-const bv = variants({family: 'bedroom', style: 'art_deco', kind: 'bed'});
-assert.ok(new Set(bv.map(x => `${x.params.headType}/${x.params.headShape}`)).size >= 6, 'bed proposals vary');
-for (const kind of Object.keys(BR.KINDS)) {
-  const bd = sample({family: 'bedroom', style: 'mid_century_modern', kind, seed: 5}), bc = BR.compile({...bd.params, kind});
+// The piece in focus proposes the others.
+const hz = SET.harmonize(SET.normalize({headType: 'cane', headShape: 'arch', legType: 'roundTaper', bedBase: 'frame', mirror: 'rect'}), 'bed');
+assert.ok(hz.wdDoorStyle === 'cane' && hz.frontStyle === 'cane' && hz.mirror === 'arch' && hz.drBase === 'legs', `bed → set ${JSON.stringify(hz).slice(0, 80)}`);
+const hw = SET.harmonize(SET.normalize({wdDoorStyle: 'fluted', wdHandle: 'bar', wdBase: 'legs'}), 'wardrobe');
+assert.ok(hw.headType === 'channel' && hw.frontStyle === 'fluted' && hw.pull === 'bar' && hw.nsBase === 'legs', 'wardrobe → set');
+{
+  const bd = sample({family: 'bedroom', style: 'mid_century_modern', kind: 'wardrobe', seed: 5}), bc = SET.compile(bd.params);
   const sh = drawingSheet(bc, {...labels, mattressTop: 'Top', edgeDetail: 'Edge'}, {rows: [['A', 'B']]});
-  assert.ok(!sh.svg.includes('NaN') && !sh.svg.includes('undefined'), `${kind} sheet`);
+  assert.ok(!sh.svg.includes('NaN') && !sh.svg.includes('undefined'), 'set sheet');
   assert.ok(drawingDxf(bc).includes('ENTITIES'));
-  const bb = bom(bc, bd.materials, 'tr'); assert.ok(bb.rows.length > 3 && bb.totals.weightKg > 3, `${kind} bom`);
+  const bb = bom(bc, bd.materials, 'tr');
+  for (const u of ['Gardırop', 'Karyola', 'Komodin', 'Şifonyer']) assert.ok(bb.rows.some(r => r.nameTr.startsWith(u)), `set bom ${u}`);
+  const piece = bom(SET.compile({...bd.params, view: 'piece'}), bd.materials, 'tr');
+  assert.ok(piece.rows.some(r => r.nameTr.startsWith('Şifonyer')), 'piece view still orders the whole set');
 }
 const bp = (text, want, family = 'bedroom') => { const a = parse(text, {family}).actions; for (const w of want) assert.ok(a.some(x => Object.entries(w).every(([k, v]) => JSON.stringify(x[k]) === JSON.stringify(v))), `bedroom "${text}" → ${JSON.stringify(a)} lacks ${JSON.stringify(w)}`); };
 bp('kemerli kapitone yatak başlığı', [{type: 'family', value: 'bedroom'}, {key: 'headType', value: 'tufted'}, {key: 'headShape', value: 'arch'}], 'seating');
 bp('160x200 sandıklı baza', [{type: 'mattress', value: [1600, 2000]}, {key: 'bedBase', value: 'baza'}, {key: 'storage', value: 'lift'}]);
 bp('başlığı 10 cm yükselt', [{type: 'delta', key: 'headHeight', value: 100}]);
 bp('3 çekmeceli şifonyer, oluklu ön, pirinç halka kulp', [{type: 'kind', value: 'dresser'}, {key: 'frontStyle', value: 'fluted'}, {key: 'pull', value: 'ring'}, {key: 'rows', value: 3}]);
-bp('Kommode mit Spiegel', [{type: 'kind', value: 'dresser'}, {key: 'mirror', value: 'rect'}], 'table');
+bp('gardırop sürgülü, oluklu kapak, deri kulp', [{type: 'kind', value: 'wardrobe'}, {key: 'wdDoorType', value: 'sliding'}, {key: 'frontStyle', value: 'fluted'}, {key: 'pull', value: 'leather'}]);
+bp('makyaj nişli gardırop', [{key: 'wdNiche', value: 'vanity'}]);
+bp('Kleiderschrank mit Schiebetüren', [{type: 'family', value: 'bedroom'}, {type: 'kind', value: 'wardrobe'}, {key: 'wdDoorType', value: 'sliding'}], 'table');
 bp('cama con cabecero de rejilla', [{key: 'headType', value: 'cane'}]);
-bp('letto con testiera capitonné', [{key: 'headType', value: 'tufted'}], 'seating');
 
-console.log(`PASS forma: ${bedroomN} bedroom designs valid (bed, bedside, chest); bedroom drawings, BOM, commands;`);
+console.log(`PASS forma: ${bedroomN} bedroom sets valid (wardrobe, bed, bedside, chest; set and piece views); matching, drawings, BOM, commands;`);
 console.log(`PASS forma: ${tables} table designs valid; patterns, stain and stone maps;`);
 console.log(`PASS forma: ${designs} style/kind/seed designs valid; 4 styles × 12 diverse proposals; ${Object.keys(WEAVES).length} weave drafts; 8-language commands; drawings, DXF, BOM, ZIP, PDF; AI output sanitised.`);

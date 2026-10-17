@@ -246,3 +246,16 @@ export function normalizeBedroomMaterials(m = {}) {
   const linen = {color: LINEN_COLORS.includes(m.linen?.color) ? m.linen.color : 'white'};
   return {...base, case: c, linen};
 }
+
+/** Whole-bedroom materials: the furniture palette plus wall paint, floor and rug. */
+export const WALL_COLORS = ['white', 'cream', 'sand', 'greige', 'silver', 'mink', 'khaki', 'iceBlue', 'dustyRose', 'mint', 'anthracite', 'petrol'];
+export const RUG_COLORS = ['cream', 'sand', 'greige', 'mink', 'silver', 'khaki', 'camel', 'anthracite', 'dustyRose', 'petrol'];
+export function normalizeRoomMaterials(m = {}) {
+  const base = normalizeBedroomMaterials(m);
+  const wall = {color: WALL_COLORS.includes(m.wall?.color) ? m.wall.color : 'cream'};
+  const fl = {surface: 'wood', species: 'oak', stain: 'natural', finish: 'matte', stone: 'travertine', polish: 'honed', ...(m.floor || {})};
+  if (!['wood', 'stone'].includes(fl.surface)) fl.surface = 'wood';
+  if (!WOODS[fl.species]) fl.species = 'oak'; if (!STAINS[fl.stain]) fl.stain = 'natural'; if (!FINISHES[fl.finish]) fl.finish = 'matte'; if (!STONES[fl.stone]) fl.stone = 'travertine';
+  const rug = {color: RUG_COLORS.includes(m.rug?.color) ? m.rug.color : 'cream'};
+  return {...base, wall, floor: fl, rug};
+}

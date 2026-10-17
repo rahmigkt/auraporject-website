@@ -221,7 +221,7 @@ const KIND_TABLE = {
   dining: L('yemek masasi|masa|dining table|esstisch|table a manger|eettafel|spisebord|mesa de comedor|tavolo da pranzo|tavolo')
 };
 const FAMILY_WORDS = {table: L('masa|sehpa|konsol|dresuar|table|tisch|tafel|bord|mesa|tavolo|tavolino|desk|bureau|escritorio|scrivania'), seating: L('koltuk|kanepe|berjer|sofa|couch|canape|divano|sessel|fauteuil|sillon|poltrona|lenestol|laenestol'),
-  bedroom: L('yatak|karyola|yatak odasi|baslik|komodin|sifonyer|bed|bedroom|headboard|bett|kopfteil|schlafzimmer|nachttisch|kommode|lit|tete de lit|chevet|commode|chambre|hoofdbord|nachtkast|nachtkastje|ladekast|slaapkamer|seng|sengegavl|natbord|sovevaerelse|cama|cabecero|mesita de noche|comoda|dormitorio|letto|testiera|comodino|cassettiera|camera da letto|nightstand|bedside|dresser|chest of drawers')};
+  bedroom: L('yatak|karyola|yatak odasi|baslik|komodin|sifonyer|gardirop|elbise dolabi|wardrobe|kleiderschrank|armoire|garderobekast|klaedeskab|armario|armadio|bed|bedroom|headboard|bett|kopfteil|schlafzimmer|nachttisch|kommode|lit|tete de lit|chevet|commode|chambre|hoofdbord|nachtkast|nachtkastje|ladekast|slaapkamer|seng|sengegavl|natbord|sovevaerelse|cama|cabecero|mesita de noche|comoda|dormitorio|letto|testiera|comodino|cassettiera|camera da letto|nightstand|bedside|dresser|chest of drawers')};
 const PERSON_UNITS = L('kisilik|kisi|people|persons|personen|person|personnes|personnes|personer|personas|persone|seats|places|zitplaatsen|pladser|plazas|posti');
 
 const DELTA_WORDS = L('daha|ilave|more|extra|another|mehr|noch|weitere|plus|encore|meer|nog|mere|endnu|mas|otro|piu|ancora|altri');
@@ -392,7 +392,8 @@ function parseTable(text) {
 const BED_KIND = {
   bed: L('yatak|karyola|baza|baslik|bed|bett|lit|seng|cama|letto|headboard|kopfteil|tete de lit|hoofdbord|sengegavl|cabecero|testiera'),
   nightstand: L('komodin|nightstand|bedside|bedside table|nachttisch|nachtschrank|table de chevet|chevet|nachtkastje|nachtkast|natbord|mesita|mesilla|comodino'),
-  dresser: L('sifonyer|dresser|chest of drawers|chest|kommode|commode|ladekast|kommode|comoda|cassettiera|cajonera')
+  dresser: L('sifonyer|dresser|chest of drawers|chest|kommode|commode|ladekast|kommode|comoda|cassettiera|cajonera'),
+  wardrobe: L('gardirop|elbise dolabi|dolap|wardrobe|closet|kleiderschrank|schrank|armoire|penderie|garderobekast|kledingkast|klaedeskab|garderobe|armario|ropero|armadio|guardaroba')
 };
 const BED_ENUM_WORDS = {
   headType: {tufted: L('kapitone|chester|tufted|capitonne|capitone|knappet|capitone|buttoned'), channel: L('kanal|kanalli|dikey kanal|channel|channels|channelled|kanalstepp|cannele|kanaal|kanaler|canales|canali'), hChannel: L('yatay kanal|yatay dilim|horizontal channel|horizontal channels|horizontale kanale|cotes horizontales|horizontale kanalen|vandrette kanaler|canales horizontales|canali orizzontali'),
@@ -407,6 +408,10 @@ const BED_ENUM_WORDS = {
   frontStyle: {fluted: L('oluklu|citali on|fluted|reeded|geriffelt|cannele|geribd|riflet|acanalado|cannettat'), framed: L('cerceveli on|shaker|kapakli cerceve|framed front|rahmenfront|facade a cadre|kaderfront|rammefront|frente enmarcado|anta a telaio'), cane: L('hasir|rattan|cane|geflecht|cannage|vlechtwerk|flet|rejilla|paglia'), grooved: L('yivli|cizgili on|grooved|gerillt|rainure|gegroefd|rillet|ranurado|scanalat'), flat: L('duz on|sade on|flat front|glatte front|facade lisse|vlakke front|glat front|frente liso|anta liscia')},
   pull: {knob: L('topuz|dugme kulp|knob|knauf|bouton|knop|pomo|pomolo'), ring: L('halka|ring|anneau|anilla|anello'), leather: L('deri kulp|deri|leather|leder|cuir|leer|laeder|cuero|pelle'), none: L('kulpsuz|it ac|push|grifflos|sans poignee|greeploos|grebsfri|sin tirador|senza maniglia'), edge: L('gizli kulp|tirnak|finger|griffleiste|prise de main|greeplijst|grebskant|unero|gola'), bar: L('cubuk kulp|kulp|bar handle|griffstange|poignee|greep|greb|tirador|maniglia')},
   caseBase: {wall: L('duvara asili|asma|wall hung|wall mounted|wandhangend|suspendu|hangend|vaegophaengt|suspendido|sospeso'), sled: L('kizak|sled|kufe|luge|slede|mede|patin|slitta'), recessed: L('gizli kaide|recessed plinth|zuruckgesetzter sockel|socle en retrait|verzonken plint|tilbagetrukket sokkel|zocalo retranqueado|zoccolo arretrato'), plinth: L('kaide|plinth|sockel|socle|plint|sokkel|zocalo|zoccolo'), legs: L('ayakli|legs|beine|pieds|poten|ben|patas|gambe')},
+  view: {piece: L('sadece bu parca|tek parca|sadece bunu|only this piece|this piece only|just this piece|nur dieses teil|cette piece seule|alleen dit stuk|kun dette|solo esta pieza|solo questo pezzo'), set: L('takimi goster|takim olarak|butun takim|show the set|whole set|as a set|set zeigen|ganzes set|voir l ensemble|hele set|vis saettet|ver el conjunto|mostra il set')},
+  wdDoorType: {sliding: L('surgulu|kayar kapak|sliding|schiebetur|schiebetuer|coulissant|portes coulissantes|schuifdeur|skydedor|skydedoere|corredera|correderas|scorrevole|scorrevoli'), hinged: L('kapakli|menteseli|hinged|drehtur|drehtueren|battant|draaideur|haengslet|batiente|battente')},
+  wdNiche: {vanity: L('makyaj nis|makyaj nisi|makyaj masasi|vanity|schminktisch|coiffeuse|kaptafel|toiletbord|tocador|toeletta'), desk: L('calisma nis|calisma nisi|calisma masali|desk niche|schreibnische|bureau integre|bureau nis|skrivebordsniche|escritorio integrado|scrivania integrata'), shelves: L('acik raf|open shelves|offene regale|etageres ouvertes|open kast|abne hylder|estantes abiertos|scaffali aperti')},
+  wdDoorStyle: {mirror: L('aynali kapak|mirror door|spiegeltur|porte miroir|spiegeldeur|spejldor|puerta de espejo|anta a specchio'), slats: L('citali kapak|slatted door|lamellentur|porte a lattes|lattendeur|lameldor|puerta de listones|anta a listelli')},
   mirror: {arch: L('kemerli ayna|arched mirror|bogenspiegel|miroir arche|boogspiegel|buespejl|espejo de arco|specchio ad arco'), round: L('yuvarlak ayna|round mirror|runder spiegel|miroir rond|ronde spiegel|rundt spejl|espejo redondo|specchio tondo'), rect: L('ayna|aynali|mirror|spiegel|miroir|spejl|espejo|specchio'), none: L('aynasiz|no mirror|ohne spiegel|sans miroir|zonder spiegel|uden spejl|sin espejo|senza specchio')}
 };
 const BED_SIZES = {'160x200': L('cift kisilik|double bed|queen|doppelbett|lit double|tweepersoons|dobbeltseng|cama de matrimonio|matrimoniale'), '180x200': L('king|king size|genis cift'), '90x190': L('tek kisilik|single|einzelbett|lit simple|eenpersoons|enkeltseng|cama individual|singolo'), '120x200': L('bir bucuk kisilik|small double|french bed')};
@@ -432,12 +437,14 @@ function parseBedroom(text) {
   for (const [key, map] of Object.entries(BED_ENUM_WORDS)) {
     const v = pickMap(text, map); if (!v) continue;
     // Shared words: "hasır" is a headboard on beds and a front on chests; "kaide" a bed base or a chest base.
+    if (['wdDoorType', 'wdNiche', 'wdDoorStyle'].includes(key) && kind && kind !== 'wardrobe') continue;
     if ((key === 'headType' || key === 'headShape') && ((kind && kind !== 'bed') || (!isBed && pickMap(text, BED_ENUM_WORDS.mirror)))) continue;
-    if (key === 'frontStyle' && (isBed || (v === 'cane' && !kind))) continue;
+    if (key === 'frontStyle' && (isBed || (v === 'cane' && !kind)) && kind !== 'wardrobe') continue;
     if (key === 'caseBase' && isBed) continue;
     if (key === 'storage' && !isBed && kind) continue;
     actions.push({type: 'enum', key, value: v});
   }
+  if (actions.some(a => a.key === 'wdDoorStyle')) for (let i = actions.length - 1; i >= 0; i--) if (actions[i].key === 'mirror') actions.splice(i, 1);
   if (actions.some(a => a.key === 'mirror' && a.value !== 'none') && /(kemer|arch|bogen|arche|boog|bue|arco)/.test(text)) actions.find(a => a.key === 'mirror').value = 'arch';
   if (actions.some(a => a.key === 'mirror' && a.value !== 'none') && !actions.some(a => a.type === 'kind')) actions.push({type: 'kind', value: 'dresser'});
   // Mattress size: "160x200", "180 x 200", "çift kişilik".
@@ -453,7 +460,7 @@ function parseBedroom(text) {
   if (species) actions.push({type: 'material', slot: 'case', key: 'species', value: species});
   if (finish) actions.push({type: 'material', slot: 'case', key: 'finish', value: finish});
   if (metal) actions.push({type: 'material', slot: 'metal', key: 'finish', value: metal});
-  for (const key of ['fiber', 'weave', 'pattern']) { const v = pickMap(text, FABRIC_WORDS[key]); if (v) actions.push({type: 'material', slot: 'fabric', key, value: v}); }
+  for (const key of ['fiber', 'weave', 'pattern']) { const v = pickMap(text, FABRIC_WORDS[key]); if (v && !(v === 'leather' && actions.some(a => a.key === 'pull' && a.value === 'leather'))) actions.push({type: 'material', slot: 'fabric', key, value: v}); }
   if (!species && !metal) {
     let colour = null, len = 0;
     for (const [id, list] of COLOR_WORDS) for (const s of list) if (s.length > len && has(text, s)) { colour = id; len = s.length; }

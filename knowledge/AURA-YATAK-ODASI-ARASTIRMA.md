@@ -45,6 +45,9 @@ Tarih: 2026-10-17 · Uygulama: `w4/assets/forma/bedroom.js`, `styles-bedroom.js`
   - Japandi: alçak platform, ahşap çıta başlık, açık bölmeli komodin.
   - Tropikal: hasır başlık ve dört direkli karyola.
 
+## 2b. Takım kararı (2026-10-17)
+Yatak odası takım olarak satılır: tek parça tasarlanır, diğerleri aynı dille önerilir (`set.js`). Gardırop takıma eklendi.
+
 ## 3. Codex'e kalanlar
 - Gardırop (Ritmo'da) ile aynı malzeme dili; takım olarak tek pakette gönderim.
 - Makyaj masası, yatak ucu bench/puf, çocuk yatağı.
