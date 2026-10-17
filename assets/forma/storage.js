@@ -19,7 +19,7 @@ import {WOODS, COLORS} from './catalog.js';
 const COLOR_KEYS = Object.keys(COLORS);
 
 export const FAMILY = 'storage';
-export const KINDS = {wardrobe: {}, nightstand: {}, dresser: {}, vanity: {}};
+export const KINDS = {wardrobe: {}, nightstand: {}, dresser: {}, vanity: {}, tvunit: {}, bookcase: {}, vitrine: {}, sideboard: {}};
 
 export const RULES = {mdf: 18, back: 8, backInset: 10, groove: 7, joint: 2, reveal: 2, kick: 50, moduleMax: 1200, leafMax: 600, boxSide: 12, boxBottom: 6, runnerClear: 12.7, setback: 20, slideDepth: 100, railDrop: 60, bumper: 1};
 export const RUNNERS = [250, 300, 350, 400, 450, 500, 550, 600];
@@ -31,6 +31,10 @@ export const SIZE = {
   nightstand: {width: [350, 800], height: [350, 750], depth: [300, 500]},
   dresser: {width: [600, 2000], height: [650, 1300], depth: [380, 560]},
   vanity: {width: [800, 1600], height: [720, 790], depth: [380, 560]},
+  tvunit: {width: [900, 3600], height: [300, 700], depth: [300, 600]},
+  bookcase: {width: [400, 4800], height: [700, 2700], depth: [250, 450]},
+  vitrine: {width: [450, 2400], height: [800, 2200], depth: [300, 500]},
+  sideboard: {width: [900, 3000], height: [600, 950], depth: [380, 550]},
   unit: {width: [150, 1300], height: [200, 2700], depth: [200, 700]} // kitchen modules (set by the kitchen, not edited alone)
 };
 export const RANGES = {
@@ -51,6 +55,7 @@ export const ENUMS = {
   topType: ['flush', 'slab'],
   caseEdge: ['square', 'eased', 'bullnose', 'chamfer'],
   caseLine: ['none', 'groove', 'inlay'],
+  backPanel: ['on', 'off'], led: ['off', 'on'],
   mirror: ['none', 'rect', 'rounded', 'arch', 'round', 'oval', 'capsule', 'scallop', 'stepped', 'organic'],
   // Set from the chosen material (solid wood → solid panels), not by hand.
   board: ['mdf', 'solid'], frontBoard: ['mdf', 'solid']
@@ -58,7 +63,7 @@ export const ENUMS = {
 export const CELL_TYPES = ['door', 'drawers', 'open', 'glass', 'mirror', 'knee', 'niche'];
 /** Cell types offered in the case-goods editor ('niche' holds a kitchen appliance and is set by the kitchen). */
 export const EDIT_TYPES = ['door', 'drawers', 'open', 'glass', 'mirror', 'knee'];
-export const INSIDE = ['shelves', 'hang', 'double', 'hangDrawers', 'empty'];
+export const INSIDE = ['shelves', 'glassShelves', 'hang', 'double', 'hangDrawers', 'empty'];
 
 // ---- Layouts --------------------------------------------------------------------------------------------
 const C = (type, o = {}) => ({type, h: 1, mm: 0, n: 1, inside: 'shelves', k: 0, ...o});
@@ -69,13 +74,21 @@ export const LAYOUTS = {
   nightstand: () => [B([C('drawers', {n: 2})])],
   dresser: () => [B([C('drawers', {n: 3})]), B([C('drawers', {n: 3})])],
   vanity: () => [B([C('knee'), C('drawers', {mm: 110})], 2.2), B([C('drawers', {n: 3})])],
-  unit: () => [B([C('door', {k: 1})])]
+  unit: () => [B([C('door', {k: 1})])],
+  tvunit: () => [B([C('drawers', {n: 2})]), B([C('open', {k: 0})], 1.6), B([C('drawers', {n: 2})])],
+  bookcase: () => [B([C('door', {k: 1, mm: 700}), C('open', {k: 3})]), B([C('door', {k: 1, mm: 700}), C('open', {k: 3})]), B([C('door', {k: 1, mm: 700}), C('open', {k: 3})])],
+  vitrine: () => [B([C('door', {k: 1, mm: 620}), C('glass', {inside: 'glassShelves', k: 3})]), B([C('door', {k: 1, mm: 620}), C('glass', {inside: 'glassShelves', k: 3})])],
+  sideboard: () => [B([C('door', {k: 1})]), B([C('drawers', {n: 3})]), B([C('door', {k: 1})])]
 };
 const BASE = {
   solidThickness: 22, plinthHeight: 80, legHeight: 150, legSize: 40, topThickness: 22, topOverhang: 0, fluteWidth: 30, mirrorHeight: 800, mirrorWidth: 0.7,
-  frontFit: 'overlay', doorType: 'hinged', frontStyle: 'flat', pull: 'bar', base: 'plinth', legType: 'taper', topType: 'flush', caseEdge: 'eased', caseLine: 'none', mirror: 'none', board: 'mdf', frontBoard: 'mdf'
+  frontFit: 'overlay', doorType: 'hinged', frontStyle: 'flat', pull: 'bar', base: 'plinth', legType: 'taper', topType: 'flush', caseEdge: 'eased', caseLine: 'none', mirror: 'none', backPanel: 'on', led: 'off', board: 'mdf', frontBoard: 'mdf'
 };
 const KIND_DEFAULTS = {
+  tvunit: {width: 1800, height: 600, depth: 420, base: 'wall', legHeight: 250, topType: 'flush', pull: 'cutout'},
+  bookcase: {width: 1800, height: 2100, depth: 350, base: 'plinth', plinthHeight: 60, topType: 'flush'},
+  vitrine: {width: 900, height: 1900, depth: 420, base: 'plinth', plinthHeight: 80, topType: 'flush', led: 'on'},
+  sideboard: {width: 1800, height: 800, depth: 460, base: 'legs', legHeight: 160, topType: 'slab', topThickness: 26},
   unit: {width: 600, height: 760, depth: 580, base: 'legs', legType: 'metal', legHeight: 120, topType: 'flush'},
   wardrobe: {width: 1800, height: 2400, depth: 600, base: 'plinth', plinthHeight: 80, topType: 'flush'},
   nightstand: {width: 500, height: 520, depth: 400, base: 'legs', legHeight: 160, topType: 'slab', pull: 'knob'},
@@ -96,6 +109,7 @@ export function normalizeBays(raw, kind) {
       if (type === 'knee' && (kind !== 'vanity' || j !== 0)) type = 'open';
       let inside = INSIDE.includes(c?.inside) ? c.inside : 'shelves';
       if (kind !== 'wardrobe' && ['hang', 'double', 'hangDrawers'].includes(inside)) inside = 'shelves';
+      if (inside === 'glassShelves' && !['glass', 'open', 'mirror'].includes(type)) inside = 'shelves';
       return {id: `b${i + 1}c${j + 1}`, joined: !!c?.joined && j > 0, color: COLOR_KEYS.includes(c?.color) ? c.color : null, type, h: num(c?.h, 0.2, 8, 1), mm: c?.mm ? num(c.mm, 60, 2600, 0, 1) : 0, n: Math.round(num(c?.n, 1, 6, 1)), inside, k: Math.round(num(c?.k, 0, 8, 0))};
     });
     return {id: `b${i + 1}`, w: num(b?.w, 0.3, 4, 1), mm: b?.mm ? num(b.mm, 150, 2000, 0, 1) : 0, cells};
@@ -109,7 +123,7 @@ export function normalize(input = {}) {
   p.bays = normalizeBays(input.bays ?? p.bays, kind);
   if (kind !== 'wardrobe') p.doorType = 'hinged';
   if (kind === 'wardrobe' && p.base === 'wall') p.base = 'plinth';
-  if (!['dresser', 'vanity'].includes(kind)) p.mirror = 'none';
+  if (!['dresser', 'vanity', 'sideboard'].includes(kind)) p.mirror = 'none';
   if (p.doorType === 'sliding') { p.frontFit = 'overlay'; p.topType = 'flush'; }
   return p;
 }
@@ -218,7 +232,7 @@ export function compile(raw) {
     const yStart = knee ? 0 : yB + T, cells = yLayout(bay, yStart, yIn1, T);
     grid.push({x0: r1(b.x0), x1: r1(b.x1), cells: cells.map(({y0, y1}) => ({y0: r1(y0), y1: r1(y1)}))});
     const backY0 = knee ? cells[0].y1 + T : yB + T;
-    pnl(parts, `b${i + 1}-back`, 'back', 'back', [b.x0 - RULES.groove, b.x1 + RULES.groove], [backY0 - RULES.groove, yIn1 + RULES.groove], [zB + RULES.backInset, zBackFace]);
+    if (p.backPanel !== 'off') pnl(parts, `b${i + 1}-back`, 'back', 'back', [b.x0 - RULES.groove, b.x1 + RULES.groove], [backY0 - RULES.groove, yIn1 + RULES.groove], [zB + RULES.backInset, zBackFace]);
     // Horizontal edges of fronts (overlay: to the panel centre line, exterior: to the outer face).
     const extL = Math.abs(b.x0 - T - (-W / 2)) < 0.5, extR = Math.abs(b.x1 + T - W / 2) < 0.5;
     const xl = extL ? -W / 2 : b.left === 'side' ? b.x0 - T : b.x0 - T / 2, xr = extR ? W / 2 : b.right === 'side' ? b.x1 + T : b.x1 + T / 2;
@@ -454,7 +468,13 @@ function interior(parts, id, c, x0, x1, y0, y1, zBack, zFront, T, p, counts, inf
     for (const s of [-1, 1]) pnl(parts, `${rid}-cup${s < 0 ? 'L' : 'R'}`, 'rail-cup', 'metal', s < 0 ? [x0, x0 + 8] : [x1 - 8, x1], [y - 14, y + 14], [z - 14, z + 14], {...mk, nocut: true}, 2);
     counts.rails++; counts.railLen += x1 - x0 - 16;
   };
-  if (c.inside === 'shelves' || c.inside === 'empty') {
+  // Display cells: LED strip under the top of the opening; TV units get a cable outlet in the back.
+  if (p.led === 'on' && ['glass', 'open'].includes(c.type)) { pnl(parts, `${id}-led`, 'led', 'led', [x0 + 20, x1 - 20], [y1 - 12, y1 - 4], [zFront - 60, zFront - 50], {nocut: true}, 1); counts.ledLen = (counts.ledLen || 0) + (x1 - x0 - 40); }
+  if (p.kind === 'tvunit' && c.type === 'open') { pnl(parts, `${id}-cable`, 'cable', 'dark', [(x0 + x1) / 2 - 40, (x0 + x1) / 2 + 40], [y0 + 30, y0 + 70], [zBack - 2, zBack + 1], {nocut: true}, 6); counts.grommets = (counts.grommets || 0) + 1; }
+  if (c.inside === 'glassShelves') {
+    // 8 mm toughened glass shelves on pins, polished edges.
+    for (let s = 0; s < c.k; s++) { const y = y0 + (y1 - y0) * (s + 1) / (c.k + 1) - 4; pnl(parts, `${id}-glass${s + 1}`, 'shelf-glass', 'glass', [x0 + 2, x1 - 2], [y, y + 8], [zBack + 4, shelfZ1], {cut: [x1 - x0 - 4, shelfZ1 - zBack - 4, 8]}, 0.5); counts.glassShelves = (counts.glassShelves || 0) + 1; }
+  } else if (c.inside === 'shelves' || c.inside === 'empty') {
     const k = c.inside === 'empty' ? 0 : c.k;
     for (let s = 0; s < k; s++) shelf(`${id}-shelf${s + 1}`, y0 + (y1 - y0) * (s + 1) / (k + 1) - T / 2);
   } else if (c.inside === 'hang') { rail(`${id}-rail`, y1 - RULES.railDrop); info.hang.push(y1 - RULES.railDrop - y0); }
@@ -529,7 +549,8 @@ export function validate(design) {
   if (p.kind === 'wardrobe' && m.moduleWidths.some(w => w > RULES.moduleMax + 1)) add('warn', 'moduleWide', Math.max(...m.moduleWidths));
   if (m.knee) { if (m.knee.h < 600) add('warn', 'kneeLow', m.knee.h); if (m.knee.w < 550) add('warn', 'kneeNarrow', m.knee.w); }
   if (m.sliding && p.width < 1200) add('warn', 'slidingNarrow', p.width);
-  if (p.height >= 1000 || p.kind === 'dresser' || p.kind === 'wardrobe') add('info', 'antiTip', p.height);
+  if (p.height >= 1000 || ['dresser', 'wardrobe', 'bookcase', 'vitrine'].includes(p.kind)) add('info', 'antiTip', p.height);
+  if (p.backPanel === 'off') add(p.height > 1200 ? 'warn' : 'info', 'backless', 0);
   return issues;
 }
 
@@ -553,6 +574,7 @@ export const ROLE = {
   'box-end': ['Çekmece kutusu ön/arka', 'Drawer box end', '12 mm huş kontrplak', '12 mm birch ply'],
   'box-bottom': ['Çekmece tabanı', 'Drawer bottom', '6 mm, kanala geçme', '6 mm, in a groove'],
   spacer: ['Menteşe takozu', 'Hinge spacer', 'İç çekmeceyi menteşeden kurtarır', 'Clears the inner drawers from the hinges'],
+  'shelf-glass': ['Cam raf', 'Glass shelf', '8 mm temperli cam, rodajlı, raf pimi üzerinde', '8 mm toughened glass, polished edges, on shelf pins'],
   'mirror-frame': ['Ayna çerçevesi', 'Mirror frame', 'Tablaya ve duvara sabitlenir', 'Fixed to the top and the wall'],
   mirror: ['Ayna', 'Mirror', '5 mm, rodajlı', '5 mm, polished edge']
 };
@@ -588,12 +610,14 @@ export function storageBom(compiled, materials, lang, buildMesh, text) {
   if (pullName) hw(pullName[0], pullName[1], c.pulls, pitch ? `Aks ${pitch} mm` : '', pitch ? `${pitch} mm centres` : '');
   hw('Bas-aç mekanizması', 'Push-to-open', c.push, 'Kulpsuz kapak / çekmece için', 'For handle-less fronts', '');
   hw('Askı borusu', 'Hanging rail', c.rails, `Oval 30×15 mm, toplam ${(c.railLen / 1000).toFixed(2)} m, uç yuvalı`, `Oval 30×15 mm, ${(c.railLen / 1000).toFixed(2)} m in all, with end cups`);
-  hw('Raf pimi', 'Shelf pin', c.shelves * 4, 'Ø5 mm', 'Ø5 mm');
+  hw('Raf pimi', 'Shelf pin', (c.shelves + (c.glassShelves || 0)) * 4, 'Ø5 mm', 'Ø5 mm');
+  hw('LED şerit', 'LED strip', c.ledLen ? 1 : 0, `2700 K, alüminyum profil + difüzör, toplam ${((c.ledLen || 0) / 1000).toFixed(2)} m; trafo ve anahtar`, `2700 K, aluminium profile + diffuser, ${((c.ledLen || 0) / 1000).toFixed(2)} m in all; driver and switch`);
+  hw('Kablo geçiş kapağı', 'Cable grommet', c.grommets || 0, 'Arkalıkta, cihaz bölmesinde; havalandırma', 'In the back of the device bay; ventilation');
   hw('Bağlantı (minifix + kavela)', 'Connectors (cam + dowel)', c.connectors, 'Her birleşimde', 'At every joint');
   hw('Ayarlı ayak', 'Adjustable foot', c.feet, 'Baza altında, 10–25 mm ayar', 'Under the plinth, 10–25 mm adjustment');
   if (p.base === 'wall') hw('Duvar askı aparatı', 'Wall hanging bracket', 2, 'Ayarlı, gizli; duvar tipine uygun dübel', 'Adjustable, concealed; plugs to suit the wall');
   if (m.sliding) hw('Sürgü kapak sistemi', 'Sliding door gear', 1, `Çift ray ${p.width} mm, ${c.leaves} kanat, frenli`, `Double track ${p.width} mm, ${c.leaves} leaves, soft-close`);
-  if (p.height >= 1000 || ['wardrobe', 'dresser'].includes(p.kind)) hw('Devrilme önleyici', 'Anti-tip fixing', 1, 'Duvara sabitleme (EN 14749)', 'Wall fixing (EN 14749)');
+  if (p.height >= 1000 || ['wardrobe', 'dresser', 'bookcase', 'vitrine'].includes(p.kind)) hw('Devrilme önleyici', 'Anti-tip fixing', 1, 'Duvara sabitleme (EN 14749)', 'Wall fixing (EN 14749)');
   return {rows, totals: {weightKg: weights(compiled, materials, buildMesh), drawers: m.drawers, lines: [
     [tr ? 'Gövde/ön levha alanı m²' : 'Carcass/front board m²', +boardArea.toFixed(2)], [tr ? `Arkalık (${RULES.back} mm) m²` : `Back (${RULES.back} mm) m²`, +backArea.toFixed(2)],
     ...(edge ? [[tr ? 'Kenar bandı m' : 'Edge banding m', +(edge * 1.1).toFixed(1)]] : []),

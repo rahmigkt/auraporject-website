@@ -516,3 +516,16 @@ Object.assign(P, {
 });
 
 Object.assign(T, {room_kitchen: ['Mutfak', 'Kitchen', 'Küche', 'Cuisine', 'Keuken', 'Køkken', 'Cocina', 'Cucina']});
+// ---- Living-room storage (TV unit, bookcase, display cabinet, sideboard) ---------------------------------------
+Object.assign(T, {
+  famStorage:   ['Dolap ve kitaplık', 'Storage & shelving', 'Schränke & Regale', 'Rangements & bibliothèques', 'Kasten & boekenkasten', 'Skabe & reoler', 'Armarios y librerías', 'Armadi e librerie'],
+  tvunit:       ['TV ünitesi', 'TV unit', 'TV-Möbel', 'Meuble TV', 'Tv-meubel', 'TV-møbel', 'Mueble TV', 'Mobile TV'],
+  bookcase:     ['Kitaplık', 'Bookcase', 'Bücherregal', 'Bibliothèque', 'Boekenkast', 'Reol', 'Librería', 'Libreria'],
+  vitrine:      ['Vitrin', 'Display cabinet', 'Vitrine', 'Vitrine', 'Vitrinekast', 'Vitrineskab', 'Vitrina', 'Vetrina'],
+  sideboard:    ['Büfe / konsol', 'Sideboard', 'Sideboard', 'Buffet', 'Dressoir', 'Skænk', 'Aparador', 'Credenza'],
+  backPanelL:   ['Arkalık', 'Back panel', 'Rückwand', 'Fond', 'Achterwand', 'Bagplade', 'Trasera', 'Schienale'],
+  ledL:         ['İç aydınlatma (LED)', 'Interior light (LED)', 'Innenlicht (LED)', 'Éclairage intérieur (LED)', 'Binnenverlichting (LED)', 'Indvendigt lys (LED)', 'Luz interior (LED)', 'Luce interna (LED)']
+});
+Object.assign(T.issues, {backless: ['Arkalıksız: duvara sabitlenmeli, köşe gönyesi gerekir', 'No back: fix to the wall and add corner braces', 'Ohne Rückwand: an der Wand befestigen, Eckwinkel', 'Sans fond : fixer au mur, équerres', 'Zonder achterwand: aan de muur, hoekverbinders', 'Uden bagplade: fastgør til væg, vinkelbeslag', 'Sin trasera: fijar a la pared, escuadras', 'Senza schienale: fissare al muro, squadrette']});
+Object.assign(P.inside, {glassShelves: ['Cam raflar', 'Glass shelves', 'Glasböden', 'Étagères en verre', 'Glazen planken', 'Glashylder', 'Estantes de vidrio', 'Ripiani in vetro']});
+Object.assign(P, {backPanel: {on: ['Var', 'Yes', 'Ja', 'Oui', 'Ja', 'Ja', 'Sí', 'Sì'], off: ['Yok (açık)', 'None (open)', 'Keine (offen)', 'Sans (ouvert)', 'Geen (open)', 'Ingen (åben)', 'Sin (abierto)', 'Senza (aperto)']}, led: {off: ['Yok', 'Off', 'Aus', 'Non', 'Uit', 'Fra', 'No', 'No'], on: ['Var', 'On', 'An', 'Oui', 'Aan', 'Til', 'Sí', 'Sì']}});
