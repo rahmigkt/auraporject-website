@@ -32,20 +32,29 @@ export function zip(files, date = new Date()) {
 }
 
 // ---- PDF from JPEG pages (each page sized to its own aspect, A3 landscape width) ----
+// A page may carry a link (e.g. "open this design"): {url, rect: [x0, y0, x1, y1] as fractions from the top left}.
 export function jpegPdf(pages) {
   const parts = [], offsets = []; let len = 0;
   const push = v => { const b = typeof v === 'string' ? enc.encode(v) : v; parts.push(b); len += b.length; };
   const obj = (id, body) => { offsets[id] = len; push(`${id} 0 obj\n`); push(body); push('\nendobj\n'); };
-  push('%PDF-1.4\n%âãÏÓ\n');
+  const pdfStr = s => '(' + String(s).replace(/[\\()]/g, c => '\\' + c) + ')';
+  const annotId = []; let next = 3 + pages.length * 3;
+  pages.forEach((pg, i) => { if (pg.link) annotId[i] = next++; });
+  push('%PDF-1.4\n%\u00e2\u00e3\u00cf\u00d3\n');
   obj(1, '<< /Type /Catalog /Pages 2 0 R >>');
   obj(2, `<< /Type /Pages /Count ${pages.length} /Kids [${pages.map((_, i) => `${3 + i * 3} 0 R`).join(' ')}] >>`);
   pages.forEach((pg, i) => {
     const id = 3 + i * 3, W = 1190.55, H = +(W * pg.height / pg.width).toFixed(2);
-    obj(id, `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${W} ${H}] /Resources << /XObject << /Im ${id + 1} 0 R >> >> /Contents ${id + 2} 0 R >>`);
+    obj(id, `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${W} ${H}] /Resources << /XObject << /Im ${id + 1} 0 R >> >> /Contents ${id + 2} 0 R${pg.link ? ` /Annots [${annotId[i]} 0 R]` : ''} >>`);
     offsets[id + 1] = len; push(`${id + 1} 0 obj\n<< /Type /XObject /Subtype /Image /Width ${pg.width} /Height ${pg.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${pg.data.length} >>\nstream\n`); push(pg.data); push('\nendstream\nendobj\n');
     const content = `q ${W} 0 0 ${H} 0 0 cm /Im Do Q`; obj(id + 2, `<< /Length ${content.length} >>\nstream\n${content}\nendstream`);
   });
-  const xref = len, n = 3 + pages.length * 3;
+  pages.forEach((pg, i) => {
+    if (!pg.link) return;
+    const W = 1190.55, H = +(W * pg.height / pg.width).toFixed(2), r = pg.link.rect;
+    obj(annotId[i], `<< /Type /Annot /Subtype /Link /Rect [${(r[0] * W).toFixed(1)} ${(H - r[3] * H).toFixed(1)} ${(r[2] * W).toFixed(1)} ${(H - r[1] * H).toFixed(1)}] /Border [0 0 0] /A << /Type /Action /S /URI /URI ${pdfStr(pg.link.url)} >> >>`);
+  });
+  const xref = len, n = next;
   push(`xref\n0 ${n}\n0000000000 65535 f \n`);
   for (let i = 1; i < n; i++) push(`${String(offsets[i]).padStart(10, '0')} 00000 n \n`);
   push(`trailer\n<< /Size ${n} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);

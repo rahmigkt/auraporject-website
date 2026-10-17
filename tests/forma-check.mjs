@@ -177,13 +177,13 @@ assert.ok(hw.headType === 'channel' && hw.frontStyle === 'fluted' && hw.pull ===
   assert.ok(piece.rows.some(r => r.nameTr.startsWith('Şifonyer')), 'piece view still orders the whole set');
 }
 const bp = (text, want, family = 'bedroom') => { const a = parse(text, {family}).actions; for (const w of want) assert.ok(a.some(x => Object.entries(w).every(([k, v]) => JSON.stringify(x[k]) === JSON.stringify(v))), `bedroom "${text}" → ${JSON.stringify(a)} lacks ${JSON.stringify(w)}`); };
-bp('kemerli kapitone yatak başlığı', [{type: 'family', value: 'bedroom'}, {key: 'headType', value: 'tufted'}, {key: 'headShape', value: 'arch'}], 'seating');
+bp('kemerli kapitone yatak başlığı', [{key: 'headType', value: 'tufted'}, {key: 'headShape', value: 'arch'}]);
 bp('160x200 sandıklı baza', [{type: 'mattress', value: [1600, 2000]}, {key: 'bedBase', value: 'baza'}, {key: 'storage', value: 'lift'}]);
 bp('başlığı 10 cm yükselt', [{type: 'delta', key: 'headHeight', value: 100}]);
-bp('3 çekmeceli şifonyer, oluklu ön, pirinç halka kulp', [{type: 'kind', value: 'dresser'}, {key: 'frontStyle', value: 'fluted'}, {key: 'pull', value: 'ring'}, {key: 'rows', value: 3}]);
-bp('gardırop sürgülü, oluklu kapak, deri kulp', [{type: 'kind', value: 'wardrobe'}, {key: 'wdDoorType', value: 'sliding'}, {key: 'frontStyle', value: 'fluted'}, {key: 'pull', value: 'leather'}]);
-bp('makyaj nişli gardırop', [{key: 'wdNiche', value: 'vanity'}]);
-bp('Kleiderschrank mit Schiebetüren', [{type: 'family', value: 'bedroom'}, {type: 'kind', value: 'wardrobe'}, {key: 'wdDoorType', value: 'sliding'}], 'table');
+bp('3 çekmeceli şifonyer, oluklu ön, pirinç halka kulp', [{type: 'family', value: 'storage'}, {type: 'kind', value: 'dresser'}, {key: 'frontStyle', value: 'fluted'}, {key: 'pull', value: 'knob'}, {type: 'drawers', value: 3}]);
+bp('gardırop sürgülü, oluklu kapak, deri kulp', [{type: 'kind', value: 'wardrobe'}, {key: 'doorType', value: 'sliding'}, {key: 'frontStyle', value: 'fluted'}, {key: 'pull', value: 'leather'}], 'storage');
+bp('makyaj masası kemerli ayna', [{type: 'kind', value: 'vanity'}, {key: 'mirror', value: 'arch'}], 'storage');
+bp('Kleiderschrank mit Schiebetüren', [{type: 'family', value: 'storage'}, {type: 'kind', value: 'wardrobe'}, {key: 'doorType', value: 'sliding'}], 'table');
 bp('cama con cabecero de rejilla', [{key: 'headType', value: 'cane'}]);
 
 // 9. Line details (stitch, inlay, groove): every family draws them as finite meshes; sheets and BOM stay clean.
@@ -201,7 +201,7 @@ for (const caseLine of ['groove', 'inlay']) lineOk(SET.compile({caseLine, frontS
   assert.ok(!sh.svg.includes('NaN'), 'line sheet');
   const rowsTr = bom(c, sample({family: 'bedroom', style: 'japandi', kind: 'bed', seed: 1}).materials, 'tr').rows;
   assert.ok(rowsTr.some(r => r.nameTr.endsWith('Dekoratif dikiş')) && rowsTr.some(r => r.nameTr.endsWith('Metal kakma')), 'line BOM rows');
-  for (const fam of ['seating', 'table', 'bedroom']) for (let seed = 1; seed <= 3; seed++) { const d = sample({family: fam, seed}); assert.ok(['stitch', 'inlay', 'caseLine'].every(k => d.params[k] === undefined || d.params[k] === 'none'), 'lines start empty'); }
+  for (const fam of ['seating', 'table', 'bedroom', 'storage']) for (let seed = 1; seed <= 3; seed++) { const d = sample({family: fam, seed}); assert.ok(['stitch', 'inlay', 'caseLine'].every(k => d.params[k] === undefined || d.params[k] === 'none'), 'lines start empty'); }
 }
 {
   const one = (t, family, want) => assert.ok(parse(t, {family}).actions.some(x => Object.entries(want).every(([k, v]) => x[k] === v)), `line command: ${t}`);
@@ -234,7 +234,9 @@ let roomN = 0;
     ['living', [mk('seating', 'sofa'), mk('seating', 'loveseat'), mk('seating', 'armchair'), mk('table', 'coffee'), mk('table', 'side'), mk('table', 'console')]],
     ['living', [mk('seating', 'sofa'), mk('seating', 'armchair'), mk('seating', 'armchair', 3), mk('table', 'coffee'), mk('table', 'dining')]],
     ['dining', [mk('table', 'dining'), mk('table', 'console')]],
-    ['bedroom', [mk('bedroom', 'bed'), mk('table', 'side'), mk('seating', 'armchair')]]
+    ['bedroom', [mk('bedroom', 'bed'), mk('table', 'side'), mk('seating', 'armchair')]],
+    ['bedroom', [mk('storage', 'wardrobe'), mk('storage', 'nightstand'), mk('storage', 'nightstand', 3), mk('storage', 'dresser'), mk('storage', 'vanity')]],
+    ['bedroom', [mk('storage', 'wardrobe'), mk('storage', 'wardrobe', 3), mk('storage', 'nightstand'), mk('seating', 'armchair')]]
   ];
   for (const [type, list] of sets) for (let layout = 0; layout < 3; layout++) {
     const items = list.map((x, i) => ({id: 'U' + i, kind: R.itemKind(x.design), fp: R.footprint(x.compiled)}));
@@ -251,7 +253,57 @@ let roomN = 0;
     roomN++;
   }
   assert.deepEqual(R.misfits([{design: mk('table', 'dining').design}], 'living').length, 1);
+  assert.equal(R.suggestRoom([{design: mk('storage', 'wardrobe').design}]), 'bedroom');
 }
+// 12. RİTMO case goods: production rules hold for every curated model and for edge cases.
+let storageN = 0, storageParts = 0;
+{
+  const S = await import('../assets/forma/storage.js'), {FAMILIES} = await import('../assets/forma/families.js'), {normalizeDesign} = await import('../assets/forma/generate.js');
+  const fam = FAMILIES.storage, near = (a, b, tol = 0.6) => Math.abs(a - b) <= tol;
+  const check = (d, label) => {
+    const c = fam.mod.compile({...d.params, kind: d.kind}), p = c.params, T = p.board === 'solid' ? p.solidThickness : 18, TF = p.frontBoard === 'solid' ? p.solidThickness : 18;
+    for (const q of c.parts) { const m = buildMesh(q); assert.ok(m.positions.length && m.positions.every(Number.isFinite), `${label}: ${q.id} mesh`); storageParts++; }
+    const dims = q => [q.geom.w, q.geom.h, q.geom.d];
+    for (const q of c.parts.filter(q => ['side', 'top', 'bottom', 'divider', 'shelf-fixed', 'shelf-adj'].includes(q.role))) assert.ok(dims(q).some(v => near(v, T)), `${label}: ${q.id} is ${T} mm`);
+    for (const q of c.parts.filter(q => q.role === 'back')) assert.ok(near(q.geom.d, 8), `${label}: back 8 mm`);
+    for (const q of c.parts.filter(q => ['door', 'drawer-front', 'sliding-door'].includes(q.role))) assert.ok(near(q.cut ? q.cut[2] : q.geom.d, TF), `${label}: ${q.id} front ${TF} mm`);
+    // Fronts: inside the outline, 2 mm reveals between neighbours in a row, never overlapping (hinged).
+    const fronts = c.parts.filter(q => ['door', 'drawer-front'].includes(q.role) && q.cut).map(q => ({id: q.id, x0: q.pos[0] - q.cut[0] / 2, x1: q.pos[0] + q.cut[0] / 2, y0: q.pos[1] - q.cut[1] / 2, y1: q.pos[1] + q.cut[1] / 2}));
+    for (const f of fronts) assert.ok(f.x0 >= -p.width / 2 - 0.5 && f.x1 <= p.width / 2 + 0.5 && f.y1 <= p.height + 0.5, `${label}: ${f.id} inside`);
+    for (let i = 0; i < fronts.length; i++) for (let j = i + 1; j < fronts.length; j++) { const a = fronts[i], b = fronts[j], ox = Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0), oy = Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0); assert.ok(ox <= -1.9 || oy <= -1.9, `${label}: ${a.id} / ${b.id} reveal ${ox.toFixed(1)} ${oy.toFixed(1)}`); }
+    // Drawer boxes sit inside their runners' opening (12.7 mm per side).
+    for (const q of c.parts.filter(q => q.role === 'box-side')) assert.ok(q.geom.w === 12, `${label}: drawer side 12 mm`);
+    if (p.kind === 'wardrobe') for (const w of c.meta.moduleWidths) assert.ok(w <= 1200 + 1 || p.bays.length === 1 || c.meta.modules === p.bays.length, `${label}: module ${w}`);
+    assert.equal(fam.mod.validate(c).filter(i => i.level === 'error').length, 0, `${label}: errors`);
+    const b = bom(c, d.materials, 'tr'); assert.ok(b.rows.some(r => r.nameTr === 'Yan dikme') && b.totals.weightKg > 0, `${label}: cut list`);
+    const sh = drawingSheet(c, labels, {rows: [['A', 'B']], link: 'https://auraproject.com.tr/tasarla.html#d=zabc'}); assert.ok(!sh.svg.includes('NaN') && sh.svg.includes('tasarla.html'), `${label}: sheet`);
+    storageN++;
+  };
+  for (const [kind, list] of Object.entries(fam.starts)) {
+    assert.equal(new Set(list.map(e => e.style)).size, 10, `storage/${kind}: every style has starting models`);
+    for (const e of list) {
+      const d0 = sample({family: 'storage', style: e.style, kind, seed: e.seed}), d = normalizeDesign({...d0, kind, params: {...e.p, kind}, materials: e.m ? {...d0.materials, ...e.m} : d0.materials});
+      check(d, `${kind}/${e.style}/${e.seed}`);
+      assert.equal(fam.mod.validate(fam.mod.compile({...d.params, kind})).filter(i => i.level === 'warn').length, 0, `${kind}/${e.style}/${e.seed} has warnings`);
+    }
+  }
+  for (const kind of Object.keys(S.KINDS)) for (const v of [{frontFit: 'inset'}, {base: 'legs'}, {base: 'wall'}, {frontStyle: 'shaker'}, {frontStyle: 'slats'}, {frontStyle: 'cane'}, {width: 3600}, {width: 350, depth: 300}, {doorType: 'sliding'}, {topType: 'slab', topOverhang: 30}]) {
+    const d = normalizeDesign({family: 'storage', kind, style: 'aura', seed: 1, params: {...S.defaultsFor(kind), ...v}, materials: {case: {surface: 'wood', species: 'walnut'}}});
+    check(d, `${kind} ${JSON.stringify(v)}`);
+    assert.equal(d.params.board, 'solid', 'solid wood means solid panels');
+  }
+  // 3600 mm wardrobe is split into transportable modules.
+  { const c = S.compile({...S.defaultsFor('wardrobe'), width: 3600, bays: Array.from({length: 6}, () => ({cells: [{type: 'door', inside: 'hang'}]}))}); assert.ok(c.meta.modules === 3 && c.meta.moduleWidths.every(w => w <= 1200), `modules ${c.meta.moduleWidths}`); }
+  // Commands.
+  const has = (t, want) => assert.ok(parse(t, {family: 'storage'}).actions.some(x => Object.entries(want).every(([k, v]) => JSON.stringify(x[k]) === JSON.stringify(v))), `storage command: ${t}`);
+  has('3 çekmeceli şifonyer', {type: 'drawers', value: 3}); has('makyaj masası', {type: 'kind', value: 'vanity'}); has('gömme kapak', {key: 'frontFit', value: 'inset'});
+  has('kapakları beyaz lake', {slot: 'front', key: 'color', value: 'white'}); has('gardırop 240 cm genişlik', {type: 'set', key: 'width', value: 2400}); has('shaker kapak', {key: 'frontStyle', value: 'shaker'});
+  assert.ok(parse('gardırop', {family: 'seating'}).actions.some(a => a.type === 'family' && a.value === 'storage'), 'wardrobe word opens storage');
+  // Design link round trip.
+  const L2 = await import('../assets/forma/link.js'), d = sample({family: 'storage', style: 'aura', kind: 'vanity', seed: 1}), enc = await L2.encode({v: 1, d: {f: d.family, k: d.kind, s: d.style, n: d.seed, p: d.params, m: d.materials}}), back = await L2.decode(enc);
+  assert.deepEqual(back.d.p, d.params, 'link round trip'); assert.ok(enc.length < 3000, `link length ${enc.length}`);
+}
+console.log(`PASS forma: ${storageN} RİTMO case goods valid (${storageParts} parts; 18 mm MDF / solid panels, 8 mm back, 2 mm reveals, modules ≤ 1200, cut list, drawings, commands, design link);`);
 console.log(`PASS forma: ${roomN} room layouts (living, dining, bedroom × 3) without overlaps;`);
 console.log(`PASS forma: ${startN} curated starting models (10 styles incl. AURA) valid;`);
 console.log(`PASS forma: ${lineN} line-detail parts (stitch, inlay, groove) on seating, tables and the bedroom set;`);

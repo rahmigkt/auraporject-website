@@ -6,18 +6,19 @@ import {worldPositions} from './build.js';
 
 /** What belongs in which room. Anything else gets a warning, and is placed if the customer insists. */
 export const ROOM_TYPES = {
-  living: {fits: ['sofa', 'loveseat', 'armchair', 'coffee', 'side', 'console']},
-  dining: {fits: ['dining', 'console', 'side', 'armchair']},
-  bedroom: {fits: ['set', 'side', 'console', 'armchair', 'desk']},
+  living: {fits: ['sofa', 'loveseat', 'armchair', 'coffee', 'side', 'console', 'dresser']},
+  dining: {fits: ['dining', 'console', 'side', 'armchair', 'dresser']},
+  bedroom: {fits: ['set', 'wardrobe', 'nightstand', 'dresser', 'vanity', 'side', 'console', 'armchair', 'desk']},
   study: {fits: ['desk', 'armchair', 'side', 'console', 'loveseat']}
 };
-/** Item kind as used for room rules: the bedroom family is one set. */
+/** Item kind as used for room rules: the old bedroom family is one set; case goods are their own kind. */
 export const itemKind = d => d.family === 'bedroom' ? 'set' : d.kind;
+const BEDROOM_KINDS = ['wardrobe', 'nightstand', 'vanity'];
 
 /** Room type suggested by the items: a bedroom set makes a bedroom, seating a living room, a dining table a dining room. */
 export function suggestRoom(items) {
   const k = items.map(i => itemKind(i.design));
-  if (k.includes('set')) return 'bedroom';
+  if (k.includes('set') || k.some(x => BEDROOM_KINDS.includes(x)) || (k.includes('dresser') && !k.some(x => ['sofa', 'loveseat', 'dining'].includes(x)))) return 'bedroom';
   if (k.some(x => ['sofa', 'loveseat', 'armchair', 'coffee'].includes(x))) return 'living';
   if (k.includes('dining')) return 'dining';
   if (k.includes('desk')) return 'study';
@@ -51,6 +52,28 @@ function arrangeRaw(items, type, layout = 0) {
     else placed.push({id: it.id, x: backZ - (rot > 0 ? f.z0 : -f.z0), z: cx + (rot > 0 ? (f.x0 + f.x1) / 2 : -(f.x0 + f.x1) / 2), rot});
   };
   let W = 4200, D = 3800;
+  if (type === 'bedroom' && !by('set').length) {
+    // Case goods along the back wall around a plain bed (the bed is only context: 160 × 200 on a simple frame).
+    // Layout 0: wardrobe | bedside · bed · bedside | chest / vanity. Layout 1: mirrored. Layout 2: chest / vanity on the window wall.
+    const wds = by('wardrobe'), ns = by('nightstand').slice(0, 2), drs = [...by('dresser'), ...by('vanity')];
+    const others = items.filter(i => !wds.includes(i) && !ns.includes(i) && !drs.includes(i));
+    const bed = {w: 1700, l: 2120}, gapB = 60, gapG = 500;
+    const groupBed = (ns[0]?.fp.w || 0) + (ns[0] ? gapB : 0) + bed.w + (ns[1] ? gapB + ns[1].fp.w : 0);
+    const side = layout === 2 ? [] : drs, rowItems = layout === 1 ? [...side, 'bed', ...wds] : [...wds, 'bed', ...side];
+    const total = rowItems.reduce((s, it, i) => s + (it === 'bed' ? groupBed : it.fp.w) + (i ? gapG : 0), 0) + others.reduce((s, it) => s + it.fp.w + gapG, 0);
+    rowItems.push(...others);
+    W = Math.max(4200, total + 900); D = Math.max(4200, bed.l + 1500 + (layout === 2 ? 0 : 0));
+    const back = -D / 2 + 20, left = -W / 2 + 20; let x = -total / 2, bedAt = null;
+    rowItems.forEach((it, i) => {
+      if (i) x += gapG;
+      if (it !== 'bed') { put(it, x + it.fp.w / 2, back); x += it.fp.w; return; }
+      if (ns[0]) { put(ns[0], x + ns[0].fp.w / 2, back); x += ns[0].fp.w + gapB; }
+      bedAt = {x: x + bed.w / 2, z: back + bed.l / 2, w: bed.w, l: bed.l}; x += bed.w;
+      if (ns[1]) { x += gapB; put(ns[1], x + ns[1].fp.w / 2, back); x += ns[1].fp.w; }
+    });
+    if (layout === 2) { let z = D / 2 - 300; drs.forEach(it => { z -= it.fp.w / 2; put(it, z, left, Math.PI / 2); z -= it.fp.w / 2 + 400; }); }
+    return {W, D, placed, bed: bedAt};
+  }
   if (type === 'bedroom') {
     const set = by('set')[0], others = items.filter(i => i !== set);
     W = Math.max(4200, (set?.fp.w || 0) + 1200); D = Math.max(4000, (set?.fp.d || 0) + 2200);
@@ -124,7 +147,8 @@ export function arrange(items, type, layout = 0) {
   }
   const gx = Math.max(0, x1 + 600 - plan.W / 2), gz = Math.max(0, z1 + 600 - plan.D / 2);
   for (const pl of plan.placed) { pl.x -= gx / 2; pl.z -= gz / 2; }
-  return {...plan, W: plan.W + gx, D: plan.D + gz};
+  const bed = plan.bed ? {...plan.bed, x: plan.bed.x - gx / 2, z: plan.bed.z - gz / 2} : null;
+  return {...plan, bed, W: plan.W + gx, D: plan.D + gz};
 }
 
 /** World position of a placed piece's footprint centre (for the rug). */
@@ -134,7 +158,7 @@ export function worldCenter(fp, pl) {
 }
 
 /** Room shell parts (decor: 'room'): floor, back and left walls with skirting, window opening, LED cove, rug. */
-export function shell(W, D, {H = 2800, rug = null} = {}) {
+export function shell(W, D, {H = 2800, rug = null, bed = null} = {}) {
   const parts = [], box = (id, mat, w, h, d, pos) => parts.push({id, role: 'room', mat, geom: {fn: 'box', w, h, d}, pos, rot: [0, 0, 0], decor: 'room', noShadow: true});
   const t = 120;
   box('floor', 'floor', W + 2 * t, 40, D + 2 * t, [0, -17, 0]); // top 3 mm above the stage's shadow plane (no z-fighting)
@@ -153,5 +177,15 @@ export function shell(W, D, {H = 2800, rug = null} = {}) {
   box('cove', 'wall', W, 120, 260, [0, H - 60, -D / 2 + 130]);
   box('led', 'led', W - 40, 10, 20, [0, H - 125, -D / 2 + 245]);
   if (rug) box('rug', 'rug', rug.w, 12, rug.d, [rug.x, 6, rug.z]);
+  if (bed) {
+    // Plain bed for context (not designed here): low frame, mattress, duvet, two pillows, a simple headboard panel.
+    const {x, z, w, l} = bed, head = z - l / 2;
+    box('bed-rug', 'rug', w + 1300, 12, 2300, [x, 6, z + 250]);
+    box('bed-frame', 'wallcut', w, 260, l - 40, [x, 150, z + 20]);
+    box('bed-head', 'wallcut', w, 1050, 60, [x, 525, head + 30]);
+    box('bed-mattress', 'wall', w - 100, 220, l - 160, [x, 390, z + 40]);
+    box('bed-duvet', 'rug', w - 60, 40, l * 0.62, [x, 515, z + l * 0.17]);
+    for (const s of [-1, 1]) box(`bed-pillow-${s}`, 'wall', w / 2 - 140, 120, 360, [x + s * (w / 4 - 20), 560, head + 320]);
+  }
   return {parts, meta: {room: true, cameraYaw: 0.72, overall: {width: W, depth: D, height: H}}};
 }

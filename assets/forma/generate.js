@@ -8,7 +8,8 @@ export const SCHEMA = 'aura.forma.design/1';
 export function normalizeDesign(d = {}) {
   const fam = familyOf(d), style = fam.byId[d.style] ? d.style : 'japandi';
   const kind = fam.kinds[d.kind] ? d.kind : fam.defaultKind;
-  return {schema: SCHEMA, family: fam.id, kind, style, seed: (d.seed >>> 0) || 1, params: fam.mod.normalize({...(d.params || {}), kind}), materials: fam.normalizeMaterials(d.materials || {})};
+  const out = {schema: SCHEMA, family: fam.id, kind, style, seed: (d.seed >>> 0) || 1, params: fam.mod.normalize({...(d.params || {}), kind}), materials: fam.normalizeMaterials(d.materials || {})};
+  return fam.couple ? fam.couple(out) : out;
 }
 
 /** Sample one design. locks: {params:{…}, materials:{…}} keeps customer-fixed choices. */
