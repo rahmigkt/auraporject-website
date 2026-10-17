@@ -6,9 +6,9 @@ import {worldPositions} from './build.js';
 
 /** What belongs in which room. Anything else gets a warning, and is placed if the customer insists. */
 export const ROOM_TYPES = {
-  living: {fits: ['sofa', 'loveseat', 'armchair', 'coffee', 'side', 'console', 'dresser']},
-  dining: {fits: ['dining', 'console', 'side', 'armchair', 'dresser']},
-  bedroom: {fits: ['set', 'wardrobe', 'nightstand', 'dresser', 'vanity', 'side', 'console', 'armchair', 'desk']},
+  living: {fits: ['sofa', 'loveseat', 'armchair', 'coffee', 'side', 'console', 'dresser', 'tvunit', 'bookcase', 'vitrine', 'sideboard']},
+  dining: {fits: ['dining', 'console', 'side', 'armchair', 'dresser', 'sideboard', 'vitrine', 'bookcase']},
+  bedroom: {fits: ['set', 'wardrobe', 'nightstand', 'dresser', 'vanity', 'side', 'console', 'armchair', 'desk', 'bookcase', 'tvunit']},
   kitchen: {fits: ['run', 'island', 'dining', 'side', 'console', 'armchair']},
   study: {fits: ['desk', 'armchair', 'side', 'console', 'loveseat']}
 };
@@ -95,7 +95,7 @@ function arrangeRaw(items, type, layout = 0) {
     others.forEach((it, i) => { const s = i % 2 ? 1 : -1; put(it, D / 2 - 900 - it.fp.w / 2, s * (W / 2 - 20), s > 0 ? -Math.PI / 2 : Math.PI / 2); });
     return {W, D, placed};
   }
-  const seats = [...by('sofa'), ...by('loveseat')], chairs = by('armchair'), coffee = by('coffee'), sides = by('side'), consoles = by('console'), dining = by('dining'), desks = by('desk');
+  const seats = [...by('sofa'), ...by('loveseat')], chairs = by('armchair'), coffee = by('coffee'), sides = by('side'), consoles = [...by('console'), ...by('sideboard'), ...by('tvunit'), ...by('vitrine'), ...by('bookcase')], dining = by('dining'), desks = by('desk');
   const main = seats[0], rest = seats.slice(1), r0 = rest[0];
   W = Math.max(4200, (main?.fp.w || 2000) + 2 * walk + (layout === 1 && r0 ? r0.fp.d + 300 : 0), dining[0] ? dining[0].fp.w + 2 * 1100 : 0);
   D = Math.max(3800, (main?.fp.d || 900) + gap + (coffee[0]?.fp.d || 600) + gap + (r0 || chairs[0] ? 1000 : 0) + walk);

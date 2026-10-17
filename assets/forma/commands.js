@@ -236,7 +236,7 @@ const KIND_TABLE = {
 };
 const FAMILY_WORDS = {kitchen: L('mutfak|mutfak dolabi|tezgah|evye|kitchen|kuche|cuisine|keuken|kokken|cocina|cucina|kitchen island|mutfak adasi'),
   table: L('masa|sehpa|konsol|dresuar|table|tisch|tafel|bord|mesa|tavolo|tavolino|desk|bureau|escritorio|scrivania'), seating: L('koltuk|kanepe|berjer|sofa|couch|canape|divano|sessel|fauteuil|sillon|poltrona|lenestol|laenestol'),
-  storage: L('yatak odasi|komodin|sifonyer|gardirop|elbise dolabi|makyaj masasi|dolap|cekmeceli|wardrobe|kleiderschrank|armoire|garderobekast|klaedeskab|armario|armadio|bedroom|schlafzimmer|nachttisch|kommode|chevet|commode|chambre|nachtkast|nachtkastje|ladekast|slaapkamer|natbord|sovevaerelse|mesita de noche|comoda|dormitorio|comodino|cassettiera|camera da letto|nightstand|bedside|dresser|chest of drawers|vanity|dressing table|schminktisch|coiffeuse|kaptafel|toiletbord|tocador|toeletta|storage|cabinet')};
+  storage: L('tv unitesi|kitaplik|vitrin|bufe|bookcase|sideboard|yatak odasi|komodin|sifonyer|gardirop|elbise dolabi|makyaj masasi|dolap|cekmeceli|wardrobe|kleiderschrank|armoire|garderobekast|klaedeskab|armario|armadio|bedroom|schlafzimmer|nachttisch|kommode|chevet|commode|chambre|nachtkast|nachtkastje|ladekast|slaapkamer|natbord|sovevaerelse|mesita de noche|comoda|dormitorio|comodino|cassettiera|camera da letto|nightstand|bedside|dresser|chest of drawers|vanity|dressing table|schminktisch|coiffeuse|kaptafel|toiletbord|tocador|toeletta|storage|cabinet')};
 const PERSON_UNITS = L('kisilik|kisi|people|persons|personen|person|personnes|personnes|personer|personas|persone|seats|places|zitplaatsen|pladser|plazas|posti');
 
 const DELTA_WORDS = L('daha|ilave|more|extra|another|mehr|noch|weitere|plus|encore|meer|nog|mere|endnu|mas|otro|piu|ancora|altri');
@@ -530,7 +530,11 @@ function parseBedroom(text) {
 // ---- RİTMO case goods vocabulary --------------------------------------------------------------------
 const STORAGE_KIND = {
   nightstand: BED_KIND.nightstand, dresser: BED_KIND.dresser, wardrobe: BED_KIND.wardrobe,
-  vanity: L('makyaj masasi|makyaj|tuvalet masasi|vanity|dressing table|schminktisch|coiffeuse|kaptafel|toiletbord|tocador|toeletta')
+  vanity: L('makyaj masasi|makyaj|tuvalet masasi|vanity|dressing table|schminktisch|coiffeuse|kaptafel|toiletbord|tocador|toeletta'),
+  tvunit: L('tv unitesi|tv sehpasi|televizyon unitesi|tv unit|tv stand|media unit|tv mobel|meuble tv|tv meubel|tv mobel|mueble tv|mobile tv'),
+  bookcase: L('kitaplik|kitap rafi|bookcase|bookshelf|shelving|bucherregal|regal|bibliotheque|boekenkast|reol|libreria|estanteria'),
+  vitrine: L('vitrin|camli dolap|display cabinet|vitrine|glass cabinet|vitrinekast|vitrineskab|vitrina|vetrina'),
+  sideboard: L('bufe|konsol dolap|sideboard|credenza|buffet|dressoir|skaenk|aparador|madia')
 };
 const STORAGE_ENUM_WORDS = {
   frontStyle: {...BED_ENUM_WORDS.frontStyle, slats: L('citali|lamel|slatted|slats|latten|lattes|lameller|listones|listelli')},

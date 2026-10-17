@@ -120,7 +120,7 @@ const UI = {
     readout: m => [[L('kModules'), String(m.moduleCount)], [L('carcassBoard'), `${m.board} mm`], [L('drawerCount'), String(m.drawers)], [L('leaves'), String(m.leaves)], [L('hingesN'), String(m.hinges)], [L('weight'), `~${weightOf()} kg`]]
   },
   storage: {
-    brand: 'RİTMO', kinds: ['wardrobe', 'nightstand', 'dresser', 'vanity'],
+    brand: 'RİTMO', kinds: ['wardrobe', 'nightstand', 'dresser', 'vanity', 'tvunit', 'bookcase', 'vitrine', 'sideboard'],
     dims: c => `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height} mm · ${c.meta.board} mm ${L(c.params.board === 'solid' ? 'boardSolid' : 'boardMdf')}`,
     readout: m => [[L('carcassBoard'), `${m.board} mm`], [L('innerDepth'), `${m.innerDepth} mm`], [L('drawerCount'), String(m.drawers)], [L('leaves'), String(m.leaves)], [L('hingesN'), String(m.hinges)], [L('modulesN'), `${m.modules} · ${m.moduleWidths.join(' + ')} mm`], [L('weight'), `~${weightOf()} kg`]]
   }
@@ -170,7 +170,7 @@ function shell() {
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261017t').then(mod => { sceneModule = mod; const {createViewer} = mod;
+  import('./scene.js?v=20261017u').then(mod => { sceneModule = mod; const {createViewer} = mod;
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(shown(), state.design.materials); if (state.room) showRoom(); }
@@ -316,7 +316,8 @@ function storagePartsPanel(p) {
   ${p.base === 'legs' ? enumGroup('legType', 'legType', 'sLegType') : ''}
   ${p.doorType === 'sliding' ? '' : enumGroup('topType', 'topType')}
   ${enumGroup('caseEdge', 'caseEdge')}
-  ${['dresser', 'vanity'].includes(k) ? enumGroup('mirror', 'mirror') : ''}`;
+  ${['dresser', 'vanity', 'sideboard'].includes(k) ? enumGroup('mirror', 'mirror') : ''}
+  ${['bookcase', 'tvunit', 'vitrine', 'sideboard'].includes(k) ? enumGroup('backPanel', 'backPanelL') + enumGroup('led', 'ledL') : ''}`;
 }
 /** Front elevation of the layout (clickable cells) and the controls of the selected cell and bay. */
 function layoutEditor(p) {
@@ -345,7 +346,7 @@ function layoutEditor(p) {
   // Controls of the selected cell / bay.
   const k = state.design.kind, bay = p.bays[sb], c = bay.cells[sc], gb = g.bays[sb], cellH = Math.round(gb.cells[sc].y1 - gb.cells[sc].y0), bayW = Math.round(gb.x1 - gb.x0);
   const types = CELL_TYPES.filter(t => t !== 'knee' || (k === 'vanity' && sc === 0));
-  const insides = k === 'wardrobe' ? INSIDE : ['shelves', 'empty'];
+  const insides = (k === 'wardrobe' ? INSIDE : ['shelves', 'glassShelves', 'empty']).filter(t => t !== 'glassShelves' || ['glass', 'open', 'mirror'].includes(c.type));
   const interiorH = Math.round(g.top - (bay.cells[0].type === 'knee' ? 0 : g.yB + g.T)), maxCell = Math.max(120, interiorH - (bay.cells.length - 1) * (120 + g.T));
   const maxBay = Math.max(260, Math.round(W - (p.bays.length - 1) * 260 - (p.bays.length + 1) * g.T));
   const slider = (attr, label, lo, hi, v, autoAttr, isAuto) => `<div class="f-slider"><label>${esc(label)}${isAuto ? ` · <small>${L('auto')}</small>` : ''}</label><input type="range" ${attr} min="${lo}" max="${hi}" step="5" value="${Math.min(hi, Math.max(lo, v))}"><span class="f-num">${v} mm</span></div>${isAuto ? '' : `<div class="f-actions f-actions-tight"><button class="f-link" ${autoAttr}>${L('auto')}</button></div>`}`;

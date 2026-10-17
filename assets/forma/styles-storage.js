@@ -32,7 +32,21 @@ const LAYOUT = {
   // Vanities
   vR: {width: 1100, height: 760, depth: 450, bays: [B([C('knee'), C('drawers', {mm: 110})], 2.2), B([C('drawers', {n: 3})])]},
   vC: {width: 1400, height: 760, depth: 460, bays: [B([C('drawers', {n: 3})]), B([C('knee'), C('drawers', {mm: 110})], 1.9), B([C('drawers', {n: 3})])]},
-  vA: {width: 1000, height: 760, depth: 440, bays: [B([C('knee'), C('drawers', {mm: 110})])]}
+  vA: {width: 1000, height: 760, depth: 440, bays: [B([C('knee'), C('drawers', {mm: 110})])]},
+  // TV units (wall-hung or standing; the open bay holds the devices, with a cable outlet in the back)
+  tvA: {width: 1800, height: 600, depth: 420, base: 'wall', legHeight: 250, bays: [B([C('drawers', {n: 2})]), B([C('open')], 1.6), B([C('drawers', {n: 2})])]},
+  tvB: {width: 2200, height: 520, depth: 450, base: 'plinth', plinthHeight: 60, bays: [B([C('door')]), B([C('open'), C('drawers', {mm: 150})], 1.4), B([C('open'), C('drawers', {mm: 150})], 1.4), B([C('door')])]},
+  tvC: {width: 2000, height: 480, depth: 420, base: 'legs', legHeight: 180, bays: [B([C('door', {inside: 'empty'})]), B([C('open', {k: 1})], 1.2), B([C('door', {inside: 'empty'})])]},
+  // Bookcases
+  bkA: {width: 1800, height: 2100, depth: 350, base: 'plinth', plinthHeight: 60, bays: [B([C('door', {mm: 700}), C('open', {k: 3})]), B([C('door', {mm: 700}), C('open', {k: 3})]), B([C('door', {mm: 700}), C('open', {k: 3})])]},
+  bkB: {width: 1600, height: 2000, depth: 330, base: 'plinth', plinthHeight: 60, bays: [B([C('open', {k: 4})]), B([C('open', {k: 4})])]},
+  bkC: {width: 2400, height: 2200, depth: 350, base: 'plinth', plinthHeight: 60, bays: [B([C('drawers', {n: 2, mm: 560}), C('open', {k: 4})]), B([C('door', {mm: 560}), C('open', {k: 4})]), B([C('door', {mm: 560}), C('open', {k: 4})]), B([C('drawers', {n: 2, mm: 560}), C('open', {k: 4})])]},
+  // Display cabinets
+  vtA: {width: 900, height: 1900, depth: 420, base: 'plinth', plinthHeight: 80, led: 'on', bays: [B([C('door', {mm: 620}), C('glass', {inside: 'glassShelves', k: 3})]), B([C('door', {mm: 620}), C('glass', {inside: 'glassShelves', k: 3})])]},
+  vtB: {width: 1400, height: 1300, depth: 420, base: 'legs', legHeight: 180, led: 'on', bays: [B([C('glass', {inside: 'glassShelves', k: 2})]), B([C('glass', {inside: 'glassShelves', k: 2})])]},
+  // Sideboards
+  sbA: {width: 1800, height: 780, depth: 460, base: 'legs', legHeight: 170, topType: 'slab', bays: [B([C('door', {k: 1})]), B([C('drawers', {n: 3})]), B([C('door', {k: 1})])]},
+  sbB: {width: 2000, height: 760, depth: 460, base: 'plinth', plinthHeight: 70, topType: 'slab', bays: [B([C('door', {k: 1})]), B([C('door', {k: 1})]), B([C('door', {k: 1})]), B([C('door', {k: 1})])]}
 };
 
 // ---- Styles --------------------------------------------------------------------------------------------------
@@ -111,11 +125,31 @@ export const STORAGE_STYLE_BY_ID = Object.fromEntries(ALL.map(s => [s.id, s]));
 /** Parameters of one recipe: kind defaults ← style look ← layout ← tweaks. */
 export function recipeParams(st, kind, [layout, tweaks = {}]) {
   const L = structuredClone(LAYOUT[layout]), look = {...st.look};
-  if (kind === 'wardrobe' && look.topType === 'slab') look.topType = 'flush';
+  if (['wardrobe', 'bookcase', 'vitrine', 'tvunit'].includes(kind) && look.topType === 'slab') look.topType = 'flush';
   if (kind === 'wardrobe' && look.base === 'legs' && !tweaks.base) look.base = 'plinth';
   if (look.legHeight && kind === 'wardrobe') delete look.legHeight;
   return {...defaultsFor(kind), ...look, ...L, ...tweaks, kind};
 }
 
+/** Layouts for the living-room pieces, chosen per style so each style reads differently. */
+const LIVING = {
+  aura: {tvunit: ['tvA', 'tvC'], bookcase: ['bkA', 'bkB'], vitrine: ['vtA'], sideboard: ['sbA', 'sbB']},
+  japandi: {tvunit: ['tvC', 'tvB'], bookcase: ['bkB', 'bkA'], vitrine: ['vtB'], sideboard: ['sbB', 'sbA']},
+  scandinavian_modern: {tvunit: ['tvC', 'tvA'], bookcase: ['bkA'], vitrine: ['vtB', 'vtA'], sideboard: ['sbA']},
+  mid_century_modern: {tvunit: ['tvC'], bookcase: ['bkC', 'bkB'], vitrine: ['vtB'], sideboard: ['sbA', 'sbB']},
+  minimalism: {tvunit: ['tvA', 'tvB'], bookcase: ['bkB'], vitrine: ['vtA'], sideboard: ['sbB']},
+  wabi_sabi: {tvunit: ['tvB'], bookcase: ['bkB'], vitrine: ['vtB'], sideboard: ['sbB']},
+  industrial: {tvunit: ['tvC'], bookcase: ['bkC'], vitrine: ['vtA'], sideboard: ['sbA']},
+  bauhaus: {tvunit: ['tvC'], bookcase: ['bkB'], vitrine: ['vtB'], sideboard: ['sbA']},
+  art_deco: {tvunit: ['tvB'], bookcase: ['bkA'], vitrine: ['vtA', 'vtB'], sideboard: ['sbB', 'sbA']},
+  brutalism: {tvunit: ['tvB'], bookcase: ['bkC'], vitrine: ['vtA'], sideboard: ['sbB']}
+};
+for (const st of ALL) for (const [kind, list] of Object.entries(LIVING[st.id] || {})) {
+  // Same front language and materials as the style's chest of drawers.
+  const mats = st.starts.dresser?.[0]?.[2] || null, tw = st.starts.dresser?.[0]?.[1] || {};
+  const look = Object.fromEntries(['frontStyle', 'pull', 'frontFit', 'fluteWidth'].filter(k => tw[k] !== undefined).map(k => [k, tw[k]]));
+  st.starts[kind] = list.map(l => [l, {...look, ...(kind === 'vitrine' ? {frontFit: 'overlay'} : {}), ...(LAYOUT[l].base ? {base: LAYOUT[l].base} : {})}, mats]);
+}
+
 /** Curated starting models: {style, seed, p, m} per kind. */
-export const STORAGE_STARTS = Object.fromEntries(['wardrobe', 'nightstand', 'dresser', 'vanity'].map(kind => [kind, STORAGE_STYLES.flatMap(st => (st.starts[kind] || []).map((r, i) => ({style: st.id, seed: i + 1, p: recipeParams(st, kind, r), m: r[2] || null})))]));
+export const STORAGE_STARTS = Object.fromEntries(['wardrobe', 'nightstand', 'dresser', 'vanity', 'tvunit', 'bookcase', 'vitrine', 'sideboard'].map(kind => [kind, STORAGE_STYLES.flatMap(st => (st.starts[kind] || []).map((r, i) => ({style: st.id, seed: i + 1, p: recipeParams(st, kind, r), m: r[2] || null})))]));
