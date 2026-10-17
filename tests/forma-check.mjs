@@ -319,6 +319,25 @@ let kitchenN = 0;
   }
   assert.ok(parse('mutfak', {family: 'seating'}).actions.some(a => a.value === 'kitchen'), 'kitchen word');
 }
+// 14. Production: cutting plans place every panel on sheets without overlaps; booklets build for every panel family.
+let sheetN = 0;
+{
+  const {FAMILIES} = await import('../assets/forma/families.js'), {normalizeDesign} = await import('../assets/forma/generate.js');
+  const {cuttingPlan, CUT_RULES} = await import('../assets/forma/production/nesting.js'), {bookletPages} = await import('../assets/forma/production/assembly.js');
+  for (const [fam, kind] of [['storage', 'wardrobe'], ['storage', 'dresser'], ['storage', 'bookcase'], ['storage', 'vanity'], ['kitchen', 'run'], ['kitchen', 'island']]) {
+    const F = FAMILIES[fam], e = F.starts[kind][0], d0 = sample({family: fam, style: e.style, kind, seed: e.seed}), d = normalizeDesign({...d0, kind, params: {...e.p, kind}, materials: e.m ? {...d0.materials, ...e.m} : d0.materials});
+    const c = F.mod.compile({...d.params, kind}), cp = cuttingPlan(c, d, 3);
+    const want = cp.rows.reduce((s, r) => s + r.qty, 0), got = cp.plan.reduce((s, b) => s + b.sheets.reduce((a, sh) => a + sh.placed.length, 0), 0);
+    assert.equal(got, want, `${kind}: every panel placed (${got}/${want})`); assert.ok(!cp.plan.some(b => b.sheets.some(sh => sh.oversize)), `${kind}: no oversize`);
+    for (const b of cp.plan) for (const sh of b.sheets) {
+      for (const p of sh.placed) assert.ok(p.x >= 0 && p.y >= 0 && p.x + p.l <= sh.sheet.l - 2 * CUT_RULES.trim + 0.01 && p.y + p.w <= sh.sheet.w - 2 * CUT_RULES.trim + 0.01, `${kind}: inside sheet`);
+      for (let i = 0; i < sh.placed.length; i++) for (let j = i + 1; j < sh.placed.length; j++) { const a = sh.placed[i], q = sh.placed[j]; assert.ok(a.x + a.l <= q.x + 0.01 || q.x + q.l <= a.x + 0.01 || a.y + a.w <= q.y + 0.01 || q.y + q.w <= a.y + 0.01, `${kind}: overlap ${a.code}/${q.code}`); }
+      if (b.board.grain) assert.ok(sh.placed.every(p => !p.rot), 'grain kept'); sheetN++;
+    }
+    const pages = bookletPages(c, bom(c, d.materials, 'tr'), {title: kind, id: 'F', qty: 3, lang: 'tr', dims: ''}); assert.ok(pages.length >= 4 && !pages.some(pg => pg.includes('NaN')), `${kind}: booklet`);
+  }
+}
+console.log(`PASS forma: production — ${sheetN} cut sheets (guillotine, kerf, grain, banding) and assembly booklets;`);
 console.log(`PASS forma: ${kitchenN} kitchens (runs and islands) valid: modules, worktop, sink, hob, hood, appliances, open view, cut list, drawings;`);
 console.log(`PASS forma: ${storageN} RİTMO case goods valid (${storageParts} parts; 18 mm MDF / solid panels, 8 mm back, 2 mm reveals, modules ≤ 1200, cut list, drawings, commands, design link);`);
 console.log(`PASS forma: ${roomN} room layouts (living, dining, bedroom × 3) without overlaps;`);
