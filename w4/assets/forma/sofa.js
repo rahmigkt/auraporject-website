@@ -14,7 +14,7 @@ export const RANGES = {
   armWidth: [40, 320, 5], armHeight: [480, 780, 5], armTop: [0, 1, 0.05], armFlare: [0, 1, 0.05], armSlope: [0, 0.4, 0.02], armSet: [0, 90, 5],
   backRake: [4, 22, 1], backThickness: [120, 300, 5], camel: [0, 140, 5], channelCount: [3, 12, 1], tuftSpacing: [110, 240, 5],
   cushionThickness: [80, 230, 5], cushionCrown: [0, 45, 1], seatCount: [1, 4, 1],
-  legHeight: [0, 340, 5], legSize: [10, 48, 1], legTaper: [0.3, 1, 0.05], legSplay: [0, 14, 1], legInset: [0, 140, 5], pillows: [0, 4, 1]
+  legHeight: [0, 340, 5], legSize: [10, 48, 1], legTaper: [0.3, 1, 0.05], legSplay: [0, 14, 1], legInset: [0, 140, 5], pillows: [0, 4, 1], pillowSize: [300, 600, 10]
 };
 
 export const ENUMS = {
@@ -25,7 +25,8 @@ export const ENUMS = {
   baseType: ['legs', 'plinth', 'floating', 'skirt', 'sled', 'frame'],
   legType: LEG_TYPES,
   welt: ['none', 'self', 'contrast'],
-  stitch: ['none', 'single', 'double']
+  stitch: ['none', 'single', 'double'],
+  pillowType: ['square', 'lumbar', 'mix', 'bolster', 'boxed']
 };
 
 export const DEFAULTS = {
@@ -34,7 +35,7 @@ export const DEFAULTS = {
   backType: 'loose', backRake: 12, backThickness: 190, camel: 60, channelCount: 6, tuftSpacing: 170,
   seatType: 'split', seatCount: 3, cushionThickness: 150, cushionCrown: 14, cushionEdge: 'boxed',
   baseType: 'legs', legType: 'tapered', legHeight: 140, legSize: 22, legTaper: 0.6, legSplay: 0, legInset: 60,
-  welt: 'none', stitch: 'none', pillows: 0
+  welt: 'none', stitch: 'none', pillows: 0, pillowType: 'square', pillowSize: 450
 };
 
 const MIN_SEAT_WIDTH = 500;
@@ -231,11 +232,30 @@ export function compile(raw) {
     }
   }
 
-  // ---- Throw pillows ------------------------------------------------------
-  const n = Math.min(p.pillows, 4);
+  // ---- Throw pillows (kırlent) --------------------------------------------
+  // Real pillow shapes (mesh.js pillow): knife-edge square and lumbar, boxed, bolster; 'mix' puts squares at the back
+  // and a lumbar in front. Pillows stand on the seat, lean back against the back cushions and turn slightly inward.
+  const n = Math.min(p.pillows, 4), lean = 0.26;
+  const shape = (type, size) => type === 'lumbar' ? {type: 'square', w: size * 1.15, h: size * 0.62, t: size * 0.34}
+    : type === 'bolster' ? {type: 'bolster', w: size * 1.1, h: size * 0.46, t: size * 0.46}
+    : type === 'boxed' ? {type: 'boxed', w: size, h: size, t: Math.min(110, size * 0.24)}
+    : {type: 'square', w: size, h: size, t: size * 0.42};
+  let backT = 0;
   for (let i = 0; i < n; i++) {
-    const s = i % 2 ? 1 : -1, row = Math.floor(i / 2), size = clamp(H - p.seatHeight + 20, 300, 450) - row * 50;
-    parts.push(part(`pillow-${i + 1}`, 'pillow', 'welt', {fn: 'cushion', w: size, h: size, d: 150, r: 60, crownFront: 40, crownTop: 0}, [s * (innerW / 2 - size / 2 - 20 - row * 140), p.seatHeight + size / 2 - 30, seatBackZ + 100 + row * 40], [-0.28, s * 0.12, s * 0.05]));
+    const row = n === 1 ? 0 : Math.floor(i / 2), s = n === 1 ? 0 : i % 2 ? 1 : -1;
+    const type = p.pillowType === 'mix' ? (row === 0 ? 'square' : 'lumbar') : p.pillowType;
+    // Pillows never rise above the back: the leaning height (plus thickness) must fit under the overall height.
+    const seatTop0 = deckTop + cT + (p.cushionCrown || 0) * 0.5, room = H - 10 - (seatTop0 - 22);
+    const hk = type === 'lumbar' ? 0.62 : type === 'bolster' ? 0.46 : 1, fit = room / (hk * Math.cos(lean) + 0.22 * Math.sin(lean) * hk + (type === 'bolster' ? 0.01 : 0));
+    const size = clamp(Math.min(p.pillowSize - row * 40, fit), 200, 600), g = shape(type, size);
+    const geom = {fn: 'pillow', ...g, pinch: g.type === 'square' ? (type === 'lumbar' ? 0.05 : 0.09) : 0, chop: type === 'square' ? 0.55 : 0, cord: p.welt === 'none' ? 0 : 3};
+    const lying = g.type === 'bolster';
+    if (row === 0) backT = Math.max(backT, g.t);
+    const seatTop = deckTop + cT + (p.cushionCrown || 0) * 0.5; // pillows press slightly into the seat
+    const y = seatTop - 22 + (lying ? g.h / 2 : g.h / 2 * Math.cos(lean));
+    const z = seatBackZ + g.t / 2 + (lying ? 20 : g.h / 2 * Math.sin(lean) + 10) + (row ? backT * 0.75 + g.h / 2 * Math.sin(lean) : 0); // front row sits in front of the back row
+    const x = s * Math.max(0, innerW / 2 - g.w / 2 - 30 - row * 160);
+    parts.push(part(`pillow-${i + 1}`, 'pillow', 'welt', geom, [x, y, z], lying ? [0, 0, 0] : [-lean, -s * 0.18, s * 0.04]));
   }
 
   // ---- Internal frame (structure view and BOM) ---------------------------

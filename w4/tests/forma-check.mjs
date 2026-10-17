@@ -225,6 +225,34 @@ let startN = 0;
     }
   }
 }
+// 11. Room: every layout keeps products inside the room and apart from each other; misfits are reported.
+let roomN = 0;
+{
+  const R = await import('../assets/forma/room.js'), {FAMILIES} = await import('../assets/forma/families.js');
+  const mk = (family, kind, seed = 2) => { const d = sample({family, style: 'japandi', kind, seed}); return {design: d, compiled: FAMILIES[family].mod.compile({...d.params, kind})}; };
+  const sets = [
+    ['living', [mk('seating', 'sofa'), mk('seating', 'loveseat'), mk('seating', 'armchair'), mk('table', 'coffee'), mk('table', 'side'), mk('table', 'console')]],
+    ['living', [mk('seating', 'sofa'), mk('seating', 'armchair'), mk('seating', 'armchair', 3), mk('table', 'coffee'), mk('table', 'dining')]],
+    ['dining', [mk('table', 'dining'), mk('table', 'console')]],
+    ['bedroom', [mk('bedroom', 'bed'), mk('table', 'side'), mk('seating', 'armchair')]]
+  ];
+  for (const [type, list] of sets) for (let layout = 0; layout < 3; layout++) {
+    const items = list.map((x, i) => ({id: 'U' + i, kind: R.itemKind(x.design), fp: R.footprint(x.compiled)}));
+    const plan = R.arrange(items, type, layout), boxes = plan.placed.map(pl => {
+      const it = items.find(i => i.id === pl.id), c = Math.cos(pl.rot), s = Math.sin(pl.rot), pts = [[it.fp.x0, it.fp.z0], [it.fp.x1, it.fp.z0], [it.fp.x0, it.fp.z1], [it.fp.x1, it.fp.z1]].map(([x, z]) => [pl.x + x * c + z * s, pl.z - x * s + z * c]);
+      return {id: pl.id, x0: Math.min(...pts.map(p => p[0])), x1: Math.max(...pts.map(p => p[0])), z0: Math.min(...pts.map(p => p[1])), z1: Math.max(...pts.map(p => p[1]))};
+    });
+    assert.equal(plan.placed.length, items.length, `${type}/${layout}: every product placed`);
+    for (const b of boxes) assert.ok(b.x0 >= -plan.W / 2 - 1 && b.x1 <= plan.W / 2 + 1 && b.z0 >= -plan.D / 2 - 1 && b.z1 <= plan.D / 2 + 1, `${type}/${layout}: ${b.id} inside the room ${JSON.stringify(b)} ${plan.W}x${plan.D}`);
+    for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) {
+      const a = boxes[i], b = boxes[j], ox = Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0), oz = Math.min(a.z1, b.z1) - Math.max(a.z0, b.z0);
+      assert.ok(ox <= 40 || oz <= 40, `${type}/${layout}: ${a.id} overlaps ${b.id} (${Math.round(ox)} × ${Math.round(oz)} mm)`);
+    }
+    roomN++;
+  }
+  assert.deepEqual(R.misfits([{design: mk('table', 'dining').design}], 'living').length, 1);
+}
+console.log(`PASS forma: ${roomN} room layouts (living, dining, bedroom × 3) without overlaps;`);
 console.log(`PASS forma: ${startN} curated starting models (10 styles incl. AURA) valid;`);
 console.log(`PASS forma: ${lineN} line-detail parts (stitch, inlay, groove) on seating, tables and the bedroom set;`);
 console.log(`PASS forma: ${bedroomN} bedroom sets valid (wardrobe, bed, bedside, chest; set and piece views); matching, drawings, BOM, commands;`);

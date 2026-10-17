@@ -45,13 +45,23 @@ const hexColor = h => new THREE.Color(h);
 
 /** Material set for one design. Starts with flat colours; textures arrive asynchronously. */
 function materialSet(materials, opts = {}) { return materials.top ? tableMaterialSet(materials, opts) : materials.case ? bedroomMaterialSet(materials, opts) : seatingMaterialSet(materials, opts); }
+/** Room for a project view: walls, floor, rug, LED, window glass. */
+function roomMaterialSet(spec, {onReady} = {}) {
+  const set = {textures: []}, jobs = [];
+  roomMaterials(set, spec, true, jobs);
+  set.glass = new THREE.MeshPhysicalMaterial({color: '#e4edf1', roughness: 0.04, transparent: true, opacity: 0.18, depthWrite: false});
+  set.fabric = set.wall;
+  Promise.all(jobs).then(() => { if (!set.disposed) onReady?.(); });
+  set.dispose = () => { set.disposed = true; for (const m of new Set([...(set.extra || []), set.glass])) m.dispose(); for (const t of set.textures) t.dispose(); };
+  return set;
+}
 /** Room shell and room textiles on top of the bedroom set. */
 function roomMaterials(set, materials, detail, jobs) {
   if (!materials.wall) return;
   const Wc = COLORS[materials.wall.color] || COLORS.cream;
   set.wall = new THREE.MeshStandardMaterial({color: hexColor(Wc.hex), roughness: 0.92});
   set.wallcut = new THREE.MeshStandardMaterial({color: '#3a3934', roughness: 0.9});
-  set.floor = surfaceMaterial({...materials.floor, surface: materials.floor.surface === 'stone' ? 'stone' : 'wood'}, set, detail ? jobs : [], {rotate: false});
+  set.floor = surfaceMaterial(materials.floor, set, detail ? jobs : [], {rotate: false});
   const Rc = COLORS[materials.rug?.color] || COLORS.cream;
   set.rug = new THREE.MeshPhysicalMaterial({color: hexColor(Rc.hex), roughness: 1, sheen: 0.6, sheenRoughness: 0.9, sheenColor: hexColor(Rc.hex).lerp(new THREE.Color('#fff'), 0.3)});
   if (detail) jobs.push(makeMaps('fabric', {fiber: 'wool', weave: 'basket', color: materials.rug?.color || 'cream', pattern: 'none', color2: 'white', scale: 1, density: 3}, 512).then(out => applyMaps(set, set.rug, out, out?.tileMm, out?.tileMm)));
@@ -74,6 +84,8 @@ function seatingMaterialSet(materials, {detail = true, onReady} = {}) {
   const f = materials.fabric, F = FIBERS[f.fiber] || FIBERS.linen, base = hexColor(COLORS[f.color].hex);
   const fabric = new THREE.MeshPhysicalMaterial({color: base, roughness: F.rough, sheen: F.sheen, sheenRoughness: f.fiber === 'velvet' ? 0.45 : 0.75, sheenColor: base.clone().lerp(new THREE.Color('#ffffff'), 0.35)});
   if (f.fiber === 'leather') { fabric.clearcoat = 0.25; fabric.clearcoatRoughness = 0.5; }
+  // Napped hides: no gloss, a soft sheen that lightens at grazing angles.
+  if (f.fiber === 'suede' || f.fiber === 'nubuck') { fabric.sheenRoughness = f.fiber === 'suede' ? 0.85 : 0.7; fabric.sheenColor = base.clone().lerp(new THREE.Color('#ffffff'), 0.22); }
   const weltSpec = {...f, color: materials.welt.color || f.color2, pattern: 'none'};
   const welt = fabric.clone(); welt.color = hexColor(COLORS[weltSpec.color].hex); welt.sheenColor = welt.color.clone().lerp(new THREE.Color('#fff'), 0.35);
   const wood = woodMaterial(materials.wood);
@@ -348,30 +360,57 @@ export function createViewer(host, {onRotate} = {}) {
   canvas.addEventListener('wheel', e => { e.preventDefault(); zoom = Math.min(2.5, Math.max(0.6, zoom * (e.deltaY > 0 ? 0.93 : 1.07))); draw(); }, {passive: false});
   canvas.addEventListener('keydown', e => { const k = {ArrowLeft: [0.12, 0], ArrowRight: [-0.12, 0], ArrowUp: [0, 0.08], ArrowDown: [0, -0.08]}[e.key]; if (k) { e.preventDefault(); view = 'angle'; yaw += k[0]; pitch = Math.max(-0.05, Math.min(1.2, pitch + k[1])); draw(); } });
 
+  // Project room: one material set per product (cached by its materials), the shell, and a warm light under the cove.
+  let room = null, roomMats = null; const itemMats = new Map();
+  const cove = new THREE.PointLight('#ffd6a0', 0, 7, 1.6); cove.castShadow = false; scene.add(cove);
+  const matsFor = m => { const k = JSON.stringify(m); if (!itemMats.has(k)) itemMats.set(k, materialSet(m, {onReady: () => rebuild()})); return itemMats.get(k); };
+  function roomGroup() {
+    const g = new THREE.Group();
+    g.add(buildGroup(room.shell, roomMats, {sketch}));
+    for (const it of room.items) {
+      const w = new THREE.Group(); w.add(buildGroup(it.compiled, matsFor(it.materials), {sketch}));
+      w.position.set(it.x / 1000, 0, it.z / 1000); w.rotation.y = it.rot; g.add(w);
+    }
+    return g;
+  }
   function rebuild() {
-    if (!compiled) return;
+    if (!compiled && !room) return;
     if (group) { scene.remove(group); disposeGroup(group); }
-    group = buildGroup(compiled, mats, {structure, sketch}); scene.add(group);
+    group = room ? roomGroup() : buildGroup(compiled, mats, {structure, sketch}); scene.add(group);
+    const ov = room?.shell.meta.overall;
+    cove.intensity = room && !sketch ? 5 : 0; if (ov) cove.position.set(0, (ov.height - 300) / 1000, (-ov.depth / 2 + 500) / 1000);
     const b = new THREE.Box3().setFromObject(group), s = b.getSize(new THREE.Vector3());
     if (dims) { scene.remove(dims); disposeGroup(dims); dims = null; }
-    if (sketch && !compiled.meta?.room) { dims = dimensionGroup(b); scene.add(dims); }
-    grid.visible = sketch; contact.visible = !sketch; ao.enabled = !sketch; // a drawing needs no ambient occlusion
+    const meta = room ? room.shell.meta : compiled.meta;
+    if (sketch && !meta?.room) { dims = dimensionGroup(b); scene.add(dims); }
+    grid.visible = sketch; contact.visible = !sketch; ao.enabled = !sketch && !room; // a drawing needs no ambient occlusion
     size = [s.x, s.y, s.z]; contact.scale.set(s.x * 1.25, s.z * 1.45, 1);
     // Rooms: light through the open corner, a shadow camera that covers the floor, no contact blob.
-    const isRoom = !!compiled.meta?.room, e = Math.max(2.5, Math.max(s.x, s.z) * 0.62);
+    const isRoom = !!meta?.room, e = Math.max(2.5, Math.max(s.x, s.z) * 0.62);
     contact.visible = !isRoom && !sketch;
-    if (isRoom) sun.position.set(-(compiled.meta.cameraYaw > 0 ? -1 : 1) * 2.6, 4.6, 3.4); else sun.position.set(-1.6, 4.2, 3.2);
+    // Rooms: daylight through the window in the left wall.
+    if (isRoom) sun.position.set(-4.6, 3.6, 1.2); else sun.position.set(-1.6, 4.2, 3.2);
     Object.assign(sun.shadow.camera, {left: -e, right: e, top: e, bottom: -e}); sun.shadow.camera.updateProjectionMatrix();
-    if (isRoom && !userMoved) { yaw = compiled.meta.cameraYaw; pitch = 0.32; }
+    if (isRoom && !userMoved) { yaw = meta.cameraYaw; pitch = 0.32; }
     draw();
   }
   return {
     setDesign(next, nextMaterials) {
       const matKey = JSON.stringify(nextMaterials);
       if (!mats || matKey !== JSON.stringify(materials)) { mats?.dispose(); mats = materialSet(nextMaterials, {onReady: () => rebuild()}); materials = structuredClone(nextMaterials); }
-      compiled = next; rebuild();
+      compiled = next; room = null; rebuild();
     },
-    view(kind) { view = kind; zoom = 1; if (kind === 'angle') { yaw = compiled?.meta?.room ? compiled.meta.cameraYaw : 0.62; pitch = 0.2; userMoved = false; } draw(); },
+    /** Project room: {shell (compiled room shell), roomMaterials, items: [{compiled, materials, x, z, rot}]}; null leaves it. */
+    setRoom(spec) {
+      if (!spec) { room = null; userMoved = false; rebuild(); return; }
+      const key = JSON.stringify(spec.roomMaterials);
+      if (!roomMats || roomMats.key !== key) { roomMats?.dispose(); roomMats = roomMaterialSet(spec.roomMaterials, {onReady: () => rebuild()}); roomMats.key = key; }
+      const keep = new Set(spec.items.map(i => JSON.stringify(i.materials)));
+      for (const [k, m] of itemMats) if (!keep.has(k)) { m.dispose(); itemMats.delete(k); }
+      if (!room) userMoved = false;
+      room = spec; zoom = 1; view = 'angle'; rebuild();
+    },
+    view(kind) { view = kind; zoom = 1; if (kind === 'angle') { yaw = room ? room.shell.meta.cameraYaw : compiled?.meta?.room ? compiled.meta.cameraYaw : 0.62; pitch = 0.2; userMoved = false; } draw(); },
     zoom(f) { zoom = Math.min(2.5, Math.max(0.6, zoom * f)); draw(); },
     structure(on) { structure = on; rebuild(); },
     /** 'sketch' (line drawing on paper) or 'render' (materials and colour). */
@@ -402,7 +441,7 @@ export function createViewer(host, {onRotate} = {}) {
       return new Promise((resolve, reject) => new GLTFExporter().parse(exportGroup, r => { disposeGroup(exportGroup); for (const m of Object.values(exportMats)) m.dispose(); for (const t of conv.values()) t.dispose(); resolve(r); }, reject, {binary: true}));
     },
     texturesReady: () => !!mats?.textures.length,
-    dispose() { ro.disconnect(); mats?.dispose(); disposeGroup(group); composer.dispose(); renderer.dispose(); canvas.remove(); }
+    dispose() { ro.disconnect(); mats?.dispose(); roomMats?.dispose(); for (const m of itemMats.values()) m.dispose(); disposeGroup(group); composer.dispose(); renderer.dispose(); canvas.remove(); }
   };
 }
 
