@@ -44,6 +44,8 @@ const N = entry => nm(entry, state.lang);
 let viewer = null, sceneModule = null;
 
 const compileOf = d => familyOf(d).mod.compile({...d.params, kind: d.kind});
+/** What the viewer shows: case goods may be shown with doors and drawers open (drawings and files stay closed). */
+const shown = (d = state.design) => d.family === 'storage' && state.openFronts ? familyOf(d).mod.compile({...d.params, kind: d.kind, openFronts: true}) : (d === state.design ? state.compiled : compileOf(d));
 const issuesOf = (d, c) => d.family !== 'seating' ? familyOf(d).mod.validate(c, d.materials, buildMesh) : familyOf(d).mod.validate(c);
 const isTable = () => state.design.family === 'table';
 const isBedroom = () => state.design.family === 'bedroom';
@@ -65,10 +67,11 @@ function setDesign(next, {record = true, keepPanel = false, sync = true} = {}) {
   if (record && state.design) { state.history.push(state.design); if (state.history.length > 80) state.history.shift(); state.future = []; }
   const familyChanged = state.design && state.design.family !== next.family;
   state.design = next; state.compiled = compileOf(next); state.room = null; delete document.body.dataset.room;
-  viewer?.setDesign(state.compiled, next.materials);
+  viewer?.setDesign(shown(next), next.materials);
   store.set('aura-forma-design-' + next.family, next); store.set('aura-forma-family', next.family); store.set(`aura-forma-kind-${next.family}-${next.kind}`, next);
   state.drawingCache = null;
   if (familyChanged) shellNav();
+  { const ob = $('#openBtn'); if (ob) ob.hidden = next.family !== 'storage'; }
   renderCaption();
   if (!keepPanel) renderPanel(); else refreshReadouts();
 }
@@ -140,7 +143,7 @@ function shell() {
       <div class="f-stage" id="stage" aria-label="${esc(L('perspective'))}"><button class="f-step f-prev" data-step="-1" aria-label="${esc(L('prevModel'))}">‹</button><button class="f-step f-next" data-step="1" aria-label="${esc(L('nextModel'))}">›</button><p class="f-start" id="startLabel"></p></div>
       <div class="f-toolbar" role="toolbar">
         <button data-view="angle" aria-pressed="true">${L('perspective')}</button><button data-view="front">${L('front')}</button><button data-view="side">${L('side')}</button><button data-view="top">${L('top')}</button>
-        <button id="modeBtn" aria-pressed="${!state.sketch}">${L(state.sketch ? 'modeRender' : 'modeSketch')}</button><button id="structureBtn" aria-pressed="false">${L('structure')}</button><button id="photoBtn">${L('photo')} ↓</button>
+        <button id="modeBtn" aria-pressed="${!state.sketch}">${L(state.sketch ? 'modeRender' : 'modeSketch')}</button><button id="structureBtn" aria-pressed="false">${L('structure')}</button><button id="openBtn" aria-pressed="${!!state.openFronts}" ${state.design.family === 'storage' ? '' : 'hidden'}>${L('openFronts')}</button><button id="photoBtn">${L('photo')} ↓</button>
         <button data-zoom="1.12" aria-label="+">+</button><button data-zoom="0.9" aria-label="−">−</button>
         <button id="undoBtn">↶ ${L('undo')}</button><button id="redoBtn">↷ ${L('redo')}</button>
       </div>
@@ -159,10 +162,10 @@ function shell() {
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261017r').then(mod => { sceneModule = mod; const {createViewer} = mod;
+  import('./scene.js?v=20261017s').then(mod => { sceneModule = mod; const {createViewer} = mod;
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
-    else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(state.compiled, state.design.materials); if (state.room) showRoom(); }
+    else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(shown(), state.design.materials); if (state.room) showRoom(); }
   }).catch(() => { host.innerHTML = '<p class="f-nogl">WebGL</p>'; });
   bindShell(); shellNav();
   renderCaption(); renderPanel();
@@ -292,6 +295,7 @@ function bedroomPartsPanel(p) {
 }
 
 // ---- RİTMO case goods: layout (bays → cells) and front language --------------------------------------
+const CELL_COLORS = ['white', 'cream', 'sand', 'greige', 'taupe', 'mink', 'silver', 'anthracite', 'black', 'sage', 'olive', 'petrol', 'navy', 'iceBlue', 'dustyRose', 'coral', 'mustard', 'camel', 'chocolate', 'cherryRed', 'emerald'];
 const selCell = () => { const p = state.design.params, s = state.sel || {b: 0, c: 0}; const b = Math.min(s.b, p.bays.length - 1), c = Math.min(s.c, p.bays[b].cells.length - 1); return {b, c}; };
 function storagePartsPanel(p) {
   const k = state.design.kind, E = familyOf(state.design).mod.ENUMS;
@@ -312,18 +316,18 @@ function layoutEditor(p) {
   const out = [`<rect x="${-W / 2}" y="${-H}" width="${W}" height="${H - g.yB}" fill="#fff" stroke="#1f2420" stroke-width="${sw * 1.4}"/>`, `<line x1="${-W / 2 - pad}" y1="0" x2="${W / 2 + pad}" y2="0" stroke="#1f2420" stroke-width="${sw}"/>`];
   g.bays.forEach((bay, i) => bay.cells.forEach((cg, j) => {
     const c = p.bays[i].cells[j], x0 = bay.x0, x1 = bay.x1, y0 = cg.y0, y1 = cg.y1, w = x1 - x0, h = y1 - y0, on = i === sb && j === sc;
-    const fill = {door: '#f3eee4', glass: '#e8f0f2', drawers: '#ece5d8', open: '#fbfaf6', knee: 'none'}[c.type];
+    const fill = c.color && c.type !== 'open' && c.type !== 'knee' ? COLORS[c.color].hex : {door: '#f3eee4', glass: '#e8f0f2', mirror: '#dfe7ea', drawers: '#ece5d8', open: '#fbfaf6', knee: 'none'}[c.type];
     out.push(`<g data-cell="${i}:${j}" style="cursor:pointer"><rect x="${x0}" y="${-y1}" width="${w}" height="${h}" fill="${fill === 'none' ? 'rgba(0,0,0,0)' : fill}" stroke="#1f2420" stroke-width="${sw}" ${c.type === 'knee' ? `stroke-dasharray="${sw * 6} ${sw * 4}"` : ''}/>`);
     if (c.type === 'drawers') for (let m = 1; m < c.n; m++) out.push(`<line x1="${x0}" y1="${-(y0 + h * m / c.n)}" x2="${x1}" y2="${-(y0 + h * m / c.n)}" stroke="#1f2420" stroke-width="${sw}"/>`);
-    if (c.type === 'door' || c.type === 'glass') {
+    if (['door', 'glass', 'mirror'].includes(c.type)) {
       const leaves = leafCount(w + g.T), lw = w / leaves;
       for (let l = 0; l < leaves; l++) { const a = x0 + l * lw, side = leaves === 1 ? (p.bays.length === 1 || i % 2 === 0 ? 1 : -1) : l % 2 === 0 ? 1 : -1, hx = side > 0 ? a : a + lw, ox = side > 0 ? a + lw : a;
         if (l) out.push(`<line x1="${a}" y1="${-y0}" x2="${a}" y2="${-y1}" stroke="#1f2420" stroke-width="${sw}"/>`);
         out.push(`<polyline points="${hx},${-y1} ${ox},${-(y0 + h / 2)} ${hx},${-y0}" fill="none" stroke="#8b8577" stroke-width="${sw * 0.8}" stroke-dasharray="${sw * 5} ${sw * 3}"/>`); }
     }
-    if (['door', 'glass', 'open'].includes(c.type) && c.inside === 'shelves') for (let m = 1; m <= c.k; m++) out.push(`<line x1="${x0 + w * 0.06}" y1="${-(y0 + h * m / (c.k + 1))}" x2="${x1 - w * 0.06}" y2="${-(y0 + h * m / (c.k + 1))}" stroke="#b9b2a3" stroke-width="${sw * 0.8}"/>`);
+    if (['door', 'glass', 'mirror', 'open'].includes(c.type) && c.inside === 'shelves') for (let m = 1; m <= c.k; m++) out.push(`<line x1="${x0 + w * 0.06}" y1="${-(y0 + h * m / (c.k + 1))}" x2="${x1 - w * 0.06}" y2="${-(y0 + h * m / (c.k + 1))}" stroke="#b9b2a3" stroke-width="${sw * 0.8}"/>`);
     if (['hang', 'double', 'hangDrawers'].includes(c.inside) && c.type !== 'drawers') for (const yy of c.inside === 'double' ? [y1 - 60, y0 + h / 2 - 60] : [y1 - 60]) out.push(`<line x1="${x0 + w * 0.08}" y1="${-yy}" x2="${x1 - w * 0.08}" y2="${-yy}" stroke="#8b8577" stroke-width="${sw * 2}" stroke-linecap="round"/>`);
-    const label = c.type === 'drawers' ? `${c.n} × ${partName('cellType', 'drawers', state.lang)}` : partName('cellType', c.type, state.lang) + (['door', 'glass', 'open'].includes(c.type) && c.inside !== 'shelves' && c.inside !== 'empty' ? ` · ${partName('inside', c.inside, state.lang)}` : '');
+    const label = c.type === 'drawers' ? `${c.n} × ${partName('cellType', 'drawers', state.lang)}` : partName('cellType', c.type, state.lang) + (['door', 'glass', 'mirror', 'open'].includes(c.type) && c.inside !== 'shelves' && c.inside !== 'empty' ? ` · ${partName('inside', c.inside, state.lang)}` : '');
     if (h > fs * 1.4) out.push(`<text x="${(x0 + x1) / 2}" y="${-(y0 + h / 2) + fs * 0.35}" font-size="${Math.min(fs, w / Math.max(6, label.length * 0.62))}" text-anchor="middle" fill="#5c625a" style="pointer-events:none">${esc(label)}</text>`);
     if (on) out.push(`<rect x="${x0 + sw * 2}" y="${-y1 + sw * 2}" width="${w - sw * 4}" height="${h - sw * 4}" fill="none" stroke="#a24a2a" stroke-width="${sw * 3}" style="pointer-events:none"/>`);
     out.push('</g>');
@@ -336,11 +340,14 @@ function layoutEditor(p) {
   const interiorH = Math.round(g.top - (bay.cells[0].type === 'knee' ? 0 : g.yB + g.T)), maxCell = Math.max(120, interiorH - (bay.cells.length - 1) * (120 + g.T));
   const maxBay = Math.max(260, Math.round(W - (p.bays.length - 1) * 260 - (p.bays.length + 1) * g.T));
   const slider = (attr, label, lo, hi, v, autoAttr, isAuto) => `<div class="f-slider"><label>${esc(label)}${isAuto ? ` · <small>${L('auto')}</small>` : ''}</label><input type="range" ${attr} min="${lo}" max="${hi}" step="5" value="${Math.min(hi, Math.max(lo, v))}"><span class="f-num">${v} mm</span></div>${isAuto ? '' : `<div class="f-actions f-actions-tight"><button class="f-link" ${autoAttr}>${L('auto')}</button></div>`}`;
-  return `<section class="f-layoutbox"><h3>${L('layout')}</h3>${svg}<p class="f-note">${L('layoutHint')}</p>
+  const nb = p.bays.length;
+  return `<section class="f-layoutbox"><h3>${L('layout')}</h3>
+  <div class="f-seg">${L('bayCount')}: ${chip('data-baycount="' + Math.max(1, nb - 1) + '"', '−', false, nb <= 1 ? 'disabled' : '')}<b class="f-count">${nb}</b>${chip('data-baycount="' + Math.min(12, nb + 1) + '"', '+', false, nb >= 12 ? 'disabled' : '')}</div>${svg}<p class="f-note">${L('layoutHint')}</p>
   <h3>${L('bayN')} ${sb + 1} · ${L('cellType')} ${sc + 1}</h3>
   <div class="f-chips">${types.map(t => chip(`data-celltype="${t}"`, partName('cellType', t, state.lang), c.type === t)).join('')}</div>
   ${c.type === 'drawers' ? `<h3>${L('drawerCount')}</h3><div class="f-seg">${[1, 2, 3, 4, 5, 6].map(n => chip(`data-cellset="n" data-value="${n}"`, String(n), c.n === n)).join('')}</div>` : ''}
-  ${['door', 'glass', 'open'].includes(c.type) ? `<h3>${L('inside')}</h3><div class="f-chips">${insides.map(t => chip(`data-cellset="inside" data-value="${t}"`, partName('inside', t, state.lang), c.inside === t)).join('')}</div>
+  ${['door', 'drawers', 'mirror'].includes(c.type) ? `<h3>${L('cellColor')}</h3><div class="f-swatches"><button class="f-swatch f-swatch-none" data-cellcolor="" aria-pressed="${!c.color}" title="${esc(L('frontMat'))}">∅</button>${CELL_COLORS.map(k => `<button class="f-swatch" data-cellcolor="${k}" style="--c:${COLORS[k].hex}" aria-pressed="${c.color === k}" title="${esc(N(COLORS[k]))}"><span class="sr">${esc(N(COLORS[k]))}</span></button>`).join('')}</div>` : ''}
+  ${['door', 'glass', 'mirror', 'open'].includes(c.type) ? `<h3>${L('inside')}</h3><div class="f-chips">${insides.map(t => chip(`data-cellset="inside" data-value="${t}"`, partName('inside', t, state.lang), c.inside === t)).join('')}</div>
     ${c.inside === 'shelves' ? `<h3>${L('shelvesN')}</h3><div class="f-seg">${[0, 1, 2, 3, 4, 5, 6].map(n => chip(`data-cellset="k" data-value="${n}"`, String(n), c.k === n)).join('')}</div>` : ''}` : ''}
   ${bay.cells.length > 1 ? slider('data-cellmm', L('cellHeight'), 100, maxCell, cellH, 'data-cellauto="1"', !c.mm) : ''}
   ${p.bays.length > 1 ? slider('data-baymm', L('bayWidth'), 260, maxBay, bayW, 'data-bayauto="1"', !bay.mm) : ''}
@@ -350,7 +357,18 @@ function layoutEditor(p) {
 /** Apply a layout edit to the selected cell / bay. */
 function layoutAction(d) {
   const p = state.design.params, bays = structuredClone(p.bays), {b, c} = selCell(), bay = bays[b], cell = bay.cells[c];
-  if (d.celltype) { cell.type = d.celltype; if (cell.type === 'drawers' && !cell.n) cell.n = 2; if (cell.type === 'open' && !['shelves', 'empty'].includes(cell.inside)) cell.inside = 'shelves'; }
+  if (d.baycount) {
+    // Any number of bays (1–12): new bays copy the last one; widths are shared until the customer sets them.
+    const n = +d.baycount; while (bays.length < n) bays.push({...structuredClone(bays.at(-1)), mm: 0}); bays.length = n;
+    for (const x of bays) x.mm = 0;
+    // Wider pieces for many bays: keep a door about 450–600 mm.
+    // The piece grows or shrinks with the bays so each keeps its width (door about the same as before).
+    const [lo, hi] = familyOf(state.design).mod.rangeFor('width', p), width = Math.round(Math.min(hi, Math.max(lo, p.width / p.bays.length * n)) / 10) * 10;
+    state.sel = {b: Math.min(b, n - 1), c: 0};
+    setDesign(withParams({bays, width})); return true;
+  }
+  if (d.cellcolor !== undefined) cell.color = d.cellcolor || null;
+  else if (d.celltype) { cell.type = d.celltype; if (cell.type === 'drawers' && !cell.n) cell.n = 2; if (cell.type === 'open' && !['shelves', 'empty'].includes(cell.inside)) cell.inside = 'shelves'; }
   else if (d.cellset) cell[d.cellset] = d.cellset === 'inside' ? d.value : +d.value;
   else if (d.cellauto) cell.mm = 0;
   else if (d.bayauto) bay.mm = 0;
@@ -628,7 +646,7 @@ function drawDeliverables() {
 // the whole project to the designer.
 const itemName = d => d.family === 'bedroom' ? L('bedroomSet') : L(d.family === 'seating' ? FAMILIES.seating.mod.compile({...d.params, kind: d.kind}).meta.kind : d.kind);
 const itemDims = d => { const o = compileOf(d).meta.overall; return `${o.width} × ${o.depth} × ${o.height} mm`; };
-const projectKey = () => state.project.items.map(i => designKey(i.design)).join('|');
+const projectKey = () => state.project.items.map(i => designKey(i.design) + '×' + (i.qty || 1)).join('|');
 function saveProject() { store.set('aura-forma-project', state.project); store.set('aura-forma-editing', state.editing); }
 function addToProject() {
   const items = state.project.items, d = structuredClone(state.design), i = items.findIndex(x => x.id === state.editing);
@@ -673,7 +691,8 @@ function projectPanel() {
   const next = state.justAdded && !changed ? `<section class="f-next"><h3>${L('whatNext')}</h3>
     ${others.map(k => `<div class="f-nextrow"><b>${esc(L(k))}</b><span><button class="f-link" data-act="same" data-kind="${k}">${L('withThisDesign')}</button><button class="f-link" data-act="fresh" data-kind="${k}">${L('designSeparately')}</button></span></div>`).join('')}
     <div class="f-nextrow"><b>${L('anotherProduct')}</b><span>${FAMILY_NAV.map(([f, k]) => `<button class="f-link" data-act="family" data-family="${f}">${esc(L(k))}</button>`).join('')}</span></div></section>` : '';
-  const list = items.length ? `<h3>${L('projectItems')} · ${items.length}</h3><ol class="f-items">${items.map((it, n) => `<li ${it.id === state.editing ? 'aria-current="true"' : ''}><span class="f-n">${String(n + 1).padStart(2, '0')}</span><span><b>${esc(itemName(it.design))}</b><small>${esc(styleName(it.design.style, state.lang))} · ${esc(itemDims(it.design))}</small></span><span class="f-itemacts"><button class="f-link" data-act="edit" data-item="${it.id}">${L('edit')}</button><button class="f-link" data-act="remove" data-item="${it.id}">${L('remove')}</button></span></li>`).join('')}</ol>` : `<p class="f-note">${L('projectEmpty')}</p>`;
+  const list = items.length ? `<h3>${L('projectItems')} · ${items.length}</h3><ol class="f-items">${items.map((it, n) => `<li ${it.id === state.editing ? 'aria-current="true"' : ''}><span class="f-n">${String(n + 1).padStart(2, '0')}</span><span><b>${esc(itemName(it.design))}</b><small>${esc(styleName(it.design.style, state.lang))} · ${esc(itemDims(it.design))}</small>
+    <span class="f-qty">${L('quantity')} <button class="f-link" data-act="qty" data-item="${it.id}" data-d="-1" ${(it.qty || 1) <= 1 ? 'disabled' : ''}>−</button><b>${it.qty || 1}</b><button class="f-link" data-act="qty" data-item="${it.id}" data-d="1">+</button></span></span><span class="f-itemacts"><button class="f-link" data-act="edit" data-item="${it.id}">${L('edit')}</button><button class="f-link" data-act="remove" data-item="${it.id}">${L('remove')}</button></span></li>`).join('')}</ol>` : `<p class="f-note">${L('projectEmpty')}</p>`;
   const room = items.length ? roomSection() : '';
   const sent = state.sent, sentChanged = sent && sent.key !== projectKey();
   const send = `<h2 class="f-h2-sub">${L('sendDesigner')}</h2><p class="f-lead">${L('sendIntro')}</p>
@@ -726,11 +745,12 @@ function projectAction(el) {
   else if (a === 'fresh') { const list = startList(state.design.family, el.dataset.kind), e = list.find(x => x.style !== state.design.style) || list[0]; startNew(e ? startDesign(e, state.design.family, el.dataset.kind) : designForKind(state.design, el.dataset.kind), `${L(el.dataset.kind)} · ${L('designSeparately')}`); }
   else if (a === 'family') { state.editing = null; state.justAdded = false; state.room = null; saveProject(); state.tab = 'parts'; setSketch(true); switchFamily(el.dataset.family); }
   else if (a === 'edit') { const it = items.find(i => i.id === el.dataset.item); if (it) { state.editing = it.id; state.justAdded = false; state.room = null; saveProject(); state.tab = 'parts'; setSketch(true); setDesign(structuredClone(it.design)); } }
+  else if (a === 'qty') { const it = items.find(i => i.id === el.dataset.item); if (it) { it.qty = Math.max(1, Math.min(999, (it.qty || 1) + +el.dataset.d)); saveProject(); renderPanel(); } }
   else if (a === 'remove') { state.project.items = items.filter(i => i.id !== el.dataset.item); if (state.editing === el.dataset.item) state.editing = null; saveProject(); if (state.room) showRoom(); renderPanel(); }
   else if (a === 'roomtype') { state.room = {type: el.dataset.type, layout: 0, allow: state.room?.allow || []}; setSketch(false); showRoom(); renderPanel(); }
   else if (a === 'allow') { state.room ??= {type: suggestRoom(items), layout: 0, allow: []}; state.room.allow.push(el.dataset.item); setSketch(false); showRoom(); renderPanel(); }
   else if (a === 'room') { state.room = state.room ? {...state.room, layout: (state.room.layout + 1) % 3} : {type: suggestRoom(items), layout: 0, allow: []}; setSketch(false); showRoom(); renderPanel(); }
-  else if (a === 'leaveRoom') { delete document.body.dataset.room; state.room = null; viewer?.setRoom(null); viewer?.setDesign(state.compiled, state.design.materials); renderCaption(); renderPanel(); }
+  else if (a === 'leaveRoom') { delete document.body.dataset.room; state.room = null; viewer?.setRoom(null); viewer?.setDesign(shown(), state.design.materials); renderCaption(); renderPanel(); }
 }
 
 // ---- Account ------------------------------------------------------------------------------------------
@@ -805,19 +825,19 @@ async function projectPackage() {
       const link = await designLink(it.design, state.lang); links.push(link);
       state.design = it.design; state.compiled = compileOf(it.design); state.drawingCache = null; state.sheetLink = link;
       const dv = deliverables(), dir = `${String(n + 1).padStart(2, '0')}-${it.design.family}-${it.design.kind}/`, title = `AURA · ${itemName(it.design)}`;
-      files.push({name: dir + 'design.json', data: JSON.stringify({schema: SCHEMA, link, design: it.design, derived: state.compiled.meta, issues: issuesOf(it.design, state.compiled), bom: dv.bom}, null, 2)});
+      files.push({name: dir + 'design.json', data: JSON.stringify({schema: SCHEMA, link, quantity: it.qty || 1, design: it.design, derived: state.compiled.meta, issues: issuesOf(it.design, state.compiled), bom: dv.bom}, null, 2)});
       files.push({name: dir + 'drawings.svg', data: dv.sheet.svg}, {name: dir + 'drawings.dxf', data: drawingDxf(state.compiled)}, {name: dir + 'parts.csv', data: bomCsv(dv.bom)});
       files.push({name: dir + 'open-design.html', data: linkPage(link, title)}, {name: dir + 'open-design.url', data: urlShortcut(link)});
       const url = sceneModule?.renderThumbnail(state.compiled, it.design.materials, {width: 1600, height: 1000});
       if (url) { const j = await dataUrlJpeg(url); pages.push(j); files.push({name: dir + 'render.jpg', data: j.data}); }
       pages.push({...await svgToJpeg(dv.sheet.svg), link: {url: link, rect: sheetLink}});
-      summary.push(`${n + 1}. ${itemName(it.design)} — ${specRows(dv.bom).map(r => r.join(': ')).join(' | ')}\n   ${link}`);
+      summary.push(`${n + 1}. ${itemName(it.design)} × ${it.qty || 1} — ${specRows(dv.bom).map(r => r.join(': ')).join(' | ')}\n   ${link}`);
     }
   } finally { state.design = keep.design; state.compiled = keep.compiled; state.drawingCache = keep.cache; state.sheetLink = null; }
-  files.push({name: 'project.json', data: JSON.stringify({schema: SCHEMA, created: new Date().toISOString(), language: state.lang, link: pLink, items: items.map((i, n) => ({id: i.id, family: i.design.family, kind: i.design.kind, style: i.design.style, link: links[n]})), room: state.room, note: 'Concept project generated by AURA Forma. Requires review by an AURA designer before production.'}, null, 2)});
+  files.push({name: 'project.json', data: JSON.stringify({schema: SCHEMA, created: new Date().toISOString(), language: state.lang, link: pLink, items: items.map((i, n) => ({id: i.id, qty: i.qty || 1, family: i.design.family, kind: i.design.kind, style: i.design.style, link: links[n]})), room: state.room, note: 'Concept project generated by AURA Forma. Requires review by an AURA designer before production.'}, null, 2)});
   files.push({name: 'drawings.pdf', data: jpegPdf(pages)});
   files.push({name: 'open-project.html', data: linkPage(pLink, `AURA · ${items.length} ${L('pieces')}`)}, {name: 'open-project.url', data: urlShortcut(pLink)});
-  files.push({name: 'README.txt', data: `AURA Forma project (${items.length} products)\n\nOpen the whole project in the studio:\n${pLink}\n\n${items.map((it, n) => `${n + 1}. ${itemName(it.design)}\n   ${links[n]}`).join('\n')}\n\nopen-project.html     opens the whole project in the studio (double-click)\nroom.jpg              the products placed in a room (if shown)\nNN-family-kind/       per product: design.json, drawings.svg/.dxf, parts.csv (cut list), render.jpg, open-design.html\ndrawings.pdf          room view, renders and A3 drawing sheets of every product (the link on each sheet opens that design)\nproject.json          list of products, links and the room layout\n\nConcept design. Dimensions, structure and build suggestions must be checked by the designer before production.\n`});
+  files.push({name: 'README.txt', data: `AURA Forma project (${items.length} products)\n\nOpen the whole project in the studio:\n${pLink}\n\n${items.map((it, n) => `${n + 1}. ${itemName(it.design)} × ${it.qty || 1}\n   ${links[n]}`).join('\n')}\n\nopen-project.html     opens the whole project in the studio (double-click)\nroom.jpg              the products placed in a room (if shown)\nNN-family-kind/       per product: design.json, drawings.svg/.dxf, parts.csv (cut list), render.jpg, open-design.html\ndrawings.pdf          room view, renders and A3 drawing sheets of every product (the link on each sheet opens that design)\nproject.json          list of products, links and the room layout\n\nConcept design. Dimensions, structure and build suggestions must be checked by the designer before production.\n`});
   return {files, summary: `${summary.join('\n')}\n\n${L('designLink')}: ${pLink}`};
 }
 async function downloadAs(kind) {
@@ -993,11 +1013,12 @@ function bindShell() {
   $('#families').onclick = e => { const b = e.target.closest('[data-family]'); if (b && b.dataset.family !== state.design.family) switchFamily(b.dataset.family); };
   for (const b of document.querySelectorAll('[data-view]')) b.onclick = () => { viewer?.view(b.dataset.view); markView(b.dataset.view); };
   for (const b of document.querySelectorAll('[data-zoom]')) b.onclick = () => viewer?.zoom(+b.dataset.zoom);
-  $('#structureBtn').onclick = toggleStructure; $('#photoBtn').onclick = savePhoto;
+  $('#structureBtn').onclick = toggleStructure;
+  $('#openBtn').onclick = () => { state.openFronts = !state.openFronts; $('#openBtn').setAttribute('aria-pressed', String(state.openFronts)); viewer?.setDesign(shown(), state.design.materials); }; $('#photoBtn').onclick = savePhoto;
   $('#undoBtn').onclick = undo; $('#redoBtn').onclick = redo;
   $('#commandForm').onsubmit = e => { e.preventDefault(); runCommand($('#command').value); };
   $('#micBtn').onclick = listen;
-  for (const b of document.querySelectorAll('[data-tab]')) b.onclick = () => { state.tab = b.dataset.tab; if (state.room && state.tab !== 'deliver') { state.room = null; delete document.body.dataset.room; viewer?.setDesign(state.compiled, state.design.materials); } setSketch(!['material', 'deliver'].includes(state.tab)); renderPanel(); };
+  for (const b of document.querySelectorAll('[data-tab]')) b.onclick = () => { state.tab = b.dataset.tab; if (state.room && state.tab !== 'deliver') { state.room = null; delete document.body.dataset.room; viewer?.setDesign(shown(), state.design.materials); } setSketch(!['material', 'deliver'].includes(state.tab)); renderPanel(); };
   $('#modeBtn').onclick = () => setSketch(!state.sketch);
   for (const b of document.querySelectorAll('[data-step]')) b.onclick = () => stepStart(+b.dataset.step);
 
@@ -1008,7 +1029,7 @@ function bindShell() {
     const el = e.target.closest('button, [data-load]'); if (!el) return;
     const d = el.dataset;
     if (d.act) { projectAction(el); return; }
-    if (isStorage() && (d.celltype || d.cellset || d.cellop || d.bayop || d.cellauto || d.bayauto)) { layoutAction(d); return; }
+    if (isStorage() && (d.baycount || d.cellcolor !== undefined || d.celltype || d.cellset || d.cellop || d.bayop || d.cellauto || d.bayauto)) { layoutAction(d); return; }
     if (d.frontSame) { setDesign({...state.design, materials: {...state.design.materials, front: {...state.design.materials.case}}}); return; }
     if (isStorage() && d.mat?.startsWith('case.') && sameFront(state.design.materials)) { const [, key] = d.mat.split('.'); const c = {...state.design.materials.case, [key]: d.value}; setDesign({...state.design, materials: {...state.design.materials, case: c, front: {...c}}}); return; }
     if (isStorage() && d.color?.startsWith('case.') && sameFront(state.design.materials)) { const [, key] = d.color.split('.'); const c = {...state.design.materials.case, [key]: d.value}; setDesign({...state.design, materials: {...state.design.materials, case: c, front: {...c}}}); return; }
@@ -1039,7 +1060,7 @@ function bindShell() {
     const el = e.target; if (!el.dataset.param) return;
     const num = el.parentElement.querySelector('[data-num]'); if (num) num.value = el.value;
     cancelAnimationFrame(pending);
-    pending = requestAnimationFrame(() => { const next = normalizeDesign(withParams({[el.dataset.param]: +el.value})); state.compiled = compileOf(next); viewer?.setDesign(state.compiled, next.materials); });
+    pending = requestAnimationFrame(() => { const next = normalizeDesign(withParams({[el.dataset.param]: +el.value})); state.compiled = compileOf(next); viewer?.setDesign(shown(next), next.materials); });
   });
   panel.addEventListener('submit', async e => {
     if (e.target.id !== 'sendForm') return; e.preventDefault();
@@ -1133,7 +1154,7 @@ const openFromLink = () => readLink().then(r => {
   if (r.design) { setDesign(normalizeDesign(r.design)); feedback(L('linkOpened')); return; }
   const have = new Set(state.project.items.map(i => designKey(i.design)));
   let next = 1 + Math.max(0, ...state.project.items.map(x => +x.id.slice(1) || 0));
-  const added = r.items.map(i => ({id: 'U' + next++, design: normalizeDesign(i.design)})).filter(i => !have.has(designKey(i.design)));
+  const added = r.items.map(i => ({id: 'U' + next++, qty: i.qty || 1, design: normalizeDesign(i.design)})).filter(i => !have.has(designKey(i.design)));
   state.project.items.push(...added); state.editing = added[0]?.id || null; saveProject();
   if (r.items[0]) setDesign(normalizeDesign(r.items[0].design));
   feedback(L('projectOpened'));

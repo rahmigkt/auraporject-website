@@ -15,7 +15,8 @@ import {topOutline, roundedRectLoop} from './mesh.js';
 import {legProfile} from './profiles.js';
 import {linePart} from './lines.js';
 import {headOutline, meshVolume} from './bedroom.js';
-import {WOODS} from './catalog.js';
+import {WOODS, COLORS} from './catalog.js';
+const COLOR_KEYS = Object.keys(COLORS);
 
 export const FAMILY = 'storage';
 export const KINDS = {wardrobe: {}, nightstand: {}, dresser: {}, vanity: {}};
@@ -26,13 +27,13 @@ const BAR_PITCH = [96, 128, 160, 192, 256, 320, 480, 640];
 
 /** Outer size limits per piece. */
 export const SIZE = {
-  wardrobe: {width: [600, 3600], height: [1800, 2700], depth: [520, 700]},
+  wardrobe: {width: [600, 6000], height: [1800, 2700], depth: [520, 700]},
   nightstand: {width: [350, 800], height: [350, 750], depth: [300, 500]},
   dresser: {width: [600, 2000], height: [650, 1300], depth: [380, 560]},
   vanity: {width: [800, 1600], height: [720, 790], depth: [380, 560]}
 };
 export const RANGES = {
-  width: [350, 3600, 10], height: [350, 2700, 10], depth: [300, 700, 5],
+  width: [350, 6000, 10], height: [350, 2700, 10], depth: [300, 700, 5],
   solidThickness: [20, 30, 1], plinthHeight: [40, 150, 5], legHeight: [60, 450, 5], legSize: [20, 60, 1],
   topThickness: [18, 40, 1], topOverhang: [0, 30, 1], fluteWidth: [12, 60, 1], mirrorHeight: [400, 1200, 10], mirrorWidth: [0.3, 1, 0.05]
 };
@@ -49,11 +50,11 @@ export const ENUMS = {
   topType: ['flush', 'slab'],
   caseEdge: ['square', 'eased', 'bullnose', 'chamfer'],
   caseLine: ['none', 'groove', 'inlay'],
-  mirror: ['none', 'rect', 'arch', 'round', 'capsule'],
+  mirror: ['none', 'rect', 'rounded', 'arch', 'round', 'oval', 'capsule', 'scallop', 'stepped', 'organic'],
   // Set from the chosen material (solid wood → solid panels), not by hand.
   board: ['mdf', 'solid'], frontBoard: ['mdf', 'solid']
 };
-export const CELL_TYPES = ['door', 'drawers', 'open', 'glass', 'knee'];
+export const CELL_TYPES = ['door', 'drawers', 'open', 'glass', 'mirror', 'knee'];
 export const INSIDE = ['shelves', 'hang', 'double', 'hangDrawers', 'empty'];
 
 // ---- Layouts --------------------------------------------------------------------------------------------
@@ -82,14 +83,14 @@ export const DEFAULTS = defaultsFor('wardrobe');
 const num = (v, lo, hi, d, step = 0) => { const n = Number(v); if (!Number.isFinite(n)) return d; const c = clamp(n, lo, hi); return step ? Math.round(c / step) * step : c; };
 /** Clean a bay list (Ritmo: 1–8 bays, 1–8 cells per bay). Ids follow position, so they are stable for a layout. */
 export function normalizeBays(raw, kind) {
-  const list = Array.isArray(raw) && raw.length ? raw.slice(0, 8) : LAYOUTS[kind]();
+  const list = Array.isArray(raw) && raw.length ? raw.slice(0, 12) : LAYOUTS[kind]();
   return list.map((b, i) => {
     const cells = (Array.isArray(b?.cells) && b.cells.length ? b.cells.slice(0, 8) : [C(kind === 'wardrobe' ? 'door' : 'drawers')]).map((c, j) => {
       let type = CELL_TYPES.includes(c?.type) ? c.type : 'open';
       if (type === 'knee' && (kind !== 'vanity' || j !== 0)) type = 'open';
       let inside = INSIDE.includes(c?.inside) ? c.inside : 'shelves';
       if (kind !== 'wardrobe' && ['hang', 'double', 'hangDrawers'].includes(inside)) inside = 'shelves';
-      return {id: `b${i + 1}c${j + 1}`, type, h: num(c?.h, 0.2, 8, 1), mm: c?.mm ? num(c.mm, 60, 2600, 0, 1) : 0, n: Math.round(num(c?.n, 1, 6, 1)), inside, k: Math.round(num(c?.k, 0, 8, 0))};
+      return {id: `b${i + 1}c${j + 1}`, color: COLOR_KEYS.includes(c?.color) ? c.color : null, type, h: num(c?.h, 0.2, 8, 1), mm: c?.mm ? num(c.mm, 60, 2600, 0, 1) : 0, n: Math.round(num(c?.n, 1, 6, 1)), inside, k: Math.round(num(c?.k, 0, 8, 0))};
     });
     return {id: `b${i + 1}`, w: num(b?.w, 0.3, 4, 1), mm: b?.mm ? num(b.mm, 150, 2000, 0, 1) : 0, cells};
   });
@@ -205,7 +206,7 @@ export function compile(raw) {
   }
 
   // Bays: back panel, cells, fixed shelves, fronts and interior.
-  const frontsOf = [], grid = []; // fronts for line details; grid for the layout editor
+  const frontsOf = [], grid = [], opens = []; // fronts for line details; grid for the layout editor
   p.bays.forEach((bay, i) => {
     const b = bx[i], knee = kneeBays[i];
     const yStart = knee ? 0 : yB + T, cells = yLayout(bay, yStart, yIn1, T);
@@ -230,16 +231,19 @@ export function compile(raw) {
         f = {x0: xl + rv / 2, x1: xr - rv / 2, y0: fy0, y1: fy1, z0: zF + RULES.bumper, z1: zF + RULES.bumper + TF};
       }
       const innerZ1 = inset ? zF - TF - 2 : zF; // front of the usable interior
-      if (!sliding && (c.type === 'door' || c.type === 'glass')) {
+      const tint = k0 => { if (c.color) for (const q of parts.slice(k0)) if (q.mat === 'front') q.mat = 'lac:' + c.color; };
+      if (!sliding && ['door', 'glass', 'mirror'].includes(c.type)) {
         const n = leafCount(f.x1 - f.x0), lw = (f.x1 - f.x0 - (n - 1) * rv) / n;
         for (let l = 0; l < n; l++) {
           const lx0 = f.x0 + l * (lw + rv), side = n === 1 ? (p.bays.length === 1 || i % 2 === 0 ? 1 : -1) : l % 2 === 0 ? 1 : -1; // handle side
           const leaf = {x0: lx0, x1: lx0 + lw, y0: f.y0, y1: f.y1, z0: f.z0, z1: f.z1};
-          frontFace(parts, `${id}-door${l + 1}`, 'door', leaf, p, c.type === 'glass' ? 'glass' : p.frontStyle, frontsOf);
+          const k0 = parts.length;
+          frontFace(parts, `${id}-door${l + 1}`, 'door', leaf, p, c.type === 'door' ? p.frontStyle : c.type, frontsOf); tint(k0);
           pull(parts, `${id}-door${l + 1}`, leaf, p, 'door', side, counts);
           const hh = leaf.y1 - leaf.y0, nh = hh <= 900 ? 2 : hh <= 1600 ? 3 : hh <= 2000 ? 4 : 5, hx = side > 0 ? leaf.x0 + 22 : leaf.x1 - 22;
           for (let q = 0; q < nh; q++) { const hy = nh === 1 ? (leaf.y0 + leaf.y1) / 2 : leaf.y0 + 100 + q * (hh - 200) / (nh - 1); pnl(parts, `${id}-door${l + 1}-hinge${q + 1}`, 'hinge', 'metal', [hx - 17.5, hx + 17.5], [hy - 17.5, hy + 17.5], [leaf.z0 - 12, leaf.z0], {internal: true, nocut: true}, 4); }
           counts.leaves++; counts.hinges += nh; info.leafH.push(hh); info.leafW.push(lw);
+          opens.push({door: true, parts: parts.slice(k0), px: side > 0 ? leaf.x0 : leaf.x1, pz: leaf.z0, sign: side > 0 ? -1 : 1});
         }
       }
       if (c.type === 'drawers') {
@@ -248,12 +252,14 @@ export function compile(raw) {
         info.runner = Math.max(info.runner, runner);
         for (let m = 0; m < n; m++) {
           const dy0 = f.y0 + m * (fh + rv), df = {x0: f.x0, x1: f.x1, y0: dy0, y1: dy0 + fh, z0: f.z0, z1: f.z1}, did = `${id}-drawer${m + 1}`;
-          if (!sliding) { frontFace(parts, did, 'drawer-front', df, p, p.frontStyle, frontsOf); pull(parts, did, df, p, 'drawer', 0, counts); info.drawerFronts.push(fh); info.drawerWidths.push(df.x1 - df.x0); }
+          const k0 = parts.length;
+          if (!sliding) { frontFace(parts, did, 'drawer-front', df, p, p.frontStyle, frontsOf); tint(k0); pull(parts, did, df, p, 'drawer', 0, counts); info.drawerFronts.push(fh); info.drawerWidths.push(df.x1 - df.x0); }
           drawerBox(parts, did, b.x0, b.x1, y0 + m * pitch, pitch, innerZ1, runner, counts);
+          if (!sliding) opens.push({drawer: true, parts: parts.slice(k0).filter(q => q.role !== 'runner'), dz: runner * 0.6});
         }
         if (sliding) for (let m = 0; m < n; m++) pnl(parts, `${id}-ifront${m + 1}`, 'inner-front', 'case', [b.x0 + 2, b.x1 - 2], [y0 + m * pitch + 2, y0 + (m + 1) * pitch - 2], [innerZ1 - RULES.mdf, innerZ1], {internal: true, band: 'four'});
       }
-      if (['door', 'glass', 'open'].includes(c.type) || (sliding && c.type !== 'drawers')) interior(parts, id, c, b.x0, b.x1, y0, y1, zBackFace, innerZ1, T, p, counts, info, c.type === 'door' || (sliding && c.type !== 'open'));
+      if (['door', 'glass', 'mirror', 'open'].includes(c.type) || (sliding && c.type !== 'drawers')) interior(parts, id, c, b.x0, b.x1, y0, y1, zBackFace, innerZ1, T, p, counts, info, ['door', 'mirror'].includes(c.type) || (sliding && c.type !== 'open'));
     });
   });
 
@@ -302,16 +308,25 @@ export function compile(raw) {
   // Mirror (chest, vanity): stands on the top against the wall.
   let mirrorTop = H;
   if (p.mirror !== 'none') {
-    const mw = W * p.mirrorWidth, mh = p.mirrorHeight, shape = {rect: 'rect', arch: 'arch', round: 'capsule', capsule: 'capsule'}[p.mirror];
-    const ow = p.mirror === 'round' ? Math.min(mw, mh) : mw, oh = p.mirror === 'round' ? ow : mh;
-    const outline = headOutline(shape, ow, oh, {r: p.mirror === 'arch' ? ow * 0.5 : 20, base: H});
-    parts.push(part('mirror-frame', 'mirror-frame', 'front', {fn: 'slab', outline, t: 25, profile: ['eased', 25, 3]}, [0, 0, zB + 30 + 25], [-Math.PI / 2, 0, 0], {cut: [ow, oh, 25]}));
-    parts.push(part('mirror-glass', 'mirror', 'mirror', {fn: 'slab', outline: headOutline(shape, ow - 56, oh - 56, {r: p.mirror === 'arch' ? (ow - 56) * 0.5 : 8, base: H + 28}), t: 5, profile: ['square', 5, 0]}, [0, 0, zB + 30 + 25 + 2], [-Math.PI / 2, 0, 0], {cut: [ow - 56, oh - 56, 5], glass: true}));
+    const mw = W * p.mirrorWidth, mh = p.mirrorHeight, round = p.mirror === 'round';
+    const ow = round ? Math.min(mw, mh) : mw, oh = round ? ow : mh;
+    parts.push(part('mirror-frame', 'mirror-frame', 'front', {fn: 'slab', outline: mirrorOutline(p.mirror, ow, oh, H), t: 25, profile: ['eased', 25, 3]}, [0, 0, zB + 30 + 25], [-Math.PI / 2, 0, 0], {cut: [ow, oh, 25]}));
+    parts.push(part('mirror-glass', 'mirror', 'mirror', {fn: 'slab', outline: mirrorOutline(p.mirror, ow - 56, oh - 56, H + 28), t: 5, profile: ['square', 5, 0]}, [0, 0, zB + 30 + 25 + 2], [-Math.PI / 2, 0, 0], {cut: [ow - 56, oh - 56, 5], glass: true}));
     mirrorTop = H + oh;
   }
 
+  // Opened view (viewer only): doors swing 100° on their hinges, drawers come out on their runners.
+  if (raw.openFronts) for (const o of opens) for (const q of o.parts) {
+    q.internal = false;
+    if (o.drawer) { if (q.geom.points && !q.pos.some(Boolean)) q.geom = {...q.geom, points: q.geom.points.map(([x, y, z]) => [x, y, z + o.dz])}; else q.pos = [q.pos[0], q.pos[1], q.pos[2] + o.dz]; continue; }
+    const th = o.sign * 100 * Math.PI / 180, c = Math.cos(th), sn = Math.sin(th);
+    const rot = ([x, y, z]) => { const dx = x - o.px, dz = z - o.pz; return [r1(o.px + dx * c + dz * sn), y, r1(o.pz - dx * sn + dz * c)]; };
+    if (q.geom.points && !q.pos.some(Boolean)) { q.geom = {...q.geom, points: q.geom.points.map(rot)}; continue; }
+    q.pos = rot(q.pos);
+    q.rot = Math.abs(q.rot[0] - Math.PI / 2) < 1e-6 ? [q.rot[0], q.rot[1], q.rot[2] - th] : [q.rot[0], q.rot[1] + th, q.rot[2]];
+  }
   // Line details on plain fronts: a shadow groove or a metal inlay inset from the edge.
-  if (p.caseLine !== 'none' && p.frontStyle === 'flat') for (const f of frontsOf) {
+  if (p.caseLine !== 'none' && p.frontStyle === 'flat' && !raw.openFronts) for (const f of frontsOf) {
     const m = clamp(Math.min(f.x1 - f.x0, f.y1 - f.y0) * 0.12, 12, 40), zl = f.z1 - (p.caseLine === 'groove' ? 0.7 : 1.0);
     parts.push(linePart(`${f.id}-line`, p.caseLine, roundedRectLoop(f.x1 - f.x0 - 2 * m, f.y1 - f.y0 - 2 * m, 2, (f.x0 + f.x1) / 2, (f.y0 + f.y1) / 2, 2).map(([x, y]) => [x, y, zl])));
   }
@@ -328,6 +343,20 @@ export function compile(raw) {
   return {family: FAMILY, params: p, parts, meta, dims: dims(p, meta, bx, {H, W, D, yB, T, topT}), sectionX, detail: slab ? {kind: 'edge', title: 'edge', T: topT, profile: [p.caseEdge, topT, Math.min(8, topT * 0.4)]} : null};
 }
 
+/** Mirror outlines (x across, y up from base): straight, soft, arched, round, oval, capsule, scalloped, stepped, organic. */
+export function mirrorOutline(shape, w, h, base) {
+  if (shape === 'oval' || shape === 'organic' || shape === 'round') {
+    const pts = [], n = 96;
+    for (let k = 0; k < n; k++) {
+      const t = k / n * Math.PI * 2, wob = shape === 'organic' ? 1 + 0.07 * Math.sin(3 * t + 0.6) + 0.04 * Math.sin(5 * t + 1.9) : 1;
+      pts.push([Math.cos(t) * w / 2 * wob, base + h / 2 + Math.sin(t) * h / 2 * (shape === 'organic' ? 1 + 0.05 * Math.cos(2 * t) : 1)]);
+    }
+    return pts;
+  }
+  const map = {rect: ['rect', 8], rounded: ['rounded', Math.min(w, h) * 0.18], arch: ['arch', w * 0.5], capsule: ['capsule', 0], scallop: ['scallop', 0], stepped: ['stepped', 8]}[shape] || ['rect', 8];
+  return headOutline(map[0], w, h, {r: map[1], scallops: 3, base});
+}
+
 /** One front (door leaf, drawer front, sliding leaf) with its face style. Cut size is always the whole front. */
 function frontFace(parts, id, role, f, p, style, list) {
   const w = f.x1 - f.x0, h = f.y1 - f.y0, d = f.z1 - f.z0, x = (f.x0 + f.x1) / 2, y = (f.y0 + f.y1) / 2, er = EDGE_R[p.caseEdge] || 2;
@@ -340,6 +369,11 @@ function frontFace(parts, id, role, f, p, style, list) {
     }
     pnl(parts, id, role, mat, [f.x0 + s - 1, f.x1 - s + 1], [f.y0 + s - 1, f.y1 - s + 1], [f.z0 + 2, f.z0 + 2 + innerD], {...cut, inner}, 0.5);
   };
+  if (style === 'mirror') { // mirrored door: the leaf with a 5 mm mirror bonded inside a 40 mm margin
+    pnl(parts, id, role, 'front', [f.x0, f.x1], [f.y0, f.y1], [f.z0, f.z1], {...cut, inner: 'mirror'}, er);
+    pnl(parts, `${id}-mirror`, 'mirror', 'mirror', [f.x0 + 40, f.x1 - 40], [f.y0 + 40, f.y1 - 40], [f.z1, f.z1 + 5], {cut: [w - 80, h - 80, 5]}, 0.5);
+    return;
+  }
   if (style === 'glass') { const s = clamp(Math.min(w, h) * 0.16, 45, 70); frame(s, 'glass', 'glass', 4); return; }
   if (style === 'shaker' && Math.min(w, h) >= 150) { const s = clamp(Math.min(w, h) * 0.16, 40, 75); frame(s, 'panel', 'front', d - 8); return; }
   if (style === 'cane' && Math.min(w, h) >= 150) { const s = clamp(Math.min(w, h) * 0.14, 40, 60); frame(s, 'cane', 'cane', 3); return; }
@@ -470,7 +504,7 @@ export function weights(compiled, materials, buildMesh) {
     let vol;
     if (q.geom.fn === 'cushion' && q.role !== 'pull') vol = q.geom.w * q.geom.h * q.geom.d;
     else vol = meshVolume(buildMesh(q));
-    const d = q.mat === 'case' ? (p.board === 'solid' ? solid : DENS.mdf) : q.mat === 'front' ? (p.frontBoard === 'solid' ? solidF : DENS.mdf) : q.mat === 'wood' ? legs : q.mat === 'metal' ? (['rail', 'track', 'runner', 'wall-rail'].includes(q.role) ? DENS.metal * 0.12 : DENS.metal * (q.role === 'pull' ? 0.5 : 0.25)) : DENS[q.mat] ?? 600;
+    const d = q.mat.startsWith('lac:') ? DENS.mdf : q.mat === 'case' ? (p.board === 'solid' ? solid : DENS.mdf) : q.mat === 'front' ? (p.frontBoard === 'solid' ? solidF : DENS.mdf) : q.mat === 'wood' ? legs : q.mat === 'metal' ? (['rail', 'track', 'runner', 'wall-rail'].includes(q.role) ? DENS.metal * 0.12 : DENS.metal * (q.role === 'pull' ? 0.5 : 0.25)) : DENS[q.mat] ?? 600;
     kg += vol / 1e9 * d;
   }
   return +kg.toFixed(1);
@@ -535,7 +569,7 @@ export function storageBom(compiled, materials, lang, buildMesh, text) {
   const order = Object.keys(ROLE), rows = [];
   for (const g of [...groups.values()].sort((a, b) => (order.indexOf(a.role) - order.indexOf(b.role)) || b.size[0] - a.size[0])) {
     const n = ROLE[g.role] || [g.role, g.role, '', ''], band = BAND[g.band];
-    const name = g.inner === 'glass' ? ['Kapak (cam çerçeve)', 'Door (glazed frame)'] : g.inner === 'cane' ? ['Kapak (hasır çerçeve)', 'Door (cane frame)'] : g.inner === 'panel' ? [n[0] + ' (çerçeveli)', n[1] + ' (framed)'] : [n[0], n[1]];
+    const name = g.inner === 'mirror' ? ['Aynalı kapak', 'Mirrored door'] : g.inner === 'glass' ? ['Kapak (cam çerçeve)', 'Door (glazed frame)'] : g.inner === 'cane' ? ['Kapak (hasır çerçeve)', 'Door (cane frame)'] : g.inner === 'panel' ? [n[0] + ' (çerçeveli)', n[1] + ' (framed)'] : [n[0], n[1]];
     const specTr = [n[2], band && g.mat !== 'frame' ? `Bant: ${band[0]}` : ''].filter(Boolean).join(' · '), specEn = [n[3], band && g.mat !== 'frame' ? `Edging: ${band[1]}` : ''].filter(Boolean).join(' · ');
     rows.push({code: `K${String(rows.length + 1).padStart(2, '0')}`, nameTr: name[0], nameEn: name[1], qty: g.qty, size: g.size, material: g.role === 'back' ? text('back') : g.inner === 'glass' && g.role !== 'door' ? text('glass') : text(g.mat), specTr, specEn, internal: g.internal});
   }
