@@ -1,6 +1,6 @@
-# AURA W4
+# AURA PROJECT — site
 
-W4 is an independent static edition at `/w4/`. Existing root, `/2/` and `/3/` editions are unchanged relative to the base branch.
+Since 2026-10-18 the former `/w4/` edition is the whole site at the root of auraproject.com.tr (studio tools included). The previous site (root pages, `/2/`, `/3/`, `admin/`, `services/`) is kept in Git under `archive/site-v1/` and is not deployed; `.htaccess` sends old `/w4/…` addresses and old page names to their new places. `mizan/` (NAKIŞ study) stays as it was. Tests: `node tests/forma-check.mjs`, `node tests/table-geometry.mjs`.
 
 ## Surface atelier
 

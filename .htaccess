@@ -1,7 +1,13 @@
 Options -Indexes
 DirectoryIndex index.html
+
+# The site is the former /w4/ edition: old addresses lead to the same pages; pages of the previous site lead home.
+<IfModule mod_alias.c>
+RedirectMatch 301 ^/w4/?(.*)$ /$1
+RedirectMatch 301 ^/(felsefe|gonye|iskarpela|kategori|kavela|masif|verev|sepet)\.html$ /
+RedirectMatch 301 ^/(2|3|ornek|admin)(/.*)?$ /
+</IfModule>
 <IfModule mod_headers.c>
-Header set X-Robots-Tag "noindex, nofollow"
 Header set X-Content-Type-Options "nosniff"
 Header set Referrer-Policy "strict-origin-when-cross-origin"
 Header set Permissions-Policy "camera=(), microphone=(self), geolocation=()"

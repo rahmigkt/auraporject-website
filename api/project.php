@@ -7,7 +7,7 @@ $method=$_SERVER['REQUEST_METHOD']??'GET';
 // Fail closed: draft mode never reads or stores the submitted customer body.
 if(!aura_ready($config))respond($method==='GET'?200:503,['available'=>false,'mode'=>'draft']);
 if(!in_array($method,['GET','POST'],true))respond(405,['error'=>'Method not allowed']);
-session_name('aura_project');session_set_cookie_params(['httponly'=>true,'secure'=>!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off','samesite'=>'Strict','path'=>'/w4/api/']);session_start();
+session_name('aura_project');session_set_cookie_params(['httponly'=>true,'secure'=>!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off','samesite'=>'Strict','path'=>'/api/']);session_start();
 if(empty($_SESSION['token']))$_SESSION['token']=bin2hex(random_bytes(32));
 if($method==='GET')respond(200,['available'=>true,'controller'=>$config['controller'],'noticeVersion'=>$config['notice_version'],'token'=>$_SESSION['token']]);
 $origin=$_SERVER['HTTP_ORIGIN']??'';$host=$_SERVER['HTTP_HOST']??'';if($origin===''||parse_url($origin,PHP_URL_HOST)!==explode(':',$host)[0]||!hash_equals($_SESSION['token'],$_SERVER['HTTP_X_AURA_TOKEN']??''))respond(403,['error'=>'Invalid session']);

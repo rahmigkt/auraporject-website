@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AURA PROJECT® — Mobilya ve Mekân Tasarımı</title>
+<meta name="description" content="AURA PROJECT: koltuk takımları, berjer, kanepeler, paneller ve aydınlatma koleksiyonları. Mekânın bütünsel dengesini kuran mobilya tasarımı.">
+<meta property="og:title" content="AURA PROJECT® — Mobilya ve Mekân Tasarımı">
+<meta property="og:description" content="Koltuk takımlarından panellere, her parça oran, ışık ve malzeme ilişkisi gözetilerek tasarlanır.">
+<meta property="og:image" content="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&auto=format&fit=crop&q=80">
+<meta property="og:url" content="https://auraproject.com.tr/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/brand.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;}
+
+  .cover{height:100vh; height:100dvh; display:flex; align-items:center; justify-content:center; background:var(--cream); position:relative; padding:20px;}
+  .cover-logo{width:min(84vw,880px);}
+  .cover-logo img{width:100%; display:block;}
+  .scroll-cue{position:absolute; bottom:28px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-dim);}
+  .scroll-cue .chev{width:1px; height:26px; background:var(--hairline-strong); animation:scrollcue 1.8s ease infinite;}
+  @keyframes scrollcue{0%,100%{opacity:0.15;} 50%{opacity:1;}}
+
+  .story-panel{min-height:64vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:72px 20px; opacity:0; transform:translateY(22px); transition:opacity .9s ease, transform .9s ease;}
+  .story-panel.in-view{opacity:1; transform:translateY(0);}
+  .story-panel.tinted{background:var(--cream-panel);}
+  .story-inner{max-width:640px; margin:0 auto;}
+  .story-panel.sub .story-inner{max-width:520px;}
+  .story-line{font-family:'Sora',sans-serif; font-weight:500; font-size:clamp(21px,3.4vw,30px); line-height:1.5; margin:18px 0 0; color:var(--ink); letter-spacing:-0.005em;}
+  .sub-logo{display:block; margin:0 auto 20px; width:min(56vw,210px);}
+  .sub-logo img{width:100%; display:block;}
+  .sub-logo-text{font-family:'Sora',sans-serif; font-weight:700; font-size:clamp(30px,6.5vw,44px); letter-spacing:0.01em; margin:0 0 20px; color:var(--ink);}
+  .story-line.sub-line{font-size:clamp(15px,1.9vw,16.5px); font-style:normal; font-weight:400; line-height:1.75; color:var(--ink-dim); text-align:center;}
+
+  @media (prefers-reduced-motion: reduce){ .story-panel{opacity:1 !important; transform:none !important; transition:none !important;} }
+
+  .brand-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--hairline);}
+  @media (min-width:760px){ .brand-grid{grid-template-columns:repeat(5,1fr);} }
+  .brand-card{background:var(--cream); padding:28px 16px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; text-decoration:none; transition:background .2s ease;}
+  .brand-card:hover{background:var(--cream-panel);}
+  .brand-card img{width:100%; max-width:120px; height:auto; display:block;}
+  .brand-cat{font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.06em; color:var(--ink-dim); text-align:center;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap navbar">
+    <a href="index.html" class="wordmark">AURA PROJECT<sup>®</sup></a>
+    <nav class="navlinks">
+      <a href="kategori.html">Koleksiyonlar</a>
+      <a href="felsefe.html">Felsefe</a>
+      <a href="#iletisim">İletişim</a>
+      <a href="sepet.html" class="cart-link">🛍️<span class="cart-badge"></span></a>
+      <a href="#" class="cta-link cta-whatsapp">Teklif Al</a>
+    </nav>
+  </div>
+</header>
+
+<section class="cover">
+  <h1 class="sr-only">AURA PROJECT — Mobilya ve Mekân Tasarımı</h1>
+  <div class="cover-logo"><img src="assets/aura-logo-full.svg" alt="AURA PROJECT"></div>
+  <div class="scroll-cue"><span>Kaydırın</span><span class="chev"></span></div>
+</section>
+
+<section class="story-panel" id="storyAura">
+  <div class="wrap story-inner">
+    <span class="eyebrow" id="heroTag">İstanbul</span>
+    <p class="story-line" id="heroTitle">Mobilya, mekânın mimari kararını taşır.</p>
+  </div>
+</section>
+
+<section class="section" id="altMarkalar">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:28px;">
+      <span class="eyebrow">Alt Markalar</span>
+      <h2>Her biri kendi zanaatinden gelir.</h2>
+    </div>
+    <div class="brand-grid">
+      <a href="verev.html" class="brand-card">
+        <img src="assets/verev-logo.svg" alt="VEREV">
+        <span class="brand-cat">Koltuk · Berjer</span>
+      </a>
+      <a href="gonye.html" class="brand-card">
+        <img src="assets/gonye-logo.svg" alt="GÖNYE">
+        <span class="brand-cat">Paneller · Dolaplar</span>
+      </a>
+      <a href="iskarpela.html" class="brand-card">
+        <img src="assets/iskarpela-logo.svg" alt="İSKARPELA">
+        <span class="brand-cat">Ahşap Aksesuarlar</span>
+      </a>
+      <a href="kavela.html" class="brand-card">
+        <img src="assets/kavela-logo.svg" alt="KAVELA">
+        <span class="brand-cat">Yatak Odası</span>
+      </a>
+      <a href="masif.html" class="brand-card">
+        <img src="assets/masif-logo.svg" alt="MASİF">
+        <span class="brand-cat">Mutfak</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="story-panel" id="storyCta">
+  <div class="wrap story-inner">
+    <div class="hero-actions" style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+      <a href="kategori.html" class="btn btn-solid">Koleksiyonu İncele</a>
+      <a href="felsefe.html" class="btn btn-line">Felsefemiz</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="koleksiyonlar">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:28px;">
+      <span class="eyebrow">Koleksiyonlar</span>
+      <h2>Kategoriye göre keşfet.</h2>
+    </div>
+  </div>
+  <div class="cat-reel" id="categoryReel">
+    <div class="cat-card skeleton"></div>
+    <div class="cat-card skeleton"></div>
+    <div class="cat-card skeleton"></div>
+  </div>
+</section>
+
+<section class="section tinted" id="one-cikanlar">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:28px;">
+      <span class="eyebrow">Öne Çıkanlar</span>
+      <h2>Atölyeden seçmeler.</h2>
+    </div>
+    <div class="card-grid" id="featuredGrid">
+      <div class="p-card"><div class="thumb skeleton"></div></div>
+      <div class="p-card"><div class="thumb skeleton"></div></div>
+      <div class="p-card"><div class="thumb skeleton"></div></div>
+      <div class="p-card"><div class="thumb skeleton"></div></div>
+    </div>
+    <div style="text-align:center; margin-top:32px;">
+      <a href="kategori.html" class="btn btn-line">Tüm Koleksiyonu Gör</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="iletisim">
+  <div class="wrap">
+    <span class="eyebrow">İletişim</span>
+    <div class="sec-head" style="margin-bottom:24px;"><h2>Projenizi konuşalım.</h2></div>
+    <div>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);">E-posta</span>
+      <div style="font-family:'Sora',sans-serif;font-size:15px;margin-top:4px;"><a id="contactEmail" href="mailto:hello@auraproject.com">hello@auraproject.com</a></div>
+    </div>
+    <div id="socialLinks" style="display:flex; gap:14px; margin-top:24px; flex-wrap:wrap;"></div>
+  </div>
+</section>
+
+<footer>© 2026 AURA PROJECT® — İstanbul</footer>
+
+<script src="assets/shared.js"></script>
+<script>
+  async function loadCategories(){
+    const reel = document.getElementById('categoryReel');
+    const { data, error } = await sb.from('aura_categories').select('*').order('sort_order');
+    if (error || !data || data.length === 0){ reel.innerHTML = ''; return; }
+    reel.innerHTML = data.map(c => {
+      const img = publicImageUrl(c.sample_image_url);
+      return '<a href="kategori.html?slug='+encodeURIComponent(c.slug)+'" class="cat-card">'+
+        (img ? '<img src="'+img+'" alt="'+escapeHtml(c.name)+'" loading="lazy">' : '') +
+        '<div class="cat-scrim"></div>'+
+        '<div class="cat-label"><span class="eyebrow" style="color:var(--brass-light);">Koleksiyon</span><h3>'+escapeHtml(c.name)+'</h3></div>'+
+      '</a>';
+    }).join('');
+  }
+
+  async function loadFeatured(){
+    const grid = document.getElementById('featuredGrid');
+    const { data, error } = await sb.from('aura_products').select('*').eq('is_featured', true).order('sort_order').limit(8);
+    if (error || !data || data.length === 0){
+      grid.innerHTML = '<div class="p-card"><div class="thumb"></div><div class="meta"><span class="eyebrow">Yakında</span><h4>Ürünler ekleniyor</h4></div></div>';
+      return;
+    }
+    grid.innerHTML = data.map(p => {
+      const img = publicImageUrl(p.image_url);
+      const price = formatPrice(p.price, p.currency);
+      return '<a href="urun.html?slug='+encodeURIComponent(p.slug)+'" class="p-card">'+
+        '<div class="thumb">'+(img ? '<img src="'+img+'" alt="'+escapeHtml(p.title)+'" loading="lazy">' : '')+'</div>'+
+        '<div class="meta"><span class="eyebrow">'+escapeHtml(p.frame_material || p.upholstery || '')+'</span><h4>'+escapeHtml(p.title)+'</h4>'+
+        (price ? '<div class="price">'+price+'</div>' : '')+'</div>'+
+      '</a>';
+    }).join('');
+  }
+
+  async function loadContact(){
+    const { data } = await sb.from('aura_project_content').select('*');
+    const map = {}; (data||[]).forEach(r => map[r.key]=r.value);
+    if (map.contact_email){ document.getElementById('contactEmail').textContent = map.contact_email; document.getElementById('contactEmail').href = 'mailto:'+map.contact_email; }
+    if (map.site_year) document.getElementById('heroTag').textContent = map.site_year;
+    if (map.hero_title) document.getElementById('heroTitle').textContent = map.hero_title;
+    // hero_body is no longer displayed on the redesigned cover/story intro
+
+    const socials = [
+      { key:'social_instagram', label:'Instagram' },
+      { key:'social_pinterest', label:'Pinterest' },
+      { key:'social_facebook', label:'Facebook' },
+      { key:'social_tiktok', label:'TikTok' },
+      { key:'social_linkedin', label:'LinkedIn' },
+      { key:'social_houzz', label:'Houzz' }
+    ];
+    const wrap = document.getElementById('socialLinks');
+    wrap.innerHTML = socials.filter(s => map[s.key]).map(s =>
+      '<a href="'+escapeHtml(map[s.key])+'" target="_blank" rel="noopener" class="btn btn-line btn-sm">'+s.label+'</a>'
+    ).join('');
+  }
+
+  loadCategories();
+  loadFeatured();
+  loadContact();
+
+  const storyPanels = document.querySelectorAll('.story-panel');
+  if ('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting){ entry.target.classList.add('in-view'); io.unobserve(entry.target); }
+      });
+    }, { threshold: 0.25 });
+    storyPanels.forEach(p => io.observe(p));
+  } else {
+    storyPanels.forEach(p => p.classList.add('in-view'));
+  }
+</script>
+</body>
+</html>
