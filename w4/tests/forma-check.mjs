@@ -210,6 +210,22 @@ for (const caseLine of ['groove', 'inlay']) lineOk(SET.compile({caseLine, frontS
   one('çekmecelere gölge kanal', 'bedroom', {key: 'caseLine', value: 'groove'}); one('başlığa çift dikiş', 'bedroom', {key: 'stitch', value: 'double'});
   assert.ok(!parse('çekmecelere gölge kanal', {family: 'bedroom'}).actions.some(x => x.key === 'headType'), 'groove is not a channel headboard');
 }
+// 10. Curated starting models: every entry is a real studio style, compiles and validates without errors.
+let startN = 0;
+{
+  const {STARTS} = await import('../assets/forma/starts.js'), {STYLE_IDS} = await import('../assets/forma/curated.js'), {FAMILIES} = await import('../assets/forma/families.js');
+  for (const [fam, kinds] of Object.entries(STARTS)) for (const [kind, list] of Object.entries(kinds)) {
+    const seen = new Set(list.map(e => e.style)); assert.equal(seen.size, STYLE_IDS.length, `${fam}/${kind}: every style has starting models`);
+    for (const e of list) {
+      assert.ok(STYLE_IDS.includes(e.style), e.style);
+      const mod = FAMILIES[fam].mod, params = mod.normalize({...mod.DEFAULTS, ...e.p, kind}), c = mod.compile(params);
+      const errs = (mod.validate(c, sample({family: fam, style: e.style, kind, seed: e.seed}).materials, buildMesh) || []).filter(i => i.level === 'error');
+      assert.equal(errs.length, 0, `${fam}/${kind}/${e.style}/${e.seed}: ${JSON.stringify(errs)}`);
+      startN++;
+    }
+  }
+}
+console.log(`PASS forma: ${startN} curated starting models (10 styles incl. AURA) valid;`);
 console.log(`PASS forma: ${lineN} line-detail parts (stitch, inlay, groove) on seating, tables and the bedroom set;`);
 console.log(`PASS forma: ${bedroomN} bedroom sets valid (wardrobe, bed, bedside, chest; set and piece views); matching, drawings, BOM, commands;`);
 console.log(`PASS forma: ${tables} table designs valid; patterns, stain and stone maps;`);

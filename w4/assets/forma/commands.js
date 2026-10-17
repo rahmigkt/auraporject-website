@@ -3,6 +3,7 @@
 // Output actions: {type:'set'|'delta', key, value} · {type:'enum', key, value} · {type:'material', slot, key, value}
 //                 {type:'style'|'kind', value} · {type:'command', name}
 import {RANGES} from './sofa.js';
+import {STYLE_IDS} from './curated.js';
 
 export function fold(text) {
   return String(text).toLowerCase().replace(/ı/g, 'i').replace(/İ/g, 'i').replace(/ß/g, 'ss').replace(/æ/g, 'ae').replace(/ø/g, 'o').replace(/œ/g, 'oe')
@@ -166,8 +167,8 @@ const STYLE_WORDS = [
   ['tropical_resort', L('tropikal|tropical|tropisch|tropique|tropisk|tropicale|resort')], ['hollywood_regency', L('hollywood|regency')],
   ['neo_classical_restrained', L('neoklasik|neo klasik|neoclassical|neo classical|klassizismus|neoclassique|neoklassiek|neoklassisk|neoclasico|neoclassico|klasik|classic|klassisch|classique|klassiek|klassisk|clasico|classico')],
   ['high_gloss_contemporary', L('parlak cagdas|high gloss|hochglanz modern|contemporain brillant|hoogglans modern|moderno brillante|lucido contemporaneo')],
-  ['muji_modern', L('sade dogal|muji|natural simple')], ['craft_modern', L('zanaat|craft|handwerk|artisanal|ambacht|handvaerk|artesanal|artigianale')]
-];
+  ['muji_modern', L('sade dogal|muji|natural simple')], ['aura', L('aura tarzi|aura stili|aura style|aura stil|style aura|estilo aura|stile aura|zanaat|craft|handwerk|artisanal|ambacht|handvaerk|artesanal|artigianale')]
+].filter(([id]) => STYLE_IDS.includes(id));
 
 const KIND_WORDS = {
   armchair: L('berjer|tekli|tek kisilik|armchair|lounge chair|sessel|fauteuil|laenestol|lenestol|sillon|butaca|poltrona'),

@@ -50,10 +50,11 @@ function home(){
 
 /** Front elevations of three studio pieces, drawn by the studio's own drawing engine (same lines as the hand-off sheet). */
 async function drawSketch(host){
- const [{sample},{FAMILIES},{buildViews}]=await Promise.all([import('./forma/generate.js'),import('./forma/families.js'),import('./forma/drawing.js')]);
- const seed=1+Math.floor(Math.random()*400),pieces=[];
- for(const [family,kind,extra] of [['seating','armchair',{stitch:'single'}],['table','side',{}],['bedroom','nightstand',{view:'piece'}]]){
-  const d=sample({family,kind,seed:seed+pieces.length*17}),c=FAMILIES[family].mod.compile({...d.params,...extra,kind});
+ const [{STARTS},{FAMILIES},{buildViews}]=await Promise.all([import('./forma/starts.js'),import('./forma/families.js'),import('./forma/drawing.js')]);
+ const pieces=[],any=list=>list[Math.floor(Math.random()*list.length)];
+ // Curated starting models only (the same ones the studio opens with).
+ for(const [family,kind,list,extra] of [['seating','armchair',STARTS.seating.armchair,{}],['table','side',STARTS.table.side,{}],['bedroom','nightstand',STARTS.bedroom.bed,{view:'piece'}]]){
+  const e=any(list),mod=FAMILIES[family].mod,c=mod.compile(mod.normalize({...mod.DEFAULTS,...e.p,...extra,kind}));
   const v=buildViews(c).views.front;let x0=Infinity,x1=-Infinity,y1=0;
   for(const s of v)for(const l of s.loops)for(const [h,y] of l){x0=Math.min(x0,h);x1=Math.max(x1,h);y1=Math.max(y1,y);}
   pieces.push({v,x0,x1,y1});

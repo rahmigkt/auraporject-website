@@ -4,7 +4,8 @@
 const W = text => Object.fromEntries(text.trim().split(/\s+/).map(t => { const [k, v] = t.split(':'); return [k, Number(v ?? 1)]; }));
 const S = (id, enums, ranges, mats) => ({id, enums: Object.fromEntries(Object.entries(enums).map(([k, v]) => [k, W(v)])), ranges, mats: Object.fromEntries(Object.entries(mats).map(([k, v]) => [k, W(v)]))});
 
-export const BEDROOM_STYLES = [
+import {curate} from './curated.js';
+const ALL = [
   S('japandi', {headType: 'slats:3 panel:2 upholstered:2 framed:1', headShape: 'rect:3 rounded:2', bedBase: 'platform:4 floating:2 frame:2', legType: 'hidden:3 block:2 squareTaper:1', footboard: 'none:6', frontStyle: 'flat:3 grooved:2 fluted:1', pull: 'edge:3 leather:2 none:2', caseBase: 'legs:2 recessed:2 plinth:1', caseLayout: 'niche:2 stack:2', caseEdge: 'eased:3', mirror: 'none:3 capsule:1', integratedNight: 'none:4 shelf:1'},
     {headHeight: [800, 1000], border: [120, 280], railHeight: [120, 220], legHeight: [40, 90], slatWidth: [30, 60], slatGap: [10, 25], cornerRadius: [0, 30]},
     {fiber: 'linen:4 wool:2', color: 'sand:3 cream:2 greige:2 khaki:1', pattern: 'none:8 stripe:1', case: 'wood:3 veneer:4', species: 'oak:5 ash:3 walnut:1', stain: 'natural:5 lightOak:2', finish: 'oil:3 matte:3', lacquer: 'cream:1', metal: 'black:2 bronze:1'}),
@@ -80,11 +81,12 @@ export const BEDROOM_STYLES = [
   S('muji_modern', {headType: 'panel:3 slats:2 upholstered:1', headShape: 'rect:4 rounded:1', bedBase: 'frame:3 platform:3', legType: 'square:2 block:2 roundTaper:1', footboard: 'none:6', frontStyle: 'flat:4', pull: 'edge:3 none:1', caseBase: 'legs:2 plinth:2', caseLayout: 'stack:2 niche:2', caseEdge: 'eased:3', mirror: 'none:3 rect:1', integratedNight: 'none:4'},
     {headHeight: [800, 1000], border: [40, 120], railHeight: [150, 230]},
     {fiber: 'linen:4 cotton:3', color: 'sand:2 cream:2 greige:2', pattern: 'none:7 stripe:1', case: 'wood:3 veneer:3', species: 'oak:3 ash:2 beech:2', stain: 'natural:4 lightOak:2', finish: 'oil:3 matte:2', lacquer: 'white:1', metal: 'black:1 nickel:1'}),
-  S('craft_modern', {headType: 'slats:3 framed:2 cane:2 panel:1', headShape: 'rect:2 rounded:2 arch:1', bedBase: 'frame:4 platform:1', legType: 'squareTaper:2 block:2 roundTaper:1', footboard: 'none:3 low:2', frontStyle: 'flat:2 grooved:2 cane:2', pull: 'leather:2 knob:2 edge:1', caseBase: 'legs:4', caseLayout: 'stack:2 topSplit:2 niche:1', caseEdge: 'eased:2 chamfer:2', mirror: 'rect:2 arch:1 none:1', integratedNight: 'none:4'},
+  S('aura', {headType: 'slats:3 framed:2 cane:2 panel:1', headShape: 'rect:2 rounded:2 arch:1', bedBase: 'frame:4 platform:1', legType: 'squareTaper:2 block:2 roundTaper:1', footboard: 'none:3 low:2', frontStyle: 'flat:2 grooved:2 cane:2', pull: 'leather:2 knob:2 edge:1', caseBase: 'legs:4', caseLayout: 'stack:2 topSplit:2 niche:1', caseEdge: 'eased:2 chamfer:2', mirror: 'rect:2 arch:1 none:1', integratedNight: 'none:4'},
     {headHeight: [1000, 1250], slatWidth: [40, 80], slatGap: [8, 20]},
     {fiber: 'wool:3 linen:2', color: 'khaki:2 camel:2 sand:1 petrol:1', pattern: 'none:5 check:1 houndstooth:1', case: 'wood:6', species: 'oak:3 walnut:2 cherry:1 ash:1', stain: 'natural:5', finish: 'oil:5', lacquer: 'khaki:1', metal: 'bronze:2 black:2'})
 ];
-export const BEDROOM_STYLE_BY_ID = Object.fromEntries(BEDROOM_STYLES.map(s => [s.id, s]));
+export const BEDROOM_STYLES = curate(ALL);
+export const BEDROOM_STYLE_BY_ID = Object.fromEntries(ALL.map(s => [s.id, s]));
 
 /** Whole-room language per style: feature wall, wardrobe fronts and handles, bedside mounting, lighting, rug, chest. */
 const RW = text => Object.fromEntries(text.trim().split(/\s*;\s*/).map(kv => { const [k, v] = kv.split('='); return [k.trim(), W(v)]; }));
@@ -114,5 +116,5 @@ export const ROOM_STYLE = {
   neo_classical_restrained: RW('wallPanel=boiserie:4; panelHeight=full:2 dado:2; wdDoorStyle=framed:4; wdHandle=knob:3 bar:1; wdDoorType=hinged:4; wdNiche=vanity:2 desk:1; nsBase=legs:2 plinth:2; drPlace=opposite:3; lighting=sconce:3 lamp:1; rug=rect:3'),
   high_gloss_contemporary: RW('wallPanel=upholstered:2 veneer:2 fluted:1; panelHeight=full:3; wdDoorStyle=flat:3 mirror:2; wdHandle=push:3 edge:2; wdDoorType=sliding:3 hinged:1; wdNiche=vanity:2 none:2; nsBase=wall:3; drPlace=none:2; lighting=pendant:2 sconce:2; rug=rect:3'),
   muji_modern: RW('wallPanel=veneer:3 none:2; panelHeight=full:2 dado:1; wdDoorStyle=flat:4; wdHandle=edge:4; wdDoorType=sliding:2 hinged:2; wdNiche=desk:2 shelves:2; nsBase=legs:2 plinth:2; drPlace=none:2; lighting=lamp:2 pendant:2; rug=rect:3'),
-  craft_modern: RW('wallPanel=slats:3 veneer:1; panelHeight=full:2 dado:1; wdDoorStyle=slats:2 cane:2 framed:1; wdHandle=leather:2 knob:2; wdDoorType=hinged:3; wdNiche=desk:2 shelves:2; nsBase=legs:4; drPlace=opposite:2; lighting=pendant:2 lamp:2; rug=rect:3')
+  aura: RW('wallPanel=slats:3 veneer:1; panelHeight=full:2 dado:1; wdDoorStyle=slats:2 cane:2 framed:1; wdHandle=leather:2 knob:2; wdDoorType=hinged:3; wdNiche=desk:2 shelves:2; nsBase=legs:4; drPlace=opposite:2; lighting=pendant:2 lamp:2; rug=rect:3')
 };

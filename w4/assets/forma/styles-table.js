@@ -3,7 +3,8 @@
 const W = text => Object.fromEntries(text.trim().split(/\s+/).map(t => { const [k, v] = t.split(':'); return [k, Number(v ?? 1)]; }));
 const S = (id, tr, en, enums, ranges, mats) => ({id, names: {tr, en}, enums: Object.fromEntries(Object.entries(enums).map(([k, v]) => [k, W(v)])), ranges, mats: Object.fromEntries(Object.entries(mats).map(([k, v]) => [k, W(v)]))});
 
-export const TABLE_STYLES = [
+import {curate} from './curated.js';
+const ALL = [
   S('japandi', 'Japandi', 'Japandi',
     {topShape: 'rounded:3 superellipse:3 oval:2 round:2 rect:1', edge: 'eased:3 underbevel:3 bullnose:1', baseType: 'legsApron:2 legsOnly:3 trestle:2 pedestal:1 slabEnds:1', legType: 'squareTaper:3 roundTaper:3 round:2 cone:1', pedestalType: 'column:2 cross:2', stretcher: 'none:4 H:2', shelf: 'none:2 slatted:3 solid:1', drawerPull: 'recess:3 none:2'},
     {topThickness: [25, 40], cornerRadius: [20, 120], shapeN: [3, 5], overhang: [80, 250], sideOverhang: [40, 120], legSize: [35, 55], legTaper: [0.6, 0.85], legSplay: [0, 4], apronHeight: [50, 80], columnSize: [120, 220], footSpread: [0.55, 0.7], edgeSize: [6, 16]},
@@ -104,10 +105,11 @@ export const TABLE_STYLES = [
     {topShape: 'rect:3 rounded:3 round:2', edge: 'eased:4', baseType: 'legsOnly:4 legsApron:3', legType: 'round:3 square:3', pedestalType: 'column:1', stretcher: 'none:4', shelf: 'solid:3 none:2', drawerPull: 'recess:3'},
     {topThickness: [20, 30], cornerRadius: [10, 60], overhang: [60, 160], legSize: [35, 50], apronHeight: [50, 80], edgeSize: [4, 8]},
     {top: 'wood:4 veneer:4', species: 'ash:3 beech:3 oak:2', stain: 'natural:6', finish: 'matte:4', stone: 'concrete:1', glass: 'clear:1', lacquer: 'white:1', base: 'same:7', metal: 'black:1', baseLacquer: 'white:1'}),
-  S('craft_modern', 'Zanaat Odaklı Modern', 'Craft Modern',
+  S('aura', 'AURA', 'AURA',
     {topShape: 'rect:3 boat:3 rounded:2 superellipse:1', edge: 'underbevel:3 eased:2 chamfer:2', baseType: 'trestle:4 legsApron:3 legsOnly:1', legType: 'squareTaper:3 blade:2 roundTaper:1', pedestalType: 'cross:2', stretcher: 'H:3 none:1', shelf: 'slatted:2 none:2', drawerPull: 'recess:2 knob:2'},
     {topThickness: [28, 45], cornerRadius: [10, 60], boatBow: [0.06, 0.16], overhang: [100, 240], legSize: [45, 70], apronHeight: [60, 90], edgeSize: [8, 18]},
     {top: 'wood:7', species: 'oak:4 walnut:3 ash:1', stain: 'natural:6', finish: 'oil:5', stone: 'travertine:1', glass: 'clear:1', lacquer: 'cream:1', base: 'same:7', metal: 'bronze:1', baseLacquer: 'black:1'})
 ];
 
-export const TABLE_STYLE_BY_ID = Object.fromEntries(TABLE_STYLES.map(s => [s.id, s]));
+export const TABLE_STYLES = curate(ALL);
+export const TABLE_STYLE_BY_ID = Object.fromEntries(ALL.map(s => [s.id, s]));
