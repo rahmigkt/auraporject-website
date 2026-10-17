@@ -3,6 +3,7 @@
 import {buildMesh} from './build.js';
 import {tableBom} from './table.js';
 import {setBom} from './set.js';
+import {storageBom} from './storage.js';
 import {bounds} from './mesh.js';
 import {FIBERS, WEAVE_NAMES, PATTERNS, COLORS, WOODS, FINISHES, METALS, STAINS, STONES, GLASS, MOTIF_NAMES, name as nm} from './catalog.js';
 import {yardage} from './textile.js';
@@ -71,6 +72,12 @@ export function bom(compiled, materials, lang = 'tr') {
     const text = slot => slot === 'top' ? surfaceText(materials.top, lang) : slot === 'base' ? surfaceText(materials.base.surface === 'same' ? materials.top : materials.base, lang) : slot === 'metal' ? nm(METALS[materials.base.surface === 'metal' ? materials.base.metal : materials.hardware.metal], lang) : slot === 'dark' ? (lang === 'tr' ? 'Siyah mat' : 'Black matt') : (lang === 'tr' ? 'Huş kontrplak / masif (iç)' : 'Birch ply / solid (internal)');
     return tableBom(compiled, materials, lang, buildMesh, text);
   }
+  if (compiled.family === 'storage') {
+    const tr = lang === 'tr', p = compiled.params, board = (spec, thick) => `${spec.surface === 'wood' ? `${tr ? 'Masif panel' : 'Solid panel'} ${thick} mm` : `MDF ${thick} mm`} · ${surfaceText(spec, lang).replace(/ \((masif|solid|kaplama|veneer)\)$/, '')}`;
+    const T = p.board === 'solid' ? p.solidThickness : 18, TF = p.frontBoard === 'solid' ? p.solidThickness : 18;
+    const text = mat => mat === 'case' ? board(materials.case, T) : mat === 'front' ? board(materials.front, TF) : mat === 'back' ? (tr ? `MDF 8 mm, iç yüz gövde renginde` : `MDF 8 mm, inner face to match the carcass`) : mat === 'frame' ? (tr ? 'Huş kontrplak' : 'Birch plywood') : mat === 'glass' ? nm(GLASS[materials.glass?.glass || 'clear'], lang) + ' 4 mm' : mat === 'mirror' ? (tr ? 'Ayna 5 mm' : 'Mirror 5 mm') : mat === 'wood' ? woodText(materials.wood, lang) : mat === 'metal' ? nm(METALS[materials.metal.finish], lang) : mat === 'cane' ? (tr ? 'Rattan hasır' : 'Rattan cane') : mat;
+    return storageBom(compiled, materials, lang, buildMesh, text);
+  }
   if (compiled.family === 'bedroom') {
     const tr = lang === 'tr';
     const text = mat => mat === 'case' ? surfaceText(materials.case, lang) : mat === 'fabric' || mat === 'welt' || mat === 'wood' || mat === 'metal' ? materialText(mat, materials, lang) : mat === 'cane' ? (tr ? 'Rattan hasır (Viyana örgüsü)' : 'Rattan cane (Vienna weave)') : mat === 'mirror' ? (tr ? 'Ayna 5 mm' : 'Mirror 5 mm') : mat === 'leather' ? (tr ? 'Deri' : 'Leather') : mat === 'dark' || mat === 'shadow' ? (tr ? 'Siyah mat' : 'Black matt') : (tr ? 'Huş kontrplak / masif (iç)' : 'Birch ply / solid (internal)');
@@ -105,5 +112,6 @@ export function bomCsv(b) {
   if (b.totals.fabricAreaM2 !== undefined) lines.push(['Kumaş alanı / Fabric area m²', b.totals.fabricAreaM2], ['Tahmini kumaş (1400 mm top) / Est. fabric (1400 mm roll) m', b.totals.fabricMetres], ['Biye / Welt m', b.totals.weltMetres], ['Düğme / Buttons', b.totals.buttons]);
   if (b.totals.weightKg !== undefined && b.totals.topKg !== undefined) lines.push(['Tahmini ağırlık / Est. weight kg', b.totals.weightKg], ['Tabla ağırlığı / Top weight kg', b.totals.topKg], ['Kişi kapasitesi / Seats', b.totals.seats], ['Tabla alanı / Top area m²', b.totals.areaM2]);
   else if (b.totals.weightKg !== undefined) lines.push(['Tahmini ağırlık / Est. weight kg', b.totals.weightKg], ...(b.totals.mattress ? [['Yatak ölçüsü / Mattress cm', b.totals.mattress]] : []), ...(b.totals.drawers ? [['Çekmece / Drawers', b.totals.drawers]] : []));
+  if (b.totals.lines) lines.push(...b.totals.lines);
   return '﻿' + lines.map(l => l.map(csvCell).join(';')).join('\r\n');
 }

@@ -44,7 +44,7 @@ function dataTexture(data, w, h, srgb) {
 const hexColor = h => new THREE.Color(h);
 
 /** Material set for one design. Starts with flat colours; textures arrive asynchronously. */
-function materialSet(materials, opts = {}) { return materials.top ? tableMaterialSet(materials, opts) : materials.case ? bedroomMaterialSet(materials, opts) : seatingMaterialSet(materials, opts); }
+function materialSet(materials, opts = {}) { return materials.front ? storageMaterialSet(materials, opts) : materials.top ? tableMaterialSet(materials, opts) : materials.case ? bedroomMaterialSet(materials, opts) : seatingMaterialSet(materials, opts); }
 /** Room for a project view: walls, floor, rug, LED, window glass. */
 function roomMaterialSet(spec, {onReady} = {}) {
   const set = {textures: []}, jobs = [];
@@ -173,6 +173,32 @@ function bedroomMaterialSet(materials, {detail = true, onReady} = {}) {
   return set;
 }
 
+/** RİTMO case goods: carcass and fronts (wood, veneer or lacquer), leg wood, hardware, birch-ply drawer boxes, glass, mirror. */
+function storageMaterialSet(materials, {detail = true, onReady} = {}) {
+  const set = {textures: []}, jobs = [], quiet = detail ? jobs : [];
+  const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  set.case = surfaceMaterial(materials.case, set, quiet);
+  set.front = same(materials.front, materials.case) ? set.case : surfaceMaterial(materials.front, set, quiet);
+  // The back shows its inner face: the carcass colour, slightly darker so the interior reads.
+  set.back = set.case.clone(); if (set.back.color) set.back.color.multiplyScalar(0.9);
+  set.wood = woodMaterial(materials.wood);
+  if (detail) jobs.push(makeMaps('wood', materials.wood).then(out => { if (out) applyMaps(set, set.wood, out, out.tileMm[0], out.tileMm[1]); }));
+  const M = METALS[materials.metal?.finish] || METALS.black;
+  set.metal = new THREE.MeshPhysicalMaterial({color: hexColor(M.hex), metalness: 1, roughness: M.rough});
+  set.dark = new THREE.MeshStandardMaterial({color: '#1d1c1a', roughness: 0.8});
+  set.frame = new THREE.MeshStandardMaterial({color: '#e2cfa9', roughness: 0.8});
+  set.mirror = new THREE.MeshPhysicalMaterial({color: '#d3dcdf', metalness: 0.55, roughness: 0.08, clearcoat: 1, clearcoatRoughness: 0.02});
+  const G = GLASS[materials.glass?.glass] || GLASS.clear;
+  set.glass = new THREE.MeshPhysicalMaterial({color: hexColor(G.hex), roughness: materials.glass?.glass === 'frosted' ? 0.55 : 0.04, transparent: true, opacity: 0.22 + G.opacity * 0.8, clearcoat: 1, clearcoatRoughness: 0.03, depthWrite: false});
+  set.leather = new THREE.MeshPhysicalMaterial({color: '#6b4428', roughness: 0.55, clearcoat: 0.2});
+  set.cane = new THREE.MeshStandardMaterial({color: '#d6b880', roughness: 0.6, side: THREE.DoubleSide});
+  { const cane = CANE ??= caneMaps(); applyMaps(set, set.cane, cane, cane.tileMm, cane.tileMm); }
+  set.inlay = set.metal; set.stitch = set.dark; set.shadow = set.dark; set.fabric = set.case;
+  Promise.all(jobs).then(() => { if (!set.disposed) onReady?.(); });
+  set.dispose = () => { set.disposed = true; for (const m of new Set([set.case, set.front, set.back, set.wood, set.metal, set.dark, set.frame, set.mirror, set.glass, set.leather, set.cane])) m.dispose(); for (const t of set.textures) t.dispose(); };
+  return set;
+}
+
 // Geometry cache shared by rebuilds (slider moves rebuild the group; meshes and their sketch edges are reused).
 const geoCache = new Map();
 function geometryFor(part) {
@@ -270,7 +296,7 @@ function buildGroup(compiled, mats, {structure = false, sketch = false} = {}) {
     if (part.planOnly) continue;
     let mat = mats[part.mat] || mats.fabric;
     if (structure && part.decor) continue;
-    if (structure && !part.internal && ['fabric', 'welt', 'top', 'case'].includes(part.mat)) {
+    if (structure && !part.internal && ['fabric', 'welt', 'top', 'case', 'front'].includes(part.mat)) {
       mat = mat.clone(); mat.transparent = true; mat.opacity = 0.16; mat.depthWrite = false; mat.userData.temp = true;
     }
     const mesh = new THREE.Mesh(geometryFor(part).g, mat);
@@ -326,7 +352,7 @@ export function createViewer(host, {onRotate} = {}) {
   { const fine = new THREE.GridHelper(12, 120, '#e3ddd0', '#e9e4d8'), major = new THREE.GridHelper(12, 12, '#d2cabb', '#d2cabb');
     for (const gh of [fine, major]) { gh.material.transparent = true; gh.material.opacity = gh === fine ? 0.55 : 0.8; gh.position.y = 0.0005; grid.add(gh); } scene.add(grid); }
   const persp = new THREE.PerspectiveCamera(30, 1, 0.05, 60), ortho = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.05, 60);
-  let userMoved = false, sketch = true, dims = null, camera = persp, view = 'angle', yaw = 0.62, pitch = 0.2, zoom = 1, group = null, mats = null, compiled = null, materials = null, structure = false, size = [1, 1, 1];
+  let userMoved = false, sketch = true, dims = null, camera = persp, view = 'angle', yaw = 0.62, pitch = 0.2, zoom = 1, group = null, mats = null, compiled = null, materials = null, structure = false, size = [1, 1, 1], baseY = 0;
   const composer = new EffectComposer(renderer);
   const renderPass = new RenderPass(scene, camera), ao = new GTAOPass(scene, camera, 1, 1), smaa = new SMAAPass(), out = new OutputPass();
   ao.blendIntensity = 0.85; ao.updateGtaoMaterial({radius: 0.35, distanceExponent: 1.4, thickness: 1.2, scale: 1.0, samples: 16});
@@ -335,19 +361,19 @@ export function createViewer(host, {onRotate} = {}) {
   const draw = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { place(); renderPass.camera = camera; ao.camera = camera; composer.render(); }); };
   function place() {
     const rect = host.getBoundingClientRect(), aspect = Math.max(0.2, rect.width / Math.max(1, rect.height));
-    const [W, H, D] = size, target = new THREE.Vector3(0, H * 0.45, 0);
+    const [W, H, D] = size, target = new THREE.Vector3(0, baseY + H * 0.45, 0); // wall-hung pieces start above the floor
     if (view === 'angle') {
       camera = persp; persp.aspect = aspect;
       const radius = Math.hypot(W, H, D) * 0.5, fov = persp.fov * Math.PI / 180;
-      const dist = radius / Math.sin(Math.min(fov, 2 * Math.atan(Math.tan(fov / 2) * aspect)) / 2) * (aspect < 1 ? 1.02 : 0.8) / zoom;
+      const dist = radius / Math.sin(Math.min(fov, 2 * Math.atan(Math.tan(fov / 2) * aspect)) / 2) * (aspect < 1 ? 1.02 : H > 0.8 * Math.max(W, D) ? 1.0 : 0.8) / zoom; // tall pieces (wardrobes) need the whole sphere
       persp.position.set(Math.sin(yaw) * Math.cos(pitch) * dist, target.y + Math.sin(pitch) * dist, Math.cos(yaw) * Math.cos(pitch) * dist);
       persp.lookAt(target); persp.updateProjectionMatrix();
     } else {
       camera = ortho;
       const spanX = view === 'side' ? D : W, spanY = view === 'top' ? D : H, half = Math.max(spanY * 0.62, spanX * 0.62 / aspect) / zoom;
       Object.assign(ortho, {left: -half * aspect, right: half * aspect, top: half, bottom: -half});
-      if (view === 'front') ortho.position.set(0, H / 2, 20); else if (view === 'side') ortho.position.set(20, H / 2, 0); else ortho.position.set(0, 20, 0.0001);
-      ortho.lookAt(view === 'top' ? new THREE.Vector3(0, 0, 0) : new THREE.Vector3(0, H / 2, 0)); ortho.updateProjectionMatrix();
+      if (view === 'front') ortho.position.set(0, baseY + H / 2, 20); else if (view === 'side') ortho.position.set(20, baseY + H / 2, 0); else ortho.position.set(0, 20, 0.0001);
+      ortho.lookAt(view === 'top' ? new THREE.Vector3(0, 0, 0) : new THREE.Vector3(0, baseY + H / 2, 0)); ortho.updateProjectionMatrix();
     }
   }
   const resize = () => { const r = host.getBoundingClientRect(), pr = Math.min(2, window.devicePixelRatio || 1); renderer.setPixelRatio(pr); renderer.setSize(Math.max(1, r.width), Math.max(1, r.height), false); composer.setPixelRatio(pr); composer.setSize(Math.max(1, r.width), Math.max(1, r.height)); draw(); };
@@ -384,7 +410,7 @@ export function createViewer(host, {onRotate} = {}) {
     const meta = room ? room.shell.meta : compiled.meta;
     if (sketch && !meta?.room) { dims = dimensionGroup(b); scene.add(dims); }
     grid.visible = sketch; contact.visible = !sketch; ao.enabled = !sketch && !room; // a drawing needs no ambient occlusion
-    size = [s.x, s.y, s.z]; contact.scale.set(s.x * 1.25, s.z * 1.45, 1);
+    size = [s.x, Math.max(s.y, b.max.y), s.z]; baseY = 0; contact.scale.set(s.x * 1.25, s.z * 1.45, 1);
     // Rooms: light through the open corner, a shadow camera that covers the floor, no contact blob.
     const isRoom = !!meta?.room, e = Math.max(2.5, Math.max(s.x, s.z) * 0.62);
     contact.visible = !isRoom && !sketch;

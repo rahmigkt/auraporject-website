@@ -3,10 +3,12 @@ import * as seating from './sofa.js';
 import * as table from './table.js';
 import * as bedroom from './bedroom.js';
 import * as set from './set.js';
+import * as storage from './storage.js';
+import {STORAGE_STYLES, STORAGE_STYLE_BY_ID, STORAGE_STARTS, recipeParams} from './styles-storage.js';
 import {BEDROOM_STYLES, BEDROOM_STYLE_BY_ID, ROOM_STYLE} from './styles-bedroom.js';
 import {STYLES as SEAT_STYLES, STYLE_BY_ID as SEAT_BY_ID, KINDS as SEAT_KINDS} from './styles.js';
 import {TABLE_STYLES, TABLE_STYLE_BY_ID} from './styles-table.js';
-import {HIDES, normalizeMaterials, normalizeTableMaterials, normalizeBedroomMaterials, MARKET_NEAR} from './catalog.js';
+import {HIDES, normalizeMaterials, normalizeTableMaterials, normalizeBedroomMaterials, normalizeStorageMaterials, MARKET_NEAR} from './catalog.js';
 import {buildMesh} from './build.js';
 // Line details start empty: the user draws them in.
 const LINE_KEYS = ['stitch', 'inlay', 'caseLine'];
@@ -114,6 +116,24 @@ export const FAMILIES = {
         }
       }
       return p;
+    }
+  },
+  storage: {
+    // RİTMO case goods: wardrobe, bedside table, chest of drawers, vanity — panel construction with fixed rules.
+    id: 'storage', mod: storage, styles: STORAGE_STYLES, byId: STORAGE_STYLE_BY_ID, kinds: storage.KINDS, defaultKind: 'wardrobe', starts: STORAGE_STARTS,
+    featureWeights: {frontStyle: 1.4, pull: 0.8, base: 1, frontFit: 0.6, legType: 0.5, topType: 0.5, caseEdge: 0.4, doorType: 0.8, board: 0, frontBoard: 0},
+    similarEnums: ['frontStyle', 'pull', 'base', 'caseEdge'], fixedKeys: ['solidThickness'],
+    normalizeMaterials: normalizeStorageMaterials,
+    /** Solid-wood surfaces mean solid panels (thickness from solidThickness); veneer and lacquer are on 18 mm MDF. */
+    couple(d) { d.params.board = d.materials.case.surface === 'wood' ? 'solid' : 'mdf'; d.params.frontBoard = d.materials.front.surface === 'wood' ? 'solid' : 'mdf'; return d; },
+    sampleParams(st, kind, r, locks) {
+      const list = st.starts[kind]?.length ? st.starts[kind] : STORAGE_STYLES[0].starts[kind];
+      return {...recipeParams(st, kind, r.pick(list)), ...(locks.params || {})};
+    },
+    sampleMaterials(st, r) {
+      const m = st.mats, species = r.weighted(m.species), stain = r.weighted(m.stain), finish = r.weighted(m.finish), color = r.weighted(m.color);
+      const surf = s => ({surface: s, species, stain, finish: s === 'lacquer' ? 'matte' : finish, color});
+      return normalizeStorageMaterials({case: surf(r.weighted(m.caseSurface)), front: surf(r.weighted(m.frontSurface)), wood: {species, stain, finish: 'oil'}, metal: {finish: r.weighted(m.metal)}});
     }
   },
   bedroom: {

@@ -235,7 +235,7 @@ const KIND_TABLE = {
   dining: L('yemek masasi|masa|dining table|esstisch|table a manger|eettafel|spisebord|mesa de comedor|tavolo da pranzo|tavolo')
 };
 const FAMILY_WORDS = {table: L('masa|sehpa|konsol|dresuar|table|tisch|tafel|bord|mesa|tavolo|tavolino|desk|bureau|escritorio|scrivania'), seating: L('koltuk|kanepe|berjer|sofa|couch|canape|divano|sessel|fauteuil|sillon|poltrona|lenestol|laenestol'),
-  bedroom: L('yatak|karyola|yatak odasi|baslik|komodin|sifonyer|gardirop|elbise dolabi|wardrobe|kleiderschrank|armoire|garderobekast|klaedeskab|armario|armadio|bed|bedroom|headboard|bett|kopfteil|schlafzimmer|nachttisch|kommode|lit|tete de lit|chevet|commode|chambre|hoofdbord|nachtkast|nachtkastje|ladekast|slaapkamer|seng|sengegavl|natbord|sovevaerelse|cama|cabecero|mesita de noche|comoda|dormitorio|letto|testiera|comodino|cassettiera|camera da letto|nightstand|bedside|dresser|chest of drawers')};
+  storage: L('yatak odasi|komodin|sifonyer|gardirop|elbise dolabi|makyaj masasi|dolap|cekmeceli|wardrobe|kleiderschrank|armoire|garderobekast|klaedeskab|armario|armadio|bedroom|schlafzimmer|nachttisch|kommode|chevet|commode|chambre|nachtkast|nachtkastje|ladekast|slaapkamer|natbord|sovevaerelse|mesita de noche|comoda|dormitorio|comodino|cassettiera|camera da letto|nightstand|bedside|dresser|chest of drawers|vanity|dressing table|schminktisch|coiffeuse|kaptafel|toiletbord|tocador|toeletta|storage|cabinet')};
 const PERSON_UNITS = L('kisilik|kisi|people|persons|personen|person|personnes|personnes|personer|personas|persone|seats|places|zitplaatsen|pladser|plazas|posti');
 
 const DELTA_WORDS = L('daha|ilave|more|extra|another|mehr|noch|weitere|plus|encore|meer|nog|mere|endnu|mas|otro|piu|ancora|altri');
@@ -255,10 +255,11 @@ export function parse(raw, current = {}) {
   const text = fold(raw), actions = [];
   // A word of another family switches family, then the rest is read with that family's grammar.
   const fam = text ? pickMap(text, FAMILY_WORDS) : null, cur = current.family || 'seating';
-  if (fam && fam !== cur && fam !== 'seating') { const r = (fam === 'table' ? parseTable : parseBedroom)(text); return {actions: [{type: 'family', value: fam}, ...r.actions.filter(a => a.type !== 'family')], understood: true}; }
+  if (fam && fam !== cur && fam !== 'seating') { const r = (fam === 'table' ? parseTable : parseStorage)(text); return {actions: [{type: 'family', value: fam}, ...r.actions.filter(a => a.type !== 'family')], understood: true}; }
   if (fam === 'seating' && cur !== 'seating') return {actions: [{type: 'family', value: 'seating'}, ...parse(raw, {family: 'seating'}).actions.filter(a => a.type !== 'family')], understood: true};
   if (cur === 'table') return parseTable(text);
   if (cur === 'bedroom') return parseBedroom(text);
+  if (cur === 'storage') return parseStorage(text);
   if (!text) return {actions, understood: false};
   for (const [name, list] of Object.entries(COMMANDS)) if (any(text, list)) { actions.push({type: 'command', name}); }
   if (actions.some(a => a.name === 'similar')) for (let i = actions.length - 1; i >= 0; i--) if (actions[i].name === 'variants') actions.splice(i, 1);
@@ -518,6 +519,77 @@ function parseBedroom(text) {
       actions.push(dir ? {type: 'delta', key: target, value: dir * Math.abs(mm)} : {type: 'set', key: target, value: mm});
     } else if (dir) {
       const steps = {mattressWidth: [100, 200, 400], headHeight: [50, 100, 200], width: [50, 100, 200], height: [20, 50, 100], depth: [20, 40, 80], headExtend: [50, 100, 200], legHeight: [20, 40, 80], baseHeight: [20, 40, 80], mattressThickness: [20, 40, 60]}[target] || [10, 20, 40];
+      actions.push({type: 'delta', key: target, value: dir * (any(text, SIZE.big) ? steps[2] : any(text, SIZE.small) ? steps[0] : steps[1])});
+    }
+  }
+  return {actions: dedupe(actions), understood: actions.length > 0};
+}
+
+// ---- RİTMO case goods vocabulary --------------------------------------------------------------------
+const STORAGE_KIND = {
+  nightstand: BED_KIND.nightstand, dresser: BED_KIND.dresser, wardrobe: BED_KIND.wardrobe,
+  vanity: L('makyaj masasi|makyaj|tuvalet masasi|vanity|dressing table|schminktisch|coiffeuse|kaptafel|toiletbord|tocador|toeletta')
+};
+const STORAGE_ENUM_WORDS = {
+  frontStyle: {...BED_ENUM_WORDS.frontStyle, slats: L('citali|lamel|slatted|slats|latten|lattes|lameller|listones|listelli')},
+  pull: BED_ENUM_WORDS.pull,
+  base: {wall: BED_ENUM_WORDS.caseBase.wall, plinth: [...BED_ENUM_WORDS.caseBase.recessed, ...BED_ENUM_WORDS.caseBase.plinth, ...L('baza|bazali')], legs: BED_ENUM_WORDS.caseBase.legs},
+  frontFit: {inset: L('gomme kapak|gomme|ic bini|inset|einliegend|encastre|inliggend|indliggende|embutido|filo'), overlay: L('tam bini|bindirme|overlay|aufschlagend|en applique|opliggend|paliggende|superpuesto')},
+  doorType: BED_ENUM_WORDS.wdDoorType,
+  mirror: BED_ENUM_WORDS.mirror,
+  caseLine: BED_ENUM_WORDS.caseLine,
+  topType: {slab: L('ayri tabla|tasan tabla|masif tabla|overhanging top|aufliegende platte|plateau rapporte'), flush: L('tablasiz|duz ust|flush top|bundig')}
+};
+const STORAGE_TARGETS = [
+  ['plinthHeight', L('baza yuksekli|kaide yuksekli|plinth height|sockelhohe|hauteur du socle|plinthoogte|sokkelhojde|altura del zocalo|altezza zoccolo')],
+  ['legHeight', BED_TARGETS.find(t => t[0] === 'legHeight')[1]],
+  ['depth', BED_TARGETS.find(t => t[0] === 'depth')[1]], ['width', BED_TARGETS.find(t => t[0] === 'width')[1]], ['height', BED_TARGETS.find(t => t[0] === 'height')[1]]
+];
+const FRONT_FROM_BED = {framed: 'shaker', cane: 'cane', fluted: 'fluted', grooved: 'grooved', flat: 'flat', slats: 'slats'};
+
+/** Case goods: piece, fronts, handles, base, fitting, doors, mirror, drawer count, materials, sizes. */
+function parseStorage(text) {
+  const actions = [];
+  if (!text) return {actions, understood: false};
+  for (const [name, list] of Object.entries(COMMANDS)) if (name !== 'variants' && name !== 'similar' && any(text, list)) actions.push({type: 'command', name});
+  for (const [id, list] of STYLE_WORDS) if (any(text, list)) { actions.push({type: 'style', value: id}); break; }
+  const fam = pickMap(text, FAMILY_WORDS); if (fam && fam !== 'storage') actions.push({type: 'family', value: fam});
+  const kind = pickMap(text, STORAGE_KIND); if (kind) actions.push({type: 'kind', value: kind});
+  for (const [key, map] of Object.entries(STORAGE_ENUM_WORDS)) {
+    let v = pickMap(text, map); if (!v) continue;
+    if (key === 'frontStyle') v = FRONT_FROM_BED[v] || v;
+    if (key === 'pull' && v === 'ring') v = 'knob';
+    if (key === 'pull' && v === 'edge' && /(tirnak|finger|griffleiste|prise|greeplijst|grebskant|unero|gola)/.test(text)) v = 'cutout';
+    actions.push({type: 'enum', key, value: v});
+  }
+  if (actions.some(a => a.key === 'mirror' && a.value !== 'none') && /(kemer|arch|bogen|arche|boog|bue|arco)/.test(text)) actions.find(a => a.key === 'mirror').value = 'arch';
+  const dm = text.match(/(\d)\s*(cekmece|drawer|schublade|tiroir|lade|skuffe|cajon|cassett)/); if (dm) actions.push({type: 'drawers', value: +dm[1]});
+  const species = pickMap(text, WOOD_WORDS), metal = pickMap(text, METAL_WORDS), finish = pickMap(text, FINISH_WORDS), surf = pickMap(text, SURFACE_WORDS);
+  const toFront = /(kapak|on yuz|cekmece onu|front|door|tur|porte|deur|lage|puerta|anta)/.test(text) && !/(govde|carcass|korpus|caisson|casco|struttura)/.test(text);
+  const slot = toFront ? 'front' : 'case';
+  if (surf && ['wood', 'veneer', 'lacquer'].includes(surf)) actions.push({type: 'material', slot, key: 'surface', value: surf});
+  if (species) actions.push({type: 'material', slot, key: 'species', value: species});
+  if (finish && !(surf === 'lacquer' && finish === 'lacquer')) actions.push({type: 'material', slot, key: 'finish', value: finish});
+  if (metal) actions.push({type: 'material', slot: 'metal', key: 'finish', value: metal});
+  if (!species && !metal) {
+    let colour = null, len = 0;
+    for (const [id, list] of COLOR_WORDS) for (const s2 of list) if (s2.length > len && has(text, s2)) { colour = id; len = s2.length; }
+    if (colour) actions.push({type: 'material', slot, key: 'color', value: MARKET_OF[colour] || colour});
+  }
+  const num = text.match(/(-?\d+(?:[.,]\d+)?)\s*(mm|cm|m)?(?![a-z0-9x×])/);
+  let target = null, targetStem = '';
+  for (const [key, list] of STORAGE_TARGETS) { const m = any(text, list); if (m) { target = key; targetStem = m; break; } }
+  let dir = 0, compWord = '', compKey = null;
+  for (const [d, key, list] of COMPARATIVES) { const m = any(text, list); if (m) { dir = d; compWord = m; if (key && !compKey) compKey = key; if (key) break; } }
+  if (!target && compKey && ['width', 'height', 'depth', 'legHeight'].includes(compKey)) target = compKey;
+  if (target && num && !any(text, DELTA_WORDS) && !(compWord && compWord.length > targetStem.length)) dir = 0;
+  if (target && !(dm && num && +num[1] === +dm[1])) {
+    if (num) {
+      const v = parseFloat(num[1].replace(',', '.')), unit = num[2] || '';
+      const mm = unit === 'mm' ? v : unit === 'm' ? v * 1000 : unit === 'cm' ? v * 10 : v <= 3 ? v * 1000 : v < 300 ? v * 10 : v;
+      actions.push(dir ? {type: 'delta', key: target, value: dir * Math.abs(mm)} : {type: 'set', key: target, value: mm});
+    } else if (dir) {
+      const steps = {width: [50, 100, 200], height: [20, 50, 100], depth: [20, 40, 80], legHeight: [20, 40, 80], plinthHeight: [10, 20, 40]}[target] || [10, 20, 40];
       actions.push({type: 'delta', key: target, value: dir * (any(text, SIZE.big) ? steps[2] : any(text, SIZE.small) ? steps[0] : steps[1])});
     }
   }

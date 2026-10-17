@@ -109,7 +109,7 @@ function section(part, xCut) {
   return loops;
 }
 
-const FILL = {fabric: '#f3efe7', welt: '#e8e1d4', wood: '#efe3cf', metal: '#e4e4e2', dark: '#d9d6d0', frame: '#f6ecda', case: '#efe6d6', mattress: '#ffffff', mirror: '#e9eef0', cane: '#f2e6c9', leather: '#e6d6c4', shadow: '#cfcac0', inlay: '#d9c48f'};
+const FILL = {front: '#efe6d6', back: '#f4ede0', glass: '#e9f0f2', fabric: '#f3efe7', welt: '#e8e1d4', wood: '#efe3cf', metal: '#e4e4e2', dark: '#d9d6d0', frame: '#f6ecda', case: '#efe6d6', mattress: '#ffffff', mirror: '#e9eef0', cane: '#f2e6c9', leather: '#e6d6c4', shadow: '#cfcac0', inlay: '#d9c48f'};
 
 /**
  * Build all views. Returns {views:{front,side,top,section}, extents, xCut}. Coordinates in mm (model space).
@@ -159,7 +159,7 @@ export function drawingSheet(compiled, labels, info = {}) {
   if (compiled.family === 'table') for (const s of views.top) if (!['top', 'leaf', 'grommet'].includes(s.role)) out.push(`<path d="${path('top', s.loops, 0)}" fill="none" stroke="#1f2420" stroke-width="0.18" stroke-dasharray="1.2 0.8"/>`);
   // Section: everything beyond the cut in light line, then cut faces hatched.
   for (const s of views.sideBehind) out.push(`<path d="${path('section', s.loops, Hm)}" fill="#fbfaf7" stroke="#9aa096" stroke-width="0.15"/>`);
-  for (const s of views.section) out.push(`<path d="${path('section', s.loops, Hm)}" fill="url(#${s.internal || ['wood', 'case', 'frame'].includes(s.mat) ? 'hatchWood' : 'hatchFoam'})" fill-rule="evenodd" stroke="#1f2420" stroke-width="0.35"/>`);
+  for (const s of views.section) out.push(`<path d="${path('section', s.loops, Hm)}" fill="url(#${s.internal || ['wood', 'case', 'frame', 'front', 'back'].includes(s.mat) ? 'hatchWood' : 'hatchFoam'})" fill-rule="evenodd" stroke="#1f2420" stroke-width="0.35"/>`);
   out.push(`</g>`);
   // Ground lines
   for (const v of ['front', 'side', 'section']) { const [x0, y0] = T(v, [v === 'front' ? -Wm / 2 - 60 : -Dm / 2 - 60, 0], Hm), [x1] = T(v, [v === 'front' ? Wm / 2 + 60 : Dm / 2 + 60, 0], Hm); out.push(`<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y0}" stroke="#1f2420" stroke-width="0.35"/>`); }
@@ -236,6 +236,8 @@ export function drawingSheet(compiled, labels, info = {}) {
 <text x="${tb[0] + 3}" y="${tb[1] + 15}">${esc(labels.scale)} 1:${scale} (A3)</text><text x="${tb[0] + 3}" y="${tb[1] + 20}">${esc(labels.units)}</text><text x="${tb[0] + 3}" y="${tb[1] + 25}">${esc(info.date || '')}</text>
 <text x="${tb[0] + 63}" y="${tb[1] + 15}">${esc(info.style || '')}</text><text x="${tb[0] + 63}" y="${tb[1] + 20}">${esc(info.id || '')}</text><text x="${tb[0] + 63}" y="${tb[1] + 25}">${esc(labels.status)}</text></g>`);
   out.push(`<text x="${margin}" y="${sheetH - margin + 3}" font-size="2.4" fill="#5c625a">${esc(labels.note)}</text>`);
+  // Link that opens this design in the studio (clickable in the PDF; the full address is in the package README).
+  if (info.link) out.push(`<a href="${esc(info.link)}"><text x="${margin}" y="${sheetH - margin - 2}" font-size="3" font-weight="600" fill="#a24a2a">↗ ${esc(labels.link || 'Open design')}: ${esc(info.link.replace(/^https?:\/\//, '').slice(0, 48))}…</text></a>`);
   const defs = `<defs><pattern id="hatchFoam" width="2.4" height="2.4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="2.4" height="2.4" fill="#f6f1e6"/><line x1="0" y1="0" x2="0" y2="2.4" stroke="#8b8577" stroke-width="0.18"/></pattern><pattern id="hatchWood" width="1.4" height="1.4" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><rect width="1.4" height="1.4" fill="#ecd9b8"/><line x1="0" y1="0" x2="0" y2="1.4" stroke="#7a5a32" stroke-width="0.22"/></pattern></defs>`;
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${sheetW}mm" height="${sheetH}mm" viewBox="0 0 ${sheetW} ${sheetH}" font-family="Helvetica, Arial, sans-serif">${defs}<rect width="${sheetW}" height="${sheetH}" fill="#fff"/><rect x="${margin / 2}" y="${margin / 2}" width="${sheetW - margin}" height="${sheetH - margin}" fill="none" stroke="#1f2420" stroke-width="0.5"/>${out.join('')}</svg>`;
   return {svg, scale, views, xCut};

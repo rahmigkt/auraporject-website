@@ -253,6 +253,15 @@ export function normalizeBedroomMaterials(m = {}) {
   return {...base, case: c, linen};
 }
 
+/** Case goods (RİTMO): carcass and fronts (solid wood, veneered MDF or lacquered MDF), leg wood, metal, glass. */
+const SURF = s => { const c = {surface: 'veneer', species: 'oak', stain: 'natural', finish: 'matte', color: 'white', ...s}; if (!['wood', 'veneer', 'lacquer'].includes(c.surface)) c.surface = 'veneer'; if (!WOODS[c.species] || c.species === 'gurgen') c.species = 'oak'; if (!STAINS[c.stain]) c.stain = 'natural'; if (!FINISHES[c.finish]) c.finish = 'matte'; if (!COLORS[c.color]) c.color = 'white'; return {surface: c.surface, species: c.species, stain: c.stain, finish: c.finish, color: c.color}; };
+export function normalizeStorageMaterials(m = {}) {
+  const kase = SURF(m.case || {}), front = SURF(m.front || m.case || {});
+  const w = {species: kase.surface === 'lacquer' ? 'oak' : kase.species, stain: kase.surface === 'lacquer' ? 'natural' : kase.stain, finish: 'oil', ...(m.wood || {})};
+  const wood = {species: WOODS[w.species] ? w.species : 'oak', stain: STAINS[w.stain] ? w.stain : 'natural', finish: FINISHES[w.finish] ? w.finish : 'oil'};
+  return {case: kase, front, wood, metal: {finish: METALS[m.metal?.finish] ? m.metal.finish : 'black'}, glass: {glass: GLASS[m.glass?.glass] ? m.glass.glass : 'clear'}};
+}
+
 /** Whole-bedroom materials: the furniture palette plus wall paint, floor and rug. */
 export const WALL_COLORS = ['white', 'cream', 'sand', 'greige', 'silver', 'mink', 'khaki', 'iceBlue', 'dustyRose', 'mint', 'anthracite', 'petrol'];
 export const RUG_COLORS = ['cream', 'sand', 'greige', 'mink', 'silver', 'khaki', 'camel', 'anthracite', 'dustyRose', 'petrol'];
