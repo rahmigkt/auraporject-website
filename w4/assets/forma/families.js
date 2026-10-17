@@ -8,6 +8,8 @@ import {STYLES as SEAT_STYLES, STYLE_BY_ID as SEAT_BY_ID, KINDS as SEAT_KINDS} f
 import {TABLE_STYLES, TABLE_STYLE_BY_ID} from './styles-table.js';
 import {normalizeMaterials, normalizeTableMaterials, normalizeBedroomMaterials, MARKET_NEAR} from './catalog.js';
 import {buildMesh} from './build.js';
+// Line details start empty: the user draws them in.
+const LINE_KEYS = ['stitch', 'inlay', 'caseLine'];
 
 /** Stain tone that keeps the style's intended wood colour on a gürgen (beech) frame. */
 const STAIN_FOR = {oak: 'oak', ash: 'lightOak', beech: 'natural', gurgen: 'natural', walnut: 'walnut', cherry: 'cherry', teak: 'teak', smoked: 'darkWalnut', ebonized: 'black'};
@@ -26,7 +28,7 @@ export const FAMILIES = {
     normalizeMaterials,
     sampleParams(st, kind, r, locks) {
       const {RANGES, ENUMS} = seating, k = SEAT_KINDS[kind] || SEAT_KINDS.sofa, p = {};
-      for (const key of Object.keys(ENUMS)) p[key] = st.enums[key] ? r.weighted(st.enums[key]) : r.pick(ENUMS[key]);
+      for (const key of Object.keys(ENUMS)) p[key] = LINE_KEYS.includes(key) ? 'none' : st.enums[key] ? r.weighted(st.enums[key]) : r.pick(ENUMS[key]);
       for (const key of Object.keys(RANGES)) { const [lo, hi] = st.ranges[key] || RANGES[key]; p[key] = r.range(lo, hi); }
       p.width = r.range(...k.width); p.depth += k.depthAdd; p.seatCount = r.int(...k.seats);
       if (kind !== 'armchair' && p.seatType === 'split' && p.width > 2300 && r.next() < 0.5) p.seatCount = 3;
@@ -64,7 +66,7 @@ export const FAMILIES = {
     normalizeMaterials: normalizeTableMaterials,
     sampleParams(st, kind, r, locks) {
       const {RANGES, ENUMS, KINDS} = table, k = KINDS[kind] || KINDS.dining, p = {kind};
-      for (const key of Object.keys(ENUMS)) p[key] = st.enums[key] ? r.weighted(st.enums[key]) : r.pick(ENUMS[key]);
+      for (const key of Object.keys(ENUMS)) p[key] = LINE_KEYS.includes(key) ? 'none' : st.enums[key] ? r.weighted(st.enums[key]) : r.pick(ENUMS[key]);
       for (const key of Object.keys(RANGES)) { const [lo, hi] = st.ranges[key] || TABLE_SAMPLE_RANGES[key] || RANGES[key]; p[key] = r.range(lo, hi); }
       // Shapes and bases that suit each kind.
       if (kind === 'console' || kind === 'desk') { if (!['rect', 'rounded', 'racetrack', 'boat'].includes(p.topShape)) p.topShape = r.pick(['rect', 'rounded']); if (['pedestal', 'tripod', 'drum', 'doublePedestal'].includes(p.baseType)) p.baseType = r.pick(['legsApron', 'slabEnds', 'sled', 'legsOnly']); }
@@ -123,7 +125,7 @@ export const FAMILIES = {
     sampleParams(st, kind, r, locks) {
       const {RANGES, ENUMS} = set, p = {kind}, rs = ROOM_STYLE[st.id] || {};
       const fromStyle = key => st.enums[key] ? r.weighted(st.enums[key]) : null;
-      for (const key of Object.keys(ENUMS)) p[key] = rs[key] ? r.weighted(rs[key]) : fromStyle(key) ?? r.pick(ENUMS[key]);
+      for (const key of Object.keys(ENUMS)) p[key] = LINE_KEYS.includes(key) ? 'none' : rs[key] ? r.weighted(rs[key]) : fromStyle(key) ?? r.pick(ENUMS[key]);
       for (const key of Object.keys(RANGES)) { const [lo, hi] = st.ranges[key] || ROOM_SAMPLE_RANGES[key] || BEDROOM_SAMPLE_RANGES[key] || RANGES[key]; p[key] = r.range(lo, hi); }
       const lay = fromStyle('caseLayout'); p.nsLayout = lay === 'niche' ? 'niche' : 'stack'; p.drLayout = ['split', 'topSplit'].includes(lay) ? lay : 'stack';
       const cb = fromStyle('caseBase'); p.drBase = cb === 'wall' || cb === 'sled' ? 'plinth' : cb || 'plinth';

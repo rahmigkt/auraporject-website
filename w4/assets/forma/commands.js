@@ -57,6 +57,11 @@ const COMPARATIVES = [
 const SIZE = {small: L('biraz|azicik|hafif|a bit|a little|slightly|bit|etwas|ein bisschen|leicht|un peu|legerement|een beetje|iets|beetje|lidt|en smule|un poco|ligeramente|un po|leggermente|po'), big: L('cok|epey|baya|much|a lot|lot|way|viel|deutlich|beaucoup|nettement|veel|flink|meget|mucho|bastante|molto|parecchio')};
 
 const ENUM_WORDS = {
+  stitch: {
+    double: L('cift dikis|cift sira dikis|cift igne|double stitch|double topstitch|doppelnaht|doppelte ziernaht|double surpiqure|dubbele stiksel|dobbelt pyntesom|doble pespunte|doppia impuntura'),
+    none: L('dikissiz|dikis yok|dikisi kaldir|no stitching|no topstitch|ohne ziernaht|sans surpiqure|zonder stiksel|uden pyntesom|sin pespunte|senza impuntura'),
+    single: L('dikis|tek dikis|topstitch|stitching|stitch|ziernaht|steppnaht|surpiqure|stiksel|siersteek|pyntesom|pespunte|impuntura')
+  },
   armType: {
     none: L('kolcaksiz|kolsuz|kollari kaldir|armless|no arms|without arms|ohne armlehnen|ohne armlehne|sans accoudoirs|sans accoudoir|zonder armleuningen|uden armlaen|sin brazos|senza braccioli'),
     slim: L('ince kol|ince kolcak|slim arm|thin arm|schmale armlehne|schmal|accoudoirs fins|fin accoudoir|smalle armleuning|smalle armlaen|brazos finos|brazo fino|braccioli sottili|bracciolo sottile|slim'),
@@ -198,6 +203,12 @@ const TABLE_TARGETS = [
   ['height', L('yukseklik|yuksekli|height|tall|hohe|hauteur|hoogte|hojde|altura|altezza')]
 ];
 const TABLE_ENUM_WORDS = {
+  inlay: {
+    double: L('cift kakma|double inlay|doppelte intarsie|double filet|dubbele inleg|dobbelt indlaeg|filete doble|doppio filetto'),
+    groove: L('kenar kanali|kenarda kanal|golge kanal|edge groove|shadow groove|kantenfuge|schattenfuge|rainure|randgroef|schaduwvoeg|kantnot|skyggenot|ranura|scanalatura|scuretto'),
+    none: L('kakmasiz|kakma yok|cizgisiz|no inlay|ohne intarsie|sans filet|zonder inleg|uden indlaeg|sin filete|senza filetto'),
+    single: L('kakma|metal kakma|pirinc serit|inlay|intarsie|filet|inleg|indlaeg|filete|filetto')
+  },
   topShape: {round: L('yuvarlak|daire|round|circular|rund|ronde|rond|rund|redonda|redondo|rotondo|rotonda'), oval: L('oval|elips|ellipse|ovaal'), rect: L('dikdortgen|kare|rectangular|rectangle|square|rechteckig|eckig|rectangulaire|carree|rechthoekig|vierkant|rektangulaer|firkantet|rectangular|cuadrada|rettangolare|quadrato'), rounded: L('kosesi yuvarlak|yumusak kose|rounded corners|abgerundete ecken|angles arrondis|afgeronde hoeken|afrundede hjorner|esquinas redondeadas|angoli arrotondati'), racetrack: L('yaris pisti|stadyum|racetrack|stadium|stadion|piste|renbaan|stadio'), boat: L('tekne|gemi|boat|bootsform|bateau|boot|bad|barco|barca'), superellipse: L('yumusak kare|soft square|weiches quadrat|carre doux|zacht vierkant|blod firkant|cuadrado suave|quadrato morbido')},
   edge: {underbevel: L('ince kenar|alttan pahli|ince gorunen|thin edge|knife edge|underbevel|dunne kante|bord fin|dunne rand|tynd kant|canto fino|bordo sottile'), bullnose: L('yuvarlak kenar|bullnose|halbrund|bord arrondi|ronde rand|afrundet kant|canto redondo|bordo arrotondato'), chamfer: L('pahli|pah|chamfer|fase|chanfrein|afgeschuind|affaset|chaflan|smusso'), ogee: L('ogee|klasik kenar|profil kenar|karnies|doucine|profiel|profilkant|moldura|modanatura'), square: L('keskin kenar|duz kenar|square edge|gerade kante|bord droit|rechte rand|lige kant|canto recto|bordo dritto'), eased: L('hafif yuvarlatilmis|eased|gebrochen|adouci|afgerond|brudt kant|suavizado|smussato')},
   baseType: {pedestal: L('tek ayak|orta ayak|pedestal|saule|mittelfuss|pied central|centrale poot|midterfod|pie central|piede centrale|lale ayak|tulip'), doublePedestal: L('cift ayak|iki ayakli orta|double pedestal|zwei saulen|deux pieds centraux|dubbele poot|dobbelt fod|doble pie|doppio piede'), trestle: L('sehpa ayak|kavalet|trestle|bock|treteau|schragen|bukke|caballete|cavalletto'), slabEnds: L('tabla ayak|yan panel|selale|waterfall|wange|wangen|pieds panneaux|cascade|wangen|plade ben|cascada|fianchi|a cascata'), sled: L('kizak|cerceve ayak|sled|kufe|traineau|slee|mede|patin|slitta'), xBase: L('x ayak|capraz ayak|x base|x-gestell|kreuzgestell|pieds en x|x-poot|kryds|patas en x|gambe a x'), tripod: L('uc ayak|uc ayakli|tripod|dreibein|trepied|driepoot|trefod|tripode|treppiede'), hairpin: L('firkete|hairpin|haarnadel|epingle|haarspeld|harnal|horquilla|forcina'), drum: L('silindir govde|tambur|drum|trommel|tambour|trommel|tromle|tambor|tamburo'), legsApron: L('kusakli|dort ayak|4 ayak|apron|zarge|ceinture|regel|sarg|faldon de madera|fascia'), legsOnly: L('kusaksiz|kusak yok|without apron|ohne zarge|sans ceinture|zonder regel|uden sarg|sin faldon|senza fascia')},
@@ -357,7 +368,10 @@ function parseTable(text) {
   const stone = pickMap(text, STONE_WORDS); if (stone) { actions.push({type: 'material', slot: 'top', key: 'surface', value: 'stone'}); actions.push({type: 'material', slot: 'top', key: 'stone', value: stone}); }
   const glass = pickMap(text, GLASS_WORDS); if (glass && surf === 'glass') actions.push({type: 'material', slot: 'top', key: 'glass', value: glass});
   const species = surf === 'glass' || surf === 'stone' || stone ? null : pickMap(text, WOOD_WORDS); if (species) actions.push({type: 'material', slot, key: 'species', value: species});
-  const metal = pickMap(text, METAL_WORDS); if (metal) { actions.push({type: 'material', slot: 'base', key: 'surface', value: 'metal'}); actions.push({type: 'material', slot: 'base', key: 'metal', value: metal}); }
+  // A metal named with an inlay is the inlay (hardware) metal, not the base: "pirinç kakma".
+  const metal = pickMap(text, METAL_WORDS), inlayed = !slotBase && actions.some(x => x.key === 'inlay' && x.value !== 'none' && x.value !== 'groove');
+  if (metal && inlayed) actions.push({type: 'material', slot: 'hardware', key: 'metal', value: metal});
+  else if (metal) { actions.push({type: 'material', slot: 'base', key: 'surface', value: 'metal'}); actions.push({type: 'material', slot: 'base', key: 'metal', value: metal}); }
   if (/(parlak|polished|poliert|poli|gepolijst|poleret|pulido|lucidat)/.test(text) && (stone || surf === 'stone')) actions.push({type: 'material', slot: 'top', key: 'polish', value: 'polished'});
   if (/(honlu|mat tas|honed|geschliffen|adouci|gezoet|slebet|apomazado|levigat)/.test(text)) actions.push({type: 'material', slot: 'top', key: 'polish', value: 'honed'});
   if (!species && !metal && !stone) {
@@ -396,6 +410,16 @@ const BED_KIND = {
   wardrobe: L('gardirop|elbise dolabi|dolap|wardrobe|closet|kleiderschrank|schrank|armoire|penderie|garderobekast|kledingkast|klaedeskab|garderobe|armario|ropero|armadio|guardaroba')
 };
 const BED_ENUM_WORDS = {
+  stitch: {
+    double: L('cift dikis|cift sira dikis|cift igne|double stitch|double topstitch|doppelnaht|doppelte ziernaht|double surpiqure|dubbele stiksel|dobbelt pyntesom|doble pespunte|doppia impuntura'),
+    none: L('dikissiz|dikis yok|dikisi kaldir|no stitching|no topstitch|ohne ziernaht|sans surpiqure|zonder stiksel|uden pyntesom|sin pespunte|senza impuntura'),
+    single: L('dikis|tek dikis|topstitch|stitching|stitch|ziernaht|steppnaht|surpiqure|stiksel|siersteek|pyntesom|pespunte|impuntura')
+  },
+  caseLine: {
+    inlay: L('kakma|metal kakma|pirinc serit|inlay|intarsie|filet|inleg|indlaeg|filete|filetto'),
+    groove: L('golge kanal|freze cizgi|shadow groove|schattenfuge|rainure|schaduwvoeg|skyggenot|ranura|scuretto'),
+    none: L('cizgisiz|kakmasiz|kakma yok|no inlay|ohne intarsie|sans filet|zonder inleg|uden indlaeg|sin filete|senza filetto')
+  },
   headType: {tufted: L('kapitone|chester|tufted|capitonne|capitone|knappet|capitone|buttoned'), channel: L('kanal|kanalli|dikey kanal|channel|channels|channelled|kanalstepp|cannele|kanaal|kanaler|canales|canali'), hChannel: L('yatay kanal|yatay dilim|horizontal channel|horizontal channels|horizontale kanale|cotes horizontales|horizontale kanalen|vandrette kanaler|canales horizontales|canali orizzontali'),
     cane: L('hasir|rattan|cane|viyana|wiener geflecht|geflecht|cannage|weens|wienerflet|rejilla|paglia di vienna|paglia'), slats: L('citali|cita|slat|slats|slatted|latten|lattes|lamel|lameller|listones|listelli|ribber'), wingback: L('kanatli|kanat|wingback|wing|ohren|oreilles|orejas|ali|oren|orer'),
     split: L('asma yastik|asili yastik|hanging cushion|hanging cushions|hangekissen|haengekissen|coussins suspendus|hangkussens|haengepuder|cojines colgantes|cuscini appesi'), boiserie: L('boiserie|duvar paneli|wall panel|wandpaneel|lambri|vaegpanel'),
@@ -441,6 +465,7 @@ function parseBedroom(text) {
     if ((key === 'headType' || key === 'headShape') && ((kind && kind !== 'bed') || (!isBed && pickMap(text, BED_ENUM_WORDS.mirror)))) continue;
     if (key === 'frontStyle' && (isBed || (v === 'cane' && !kind)) && kind !== 'wardrobe') continue;
     if (key === 'caseBase' && isBed) continue;
+    if (key === 'headType' && v === 'channel' && pickMap(text, BED_ENUM_WORDS.caseLine) === 'groove') continue;
     if (key === 'storage' && !isBed && kind) continue;
     actions.push({type: 'enum', key, value: v});
   }

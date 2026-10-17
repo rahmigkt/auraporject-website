@@ -109,7 +109,7 @@ function section(part, xCut) {
   return loops;
 }
 
-const FILL = {fabric: '#f3efe7', welt: '#e8e1d4', wood: '#efe3cf', metal: '#e4e4e2', dark: '#d9d6d0', frame: '#f6ecda', case: '#efe6d6', mattress: '#ffffff', mirror: '#e9eef0', cane: '#f2e6c9', leather: '#e6d6c4', shadow: '#cfcac0'};
+const FILL = {fabric: '#f3efe7', welt: '#e8e1d4', wood: '#efe3cf', metal: '#e4e4e2', dark: '#d9d6d0', frame: '#f6ecda', case: '#efe6d6', mattress: '#ffffff', mirror: '#e9eef0', cane: '#f2e6c9', leather: '#e6d6c4', shadow: '#cfcac0', inlay: '#d9c48f'};
 
 /**
  * Build all views. Returns {views:{front,side,top,section}, extents, xCut}. Coordinates in mm (model space).

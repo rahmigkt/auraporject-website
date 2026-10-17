@@ -1,5 +1,5 @@
 // Builds meshes from part geometry descriptors (shared by every family). Cached by descriptor.
-import {cushion, loft, lathe, tube, weltLoop, sphere, profiledSlab, transformPositions, computeNormals} from './mesh.js';
+import {cushion, loft, lathe, tube, lineMesh, weltLoop, sphere, profiledSlab, transformPositions, computeNormals} from './mesh.js';
 import {edgeProfile} from './table.js';
 
 const cache = new Map();
@@ -13,6 +13,7 @@ export function buildMesh(q) {
   else if (g.fn === 'lathe') mesh = lathe(g.profile, {square: g.square, faceted: g.faceted, segments: g.segments || 28});
   else if (g.fn === 'tube') mesh = tube(g.points, g.r);
   else if (g.fn === 'welt') mesh = weltLoop(g.w, g.d, g.r, g.cord);
+  else if (g.fn === 'line') mesh = lineMesh(g);
   else if (g.fn === 'slab') mesh = profiledSlab(g.outline, g.t, edgeProfile(...g.profile), {steps: g.profile[0] === 'square' ? 2 : 14});
   else if (g.fn === 'clipped') {
     // A part tilted in place and cut flat at y0 / y1 (splayed legs, X bars): ends sit on the floor and under the top.

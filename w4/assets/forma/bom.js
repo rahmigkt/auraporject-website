@@ -8,6 +8,7 @@ import {FIBERS, WEAVE_NAMES, PATTERNS, COLORS, WOODS, FINISHES, METALS, STAINS, 
 import {yardage} from './textile.js';
 
 const ROLE = {
+  stitch: ['Dekoratif dikiş', 'Topstitching', 'Tek/çift sıra, 3–4 mm adım, kalın dikiş ipliği (Nm 20)', 'Single/double row, 3–4 mm stitch, heavy thread (Nm 20)'],
   'seat-deck': ['Oturum tabanı', 'Seat deck', 'Elastik kemer veya zigzag yay tabanı, 25 mm köpük kaplama', 'Elastic webbing or sinuous springs, 25 mm foam wrap'],
   'seat-cushion': ['Oturum minderi', 'Seat cushion', 'HR 35 kg/m³ köpük + elyaf sargı, fermuarlı kılıf', 'HR 35 kg/m³ foam + fibre wrap, zipped cover'],
   'seat-tight': ['Sabit oturum', 'Tight seat', 'HR 35 kg/m³ köpük, gövdeye sabit döşeme', 'HR 35 kg/m³ foam, fixed upholstery'],

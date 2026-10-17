@@ -218,6 +218,40 @@ export function tube(points, radius, {sides = 14} = {}) {
   return finish(b);
 }
 
+/** Line details (topstitch, inlay, groove): a thin tube along a 3D polyline, solid or dashed like a stitch. */
+export function lineMesh({points, r = 1, closed = true, dash = null, sides = 6}) {
+  // Drop repeated points (a zero-length segment has no direction).
+  const clean = points.filter((q, i) => { const o = points[(i - 1 + points.length) % points.length]; return i === 0 && !closed || Math.hypot(q[0] - o[0], q[1] - o[1], q[2] - o[2]) > 0.05; });
+  const pts = closed ? [...clean, clean[0]] : clean, acc = [0];
+  for (let i = 1; i < pts.length; i++) acc.push(acc[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1], pts[i][2] - pts[i - 1][2]));
+  const total = acc.at(-1);
+  if (!dash || total <= 0) return tube(pts, r, {sides});
+  let seg = 1;
+  const at = s => { while (seg < acc.length - 1 && acc[seg] < s) seg++; const t = (s - acc[seg - 1]) / ((acc[seg] - acc[seg - 1]) || 1); return pts[seg - 1].map((v, k) => v + (pts[seg][k] - v) * t); };
+  const [len, gap] = dash, n = Math.max(1, Math.round(total / (len + gap))), step = total / n, pieces = [];
+  for (let i = 0; i < n; i++) { const a = at(i * step), b = at(i * step + len * step / (len + gap)); pieces.push(tube([a, b], r, {sides})); }
+  return mergeMeshes(pieces);
+}
+function mergeMeshes(list) {
+  const nv = list.reduce((s, m) => s + m.positions.length, 0), ni = list.reduce((s, m) => s + m.indices.length, 0), nu = list.reduce((s, m) => s + m.uvs.length, 0);
+  const positions = new Float32Array(nv), normals = new Float32Array(nv), uvs = new Float32Array(nu), indices = new Uint32Array(ni);
+  let ov = 0, oi = 0, ou = 0;
+  for (const m of list) {
+    positions.set(m.positions, ov); normals.set(m.normals, ov); uvs.set(m.uvs, ou);
+    for (let i = 0; i < m.indices.length; i++) indices[oi + i] = m.indices[i] + ov / 3;
+    ov += m.positions.length; oi += m.indices.length; ou += m.uvs.length;
+  }
+  return {positions, normals, uvs, indices};
+}
+/** Rounded rectangle loop (cx, cy centre; w × h; corner radius r) as [u, v] points, counter-clockwise. */
+export function roundedRectLoop(w, h, r, cx = 0, cy = 0, seg = 6) {
+  r = Math.max(0, Math.min(r, w / 2 - 0.1, h / 2 - 0.1));
+  const hx = w / 2 - r, hy = h / 2 - r, out = [];
+  for (const [ax, ay, a0] of [[hx, hy, 0], [-hx, hy, 90], [-hx, -hy, 180], [hx, -hy, 270]])
+    for (let k = 0; k <= seg; k++) { const a = (a0 + k * 90 / seg) * Math.PI / 180; out.push([cx + ax + Math.cos(a) * r, cy + ay + Math.sin(a) * r]); }
+  return out;
+}
+
 /** Closed tube along a rounded rectangle in the XZ plane (piping/welt cord). */
 export function weltLoop(w, d, r, cord) {
   const pts = [], hw = w / 2 - r, hd = d / 2 - r;

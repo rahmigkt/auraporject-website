@@ -1,6 +1,7 @@
 // Seating family: sofa, loveseat and armchair from one parametric assembly grammar.
 // Units: millimetres and degrees. Origin: floor centre; front faces +z.
-import {tuftGrid, transformPositions, bounds} from './mesh.js';
+import {tuftGrid, transformPositions, bounds, roundedRectLoop} from './mesh.js';
+import {linePart, densify, rows} from './lines.js';
 import {buildMesh} from './build.js';
 import {armSection, armOverhang, legProfile, isSquareLeg, ARM_TYPES, LEG_TYPES} from './profiles.js';
 import {clamp} from './rng.js';
@@ -23,7 +24,8 @@ export const ENUMS = {
   cushionEdge: ['boxed', 'knife', 'bullnose', 'soft'],
   baseType: ['legs', 'plinth', 'floating', 'skirt', 'sled', 'frame'],
   legType: LEG_TYPES,
-  welt: ['none', 'self', 'contrast']
+  welt: ['none', 'self', 'contrast'],
+  stitch: ['none', 'single', 'double']
 };
 
 export const DEFAULTS = {
@@ -32,7 +34,7 @@ export const DEFAULTS = {
   backType: 'loose', backRake: 12, backThickness: 190, camel: 60, channelCount: 6, tuftSpacing: 170,
   seatType: 'split', seatCount: 3, cushionThickness: 150, cushionCrown: 14, cushionEdge: 'boxed',
   baseType: 'legs', legType: 'tapered', legHeight: 140, legSize: 22, legTaper: 0.6, legSplay: 0, legInset: 60,
-  welt: 'none', pillows: 0
+  welt: 'none', stitch: 'none', pillows: 0
 };
 
 const MIN_SEAT_WIDTH = 500;
@@ -161,13 +163,20 @@ export function compile(raw) {
     if (edge === 'soft') return {...base, r: cT * 0.32, crownTop: crown + 6, crownFront: 12};
     return {...base, r: 14, crownTop: crown, crownFront: 4};
   };
+  // Topstitch on the seat tops: dashed thread loops inset from the edge, following the crowned surface.
+  const bump = u => Math.max(0, 1 - u * u);
+  const stitch = (id, g, pos) => rows(p.stitch, Math.max(22, g.r + 8)).forEach((inset, k) => {
+    const hw = g.w / 2, hd = g.d / 2, loop = densify(roundedRectLoop(g.w - 2 * inset, g.d - 2 * inset, 14), 30);
+    parts.push(linePart(`${id}-stitch-${k + 1}`, 'stitch', loop.map(([x, z]) => [x, g.h / 2 + (g.crownTop || 0) * bump(x / hw) * bump(z / hd) + 0.4, z]), pos));
+  });
   if (p.seatType === 'tight') {
-    parts.push(part('seat', 'seat-tight', 'fabric', {...cg(innerW), r: Math.min(30, cT * 0.3)}, [0, deckTop + cT / 2 - 4, seatZ]));
+    const g = {...cg(innerW), r: Math.min(30, cT * 0.3)}, pos = [0, deckTop + cT / 2 - 4, seatZ];
+    parts.push(part('seat', 'seat-tight', 'fabric', g, pos)); stitch('seat', g, pos);
   } else {
     const n = p.seatType === 'bench' ? 1 : p.seatCount, w = innerW / n;
     for (let i = 0; i < n; i++) {
       const x = -innerW / 2 + w * (i + 0.5);
-      parts.push(part(`seat-cushion-${i + 1}`, 'seat-cushion', 'fabric', cg(w - 6), [x, deckTop + cT / 2, seatZ]));
+      parts.push(part(`seat-cushion-${i + 1}`, 'seat-cushion', 'fabric', cg(w - 6), [x, deckTop + cT / 2, seatZ])); stitch(`seat-${i + 1}`, cg(w - 6), [x, deckTop + cT / 2, seatZ]);
       if (p.welt !== 'none' && edge !== 'soft') for (const s of edge === 'knife' ? [0] : [-1, 1])
         parts.push(part(`welt-${i + 1}-${s < 0 ? 'b' : s > 0 ? 't' : 'm'}`, 'welt', p.welt === 'contrast' ? 'welt' : 'fabric', {fn: 'welt', w: w - 6, d: seatD, r: 14, cord: 4}, [x, deckTop + cT / 2 + s * (cT / 2 - 2), seatZ]));
     }
