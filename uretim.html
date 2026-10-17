@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AURA · Üretim</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/forma/studio.css?v=20261017v">
+<style>
+body{background:var(--paper,#f1eee6);color:var(--ink,#1f2420);margin:0;font-family:Inter,Helvetica,Arial,sans-serif}
+.p-wrap{max-width:980px;margin:0 auto;padding:28px 18px 60px}.p-wrap h1{font-family:Georgia,serif;font-weight:400;font-size:30px;margin:6px 0 4px}
+.p-box{background:#fbfaf6;border:1px solid var(--hair,#ddd8cc);padding:18px;margin:16px 0}.p-box h2{font-size:13px;letter-spacing:1.4px;text-transform:uppercase;margin:0 0 12px;color:#5c625a}
+.p-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}.p-grid label{display:flex;flex-direction:column;font-size:12px;gap:4px}
+.p-grid input,.p-grid select,.p-box textarea{font:inherit;padding:8px;border:1px solid var(--hair,#ddd8cc);background:#fff}
+.p-items li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #ebe7de;flex-wrap:wrap}.p-items{list-style:none;padding:0;margin:0}
+.p-items small{color:#5c625a;display:block}.p-acts{display:flex;gap:8px;flex-wrap:wrap}.p-note{font-size:12px;color:#5c625a}.p-warn{color:#a24a2a;font-size:13px}
+.p-ok{display:flex;gap:8px;align-items:flex-start;font-size:13px;margin-top:10px}
+</style>
+</head>
+<body>
+<main class="p-wrap">
+  <p class="f-eyebrow">AURA · ÜRETİM</p>
+  <h1>Onay, ebatlama ve montaj kitapçığı</h1>
+  <p class="p-note">Bu sayfa tasarımcı ve atölye içindir. Ebatlama planı ve montaj kitapçığı yalnızca tasarımcı onayından sonra, onaylanan tasarımdan üretilir.</p>
+  <section class="p-box"><h2>1 · Tasarım</h2>
+    <div class="p-grid"><label>Tasarım / proje bağlantısı<input id="link" placeholder="https://auraproject.com.tr/tasarla.html#p=…"></label>
+    <label>ya da design.json / project.json<input id="file" type="file" accept=".json,application/json"></label></div>
+    <p class="p-note" id="loadState"></p>
+    <ul class="p-items" id="items"></ul>
+  </section>
+  <section class="p-box"><h2>2 · Onay</h2>
+    <div class="p-grid">
+      <label>Onaylayan tasarımcı *<input id="approver" maxlength="80"></label>
+      <label>Kitapçık dili<select id="lang"><option value="tr">Türkçe</option><option value="en">English</option><option value="de">Deutsch (EN metin)</option><option value="fr">Français (EN metin)</option><option value="nl">Nederlands (EN metin)</option><option value="da">Dansk (EN metin)</option><option value="es">Español (EN metin)</option><option value="it">Italiano (EN metin)</option></select></label>
+      <label>Testere payı (mm)<input id="kerf" type="number" step="0.1" value="4.4"></label>
+      <label>Kenar temizliği (mm)<input id="trim" type="number" step="1" value="10"></label>
+      <label>Kenar bandı kalınlığı (mm)<input id="band" type="number" step="0.1" value="1"></label>
+    </div>
+    <label class="p-ok"><input type="checkbox" id="approve"> <span>Ölçüleri, yapımı, malzemeleri ve donanımı kontrol ettim; bu tasarımı üretim için onaylıyorum.</span></label>
+    <p class="p-warn" id="approveState"></p>
+  </section>
+  <section class="p-box"><h2>3 · Üretim dosyaları</h2>
+    <p class="p-note">Her ürün için: ebatlama listesi (CSV, kesim ölçüsü = net ölçü − bant payı), levha yerleşim planı (PDF) ve montaj kitapçığı (PDF). Taş tezgah, cam ve ayna kesim dışıdır; ayrı sipariş listesinde yer alır.</p>
+    <div class="p-acts"><button class="f-primary" id="all" disabled>Tümünü indir (ZIP) ↓</button></div>
+    <p class="p-note" id="outState"></p>
+  </section>
+</main>
+<script type="module" src="assets/forma/production/app.js?v=20261017v"></script>
+</body>
+</html>

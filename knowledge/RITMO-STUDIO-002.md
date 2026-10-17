@@ -34,3 +34,13 @@ Family **Mutfak** (`kitchen`): a run (duvar mutfağı) or an island of modules o
 900 mm high (850–950), 600 deep (island 800–1300), plinth 100–150 recessed 50 mm, wall units 450–750 above the
 worktop. Sink single / double / with drainer, undermount or inset; tap; induction or gas hob; chimney or
 integrated hood; splashback. Corner units, carousels and other special fittings will come as accessories.
+
+## Production (uretim.html, after designer approval)
+
+Not linked from the site (noindex). The designer opens the approved design or project link (or design.json),
+enters their name, ticks the approval, picks the booklet language and order quantity. Outputs per product:
+`ebatlama.csv` (cut sizes = finished − 1 mm band per banded edge, grain direction, banding counts, sheet count and
+yield), `levha-plani.pdf` (guillotine layouts on 2800 × 2100 MDF / 2500 × 1250 birch ply, 4.4 mm kerf, 10 mm trim;
+over-long parts split and joined), `montaj-kitapcigi.pdf` (cover, parts and hardware lists, steps with exploded
+isometric views), `onay.json` (approver, date, quantity, link). Booklet text: Turkish and English; other languages
+fall back to English until translated. Stone worktops, glass and mirrors are listed for separate order.
