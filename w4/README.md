@@ -98,3 +98,7 @@ The studio offers ten styles: AURA (house style) plus nine widely used styles wi
 ## Project, room and materials (2026-10-18)
 
 Step 04 is now Project: add the piece and continue (same design in another size of the family, a separately designed piece, or another family); the project is listed, edited and sent as one package. `assets/forma/room.js` places the project in a lit room (three rule-based layouts, room types with misfit warnings that can be overridden; covered by `tests/forma-check.mjs`). Throw pillows use a dedicated knife-edge/lumbar/bolster/boxed geometry (`mesh.js pillow`). The fabric panel shows a raking-light close-up of the weave. Suede and nubuck join leather as hides.
+
+## Accounts (2026-10-18)
+
+`assets/forma/account.js`: email + password accounts (Supabase Auth, project shared with the main site). A signed-in customer's studio work (all `aura-forma-*` keys: project, designs in progress, per-kind memory) is saved to `public.forma_workspaces` (one row per user, owner-only RLS), debounced after every change; on sign-in this browser's work and the account's are united once, afterwards the newer side wins. The studio invites to create an account on first visit; "continue without an account" keeps work in the browser only. supabase-js 2.45.4 UMD is vendored under `assets/vendor/supabase/` (MIT). For email confirmation and password reset links to return to the site, `https://auraproject.com.tr/**` must be listed in the Supabase Auth redirect URLs.
