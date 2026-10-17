@@ -23,7 +23,7 @@ export async function decode(text) {
 /** Studio address the links point to (the deployed studio page, whatever page made the link). */
 export const studioUrl = (lang = 'tr') => `${location.origin}${location.pathname.replace(/[^/]*$/, '')}tasarla.html?lang=${lang}`;
 export async function designLink(design, lang) { return `${studioUrl(lang)}#d=${await encode({v: 1, d: slim(design)})}`; }
-export async function projectLink(items, room, lang) { return `${studioUrl(lang)}#p=${await encode({v: 1, items: items.map(i => ({id: i.id, d: slim(i.design)})), room: room || null})}`; }
+export async function projectLink(items, room, lang) { return `${studioUrl(lang)}#p=${await encode({v: 1, items: items.map(i => ({id: i.id, q: i.qty || 1, d: slim(i.design)})), room: room || null})}`; }
 
 /** Read #d= / #p= from the current address. Returns {design} or {items, room} or null. */
 export async function readLink(hash = location.hash) {
@@ -31,7 +31,7 @@ export async function readLink(hash = location.hash) {
   try {
     const x = await decode(m[2]);
     if (m[1] === 'd' && x?.d) return {design: full(x.d)};
-    if (m[1] === 'p' && Array.isArray(x?.items)) return {items: x.items.map(i => ({id: i.id, design: full(i.d)})), room: x.room || null};
+    if (m[1] === 'p' && Array.isArray(x?.items)) return {items: x.items.map(i => ({id: i.id, qty: i.q || 1, design: full(i.d)})), room: x.room || null};
   } catch {}
   return null;
 }

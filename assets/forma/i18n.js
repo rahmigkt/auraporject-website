@@ -448,3 +448,17 @@ Object.assign(P, {
     fluteWidth: ['Desen aralığı (yiv / çıta)', 'Pattern pitch (groove / slat)', 'Raster (Rille / Latte)', 'Pas du motif (rainure / latte)', 'Patroonmaat (groef / lat)', 'Mønstermål (rille / liste)', 'Paso (ranura / listón)', 'Passo (scanalatura / listello)'],
     mirrorHeight: P.params.mirrorHeight, mirrorWidth: P.params.mirrorWidth}
 });
+Object.assign(T, {
+  openFronts:   ['Kapakları aç', 'Open fronts', 'Fronten öffnen', 'Ouvrir les façades', 'Fronten openen', 'Åbn fronter', 'Abrir frentes', 'Apri frontali'],
+  bayCount:     ['Bölme / kapak sayısı', 'Bays / doors', 'Felder / Türen', 'Travées / portes', 'Vakken / deuren', 'Sektioner / låger', 'Módulos / puertas', 'Campate / ante'],
+  cellColor:    ['Bu gözün rengi', 'Colour of this cell', 'Farbe dieses Fachs', 'Couleur de cette case', 'Kleur van dit vak', 'Feltets farve', 'Color de esta celda', 'Colore di questo vano'],
+  quantity:     ['Adet', 'Qty', 'Stück', 'Qté', 'Aantal', 'Antal', 'Cant.', 'Qtà']
+});
+Object.assign(P.cellType, {mirror: ['Aynalı kapak', 'Mirrored door', 'Spiegeltür', 'Porte miroir', 'Spiegeldeur', 'Spejllåge', 'Puerta espejo', 'Anta a specchio']});
+Object.assign(P.mirror, {
+  rounded: ['Yumuşak köşe', 'Soft corners', 'Weiche Ecken', 'Coins doux', 'Zachte hoeken', 'Bløde hjørner', 'Esquinas suaves', 'Angoli morbidi'],
+  oval: ['Oval', 'Oval', 'Oval', 'Ovale', 'Ovaal', 'Oval', 'Ovalado', 'Ovale'],
+  scallop: ['Dilimli', 'Scalloped', 'Gewellt', 'Festonné', 'Geschulpt', 'Bølget', 'Festoneado', 'Smerlato'],
+  stepped: ['Kademeli', 'Stepped', 'Gestuft', 'À gradins', 'Getrapt', 'Trappet', 'Escalonado', 'A gradoni'],
+  organic: ['Organik', 'Organic', 'Organisch', 'Organique', 'Organisch', 'Organisk', 'Orgánico', 'Organico']
+});
