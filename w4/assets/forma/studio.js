@@ -1,13 +1,15 @@
 // AURA Forma design studio: family → style (one starting form) → parts / dimensions / materials → send to the designer.
 // No ready-made proposal gallery: people build their own piece. Drawings, parts list and files never leave the
 // browser before sending; afterwards the customer can download the PDF of the design they sent.
-// Families: seating (sofa, loveseat, armchair), tables (dining, coffee, side, console, desk) and bedroom (bed, bedside, chest).
+// Families: seating (sofa, loveseat, armchair), tables (dining, coffee, side, console, desk) and the bedroom set
+// (bed, wardrobe, chest, bedside units: one piece is designed, the others are proposed to match and shown as a set).
 import {sample, normalizeDesign, SCHEMA} from './generate.js';
 import {FAMILIES, familyOf} from './families.js';
 import {buildMesh} from './build.js';
 import {styleName} from './styles.js';
 import {COLORS, FIBERS, WEAVES, WEAVE_NAMES, PATTERNS, MOTIF_CHOICES, MOTIF_NAMES, WOODS, FINISHES, STAINS, METALS, STONES, GLASS, SURFACES, LINEN_COLORS, colorGroup, name as nm} from './catalog.js';
 import {MATTRESS} from './bedroom.js';
+import {harmonize} from './set.js';
 import {draft, fabricMaps} from './textile.js';
 import {stoneMaps} from './stone.js';
 import {woodMaps} from './wood.js';
@@ -39,10 +41,17 @@ const issuesOf = (d, c) => d.family !== 'seating' ? familyOf(d).mod.validate(c, 
 const isTable = () => state.design.family === 'table';
 const isBedroom = () => state.design.family === 'bedroom';
 const isBed = () => isBedroom() && state.design.kind === 'bed';
+const focus = () => state.design.kind;
 
 // ---- Design state --------------------------------------------------------------
-function setDesign(next, {record = true, keepPanel = false} = {}) {
+function setDesign(next, {record = true, keepPanel = false, sync = true} = {}) {
   next = normalizeDesign(next);
+  // Bedroom set: when the piece in focus changes, the other pieces are re-proposed to match it.
+  if (sync && record && next.family === 'bedroom' && state.design?.family === 'bedroom') {
+    // Only a change to the focused piece's design language is proposed to the others (sizes stay per piece).
+    const LANG = {bed: ['headType', 'headShape', 'bedBase', 'legType'], wardrobe: ['wdDoorStyle', 'wdHandle', 'wdBase'], dresser: ['frontStyle', 'pull', 'drBase'], nightstand: ['frontStyle', 'pull', 'nsBase']}[next.kind] || [];
+    if (LANG.some(k => next.params[k] !== state.design.params[k]) || (next.params.setMatch === 'on' && state.design.params.setMatch === 'off')) next = normalizeDesign({...next, params: harmonize(next.params, next.kind)});
+  }
   if (record && state.design) { state.history.push(state.design); if (state.history.length > 80) state.history.shift(); state.future = []; }
   const familyChanged = state.design && state.design.family !== next.family;
   state.design = next; state.compiled = compileOf(next);
@@ -81,10 +90,10 @@ const UI = {
     readout: m => [[L('knee'), `${m.knee} mm`], ...(m.seats ? [[L('persons'), String(m.seats)]] : []), [L('weight'), `~${weightOf()} kg`]]
   },
   bedroom: {
-    brand: 'SÜKUN', kinds: ['bed', 'nightstand', 'dresser'],
+    brand: 'SÜKUN', kinds: ['bed', 'wardrobe', 'dresser', 'nightstand'],
     styleSub: s => Object.keys(s.enums.headType).slice(0, 2).map(a => partName('headType', a, state.lang)).join(' · '),
-    dims: c => c.meta.kind === 'bed' ? `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height} mm · ${L('mattress')} ${c.meta.mattress} · ${L('mattressTop')} ${c.meta.mattressTop} mm` : `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height} mm · ${c.meta.drawers} ${L('drawersN')}`,
-    readout: m => m.kind === 'bed' ? [[L('mattressTop'), `${m.mattressTop} mm`], [L('headAbove'), `${m.headAbove} mm`], [L('weight'), `~${weightOf()} kg`]] : [[L('drawersN'), String(m.drawers)], [L('weight'), `~${weightOf()} kg`]]
+    dims: c => c.meta.set ? `${L('setOf')} · ${L('mattress')} ${c.meta.mattress} · ${L('wardrobe')} ${c.meta.pieces.wardrobe[0]} mm · ${c.meta.wardrobeDoors} ${L('doorsN')}` : `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height} mm`,
+    readout: m => [[L('mattressTop'), `${m.mattressTop} mm`], [L('headAbove'), `${m.headAbove} mm`], [L('nightstand'), `${m.nsHeight} mm`], [L('weight'), `~${weightOf()} kg`]]
   }
 };
 const ui = () => UI[state.design.family];
@@ -131,7 +140,7 @@ function shell() {
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261017d').then(({createViewer}) => {
+  import('./scene.js?v=20261017f').then(({createViewer}) => {
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else viewer.setDesign(state.compiled, state.design.materials);
@@ -146,7 +155,7 @@ function shellNav() {
 function renderCaption() {
   const d = state.design, c = state.compiled, issues = issuesOf(d, c);
   $('#eyebrow').textContent = `AURA · ${ui().brand} · ${styleName(d.style, state.lang).toUpperCase()}`;
-  $('#designTitle').textContent = `${L(d.family === 'table' ? d.kind : c.meta.kind)} · F-${String(d.seed % 100000).padStart(5, '0')}`;
+  $('#designTitle').textContent = d.family === 'bedroom' ? `${L('bedroomSet')} · F-${String(d.seed % 100000).padStart(5, '0')}` : `${L(d.family === 'table' ? d.kind : c.meta.kind)} · F-${String(d.seed % 100000).padStart(5, '0')}`;
   $('#dims').textContent = ui().dims(c);
   const err = issues.filter(i => i.level === 'error'), warn = issues.filter(i => i.level === 'warn');
   const st = $('#status');
@@ -199,24 +208,29 @@ function partsPanel() {
 }
 
 function bedroomPartsPanel(p) {
-  const B = familyOf(state.design).mod.ENUMS;
-  if (isBed()) {
+  const B = familyOf(state.design).mod.ENUMS, k = focus(), LEG = ['round', 'roundTaper', 'squareTaper', 'square', 'cone', 'block'];
+  // Header: which piece is being designed, set or single view, and whether the others follow.
+  const head = `<h2>${L('tabParts')}</h2>
+  <h3>${L('designPiece')}</h3><div class="f-seg">${UI.bedroom.kinds.map(x => chip(`data-kind="${x}"`, L(x), k === x)).join('')}</div>
+  <div class="f-seg f-seg-small">${chip('data-enum="view" data-value="set"', L('showSet'), p.view === 'set')}${chip('data-enum="view" data-value="piece"', L('showPiece'), p.view === 'piece')}${chip(`data-enum="setMatch" data-value="${p.setMatch === 'on' ? 'off' : 'on'}"`, L('setMatch'), p.setMatch === 'on')}</div>
+  <p class="f-note">${L(p.setMatch === 'on' ? 'setMatchOn' : 'setMatchOff')}</p>`;
+  if (k === 'bed') {
     const size = `${p.mattressWidth / 10}x${p.mattressLength / 10}`;
-    return `<h2>${L('tabParts')}</h2>
-    <h3>${L('mattress')}</h3><div class="f-chips">${Object.keys(MATTRESS).map(k => chip(`data-mattress="${k}"`, k.replace('x', ' × '), size === k)).join('')}</div>
+    return `${head}<h3>${L('mattress')}</h3><div class="f-chips">${Object.keys(MATTRESS).map(m => chip(`data-mattress="${m}"`, m.replace('x', ' × '), size === m)).join('')}</div>
     ${enumGroup('headType', 'headboard')}${enumGroup('headShape', 'headShape')}${enumGroup('bedBase', 'bedBase')}
     ${p.bedBase === 'floating' ? '' : enumGroup('legType', 'legType', 'bLegType', B.legType.filter(v => !['frame', 'fourPoster'].includes(p.bedBase) || v !== 'hidden'))}
     ${enumGroup('footboard', 'footboard')}${enumGroup('storage', 'storage', 'storage', p.bedBase === 'baza' ? ['none', 'lift'] : ['frame', 'fourPoster', 'floating'].includes(p.bedBase) ? ['none', 'drawers'] : B.storage)}
-    ${enumGroup('integratedNight', 'integratedNight')}${enumGroup('bedding', 'bedding')}
-    <p class="f-note">${L('setNote')}</p>`;
+    ${enumGroup('bedding', 'bedding')}`;
   }
-  const k = state.design.kind, layouts = k === 'nightstand' ? ['stack', 'niche'] : ['stack', 'split', 'topSplit'];
-  return `<h2>${L('tabParts')}</h2>${enumGroup('caseLayout', 'caseLayout', 'caseLayout', layouts)}
-  ${counter('rows', 'rows', k === 'nightstand' ? [1, 2, 3] : [2, 3, 4, 5, 6])}
-  ${['split', 'topSplit'].includes(p.caseLayout) ? counter('columns', 'columns', [2, 3]) : ''}
+  if (k === 'wardrobe') return `${head}${enumGroup('wdDoorType', 'wdDoorType')}${enumGroup('wdDoorStyle', 'wdDoorStyle')}${enumGroup('wdHandle', 'wdHandle')}
+    ${enumGroup('wdNiche', 'wdNiche')}${enumGroup('wdBase', 'wdBase')}${p.wdBase === 'legs' ? enumGroup('legType', 'legType', 'bLegType', LEG) : ''}${enumGroup('caseEdge', 'caseEdge')}`;
+  const pre = k === 'nightstand' ? 'ns' : 'dr', base = p[pre + 'Base'], layout = p[pre + 'Layout'];
+  return `${head}${enumGroup(pre + 'Layout', 'caseLayout', 'caseLayout', B[pre + 'Layout'])}
+  ${counter(pre + 'Rows', 'rows', k === 'nightstand' ? [1, 2, 3] : [2, 3, 4, 5, 6])}
+  ${k === 'dresser' && ['split', 'topSplit'].includes(layout) ? counter('drColumns', 'columns', [2, 3]) : ''}
   ${enumGroup('frontStyle', 'frontStyle')}${enumGroup('pull', 'pull')}
-  ${enumGroup('caseBase', 'caseBase', 'caseBase', k === 'nightstand' ? B.caseBase : B.caseBase.filter(v => v !== 'wall'))}
-  ${p.caseBase === 'legs' ? enumGroup('legType', 'legType', 'bLegType', ['round', 'roundTaper', 'squareTaper', 'square', 'cone', 'block']) : ''}
+  ${enumGroup(pre + 'Base', 'caseBase', 'caseBase', B[pre + 'Base'])}
+  ${base === 'legs' ? enumGroup('legType', 'legType', 'bLegType', LEG) : ''}
   ${enumGroup('caseEdge', 'caseEdge')}${k === 'dresser' ? enumGroup('mirror', 'mirror') : ''}
   ${k === 'nightstand' ? `<p class="f-note">${L('setNote')}</p>` : ''}`;
 }
@@ -225,15 +239,18 @@ const UNIT = {armTop: '', armFlare: '', armSlope: '', legTaper: '', backRake: '�
 function sizeGroups() {
   const d = state.design, p = d.params;
   if (isBedroom()) {
-    if (isBed()) {
+    const k = focus();
+    if (k === 'bed') {
       const h = p.headType, g = [['general', ['mattressThickness', 'railHeight', 'legHeight', ...(['platform', 'floating'].includes(p.bedBase) ? ['border'] : [])]]];
-      g.push(['headboard', ['headHeight', 'headThickness', 'headExtend', ...(['rounded', 'arch', 'capsule'].includes(p.headShape) ? ['headRadius'] : []), ...(p.headShape === 'scallop' ? ['scallops'] : []), ...(['channel', 'hChannel'].includes(h) ? ['channelCount'] : []), ...(h === 'tufted' ? ['tuftSpacing'] : []), ...(h === 'slats' ? ['slatWidth', 'slatGap'] : []), ...(h === 'wingback' ? ['wingDepth'] : []), ...(['framed', 'cane'].includes(h) ? ['frameWidth'] : []), ...(p.integratedNight !== 'none' ? ['nightWidth'] : [])]]);
+      g.push(['headboard', ['headHeight', 'headThickness', 'headExtend', ...(['rounded', 'arch', 'capsule'].includes(p.headShape) ? ['headRadius'] : []), ...(p.headShape === 'scallop' ? ['scallops'] : []), ...(['channel', 'hChannel'].includes(h) ? ['channelCount'] : []), ...(h === 'tufted' ? ['tuftSpacing'] : []), ...(h === 'slats' ? ['slatWidth', 'slatGap'] : []), ...(h === 'wingback' ? ['wingDepth'] : []), ...(['framed', 'cane'].includes(h) ? ['frameWidth'] : [])]]);
       if (p.footboard !== 'none') g.push(['footboard', ['footHeight']]);
       g.push(['base', [...(p.legType === 'hidden' || p.bedBase === 'floating' ? ['plinthInset'] : ['legSize']), ...(['roundTaper', 'squareTaper', 'cone'].includes(p.legType) ? ['legTaper'] : []), ...(p.bedBase === 'fourPoster' ? ['postSize', 'postHeight'] : [])]]);
       return g;
     }
-    const g = [['general', ['width', 'depth', 'height']], ['base', ['topThickness', 'topOverhang', 'cornerRadius', ...(p.caseBase === 'wall' ? [] : ['baseHeight']), ...(p.caseBase === 'legs' ? ['legSize'] : []), 'graduation', ...(p.frontStyle === 'fluted' ? ['fluteWidth'] : [])]]];
-    if (d.kind === 'dresser' && p.mirror !== 'none') g.push(['mirror', ['mirrorHeight', 'mirrorWidth']]);
+    if (k === 'wardrobe') return [['general', ['wdWidth', 'wdHeight', 'wdDepth', ...(p.wdNiche !== 'none' ? ['wdNicheWidth'] : [])]], ['base', ['topOverhang', ...(p.wdDoorStyle === 'slats' ? ['battenWidth', 'battenGap'] : []), ...(p.wdDoorStyle === 'fluted' ? ['fluteWidth'] : []), ...(p.wdBase === 'legs' ? ['caseBaseHeight'] : [])]]];
+    if (k === 'nightstand') return [['general', ['nsWidth', 'nsDepth', 'nsHeightOffset']], ['base', ['topThickness', 'topOverhang', 'cornerRadius', 'graduation', ...(p.nsBase === 'legs' ? ['caseBaseHeight'] : []), ...(p.frontStyle === 'fluted' ? ['fluteWidth'] : [])]]];
+    const g = [['general', ['drWidth', 'drDepth', 'drHeight']], ['base', ['topThickness', 'topOverhang', 'cornerRadius', 'graduation', ...(p.drBase === 'legs' ? ['caseBaseHeight'] : []), ...(p.frontStyle === 'fluted' ? ['fluteWidth'] : [])]]];
+    if (p.mirror !== 'none') g.push(['mirror', ['mirrorHeight', 'mirrorWidth']]);
     return g;
   }
   if (!isTable()) {
@@ -292,9 +309,9 @@ function fabricSection(f) {
 const fabricPreview = (f, label) => `<div class="f-fabric-preview"><canvas id="fabricPreview" width="320" height="320" aria-label="${esc(label)}"></canvas><div><p class="f-eyebrow">${esc(label)}</p><p class="f-fabric-name">${esc(N(FIBERS[f.fiber]))}${FIBERS[f.fiber].weave ? ' · ' + esc(N(WEAVE_NAMES[f.weave])) : ''}<br>${esc(N(COLORS[f.color]))}${f.pattern !== 'none' ? ' · ' + esc(N(PATTERNS[f.pattern])) + (f.motif ? ' (' + esc(N(MOTIF_NAMES[f.motif])) + ')' : '') : ''}</p><p class="f-note" id="tileNote"></p></div></div>`;
 
 function bedroomMaterialPanel() {
-  const d = state.design, m = d.materials, p = d.params, bed = d.kind === 'bed';
+  const d = state.design, m = d.materials, p = d.params, bed = true; // the set always includes the bed
   const upholstered = bed && (['upholstered', 'channel', 'hChannel', 'tufted', 'panels', 'framed', 'wingback', 'split'].includes(p.headType) || ['baza', 'upholsteredFrame'].includes(p.bedBase));
-  const woodVisible = !bed || ['framed', 'cane', 'slats'].includes(p.headType) || !['hidden'].includes(p.legType);
+  const woodVisible = true;
   return `<h2>${L('tabMaterial')}</h2>
   <div class="f-fabric-preview"><canvas id="surfacePreview" width="320" height="320" aria-label="${esc(L('caseMat'))}"></canvas><div><p class="f-eyebrow">${L('caseMat')}</p><p class="f-fabric-name">${esc(surfaceShort(m.case))}</p></div></div>
   <h3>${L('caseMat')}</h3><div class="f-chips">${['wood', 'veneer', 'lacquer'].map(k => chip(`data-mat="case.surface" data-value="${k}"`, N(SURFACES[k]), m.case.surface === k)).join('')}</div>
@@ -348,8 +365,8 @@ function deliverPanel() {
   const d = state.design, c = state.compiled, sent = state.sent, changed = sent && sent.key !== designKey(d);
   return `<h2>${L('tabDeliver')}</h2><p class="f-lead">${L('sendIntro')}</p>
   <h3>${L('yourDesign')}</h3><dl class="f-readout">
-    <dt>${esc(L(d.family === 'table' ? d.kind : c.meta.kind))}</dt><dd>${esc(styleName(d.style, state.lang))}</dd>
-    <dt>${esc(L('overall'))}</dt><dd>${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height} mm</dd>
+    <dt>${esc(d.family === 'bedroom' ? L('bedroomSet') : L(d.family === 'table' ? d.kind : c.meta.kind))}</dt><dd>${esc(styleName(d.style, state.lang))}</dd>
+    ${d.family === 'bedroom' ? `<dt>${esc(L('setPieces'))}</dt><dd>${esc(L('setPiecesList'))}</dd>` : `<dt>${esc(L('overall'))}</dt><dd>${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height} mm</dd>`}
     <dt>${esc(L(d.family === 'table' ? 'topMat' : d.family === 'bedroom' ? 'caseMat' : 'fabric'))}</dt><dd>${esc(d.family === 'table' ? surfaceShort(d.materials.top) : d.family === 'bedroom' ? surfaceShort(d.materials.case) : `${N(FIBERS[d.materials.fabric.fiber])} · ${N(COLORS[d.materials.fabric.color])}`)}</dd>
   </dl>
   ${sent ? `<div class="f-sent"><p>${L('sent')} <b>${esc(sent.id)}</b></p>${sent.pdf || !changed ? `<button class="f-primary" data-dl="sentPdf">${L('sentPdf')} ↓</button>` : ''}${changed ? `<p class="f-note">${L('changedAfterSend')}</p>` : ''}</div>` : ''}
@@ -401,30 +418,15 @@ function sheetLabels() {
 function specRows(b) {
   const d = state.design, c = state.compiled, m = d.materials;
   if (d.family === 'bedroom') {
-    const p = c.params, f = m.fabric;
-    if (d.kind === 'bed') return [
-      [L('overall'), `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height}`], [L('mattress'), `${c.meta.mattress} cm`], [L('mattressTop'), `${c.meta.mattressTop}`],
-      [L('headboard'), `${partName('headType', p.headType, state.lang)} · ${partName('headShape', p.headShape, state.lang)} · ${p.headHeight}`], [L('bedBase'), `${partName('bedBase', p.bedBase, state.lang)}${p.storage !== 'none' ? ' · ' + partName('storage', p.storage, state.lang) : ''}`],
-      ...(p.footboard !== 'none' ? [[L('footboard'), `${partName('footboard', p.footboard, state.lang)} · ${p.footHeight}`]] : []),
-      [L('upholstery'), `${N(FIBERS[f.fiber])} · ${N(COLORS[f.color])}${f.pattern !== 'none' ? ' · ' + N(PATTERNS[f.pattern]) : ''}`], [L('caseMat'), surfaceShort(m.case)], [L('solidWood'), `${N(WOODS[m.wood.species])} · ${N(STAINS[m.wood.stain])}`],
-      ...(b.totals.fabricMetres ? [[L('fabricNeed'), `~${b.totals.fabricMetres} m (1400 mm)`]] : []), [L('weight'), `~${b.totals.weightKg} kg`]
-    ];
+    const p = c.params, f = m.fabric, pc = c.meta.pieces, dim = a => a ? a.join(' × ') : '';
     return [
-      [L('overall'), `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height}`], [L('caseLayout'), `${partName('caseLayout', p.caseLayout, state.lang)} · ${c.meta.drawers} ${L('drawersN')}`],
-      [L('frontStyle'), partName('frontStyle', p.frontStyle, state.lang)], [L('pull'), `${partName('pull', p.pull, state.lang)} · ${N(METALS[m.metal.finish])}`], [L('caseBase'), partName('caseBase', p.caseBase, state.lang)],
-      [L('caseMat'), surfaceShort(m.case)], ...(p.mirror !== 'none' && d.kind === 'dresser' ? [[L('mirror'), `${partName('mirror', p.mirror, state.lang)} · ${p.mirrorHeight}`]] : []), [L('weight'), `~${b.totals.weightKg} kg`]
-    ];
-  }
-  if (d.family === 'table') {
-    const p = c.params;
-    return [
-      [L('overall'), `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height}`],
-      ...(c.meta.extendedLength ? [[L('leaves'), `${p.leaves} × ${p.leafLength} → ${c.meta.extendedLength}`]] : []),
-      [L('topShape'), partName('topShape', p.topShape, state.lang)], [L('edge'), partName('edge', p.edge, state.lang)],
-      [L('baseType'), partName('tBaseType', p.baseType, state.lang)], [L('topMat'), `${surfaceShort(m.top)} · ${p.topThickness} mm`],
-      [L('baseMat'), m.base.surface === 'metal' ? N(METALS[m.base.metal]) : surfaceShort(m.base)],
-      ...(c.meta.seats ? [[L('persons'), String(c.meta.seats)]] : []), [L('knee'), `${c.meta.knee}`],
-      ...(p.drawers ? [[L('drawers'), String(p.drawers)]] : []), [L('weight'), `~${b.totals.weightKg} kg`]
+      [L('bed'), `${pc ? dim(pc.bed) + ' · ' : ''}${partName('headType', p.headType, state.lang)} · ${partName('headShape', p.headShape, state.lang)} · ${partName('bedBase', p.bedBase, state.lang)} · ${c.meta.mattress} cm`],
+      [L('wardrobe'), `${pc ? dim(pc.wardrobe) + ' · ' : ''}${partName('wdDoorType', p.wdDoorType, state.lang)} · ${partName('wdDoorStyle', p.wdDoorStyle, state.lang)} · ${c.meta.wardrobeDoors} ${L('doorsN')}`],
+      [L('dresser'), `${pc ? dim(pc.dresser) + ' · ' : ''}${c.meta.drawers} ${L('drawersN')}${p.mirror !== 'none' ? ' · ' + partName('mirror', p.mirror, state.lang) : ''}`],
+      [L('nightstand'), `${pc ? dim(pc.nightstand) + ' × 2' : ''}`],
+      [L('frontStyle'), `${partName('frontStyle', p.frontStyle, state.lang)} · ${partName('pull', p.pull, state.lang)} · ${N(METALS[m.metal.finish])}`],
+      [L('caseMat'), surfaceShort(m.case)], [L('upholstery'), `${N(FIBERS[f.fiber])} · ${N(COLORS[f.color])}${f.pattern !== 'none' ? ' · ' + N(PATTERNS[f.pattern]) : ''}`],
+      [L('mattressTop'), `${c.meta.mattressTop}`], ...(b.totals.fabricMetres ? [[L('fabricNeed'), `~${b.totals.fabricMetres} m (1400 mm)`]] : []), [L('weight'), `~${b.totals.weightKg} kg`]
     ];
   }
   const f = m.fabric;
@@ -522,10 +524,9 @@ function applyActions(actions) {
     changed = true;
     let key = a.key;
     if (d.family === 'seating' && key === 'length') key = 'width';
-    if (d.family === 'bedroom' && d.kind === 'bed' && (key === 'width' || key === 'length')) key = key === 'width' ? 'mattressWidth' : 'mattressLength';
-    if (d.family === 'bedroom' && d.kind === 'bed' && key === 'height') key = 'headHeight';
-    if (d.family === 'bedroom' && d.kind !== 'bed' && key === 'headHeight') key = 'height';
-    if (a.type === 'mattress') { if (d.family === 'bedroom') { if (d.kind !== 'bed') d = designForKind(d, 'bed'); [d.params.mattressWidth, d.params.mattressLength] = a.value; notes.push(`${L('mattress')} ${a.value[0] / 10}×${a.value[1] / 10}`); } continue; }
+    if (d.family === 'bedroom') key = setKey(d, key, a, actions);
+    if (a.type === 'mattress') { if (d.family === 'bedroom') { d.kind = 'bed'; [d.params.mattressWidth, d.params.mattressLength] = a.value; notes.push(`${L('mattress')} ${a.value[0] / 10}×${a.value[1] / 10}`); } continue; }
+    if (d.family === 'bedroom' && a.type === 'kind') { if (fam.kinds[a.value]) { d.kind = a.value; notes.push(L(a.value)); } else { const owner = Object.values(FAMILIES).find(f => f.kinds[a.value]); if (owner) { switchFamily(owner.id, a.value); d = structuredClone(state.design); fam = familyOf(d); notes.push(L(a.value)); } } continue; }
     if (d.family === 'table' && key === 'leaves' && a.value > 0) {
       if (['pedestal', 'drum', 'tripod'].includes(d.params.baseType)) d.params.baseType = 'doublePedestal';
       if (['round', 'boat'].includes(d.params.topShape)) d.params.topShape = 'oval';
@@ -534,10 +535,9 @@ function applyActions(actions) {
     else if (a.type === 'delta') { const before = d.params[key]; d.params[key] = before + a.value; notes.push(`${partName('params', key, state.lang)} ${Math.round(before)} → ${Math.round(before + a.value)}`); }
     else if (a.type === 'enum') {
       // Bed-only and chest-only choices move the design to the right piece first.
-      if (d.family === 'bedroom') { const bedKey = ['headType', 'headShape', 'bedBase', 'footboard', 'storage', 'integratedNight', 'bedding'].includes(key), caseKey = ['frontStyle', 'pull', 'caseBase', 'caseLayout', 'caseEdge', 'mirror'].includes(key);
-        if (bedKey && d.kind !== 'bed') d = designForKind(d, 'bed');
-        else if (caseKey && d.kind === 'bed' && !actions.some(x => x.type === 'kind')) d = designForKind(d, key === 'mirror' ? 'dresser' : 'nightstand'); }
-      d.params[key] = a.value; notes.push(partName(d.family === 'table' && key === 'baseType' ? 'tBaseType' : d.family === 'table' && key === 'legType' ? 'legTypeT' : d.family === 'bedroom' && key === 'legType' ? 'bLegType' : key, a.value, state.lang)); }
+      // Bedroom set: the edited piece becomes the one in focus, so the others follow it.
+      if (d.family === 'bedroom' && !actions.some(x => x.type === 'kind')) { const owner = PIECE_OF[key]; if (owner && owner !== d.kind && !(owner === 'case' && ['dresser', 'nightstand'].includes(d.kind))) d.kind = owner === 'case' ? 'dresser' : owner; }
+      d.params[key] = a.value; notes.push(partName(d.family === 'table' && key === 'baseType' ? 'tBaseType' : d.family === 'table' && key === 'legType' ? 'legTypeT' : d.family === 'bedroom' && key === 'legType' ? 'bLegType' : ({nsBase: 'caseBase', drBase: 'caseBase', nsLayout: 'caseLayout', drLayout: 'caseLayout'}[key] || key), a.value, state.lang)); }
     else if (a.type === 'seats') { if (d.family === 'table') { d.params = FAMILIES.table.repair({...seatsToSize(d, a.value), kind: 'dining'}, d.materials); d.kind = 'dining'; notes.push(`${a.value} ${L('persons')}`); } }
     else if (a.type === 'style') { d = sample({family: d.family, style: a.value, kind: d.kind, seed: d.seed}); notes.push(styleName(a.value, state.lang)); }
     else if (a.type === 'kind') {
@@ -563,6 +563,18 @@ function applyActions(actions) {
   }
   if (changed) setDesign(d);
   return notes;
+}
+/** Bedroom set: which piece a parameter belongs to, and generic command keys mapped to the piece in focus. */
+const PIECE_OF = {headType: 'bed', headShape: 'bed', bedBase: 'bed', footboard: 'bed', storage: 'bed', bedding: 'bed', wdDoorType: 'wardrobe', wdDoorStyle: 'wardrobe', wdHandle: 'wardrobe', wdNiche: 'wardrobe', wdBase: 'wardrobe', mirror: 'dresser', drLayout: 'dresser', drBase: 'dresser', drRows: 'dresser', drColumns: 'dresser', nsLayout: 'nightstand', nsBase: 'nightstand', nsRows: 'nightstand', frontStyle: 'case', pull: 'case'};
+function setKey(d, key, a, actions) {
+  const k = actions.find(x => x.type === 'kind' && ['bed', 'wardrobe', 'dresser', 'nightstand'].includes(x.value))?.value || d.kind;
+  const pre = k === 'nightstand' ? 'ns' : 'dr';
+  if (k === 'wardrobe') { if (key === 'frontStyle') return 'wdDoorStyle'; if (key === 'pull') { a.value = {bar: 'bar', edge: 'edge', knob: 'knob', leather: 'leather', none: 'push', ring: 'knob'}[a.value] || 'bar'; return 'wdHandle'; } if (key === 'caseBase') { a.value = a.value === 'legs' ? 'legs' : 'recessed'; return 'wdBase'; } }
+  const map = {bed: {width: 'mattressWidth', length: 'mattressLength', height: 'headHeight'}, wardrobe: {width: 'wdWidth', height: 'wdHeight', depth: 'wdDepth'}, dresser: {width: 'drWidth', height: 'drHeight', depth: 'drDepth', rows: 'drRows', columns: 'drColumns', caseBase: 'drBase', caseLayout: 'drLayout', baseHeight: 'caseBaseHeight'}, nightstand: {width: 'nsWidth', depth: 'nsDepth', rows: 'nsRows', caseBase: 'nsBase', caseLayout: 'nsLayout', baseHeight: 'caseBaseHeight'}}[k] || {};
+  if (k === 'nightstand' && key === 'height') { if (a.type === 'set') a.value -= state.compiled.meta.mattressTop; return 'nsHeightOffset'; }
+  if (k !== 'nightstand' && key === 'caseBase' && a.value === 'wall') a.value = 'recessed';
+  void pre;
+  return map[key] || key;
 }
 function materialLabel(a) {
   const tables = {fiber: FIBERS, weave: WEAVE_NAMES, pattern: PATTERNS, color: COLORS, color2: COLORS, species: WOODS, stain: STAINS, stone: STONES, glass: GLASS, surface: SURFACES, metal: METALS, motif: MOTIF_NAMES, finish: a.slot === 'metal' ? METALS : FINISHES};
@@ -617,7 +629,7 @@ function bindShell() {
   panel.addEventListener('click', e => {
     const el = e.target.closest('button, [data-load]'); if (!el) return;
     const d = el.dataset;
-    if (d.kind) { if (d.kind !== state.design.kind) setDesign(designForKind(state.design, d.kind)); }
+    if (d.kind) { if (d.kind !== state.design.kind) setDesign(isBedroom() ? {...state.design, kind: d.kind, params: {...state.design.params, kind: d.kind}} : designForKind(state.design, d.kind)); }
     else if (d.style) { setDesign(sample({family: state.design.family, style: d.style, kind: state.design.kind, seed: state.design.seed})); }
     else if (el.id === 'generateBtn') { state.tab = 'parts'; renderPanel(); }
     else if (d.enum) setDesign(withParams({[d.enum]: d.value}));

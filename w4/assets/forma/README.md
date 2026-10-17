@@ -31,7 +31,8 @@ technical drawings and the designer package.
 | `table.js` | Table grammar (dining, coffee, side, console, desk): 7 top shapes, 6 edge profiles, 11 base systems, 7 leg types, 6 pedestals, stretchers, shelves, drawers, extension leaves. `validate` checks height, knee room (≥ 630 mm), top deflection (5wL⁴/384EI), tipping under a kind-based edge load, weight, wood movement. `tableBom` gives cut sizes (staves, tenon allowances, Z-clips, glides). |
 | `styles-table.js` | 26 table style distributions (same ids as seating). |
 | `bedroom.js` | Bedroom grammar: bed (12 headboard types × 6 silhouettes, 6 bases, footboard, storage, built-in bedside units, mattress sizes TR/EU), bedside table and chest (layouts incl. 2:3:2 top row, graduated drawers, 5 front styles, 6 pulls, 5 bases, rounded plan, mirror). Checks and parts list. Research: `knowledge/AURA-YATAK-ODASI-ARASTIRMA.md`. |
-| `styles-bedroom.js` | 26 bedroom style distributions. |
+| `set.js` | Bedroom SET: the family module. One piece is designed (bed, wardrobe, chest, bedside unit); `harmonize()` proposes the others from it (headboard ↔ door face ↔ drawer front, handles, legs, base); set view lines all pieces up, piece view shows one; the parts list always covers the whole set. Includes the wardrobe grammar (hinged/sliding, 7 door faces, 5 handles, vanity/desk/shelf middle section, plinth/legs). |
+| `styles-bedroom.js` | 26 bedroom style distributions plus `ROOM_STYLE` (wardrobe, bedside, chest language per style). |
 | `cane.js` | Vienna-cane map. |
 | `stone.js` | Procedural marble / travertine / terrazzo / concrete-look maps (600 mm tile). |
 | `voice.js`, `whisper-worker.js` | Voice: browser speech recognition; if the browser has none (Firefox, some Chromium builds) Whisper runs in the browser via transformers.js (≈80 MB once, cached). Needs `microphone=(self)` in `Permissions-Policy` (.htaccess). |

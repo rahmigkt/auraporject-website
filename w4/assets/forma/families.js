@@ -2,7 +2,8 @@
 import * as seating from './sofa.js';
 import * as table from './table.js';
 import * as bedroom from './bedroom.js';
-import {BEDROOM_STYLES, BEDROOM_STYLE_BY_ID} from './styles-bedroom.js';
+import * as set from './set.js';
+import {BEDROOM_STYLES, BEDROOM_STYLE_BY_ID, ROOM_STYLE} from './styles-bedroom.js';
 import {STYLES as SEAT_STYLES, STYLE_BY_ID as SEAT_BY_ID, KINDS as SEAT_KINDS} from './styles.js';
 import {TABLE_STYLES, TABLE_STYLE_BY_ID} from './styles-table.js';
 import {normalizeMaterials, normalizeTableMaterials, normalizeBedroomMaterials, MARKET_NEAR} from './catalog.js';
@@ -114,39 +115,46 @@ export const FAMILIES = {
     }
   },
   bedroom: {
-    id: 'bedroom', mod: bedroom, styles: BEDROOM_STYLES, byId: BEDROOM_STYLE_BY_ID, kinds: bedroom.KINDS, defaultKind: 'bed',
-    featureWeights: {headType: 1.6, headShape: 1.3, bedBase: 1.2, legType: 0.7, footboard: 0.5, frontStyle: 1.2, pull: 0.6, caseBase: 0.8, caseLayout: 0.8, mirror: 0.5},
-    similarEnums: ['headType', 'headShape', 'bedBase', 'legType', 'frontStyle', 'pull', 'caseBase'], fixedKeys: ['mattressWidth', 'mattressLength', 'rows', 'columns'],
+    // Bedroom furniture is delivered as a set: the piece in focus (kind) is designed, the rest is proposed to match.
+    id: 'bedroom', mod: set, styles: BEDROOM_STYLES, byId: BEDROOM_STYLE_BY_ID, kinds: set.KINDS, defaultKind: 'bed',
+    featureWeights: {headType: 1.6, headShape: 1.2, bedBase: 1, wdDoorStyle: 1.4, wdHandle: 0.6, frontStyle: 0.8, wdNiche: 0.8},
+    similarEnums: ['headType', 'headShape', 'bedBase', 'wdDoorStyle', 'frontStyle'], fixedKeys: ['mattressWidth', 'mattressLength'],
     normalizeMaterials: normalizeBedroomMaterials,
     sampleParams(st, kind, r, locks) {
-      const {RANGES, ENUMS, KINDS, MATTRESS} = bedroom, p = {kind};
-      for (const key of Object.keys(ENUMS)) p[key] = st.enums[key] ? r.weighted(st.enums[key]) : r.pick(ENUMS[key]);
-      for (const key of Object.keys(RANGES)) { const [lo, hi] = st.ranges[key] || BEDROOM_SAMPLE_RANGES[key] || RANGES[key]; p[key] = r.range(lo, hi); }
+      const {RANGES, ENUMS} = set, p = {kind}, rs = ROOM_STYLE[st.id] || {};
+      const fromStyle = key => st.enums[key] ? r.weighted(st.enums[key]) : null;
+      for (const key of Object.keys(ENUMS)) p[key] = rs[key] ? r.weighted(rs[key]) : fromStyle(key) ?? r.pick(ENUMS[key]);
+      for (const key of Object.keys(RANGES)) { const [lo, hi] = st.ranges[key] || ROOM_SAMPLE_RANGES[key] || BEDROOM_SAMPLE_RANGES[key] || RANGES[key]; p[key] = r.range(lo, hi); }
+      const lay = fromStyle('caseLayout'); p.nsLayout = lay === 'niche' ? 'niche' : 'stack'; p.drLayout = ['split', 'topSplit'].includes(lay) ? lay : 'stack';
+      const cb = fromStyle('caseBase'); p.drBase = cb === 'wall' || cb === 'sled' ? 'plinth' : cb || 'plinth';
+      if (p.nsBase !== 'wall' && cb && cb !== 'sled' && cb !== 'wall') p.nsBase = cb;
+      p.wdBase = p.drBase === 'legs' ? 'legs' : 'recessed';
+      p.mirror = fromStyle('mirror') || 'none';
+      if (st.ranges.nightWidth) p.nsWidth = r.range(...st.ranges.nightWidth);
+      if (st.ranges.slatWidth) p.battenWidth = Math.min(80, r.range(...st.ranges.slatWidth));
       p.storage = r.next() < 0.3 ? (p.bedBase === 'baza' || p.bedBase === 'platform' ? 'lift' : 'drawers') : 'none';
-      p.bedding = 'made';
-      if (kind === 'bed') {
-        const size = r.weighted({'160x200': 5, '180x200': 3, '150x200': 2, '140x190': 1, '120x200': 1, '90x190': 1});
-        [p.mattressWidth, p.mattressLength] = MATTRESS[size];
-        p.mattressThickness = r.range(220, 300);
-        if (p.bedBase === 'baza') { p.railHeight = r.range(280, 340); p.legHeight = p.legType === 'hidden' ? r.range(20, 60) : r.range(60, 110); }
-        if (p.headType === 'boiserie' || (p.integratedNight !== 'none')) p.headExtend = Math.max(p.headExtend, r.range(450, 650));
-        if (p.headType === 'channel' && p.headShape === 'scallop') p.channelCount = Math.round(p.scallops * 3);
-        // Keep the mattress top in the comfortable 450–600 mm band (sitting and getting up).
-        const inset = ['frame', 'upholsteredFrame', 'fourPoster'].includes(p.bedBase) ? Math.min(p.railHeight - 60, 120) : 0;
-        const top = () => p.legHeight + p.railHeight + p.mattressThickness - (['frame', 'upholsteredFrame', 'fourPoster'].includes(p.bedBase) ? Math.min(p.railHeight - 60, 120) : 0);
-        const lo = st.id === 'japandi' || st.id === 'wabi_sabi' || st.id === 'muji_modern' ? 400 : 450;
-        for (let i = 0; i < 20 && top() > 600; i++) { if (p.railHeight > 160) p.railHeight -= 20; else p.legHeight = Math.max(0, p.legHeight - 20); }
-        for (let i = 0; i < 20 && top() < lo; i++) p.railHeight += 20;
-        void inset;
-      } else {
-        const k = KINDS[kind];
-        p.width = r.range(...k.width); p.depth = r.range(...k.depth); p.height = r.range(...k.height);
-        if (kind === 'nightstand') { p.rows = r.int(1, 3); p.columns = 1; }
-        else { p.rows = p.height > 1000 ? r.int(5, 6) : r.int(3, 4); p.columns = p.width > 1200 ? r.int(2, 3) : 2; if (p.height > 1000) p.mirror = 'none'; }
-        p.baseHeight = p.caseBase === 'legs' || p.caseBase === 'sled' ? r.range(120, 220) : p.caseBase === 'wall' ? 0 : r.range(40, 90);
-      }
+      p.bedding = 'made'; p.headExtend = 0; p.view = 'set'; p.setMatch = 'on';
+      const size = r.weighted({'160x200': 5, '180x200': 3, '150x200': 2, '140x190': 1});
+      [p.mattressWidth, p.mattressLength] = bedroom.MATTRESS[size];
+      p.mattressThickness = r.range(220, 280);
+      if (p.bedBase === 'baza') { p.railHeight = r.range(260, 320); p.legHeight = p.legType === 'hidden' ? r.range(20, 50) : r.range(50, 90); }
+      p.wdWidth = Math.round(r.range(1600, 2600) / 10) * 10;
+      const framed = ['frame', 'upholsteredFrame', 'fourPoster'].includes(p.bedBase);
+      const top = () => p.legHeight + p.railHeight + p.mattressThickness - (framed ? Math.min(p.railHeight - 60, 120) : 0);
+      const lo = ['japandi', 'wabi_sabi', 'muji_modern'].includes(st.id) ? 400 : 450;
+      for (let i = 0; i < 20 && top() > 600; i++) { if (p.railHeight > 160) p.railHeight -= 20; else p.legHeight = Math.max(0, p.legHeight - 20); }
+      for (let i = 0; i < 20 && top() < lo; i++) p.railHeight += 20;
       Object.assign(p, locks.params || {});
-      return p;
+      // The other pieces follow the one in focus.
+      const q = set.harmonize(set.normalize(p), kind);
+      // Final check of the mattress top on the proposed set (450–600 mm; lower for floor-level styles).
+      for (let i = 0; i < 30; i++) {
+        const t = bedroom.compileBed(bedroom.normalize({...q, kind: 'bed', integratedNight: 'none'})).meta;
+        if (t.mattressTop > 600) { if (q.railHeight > 140) q.railHeight -= 20; else if (q.legHeight > 0) q.legHeight = Math.max(0, q.legHeight - 20); else q.mattressThickness = Math.max(180, q.mattressThickness - 20); }
+        else if (t.headAbove < 300) q.headHeight += 50;
+        else break;
+      }
+      return q;
     },
     sampleMaterials(st, r) {
       const m = st.mats, fiber = r.weighted(m.fiber);
@@ -164,6 +172,8 @@ export const FAMILIES = {
   }
 };
 
+/** Room-level sampling ranges. */
+const ROOM_SAMPLE_RANGES = {nsWidth: [440, 540], nsDepth: [360, 420], nsRows: [1, 2], nsHeightOffset: [0, 60], wdDepth: [580, 620], wdHeight: [2200, 2400], wdNicheWidth: [900, 1200], battenWidth: [30, 50], battenGap: [12, 22], panelDado: [1150, 1350], drWidth: [1000, 1400], drDepth: [430, 480], drHeight: [760, 860], drRows: [3, 4], drColumns: [2, 3], caseBaseHeight: [100, 180], topThickness: [18, 28], topOverhang: [0, 12], graduation: [0.2, 0.5], fluteWidth: [18, 28], mirrorHeight: [700, 950], mirrorWidth: [0.5, 0.75]};
 /** Sensible sampling ranges for bedroom parameters a style does not set. */
 const BEDROOM_SAMPLE_RANGES = {legHeight: [60, 160], railHeight: [180, 300], border: [40, 140], plinthInset: [100, 200], headHeight: [1050, 1300], headThickness: [80, 130], headExtend: [0, 0], headRadius: [60, 300], scallops: [3, 4], channelCount: [8, 12], tuftSpacing: [160, 210], slatWidth: [45, 80], slatGap: [12, 30], wingDepth: [180, 260], frameWidth: [50, 80], footHeight: [350, 600], postSize: [50, 70], postHeight: [1900, 2100], legSize: [40, 60], legTaper: [0.6, 0.8], nightWidth: [420, 520], topThickness: [18, 30], topOverhang: [0, 15], cornerRadius: [0, 40], graduation: [0.2, 0.6], fluteWidth: [18, 30], mirrorHeight: [700, 1000], mirrorWidth: [0.5, 0.8]};
 

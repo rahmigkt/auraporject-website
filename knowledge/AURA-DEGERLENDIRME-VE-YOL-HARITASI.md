@@ -384,3 +384,9 @@ Yayındaki sayfa: `w4/tasarla.html`. Kod: `w4/assets/forma/` (ayrıntı: `w4/ass
 ## 10. Masa geometrisi ve yatak odası (2026-10-17)
 - Masa: ayak sistemleri tablanın alt yüzüne (kenar profili dahil) her şekilde sığdırılıyor; eğik ayaklar zemine ve tablaya düz kesiliyor; köprü ayak tek dikmeli; çıtalı raf taşıyıcı kayıtlı; devrilme gerçek zemin izinden hesaplanıyor. `tests/table-geometry.mjs` 8865 kombinasyonda boşluk/taşma/askıda parça kontrol ediyor.
 - Yatak odası ailesi eklendi (karyola, komodin, şifonyer): ayrıntı ve kaynaklar `knowledge/AURA-YATAK-ODASI-ARASTIRMA.md`.
+
+## 11. Karar (2026-10-17): yatak odası takım olarak
+- AURA yatak odasında tek ürün vermez; takım verir. Stüdyoda kişi bir parçayı tasarlar (karyola, gardırop, şifonyer veya komodin), diğer parçalar aynı tarz ve özelliklerle önerilir ("Takımı uydur" açık) ve "Takımı göster" ile birlikte görünür. Eşleme: başlık tipi ↔ gardırop kapak yüzeyi ↔ çekmece önü; kulp; ayak/kaide; köşe ve ayna formu. Yalnız odaklanılan parçanın tasarım dili değiştiğinde öneri yapılır; ölçüler parça başına kalır.
+- Gardırop eklendi: menteşeli/sürgülü; düz, dikey yivli, çıtalı, oluklu, çerçeveli, hasır, aynalı kapak; uzun çubuk, gizli tırnak, topuz, deri, it-aç kulp; makyaj/çalışma nişi veya açık raflı ara bölüm; kaide, gizli kaide veya ayak.
+- Parça listesi ve tasarımcı paketi her zaman bütün takımı kapsar.
+- Ekteki görsellerdeki gibi bütün odanın yapay zekâ ile canlı tasarlanması ayrı bir akıştır (oda projesi); şimdilik ertelendi.

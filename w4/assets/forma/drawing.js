@@ -115,10 +115,11 @@ const FILL = {fabric: '#f3efe7', welt: '#e8e1d4', wood: '#efe3cf', metal: '#e4e4
  * Build all views. Returns {views:{front,side,top,section}, extents, xCut}. Coordinates in mm (model space).
  */
 export function buildViews(compiled) {
-  const shown = compiled.parts.filter(p => p.decor !== 'bedding'), visible = shown.filter(p => !p.internal);
+  const shown = compiled.parts.filter(p => p.decor !== 'bedding' && !p.render3d && !p.planOnly), visible = shown.filter(p => !p.internal);
   const views = {};
+  const planExtra = compiled.parts.filter(p => p.planOnly);
   for (const view of ['front', 'side', 'top']) {
-    views[view] = visible.map(p => ({id: p.id, mat: p.mat, role: p.role, ...silhouette(p, view)})).sort((a, b) => a.depth - b.depth);
+    views[view] = (view === 'top' ? [...visible, ...planExtra] : visible).map(p => ({id: p.id, mat: p.mat, role: p.role, ...silhouette(p, view)})).sort((a, b) => a.depth - b.depth);
   }
   const m = compiled.meta, seatW = m.seatWidthEach;
   const xCut = compiled.sectionX ?? Math.round(-m.innerWidth / 2 + seatW / 2);
