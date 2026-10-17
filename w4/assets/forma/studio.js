@@ -11,6 +11,7 @@ import {STARTS} from './starts.js';
 import {HIDES, COLORS, FIBERS, WEAVES, WEAVE_NAMES, PATTERNS, MOTIF_CHOICES, MOTIF_NAMES, WOODS, FINISHES, STAINS, METALS, STONES, GLASS, SURFACES, LINEN_COLORS, colorGroup, name as nm} from './catalog.js';
 import {MATTRESS} from './bedroom.js';
 import {harmonize} from './set.js';
+import {account} from './account.js';
 import {ROOM_TYPES, suggestRoom, misfits, itemKind, footprint, arrange, worldCenter, shell as roomShell} from './room.js';
 import {draft, fabricMaps} from './textile.js';
 import {stoneMaps} from './stone.js';
@@ -26,7 +27,8 @@ import {t, partName, UI_LANGS} from './i18n.js';
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
-const store = {get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }};
+// Browser storage; with an account every change is also saved to it (debounced), so work survives other devices.
+const store = {get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} account.schedule(); }};
 
 const params = new URLSearchParams(location.search);
 const browserLang = (navigator.language || 'en').slice(0, 2);
@@ -118,6 +120,7 @@ function shell() {
   <header class="f-header">
     <a class="f-brand" href="index.html?lang=${state.lang}">AURA</a>
     <nav class="f-families" id="families" aria-label="${esc(L('title'))}"></nav>
+    <button class="f-account" id="accountBtn" type="button"></button>
     <label class="f-lang"><span class="sr">Language</span><select id="lang">${Object.entries(UI_LANGS).map(([k, v]) => `<option value="${k}" ${k === state.lang ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
   </header>
   <main class="f-layout">
@@ -145,7 +148,7 @@ function shell() {
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261018f').then(mod => { sceneModule = mod; const {createViewer} = mod;
+  import('./scene.js?v=20261018g').then(mod => { sceneModule = mod; const {createViewer} = mod;
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(state.compiled, state.design.materials); if (state.room) showRoom(); }
@@ -526,7 +529,10 @@ function sameDesign(d, kind) {
 }
 function startNew(d, note) { state.editing = null; state.justAdded = false; state.room = null; saveProject(); state.tab = 'parts'; setSketch(true); setDesign(d); feedback(note); }
 function projectPanel() {
-  const items = state.project.items, d = state.design, fam = d.family, editing = items.find(i => i.id === state.editing);
+  const items = state.project.items, d = state.design, fam = d.family;
+  // Back on a design that is already in the project (undo, reopening): it is that item, not a new one.
+  if (!items.some(i => i.id === state.editing)) { const same = items.find(i => designKey(i.design) === designKey(d)); state.editing = same ? same.id : null; }
+  const editing = items.find(i => i.id === state.editing);
   const changed = editing && designKey(editing.design) !== designKey(d);
   const others = fam === 'bedroom' ? [] : ui().kinds.filter(k => k !== d.kind);
   const next = state.justAdded && !changed ? `<section class="f-next"><h3>${L('whatNext')}</h3>
@@ -590,6 +596,64 @@ function projectAction(el) {
   else if (a === 'allow') { state.room ??= {type: suggestRoom(items), layout: 0, allow: []}; state.room.allow.push(el.dataset.item); setSketch(false); showRoom(); renderPanel(); }
   else if (a === 'room') { state.room = state.room ? {...state.room, layout: (state.room.layout + 1) % 3} : {type: suggestRoom(items), layout: 0, allow: []}; setSketch(false); showRoom(); renderPanel(); }
   else if (a === 'leaveRoom') { delete document.body.dataset.room; state.room = null; viewer?.setRoom(null); viewer?.setDesign(state.compiled, state.design.materials); renderCaption(); renderPanel(); }
+}
+
+// ---- Account ------------------------------------------------------------------------------------------
+function renderAccountBtn() {
+  const b = $('#accountBtn'); if (!b) return;
+  const u = account.user; b.textContent = u ? (u.user_metadata?.name || u.email).split(/[ @]/)[0] : L('signIn');
+  b.dataset.on = u ? '1' : ''; b.title = u ? u.email : L('signIn');
+}
+function openAccount(first = false) {
+  document.querySelector('.f-modal')?.remove();
+  const u = account.user, m = document.createElement('div');
+  m.className = 'f-modal'; m.setAttribute('role', 'dialog'); m.setAttribute('aria-modal', 'true');
+  const form = mode => `<form class="f-send f-auth" data-mode="${mode}">
+      ${mode === 'up' ? `<label class="full">${L('name')}<input name="name" maxlength="120" autocomplete="name"></label>` : ''}
+      <label class="full">${L('email')} *<input name="email" type="email" required maxlength="160" autocomplete="email"></label>
+      ${mode !== 'reset' ? `<label class="full">${L('password')} *<input name="password" type="password" required minlength="8" maxlength="72" autocomplete="${mode === 'up' ? 'new-password' : 'current-password'}"></label>` : ''}
+      <p class="f-note full" id="authState"></p>
+      <button class="f-primary full" type="submit">${L(mode === 'up' ? 'createAccount' : mode === 'in' ? 'signIn' : 'sendReset')} →</button></form>`;
+  const body = u ? `<h2>${L('account')}</h2><p class="f-lead">${esc(u.email)}</p><p class="f-note">${L('accountSaved')}</p>
+      <div class="f-actions"><button class="f-secondary" data-auth="out">${L('signOut')}</button><button class="f-primary" data-auth="close">${L('continue')}</button></div>`
+    : `<h2>${L(first ? 'welcomeTitle' : 'account')}</h2><p class="f-lead">${L('accountWhy')}</p>
+      <nav class="f-authtabs"><button class="f-link" data-auth="up" aria-pressed="true">${L('createAccount')}</button><button class="f-link" data-auth="in">${L('signIn')}</button></nav>
+      <div id="authForm">${form('up')}</div>
+      <p class="f-note"><button class="f-link" data-auth="reset">${L('forgot')}</button></p>
+      <div class="f-actions"><button class="f-secondary" data-auth="skip">${L('continueWithout')}</button></div>
+      <p class="f-note">${L('withoutNote')}</p>`;
+  m.innerHTML = `<div class="f-modal-box"><button class="f-modal-x" data-auth="close" aria-label="×">×</button>${body}</div>`;
+  document.body.appendChild(m);
+  const close = () => m.remove();
+  m.addEventListener('click', async e => {
+    const b = e.target.closest('[data-auth]'); if (!b) { if (e.target === m) close(); return; }
+    const a = b.dataset.auth;
+    if (a === 'close') close();
+    else if (a === 'skip') { try { localStorage.setItem('aura-forma-account-skip', '1'); } catch {} close(); }
+    else if (a === 'out') { await account.signOut(); for (const k of Object.keys(localStorage)) if (k.startsWith('aura-forma-') && k !== 'aura-forma-lang') localStorage.removeItem(k); location.reload(); }
+    else { m.querySelector('#authForm').innerHTML = form(a); for (const t of m.querySelectorAll('.f-authtabs [data-auth]')) t.setAttribute('aria-pressed', String(t.dataset.auth === a)); }
+  });
+  m.addEventListener('submit', async e => {
+    e.preventDefault(); const f = e.target, fd = new FormData(f), st = m.querySelector('#authState'), mode = f.dataset.mode;
+    st.textContent = L('working');
+    try {
+      if (mode === 'up') { const r = await account.signUp(fd.get('email'), fd.get('password'), fd.get('name') || ''); if (r.confirm) { st.textContent = L('confirmEmail'); return; } }
+      else if (mode === 'in') await account.signIn(fd.get('email'), fd.get('password'));
+      else { await account.reset(fd.get('email')); st.textContent = L('resetSent'); return; }
+      st.textContent = L('syncing');
+      const changed = await account.pull(designKey); close();
+      if (changed) location.reload(); else { renderAccountBtn(); feedback(L('accountSaved')); }
+    } catch (err) { st.textContent = authError(err); }
+  });
+}
+function authError(err) {
+  const m = String(err?.message || err);
+  if (/failed to fetch|network/i.test(m)) return L('authOffline');
+  if (/invalid login/i.test(m)) return L('authWrong');
+  if (/already registered|already exists/i.test(m)) return L('authExists');
+  if (/password/i.test(m)) return L('authPassword');
+  if (/rate limit|too many/i.test(m)) return L('authRate');
+  return m;
 }
 
 // ---- Package -------------------------------------------------------------------------------
@@ -763,6 +827,8 @@ function listen() {
 
 // ---- Events ----------------------------------------------------------------------------------
 function bindShell() {
+  $('#accountBtn').onclick = () => openAccount();
+  renderAccountBtn();
   $('#lang').onchange = e => { state.lang = e.target.value; store.set('aura-forma-lang', state.lang); state.drawingCache = null; shell(); };
   $('#families').onclick = e => { const b = e.target.closest('[data-family]'); if (b && b.dataset.family !== state.design.family) switchFamily(b.dataset.family); };
   for (const b of document.querySelectorAll('[data-view]')) b.onclick = () => { viewer?.view(b.dataset.view); markView(b.dataset.view); };
@@ -877,5 +943,13 @@ store.set('aura-forma-lang', state.lang);
   const ed = store.get('aura-forma-editing'); state.editing = state.project.items.some(i => i.id === ed) ? ed : null;
   const prev = store.get('aura-forma-sent-project'); if (prev?.key && prev.key === projectKey()) state.sent = prev; }
 shell();
+// Account: restore the session; a returning signed-in customer gets the saved work; others are invited once.
+account.init().then(async u => {
+  renderAccountBtn();
+  account.onChange(() => renderAccountBtn());
+  if (u) { try { if (await account.pull(designKey)) location.reload(); } catch {} }
+  else if (!store.get('aura-forma-account-skip') && !location.hash.includes('access_token')) openAccount(true);
+}).catch(() => {});
+window.addEventListener('pagehide', () => { account.flush(); });
 if (start.note) { feedback(start.note); state.tab = 'parts'; renderPanel(); }
 aiStatus().then(s => { state.ai = s; if (state.tab === 'parts') renderPanel(); });
