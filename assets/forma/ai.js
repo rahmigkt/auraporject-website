@@ -1,4 +1,4 @@
-// Client for the optional server AI (w4/api/forma-ai.php). The site works fully without it:
+// Client for the optional server AI (api/forma-ai.php). The site works fully without it:
 // typed/spoken commands are parsed locally first; only unparsed requests and image reading use the AI.
 import {normalizeDesign, sample} from './generate.js';
 import {RANGES, ENUMS} from './sofa.js';

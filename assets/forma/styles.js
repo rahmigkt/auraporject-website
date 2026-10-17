@@ -1,7 +1,7 @@
 // Style → parameter distributions for the seating family.
 // Each style is an editorial working direction (not a historical certification): it weights part types
 // and narrows continuous ranges. Sampling inside it produces many genuinely different designs.
-// Style ids match w4/assets/style-directions.js so the AI taste brief maps directly.
+// Style ids match assets/style-directions.js so the AI taste brief maps directly.
 
 const W = text => Object.fromEntries(text.trim().split(/\s+/).map(t => { const [k, v] = t.split(':'); return [k, Number(v ?? 1)]; }));
 
