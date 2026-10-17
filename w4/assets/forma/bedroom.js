@@ -7,6 +7,8 @@
 // chests anchored to the wall. Checks are guidance for the designer, not certification.
 import {topOutline, clipX, offsetOutline, transformPositions, bounds} from './mesh.js';
 import {legProfile} from './profiles.js';
+import {linePart, rows} from './lines.js';
+import {roundedRectLoop} from './mesh.js';
 import {clamp} from './rng.js';
 import {WOODS} from './catalog.js';
 
@@ -52,7 +54,9 @@ export const ENUMS = {
   caseBase: ['legs', 'plinth', 'recessed', 'sled', 'wall'],
   caseLayout: ['stack', 'split', 'topSplit', 'niche'],
   caseEdge: ['square', 'eased', 'bullnose', 'chamfer'],
-  mirror: ['none', 'rect', 'arch', 'round', 'capsule']
+  mirror: ['none', 'rect', 'arch', 'round', 'capsule'],
+  stitch: ['none', 'single', 'double'],
+  caseLine: ['none', 'groove', 'inlay']
 };
 
 export const DEFAULTS = {
@@ -62,7 +66,7 @@ export const DEFAULTS = {
   width: 520, depth: 400, height: 560, topThickness: 25, topOverhang: 10, cornerRadius: 0, baseHeight: 120, rows: 2, columns: 1, graduation: 0.4,
   fluteWidth: 24, mirrorHeight: 800, mirrorWidth: 0.7,
   headType: 'upholstered', headShape: 'rect', bedBase: 'baza', legType: 'block', footboard: 'none', storage: 'none', bedding: 'made', integratedNight: 'none',
-  frontStyle: 'flat', pull: 'knob', caseBase: 'legs', caseLayout: 'stack', caseEdge: 'eased', mirror: 'none', kind: 'bed'
+  frontStyle: 'flat', pull: 'knob', caseBase: 'legs', caseLayout: 'stack', caseEdge: 'eased', mirror: 'none', stitch: 'none', caseLine: 'none', kind: 'bed'
 };
 
 const UPHOLSTERED_HEADS = ['upholstered', 'channel', 'hChannel', 'tufted', 'panels', 'framed', 'wingback', 'split'];
@@ -308,6 +312,17 @@ export function compileBed(p) {
       break;
     }
   }
+  // Topstitch: a loop inset on a plain upholstered headboard (or framed infill), and double-needle lines round the baza.
+  if (p.stitch !== 'none') {
+    const face = p.headType === 'framed' ? {w: HW - 2 * p.frameWidth, h: HH - 2 * p.frameWidth, b: hb0 + p.frameWidth, r: p.headRadius - p.frameWidth, z: zF + 35, t: 55}
+      : ['upholstered', 'wingback'].includes(p.headType) ? {w: HW, h: HH, b: hb0, r: p.headRadius, z: zF, t: ht} : null;
+    if (face) rows(p.stitch, face.t / 2 + 24, 10).forEach((i, k) => {
+      const loop = headOutline(p.headShape, face.w - 2 * i, face.h - 2 * i, {r: Math.max(4, face.r - i), scallops: p.scallops, base: face.b + i});
+      parts.push(linePart(`head-stitch-${k + 1}`, 'stitch', loop.map(([x, y]) => [x, y, face.z + 0.5])));
+    });
+    if (p.bedBase === 'baza') for (const [k, y] of rows(p.stitch, 24, 9).flatMap(d => [railTop - d, legH + d]).entries())
+      parts.push(linePart(`baza-stitch-${k + 1}`, 'stitch', roundedRectLoop(BW + 1, BL + 1, 14.5).map(([x, z]) => [x, y, z])));
+  }
   // Integrated bedside units on a wide headboard.
   if (p.integratedNight !== 'none') {
     const nw = p.nightWidth, nd = 380, y = mattressTop - 20;
@@ -422,6 +437,11 @@ export function compileCase(p) {
       for (let k = 1; k < Math.max(2, Math.round(d.h / 45)); k++) parts.push(box(`groove-${d.id}-${k}`, 'seam', 'dark', d.w - 1, 3, 1, [d.x, d.y - d.h / 2 + k * d.h / Math.max(2, Math.round(d.h / 45)), zFace + fr / 2 + 0.2], {}, 0.4));
     } else parts.push(box(`front-${d.id}`, 'drawer-front', 'case', d.w, d.h, fr, [d.x, d.y, zFace]));
     parts.push(box(`box-${d.id}`, 'drawer-box', 'frame', d.w - 30, Math.max(60, d.h - 40), D - fr - 40, [d.x, d.y - 8, zFace - fr / 2 - (D - fr - 40) / 2], {internal: true}));
+    // Line detail on plain fronts: a shadow groove or a metal inlay frame inset from the edge.
+    if (style === 'flat' && p.caseLine !== 'none') {
+      const m = clamp(d.h * 0.12, 12, 24), zl = zFace + fr / 2 - (p.caseLine === 'groove' ? 0.7 : 1.0);
+      parts.push(linePart(`line-${d.id}`, p.caseLine, roundedRectLoop(d.w - 2 * m, d.h - 2 * m, 2, d.x, d.y, 2).map(([x, y]) => [x, y, zl])));
+    }
     const zp = zFace + fr / 2 + (style === 'fluted' ? 6 : 0);
     if (p.pull === 'knob') for (const off of d.w > 700 ? [-d.w / 4, d.w / 4] : [0]) parts.push(part(`knob-${d.id}-${off}`, 'pull', 'metal', {fn: 'lathe', profile: [[0, 6], [14, 6], [17, 14], [26, 15], [28, 10]]}, [d.x + off, d.y, zp], [Math.PI / 2, 0, 0]));
     if (p.pull === 'ring') parts.push(part(`ring-${d.id}`, 'pull', 'metal', {fn: 'lathe', profile: [[0, 8], [6, 8], [8, 20], [11, 20], [11, 4], [4, 4]]}, [d.x, d.y, zp], [Math.PI / 2, 0, 0]));
@@ -503,6 +523,9 @@ export function validate(design, materials = null, buildMesh = null) {
 }
 
 export const ROLE = {
+  stitch: ['Dekoratif dikiş', 'Topstitching', 'Tek/çift sıra, 3–4 mm adım, kalın dikiş ipliği (Nm 20)', 'Single/double row, 3–4 mm stitch, heavy thread (Nm 20)'],
+  inlay: ['Metal kakma', 'Metal inlay', '3 mm pirinç/metal şerit, yüzeye frezelenmiş kanala yapıştırılır, zımparalanır', '3 mm brass/metal strip glued into a routed channel, flushed'],
+  groove: ['Gölge kanal', 'Shadow groove', '3 × 3 mm freze kanal, kanal içi mat siyah', '3 × 3 mm routed groove, matt black inside'],
   baza: ['Baza gövdesi', 'Box base', '18 mm kontrplak/MDF kasa, 30 mm sünger, kumaş kaplama; 4 köşe taşıyıcı', '18 mm ply/MDF box, 30 mm foam, fabric cover; four corner supports'],
   platform: ['Platform', 'Platform base', 'Kasa + kapak, kenar profilli; çıtalı taban', 'Box with profiled edges; slatted deck'],
   rail: ['Kasa kayıtı', 'Bed rail', 'Masif / kontrplak; köşe bağlantısı çelik karyola köşebendi', 'Solid / ply; steel bed-rail fittings at the corners'],

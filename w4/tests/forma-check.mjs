@@ -186,6 +186,31 @@ bp('makyaj nişli gardırop', [{key: 'wdNiche', value: 'vanity'}]);
 bp('Kleiderschrank mit Schiebetüren', [{type: 'family', value: 'bedroom'}, {type: 'kind', value: 'wardrobe'}, {key: 'wdDoorType', value: 'sliding'}], 'table');
 bp('cama con cabecero de rejilla', [{key: 'headType', value: 'cane'}]);
 
+// 9. Line details (stitch, inlay, groove): every family draws them as finite meshes; sheets and BOM stay clean.
+let lineN = 0;
+const lineOk = (c, label) => {
+  const ls = c.parts.filter(q => q.line); assert.ok(ls.length, `${label}: no line parts`);
+  for (const q of ls) { const m = buildMesh(q); assert.ok(m.positions.length && m.positions.every(Number.isFinite), `${label} ${q.id}`); lineN++; }
+};
+for (const stitch of ['single', 'double']) for (const seatType of ['split', 'bench', 'tight']) for (const cushionEdge of ['boxed', 'knife', 'bullnose']) lineOk(compile({stitch, seatType, cushionEdge}), `sofa ${stitch}/${seatType}/${cushionEdge}`);
+for (const inlay of ['single', 'double', 'groove']) for (const topShape of T.ENUMS.topShape) for (const edge of T.ENUMS.edge) lineOk(T.compile({inlay, topShape, edge}), `table ${inlay}/${topShape}/${edge}`);
+for (const headType of ['upholstered', 'wingback', 'framed']) for (const headShape of SET.ENUMS.headShape) lineOk(SET.compile({stitch: 'double', headType, headShape, bedBase: 'baza'}), `bed ${headType}/${headShape}`);
+for (const caseLine of ['groove', 'inlay']) lineOk(SET.compile({caseLine, frontStyle: 'flat', wdDoorStyle: 'flat'}), `set ${caseLine}`);
+{
+  const c = SET.compile({stitch: 'single', caseLine: 'inlay', frontStyle: 'flat', wdDoorStyle: 'flat'}), sh = drawingSheet(c, {...labels, mattressTop: 'Top', edgeDetail: 'Edge'}, {rows: [['A', 'B']]});
+  assert.ok(!sh.svg.includes('NaN'), 'line sheet');
+  const rowsTr = bom(c, sample({family: 'bedroom', style: 'japandi', kind: 'bed', seed: 1}).materials, 'tr').rows;
+  assert.ok(rowsTr.some(r => r.nameTr.endsWith('Dekoratif dikiş')) && rowsTr.some(r => r.nameTr.endsWith('Metal kakma')), 'line BOM rows');
+  for (const fam of ['seating', 'table', 'bedroom']) for (let seed = 1; seed <= 3; seed++) { const d = sample({family: fam, seed}); assert.ok(['stitch', 'inlay', 'caseLine'].every(k => d.params[k] === undefined || d.params[k] === 'none'), 'lines start empty'); }
+}
+{
+  const one = (t, family, want) => assert.ok(parse(t, {family}).actions.some(x => Object.entries(want).every(([k, v]) => x[k] === v)), `line command: ${t}`);
+  one('çift dikiş', 'seating', {key: 'stitch', value: 'double'}); one('Doppelnaht', 'seating', {key: 'stitch', value: 'double'});
+  one('pirinç kakma', 'table', {slot: 'hardware', value: 'brass'}); one('kenarda kanal', 'table', {key: 'inlay', value: 'groove'}); one('filete doble', 'table', {key: 'inlay', value: 'double'});
+  one('çekmecelere gölge kanal', 'bedroom', {key: 'caseLine', value: 'groove'}); one('başlığa çift dikiş', 'bedroom', {key: 'stitch', value: 'double'});
+  assert.ok(!parse('çekmecelere gölge kanal', {family: 'bedroom'}).actions.some(x => x.key === 'headType'), 'groove is not a channel headboard');
+}
+console.log(`PASS forma: ${lineN} line-detail parts (stitch, inlay, groove) on seating, tables and the bedroom set;`);
 console.log(`PASS forma: ${bedroomN} bedroom sets valid (wardrobe, bed, bedside, chest; set and piece views); matching, drawings, BOM, commands;`);
 console.log(`PASS forma: ${tables} table designs valid; patterns, stain and stone maps;`);
 console.log(`PASS forma: ${designs} style/kind/seed designs valid; 4 styles × 12 diverse proposals; ${Object.keys(WEAVES).length} weave drafts; 8-language commands; drawings, DXF, BOM, ZIP, PDF; AI output sanitised.`);

@@ -390,3 +390,10 @@ Yayındaki sayfa: `w4/tasarla.html`. Kod: `w4/assets/forma/` (ayrıntı: `w4/ass
 - Gardırop eklendi: menteşeli/sürgülü; düz, dikey yivli, çıtalı, oluklu, çerçeveli, hasır, aynalı kapak; uzun çubuk, gizli tırnak, topuz, deri, it-aç kulp; makyaj/çalışma nişi veya açık raflı ara bölüm; kaide, gizli kaide veya ayak.
 - Parça listesi ve tasarımcı paketi her zaman bütün takımı kapsar.
 - Ekteki görsellerdeki gibi bütün odanın yapay zekâ ile canlı tasarlanması ayrı bir akıştır (oda projesi); şimdilik ertelendi.
+
+## 12. Karar (2026-10-18): seçmeli stüdyo eskizle başlar
+- İki yol var: (1) seçerek, ekleyerek, ölçü vererek ilerleyen stüdyo — korunur ve önce bu tamamlanır; (2) konuşan, görselden çizim üreten AURA AI sayfası — seçmeli stüdyo tamamlanınca, oradan gelen veriyle tasarlanacak.
+- Stüdyo artık eskizle açılır: kâğıt beyazı hacimler, grafit kenar ve siluet çizgileri, ölçü çizgileri (mm) ve çizim ızgarası. Renk ve malzeme "Malzeme" adımında gelir; araç çubuğundaki "Eskiz / Renkli" ile istenince geçilebilir.
+- Adımlar: 01 Parçalar · 02 Ölçüler · 03 Malzeme · 04 Gönder. Tarz seçimi zorunlu ilk adım değil; Parçalar'ın altındaki "Esin al" listesinde isteğe bağlı.
+- Çizgi detayları (eskizde kırmızı): oturma grubunda minder üstü dikiş (tek/çift sıra), masada tabla kakması (tek/çift) veya kenarda gölge kanal, yatak odasında başlık ve bazada dikiş, düz kapak ve çekmece önlerinde gölge kanal veya metal kakma. Parça listesine işlenir; komutla da eklenir ("çift dikiş", "pirinç kakma", "çekmecelere gölge kanal").
+- Ana sayfa: kutu ve katalog görünümü kaldırıldı (kategori kartları, tarz kütüphanesi bandı, Ritmo/Verev adları). İnce üst çizgi; stüdyonun kendi çizim motoruyla çizilmiş örnek eskiz; dört aile (oturma, masa, yatak odası, depolama) yazı satırı olarak; AURA AI'ye tek satır. 8 dil.

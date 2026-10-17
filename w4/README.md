@@ -79,3 +79,14 @@ W4 now opens around two primary entry points: guided choices and the design assi
 No email/API request uploads contact data in this flow. The configured WhatsApp line is 905330339084. The prepared PDF can be sent via native Web Share on supported devices (visitor chooses WhatsApp/AURA), or saved and attached manually after opening the exact AURA chat. A wa.me URL cannot attach the file or guarantee its recipient in the native share picker. Sharing uses the visitor's WhatsApp account. The interface never claims delivery. Automatic server-to-business PDF delivery is not implemented and would require a WhatsApp Business API integration.
 
 QA: homepage colour/arm interaction, direct armchair shortcut, desktop and 390px layout; complete contact-to-PDF browser path using fictional details; downloaded 340 KB PDF validated as three A4 pages by Poppler, all three page renders inspected. No test WhatsApp message was sent. Existing geometry suites remain passing.
+
+
+## Sketch-first studio and line details (2026-10-18)
+
+`tasarla.html` opens as a drawing, not a catalogue: paper-white volumes with graphite creases and silhouettes (inverted hull), overall dimension lines in millimetres and a drafting grid. Colour and materials appear from step 03 (Material); a toolbar toggle switches Sketch/Colour at any time. Steps are now Parts · Dimensions · Material · Send; choosing a style is optional ("Borrow a starting form", collapsed under Parts). Options are typographic (active = red underline), the header is a single 44 px line.
+
+Line details (`assets/forma/lines.js`, geometry fn `line`): seat-cushion topstitch (single/double, follows the crowned top), table-top metal inlay (single/double, offset from the edge profile) or an edge shadow groove, bedroom headboard/baza topstitch and flat door/drawer front groove or inlay. They draw as red ink lines in the sketch, as thread/metal in colour, appear in the parts list, and are parsed from 8-language commands. Generated starting forms never contain line details.
+
+The homepage (`index.html`) no longer has the style library banner, product-line names or category cards: a slim header, the studio's own front-elevation sketch of three sample pieces, four families as text rows and one line to AURA AI, in the eight site languages.
+
+QA: `tests/forma-check.mjs` (line-detail section added) and `tests/table-geometry.mjs`; browser checks of all families in sketch and colour, zoomed line details, material/send tabs and 390 px layouts.

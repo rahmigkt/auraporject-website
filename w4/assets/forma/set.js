@@ -5,14 +5,15 @@
 // Units: mm. Each piece is built in its own frame (front = +z); the set view lines them up like a showroom.
 import * as B from './bedroom.js';
 import {clamp} from './rng.js';
-import {bounds, transformPositions} from './mesh.js';
+import {bounds, transformPositions, roundedRectLoop} from './mesh.js';
+import {linePart} from './lines.js';
 
 export const FAMILY = 'bedroom';
 /** Kinds are the piece in focus; the design always carries the whole set. */
 export const KINDS = {bed: {}, wardrobe: {}, dresser: {}, nightstand: {}};
 
 const BED_RANGE_KEYS = ['mattressWidth', 'mattressLength', 'mattressThickness', 'legHeight', 'railHeight', 'border', 'plinthInset', 'headHeight', 'headThickness', 'headExtend', 'headRadius', 'scallops', 'channelCount', 'tuftSpacing', 'slatWidth', 'slatGap', 'wingDepth', 'frameWidth', 'footHeight', 'postSize', 'postHeight', 'legSize', 'legTaper'];
-const BED_ENUM_KEYS = ['headType', 'headShape', 'bedBase', 'legType', 'footboard', 'storage', 'bedding'];
+const BED_ENUM_KEYS = ['headType', 'headShape', 'bedBase', 'legType', 'footboard', 'storage', 'bedding', 'stitch'];
 const pick = (o, keys) => Object.fromEntries(keys.map(k => [k, o[k]]));
 
 export const RANGES = {
@@ -28,7 +29,7 @@ export const ENUMS = {
   wdDoorType: ['hinged', 'sliding'], wdDoorStyle: ['flat', 'grooved', 'slats', 'fluted', 'framed', 'cane', 'mirror'], wdHandle: ['bar', 'edge', 'knob', 'leather', 'push'], wdNiche: ['none', 'vanity', 'desk', 'shelves'], wdBase: ['plinth', 'recessed', 'legs'],
   nsBase: ['wall', 'legs', 'plinth', 'recessed'], nsLayout: ['stack', 'niche'],
   drLayout: ['stack', 'split', 'topSplit'], drBase: ['legs', 'plinth', 'recessed'], mirror: ['none', 'rect', 'arch', 'round', 'capsule'],
-  frontStyle: B.ENUMS.frontStyle, pull: B.ENUMS.pull, caseEdge: B.ENUMS.caseEdge,
+  frontStyle: B.ENUMS.frontStyle, pull: B.ENUMS.pull, caseEdge: B.ENUMS.caseEdge, caseLine: B.ENUMS.caseLine,
   view: ['set', 'piece'], setMatch: ['on', 'off']
 };
 export const DEFAULTS = {
@@ -36,7 +37,7 @@ export const DEFAULTS = {
   nsWidth: 500, nsDepth: 400, nsRows: 1, nsHeightOffset: 30, nsBase: 'legs', nsLayout: 'stack',
   wdWidth: 2000, wdHeight: 2300, wdDepth: 600, wdNicheWidth: 900, battenWidth: 40, battenGap: 18, wdDoorType: 'hinged', wdDoorStyle: 'flat', wdHandle: 'edge', wdNiche: 'none', wdBase: 'plinth',
   drWidth: 1200, drDepth: 450, drHeight: 800, drRows: 3, drColumns: 2, drLayout: 'stack', drBase: 'plinth', mirror: 'none',
-  frontStyle: 'flat', pull: 'edge', caseEdge: 'eased', topThickness: 22, topOverhang: 0, cornerRadius: 0, graduation: 0.3, fluteWidth: 24, caseBaseHeight: 120,
+  frontStyle: 'flat', pull: 'edge', caseEdge: 'eased', caseLine: 'none', topThickness: 22, topOverhang: 0, cornerRadius: 0, graduation: 0.3, fluteWidth: 24, caseBaseHeight: 120,
   mirrorHeight: 800, mirrorWidth: 0.6, view: 'set', setMatch: 'on', kind: 'bed'
 };
 
@@ -170,6 +171,7 @@ function doorFace(parts, p, id, x, y, z, w, h, side) {
     if (st === 'framed') { const m = Math.min(90, w * 0.16); parts.push(box(`${id}-p`, 'front-panel', 'case', w - 2 * m, h - 2 * m, 5, [x, y, z + t / 2 + 1.5], {}, 1)); }
     if (st === 'cane') parts.push(box(`${id}-c`, 'cane', 'cane', w - 140, h - 260, 3, [x, y + 20, z + t / 2 + 0.8], {}, 0.5));
     if (st === 'mirror') parts.push(box(`${id}-m`, 'mirror', 'mirror', w - 60, h - 200, 4, [x, y, z + t / 2 + 1.5], {}, 0.5));
+    if (st === 'flat' && p.caseLine !== 'none') parts.push(linePart(`${id}-line`, p.caseLine, roundedRectLoop(w - 80, h - 80, 2, x, y, 2).map(([u, v]) => [u, v, z + t / 2 - (p.caseLine === 'groove' ? 0.7 : 1.0)])));
   }
   const zf = z + t / 2 + (st === 'fluted' ? 6 : st === 'slats' ? 5 : 0), hx = x + side * (w / 2 - 50);
   if (p.wdHandle === 'bar') parts.push(part(`${id}-h`, 'pull', 'metal', {fn: 'tube', points: [[hx, y - 350, zf], [hx, y - 350, zf + 30], [hx, y + 350, zf + 30], [hx, y + 350, zf]], r: 7}, [0, 0, 0]));
@@ -181,7 +183,7 @@ function doorFace(parts, p, id, x, y, z, w, h, side) {
 
 // ---- Pieces ----------------------------------------------------------------------------------------------
 function caseCommon(p) {
-  return {frontStyle: p.frontStyle, pull: p.pull, caseEdge: p.caseEdge, topThickness: p.topThickness, topOverhang: p.topOverhang, cornerRadius: p.cornerRadius, graduation: p.graduation, fluteWidth: p.fluteWidth, legType: LEGGY.includes(p.legType) ? p.legType : 'roundTaper', legSize: Math.min(45, p.legSize)};
+  return {frontStyle: p.frontStyle, pull: p.pull, caseEdge: p.caseEdge, caseLine: p.caseLine, topThickness: p.topThickness, topOverhang: p.topOverhang, cornerRadius: p.cornerRadius, graduation: p.graduation, fluteWidth: p.fluteWidth, legType: LEGGY.includes(p.legType) ? p.legType : 'roundTaper', legSize: Math.min(45, p.legSize)};
 }
 function pieces(p) {
   const bedP = B.normalize({...pick(p, [...BED_RANGE_KEYS, ...BED_ENUM_KEYS]), kind: 'bed', integratedNight: 'none'});

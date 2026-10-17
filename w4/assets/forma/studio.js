@@ -30,7 +30,7 @@ const params = new URLSearchParams(location.search);
 const browserLang = (navigator.language || 'en').slice(0, 2);
 const state = {
   lang: UI_LANGS[params.get('lang')] ? params.get('lang') : UI_LANGS[store.get('aura-forma-lang')] ? store.get('aura-forma-lang') : UI_LANGS[browserLang] ? browserLang : 'tr',
-  design: null, compiled: null, history: [], future: [], tab: 'style', sent: null, structure: false, ai: {available: false, vision: false}, avoid: []
+  design: null, compiled: null, history: [], future: [], tab: 'parts', sketch: true, inspire: false, sent: null, structure: false, ai: {available: false, vision: false}, avoid: []
 };
 const L = k => t(k, state.lang);
 const N = entry => nm(entry, state.lang);
@@ -111,7 +111,7 @@ function shell() {
   document.title = `AURA · ${L('title')}`;
   $('#app').innerHTML = `
   <header class="f-header">
-    <a class="f-brand" href="index.html?lang=${state.lang}">AURA<small>PROJECT / STUDIO</small></a>
+    <a class="f-brand" href="index.html?lang=${state.lang}">AURA</a>
     <nav class="f-families" id="families" aria-label="${esc(L('title'))}"></nav>
     <label class="f-lang"><span class="sr">Language</span><select id="lang">${Object.entries(UI_LANGS).map(([k, v]) => `<option value="${k}" ${k === state.lang ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
   </header>
@@ -121,7 +121,7 @@ function shell() {
       <div class="f-stage" id="stage" aria-label="${esc(L('perspective'))}"></div>
       <div class="f-toolbar" role="toolbar">
         <button data-view="angle" aria-pressed="true">${L('perspective')}</button><button data-view="front">${L('front')}</button><button data-view="side">${L('side')}</button><button data-view="top">${L('top')}</button>
-        <button id="structureBtn" aria-pressed="false">${L('structure')}</button><button id="photoBtn">${L('photo')} ↓</button>
+        <button id="modeBtn" aria-pressed="${!state.sketch}">${L(state.sketch ? 'modeRender' : 'modeSketch')}</button><button id="structureBtn" aria-pressed="false">${L('structure')}</button><button id="photoBtn">${L('photo')} ↓</button>
         <button data-zoom="1.12" aria-label="+">+</button><button data-zoom="0.9" aria-label="−">−</button>
         <button id="undoBtn">↶ ${L('undo')}</button><button id="redoBtn">↷ ${L('redo')}</button>
       </div>
@@ -134,16 +134,16 @@ function shell() {
       <p class="f-hint">${L('rotateHint')} ${L('concept')}</p>
     </section>
     <aside class="f-editor">
-      <nav class="f-tabs" role="tablist">${['style', 'parts', 'size', 'material', 'deliver'].map((k, i) => `<button role="tab" data-tab="${k}" aria-selected="${state.tab === k}"><span>${String(i + 1).padStart(2, '0')}</span>${L('tab' + k[0].toUpperCase() + k.slice(1))}</button>`).join('')}</nav>
+      <nav class="f-tabs" role="tablist">${['parts', 'size', 'material', 'deliver'].map((k, i) => `<button role="tab" data-tab="${k}" aria-selected="${state.tab === k}"><span>${String(i + 1).padStart(2, '0')}</span>${L('tab' + k[0].toUpperCase() + k.slice(1))}</button>`).join('')}</nav>
       <div id="panel" class="f-panel"></div>
     </aside>
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261017f').then(({createViewer}) => {
+  import('./scene.js?v=20261018b').then(({createViewer}) => {
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
-    else viewer.setDesign(state.compiled, state.design.materials);
+    else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(state.compiled, state.design.materials); }
   }).catch(() => { host.innerHTML = '<p class="f-nogl">WebGL</p>'; });
   bindShell(); shellNav();
   renderCaption(); renderPanel();
@@ -154,8 +154,8 @@ function shellNav() {
 
 function renderCaption() {
   const d = state.design, c = state.compiled, issues = issuesOf(d, c);
-  $('#eyebrow').textContent = `AURA · ${ui().brand} · ${styleName(d.style, state.lang).toUpperCase()}`;
-  $('#designTitle').textContent = d.family === 'bedroom' ? `${L('bedroomSet')} · F-${String(d.seed % 100000).padStart(5, '0')}` : `${L(d.family === 'table' ? d.kind : c.meta.kind)} · F-${String(d.seed % 100000).padStart(5, '0')}`;
+  $('#eyebrow').textContent = `F-${String(d.seed % 100000).padStart(5, '0')} · ${L(state.sketch ? 'modeSketch' : 'modeRender')}`;
+  $('#designTitle').textContent = d.family === 'bedroom' ? (d.params.view === 'set' ? L('bedroomSet') : L(d.kind)) : L(d.family === 'table' ? d.kind : c.meta.kind);
   $('#dims').textContent = ui().dims(c);
   const err = issues.filter(i => i.level === 'error'), warn = issues.filter(i => i.level === 'warn');
   const st = $('#status');
@@ -168,21 +168,32 @@ function feedback(text, level = 'info') { const f = $('#feedback'); f.textConten
 // ---- Panels ---------------------------------------------------------------------------
 function renderPanel() {
   for (const b of document.querySelectorAll('[data-tab]')) b.setAttribute('aria-selected', String(b.dataset.tab === state.tab));
-  $('#panel').innerHTML = {style: stylePanel, parts: partsPanel, size: sizePanel, material: materialPanel, deliver: deliverPanel}[state.tab]();
+  $('#panel').innerHTML = { parts: partsPanel, size: sizePanel, material: materialPanel, deliver: deliverPanel}[state.tab]();
   if (state.tab === 'material') drawMaterialPreviews();
   if (state.tab === 'deliver') drawDeliverables();
 }
 const chip = (attrs, label, on, extra = '') => `<button class="f-chip" ${attrs} aria-pressed="${on}" ${extra}>${esc(label)}</button>`;
 
-function stylePanel() {
+// Style is optional: a quiet list to borrow a starting form from, never a required first step.
+function inspireSection() {
   const d = state.design, fam = familyOf(d);
-  return `<h2>${L('chooseStyle')}</h2><p class="f-lead">${L('styleHint')}</p>
-  <h3>${L('kind')}</h3><div class="f-seg">${ui().kinds.map(k => chip(`data-kind="${k}"`, L(k), d.kind === k)).join('')}</div>
-  <div class="f-styles">${fam.styles.map(s => `<button class="f-style" data-style="${s.id}" aria-pressed="${d.style === s.id}" ${state.avoid.includes(s.id) ? 'data-avoid="1"' : ''}><b>${esc(styleName(s.id, state.lang))}</b><small>${esc(ui().styleSub(s))}</small></button>`).join('')}</div>
-  <div class="f-actions"><button class="f-primary" id="generateBtn">${L('generate')} →</button>
-  ${d.family === 'seating' ? `<label class="f-secondary" id="imageLabel">${L('fromImage')} ↑<input id="imageFile" type="file" accept="image/jpeg,image/png,image/webp" hidden></label>` : ''}</div>
-  ${d.family === 'seating' ? `<p class="f-note">${L('imageHint')}${state.ai.vision ? '' : ' ' + L('aiOff')}</p>` : ''}`;
+  return `<details class="f-inspire" ${state.inspire ? 'open' : ''}><summary>${L('inspire')}</summary><p class="f-note">${L('inspireHint')}</p>
+  <ul class="f-list">${fam.styles.map(s => `<li><button data-style="${s.id}" aria-pressed="${d.style === s.id}"><b>${esc(styleName(s.id, state.lang))}</b><small>${esc(ui().styleSub(s))}</small></button></li>`).join('')}</ul>
+  ${d.family === 'seating' ? `<div class="f-actions"><label class="f-secondary" id="imageLabel">${L('fromImage')} ↑<input id="imageFile" type="file" accept="image/jpeg,image/png,image/webp" hidden></label></div><p class="f-note">${L('imageHint')}${state.ai.vision ? '' : ' ' + L('aiOff')}</p>` : ''}</details>`;
 }
+// Line details: the simple lines that make a form one's own (stitching, inlay, groove), drawn in red in the sketch.
+function linesSection() {
+  const d = state.design, p = d.params;
+  let body = '';
+  if (d.family === 'seating') body = enumGroup('stitch', 'stitchLine');
+  else if (d.family === 'table') body = enumGroup('inlay', 'inlayLine');
+  else {
+    const soft = ['upholstered', 'wingback', 'framed'].includes(p.headType) || p.bedBase === 'baza';
+    body = (soft ? enumGroup('stitch', 'stitchLine') : '') + enumGroup('caseLine', 'caseLineLbl') + (p.frontStyle !== 'flat' || p.wdDoorStyle !== 'flat' ? `<p class="f-note">${L('caseLineNote')}</p>` : '');
+  }
+  return `<section class="f-lines"><h2 class="f-h2-sub">${L('lineDetails')}</h2><p class="f-note">${L('lineHint')}</p>${body}</section>`;
+}
+const kindRow = () => isBedroom() ? '' : `<div class="f-kinds">${ui().kinds.map(k => chip(`data-kind="${k}"`, L(k), state.design.kind === k)).join('')}</div>`;
 
 function enumGroup(key, labelKey, ns = key, options = familyOf(state.design).mod.ENUMS[key]) {
   return `<h3>${L(labelKey)}</h3><div class="f-chips">${options.map(v => chip(`data-enum="${key}" data-value="${v}"`, partName(ns, v, state.lang), state.design.params[key] === v)).join('')}</div>`;
@@ -190,6 +201,10 @@ function enumGroup(key, labelKey, ns = key, options = familyOf(state.design).mod
 const counter = (key, label, values) => `<h3>${L(label)}</h3><div class="f-seg">${values.map(n => chip(`data-count="${key}" data-value="${n}"`, String(n), state.design.params[key] === n)).join('')}</div>`;
 
 function partsPanel() {
+  const head = `<h2>${L('tabParts')}</h2>`, body = partsBody();
+  return body.replace(head, head + kindRow()) + linesSection() + inspireSection();
+}
+function partsBody() {
   const p = state.design.params;
   if (isBedroom()) return bedroomPartsPanel(p);
   if (!isTable()) {
@@ -559,6 +574,7 @@ function applyActions(actions) {
       if (d.family === 'table' && mk === 'species' && !['wood', 'veneer'].includes(d.materials[slot].surface)) d.materials[slot].surface = 'wood';
       if (d.family === 'table' && mk === 'color' && !['lacquer'].includes(d.materials[slot].surface)) d.materials[slot].surface = 'lacquer';
       notes.push(materialLabel({slot, key: mk, value}));
+      if (state.sketch) setSketch(false);
     }
   }
   if (changed) setDesign(d);
@@ -594,6 +610,12 @@ async function runCommand(text) {
 }
 
 function markView(v) { for (const b of document.querySelectorAll('[data-view]')) b.setAttribute('aria-pressed', String(b.dataset.view === v)); }
+/** Sketch (line drawing) while forming and sizing; colour and material appear from the material step on. */
+function setSketch(on) {
+  state.sketch = on; viewer?.mode(on ? 'sketch' : 'render');
+  const b = $('#modeBtn'); if (b) { b.setAttribute('aria-pressed', String(!on)); b.textContent = L(on ? 'modeRender' : 'modeSketch'); }
+  document.body.dataset.mode = on ? 'sketch' : 'render'; renderCaption();
+}
 function toggleStructure() { state.structure = !state.structure; viewer?.structure(state.structure); $('#structureBtn').setAttribute('aria-pressed', String(state.structure)); }
 async function savePhoto() { if (!viewer) return; download(`${projectId()}.jpg`, (await dataUrlJpeg(await viewer.photo(2))).data, 'image/jpeg'); }
 
@@ -623,15 +645,16 @@ function bindShell() {
   $('#undoBtn').onclick = undo; $('#redoBtn').onclick = redo;
   $('#commandForm').onsubmit = e => { e.preventDefault(); runCommand($('#command').value); };
   $('#micBtn').onclick = listen;
-  for (const b of document.querySelectorAll('[data-tab]')) b.onclick = () => { state.tab = b.dataset.tab; renderPanel(); };
+  for (const b of document.querySelectorAll('[data-tab]')) b.onclick = () => { state.tab = b.dataset.tab; setSketch(!['material', 'deliver'].includes(state.tab)); renderPanel(); };
+  $('#modeBtn').onclick = () => setSketch(!state.sketch);
 
   const panel = $('#panel');
+  panel.addEventListener('toggle', e => { if (e.target.classList?.contains('f-inspire')) state.inspire = e.target.open; }, true);
   panel.addEventListener('click', e => {
     const el = e.target.closest('button, [data-load]'); if (!el) return;
     const d = el.dataset;
     if (d.kind) { if (d.kind !== state.design.kind) setDesign(isBedroom() ? {...state.design, kind: d.kind, params: {...state.design.params, kind: d.kind}} : designForKind(state.design, d.kind)); }
     else if (d.style) { setDesign(sample({family: state.design.family, style: d.style, kind: state.design.kind, seed: state.design.seed})); }
-    else if (el.id === 'generateBtn') { state.tab = 'parts'; renderPanel(); }
     else if (d.enum) setDesign(withParams({[d.enum]: d.value}));
     else if (d.count) setDesign(withParams({[d.count]: +d.value}));
     else if (d.mattress) { const [w, l] = MATTRESS[d.mattress]; setDesign(withParams({mattressWidth: w, mattressLength: l})); }
@@ -720,4 +743,4 @@ store.set('aura-forma-lang', state.lang);
 { const prev = store.get('aura-forma-sent-' + state.design.family); if (prev?.key === designKey(state.design)) state.sent = prev; }
 shell();
 if (start.note) { feedback(start.note); state.tab = 'parts'; renderPanel(); }
-aiStatus().then(s => { state.ai = s; if (state.tab === 'style') renderPanel(); });
+aiStatus().then(s => { state.ai = s; if (state.tab === 'parts' && state.inspire) renderPanel(); });

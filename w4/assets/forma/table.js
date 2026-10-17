@@ -4,6 +4,7 @@
 // tipping safety, wood movement and weight. Results are guidance for the designer, not certification.
 import {cushion, lathe, tube, topOutline, clipX, offsetOutline, profiledSlab, transformPositions, bounds} from './mesh.js';
 import {legProfile} from './profiles.js';
+import {linePart, ccw, rows} from './lines.js';
 import {clamp} from './rng.js';
 import {WOODS, STONES} from './catalog.js';
 
@@ -37,14 +38,15 @@ export const ENUMS = {
   shelf: ['none', 'solid', 'slatted'],
   drawerPull: ['none', 'knob', 'bar', 'recess'],
   backPanel: ['none', 'panel'],
-  extended: ['closed', 'open']
+  extended: ['closed', 'open'],
+  inlay: ['none', 'single', 'double', 'groove']
 };
 
 export const DEFAULTS = {
   length: 1800, width: 900, height: 750, topThickness: 30, cornerRadius: 20, shapeN: 4, boatBow: 0.08, edgeSize: 10, overhang: 120, sideOverhang: 60,
   legSize: 60, legTaper: 0.7, legSplay: 0, apronHeight: 90, apronThickness: 22, apronSetback: 8, stretcherHeight: 150,
   columnSize: 160, footSpread: 0.6, panelThickness: 40, tubeSize: 30, shelfHeight: 150, shelfThickness: 20, drawers: 0, leaves: 0, leafLength: 450,
-  topShape: 'rounded', edge: 'eased', baseType: 'legsApron', legType: 'squareTaper', pedestalType: 'column', stretcher: 'none', shelf: 'none', drawerPull: 'none', backPanel: 'none', extended: 'closed', kind: 'dining'
+  topShape: 'rounded', edge: 'eased', baseType: 'legsApron', legType: 'squareTaper', pedestalType: 'column', stretcher: 'none', shelf: 'none', drawerPull: 'none', backPanel: 'none', extended: 'closed', inlay: 'none', kind: 'dining'
 };
 
 /** Clamp and reconcile so every combination is buildable. */
@@ -152,6 +154,14 @@ export function compile(raw) {
       parts.push(part(i === 0 || i === cuts.length - 2 ? `top-${i ? 'right' : 'left'}` : `leaf-${i}`, i === 0 || i === cuts.length - 2 ? 'top' : 'leaf', 'top', {fn: 'slab', outline: piece, t: T, profile: [p.edge, T, p.edgeSize]}, [0, yu, 0]));
     }
   } else parts.push(part('top', 'top', 'top', {fn: 'slab', outline, t: T, profile: [p.edge, T, p.edgeSize]}, [0, yu, 0]));
+  // Line details: a metal inlay band on the top face, or a shadow groove round the edge.
+  if (p.inlay === 'groove') {
+    const loop = offsetOutline(ccw(outline), (prof(0.5) || 0) + 0.7);
+    parts.push(linePart('edge-groove', 'groove', loop.map(([x, z]) => [x, T / 2, z]), [0, yu, 0]));
+  } else for (const [k, inset] of rows(p.inlay, (prof(0) || 0) + Math.min(40, W * 0.06), 10).entries()) {
+    const loop = offsetOutline(ccw(outline), inset);
+    parts.push(linePart(`inlay-${k + 1}`, 'inlay', loop.map(([x, z]) => [x, T - 0.7, z]), [0, yu, 0]));
+  }
   if (p.kind === 'desk') parts.push(part('grommet', 'grommet', 'dark', {fn: 'lathe', profile: [[0, 30], [2, 30]], square: false}, [L / 2 - 220, H - 0.5, -W / 2 + 90]));
 
   // ---- Base -------------------------------------------------------------------------
@@ -497,7 +507,7 @@ export function tableBom(compiled, materials, lang, buildMesh, materialText) {
     const mm = buildMesh(q), b = bounds(mm.positions), size = b.size.map(v => Math.round(v)).sort((a, c) => c - a), key = `${q.role}|${q.mat}|${size.join('x')}`;
     const g = groups.get(key) || {role: q.role, mat: q.mat, size, qty: 0, internal: !!q.internal}; g.qty++; groups.set(key, g);
   }
-  const NAME = {leg: ['Ayak', 'Leg', 'Masif blok, ham kesit +6 mm; zıvana-lamba ile kuşağa', 'Solid blank, +6 mm rough section; mortise & tenon to apron'], apron: ['Kuşak', 'Apron', 'Masif, iki uçta 25 mm zıvana dili', 'Solid, 25 mm tenon each end'], 'corner-block': ['Köşe takozu', 'Corner block', 'Vida + tutkal, M8 askı cıvatası', 'Glue + screws, M8 hanger bolt'], stretcher: ['Alt kuşak', 'Stretcher', 'Masif, kavelalı', 'Solid, dowelled'],
+  const NAME = {inlay: ['Metal kakma', 'Metal inlay', '3 mm pirinç/metal şerit, yüzeye frezelenmiş kanala yapıştırılır, zımparalanır', '3 mm brass/metal strip glued into a routed channel, flushed'], groove: ['Gölge kanal', 'Shadow groove', '3 × 3 mm freze kanal, kanal içi mat siyah', '3 × 3 mm routed groove, matt black inside'], leg: ['Ayak', 'Leg', 'Masif blok, ham kesit +6 mm; zıvana-lamba ile kuşağa', 'Solid blank, +6 mm rough section; mortise & tenon to apron'], apron: ['Kuşak', 'Apron', 'Masif, iki uçta 25 mm zıvana dili', 'Solid, 25 mm tenon each end'], 'corner-block': ['Köşe takozu', 'Corner block', 'Vida + tutkal, M8 askı cıvatası', 'Glue + screws, M8 hanger bolt'], stretcher: ['Alt kuşak', 'Stretcher', 'Masif, kavelalı', 'Solid, dowelled'],
     'drawer-front': ['Çekmece önü', 'Drawer front', 'Kuşakla aynı malzeme, 3 mm derz', 'Same as apron, 3 mm reveal'], 'drawer-box': ['Çekmece kutusu', 'Drawer box', '12 mm huş kontrplak, 6 mm taban; tam çekilir ray', '12 mm birch ply, 6 mm bottom; full-extension runners'], pull: ['Kulp', 'Pull', 'Metal', 'Metal'],
     shelf: ['Alt raf', 'Lower shelf', 'Ayaklara gizli kavela', 'Concealed dowels to legs'], 'shelf-slat': ['Raf çıtası', 'Shelf slat', 'Masif çıta, 8 mm boşluk', 'Solid slat, 8 mm gap'], 'shelf-rail': ['Raf taşıyıcı kayıt', 'Shelf rail', 'Masif, ayaklara zıvana', 'Solid, tenoned into the legs'], 'trestle-post': ['Köprü ayak dikmesi', 'Trestle post', 'Masif, alt ve üst kayıta zıvana', 'Solid, tenoned into foot and bearer'], 'back-panel': ['Arka panel', 'Modesty panel', 'Kuşağa vida', 'Screwed to apron'],
     'trestle-bearer': ['Köprü ayak üst kayıtı', 'Trestle bearer', 'Masif, tablaya Z-klips', 'Solid, Z-clips to top'], 'trestle-foot': ['Köprü ayak tabanı', 'Trestle foot', 'Masif, alt kenar 3 mm boşaltma', 'Solid, 3 mm relief underneath'],

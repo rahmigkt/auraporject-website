@@ -81,14 +81,17 @@ function seatingMaterialSet(materials, {detail = true, onReady} = {}) {
   const metal = new THREE.MeshPhysicalMaterial({color: hexColor(M.hex), metalness: 1, roughness: M.rough});
   const dark = new THREE.MeshStandardMaterial({color: '#1d1c1a', roughness: 0.8});
   const frame = new THREE.MeshStandardMaterial({color: '#d9c7a4', roughness: 0.85});
-  const set = {fabric, welt, wood, metal, dark, frame, textures: []};
+  // Thread for topstitching: the fabric colour, a shade deeper; inlay: the chosen metal.
+  const stitch = new THREE.MeshStandardMaterial({color: base.clone().multiplyScalar(0.55), roughness: 0.8});
+  const inlay = metal;
+  const set = {fabric, welt, wood, metal, dark, frame, stitch, inlay, textures: []};
   if (detail) Promise.all([makeMaps('fabric', f), makeMaps('fabric', weltSpec, 512), makeMaps('wood', materials.wood)]).then(([a, b, c]) => {
     if (set.disposed) return;
     applyMaps(set, fabric, a, a?.tileMm, a?.tileMm); applyMaps(set, welt, b, b?.tileMm, b?.tileMm);
     if (c) applyMaps(set, wood, c, c.tileMm[0], c.tileMm[1]);
     onReady?.();
   });
-  set.dispose = () => { set.disposed = true; for (const m of [fabric, welt, wood, metal, dark, frame]) m.dispose(); for (const t of set.textures) t.dispose(); };
+  set.dispose = () => { set.disposed = true; for (const m of [fabric, welt, wood, metal, dark, frame, stitch]) m.dispose(); for (const t of set.textures) t.dispose(); };
   return set;
 }
 
@@ -125,9 +128,10 @@ function tableMaterialSet(materials, {detail = true, onReady} = {}) {
   set.metal = materials.base.surface === 'metal' ? set.base : new THREE.MeshPhysicalMaterial({color: hexColor(M.hex), metalness: 1, roughness: M.rough});
   set.dark = new THREE.MeshStandardMaterial({color: '#1d1c1a', roughness: 0.8});
   set.frame = new THREE.MeshStandardMaterial({color: '#d9c7a4', roughness: 0.85});
-  set.fabric = set.base; set.wood = set.base; set.welt = set.base;
+  set.fabric = set.base; set.wood = set.base; set.welt = set.base; set.stitch = set.dark;
+  set.inlay = new THREE.MeshPhysicalMaterial({color: hexColor(M.hex), metalness: 1, roughness: Math.min(0.3, M.rough)});
   if (detail) Promise.all(jobs).then(() => { if (!set.disposed) onReady?.(); });
-  set.dispose = () => { set.disposed = true; for (const m of new Set([set.top, set.base, set.metal, set.dark, set.frame])) m.dispose(); for (const t of set.textures) t.dispose(); };
+  set.dispose = () => { set.disposed = true; for (const m of new Set([set.top, set.base, set.metal, set.dark, set.frame, set.inlay])) m.dispose(); for (const t of set.textures) t.dispose(); };
   return set;
 }
 
@@ -157,36 +161,116 @@ function bedroomMaterialSet(materials, {detail = true, onReady} = {}) {
   return set;
 }
 
+// Geometry cache shared by rebuilds (slider moves rebuild the group; meshes and their sketch edges are reused).
+const geoCache = new Map();
 function geometryFor(part) {
-  const m = buildMesh(part), g = new THREE.BufferGeometry();
-  g.setAttribute('position', new THREE.BufferAttribute(m.positions, 3));
-  g.setAttribute('normal', new THREE.BufferAttribute(m.normals, 3));
-  g.setAttribute('uv', new THREE.BufferAttribute(m.uvs, 2));
-  g.setIndex(new THREE.BufferAttribute(m.indices, 1));
+  const key = JSON.stringify(part.geom);
+  let hit = geoCache.get(key);
+  if (!hit) {
+    const m = buildMesh(part), g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(m.positions, 3));
+    g.setAttribute('normal', new THREE.BufferAttribute(m.normals, 3));
+    g.setAttribute('uv', new THREE.BufferAttribute(m.uvs, 2));
+    g.setIndex(new THREE.BufferAttribute(m.indices, 1));
+    g.userData.cached = true;
+    hit = {g, edges: null};
+    geoCache.set(key, hit);
+    if (geoCache.size > 500) { const [k, old] = geoCache.entries().next().value; old.g.dispose(); old.edges?.dispose(); geoCache.delete(k); }
+  }
+  return hit;
+}
+
+// ---- Sketch mode: the piece as a drawing — paper-white volumes, graphite creases and silhouettes. -----------
+const SKETCH = {
+  fill: new THREE.MeshStandardMaterial({color: '#fbfaf5', roughness: 1, metalness: 0, envMapIntensity: 0.35, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1}),
+  edge: new THREE.LineBasicMaterial({color: '#2c2c28', transparent: true, opacity: 0.82, toneMapped: false}),
+  // Silhouette by an inverted hull pushed out along the normals (local units are mm).
+  hull: new THREE.ShaderMaterial({side: THREE.BackSide, polygonOffset: true, polygonOffsetFactor: 3, polygonOffsetUnits: 6, uniforms: {color: {value: new THREE.Color('#2c2c28')}, thickness: {value: 3.2}},
+    vertexShader: 'uniform float thickness; void main(){ vec3 p = position + normal * thickness; gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0); }',
+    fragmentShader: 'uniform vec3 color; void main(){ gl_FragColor = vec4(color, 1.0); }'}),
+  led: new THREE.MeshBasicMaterial({color: '#ffffff'}),
+  // Line details (stitches, inlays, grooves) are drawn in ink, a little lighter than the outlines.
+  ink: new THREE.LineBasicMaterial({color: '#9c3b22', toneMapped: false}),
+  inkDash: new THREE.LineDashedMaterial({color: '#9c3b22', dashSize: 9, gapSize: 6, toneMapped: false})
+};
+// In the sketch, line details are drawn as 1 px ink lines (a 2 mm thread would vanish at drawing scale).
+const lineCache = new Map();
+function sketchLine(part) {
+  const key = JSON.stringify(part.geom.points);
+  let g = lineCache.get(key);
+  if (!g) {
+    const pts = part.geom.points.map(q => new THREE.Vector3(...q)); pts.push(pts[0].clone());
+    g = new THREE.BufferGeometry().setFromPoints(pts); g.userData.cached = true;
+    const tmp = new THREE.Line(g); tmp.computeLineDistances();
+    lineCache.set(key, g); if (lineCache.size > 300) { const [k, old] = lineCache.entries().next().value; old.dispose(); lineCache.delete(k); }
+  }
+  const line = new THREE.Line(g, part.geom.dash ? SKETCH.inkDash : SKETCH.ink);
+  line.position.set(...part.pos); line.rotation.set(...part.rot); line.renderOrder = 2;
+  return line;
+}
+function sketchEdges(hit, angle = 26) { return hit.edges ??= new THREE.EdgesGeometry(hit.g, angle); }
+/** Smallest extent of a cached geometry (mm): thin parts get no silhouette hull (it would swallow them). */
+function minExtent(hit) { if (hit.min === undefined) { hit.g.computeBoundingBox(); const s = hit.g.boundingBox.getSize(new THREE.Vector3()); hit.min = Math.min(s.x, s.y, s.z); } return hit.min; }
+
+/** Dimension lines (overall width, depth, height) drawn beside the piece, in metres, with mm labels. */
+function dimensionGroup(box) {
+  const g = new THREE.Group(), mat = new THREE.LineBasicMaterial({color: '#7a2f1d', toneMapped: false, depthTest: false}), s = box.getSize(new THREE.Vector3());
+  const off = Math.max(0.12, Math.max(s.x, s.z) * 0.06), tick = off * 0.35, min = box.min, max = box.max;
+  const label = (text, at) => {
+    const c = document.createElement('canvas'); c.width = 256; c.height = 64; const x = c.getContext('2d');
+    x.font = '600 40px ui-monospace, Menlo, Consolas, monospace'; x.fillStyle = '#7a2f1d'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(text, 128, 34);
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial({map: t, depthTest: false, depthWrite: false, transparent: true, toneMapped: false}));
+    const h = Math.min(0.24, Math.max(0.07, Math.max(s.x, s.y, s.z) * 0.045)); sp.scale.set(h * 4, h, 1); sp.position.copy(at); sp.renderOrder = 10; g.add(sp);
+  };
+  const line = (a, b, n) => {
+    const pts = [a, b, a.clone().addScaledVector(n, tick), a.clone().addScaledVector(n, -tick), b.clone().addScaledVector(n, tick), b.clone().addScaledVector(n, -tick)];
+    const geo = new THREE.BufferGeometry().setFromPoints([pts[0], pts[1], pts[2], pts[3], pts[4], pts[5]]);
+    geo.setIndex([0, 1, 2, 3, 4, 5]); const ls = new THREE.LineSegments(geo, mat); ls.renderOrder = 9; g.add(ls);
+  };
+  const zf = max.z + off, xr = max.x + off, y0 = 0.002;
+  line(new THREE.Vector3(min.x, y0, zf), new THREE.Vector3(max.x, y0, zf), new THREE.Vector3(0, 0, 1));
+  label(`${Math.round(s.x * 1000)}`, new THREE.Vector3((min.x + max.x) / 2, y0 + off * 0.5, zf + off * 0.2));
+  line(new THREE.Vector3(xr, y0, min.z), new THREE.Vector3(xr, y0, max.z), new THREE.Vector3(1, 0, 0));
+  label(`${Math.round(s.z * 1000)}`, new THREE.Vector3(xr + off * 0.3, y0 + off * 0.5, (min.z + max.z) / 2));
+  // Height at the back corner, where it stays clear of the piece in the usual three-quarter view.
+  line(new THREE.Vector3(xr, 0, min.z), new THREE.Vector3(xr, max.y, min.z), new THREE.Vector3(1, 0, 0));
+  label(`${Math.round(s.y * 1000)}`, new THREE.Vector3(xr + off * 0.45, max.y / 2, min.z));
+  g.userData.dims = true;
   return g;
 }
 
 /** Group of meshes for a compiled design (units: metres). */
-function buildGroup(compiled, mats, {structure = false} = {}) {
+function buildGroup(compiled, mats, {structure = false, sketch = false} = {}) {
   const group = new THREE.Group(); group.scale.setScalar(0.001);
   for (const part of compiled.parts) {
     if (part.internal && !structure) continue;
+    if (sketch && !part.planOnly) {
+      if (part.decor === 'room') continue;
+      if (part.line) { group.add(sketchLine(part)); continue; }
+      const hit = geometryFor(part), mesh = new THREE.Mesh(hit.g, part.mat === 'led' ? SKETCH.led : SKETCH.fill);
+      mesh.position.set(...part.pos); mesh.rotation.set(...part.rot); mesh.castShadow = !part.noShadow; mesh.receiveShadow = true;
+      mesh.add(new THREE.LineSegments(sketchEdges(hit, ['reeds', 'cane'].includes(part.role) ? 50 : 26), SKETCH.edge));
+      if (!['tuft-button', 'reeds', 'seam', 'pull', 'cane'].includes(part.role) && !part.geom?.fn?.startsWith('tube') && minExtent(hit) >= 24) mesh.add(new THREE.Mesh(hit.g, SKETCH.hull));
+      mesh.userData.part = part.id; group.add(mesh);
+      continue;
+    }
     if (part.planOnly) continue;
     let mat = mats[part.mat] || mats.fabric;
     if (structure && part.decor) continue;
     if (structure && !part.internal && ['fabric', 'welt', 'top', 'case'].includes(part.mat)) {
       mat = mat.clone(); mat.transparent = true; mat.opacity = 0.16; mat.depthWrite = false; mat.userData.temp = true;
     }
-    const mesh = new THREE.Mesh(geometryFor(part), mat);
+    const mesh = new THREE.Mesh(geometryFor(part).g, mat);
     mesh.position.set(...part.pos); mesh.rotation.set(...part.rot);
-    mesh.castShadow = !part.noShadow && (!structure || part.internal); mesh.receiveShadow = true;
+    mesh.castShadow = !part.noShadow && (!structure || part.internal); mesh.receiveShadow = !part.line;
     mesh.userData.part = part.id;
     group.add(mesh);
   }
   return group;
 }
 
-function disposeGroup(group) { group?.traverse(o => { o.geometry?.dispose(); if (o.material?.userData?.temp) o.material.dispose(); }); }
+function disposeGroup(group) { group?.traverse(o => { if (o.geometry && !o.geometry.userData.cached && !(o.geometry.type === 'EdgesGeometry')) o.geometry.dispose(); if (o.material?.userData?.temp) o.material.dispose(); if (o.isSprite) { o.material.map?.dispose(); o.material.dispose(); } }); }
 
 function makeRenderer(canvas, {alpha = true} = {}) {
   const r = new THREE.WebGLRenderer({canvas, antialias: true, alpha, preserveDrawingBuffer: true});
@@ -197,6 +281,7 @@ function makeRenderer(canvas, {alpha = true} = {}) {
 
 // Background colours are pre-compensated for ACES tone mapping so the page paper tone (#f1eee6) is reproduced.
 const PAPER = [1.884, 1.594, 1.132];
+const SHEET = [4.894, 4.236, 2.486]; // studio sheet #fbfaf6
 function makeStage(renderer, bg = PAPER) {
   const scene = new THREE.Scene(); scene.background = new THREE.Color().setRGB(...bg, THREE.LinearSRGBColorSpace);
   const pmrem = new THREE.PMREMGenerator(renderer);
@@ -223,9 +308,13 @@ export function createViewer(host, {onRotate} = {}) {
   host.appendChild(canvas);
   let renderer;
   try { renderer = makeRenderer(canvas, {alpha: false}); } catch { host.dataset.webgl = 'off'; return null; }
-  const {scene, contact, sun} = makeStage(renderer);
+  const {scene, contact, sun} = makeStage(renderer, SHEET);
+  // Drafting grid (100 mm cells, 1 m lines) shown with the sketch.
+  const grid = new THREE.Group();
+  { const fine = new THREE.GridHelper(12, 120, '#e3ddd0', '#e9e4d8'), major = new THREE.GridHelper(12, 12, '#d2cabb', '#d2cabb');
+    for (const gh of [fine, major]) { gh.material.transparent = true; gh.material.opacity = gh === fine ? 0.55 : 0.8; gh.position.y = 0.0005; grid.add(gh); } scene.add(grid); }
   const persp = new THREE.PerspectiveCamera(30, 1, 0.05, 60), ortho = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.05, 60);
-  let userMoved = false, camera = persp, view = 'angle', yaw = 0.62, pitch = 0.2, zoom = 1, group = null, mats = null, compiled = null, materials = null, structure = false, size = [1, 1, 1];
+  let userMoved = false, sketch = true, dims = null, camera = persp, view = 'angle', yaw = 0.62, pitch = 0.2, zoom = 1, group = null, mats = null, compiled = null, materials = null, structure = false, size = [1, 1, 1];
   const composer = new EffectComposer(renderer);
   const renderPass = new RenderPass(scene, camera), ao = new GTAOPass(scene, camera, 1, 1), smaa = new SMAAPass(), out = new OutputPass();
   ao.blendIntensity = 0.85; ao.updateGtaoMaterial({radius: 0.35, distanceExponent: 1.4, thickness: 1.2, scale: 1.0, samples: 16});
@@ -262,12 +351,15 @@ export function createViewer(host, {onRotate} = {}) {
   function rebuild() {
     if (!compiled) return;
     if (group) { scene.remove(group); disposeGroup(group); }
-    group = buildGroup(compiled, mats, {structure}); scene.add(group);
+    group = buildGroup(compiled, mats, {structure, sketch}); scene.add(group);
     const b = new THREE.Box3().setFromObject(group), s = b.getSize(new THREE.Vector3());
+    if (dims) { scene.remove(dims); disposeGroup(dims); dims = null; }
+    if (sketch && !compiled.meta?.room) { dims = dimensionGroup(b); scene.add(dims); }
+    grid.visible = sketch; contact.visible = !sketch; ao.enabled = !sketch; // a drawing needs no ambient occlusion
     size = [s.x, s.y, s.z]; contact.scale.set(s.x * 1.25, s.z * 1.45, 1);
     // Rooms: light through the open corner, a shadow camera that covers the floor, no contact blob.
     const isRoom = !!compiled.meta?.room, e = Math.max(2.5, Math.max(s.x, s.z) * 0.62);
-    contact.visible = !isRoom;
+    contact.visible = !isRoom && !sketch;
     if (isRoom) sun.position.set(-(compiled.meta.cameraYaw > 0 ? -1 : 1) * 2.6, 4.6, 3.4); else sun.position.set(-1.6, 4.2, 3.2);
     Object.assign(sun.shadow.camera, {left: -e, right: e, top: e, bottom: -e}); sun.shadow.camera.updateProjectionMatrix();
     if (isRoom && !userMoved) { yaw = compiled.meta.cameraYaw; pitch = 0.32; }
@@ -282,6 +374,8 @@ export function createViewer(host, {onRotate} = {}) {
     view(kind) { view = kind; zoom = 1; if (kind === 'angle') { yaw = compiled?.meta?.room ? compiled.meta.cameraYaw : 0.62; pitch = 0.2; userMoved = false; } draw(); },
     zoom(f) { zoom = Math.min(2.5, Math.max(0.6, zoom * f)); draw(); },
     structure(on) { structure = on; rebuild(); },
+    /** 'sketch' (line drawing on paper) or 'render' (materials and colour). */
+    mode(m) { const next = m === 'sketch'; if (next !== sketch) { sketch = next; rebuild(); } },
     /** High-resolution still (longer AO sampling). */
     async photo(scale = 2) {
       const r = host.getBoundingClientRect(), w = Math.round(r.width * scale), h = Math.round(r.height * scale);
