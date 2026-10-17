@@ -194,12 +194,18 @@ function storageMaterialSet(materials, {detail = true, onReady} = {}) {
   set.cane = new THREE.MeshStandardMaterial({color: '#d6b880', roughness: 0.6, side: THREE.DoubleSide});
   { const cane = CANE ??= caneMaps(); applyMaps(set, set.cane, cane, cane.tileMm, cane.tileMm); }
   set.inlay = set.metal; set.stitch = set.dark; set.shadow = set.dark; set.fabric = set.case;
+  // Kitchen: worktop, stainless steel, appliance glass, sink.
+  if (materials.top) set.top = surfaceMaterial(materials.top, set, quiet, {rotate: true});
+  set.steel = new THREE.MeshPhysicalMaterial({color: '#c9ccce', metalness: 1, roughness: 0.32});
+  set.appliance = new THREE.MeshPhysicalMaterial({color: '#141617', roughness: 0.18, metalness: 0.2, clearcoat: 1, clearcoatRoughness: 0.05});
+  const SF = {steel: null, black: '#2a2b2b', grey: '#6d6e6b', white: '#e9e7e2'}[materials.sink?.finish || 'steel'];
+  set.sink = SF ? new THREE.MeshStandardMaterial({color: SF, roughness: 0.55}) : set.steel;
   // Per-cell lacquer colours (Ritmo: any door or drawer can take its own colour), made on first use.
   const lac = new Map(), gloss = materials.front?.surface === 'lacquer' && materials.front.finish === 'lacquer';
   set.lacquer = key => { if (!lac.has(key)) { const C = COLORS[key] || COLORS.white; lac.set(key, new THREE.MeshPhysicalMaterial({color: hexColor(C.hex), roughness: gloss ? 0.14 : 0.5, clearcoat: gloss ? 0.9 : 0.1, clearcoatRoughness: 0.08})); } return lac.get(key); };
   set.extra = [...(set.extra || [])]; set.lacMap = lac;
   Promise.all(jobs).then(() => { if (!set.disposed) onReady?.(); });
-  set.dispose = () => { set.disposed = true; for (const m of new Set([set.case, set.front, set.back, set.wood, set.metal, set.dark, set.frame, set.mirror, set.glass, set.leather, set.cane])) m.dispose(); for (const m of lac.values()) m.dispose(); for (const t of set.textures) t.dispose(); };
+  set.dispose = () => { set.disposed = true; for (const m of new Set([set.case, set.front, set.back, set.wood, set.metal, set.dark, set.frame, set.mirror, set.glass, set.leather, set.cane])) m.dispose(); for (const m of lac.values()) m.dispose(); for (const m of new Set([set.top, set.steel, set.appliance, set.sink].filter(Boolean))) m.dispose(); for (const t of set.textures) t.dispose(); };
   return set;
 }
 

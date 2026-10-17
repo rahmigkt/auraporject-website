@@ -25,3 +25,12 @@ Board follows the material: a solid-wood surface makes solid panels; veneer and 
 
 Outputs: cut list (`parts.csv`) with edge banding and hardware, A3 drawings, DXF, and a link that opens the design
 again (`#d=` one design, `#p=` the whole project) in the PDF, README, `open-design.html` and `project.json`.
+
+## Kitchen (2026-10-17)
+
+Family **Mutfak** (`kitchen`): a run (duvar mutfağı) or an island of modules on the same panel engine. Base units
+(drawers, doors, drawer + door, sink, hob, oven housing, integrated dishwasher, open), tall units (fridge housing
+1780 niche, oven tower with 600 + 390 niches, larder), wall units (doors, glazed, open, lift-up, hood). Worktop
+900 mm high (850–950), 600 deep (island 800–1300), plinth 100–150 recessed 50 mm, wall units 450–750 above the
+worktop. Sink single / double / with drainer, undermount or inset; tap; induction or gas hob; chimney or
+integrated hood; splashback. Corner units, carousels and other special fittings will come as accessories.

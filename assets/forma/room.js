@@ -9,6 +9,7 @@ export const ROOM_TYPES = {
   living: {fits: ['sofa', 'loveseat', 'armchair', 'coffee', 'side', 'console', 'dresser']},
   dining: {fits: ['dining', 'console', 'side', 'armchair', 'dresser']},
   bedroom: {fits: ['set', 'wardrobe', 'nightstand', 'dresser', 'vanity', 'side', 'console', 'armchair', 'desk']},
+  kitchen: {fits: ['run', 'island', 'dining', 'side', 'console', 'armchair']},
   study: {fits: ['desk', 'armchair', 'side', 'console', 'loveseat']}
 };
 /** Item kind as used for room rules: the old bedroom family is one set; case goods are their own kind. */
@@ -18,6 +19,7 @@ const BEDROOM_KINDS = ['wardrobe', 'nightstand', 'vanity'];
 /** Room type suggested by the items: a bedroom set makes a bedroom, seating a living room, a dining table a dining room. */
 export function suggestRoom(items) {
   const k = items.map(i => itemKind(i.design));
+  if (k.includes('run') || k.includes('island')) return 'kitchen';
   if (k.includes('set') || k.some(x => BEDROOM_KINDS.includes(x)) || (k.includes('dresser') && !k.some(x => ['sofa', 'loveseat', 'dining'].includes(x)))) return 'bedroom';
   if (k.some(x => ['sofa', 'loveseat', 'armchair', 'coffee'].includes(x))) return 'living';
   if (k.includes('dining')) return 'dining';
@@ -52,6 +54,18 @@ function arrangeRaw(items, type, layout = 0) {
     else placed.push({id: it.id, x: backZ - (rot > 0 ? f.z0 : -f.z0), z: cx + (rot > 0 ? (f.x0 + f.x1) / 2 : -(f.x0 + f.x1) / 2), rot});
   };
   let W = 4200, D = 3800;
+  if (type === 'kitchen') {
+    // The run along the back wall, islands in front with a 1100 mm walkway, a dining table beyond.
+    const runs = by('run'), isl = by('island'), rest = items.filter(i => !runs.includes(i) && !isl.includes(i));
+    const runW = runs.reduce((s, r) => s + r.fp.w + 300, -300), islW = Math.max(0, ...isl.map(i => i.fp.w));
+    W = Math.max(4200, runW + 900, islW + 1800); D = Math.max(4000, (runs[0]?.fp.d || 600) + 1100 + isl.reduce((s, i) => s + i.fp.d + 1100, 0) + (rest.length ? 1600 : 400));
+    const back = -D / 2 + 20; let x = -runW / 2;
+    for (const r of runs) { put(r, (layout === 1 ? -1 : 1) * (x + r.fp.w / 2), back); x += r.fp.w + 300; }
+    let z = back + (runs[0]?.fp.d || 600) + 1100;
+    isl.forEach((it, i) => { put(it, layout === 2 ? -W / 2 + 900 + it.fp.w / 2 : 0, z); z += it.fp.d + 1100; void i; });
+    rest.forEach((it, i) => put(it, (i - (rest.length - 1) / 2) * (it.fp.w + 600), z + 200));
+    return {W, D, placed};
+  }
   if (type === 'bedroom' && !by('set').length) {
     // Case goods along the back wall around a plain bed (the bed is only context: 160 × 200 on a simple frame).
     // Layout 0: wardrobe | bedside · bed · bedside | chest / vanity. Layout 1: mirrored. Layout 2: chest / vanity on the window wall.

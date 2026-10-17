@@ -30,7 +30,8 @@ export const SIZE = {
   wardrobe: {width: [600, 6000], height: [1800, 2700], depth: [520, 700]},
   nightstand: {width: [350, 800], height: [350, 750], depth: [300, 500]},
   dresser: {width: [600, 2000], height: [650, 1300], depth: [380, 560]},
-  vanity: {width: [800, 1600], height: [720, 790], depth: [380, 560]}
+  vanity: {width: [800, 1600], height: [720, 790], depth: [380, 560]},
+  unit: {width: [150, 1300], height: [200, 2700], depth: [200, 700]} // kitchen modules (set by the kitchen, not edited alone)
 };
 export const RANGES = {
   width: [350, 6000, 10], height: [350, 2700, 10], depth: [300, 700, 5],
@@ -54,7 +55,9 @@ export const ENUMS = {
   // Set from the chosen material (solid wood → solid panels), not by hand.
   board: ['mdf', 'solid'], frontBoard: ['mdf', 'solid']
 };
-export const CELL_TYPES = ['door', 'drawers', 'open', 'glass', 'mirror', 'knee'];
+export const CELL_TYPES = ['door', 'drawers', 'open', 'glass', 'mirror', 'knee', 'niche'];
+/** Cell types offered in the case-goods editor ('niche' holds a kitchen appliance and is set by the kitchen). */
+export const EDIT_TYPES = ['door', 'drawers', 'open', 'glass', 'mirror', 'knee'];
 export const INSIDE = ['shelves', 'hang', 'double', 'hangDrawers', 'empty'];
 
 // ---- Layouts --------------------------------------------------------------------------------------------
@@ -65,19 +68,22 @@ export const LAYOUTS = {
   wardrobe: () => [B([C('door', {inside: 'hang'})]), B([C('door', {k: 5})]), B([C('door', {inside: 'hangDrawers'})])],
   nightstand: () => [B([C('drawers', {n: 2})])],
   dresser: () => [B([C('drawers', {n: 3})]), B([C('drawers', {n: 3})])],
-  vanity: () => [B([C('knee'), C('drawers', {mm: 110})], 2.2), B([C('drawers', {n: 3})])]
+  vanity: () => [B([C('knee'), C('drawers', {mm: 110})], 2.2), B([C('drawers', {n: 3})])],
+  unit: () => [B([C('door', {k: 1})])]
 };
 const BASE = {
   solidThickness: 22, plinthHeight: 80, legHeight: 150, legSize: 40, topThickness: 22, topOverhang: 0, fluteWidth: 30, mirrorHeight: 800, mirrorWidth: 0.7,
   frontFit: 'overlay', doorType: 'hinged', frontStyle: 'flat', pull: 'bar', base: 'plinth', legType: 'taper', topType: 'flush', caseEdge: 'eased', caseLine: 'none', mirror: 'none', board: 'mdf', frontBoard: 'mdf'
 };
 const KIND_DEFAULTS = {
+  unit: {width: 600, height: 760, depth: 580, base: 'legs', legType: 'metal', legHeight: 120, topType: 'flush'},
   wardrobe: {width: 1800, height: 2400, depth: 600, base: 'plinth', plinthHeight: 80, topType: 'flush'},
   nightstand: {width: 500, height: 520, depth: 400, base: 'legs', legHeight: 160, topType: 'slab', pull: 'knob'},
   dresser: {width: 1200, height: 860, depth: 470, base: 'plinth', plinthHeight: 80, topType: 'slab'},
   vanity: {width: 1100, height: 760, depth: 450, base: 'legs', legHeight: 160, topType: 'slab', mirror: 'rect', mirrorHeight: 700, mirrorWidth: 0.6, pull: 'knob'}
 };
-export const defaultsFor = kind => ({...BASE, ...KIND_DEFAULTS[KINDS[kind] ? kind : 'wardrobe'], bays: LAYOUTS[KINDS[kind] ? kind : 'wardrobe'](), kind: KINDS[kind] ? kind : 'wardrobe'});
+const known = kind => KINDS[kind] || kind === 'unit' ? kind : 'wardrobe';
+export const defaultsFor = kind => ({...BASE, ...KIND_DEFAULTS[known(kind)], bays: LAYOUTS[known(kind)](), kind: known(kind)});
 export const DEFAULTS = defaultsFor('wardrobe');
 
 const num = (v, lo, hi, d, step = 0) => { const n = Number(v); if (!Number.isFinite(n)) return d; const c = clamp(n, lo, hi); return step ? Math.round(c / step) * step : c; };
@@ -90,14 +96,14 @@ export function normalizeBays(raw, kind) {
       if (type === 'knee' && (kind !== 'vanity' || j !== 0)) type = 'open';
       let inside = INSIDE.includes(c?.inside) ? c.inside : 'shelves';
       if (kind !== 'wardrobe' && ['hang', 'double', 'hangDrawers'].includes(inside)) inside = 'shelves';
-      return {id: `b${i + 1}c${j + 1}`, color: COLOR_KEYS.includes(c?.color) ? c.color : null, type, h: num(c?.h, 0.2, 8, 1), mm: c?.mm ? num(c.mm, 60, 2600, 0, 1) : 0, n: Math.round(num(c?.n, 1, 6, 1)), inside, k: Math.round(num(c?.k, 0, 8, 0))};
+      return {id: `b${i + 1}c${j + 1}`, joined: !!c?.joined && j > 0, color: COLOR_KEYS.includes(c?.color) ? c.color : null, type, h: num(c?.h, 0.2, 8, 1), mm: c?.mm ? num(c.mm, 60, 2600, 0, 1) : 0, n: Math.round(num(c?.n, 1, 6, 1)), inside, k: Math.round(num(c?.k, 0, 8, 0))};
     });
     return {id: `b${i + 1}`, w: num(b?.w, 0.3, 4, 1), mm: b?.mm ? num(b.mm, 150, 2000, 0, 1) : 0, cells};
   });
 }
 
 export function normalize(input = {}) {
-  const kind = KINDS[input.kind] ? input.kind : 'wardrobe', p = defaultsFor(kind);
+  const kind = known(input.kind), p = defaultsFor(kind);
   for (const key of Object.keys(RANGES)) if (input[key] !== undefined) { const [lo, hi, step] = rangeFor(key, p); p[key] = +num(input[key], lo, hi, p[key], step).toFixed(3); }
   for (const [key, list] of Object.entries(ENUMS)) if (list.includes(input[key])) p[key] = input[key];
   p.bays = normalizeBays(input.bays ?? p.bays, kind);
@@ -218,7 +224,7 @@ export function compile(raw) {
     const xl = extL ? -W / 2 : b.left === 'side' ? b.x0 - T : b.x0 - T / 2, xr = extR ? W / 2 : b.right === 'side' ? b.x1 + T : b.x1 + T / 2;
     bay.cells.forEach((c, j) => {
       const {y0, y1} = cells[j], id = `${bay.id}c${j + 1}`;
-      if (j < bay.cells.length - 1) { pnl(parts, `${id}-shelf`, 'shelf-fixed', 'case', [b.x0, b.x1], [y1, y1 + T], [zBackFace, zF], {band: 'front'}); counts.fixedShelves++; counts.connectors += 2 * conn(Dc); if (c.type !== 'knee') info.spans.push(b.x1 - b.x0); }
+      if (j < bay.cells.length - 1 && !bay.cells[j + 1].joined) { pnl(parts, `${id}-shelf`, 'shelf-fixed', 'case', [b.x0, b.x1], [y1, y1 + T], [zBackFace, zF], {band: 'front'}); counts.fixedShelves++; counts.connectors += 2 * conn(Dc); if (c.type !== 'knee') info.spans.push(b.x1 - b.x0); }
       if (c.type === 'knee') { info.knee = {w: Math.round(b.x1 - b.x0), h: Math.round(y1)}; return; }
       const below = j === 0 ? (knee ? 'ext' : 'bottom') : bay.cells[j - 1].type === 'knee' ? 'ext' : 'shelf';
       const above = j === bay.cells.length - 1 ? 'top' : 'shelf';
