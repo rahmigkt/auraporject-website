@@ -4,6 +4,7 @@ import {buildMesh} from './build.js';
 import {tableBom} from './table.js';
 import {setBom} from './set.js';
 import {storageBom} from './storage.js';
+import {kitchenBom} from './kitchen.js';
 import {bounds} from './mesh.js';
 import {FIBERS, WEAVE_NAMES, PATTERNS, COLORS, WOODS, FINISHES, METALS, STAINS, STONES, GLASS, MOTIF_NAMES, name as nm} from './catalog.js';
 import {yardage} from './textile.js';
@@ -72,10 +73,14 @@ export function bom(compiled, materials, lang = 'tr') {
     const text = slot => slot === 'top' ? surfaceText(materials.top, lang) : slot === 'base' ? surfaceText(materials.base.surface === 'same' ? materials.top : materials.base, lang) : slot === 'metal' ? nm(METALS[materials.base.surface === 'metal' ? materials.base.metal : materials.hardware.metal], lang) : slot === 'dark' ? (lang === 'tr' ? 'Siyah mat' : 'Black matt') : (lang === 'tr' ? 'Huş kontrplak / masif (iç)' : 'Birch ply / solid (internal)');
     return tableBom(compiled, materials, lang, buildMesh, text);
   }
-  if (compiled.family === 'storage') {
+  if (compiled.family === 'storage' || compiled.family === 'kitchen') {
     const tr = lang === 'tr', p = compiled.params, board = (spec, thick) => `${spec.surface === 'wood' ? `${tr ? 'Masif panel' : 'Solid panel'} ${thick} mm` : `MDF ${thick} mm`} · ${surfaceText(spec, lang).replace(/ \((masif|solid|kaplama|veneer)\)$/, '')}`;
     const T = p.board === 'solid' ? p.solidThickness : 18, TF = p.frontBoard === 'solid' ? p.solidThickness : 18;
     const text = mat => mat.startsWith('lac:') ? `MDF ${TF} mm · ${tr ? 'Lake' : 'Lacquer'} · ${nm(COLORS[mat.slice(4)], lang)}` : mat === 'case' ? board(materials.case, T) : mat === 'front' ? board(materials.front, TF) : mat === 'back' ? (tr ? `MDF 8 mm, iç yüz gövde renginde` : `MDF 8 mm, inner face to match the carcass`) : mat === 'frame' ? (tr ? 'Huş kontrplak' : 'Birch plywood') : mat === 'glass' ? nm(GLASS[materials.glass?.glass || 'clear'], lang) + ' 4 mm' : mat === 'mirror' ? (tr ? 'Ayna 5 mm' : 'Mirror 5 mm') : mat === 'wood' ? woodText(materials.wood, lang) : mat === 'metal' ? nm(METALS[materials.metal.finish], lang) : mat === 'cane' ? (tr ? 'Rattan hasır' : 'Rattan cane') : mat;
+    if (compiled.family === 'kitchen') {
+      const kt = mat => mat === 'top' ? `${surfaceText(materials.top, lang)} · ${p.topThickness} mm` : mat === 'steel' ? (tr ? 'Paslanmaz çelik' : 'Stainless steel') : mat === 'sink' ? ({steel: tr ? 'Paslanmaz çelik' : 'Stainless steel', black: tr ? 'Granit kompozit, siyah' : 'Granite composite, black', grey: tr ? 'Granit kompozit, gri' : 'Granite composite, grey', white: tr ? 'Granit kompozit, beyaz' : 'Granite composite, white'}[materials.sink?.finish] || '') : text(mat);
+      return kitchenBom(compiled, materials, lang, buildMesh, kt);
+    }
     return storageBom(compiled, materials, lang, buildMesh, text);
   }
   if (compiled.family === 'bedroom') {

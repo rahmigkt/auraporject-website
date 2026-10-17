@@ -234,7 +234,8 @@ const KIND_TABLE = {
   desk: L('calisma masasi|yazi masasi|desk|schreibtisch|bureau|bureau|skrivebord|escritorio|scrivania'),
   dining: L('yemek masasi|masa|dining table|esstisch|table a manger|eettafel|spisebord|mesa de comedor|tavolo da pranzo|tavolo')
 };
-const FAMILY_WORDS = {table: L('masa|sehpa|konsol|dresuar|table|tisch|tafel|bord|mesa|tavolo|tavolino|desk|bureau|escritorio|scrivania'), seating: L('koltuk|kanepe|berjer|sofa|couch|canape|divano|sessel|fauteuil|sillon|poltrona|lenestol|laenestol'),
+const FAMILY_WORDS = {kitchen: L('mutfak|mutfak dolabi|tezgah|evye|kitchen|kuche|cuisine|keuken|kokken|cocina|cucina|kitchen island|mutfak adasi'),
+  table: L('masa|sehpa|konsol|dresuar|table|tisch|tafel|bord|mesa|tavolo|tavolino|desk|bureau|escritorio|scrivania'), seating: L('koltuk|kanepe|berjer|sofa|couch|canape|divano|sessel|fauteuil|sillon|poltrona|lenestol|laenestol'),
   storage: L('yatak odasi|komodin|sifonyer|gardirop|elbise dolabi|makyaj masasi|dolap|cekmeceli|wardrobe|kleiderschrank|armoire|garderobekast|klaedeskab|armario|armadio|bedroom|schlafzimmer|nachttisch|kommode|chevet|commode|chambre|nachtkast|nachtkastje|ladekast|slaapkamer|natbord|sovevaerelse|mesita de noche|comoda|dormitorio|comodino|cassettiera|camera da letto|nightstand|bedside|dresser|chest of drawers|vanity|dressing table|schminktisch|coiffeuse|kaptafel|toiletbord|tocador|toeletta|storage|cabinet')};
 const PERSON_UNITS = L('kisilik|kisi|people|persons|personen|person|personnes|personnes|personer|personas|persone|seats|places|zitplaatsen|pladser|plazas|posti');
 
@@ -255,11 +256,12 @@ export function parse(raw, current = {}) {
   const text = fold(raw), actions = [];
   // A word of another family switches family, then the rest is read with that family's grammar.
   const fam = text ? pickMap(text, FAMILY_WORDS) : null, cur = current.family || 'seating';
-  if (fam && fam !== cur && fam !== 'seating') { const r = (fam === 'table' ? parseTable : parseStorage)(text); return {actions: [{type: 'family', value: fam}, ...r.actions.filter(a => a.type !== 'family')], understood: true}; }
+  if (fam && fam !== cur && fam !== 'seating') { const r = (fam === 'table' ? parseTable : fam === 'kitchen' ? parseKitchen : parseStorage)(text); return {actions: [{type: 'family', value: fam}, ...r.actions.filter(a => a.type !== 'family')], understood: true}; }
   if (fam === 'seating' && cur !== 'seating') return {actions: [{type: 'family', value: 'seating'}, ...parse(raw, {family: 'seating'}).actions.filter(a => a.type !== 'family')], understood: true};
   if (cur === 'table') return parseTable(text);
   if (cur === 'bedroom') return parseBedroom(text);
   if (cur === 'storage') return parseStorage(text);
+  if (cur === 'kitchen') return parseKitchen(text);
   if (!text) return {actions, understood: false};
   for (const [name, list] of Object.entries(COMMANDS)) if (any(text, list)) { actions.push({type: 'command', name}); }
   if (actions.some(a => a.name === 'similar')) for (let i = actions.length - 1; i >= 0; i--) if (actions[i].name === 'variants') actions.splice(i, 1);
@@ -593,6 +595,23 @@ function parseStorage(text) {
       actions.push({type: 'delta', key: target, value: dir * (any(text, SIZE.big) ? steps[2] : any(text, SIZE.small) ? steps[0] : steps[1])});
     }
   }
+  return {actions: dedupe(actions), understood: actions.length > 0};
+}
+
+/** Kitchen: the case-goods grammar plus run / island, sink, hob and worktop words. */
+const KITCHEN_WORDS = {
+  kind: {island: L('ada|mutfak adasi|island|kucheninsel|ilot|kookeiland|kokkeno|isla|isola'), run: L('duz mutfak|duvar mutfagi|kitchen run|kuchenzeile|cuisine lineaire|keukenblok|cocina lineal|cucina lineare')},
+  sink: {double: L('cift hazne|cift gozlu|double bowl|doppelbecken|double bac|dubbele bak|dos cubetas|due vasche'), drainer: L('damlalikli|drainer|abtropf|egouttoir|afdruip|escurridor|gocciolatoio'), single: L('tek hazne|tek gozlu|single bowl|einzelbecken|simple bac')},
+  hob: {gas: L('gazli|gas hob|gaskochfeld|plaque gaz|gaskookplaat|placa de gas|piano a gas'), induction: L('induksiyon|induction|induktion|inductie|induccion|induzione')},
+  hood: {integrated: L('gomme aspirator|integrated hood|integrierter|groupe filtrant'), chimney: L('davlumbaz|chimney hood|kaminhaube|hotte murale'), none: L('davlumbazsiz|no hood|ohne haube|sans hotte')},
+  tap: {pullout: L('spiralli|cekilebilir|pull out|pullout|brause|douchette'), straight: L('duz batarya|straight tap')}
+};
+function parseKitchen(text) {
+  const r = parseStorage(text), actions = r.actions.filter(a => a.type !== 'kind' && !(a.type === 'family' && a.value === 'kitchen'));
+  for (const [key, map] of Object.entries(KITCHEN_WORDS)) { const v = pickMap(text, map); if (v) actions.push(key === 'kind' ? {type: 'kind', value: v} : {type: 'enum', key, value: v}); }
+  // Worktop words move material actions to the worktop.
+  if (/(tezgah|worktop|countertop|arbeitsplatte|plan de travail|werkblad|bordplade|encimera|piano di lavoro)/.test(text)) for (const a of actions) if (a.type === 'material' && a.slot === 'case') a.slot = 'top';
+  const stone = pickMap(text, STONE_WORDS); if (stone) actions.push({type: 'material', slot: 'top', key: 'stone', value: stone});
   return {actions: dedupe(actions), understood: actions.length > 0};
 }
 

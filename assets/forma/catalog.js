@@ -262,6 +262,16 @@ export function normalizeStorageMaterials(m = {}) {
   return {case: kase, front, wood, metal: {finish: METALS[m.metal?.finish] ? m.metal.finish : 'black'}, glass: {glass: GLASS[m.glass?.glass] ? m.glass.glass : 'clear'}};
 }
 
+/** Kitchen: case-goods materials plus the worktop (stone, wood or lacquered compact) and the sink finish. */
+export const SINK_FINISHES = ['steel', 'black', 'grey', 'white'];
+export function normalizeKitchenMaterials(m = {}) {
+  const base = normalizeStorageMaterials(m), t = {surface: 'stone', stone: 'carrara', polish: 'honed', species: 'oak', stain: 'natural', finish: 'oil', color: 'white', ...(m.top || {})};
+  if (!['stone', 'wood', 'lacquer'].includes(t.surface)) t.surface = 'stone';
+  if (!STONES[t.stone]) t.stone = 'carrara'; if (!['honed', 'polished'].includes(t.polish)) t.polish = 'honed';
+  if (!WOODS[t.species]) t.species = 'oak'; if (!STAINS[t.stain]) t.stain = 'natural'; if (!FINISHES[t.finish]) t.finish = 'oil'; if (!COLORS[t.color]) t.color = 'white';
+  return {...base, top: t, sink: {finish: SINK_FINISHES.includes(m.sink?.finish) ? m.sink.finish : 'steel'}};
+}
+
 /** Whole-bedroom materials: the furniture palette plus wall paint, floor and rug. */
 export const WALL_COLORS = ['white', 'cream', 'sand', 'greige', 'silver', 'mink', 'khaki', 'iceBlue', 'dustyRose', 'mint', 'anthracite', 'petrol'];
 export const RUG_COLORS = ['cream', 'sand', 'greige', 'mink', 'silver', 'khaki', 'camel', 'anthracite', 'dustyRose', 'petrol'];

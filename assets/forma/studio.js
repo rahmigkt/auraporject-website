@@ -12,7 +12,7 @@ import {STARTS} from './starts.js';
 import {HIDES, COLORS, FIBERS, WEAVES, WEAVE_NAMES, PATTERNS, MOTIF_CHOICES, MOTIF_NAMES, WOODS, FINISHES, STAINS, METALS, STONES, GLASS, SURFACES, LINEN_COLORS, colorGroup, name as nm} from './catalog.js';
 import {MATTRESS} from './bedroom.js';
 import {harmonize} from './set.js';
-import {CELL_TYPES, INSIDE, leafCount} from './storage.js';
+import {EDIT_TYPES as CELL_TYPES, INSIDE, leafCount} from './storage.js';
 import {designLink, projectLink, readLink, linkPage, urlShortcut} from './link.js';
 import {account} from './account.js';
 import {ROOM_TYPES, suggestRoom, misfits, itemKind, footprint, arrange, worldCenter, shell as roomShell} from './room.js';
@@ -45,14 +45,17 @@ let viewer = null, sceneModule = null;
 
 const compileOf = d => familyOf(d).mod.compile({...d.params, kind: d.kind});
 /** What the viewer shows: case goods may be shown with doors and drawers open (drawings and files stay closed). */
-const shown = (d = state.design) => d.family === 'storage' && state.openFronts ? familyOf(d).mod.compile({...d.params, kind: d.kind, openFronts: true}) : (d === state.design ? state.compiled : compileOf(d));
+const shown = (d = state.design) => ['storage', 'kitchen'].includes(d.family) && state.openFronts ? familyOf(d).mod.compile({...d.params, kind: d.kind, openFronts: true}) : (d === state.design ? state.compiled : compileOf(d));
 const issuesOf = (d, c) => d.family !== 'seating' ? familyOf(d).mod.validate(c, d.materials, buildMesh) : familyOf(d).mod.validate(c);
 const isTable = () => state.design.family === 'table';
 const isBedroom = () => state.design.family === 'bedroom';
 const isBed = () => isBedroom() && state.design.kind === 'bed';
 const isStorage = () => state.design.family === 'storage';
+const isKitchen = () => state.design.family === 'kitchen';
+/** Panel furniture (case goods and kitchens) shares fronts, materials and the open view. */
+const isPanel = () => isStorage() || isKitchen();
 /** Families offered in the studio (the old bed-led bedroom set is not offered any more). */
-const FAMILY_NAV = [['seating', 'famSeating'], ['table', 'famTable'], ['storage', 'famStorage']];
+const FAMILY_NAV = [['seating', 'famSeating'], ['table', 'famTable'], ['storage', 'famStorage'], ['kitchen', 'famKitchen']];
 const focus = () => state.design.kind;
 
 // ---- Design state --------------------------------------------------------------
@@ -71,7 +74,7 @@ function setDesign(next, {record = true, keepPanel = false, sync = true} = {}) {
   store.set('aura-forma-design-' + next.family, next); store.set('aura-forma-family', next.family); store.set(`aura-forma-kind-${next.family}-${next.kind}`, next);
   state.drawingCache = null;
   if (familyChanged) shellNav();
-  { const ob = $('#openBtn'); if (ob) ob.hidden = next.family !== 'storage'; }
+  { const ob = $('#openBtn'); if (ob) ob.hidden = !['storage', 'kitchen'].includes(next.family); }
   renderCaption();
   if (!keepPanel) renderPanel(); else refreshReadouts();
 }
@@ -111,6 +114,11 @@ const UI = {
     dims: c => c.meta.set ? `${L('setOf')} · ${L('mattress')} ${c.meta.mattress} · ${L('wardrobe')} ${c.meta.pieces.wardrobe[0]} mm · ${c.meta.wardrobeDoors} ${L('doorsN')}` : `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height} mm`,
     readout: m => [[L('mattressTop'), `${m.mattressTop} mm`], [L('headAbove'), `${m.headAbove} mm`], [L('nightstand'), `${m.nsHeight} mm`], [L('weight'), `~${weightOf()} kg`]]
   },
+  kitchen: {
+    brand: 'MUTFAK', kinds: ['run', 'island'],
+    dims: c => `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height} mm · ${L('worktopHeightL').toLowerCase()} ${c.params.worktopHeight}`,
+    readout: m => [[L('kModules'), String(m.moduleCount)], [L('carcassBoard'), `${m.board} mm`], [L('drawerCount'), String(m.drawers)], [L('leaves'), String(m.leaves)], [L('hingesN'), String(m.hinges)], [L('weight'), `~${weightOf()} kg`]]
+  },
   storage: {
     brand: 'RİTMO', kinds: ['wardrobe', 'nightstand', 'dresser', 'vanity'],
     dims: c => `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height} mm · ${c.meta.board} mm ${L(c.params.board === 'solid' ? 'boardSolid' : 'boardMdf')}`,
@@ -143,7 +151,7 @@ function shell() {
       <div class="f-stage" id="stage" aria-label="${esc(L('perspective'))}"><button class="f-step f-prev" data-step="-1" aria-label="${esc(L('prevModel'))}">‹</button><button class="f-step f-next" data-step="1" aria-label="${esc(L('nextModel'))}">›</button><p class="f-start" id="startLabel"></p></div>
       <div class="f-toolbar" role="toolbar">
         <button data-view="angle" aria-pressed="true">${L('perspective')}</button><button data-view="front">${L('front')}</button><button data-view="side">${L('side')}</button><button data-view="top">${L('top')}</button>
-        <button id="modeBtn" aria-pressed="${!state.sketch}">${L(state.sketch ? 'modeRender' : 'modeSketch')}</button><button id="structureBtn" aria-pressed="false">${L('structure')}</button><button id="openBtn" aria-pressed="${!!state.openFronts}" ${state.design.family === 'storage' ? '' : 'hidden'}>${L('openFronts')}</button><button id="photoBtn">${L('photo')} ↓</button>
+        <button id="modeBtn" aria-pressed="${!state.sketch}">${L(state.sketch ? 'modeRender' : 'modeSketch')}</button><button id="structureBtn" aria-pressed="false">${L('structure')}</button><button id="openBtn" aria-pressed="${!!state.openFronts}" ${['storage', 'kitchen'].includes(state.design.family) ? '' : 'hidden'}>${L('openFronts')}</button><button id="photoBtn">${L('photo')} ↓</button>
         <button data-zoom="1.12" aria-label="+">+</button><button data-zoom="0.9" aria-label="−">−</button>
         <button id="undoBtn">↶ ${L('undo')}</button><button id="redoBtn">↷ ${L('redo')}</button>
       </div>
@@ -162,7 +170,7 @@ function shell() {
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261017s').then(mod => { sceneModule = mod; const {createViewer} = mod;
+  import('./scene.js?v=20261017t').then(mod => { sceneModule = mod; const {createViewer} = mod;
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(shown(), state.design.materials); if (state.room) showRoom(); }
@@ -229,7 +237,7 @@ function linesSection() {
   let body = '';
   if (d.family === 'seating') body = enumGroup('stitch', 'stitchLine');
   else if (d.family === 'table') body = enumGroup('inlay', 'inlayLine');
-  else if (d.family === 'storage') body = enumGroup('caseLine', 'caseLineLbl') + (p.frontStyle !== 'flat' ? `<p class="f-note">${L('caseLineNote')}</p>` : '');
+  else if (d.family === 'storage' || d.family === 'kitchen') body = enumGroup('caseLine', 'caseLineLbl') + (p.frontStyle !== 'flat' ? `<p class="f-note">${L('caseLineNote')}</p>` : '');
   else {
     const soft = ['upholstered', 'wingback', 'framed'].includes(p.headType) || p.bedBase === 'baza';
     body = (soft ? enumGroup('stitch', 'stitchLine') : '') + enumGroup('caseLine', 'caseLineLbl') + (p.frontStyle !== 'flat' || p.wdDoorStyle !== 'flat' ? `<p class="f-note">${L('caseLineNote')}</p>` : '');
@@ -251,6 +259,7 @@ function partsBody() {
   const p = state.design.params;
   if (isBedroom()) return bedroomPartsPanel(p);
   if (isStorage()) return storagePartsPanel(p);
+  if (isKitchen()) return kitchenPartsPanel(p);
   if (!isTable()) {
     const legs = ['legs', 'frame'].includes(p.baseType);
     return `<h2>${L('tabParts')}</h2>${enumGroup('armType', 'arm')}${enumGroup('backType', 'back')}${enumGroup('seatType', 'seat')}${counter('seatCount', 'seats', [1, 2, 3, 4])}
@@ -381,9 +390,58 @@ function layoutAction(d) {
   return true;
 }
 
+// ---- Kitchen: modules along the run ---------------------------------------------------------------
+const KTYPES = ['drawers', 'doors', 'drawerDoor', 'sink', 'hob', 'oven', 'dishwasher', 'open', 'tallFridge', 'tallOven', 'pantry'];
+const KWIDTHS = {dishwasher: [450, 600], oven: [600], tallFridge: [600], tallOven: [600], hob: [600, 800, 900, 1000, 1200], sink: [450, 500, 600, 800, 900, 1000, 1200]};
+const kSel = () => Math.min(state.ksel || 0, state.design.params.modules.length - 1);
+function kitchenPartsPanel(p) {
+  const g = state.compiled.meta.grid, i = kSel(), m = p.modules[i], run = p.kind === 'run', tall = ['tallFridge', 'tallOven', 'pantry'].includes(m.type);
+  const W = g.total, H = run ? g.tallTop + 120 : g.baseTop + 120, pad = W * 0.03, sw = Math.max(W, H) / 300, fs = Math.min(70, H / 14);
+  const out = [`<line x1="${-W / 2 - pad}" y1="0" x2="${W / 2 + pad}" y2="0" stroke="#1f2420" stroke-width="${sw}"/>`];
+  g.modules.forEach((x, k) => {
+    const t = ['tallFridge', 'tallOven', 'pantry'].includes(x.type), top = t ? g.tallTop : g.baseTop + 30, on = k === i;
+    out.push(`<g data-mod="${k}" style="cursor:pointer"><rect x="${x.x0}" y="${-top}" width="${x.x1 - x.x0}" height="${top - g.plinth}" fill="${x.type === 'dishwasher' ? '#e6e8e8' : '#f3eee4'}" stroke="#1f2420" stroke-width="${sw}"/>`);
+    if (run && x.wall !== 'none' && !t) out.push(`<rect x="${x.x0}" y="${-g.tallTop}" width="${x.x1 - x.x0}" height="${g.tallTop - g.wallY0}" fill="${x.wall === 'hood' ? '#e2e5e6' : x.wall === 'glass' ? '#e8f0f2' : '#f7f3ea'}" stroke="#1f2420" stroke-width="${sw}"/>`);
+    const label = partName('kBase', x.type, state.lang);
+    out.push(`<text x="${(x.x0 + x.x1) / 2}" y="${-(g.plinth + (top - g.plinth) / 2)}" font-size="${Math.min(fs, (x.x1 - x.x0) / Math.max(5, label.length * 0.6))}" text-anchor="middle" fill="#5c625a" style="pointer-events:none">${esc(label)}</text>`);
+    if (on) out.push(`<rect x="${x.x0 + sw * 2}" y="${-(run && !t && x.wall !== 'none' ? g.tallTop : top) + sw * 2}" width="${x.x1 - x.x0 - sw * 4}" height="${(run && !t && x.wall !== 'none' ? g.tallTop : top) - g.plinth - sw * 4}" fill="none" stroke="#a24a2a" stroke-width="${sw * 3}" style="pointer-events:none"/>`);
+    out.push('</g>');
+  });
+  const svg = `<svg class="f-layout-svg" viewBox="${-W / 2 - pad} ${-H} ${W + 2 * pad} ${H + pad}">${out.join('')}</svg>`;
+  const types = KTYPES.filter(t => run || !['tallFridge', 'tallOven', 'pantry'].includes(t)), widths = KWIDTHS[m.type] || [150, 300, 400, 450, 500, 600, 800, 900, 1000, 1200];
+  return `<h2>${L('tabParts')}</h2><section class="f-layoutbox"><h3>${L('kModules')} · ${p.modules.length} · ${g.total} mm</h3>${svg}<p class="f-note">${L('kHint')}</p>
+  <h3>${L('kModule')} ${i + 1} · ${L('kBaseType')}</h3><div class="f-chips">${types.map(t => chip(`data-mtype="${t}"`, partName('kBase', t, state.lang), m.type === t)).join('')}</div>
+  <h3>${L('width')}</h3><div class="f-seg">${widths.map(w => chip(`data-mw="${w}"`, String(w), m.w === w)).join('')}</div>
+  ${run && !tall ? `<h3>${L('kWallType')}</h3><div class="f-chips">${['doors', 'glass', 'open', 'flap', 'hood', 'none'].map(t => chip(`data-mwall="${t}"`, partName('kWall', t, state.lang), m.wall === t)).join('')}</div>` : ''}
+  <div class="f-actions"><button class="f-secondary" data-mop="left" ${i === 0 ? 'disabled' : ''}>← ${L('moveLeft')}</button><button class="f-secondary" data-mop="right" ${i >= p.modules.length - 1 ? 'disabled' : ''}>${L('moveRight')} →</button></div>
+  <div class="f-actions"><button class="f-secondary" data-mop="add" ${p.modules.length >= 16 ? 'disabled' : ''}>+ ${L('addModule')}</button><button class="f-secondary" data-mop="remove" ${p.modules.length <= 1 ? 'disabled' : ''}>− ${L('removeModule')}</button></div></section>
+  ${enumGroup('sink', 'sinkL')}${p.sink === 'drainer' ? '' : enumGroup('sinkMount', 'sinkMountL')}${enumGroup('tap', 'tapL')}${enumGroup('hob', 'hobL')}
+  ${run ? enumGroup('hood', 'hoodL') + enumGroup('backsplash', 'backsplashL') : ''}
+  ${enumGroup('frontStyle', 'frontStyle')}${enumGroup('frontFit', 'frontFit')}${enumGroup('pull', 'pull')}${enumGroup('caseEdge', 'caseEdge')}`;
+}
+function kitchenAction(d) {
+  const p = state.design.params, mods = structuredClone(p.modules), i = kSel(), m = mods[i];
+  if (d.mod !== undefined) { state.ksel = +d.mod; renderPanel(); return; }
+  if (d.mtype) { m.type = d.mtype; if (KWIDTHS[m.type] && !KWIDTHS[m.type].includes(m.w)) m.w = KWIDTHS[m.type].includes(600) ? 600 : KWIDTHS[m.type][0]; if (['tallFridge', 'tallOven', 'pantry'].includes(m.type)) m.wall = 'none'; else if (m.type === 'hob' && p.kind === 'run') m.wall = 'hood'; else if (m.wall === 'none' && p.kind === 'run') m.wall = 'doors'; }
+  else if (d.mw) m.w = +d.mw;
+  else if (d.mwall) m.wall = d.mwall;
+  else if (d.mop === 'left' && i > 0) { [mods[i - 1], mods[i]] = [mods[i], mods[i - 1]]; state.ksel = i - 1; }
+  else if (d.mop === 'right' && i < mods.length - 1) { [mods[i + 1], mods[i]] = [mods[i], mods[i + 1]]; state.ksel = i + 1; }
+  else if (d.mop === 'add') { mods.splice(i + 1, 0, structuredClone(m)); state.ksel = i + 1; }
+  else if (d.mop === 'remove' && mods.length > 1) { mods.splice(i, 1); state.ksel = Math.max(0, i - 1); }
+  setDesign(withParams({modules: mods}));
+}
+
 const UNIT = {armTop: '', armFlare: '', armSlope: '', legTaper: '', backRake: '°', channelCount: '', seatCount: '', shapeN: '', boatBow: '', footSpread: '', legSplay: '°', scallops: '', graduation: '', mirrorWidth: ''};
 function sizeGroups() {
   const d = state.design, p = d.params;
+  if (isKitchen()) {
+    const g = [['general', ['worktopHeight', 'topThickness', 'topDepth', 'plinthHeight']]];
+    if (p.kind === 'run') g.push(['wallUnits', ['wallGap', 'wallHeight', 'wallDepth']]);
+    const con = [...(['grooved', 'fluted', 'slats'].includes(p.frontStyle) ? ['fluteWidth'] : []), ...(p.board === 'solid' || p.frontBoard === 'solid' ? ['solidThickness'] : [])];
+    if (con.length) g.push(['construction', con]);
+    return g;
+  }
   if (isStorage()) {
     const g = [['general', ['width', 'height', 'depth']]];
     g.push(['base', p.base === 'plinth' ? ['plinthHeight'] : p.base === 'legs' ? ['legHeight', 'legSize'] : ['legHeight']]);
@@ -430,10 +488,10 @@ function sizeGroups() {
   return g;
 }
 /** Parameter label (case goods have their own wording for a few shared keys). */
-const paramName = k => { if (isStorage()) { const n = partName('sParams', k, state.lang); if (n !== k) return n; } return partName('params', k, state.lang); };
+const paramName = k => { if (isKitchen()) { const n = partName('kParams', k, state.lang); if (n !== k) return n; } if (isPanel()) { const n = partName('sParams', k, state.lang); if (n !== k) return n; } return partName('params', k, state.lang); };
 function sizePanel() {
   const fam = familyOf(state.design), p = state.design.params;
-  const note = isStorage() ? `<p class="f-note">${esc(L('constructionNote').replace('{T}', state.compiled.meta.board))}</p>` : '';
+  const note = isPanel() ? `<p class="f-note">${esc(L('constructionNote').replace('{T}', state.compiled.meta.board))}</p>` : '';
   return `<h2>${L('tabSize')}</h2>${note}${sizeGroups().map(([g, keys]) => keys.length ? `<h3>${L(g)}</h3>${keys.map(k => { const [lo, hi, step] = fam.mod.rangeFor ? fam.mod.rangeFor(k, p) : fam.mod.RANGES[k], u = UNIT[k] ?? 'mm'; return `<div class="f-slider"><label for="r-${k}">${esc(paramName(k))}</label><input type="range" id="r-${k}" data-param="${k}" min="${lo}" max="${hi}" step="${step}" value="${p[k]}"><span class="f-num"><input type="number" data-num="${k}" min="${lo}" max="${hi}" step="${step}" value="${p[k]}" aria-label="${esc(paramName(k))}">${u}</span></div>`; }).join('')}` : '').join('')}
   <h3>${L('derived')}</h3><dl class="f-readout" id="readout">${readout()}</dl>`;
 }
@@ -451,11 +509,11 @@ const stainChips = (slot, w) => `<div class="f-chips">${Object.keys(STAINS).map(
 const finishChips = (slot, w) => `<div class="f-chips">${Object.keys(FINISHES).map(k => chip(`data-mat="${slot}.finish" data-value="${k}"`, N(FINISHES[k]), w.finish === k)).join('')}</div>`;
 const metalChips = (attr, cur) => `<div class="f-chips">${Object.keys(METALS).map(k => `<button class="f-chip f-wood" ${attr} data-value="${k}" aria-pressed="${cur === k}" style="--c:${METALS[k].hex}">${esc(N(METALS[k]))}</button>`).join('')}</div>`;
 
-function materialPanel() { return isTable() ? tableMaterialPanel() : isStorage() ? storageMaterialPanel() : isBedroom() ? bedroomMaterialPanel() : seatingMaterialPanel(); }
+function materialPanel() { return isTable() ? tableMaterialPanel() : isPanel() ? storageMaterialPanel() : isBedroom() ? bedroomMaterialPanel() : seatingMaterialPanel(); }
 const sameFront = m => JSON.stringify(m.front) === JSON.stringify(m.case);
 function storageMaterialPanel() {
   const d = state.design, m = d.materials, p = d.params, same = sameFront(m), kinds = ['wood', 'veneer', 'lacquer'];
-  const glass = p.bays.some(b => b.cells.some(c => c.type === 'glass'));
+  const glass = p.bays ? p.bays.some(b => b.cells.some(c => c.type === 'glass')) : p.modules.some(x => x.wall === 'glass');
   return `<h2>${L('tabMaterial')}</h2>
   <div class="f-fabric-preview"><div class="f-swatchpair"><figure><canvas id="surfacePreview" width="320" height="320" aria-label="${esc(L('carcassMat'))}"></canvas><figcaption>${L('carcassMat')}</figcaption></figure><figure><canvas id="frontPreview" width="320" height="320" aria-label="${esc(L('frontMat'))}"></canvas><figcaption>${L('frontMat')}</figcaption></figure></div>
   <div><p class="f-eyebrow">${L('carcassMat')} · ${state.compiled.meta.board} mm</p><p class="f-fabric-name">${esc(surfaceShort(m.case))}</p><p class="f-eyebrow">${L('frontMat')} · ${state.compiled.meta.front} mm</p><p class="f-fabric-name">${esc(surfaceShort(m.front))}</p></div></div>
@@ -465,6 +523,8 @@ function storageMaterialPanel() {
   ${same ? '' : surfaceOptions('front', m.front)}
   ${p.base === 'legs' && p.legType !== 'metal' ? `<h3>${L('legWood')}</h3>${woodChips('wood', m.wood)}<h3>${L('stain')}</h3>${stainChips('wood', m.wood)}` : ''}
   <h3>${L('metal')}</h3>${metalChips('data-mat="metal.finish"', m.metal.finish)}
+  ${m.top ? `<h2 class="f-h2-sub">${L('worktopMat')}</h2><div class="f-chips">${['stone', 'wood', 'lacquer'].map(k => chip(`data-mat="top.surface" data-value="${k}"`, N(SURFACES[k]), m.top.surface === k)).join('')}</div>${surfaceOptions('top', m.top)}
+  <h3>${L('sinkFinish')}</h3><div class="f-chips">${['steel', 'black', 'grey', 'white'].map(k => chip(`data-mat="sink.finish" data-value="${k}"`, partName('sinkFinish', k, state.lang), m.sink.finish === k)).join('')}</div>` : ''}
   ${glass ? `<h3>${L('glassKind')}</h3><div class="f-chips">${Object.keys(GLASS).map(k => `<button class="f-chip f-wood" data-mat="glass.glass" data-value="${k}" aria-pressed="${m.glass.glass === k}" style="--c:${GLASS[k].hex}">${esc(N(GLASS[k]))}</button>`).join('')}</div>` : ''}`;
 }
 
@@ -587,6 +647,16 @@ function sheetLabels() {
 }
 function specRows(b) {
   const d = state.design, c = state.compiled, m = d.materials;
+  if (d.family === 'kitchen') {
+    const p = c.params, mm = c.meta, o = mm.overall, pn = (g, v) => partName(g, v, state.lang);
+    return [
+      [L('overall'), `${o.width} × ${o.depth} × ${o.height}`], [L('worktopHeightL'), `${p.worktopHeight} · ${surfaceShort(m.top)} ${p.topThickness} mm`],
+      [L('construction'), `${mm.board} mm ${L(p.board === 'solid' ? 'boardSolid' : 'boardMdf')} · 8 mm · 2 mm`], [L('kModules'), `${p.modules.length} · ${p.modules.map(x => x.w).join(' + ')}`],
+      [L('frontStyle'), `${pn('frontStyle', p.frontStyle)} · ${pn('pull', p.pull)}`], [L('carcassMat'), surfaceShort(m.case)], [L('frontMat'), surfaceShort(m.front)],
+      [L('sinkL'), `${pn('sink', p.sink)} · ${pn('sinkMount', p.sinkMount)} · ${pn('tap', p.tap)}`], [L('appliances'), mm.appliances.map(a => pn('appliance', a.kind)).join(', ')],
+      [L('drawerCount'), `${mm.drawers}`], [L('leaves'), `${mm.leaves} · ${mm.hinges} ${L('hingesN').toLowerCase()}`], [L('weight'), `~${b.totals.weightKg} kg`]
+    ];
+  }
   if (d.family === 'storage') {
     const p = c.params, mm = c.meta, o = mm.overall, pn = (g, v) => partName(g, v, state.lang);
     return [
@@ -668,6 +738,11 @@ function sameDesign(d, kind) {
     const fresh = sample({family: 'table', style: d.style, kind, seed: d.seed, locks: {materials: d.materials}}), keep = ['topShape', 'edge', 'baseType', 'legType', 'pedestalType', 'stretcher', 'inlay', 'drawerPull'];
     const p = {...fresh.params, ...Object.fromEntries(keep.map(k => [k, d.params[k]])), kind};
     return normalizeDesign({...fresh, materials: structuredClone(d.materials), params: FAMILIES.table.repair(FAMILIES.table.mod.normalize(p), d.materials)});
+  }
+  if (d.family === 'kitchen') {
+    const list = startList('kitchen', kind), e = list.find(x => x.style === d.style) || list[0], base = startDesign(e, 'kitchen', kind);
+    const keep = ['frontStyle', 'pull', 'frontFit', 'caseEdge', 'caseLine', 'fluteWidth', 'solidThickness', 'sink', 'sinkMount', 'tap', 'hob', 'worktopHeight', 'topThickness', 'plinthHeight'];
+    return normalizeDesign({...base, style: d.style, params: {...base.params, ...Object.fromEntries(keep.map(k => [k, d.params[k]])), kind}, materials: structuredClone(d.materials)});
   }
   if (d.family === 'storage') {
     // Same front language (face, handle, fitting, base, edge, materials) on the other piece's layout.
@@ -884,7 +959,7 @@ function applyActions(actions) {
       continue;
     }
     if (a.type === 'family') {
-      if (a.value !== d.family) { const k = actions.find(x => x.type === 'kind' && FAMILIES[a.value].kinds[x.value])?.value; switchFamily(a.value, k); d = structuredClone(state.design); fam = familyOf(d); notes.push(L({table: 'famTable', bedroom: 'famBedroom', seating: 'famSeating', storage: 'famStorage'}[a.value])); }
+      if (a.value !== d.family) { const k = actions.find(x => x.type === 'kind' && FAMILIES[a.value].kinds[x.value])?.value; switchFamily(a.value, k); d = structuredClone(state.design); fam = familyOf(d); notes.push(L({table: 'famTable', bedroom: 'famBedroom', seating: 'famSeating', storage: 'famStorage', kitchen: 'famKitchen'}[a.value])); }
       continue;
     }
     changed = true;
@@ -922,8 +997,9 @@ function applyActions(actions) {
       if (d.family === 'seating' && slot === 'wood' && mk === 'species' && value !== 'gurgen') { mk = 'stain'; value = SPECIES_TO_STAIN[value] || 'natural'; }
       if (d.family === 'seating' && (slot === 'top' || slot === 'base')) continue;
       if (d.family === 'table' && (slot === 'wood' || slot === 'fabric')) slot = 'top';
-      if (d.family === 'storage') {
+      if (d.family === 'storage' || d.family === 'kitchen') {
         // Case goods: wood words go to the carcass (and to the fronts when they match it); a colour means lacquer.
+        if (d.family === 'kitchen' && slot === 'top') { const patch = {[mk]: value}; if (mk === 'stone') patch.surface = 'stone'; if (mk === 'species') patch.surface = 'wood'; d.materials.top = {...d.materials.top, ...patch}; notes.push(materialLabel({slot, key: mk, value})); if (state.sketch) setSketch(false); continue; }
         if (['top', 'base', 'fabric'].includes(slot) || (slot === 'wood' && mk !== 'finish')) slot = 'case';
         if (slot === 'case' || slot === 'front') {
           const same = sameFront(d.materials), patch = {[mk]: value};
@@ -1024,6 +1100,8 @@ function bindShell() {
 
   const panel = $('#panel');
   panel.addEventListener('click', e => {
+    const modEl = e.target.closest('[data-mod]');
+    if (modEl) { state.ksel = +modEl.dataset.mod; renderPanel(); return; }
     const cellEl = e.target.closest('[data-cell]');
     if (cellEl) { const [b, c] = cellEl.dataset.cell.split(':').map(Number); state.sel = {b, c}; renderPanel(); return; }
     const el = e.target.closest('button, [data-load]'); if (!el) return;
@@ -1031,8 +1109,9 @@ function bindShell() {
     if (d.act) { projectAction(el); return; }
     if (isStorage() && (d.baycount || d.cellcolor !== undefined || d.celltype || d.cellset || d.cellop || d.bayop || d.cellauto || d.bayauto)) { layoutAction(d); return; }
     if (d.frontSame) { setDesign({...state.design, materials: {...state.design.materials, front: {...state.design.materials.case}}}); return; }
-    if (isStorage() && d.mat?.startsWith('case.') && sameFront(state.design.materials)) { const [, key] = d.mat.split('.'); const c = {...state.design.materials.case, [key]: d.value}; setDesign({...state.design, materials: {...state.design.materials, case: c, front: {...c}}}); return; }
-    if (isStorage() && d.color?.startsWith('case.') && sameFront(state.design.materials)) { const [, key] = d.color.split('.'); const c = {...state.design.materials.case, [key]: d.value}; setDesign({...state.design, materials: {...state.design.materials, case: c, front: {...c}}}); return; }
+    if (isKitchen() && (d.mtype || d.mw || d.mwall || d.mop)) { kitchenAction(d); return; }
+    if (isPanel() && d.mat?.startsWith('case.') && sameFront(state.design.materials)) { const [, key] = d.mat.split('.'); const c = {...state.design.materials.case, [key]: d.value}; setDesign({...state.design, materials: {...state.design.materials, case: c, front: {...c}}}); return; }
+    if (isPanel() && d.color?.startsWith('case.') && sameFront(state.design.materials)) { const [, key] = d.color.split('.'); const c = {...state.design.materials.case, [key]: d.value}; setDesign({...state.design, materials: {...state.design.materials, case: c, front: {...c}}}); return; }
     if (d.kind) { if (d.kind !== state.design.kind) setDesign(isBedroom() ? {...state.design, kind: d.kind, params: {...state.design.params, kind: d.kind}} : designForKind(state.design, d.kind)); }
     else if (d.startStyle) { const e = startList().find(x => x.style === d.startStyle); if (e) setDesign(startDesign(e)); }
     else if (d.enum) setDesign(withParams({[d.enum]: d.value}));

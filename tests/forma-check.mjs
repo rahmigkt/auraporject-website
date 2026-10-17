@@ -303,6 +303,23 @@ let storageN = 0, storageParts = 0;
   const L2 = await import('../assets/forma/link.js'), d = sample({family: 'storage', style: 'aura', kind: 'vanity', seed: 1}), enc = await L2.encode({v: 1, d: {f: d.family, k: d.kind, s: d.style, n: d.seed, p: d.params, m: d.materials}}), back = await L2.decode(enc);
   assert.deepEqual(back.d.p, d.params, 'link round trip'); assert.ok(enc.length < 3000, `link length ${enc.length}`);
 }
+// 13. Kitchens: every curated run / island compiles, has a worktop, sink, appliances and a clean sheet.
+let kitchenN = 0;
+{
+  const {FAMILIES} = await import('../assets/forma/families.js'), {normalizeDesign} = await import('../assets/forma/generate.js'), fam = FAMILIES.kitchen;
+  for (const [kind, list] of Object.entries(fam.starts)) for (const e of list) for (const open of [false, true]) {
+    const d0 = sample({family: 'kitchen', style: e.style, kind, seed: e.seed}), d = normalizeDesign({...d0, kind, params: {...e.p, kind}, materials: e.m ? {...d0.materials, ...e.m} : d0.materials});
+    const c = fam.mod.compile({...d.params, kind, openFronts: open});
+    for (const q of c.parts) { const m = buildMesh(q); assert.ok(m.positions.length && m.positions.every(Number.isFinite), `kitchen ${kind}/${e.style}: ${q.id}`); }
+    if (open) continue;
+    assert.equal(fam.mod.validate(c).filter(i => i.level !== 'info').length, 0, `kitchen ${kind}/${e.style}/${e.seed}: ${JSON.stringify(fam.mod.validate(c))}`);
+    const b = bom(c, d.materials, 'tr'); assert.ok(b.rows.some(r => r.nameTr === 'Tezgah') && b.rows.some(r => r.code[0] === 'A'), `kitchen ${kind}/${e.style}: bom`);
+    const sh = drawingSheet(c, labels, {rows: [['A', 'B']]}); assert.ok(!sh.svg.includes('NaN'), 'kitchen sheet');
+    kitchenN++;
+  }
+  assert.ok(parse('mutfak', {family: 'seating'}).actions.some(a => a.value === 'kitchen'), 'kitchen word');
+}
+console.log(`PASS forma: ${kitchenN} kitchens (runs and islands) valid: modules, worktop, sink, hob, hood, appliances, open view, cut list, drawings;`);
 console.log(`PASS forma: ${storageN} RİTMO case goods valid (${storageParts} parts; 18 mm MDF / solid panels, 8 mm back, 2 mm reveals, modules ≤ 1200, cut list, drawings, commands, design link);`);
 console.log(`PASS forma: ${roomN} room layouts (living, dining, bedroom × 3) without overlaps;`);
 console.log(`PASS forma: ${startN} curated starting models (10 styles incl. AURA) valid;`);

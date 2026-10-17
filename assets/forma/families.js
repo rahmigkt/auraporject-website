@@ -4,11 +4,12 @@ import * as table from './table.js';
 import * as bedroom from './bedroom.js';
 import * as set from './set.js';
 import * as storage from './storage.js';
+import * as kitchen from './kitchen.js';
 import {STORAGE_STYLES, STORAGE_STYLE_BY_ID, STORAGE_STARTS, recipeParams} from './styles-storage.js';
 import {BEDROOM_STYLES, BEDROOM_STYLE_BY_ID, ROOM_STYLE} from './styles-bedroom.js';
 import {STYLES as SEAT_STYLES, STYLE_BY_ID as SEAT_BY_ID, KINDS as SEAT_KINDS} from './styles.js';
 import {TABLE_STYLES, TABLE_STYLE_BY_ID} from './styles-table.js';
-import {HIDES, normalizeMaterials, normalizeTableMaterials, normalizeBedroomMaterials, normalizeStorageMaterials, MARKET_NEAR} from './catalog.js';
+import {HIDES, normalizeMaterials, normalizeTableMaterials, normalizeBedroomMaterials, normalizeStorageMaterials, normalizeKitchenMaterials, MARKET_NEAR} from './catalog.js';
 import {buildMesh} from './build.js';
 // Line details start empty: the user draws them in.
 const LINE_KEYS = ['stitch', 'inlay', 'caseLine'];
@@ -136,6 +137,19 @@ export const FAMILIES = {
       return normalizeStorageMaterials({case: surf(r.weighted(m.caseSurface)), front: surf(r.weighted(m.frontSurface)), wood: {species, stain, finish: 'oil'}, metal: {finish: r.weighted(m.metal)}});
     }
   },
+  kitchen: {
+    // Kitchen: a run or an island of RİTMO modules with worktop, sink, hob, hood and built-in appliances.
+    id: 'kitchen', mod: kitchen, styles: STORAGE_STYLES, byId: STORAGE_STYLE_BY_ID, kinds: kitchen.KINDS, defaultKind: 'run', starts: null,
+    featureWeights: {frontStyle: 1.4, pull: 0.8, frontFit: 0.6, caseEdge: 0.4, sink: 0.5, hob: 0.4, hood: 0.4, backsplash: 0.3, board: 0, frontBoard: 0},
+    similarEnums: ['frontStyle', 'pull', 'caseEdge'], fixedKeys: ['solidThickness'],
+    normalizeMaterials: normalizeKitchenMaterials,
+    couple(d) { d.params.board = d.materials.case.surface === 'wood' ? 'solid' : 'mdf'; d.params.frontBoard = d.materials.front.surface === 'wood' ? 'solid' : 'mdf'; return d; },
+    sampleParams(st, kind, r, locks) {
+      const list = KITCHEN_STARTS[kind].filter(e => e.style === st.id);
+      return {...structuredClone(r.pick(list.length ? list : KITCHEN_STARTS[kind]).p), ...(locks.params || {})};
+    },
+    sampleMaterials(st, r) { const m = FAMILIES.storage.sampleMaterials(st, r); return normalizeKitchenMaterials({...m, top: {surface: 'stone', stone: r.pick(['carrara', 'travertine', 'concrete', 'terrazzo']), polish: 'honed'}}); }
+  },
   bedroom: {
     // Bedroom furniture is delivered as a set: the piece in focus (kind) is designed, the rest is proposed to match.
     id: 'bedroom', mod: set, styles: BEDROOM_STYLES, byId: BEDROOM_STYLE_BY_ID, kinds: set.KINDS, defaultKind: 'bed',
@@ -199,4 +213,6 @@ const ROOM_SAMPLE_RANGES = {nsWidth: [440, 540], nsDepth: [360, 420], nsRows: [1
 /** Sensible sampling ranges for bedroom parameters a style does not set. */
 const BEDROOM_SAMPLE_RANGES = {legHeight: [60, 160], railHeight: [180, 300], border: [40, 140], plinthInset: [100, 200], headHeight: [1050, 1300], headThickness: [80, 130], headExtend: [0, 0], headRadius: [60, 300], scallops: [3, 4], channelCount: [8, 12], tuftSpacing: [160, 210], slatWidth: [45, 80], slatGap: [12, 30], wingDepth: [180, 260], frameWidth: [50, 80], footHeight: [350, 600], postSize: [50, 70], postHeight: [1900, 2100], legSize: [40, 60], legTaper: [0.6, 0.8], nightWidth: [420, 520], topThickness: [18, 30], topOverhang: [0, 15], cornerRadius: [0, 40], graduation: [0.2, 0.6], fluteWidth: [18, 30], mirrorHeight: [700, 1000], mirrorWidth: [0.5, 0.8]};
 
+const KITCHEN_STARTS = kitchen.kitchenStarts(STORAGE_STYLES);
+FAMILIES.kitchen.starts = KITCHEN_STARTS;
 export const familyOf = d => FAMILIES[d?.family] || FAMILIES.seating;
