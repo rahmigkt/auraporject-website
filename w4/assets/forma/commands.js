@@ -118,7 +118,7 @@ const ENUM_WORDS = {
 };
 
 const FABRIC_WORDS = {
-  fiber: {linen: L('keten|linen|leinen|lin|linnen|hor|lino'), cotton: L('pamuk|cotton|baumwolle|coton|katoen|bomuld|algodon|cotone'), wool: L('yun|wool|wolle|laine|wol|uld|lana'), velvet: L('kadife|velvet|samt|velours|fluweel|flojl|terciopelo|velluto'), boucle: L('bukle|boucle|bouclette'), chenille: L('sonil|chenille|ciniglia|chenilla'), leather: L('deri|leather|leder|cuir|leer|laeder|cuero|pelle')},
+  fiber: {linen: L('keten|linen|leinen|lin|linnen|hor|lino'), cotton: L('pamuk|cotton|baumwolle|coton|katoen|bomuld|algodon|cotone'), wool: L('yun|wool|wolle|laine|wol|uld|lana'), velvet: L('kadife|velvet|samt|velours|fluweel|flojl|terciopelo|velluto'), boucle: L('bukle|boucle|bouclette'), chenille: L('sonil|chenille|ciniglia|chenilla'), leather: L('deri|leather|leder|cuir|leer|laeder|cuero|pelle'), suede: L('suet|suede|velourleder|veloursleder|wildleder|daim|ruskind|gamuza|piel de ante|cuero de ante|scamosciato|camoscio'), nubuck: L('nubuk|nubuck|nubukleder|nobuk|nabuk')},
   weave: {plain: L('bezayagi|plain weave|leinwandbindung|toile|linnenbinding|laerredsbinding|tafetan'), twill22: L('dimi|twill|koper|serge|keper|kipper|sarga|saia'), satin: L('saten|satin|atlas|satijn|raso'), basket: L('panama|basket|natte'), herringbone: L('baliksirti|herringbone|fischgrat|chevron|visgraat|sildeben|espiga|spina di pesce'), diamond: L('elmas|diamond|raute|losange|ruit|rude|rombo')},
   pattern: {none: L('duz kumas|desensiz|solid|plain fabric|unifarben|uni|effen|ensfarvet|liso|tinta unita'), stripe: L('cizgili|stripe|striped|gestreift|streifen|raye|rayure|streep|gestreept|stribet|rayas|a rayas|righe|a righe|rigato'), check: L('kareli|potikare|gingham|check|checked|karo|kariert|vichy|carreaux|geruit|ruit|ternet|cuadros|quadri|quadretti'), plaid: L('ekose|plaid|tartan|schottenkaro|ecossais|schotse ruit|skotskternet|escoces|scozzese'), damask: L('damask|damast|damasse|damasco')}
 };
@@ -177,6 +177,8 @@ const KIND_WORDS = {
 };
 
 const COMMANDS = {
+  addProject: L('projeye ekle|projeme ekle|add to project|add to my project|zum projekt|ajouter au projet|aan project toevoegen|tilfoj til projekt|anadir al proyecto|aggiungi al progetto'),
+  roomView: L('odaya yerlestir|odada goster|odada gor|place in room|show in room|see in room|im raum|dans la piece|in de kamer|i rummet|en la habitacion|nella stanza'),
   undo: L('geri al|undo|ruckgangig|zuruck|annuler|ongedaan|fortryd|deshacer|annulla'),
   redo: L('yinele|ileri al|redo|wiederholen|retablir|opnieuw|gendan|rehacer|ripeti|ripristina'),
   similar: L('benzer|buna benzer|similar|more like this|like this|ahnlich|aehnlich|similaire|vergelijkbaar|soortgelijk|lignende|simil|parecid'),

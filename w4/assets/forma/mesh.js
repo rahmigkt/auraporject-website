@@ -218,6 +218,53 @@ export function tube(points, radius, {sides = 14} = {}) {
   return finish(b);
 }
 
+/**
+ * Throw pillow (kırlent), standing in the x–y plane, thickness along z, centred. Units mm.
+ * Knife-edge pillows are two panels sewn together and filled: the edge midpoints pull inward (pinch), the corners
+ * stay pointed, the body is full in the middle and thins to the seam; an optional "chop" dents the top centre.
+ * type: 'square' | 'lumbar' (knife edge, any w × h) | 'boxed' (gusset band, flatter faces) | 'bolster' (roll along x).
+ */
+export function pillow({w, h, t, type = 'square', pinch = 0.07, chop = 0, cord = 0, n = 30}) {
+  if (type === 'bolster') {
+    // Roll with gathered ends: full radius along the body, ends drawn in towards a button.
+    const R = h / 2, L = w, prof = [];
+    // Samples are dense near the ends so the rounded, gathered ends stay smooth.
+    for (let k = 0; k <= 40; k++) {
+      const y = L / 2 * Math.sin((-1 + 2 * k / 40) * Math.PI / 2), e = Math.min(1, (L / 2 - Math.abs(y)) / R);
+      prof.push([y, Math.max(R * 0.08, R * Math.sqrt(Math.max(0, 1 - (1 - e) ** 2)))]);
+    }
+    const m = lathe(prof, {segments: 28});
+    return {...m, positions: transformPositions(m.positions, [0, 0, 0], [0, 0, Math.PI / 2]), normals: transformPositions(m.normals, [0, 0, 0], [0, 0, Math.PI / 2])};
+  }
+  if (type === 'boxed') return cushion({w, h, d: t, r: Math.min(26, t * 0.3), crownFront: t * 0.32});
+  const b = new Builder(), hw = w / 2, hh = h / 2, grid = [[], []];
+  for (const [side, sz] of [[0, 1], [1, -1]]) for (let j = 0; j <= n; j++) for (let i = 0; i <= n; i++) {
+    const u = -1 + 2 * i / n, v = -1 + 2 * j / n;
+    const x = u * hw * (1 - pinch * (1 - v * v)), y0 = v * hh * (1 - pinch * (1 - u * u));
+    const dent = chop * Math.exp(-u * u / 0.04) * Math.max(0, v) ** 2;
+    const y = y0 - dent * h * 0.06;
+    // Domed body thinning to the seam, with soft folds running in from the pointed corners.
+    const body = Math.pow(Math.max(0, (1 - u * u) * (1 - v * v)), 0.5);
+    const folds = 0.08 * Math.sin(14 * (Math.abs(u) - Math.abs(v))) * (Math.abs(u * v)) ** 3;
+    const z = sz * Math.max(0.8, t / 2 * (body + folds * body) * (1 - dent * 0.45));
+    grid[side].push(b.v(x, y, z));
+  }
+  const at = (side, i, j) => grid[side][j * (n + 1) + i];
+  for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
+    b.quad(at(0, i, j), at(0, i + 1, j), at(0, i + 1, j + 1), at(0, i, j + 1));
+    b.quad(at(1, i, j), at(1, i, j + 1), at(1, i + 1, j + 1), at(1, i + 1, j));
+  }
+  // Close the seam between the two panels.
+  const ring = [];
+  for (let i = 0; i < n; i++) ring.push([i, 0]); for (let j = 0; j < n; j++) ring.push([n, j]); for (let i = n; i > 0; i--) ring.push([i, n]); for (let j = n; j > 0; j--) ring.push([0, j]);
+  for (let k = 0; k < ring.length; k++) { const [i, j] = ring[k], [i2, j2] = ring[(k + 1) % ring.length]; b.quad(at(0, i, j), at(1, i, j), at(1, i2, j2), at(0, i2, j2)); }
+  const body = finish(b);
+  if (!cord) return body;
+  // Piping round the seam.
+  const pts = ring.map(([i, j]) => { const id = at(0, i, j); return [b.p[id * 3], b.p[id * 3 + 1], 0]; }); pts.push(pts[0]);
+  return mergeMeshes([body, tube(pts, cord, {sides: 8})]);
+}
+
 /** Line details (topstitch, inlay, groove): a thin tube along a 3D polyline, solid or dashed like a stitch. */
 export function lineMesh({points, r = 1, closed = true, dash = null, sides = 6}) {
   // Drop repeated points (a zero-length segment has no direction).

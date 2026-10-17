@@ -128,3 +128,21 @@
 .f-starts{margin:20px 0 8px;padding-bottom:16px;border-bottom:1px solid var(--hair)}.f-starts h3{margin-top:0}
 .f-starts .f-chip{font:400 15px var(--serif)}
 @media (max-width:620px){.f-step{font-size:34px;padding:12px 6px}}
+/* Fabric: close-up (weave relief) beside the repeat view */
+.f-fabric-preview{display:block}
+.f-swatchpair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.f-swatchpair figure{margin:0}.f-swatchpair canvas{width:100%;height:auto;aspect-ratio:1;border:1px solid var(--hair);display:block}
+.f-swatchpair figcaption{font:10px var(--mono);color:var(--muted);margin-top:5px}
+/* Project: add and continue */
+.f-current{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--hair);margin:16px 0 6px}
+.f-current b,.f-items b{display:block;font:400 17px var(--serif)}.f-current small,.f-items small{font:10.5px var(--mono);color:var(--muted)}
+.f-link{border:0;background:none;padding:2px 0;font-size:12.5px;color:var(--ink);border-bottom:1px solid var(--red);cursor:pointer}
+.f-link:hover{color:var(--red)}
+.f-next{margin:8px 0 6px}.f-nextrow{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 0;border-bottom:1px solid var(--hair2);flex-wrap:wrap}
+.f-nextrow b{font:400 15px var(--serif)}.f-nextrow span{display:flex;gap:16px;flex-wrap:wrap}
+.f-items{list-style:none;padding:0;margin:0}.f-items li{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--hair2)}
+.f-items li[aria-current=true] b{color:var(--red)}.f-n{font:10px var(--mono);color:var(--red)}.f-itemacts{display:flex;gap:14px}
+.f-roombox{margin-top:26px;padding-top:4px;border-top:1px solid var(--hair)}
+.f-warn{margin:10px 0;padding:8px 10px;border-left:2px solid var(--warn);background:#f6efe1}.f-warn p{margin:4px 0;font-size:12px;color:#5d4a2a}
+.f-primary:disabled{background:transparent;color:var(--muted);border-color:var(--hair)}
+body[data-room] .f-step,body[data-room] .f-start{display:none}

@@ -6,7 +6,7 @@ import * as set from './set.js';
 import {BEDROOM_STYLES, BEDROOM_STYLE_BY_ID, ROOM_STYLE} from './styles-bedroom.js';
 import {STYLES as SEAT_STYLES, STYLE_BY_ID as SEAT_BY_ID, KINDS as SEAT_KINDS} from './styles.js';
 import {TABLE_STYLES, TABLE_STYLE_BY_ID} from './styles-table.js';
-import {normalizeMaterials, normalizeTableMaterials, normalizeBedroomMaterials, MARKET_NEAR} from './catalog.js';
+import {HIDES, normalizeMaterials, normalizeTableMaterials, normalizeBedroomMaterials, MARKET_NEAR} from './catalog.js';
 import {buildMesh} from './build.js';
 // Line details start empty: the user draws them in.
 const LINE_KEYS = ['stitch', 'inlay', 'caseLine'];
@@ -51,7 +51,7 @@ export const FAMILIES = {
       if (pattern !== 'none' && r.next() < 0.5) color2 = MARKET_NEAR[color2] || color2;
       const woodPick = r.weighted(m.wood);
       return normalizeMaterials({
-        fabric: {fiber, weave: r.weighted(m.weave), color, pattern: fiber === 'leather' ? 'none' : pattern, color2, scale: 1, density: r.int(2, 4)},
+        fabric: {fiber, weave: r.weighted(m.weave), color, pattern: HIDES.includes(fiber) ? 'none' : pattern, color2, scale: 1, density: r.int(2, 4)},
         welt: {color: r.next() < 0.6 ? color2 : null},
         // Seating frames and legs are gürgen (beech) for strength; the colour is a separate stain.
         wood: {species: 'gurgen', stain: STAIN_FOR[woodPick] || 'natural', finish: r.weighted(m.finish)},
@@ -162,7 +162,7 @@ export const FAMILIES = {
       const m = st.mats, fiber = r.weighted(m.fiber);
       let color = r.weighted(m.color), color2 = r.pick(['white', 'cream', 'anthracite', 'navy', 'mustard', 'camel']);
       if (color2 === color) color2 = 'white';
-      const pattern = fiber === 'leather' ? 'none' : r.weighted(m.pattern);
+      const pattern = HIDES.includes(fiber) ? 'none' : r.weighted(m.pattern);
       const wood = {species: r.weighted(m.species), stain: r.weighted(m.stain), finish: r.weighted(m.finish)};
       return normalizeBedroomMaterials({
         fabric: {fiber, weave: 'plain', color, pattern, color2, scale: 1, density: r.int(2, 4)},

@@ -1,7 +1,7 @@
 // Woven-textile material maps generated from the weave draft (warp/weft interlacing matrix).
 // The weave definitions are the NAKIŞ ones: top(i,j) = warp i passes over weft j.
 // Output is pure RGBA data (albedo, normal, roughness) at real thread scale, usable in three.js DataTextures.
-import {WEAVES, FIBERS, COLORS} from './catalog.js';
+import {WEAVES, FIBERS, COLORS, HIDES} from './catalog.js';
 import {MOTIF_WEAVE} from '../nakis/weave.js?v=20261016b';
 import {MOTIFS} from '../nakis/motifs.js?v=20261016b';
 import {fbm, valueNoise, clamp} from './rng.js';
@@ -124,12 +124,12 @@ export function fabricMaps(spec, {maxPx = 1024} = {}) {
 /** Velvet, bouclé and leather have no visible weave: pile, loops or grain instead. */
 function pileMaps(spec, F, base, maxPx) {
   // Velvet, chenille and bouclé can be printed; leather stays plain.
-  const pat = spec.fiber === 'leather' ? 'none' : spec.pattern, second = hex(COLORS[spec.color2]?.hex || '#3b3b38');
+  const pat = HIDES.includes(spec.fiber) ? 'none' : spec.pattern, second = hex(COLORS[spec.color2]?.hex || '#3b3b38');
   const motifId = MOTIF_PATTERNS[pat] ? (spec.motif || MOTIF_PATTERNS[pat]) : null, printed = PATTERN_MASK[pat];
   const df = densityFactor(spec);
   const stripeMask = pat === 'stripe' ? (u => (u % 1) < 0.24 ? 1 : 0) : null, checkMask = pat === 'check' || pat === 'plaid' ? ((u, v) => ((Math.floor(u * 2) + Math.floor(v * 2)) % 2) || (pat === 'plaid' && (Math.abs(u - 0.5) < 0.03 || Math.abs(v - 0.5) < 0.03)) ? 1 : 0) : null;
   const patterned = motifId || printed || stripeMask || checkMask;
-  const size = Math.min(patterned ? 768 : 512, maxPx), tileMm = patterned ? MOTIF_REPEAT * df * (pat === 'polka' ? 0.45 : pat === 'houndstooth' ? 0.12 : pat === 'stripe' ? 0.25 : pat === 'check' ? 0.1 : 1) : spec.fiber === 'leather' ? 90 : spec.fiber === 'boucle' ? 40 : 60;
+  const size = Math.min(patterned ? 768 : 512, maxPx), tileMm = patterned ? MOTIF_REPEAT * df * (pat === 'polka' ? 0.45 : pat === 'houndstooth' ? 0.12 : pat === 'stripe' ? 0.25 : pat === 'check' ? 0.1 : 1) : spec.fiber === 'leather' ? 90 : spec.fiber === 'suede' ? 120 : spec.fiber === 'nubuck' ? 80 : spec.fiber === 'boucle' ? 40 : 60;
   const mask = motifId ? motifMask(motifId, size) : null;
   const albedo = new Uint8ClampedArray(size * size * 4), rough = new Uint8ClampedArray(size * size * 4), height = new Float32Array(size * size);
   const per = 8;
@@ -138,6 +138,15 @@ function pileMaps(spec, F, base, maxPx) {
     if (spec.fiber === 'leather') {
       const pebble = fbm(u * 26, v * 26, 11, 2, per * 26), crease = Math.abs(fbm(u * 2.2, v * 2.2, 5, 3, per * 2.2) - 0.5), patina = fbm(u * 0.8, v * 0.8, 2, 3, per * 0.8);
       h = clamp(0.55 + (pebble - 0.5) * 0.7 - (crease < 0.02 ? 0.25 : 0), 0, 1); tone = 0.88 + 0.16 * (patina - 0.5) + (pebble - 0.5) * 0.08 - (crease < 0.02 ? 0.04 : 0); r = F.rough + (pebble - 0.5) * 0.2;
+    } else if (spec.fiber === 'suede') {
+      // Napped split leather: fibrous fine noise, soft cloudy tone, and brushed streaks where the nap was stroked.
+      const fibre = fbm(u * 60, v * 60, 31, 2, per * 60), cloud = fbm(u * 1.1, v * 1.1, 13, 3, per * 1.1);
+      const stroke = fbm(u * 0.6 + v * 2.4, v * 0.25, 17, 3, per * 0.6), brushed = Math.max(0, stroke - 0.55) * 2.2;
+      h = clamp(0.5 + (fibre - 0.5) * 0.16, 0, 1); tone = 0.88 + (cloud - 0.5) * 0.16 + (fibre - 0.5) * 0.05 + brushed * 0.1; r = F.rough;
+    } else if (spec.fiber === 'nubuck') {
+      // Sanded grain: a very fine even nap with faint pores; a little more uniform than suede.
+      const nap = fbm(u * 90, v * 90, 41, 2, per * 90), pores = fbm(u * 22, v * 22, 43, 2, per * 22), cloud = fbm(u * 1.4, v * 1.4, 47, 3, per * 1.4);
+      h = clamp(0.55 + (nap - 0.5) * 0.22 - (pores < 0.3 ? 0.08 : 0), 0, 1); tone = 0.9 + (cloud - 0.5) * 0.1 + (nap - 0.5) * 0.06 - (pores < 0.3 ? 0.03 : 0); r = F.rough;
     } else if (spec.fiber === 'boucle') {
       const wu = u * 4.5 + (fbm(u * 3, v * 3, 8, 2, per * 3) - 0.5) * 1.2, wv = v * 4.5 + (fbm(u * 3, v * 3, 9, 2, per * 3) - 0.5) * 1.2;
       const fx = wu - Math.floor(wu), fy = wv - Math.floor(wv), jitter = valueNoise(Math.floor(wu), Math.floor(wv), 7, per * 4.5);
@@ -153,7 +162,7 @@ function pileMaps(spec, F, base, maxPx) {
     albedo[k] = clamp(col[0] * tone, 0, 255); albedo[k + 1] = clamp(col[1] * tone, 0, 255); albedo[k + 2] = clamp(col[2] * tone, 0, 255); albedo[k + 3] = 255;
     rough[k] = rough[k + 1] = rough[k + 2] = clamp(r, 0.05, 1) * 255; rough[k + 3] = 255;
   }
-  return {size, tileMm, albedo, normal: normalFromHeight(height, size, spec.fiber === 'leather' ? 1.4 : 1.8), rough};
+  return {size, tileMm, albedo, normal: normalFromHeight(height, size, spec.fiber === 'leather' ? 1.4 : spec.fiber === 'suede' ? 0.55 : spec.fiber === 'nubuck' ? 0.4 : 1.8), rough};
 }
 
 /** Tangent-space normal map from a wrapping height field. */

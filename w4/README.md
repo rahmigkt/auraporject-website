@@ -94,3 +94,7 @@ QA: `tests/forma-check.mjs` (line-detail section added) and `tests/table-geometr
 ## Curated styles and starting models (2026-10-18)
 
 The studio offers ten styles: AURA (house style) plus nine widely used styles with clear lines (`assets/forma/curated.js`). Each family and kind opens on hand-picked starting models (`assets/forma/starts.js`, 270 entries, three per style), chosen by rendering six candidates each and keeping only on-style, distinct, well-proportioned ones. Models are browsed full size in the sketch with ‹ › on the drawing; the parameters are stored so sampler changes do not alter them. `tests/forma-check.mjs` validates every entry.
+
+## Project, room and materials (2026-10-18)
+
+Step 04 is now Project: add the piece and continue (same design in another size of the family, a separately designed piece, or another family); the project is listed, edited and sent as one package. `assets/forma/room.js` places the project in a lit room (three rule-based layouts, room types with misfit warnings that can be overridden; covered by `tests/forma-check.mjs`). Throw pillows use a dedicated knife-edge/lumbar/bolster/boxed geometry (`mesh.js pillow`). The fabric panel shows a raking-light close-up of the weave. Suede and nubuck join leather as hides.

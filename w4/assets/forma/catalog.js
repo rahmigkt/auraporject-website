@@ -14,8 +14,14 @@ export const FIBERS = {
   velvet:  {tr: 'Kadife', en: 'Velvet', de: 'Samt', fr: 'Velours', nl: 'Fluweel', da: 'Fløjl', es: 'Terciopelo', it: 'Velluto', thread: 0.3, slub: 0, fuzz: 0.08, sheen: 1, rough: 0.75, weave: false},
   boucle:  {tr: 'Bukle', en: 'Bouclé', de: 'Bouclé', fr: 'Bouclette', nl: 'Bouclé', da: 'Bouclé', es: 'Bouclé', it: 'Bouclé', thread: 1.3, slub: 0.3, fuzz: 0.3, sheen: 0.25, rough: 0.97, weave: false},
   chenille:{tr: 'Şönil', en: 'Chenille', de: 'Chenille', fr: 'Chenille', nl: 'Chenille', da: 'Chenille', es: 'Chenilla', it: 'Ciniglia', thread: 1.0, slub: 0.1, fuzz: 0.5, sheen: 0.7, rough: 0.85, weave: true},
-  leather: {tr: 'Deri', en: 'Leather', de: 'Leder', fr: 'Cuir', nl: 'Leer', da: 'Læder', es: 'Cuero', it: 'Pelle', thread: 0, slub: 0, fuzz: 0, sheen: 0, rough: 0.5, weave: false}
+  leather: {tr: 'Deri', en: 'Leather', de: 'Leder', fr: 'Cuir', nl: 'Leer', da: 'Læder', es: 'Cuero', it: 'Pelle', thread: 0, slub: 0, fuzz: 0, sheen: 0, rough: 0.5, weave: false},
+  // Suede: the split, napped inner side of the hide — matte, soft, shows finger marks. Nubuck: the grain side sanded
+  // to a very fine, velvety nap — tighter and more even than suede.
+  suede:   {tr: 'Süet', en: 'Suede', de: 'Veloursleder', fr: 'Daim', nl: 'Suède', da: 'Ruskind', es: 'Ante', it: 'Scamosciato', thread: 0, slub: 0, fuzz: 0, sheen: 0.55, rough: 0.98, weave: false},
+  nubuck:  {tr: 'Nubuk', en: 'Nubuck', de: 'Nubukleder', fr: 'Nubuck', nl: 'Nubuck', da: 'Nubuck', es: 'Nobuk', it: 'Nabuk', thread: 0, slub: 0, fuzz: 0, sheen: 0.4, rough: 0.92, weave: false}
 };
+/** Hides: no weave and no printed pattern. */
+export const HIDES = ['leather', 'suede', 'nubuck'];
 
 export const WEAVE_NAMES = {
   plain: {tr: 'Bezayağı', en: 'Plain weave', de: 'Leinwandbindung', fr: 'Toile', nl: 'Linnenbinding', da: 'Lærredsbinding', es: 'Tafetán', it: 'Tela'},
@@ -201,7 +207,7 @@ export function normalizeMaterials(m = {}) {
   if (!WEAVES[f.weave]) f.weave = 'plain';
   if (!COLORS[f.color]) f.color = 'cream';
   if (!COLORS[f.color2]) f.color2 = 'charcoal';
-  if (!PATTERNS[f.pattern]) f.pattern = 'none';
+  if (!PATTERNS[f.pattern] || HIDES.includes(f.fiber)) f.pattern = 'none'; // hides take no printed pattern
   f.scale = Math.min(3, Math.max(0.5, Number(f.scale) || 1));
   f.density = Math.min(6, Math.max(1, Math.round(Number(f.density) || 3)));
   const motifs = MOTIF_CHOICES[f.pattern];
