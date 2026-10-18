@@ -5,6 +5,7 @@ import * as bedroom from './bedroom.js';
 import * as set from './set.js';
 import * as storage from './storage.js';
 import * as kitchen from './kitchen.js';
+import * as bath from './bath.js';
 import {STORAGE_STYLES, STORAGE_STYLE_BY_ID, STORAGE_STARTS, recipeParams} from './styles-storage.js';
 import {BEDROOM_STYLES, BEDROOM_STYLE_BY_ID, ROOM_STYLE} from './styles-bedroom.js';
 import {STYLES as SEAT_STYLES, STYLE_BY_ID as SEAT_BY_ID, KINDS as SEAT_KINDS} from './styles.js';
@@ -150,6 +151,19 @@ export const FAMILIES = {
     },
     sampleMaterials(st, r) { const m = FAMILIES.storage.sampleMaterials(st, r); return normalizeKitchenMaterials({...m, top: {surface: 'stone', stone: r.pick(['carrara', 'travertine', 'concrete', 'terrazzo']), polish: 'honed'}}); }
   },
+  bath: {
+    // Bathroom: special vanity units with their top and basin, tall columns and shaped (lit) mirrors or mirror cabinets.
+    id: 'bath', mod: bath, styles: STORAGE_STYLES, byId: STORAGE_STYLE_BY_ID, kinds: bath.KINDS, defaultKind: 'basin', starts: null,
+    featureWeights: {frontStyle: 1.4, pull: 0.8, basinType: 1, basinShape: 0.6, tap: 0.4, base: 0.6, mirror: 1, mirrorLight: 0.4, board: 0, frontBoard: 0},
+    similarEnums: ['frontStyle', 'pull', 'basinType', 'mirror'], fixedKeys: ['solidThickness'],
+    normalizeMaterials: m => normalizeKitchenMaterials({...m, sink: m?.sink || {finish: 'white'}}),
+    couple(d) { d.params.board = d.materials.case.surface === 'wood' ? 'solid' : 'mdf'; d.params.frontBoard = d.materials.front.surface === 'wood' ? 'solid' : 'mdf'; return d; },
+    sampleParams(st, kind, r, locks) {
+      const list = BATH_STARTS[kind].filter(e => e.style === st.id);
+      return {...structuredClone(r.pick(list.length ? list : BATH_STARTS[kind]).p), ...(locks.params || {})};
+    },
+    sampleMaterials(st, r) { const m = FAMILIES.storage.sampleMaterials(st, r); return normalizeKitchenMaterials({...m, top: {surface: 'stone', stone: r.pick(['travertine', 'carrara', 'terrazzo', 'concrete']), polish: 'honed'}, sink: {finish: 'white'}}); }
+  },
   bedroom: {
     // Bedroom furniture is delivered as a set: the piece in focus (kind) is designed, the rest is proposed to match.
     id: 'bedroom', mod: set, styles: BEDROOM_STYLES, byId: BEDROOM_STYLE_BY_ID, kinds: set.KINDS, defaultKind: 'bed',
@@ -215,4 +229,6 @@ const BEDROOM_SAMPLE_RANGES = {legHeight: [60, 160], railHeight: [180, 300], bor
 
 const KITCHEN_STARTS = kitchen.kitchenStarts(STORAGE_STYLES);
 FAMILIES.kitchen.starts = KITCHEN_STARTS;
+const BATH_STARTS = bath.bathStarts(STORAGE_STYLES);
+FAMILIES.bath.starts = BATH_STARTS;
 export const familyOf = d => FAMILIES[d?.family] || FAMILIES.seating;

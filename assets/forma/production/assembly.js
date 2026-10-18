@@ -79,7 +79,7 @@ export function assemblySteps(compiled, bom, lang = 'tr') {
   for (const id of ORDER) {
     if (id === 'prepare' || id === 'finish') { steps.push({id, title: t.steps[id][0], text: t.steps[id][1], parts: [], hardware: []}); continue; }
     if (id === 'join' && !multi) continue;
-    if (id === 'wall' && !(p.height >= 1000 || ['wardrobe', 'dresser', 'bookcase', 'vitrine'].includes(p.kind) || p.base === 'wall' || compiled.family === 'kitchen')) continue;
+    if (id === 'wall' && !(p.height >= 1000 || ['wardrobe', 'dresser', 'bookcase', 'vitrine'].includes(p.kind) || p.base === 'wall' || compiled.family !== 'storage')) continue;
     const parts = byStep.get(id) || [];
     if (!parts.length && !['join', 'wall'].includes(id)) continue;
     const codes = [...new Set(bom.rows.filter(r => r.code[0] === 'K' && parts.some(q => matches(r, q))).map(r => r.code))];

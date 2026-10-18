@@ -19,8 +19,12 @@ const T={
  tableSub:['yemek, orta, yan sehpa, konsol, çalışma','dining, coffee, side, console, desk','Ess-, Couch-, Beistelltisch, Konsole, Schreibtisch','repas, basse, d’appoint, console, bureau','eet-, salon-, bijzettafel, wandtafel, bureau','spise-, sofa-, sidebord, konsol, skrivebord','comedor, centro, auxiliar, consola, escritorio','pranzo, caffè, servizio, consolle, scrivania'],
  bedroom:['Yatak odası','Bedroom','Schlafzimmer','Chambre','Slaapkamer','Soveværelse','Dormitorio','Camera da letto'],
  bedroomSub:['gardırop, karyola, şifonyer, komodin — takım olarak','wardrobe, bed, chest, bedside — as a set','Schrank, Bett, Kommode, Nachttisch — als Set','armoire, lit, commode, chevet — en ensemble','kast, bed, ladekast, nachtkastje — als set','garderobe, seng, kommode, natbord — som sæt','armario, cama, cómoda, mesita — en conjunto','armadio, letto, cassettiera, comodino — coordinati'],
- storage:['Depolama','Storage','Stauraum','Rangement','Opbergen','Opbevaring','Almacenaje','Contenitori'],
- storageSub:['raf, kapak ve çekmeceli modüler gövde','modular unit with shelves, doors and drawers','Modul mit Fächern, Türen und Schubladen','module avec étagères, portes et tiroirs','module met planken, deuren en laden','modul med hylder, låger og skuffer','módulo con estantes, puertas y cajones','modulo con ripiani, ante e cassetti'],
+ storage:['Dolap ve kitaplık','Storage & shelving','Schränke & Regale','Rangements','Kasten & boekenkasten','Skabe & reoler','Armarios y librerías','Armadi e librerie'],
+ kitchen:['Mutfak','Kitchen','Küche','Cuisine','Keuken','Køkken','Cocina','Cucina'],
+ kitchenSub:['tezgah altı ve üstü dolaplar, evye, ocak, ankastre','base and wall units, sink, hob, built-ins','Unter- und Oberschränke, Spüle, Kochfeld','meubles bas et hauts, évier, plaque','onder- en bovenkasten, spoelbak, kookplaat','under- og overskabe, vask, kogeplade','muebles bajos y altos, fregadero, placa','basi e pensili, lavello, piano cottura'],
+ bath:['Banyo','Bathroom','Bad','Salle de bain','Badkamer','Badeværelse','Baño','Bagno'],
+ bathSub:['lavabo dolabı, tezgah, ayna, boy dolabı','vanity unit, top, mirror, tall cabinet','Waschtisch, Platte, Spiegel, Hochschrank','meuble vasque, plan, miroir, colonne','wastafelmeubel, blad, spiegel, kolomkast','vaskeskab, plade, spejl, højskab','mueble de lavabo, encimera, espejo, columna','mobile lavabo, top, specchio, colonna'],
+ storageSub:['gardırop, şifonyer, komodin, TV ünitesi, kitaplık, vitrin','wardrobe, chest, bedside, TV unit, bookcase, display','Schrank, Kommode, Nachttisch, TV, Regal, Vitrine','armoire, commode, chevet, meuble TV, bibliothèque','kast, ladekast, nachtkast, tv-meubel, boekenkast','garderobe, kommode, natbord, TV, reol, vitrine','armario, cómoda, mesita, TV, librería, vitrina','armadio, cassettiera, comodino, TV, libreria, vetrina'],
  steps:[['Eskiz','Ölçü','Malzeme ve renk','Tasarımcıya gönder'],['Sketch','Dimensions','Material and colour','Send to the designer'],['Skizze','Maße','Material und Farbe','An die Designerin senden'],['Esquisse','Dimensions','Matière et couleur','Envoyer au designer'],['Schets','Maten','Materiaal en kleur','Naar de ontwerper'],['Skitse','Mål','Materiale og farve','Send til designeren'],['Boceto','Medidas','Material y color','Enviar al diseñador'],['Schizzo','Misure','Materiale e colore','Invia al designer']],
  aiTitle:['Ya da anlatın.','Or just describe it.','Oder beschreiben Sie es.','Ou décrivez-le.','Of beschrijf het.','Eller beskriv det.','O descríbalo.','Oppure raccontalo.'],
  aiText:['AURA AI ile konuşarak başlayın; ne istediğinizi birlikte netleştirelim.','Start by talking to AURA AI; we work out together what you want.','Beginnen Sie im Gespräch mit AURA AI; gemeinsam klären wir, was Sie möchten.','Commencez par une conversation avec AURA AI ; nous précisons ensemble votre idée.','Begin met een gesprek met AURA AI; samen maken we je idee concreet.','Start med en samtale med AURA AI; sammen gør vi idéen klar.','Empiece hablando con AURA AI; juntos concretamos lo que quiere.','Inizia parlando con AURA AI; insieme chiariamo cosa desideri.'],
@@ -38,10 +42,10 @@ export const siteFooter=(lang='tr')=>`<footer class="a-footer"><span>${t('foot',
 // ---- Home: a drawing table, not a catalogue --------------------------------------------------------
 function home(){
  const lang=pageLang();document.documentElement.lang=lang;
- const fams=[['seating','tasarla.html?family=seating'],['table','tasarla.html?family=table'],['bedroom','tasarla.html?family=bedroom'],['storage','ritmo.html']];
+ const fams=[['seating','tasarla.html?family=seating'],['table','tasarla.html?family=table'],['storage','tasarla.html?family=storage'],['kitchen','tasarla.html?family=kitchen'],['bath','tasarla.html?family=bath']];
  document.getElementById('main').innerHTML=siteHeader(lang,{switcher:true})+`<section class="h-hero"><div class="h-text"><p class="h-eye">${t('eye',lang)}</p><h1>${t('h1',lang)}</h1><p class="h-lead">${t('lead',lang)}</p>
  <ol class="h-steps">${t('steps',lang).map((s,i)=>`<li><span>0${i+1}</span>${esc(s)}</li>`).join('')}</ol></div>
- <figure class="h-sheet"><div id="homeSketch" class="h-sketch" aria-hidden="true"></div><figcaption>${t('note',lang)}</figcaption></figure></section>
+ <figure class="h-sheet"><a href="tasarla.html?lang=${lang}" aria-label="${esc(t('design',lang))}"><div id="homeSketch" class="h-sketch" aria-hidden="true"></div></a><figcaption>${t('note',lang)}</figcaption></figure></section>
  <section class="h-pick"><h2>${t('pick',lang)}</h2><ul>${fams.map(([f,href],i)=>`<li><a href="${href}${href.includes('?')?'&':'?'}lang=${lang}"><span class="h-n">0${i+1}</span><b>${t(f,lang)}</b><small>${t(f+'Sub',lang)}</small><span class="h-go">→</span></a></li>`).join('')}</ul></section>
  <section class="h-ai"><div><h2>${t('aiTitle',lang)}</h2><p>${t('aiText',lang)}</p></div><a href="sohbet.html">${t('aiCta',lang)}</a></section>`+siteFooter(lang);
  document.getElementById('homeLang').onchange=e=>{try{localStorage.setItem('aura-forma-lang',JSON.stringify(e.target.value));}catch{}const u=new URL(location.href);u.searchParams.set('lang',e.target.value);history.replaceState(null,'',u);home();};
@@ -52,9 +56,9 @@ function home(){
 async function drawSketch(host){
  const [{STARTS},{FAMILIES},{buildViews}]=await Promise.all([import('./forma/starts.js'),import('./forma/families.js'),import('./forma/drawing.js')]);
  const pieces=[],any=list=>list[Math.floor(Math.random()*list.length)];
- // Curated starting models only (the same ones the studio opens with).
- for(const [family,kind,list,extra] of [['seating','armchair',STARTS.seating.armchair,{}],['table','side',STARTS.table.side,{}],['bedroom','nightstand',STARTS.bedroom.bed,{view:'piece'}]]){
-  const e=any(list),mod=FAMILIES[family].mod,c=mod.compile(mod.normalize({...mod.DEFAULTS,...e.p,...extra,kind}));
+ // Curated starting models of the current studio: an armchair, a sideboard and a display cabinet (panel construction lines).
+ for(const [family,kind,list] of [['seating','armchair',STARTS.seating.armchair],['storage','sideboard',FAMILIES.storage.starts.sideboard],['storage','vitrine',FAMILIES.storage.starts.vitrine]]){
+  const e=any(list),mod=FAMILIES[family].mod,defs=mod.defaultsFor?mod.defaultsFor(kind):mod.DEFAULTS,c=mod.compile(mod.normalize({...defs,...e.p,kind}));
   const v=buildViews(c).views.front;let x0=Infinity,x1=-Infinity,y1=0;
   for(const s of v)for(const l of s.loops)for(const [h,y] of l){x0=Math.min(x0,h);x1=Math.max(x1,h);y1=Math.max(y1,y);}
   pieces.push({v,x0,x1,y1});

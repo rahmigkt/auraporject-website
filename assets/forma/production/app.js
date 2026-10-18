@@ -10,7 +10,7 @@ import {zip, jpegPdf, svgToJpeg, download} from '../package.js';
 import {t, partName} from '../i18n.js';
 
 const $ = s => document.querySelector(s);
-const PANEL = ['storage', 'kitchen'];
+const PANEL = ['storage', 'kitchen', 'bath'];
 let items = [];
 
 function setItems(list) {

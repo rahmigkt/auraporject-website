@@ -372,11 +372,11 @@ export function createViewer(host, {onRotate} = {}) {
   const draw = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { place(); renderPass.camera = camera; ao.camera = camera; composer.render(); }); };
   function place() {
     const rect = host.getBoundingClientRect(), aspect = Math.max(0.2, rect.width / Math.max(1, rect.height));
-    const [W, H, D] = size, target = new THREE.Vector3(0, baseY + H * 0.45, 0); // wall-hung pieces start above the floor
+    const [W, H, D] = size, target = new THREE.Vector3(0, baseY + H * (H > 1.5 * Math.max(W, D) ? 0.5 : 0.45), 0); // wall-hung pieces start above the floor
     if (view === 'angle') {
       camera = persp; persp.aspect = aspect;
       const radius = Math.hypot(W, H, D) * 0.5, fov = persp.fov * Math.PI / 180;
-      const dist = radius / Math.sin(Math.min(fov, 2 * Math.atan(Math.tan(fov / 2) * aspect)) / 2) * (aspect < 1 ? 1.02 : H > 0.8 * Math.max(W, D) ? 1.0 : 0.8) / zoom; // tall pieces (wardrobes) need the whole sphere
+      const dist = radius / Math.sin(Math.min(fov, 2 * Math.atan(Math.tan(fov / 2) * aspect)) / 2) * (H > 1.5 * Math.max(W, D) ? 1.15 : aspect < 1 ? 1.02 : H > 0.8 * Math.max(W, D) ? 1.0 : 0.8) / zoom; // tall pieces (wardrobes) need the whole sphere
       persp.position.set(Math.sin(yaw) * Math.cos(pitch) * dist, target.y + Math.sin(pitch) * dist, Math.cos(yaw) * Math.cos(pitch) * dist);
       persp.lookAt(target); persp.updateProjectionMatrix();
     } else {
