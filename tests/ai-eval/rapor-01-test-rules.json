@@ -1,0 +1,3963 @@
+{
+  "file": "tests\\ai-eval\\sinav-01-test.jsonl",
+  "sha256": "232f7b097e3899ddeec04a62e52583c73f123727970dbfc72503bca9291a641c",
+  "freeze": "donmuş, eşleşiyor",
+  "system": "rules",
+  "mode": "ön skor (onaysız kayıtlar dahil)",
+  "date": "2026-10-18T11:12:17.124Z",
+  "records": 390,
+  "scored": 390,
+  "overall": {
+    "n": 390,
+    "exact": 0.459,
+    "precision": 0.478,
+    "recall": 0.564,
+    "f1": 0.517,
+    "forbidViolationRate": 0.815,
+    "clarifyAccuracy": 0.389,
+    "missing": 0
+  },
+  "bySplit": {
+    "test": {
+      "n": 390,
+      "exact": 0.459,
+      "precision": 0.478,
+      "recall": 0.564,
+      "f1": 0.517,
+      "forbidViolationRate": 0.815,
+      "clarifyAccuracy": 0.389,
+      "missing": 0
+    }
+  },
+  "byLang": {
+    "da": {
+      "n": 15,
+      "exact": 0.6,
+      "precision": 0.471,
+      "recall": 0.8,
+      "f1": 0.593,
+      "forbidViolationRate": 0.4,
+      "clarifyAccuracy": 1,
+      "missing": 0
+    },
+    "de": {
+      "n": 15,
+      "exact": 0.267,
+      "precision": 0.444,
+      "recall": 0.8,
+      "f1": 0.571,
+      "forbidViolationRate": 0.9,
+      "clarifyAccuracy": 0,
+      "missing": 0
+    },
+    "en": {
+      "n": 60,
+      "exact": 0.25,
+      "precision": 0.35,
+      "recall": 0.35,
+      "f1": 0.35,
+      "forbidViolationRate": 0.8,
+      "clarifyAccuracy": 0,
+      "missing": 0
+    },
+    "es": {
+      "n": 15,
+      "exact": 0.267,
+      "precision": 0.4,
+      "recall": 0.8,
+      "f1": 0.533,
+      "forbidViolationRate": 0.9,
+      "clarifyAccuracy": 0,
+      "missing": 0
+    },
+    "fr": {
+      "n": 15,
+      "exact": 0.267,
+      "precision": 0.333,
+      "recall": 0.8,
+      "f1": 0.471,
+      "forbidViolationRate": 0.9,
+      "clarifyAccuracy": 0,
+      "missing": 0
+    },
+    "it": {
+      "n": 15,
+      "exact": 0.267,
+      "precision": 0.4,
+      "recall": 0.8,
+      "f1": 0.533,
+      "forbidViolationRate": 0.9,
+      "clarifyAccuracy": 0,
+      "missing": 0
+    },
+    "nl": {
+      "n": 15,
+      "exact": 0.267,
+      "precision": 0.4,
+      "recall": 0.8,
+      "f1": 0.533,
+      "forbidViolationRate": 0.9,
+      "clarifyAccuracy": 0,
+      "missing": 0
+    },
+    "tr": {
+      "n": 240,
+      "exact": 0.563,
+      "precision": 0.557,
+      "recall": 0.557,
+      "f1": 0.557,
+      "forbidViolationRate": 0.818,
+      "clarifyAccuracy": 0.667,
+      "missing": 0
+    }
+  },
+  "byCategory": {
+    "ambiguous": {
+      "n": 15,
+      "exact": 1,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "forbidViolationRate": null,
+      "clarifyAccuracy": 1,
+      "missing": 0
+    },
+    "colloquial": {
+      "n": 15,
+      "exact": 0.8,
+      "precision": 0.667,
+      "recall": 0.8,
+      "f1": 0.727,
+      "forbidViolationRate": null,
+      "clarifyAccuracy": null,
+      "missing": 0
+    },
+    "color": {
+      "n": 15,
+      "exact": 0.8,
+      "precision": 0.8,
+      "recall": 0.8,
+      "f1": 0.8,
+      "forbidViolationRate": null,
+      "clarifyAccuracy": null,
+      "missing": 0
+    },
+    "family": {
+      "n": 15,
+      "exact": 0,
+      "precision": 0.5,
+      "recall": 0.2,
+      "f1": 0.286,
+      "forbidViolationRate": null,
+      "clarifyAccuracy": null,
+      "missing": 0
+    },
+    "kind": {
+      "n": 15,
+      "exact": 1,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "forbidViolationRate": null,
+      "clarifyAccuracy": null,
+      "missing": 0
+    },
+    "layout": {
+      "n": 15,
+      "exact": 1,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "forbidViolationRate": null,
+      "clarifyAccuracy": null,
+      "missing": 0
+    },
+    "mixed": {
+      "n": 75,
+      "exact": 0,
+      "precision": 0.429,
+      "recall": 0.425,
+      "f1": 0.427,
+      "forbidViolationRate": 0.8,
+      "clarifyAccuracy": null,
+      "missing": 0
+    },
+    "negation": {
+      "n": 75,
+      "exact": 0.067,
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "forbidViolationRate": 0.853,
+      "clarifyAccuracy": 0.083,
+      "missing": 0
+    },
+    "offtopic": {
+      "n": 15,
+      "exact": 1,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "forbidViolationRate": null,
+      "clarifyAccuracy": 1,
+      "missing": 0
+    },
+    "part": {
+      "n": 15,
+      "exact": 0.6,
+      "precision": 0.8,
+      "recall": 0.8,
+      "f1": 0.8,
+      "forbidViolationRate": 0,
+      "clarifyAccuracy": null,
+      "missing": 0
+    },
+    "relative": {
+      "n": 30,
+      "exact": 0.2,
+      "precision": 0.182,
+      "recall": 0.2,
+      "f1": 0.19,
+      "forbidViolationRate": null,
+      "clarifyAccuracy": null,
+      "missing": 0
+    },
+    "style": {
+      "n": 15,
+      "exact": 1,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "forbidViolationRate": null,
+      "clarifyAccuracy": null,
+      "missing": 0
+    },
+    "units": {
+      "n": 75,
+      "exact": 0.8,
+      "precision": 0.732,
+      "recall": 0.8,
+      "f1": 0.764,
+      "forbidViolationRate": null,
+      "clarifyAccuracy": null,
+      "missing": 0
+    }
+  },
+  "failures": [
+    {
+      "id": "sinav01-tr-seating-3-0",
+      "text": "kumaş beyaz olsun",
+      "got": [
+        {
+          "type": "material",
+          "slot": "fabric",
+          "key": "color",
+          "value": "chalk"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-seating-3-1",
+      "text": "lütfen kumaş beyaz olsun",
+      "got": [
+        {
+          "type": "material",
+          "slot": "fabric",
+          "key": "color",
+          "value": "chalk"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-seating-3-2",
+      "text": "rica etsem kumaş beyaz olsun",
+      "got": [
+        {
+          "type": "material",
+          "slot": "fabric",
+          "key": "color",
+          "value": "chalk"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-seating-4-0",
+      "text": "kolçakları kaldır",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-seating-4-1",
+      "text": "lütfen kolçakları kaldır",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-seating-4-2",
+      "text": "rica etsem kolçakları kaldır",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-seating-6-0",
+      "text": "masa ailesine geç",
+      "got": [
+        {
+          "type": "family",
+          "value": "table"
+        },
+        {
+          "type": "kind",
+          "value": "dining"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-seating-6-1",
+      "text": "lütfen masa ailesine geç",
+      "got": [
+        {
+          "type": "family",
+          "value": "table"
+        },
+        {
+          "type": "kind",
+          "value": "dining"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-seating-6-2",
+      "text": "rica etsem masa ailesine geç",
+      "got": [
+        {
+          "type": "family",
+          "value": "table"
+        },
+        {
+          "type": "kind",
+          "value": "dining"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-seating-15-0",
+      "text": "kumaş beyaz olmasın",
+      "got": [
+        {
+          "type": "material",
+          "slot": "fabric",
+          "key": "color",
+          "value": "chalk"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-tr-seating-15-1",
+      "text": "lütfen kumaş beyaz olmasın",
+      "got": [
+        {
+          "type": "material",
+          "slot": "fabric",
+          "key": "color",
+          "value": "chalk"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-tr-seating-15-2",
+      "text": "rica etsem kumaş beyaz olmasın",
+      "got": [
+        {
+          "type": "material",
+          "slot": "fabric",
+          "key": "color",
+          "value": "chalk"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-tr-seating-16-0",
+      "text": "ceviz yerine meşe kullan",
+      "got": [
+        {
+          "type": "material",
+          "slot": "wood",
+          "key": "species",
+          "value": "walnut"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-seating-16-1",
+      "text": "lütfen ceviz yerine meşe kullan",
+      "got": [
+        {
+          "type": "material",
+          "slot": "wood",
+          "key": "species",
+          "value": "walnut"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-seating-16-2",
+      "text": "rica etsem ceviz yerine meşe kullan",
+      "got": [
+        {
+          "type": "material",
+          "slot": "wood",
+          "key": "species",
+          "value": "walnut"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-seating-17-0",
+      "text": "genişlik 180 cm ve derinlik 90 cm",
+      "got": [
+        {
+          "type": "material",
+          "slot": "fabric",
+          "key": "fiber",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-seating-17-1",
+      "text": "lütfen genişlik 190 cm ve derinlik 90 cm",
+      "got": [
+        {
+          "type": "material",
+          "slot": "fabric",
+          "key": "fiber",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1900
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-seating-17-2",
+      "text": "rica etsem genişlik 200 cm ve derinlik 90 cm",
+      "got": [
+        {
+          "type": "material",
+          "slot": "fabric",
+          "key": "fiber",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 2000
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-seating-18-0",
+      "text": "ahşap meşe, kumaş beyaz olsun",
+      "got": [
+        {
+          "type": "material",
+          "slot": "wood",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-seating-18-1",
+      "text": "lütfen ahşap meşe, kumaş beyaz olsun",
+      "got": [
+        {
+          "type": "material",
+          "slot": "wood",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-seating-18-2",
+      "text": "rica etsem ahşap meşe, kumaş beyaz olsun",
+      "got": [
+        {
+          "type": "material",
+          "slot": "wood",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-seating-22-0",
+      "text": "genişlik 1 cm azalt",
+      "got": [
+        {
+          "type": "delta",
+          "key": "width",
+          "value": 10
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-seating-22-1",
+      "text": "lütfen genişlik 2 cm azalt",
+      "got": [
+        {
+          "type": "delta",
+          "key": "width",
+          "value": 20
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-seating-22-2",
+      "text": "rica etsem genişlik 3 cm azalt",
+      "got": [
+        {
+          "type": "delta",
+          "key": "width",
+          "value": 30
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-seating-15-0",
+      "text": "Please do not make the fabric white",
+      "got": [
+        {
+          "type": "material",
+          "slot": "fabric",
+          "key": "color",
+          "value": "chalk"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-en-seating-15-1",
+      "text": "Do not make the fabric white",
+      "got": [
+        {
+          "type": "material",
+          "slot": "fabric",
+          "key": "color",
+          "value": "chalk"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-en-seating-15-2",
+      "text": "I do not want the fabric white",
+      "got": [
+        {
+          "type": "material",
+          "slot": "fabric",
+          "key": "color",
+          "value": "chalk"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-en-seating-17-0",
+      "text": "width 180 cm and depth 90 cm please",
+      "got": [
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-seating-17-1",
+      "text": "width 190 cm and depth 90 cm please",
+      "got": [
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1900
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-seating-17-2",
+      "text": "width 200 cm and depth 90 cm please",
+      "got": [
+        {
+          "type": "set",
+          "key": "width",
+          "value": 2000
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-de-seating-15-0",
+      "text": "Bitte keine Eiche verwenden",
+      "got": [
+        {
+          "type": "material",
+          "slot": "wood",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-de-seating-17-0",
+      "text": "Breite: Auf 180 cm einstellen, aber kein Nussbaumholz",
+      "got": [
+        {
+          "type": "material",
+          "slot": "wood",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-fr-seating-15-0",
+      "text": "Je ne veux pas de chêne",
+      "got": [
+        {
+          "type": "material",
+          "slot": "wood",
+          "key": "species",
+          "value": "oak"
+        },
+        {
+          "type": "material",
+          "slot": "fabric",
+          "key": "color",
+          "value": "rust"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 2,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-fr-seating-17-0",
+      "text": "largeur: Régler à 180 cm, mais pas de noyer",
+      "got": [
+        {
+          "type": "material",
+          "slot": "wood",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "material",
+          "slot": "fabric",
+          "key": "color",
+          "value": "rust"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 2,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-nl-seating-15-0",
+      "text": "Geen eikenhout gebruiken graag",
+      "got": [
+        {
+          "type": "material",
+          "slot": "wood",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-nl-seating-17-0",
+      "text": "breedte: Instellen op 180 cm, maar geen notenhout",
+      "got": [
+        {
+          "type": "material",
+          "slot": "wood",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-da-seating-17-0",
+      "text": "bredde: Sæt til 180 cm, men ikke valnøddetræ",
+      "got": [
+        {
+          "type": "material",
+          "slot": "wood",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-es-seating-15-0",
+      "text": "No quiero roble",
+      "got": [
+        {
+          "type": "material",
+          "slot": "wood",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-es-seating-17-0",
+      "text": "ancho: Ajustar a 180 cm, pero sin nogal",
+      "got": [
+        {
+          "type": "material",
+          "slot": "wood",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-it-seating-15-0",
+      "text": "Non voglio rovere",
+      "got": [
+        {
+          "type": "material",
+          "slot": "wood",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-it-seating-17-0",
+      "text": "larghezza: Imposta a 180 cm, ma senza noce",
+      "got": [
+        {
+          "type": "material",
+          "slot": "wood",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-table-6-0",
+      "text": "oturma ailesine geç",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-table-6-1",
+      "text": "lütfen oturma ailesine geç",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-table-6-2",
+      "text": "rica etsem oturma ailesine geç",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-table-15-0",
+      "text": "tabla beyaz olmasın",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-tr-table-15-1",
+      "text": "lütfen tabla beyaz olmasın",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-tr-table-15-2",
+      "text": "rica etsem tabla beyaz olmasın",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-tr-table-16-0",
+      "text": "ceviz yerine meşe kullan",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "walnut"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-table-16-1",
+      "text": "lütfen ceviz yerine meşe kullan",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "walnut"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-table-16-2",
+      "text": "rica etsem ceviz yerine meşe kullan",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "walnut"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-table-17-0",
+      "text": "uzunluk 180 cm ve genişlik 90 cm",
+      "got": [
+        {
+          "type": "set",
+          "key": "length",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-table-17-1",
+      "text": "lütfen uzunluk 190 cm ve genişlik 90 cm",
+      "got": [
+        {
+          "type": "set",
+          "key": "length",
+          "value": 1900
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-table-17-2",
+      "text": "rica etsem uzunluk 200 cm ve genişlik 90 cm",
+      "got": [
+        {
+          "type": "set",
+          "key": "length",
+          "value": 2000
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-table-18-0",
+      "text": "tabla meşe, tabla beyaz olsun",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-table-18-1",
+      "text": "lütfen tabla meşe, tabla beyaz olsun",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-table-18-2",
+      "text": "rica etsem tabla meşe, tabla beyaz olsun",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-table-15-0",
+      "text": "Please do not make the top white",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-en-table-15-1",
+      "text": "Do not make the top white",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-en-table-15-2",
+      "text": "I do not want the top white",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-en-table-17-0",
+      "text": "length 180 cm and width 90 cm please",
+      "got": [
+        {
+          "type": "set",
+          "key": "length",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-table-17-1",
+      "text": "length 190 cm and width 90 cm please",
+      "got": [
+        {
+          "type": "set",
+          "key": "length",
+          "value": 1900
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-table-17-2",
+      "text": "length 200 cm and width 90 cm please",
+      "got": [
+        {
+          "type": "set",
+          "key": "length",
+          "value": 2000
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-table-22-0",
+      "text": "reduce the length by 1 centimetres please",
+      "got": [
+        {
+          "type": "delta",
+          "key": "length",
+          "value": -1000
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-table-22-1",
+      "text": "reduce the length by 2 centimetres please",
+      "got": [
+        {
+          "type": "delta",
+          "key": "length",
+          "value": -2000
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-table-22-2",
+      "text": "reduce the length by 3 centimetres please",
+      "got": [
+        {
+          "type": "delta",
+          "key": "length",
+          "value": -3000
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-de-table-15-0",
+      "text": "Bitte keine Eiche verwenden",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-de-table-17-0",
+      "text": "Länge: Auf 180 cm einstellen, aber kein Nussbaumholz",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "length",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-fr-table-15-0",
+      "text": "Je ne veux pas de chêne",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-fr-table-17-0",
+      "text": "longueur: Régler à 180 cm, mais pas de noyer",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "length",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-nl-table-15-0",
+      "text": "Geen eikenhout gebruiken graag",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-nl-table-17-0",
+      "text": "lengte: Instellen op 180 cm, maar geen notenhout",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "length",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-da-table-17-0",
+      "text": "længde: Sæt til 180 cm, men ikke valnøddetræ",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "length",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-es-table-15-0",
+      "text": "No quiero roble",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-es-table-17-0",
+      "text": "largo: Ajustar a 180 cm, pero sin nogal",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "length",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-it-table-15-0",
+      "text": "Non voglio rovere",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-it-table-17-0",
+      "text": "lunghezza: Imposta a 180 cm, ma senza noce",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "length",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-storage-6-0",
+      "text": "oturma ailesine geç",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-storage-6-1",
+      "text": "lütfen oturma ailesine geç",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-storage-6-2",
+      "text": "rica etsem oturma ailesine geç",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-storage-15-0",
+      "text": "kapaklar beyaz olmasın",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-tr-storage-15-1",
+      "text": "lütfen kapaklar beyaz olmasın",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-tr-storage-15-2",
+      "text": "rica etsem kapaklar beyaz olmasın",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-tr-storage-16-0",
+      "text": "ceviz yerine meşe kullan",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-storage-16-1",
+      "text": "lütfen ceviz yerine meşe kullan",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-storage-16-2",
+      "text": "rica etsem ceviz yerine meşe kullan",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-storage-17-0",
+      "text": "genişlik 180 cm ve derinlik 50 cm",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 1800
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-storage-17-1",
+      "text": "lütfen genişlik 190 cm ve derinlik 50 cm",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 1900
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-storage-17-2",
+      "text": "rica etsem genişlik 200 cm ve derinlik 50 cm",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 2000
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-storage-18-0",
+      "text": "gövde meşe, kapaklar beyaz olsun",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-storage-18-1",
+      "text": "lütfen gövde meşe, kapaklar beyaz olsun",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-storage-18-2",
+      "text": "rica etsem gövde meşe, kapaklar beyaz olsun",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-storage-22-0",
+      "text": "genişlik 1 cm azalt",
+      "got": [
+        {
+          "type": "set",
+          "key": "width",
+          "value": 10
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-storage-22-1",
+      "text": "lütfen genişlik 2 cm azalt",
+      "got": [
+        {
+          "type": "set",
+          "key": "width",
+          "value": 20
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-storage-22-2",
+      "text": "rica etsem genişlik 3 cm azalt",
+      "got": [
+        {
+          "type": "set",
+          "key": "width",
+          "value": 30
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-storage-15-0",
+      "text": "Please do not make the fronts white",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-en-storage-15-1",
+      "text": "Do not make the fronts white",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-en-storage-15-2",
+      "text": "I do not want the fronts white",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-en-storage-17-0",
+      "text": "width 180 cm and depth 50 cm please",
+      "got": [
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 1800
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-storage-17-1",
+      "text": "width 190 cm and depth 50 cm please",
+      "got": [
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 1900
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-storage-17-2",
+      "text": "width 200 cm and depth 50 cm please",
+      "got": [
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 2000
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-storage-22-0",
+      "text": "reduce the width by 1 centimetres please",
+      "got": [
+        {
+          "type": "delta",
+          "key": "width",
+          "value": -1000
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-storage-22-1",
+      "text": "reduce the width by 2 centimetres please",
+      "got": [
+        {
+          "type": "delta",
+          "key": "width",
+          "value": -2000
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-storage-22-2",
+      "text": "reduce the width by 3 centimetres please",
+      "got": [
+        {
+          "type": "delta",
+          "key": "width",
+          "value": -3000
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-de-storage-15-0",
+      "text": "Bitte keine Eiche verwenden",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-de-storage-17-0",
+      "text": "Breite: Auf 180 cm einstellen, aber kein Nussbaumholz",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-fr-storage-15-0",
+      "text": "Je ne veux pas de chêne",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-fr-storage-17-0",
+      "text": "largeur: Régler à 180 cm, mais pas de noyer",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-nl-storage-15-0",
+      "text": "Geen eikenhout gebruiken graag",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-nl-storage-17-0",
+      "text": "breedte: Instellen op 180 cm, maar geen notenhout",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-da-storage-17-0",
+      "text": "bredde: Sæt til 180 cm, men ikke valnøddetræ",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-es-storage-15-0",
+      "text": "No quiero roble",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-es-storage-17-0",
+      "text": "ancho: Ajustar a 180 cm, pero sin nogal",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-it-storage-15-0",
+      "text": "Non voglio rovere",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-it-storage-17-0",
+      "text": "larghezza: Imposta a 180 cm, ma senza noce",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-6-0",
+      "text": "oturma ailesine geç",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-6-1",
+      "text": "lütfen oturma ailesine geç",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-6-2",
+      "text": "rica etsem oturma ailesine geç",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-11-0",
+      "text": "tezgah derinliği 60 santim yapsak ya",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 600
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-11-1",
+      "text": "lütfen tezgah derinliği 65 santim yapsak ya",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 650
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-11-2",
+      "text": "rica etsem tezgah derinliği 70 santim yapsak ya",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 700
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-15-0",
+      "text": "kapaklar beyaz olmasın",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-tr-kitchen-15-1",
+      "text": "lütfen kapaklar beyaz olmasın",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-tr-kitchen-15-2",
+      "text": "rica etsem kapaklar beyaz olmasın",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-tr-kitchen-16-0",
+      "text": "ceviz yerine meşe kullan",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-16-1",
+      "text": "lütfen ceviz yerine meşe kullan",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-16-2",
+      "text": "rica etsem ceviz yerine meşe kullan",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-17-0",
+      "text": "tezgah derinliği 60 cm ve tezgah kalınlığı 3 cm",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 600
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-17-1",
+      "text": "lütfen tezgah derinliği 65 cm ve tezgah kalınlığı 3 cm",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 650
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-17-2",
+      "text": "rica etsem tezgah derinliği 70 cm ve tezgah kalınlığı 3 cm",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 700
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-18-0",
+      "text": "gövde meşe, kapaklar beyaz olsun",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-18-1",
+      "text": "lütfen gövde meşe, kapaklar beyaz olsun",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-18-2",
+      "text": "rica etsem gövde meşe, kapaklar beyaz olsun",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-19-0",
+      "text": "tezgah derinliği: 600 mm",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 600
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-19-1",
+      "text": "lütfen tezgah derinliği: 650 mm",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 650
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-19-2",
+      "text": "rica etsem tezgah derinliği: 700 mm",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 700
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-20-0",
+      "text": "tezgah derinliği 60 cm'ye ayarlansın",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 600
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-20-1",
+      "text": "lütfen tezgah derinliği 65 cm'ye ayarlansın",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 650
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-20-2",
+      "text": "rica etsem tezgah derinliği 70 cm'ye ayarlansın",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 700
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-22-0",
+      "text": "tezgah derinliği 1 cm azalt",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 10
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-22-1",
+      "text": "lütfen tezgah derinliği 2 cm azalt",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 20
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-kitchen-22-2",
+      "text": "rica etsem tezgah derinliği 3 cm azalt",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 30
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-kitchen-15-0",
+      "text": "Please do not make the fronts white",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-en-kitchen-15-1",
+      "text": "Do not make the fronts white",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-en-kitchen-15-2",
+      "text": "I do not want the fronts white",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-en-kitchen-17-0",
+      "text": "worktop depth 60 cm and worktop thickness 3 cm please",
+      "got": [
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 600
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-kitchen-17-1",
+      "text": "worktop depth 65 cm and worktop thickness 3 cm please",
+      "got": [
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 650
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-kitchen-17-2",
+      "text": "worktop depth 70 cm and worktop thickness 3 cm please",
+      "got": [
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 700
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-kitchen-19-0",
+      "text": "worktop depth: 600 millimetres please",
+      "got": [
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 600
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-kitchen-19-1",
+      "text": "worktop depth: 650 millimetres",
+      "got": [
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 650
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-kitchen-19-2",
+      "text": "worktop depth: 700 millimetres if possible",
+      "got": [
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 700
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-kitchen-22-0",
+      "text": "reduce the worktop depth by 1 centimetres please",
+      "got": [
+        {
+          "type": "delta",
+          "key": "depth",
+          "value": -1000
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-kitchen-22-1",
+      "text": "reduce the worktop depth by 2 centimetres please",
+      "got": [
+        {
+          "type": "delta",
+          "key": "depth",
+          "value": -2000
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-kitchen-22-2",
+      "text": "reduce the worktop depth by 3 centimetres please",
+      "got": [
+        {
+          "type": "delta",
+          "key": "depth",
+          "value": -3000
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-de-kitchen-15-0",
+      "text": "Bitte keine Eiche verwenden",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-de-kitchen-17-0",
+      "text": "Arbeitsplattentiefe: Auf 60 cm einstellen, aber kein Nussbaumholz",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "walnut"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-de-kitchen-19-0",
+      "text": "Arbeitsplattentiefe: Bitte auf 600 Millimeter setzen",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-fr-kitchen-15-0",
+      "text": "Je ne veux pas de chêne",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-fr-kitchen-17-0",
+      "text": "profondeur du plan de travail: Régler à 60 cm, mais pas de noyer",
+      "got": [
+        {
+          "type": "command",
+          "name": "drawings"
+        },
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 600
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 3,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-fr-kitchen-19-0",
+      "text": "profondeur du plan de travail: Régler à 600 millimètres",
+      "got": [
+        {
+          "type": "command",
+          "name": "drawings"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 600
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-nl-kitchen-15-0",
+      "text": "Geen eikenhout gebruiken graag",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-nl-kitchen-17-0",
+      "text": "diepte van het werkblad: Instellen op 60 cm, maar geen notenhout",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 600
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-nl-kitchen-19-0",
+      "text": "diepte van het werkblad: Instellen op 600 millimeter",
+      "got": [
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 600
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-da-kitchen-17-0",
+      "text": "bordpladens dybde: Sæt til 60 cm, men ikke valnøddetræ",
+      "got": [
+        {
+          "type": "family",
+          "value": "table"
+        },
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 600
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 3,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-da-kitchen-19-0",
+      "text": "bordpladens dybde: Sæt til 600 millimeter",
+      "got": [
+        {
+          "type": "family",
+          "value": "table"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 600
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-es-kitchen-15-0",
+      "text": "No quiero roble",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-es-kitchen-17-0",
+      "text": "profundidad de la encimera: Ajustar a 60 cm, pero sin nogal",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 600
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-es-kitchen-19-0",
+      "text": "profundidad de la encimera: Ajustar a 600 milímetros",
+      "got": [
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 600
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-it-kitchen-15-0",
+      "text": "Non voglio rovere",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-it-kitchen-17-0",
+      "text": "profondità del piano di lavoro: Imposta a 60 cm, ma senza noce",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 600
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-it-kitchen-19-0",
+      "text": "profondità del piano di lavoro: Imposta a 600 millimetri",
+      "got": [
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 600
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-bath-4-0",
+      "text": "çift lavabo olsun",
+      "got": [
+        {
+          "type": "kind",
+          "value": "basin"
+        },
+        {
+          "type": "enum",
+          "key": "basins",
+          "value": "double"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-bath-4-1",
+      "text": "lütfen çift lavabo olsun",
+      "got": [
+        {
+          "type": "kind",
+          "value": "basin"
+        },
+        {
+          "type": "enum",
+          "key": "basins",
+          "value": "double"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-bath-4-2",
+      "text": "rica etsem çift lavabo olsun",
+      "got": [
+        {
+          "type": "kind",
+          "value": "basin"
+        },
+        {
+          "type": "enum",
+          "key": "basins",
+          "value": "double"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-bath-6-0",
+      "text": "oturma ailesine geç",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-bath-6-1",
+      "text": "lütfen oturma ailesine geç",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-bath-6-2",
+      "text": "rica etsem oturma ailesine geç",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-bath-15-0",
+      "text": "kapaklar beyaz olmasın",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-tr-bath-15-1",
+      "text": "lütfen kapaklar beyaz olmasın",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-tr-bath-15-2",
+      "text": "rica etsem kapaklar beyaz olmasın",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-tr-bath-16-0",
+      "text": "ceviz yerine meşe kullan",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-bath-16-1",
+      "text": "lütfen ceviz yerine meşe kullan",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-bath-16-2",
+      "text": "rica etsem ceviz yerine meşe kullan",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-bath-17-0",
+      "text": "genişlik 180 cm ve derinlik 50 cm",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 1800
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-bath-17-1",
+      "text": "lütfen genişlik 190 cm ve derinlik 50 cm",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 1900
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-bath-17-2",
+      "text": "rica etsem genişlik 200 cm ve derinlik 50 cm",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 2000
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-bath-18-0",
+      "text": "gövde meşe, kapaklar beyaz olsun",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-bath-18-1",
+      "text": "lütfen gövde meşe, kapaklar beyaz olsun",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-bath-18-2",
+      "text": "rica etsem gövde meşe, kapaklar beyaz olsun",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-bath-22-0",
+      "text": "genişlik 1 cm azalt",
+      "got": [
+        {
+          "type": "set",
+          "key": "width",
+          "value": 10
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-bath-22-1",
+      "text": "lütfen genişlik 2 cm azalt",
+      "got": [
+        {
+          "type": "set",
+          "key": "width",
+          "value": 20
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-tr-bath-22-2",
+      "text": "rica etsem genişlik 3 cm azalt",
+      "got": [
+        {
+          "type": "set",
+          "key": "width",
+          "value": 30
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-bath-15-0",
+      "text": "Please do not make the fronts white",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-en-bath-15-1",
+      "text": "Do not make the fronts white",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-en-bath-15-2",
+      "text": "I do not want the fronts white",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-en-bath-17-0",
+      "text": "width 180 cm and depth 50 cm please",
+      "got": [
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 1800
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-bath-17-1",
+      "text": "width 190 cm and depth 50 cm please",
+      "got": [
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 1900
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-bath-17-2",
+      "text": "width 200 cm and depth 50 cm please",
+      "got": [
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 2000
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-bath-22-0",
+      "text": "reduce the width by 1 centimetres please",
+      "got": [
+        {
+          "type": "delta",
+          "key": "width",
+          "value": -1000
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-bath-22-1",
+      "text": "reduce the width by 2 centimetres please",
+      "got": [
+        {
+          "type": "delta",
+          "key": "width",
+          "value": -2000
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-en-bath-22-2",
+      "text": "reduce the width by 3 centimetres please",
+      "got": [
+        {
+          "type": "delta",
+          "key": "width",
+          "value": -3000
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-de-bath-15-0",
+      "text": "Bitte keine Eiche verwenden",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-de-bath-17-0",
+      "text": "Breite: Auf 180 cm einstellen, aber kein Nussbaumholz",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-fr-bath-15-0",
+      "text": "Je ne veux pas de chêne",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-fr-bath-17-0",
+      "text": "largeur: Régler à 180 cm, mais pas de noyer",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-nl-bath-15-0",
+      "text": "Geen eikenhout gebruiken graag",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-nl-bath-17-0",
+      "text": "breedte: Instellen op 180 cm, maar geen notenhout",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-da-bath-17-0",
+      "text": "bredde: Sæt til 180 cm, men ikke valnøddetræ",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-es-bath-15-0",
+      "text": "No quiero roble",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-es-bath-17-0",
+      "text": "ancho: Ajustar a 180 cm, pero sin nogal",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01-it-bath-15-0",
+      "text": "Non voglio rovere",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01-it-bath-17-0",
+      "text": "larghezza: Imposta a 180 cm, ma senza noce",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1800
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    }
+  ]
+}
