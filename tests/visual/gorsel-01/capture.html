@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="tr"><meta charset="utf-8"><title>GÖRSEL-01 · eskiz denetimi</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#f1eee6;color:#262622;font:14px system-ui}header{height:68px;padding:16px 28px;border-bottom:1px solid #dcd8cd;display:flex;align-items:center;justify-content:space-between}h1{font:20px Georgia;margin:0}small{font:12px monospace}#view{width:100%;height:calc(100vh - 68px);min-height:500px}canvas{width:100%;height:100%;display:block}</style>
+<header><h1>GÖRSEL-01 · <span id="family"></span></h1><small id="status">Yükleniyor</small></header><main id="view"></main>
+<script type="module">
+import {familyOf} from '../../../assets/forma/families.js';
+const q=new URLSearchParams(location.search), family=q.get('family')||'seating', before=q.get('version')==='before';
+const {createViewer}=await import((before?'/baseline':'')+'/assets/forma/scene.js');
+const designs=await (await fetch('./designs.json')).json(), d=designs.find(d=>d.family===family);
+const compiled=familyOf(d).mod.compile(d.params);
+const viewer=createViewer(document.querySelector('#view'));
+if(!viewer) throw new Error('WebGL gerekli');
+viewer.setDesign(compiled,d.materials);viewer.view(q.get('view')||'angle');
+document.querySelector('#family').textContent=family;
+document.querySelector('#status').textContent=`${before?'ÖNCE':'SONRA'} · ${d.style} · seed ${d.seed} · ${compiled.parts.length} parça`;
+</script></html>
