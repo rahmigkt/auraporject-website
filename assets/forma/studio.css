@@ -121,13 +121,10 @@
   .f-caption{flex-direction:column;align-items:start}.f-status{max-width:none;text-align:left}.f-toolbar{overflow-x:auto;flex-wrap:nowrap}.f-toolbar button{white-space:nowrap}
   .f-slider{grid-template-columns:1fr 92px}.f-slider input[type=range]{grid-column:1/-1;grid-row:2}.f-send{grid-template-columns:1fr}.f-fabric-preview{grid-template-columns:110px 1fr}.f-fabric-preview canvas{width:110px;height:110px}.f-list{columns:1}.f-tabs button{padding-left:10px;font-size:11px}}
 /* Starting models: browse on the drawing itself */
-.f-step{position:absolute;top:50%;transform:translateY(-50%);z-index:2;border:0;background:none;font:300 44px/1 var(--serif);color:var(--muted);padding:18px 14px;cursor:pointer}
-.f-step:hover{color:var(--red)}.f-prev{left:2px}.f-next{right:2px}
 .f-start{position:absolute;left:16px;bottom:12px;margin:0;z-index:2;display:flex;gap:10px;align-items:baseline;pointer-events:none}
 .f-start b{font:400 18px var(--serif);color:var(--ink)}.f-start span{font:10.5px var(--mono);color:var(--red)}
 .f-starts{margin:20px 0 8px;padding-bottom:16px;border-bottom:1px solid var(--hair)}.f-starts h3{margin-top:0}
 .f-starts .f-chip{font:400 15px var(--serif)}
-@media (max-width:620px){.f-step{font-size:34px;padding:12px 6px}}
 /* Fabric: close-up (weave relief) beside the repeat view */
 .f-fabric-preview{display:block}
 .f-swatchpair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
@@ -172,3 +169,20 @@ body[data-room] .f-step,body[data-room] .f-start{display:none}
   .f-feedback{margin:4px 0 0;min-height:0;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 }
 @media (max-width:620px){.f-stage{height:40vh;height:40svh}}
+
+/* First-visit guide (infographic) */
+.f-guide-btn{border:1px solid var(--hair);background:none;font-size:12px;color:var(--ink);padding:4px 10px;cursor:pointer;border-radius:999px}
+.f-guide-btn:hover{border-color:var(--red);color:var(--red)}
+.f-guide .f-modal-box{width:min(880px,100%)}
+.f-guide-steps{list-style:none;margin:18px 0 10px;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:0;counter-reset:g;position:relative}
+.f-guide-steps li{position:relative;padding:14px 14px 16px;border-top:1px solid var(--hair)}
+.f-guide-steps li:nth-child(-n+3){border-top:0}
+.f-guide-steps li+li{border-left:1px solid var(--hair)}.f-guide-steps li:nth-child(4){border-left:0}
+.f-guide-steps svg{width:84px;height:63px;display:block;margin-bottom:6px;fill:none;stroke:var(--ink);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.f-guide-steps svg .r{stroke:var(--red)}.f-guide-steps svg .f{fill:var(--hair)}
+.f-guide-n{position:absolute;right:12px;top:12px;font:300 26px/1 var(--serif);color:var(--red)}
+.f-guide-steps b{display:block;font:400 17px/1.25 var(--serif);margin-bottom:4px}
+.f-guide-steps p{margin:0;font-size:12.5px;line-height:1.5;color:var(--graphite)}
+.f-guide-tip{font-size:12.5px;color:var(--graphite);background:var(--paper,#f6f3ec);padding:10px 12px;border-left:2px solid var(--red);margin:6px 0 4px}
+@media (max-width:700px){.f-guide-steps{grid-template-columns:1fr 1fr}.f-guide-steps li{border-left:0!important;border-top:1px solid var(--hair)!important}.f-guide-steps li:nth-child(odd){border-right:1px solid var(--hair)}.f-guide-steps li:nth-child(-n+2){border-top:0!important}.f-guide-steps svg{width:64px;height:48px}}
+@media (max-width:440px){.f-guide-steps{grid-template-columns:1fr}.f-guide-steps li{border-right:0!important;border-top:1px solid var(--hair)!important;display:grid;grid-template-columns:64px 1fr;column-gap:12px}.f-guide-steps li:first-child{border-top:0!important}.f-guide-steps svg{grid-row:span 2}.f-guide-steps p{grid-column:2}.f-guide-n{font-size:20px}}

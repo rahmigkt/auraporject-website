@@ -45,17 +45,18 @@ let viewer = null, sceneModule = null;
 
 const compileOf = d => familyOf(d).mod.compile({...d.params, kind: d.kind});
 /** What the viewer shows: case goods may be shown with doors and drawers open (drawings and files stay closed). */
-const shown = (d = state.design) => ['storage', 'kitchen'].includes(d.family) && state.openFronts ? familyOf(d).mod.compile({...d.params, kind: d.kind, openFronts: true}) : (d === state.design ? state.compiled : compileOf(d));
+const shown = (d = state.design) => ['storage', 'kitchen', 'bath'].includes(d.family) && state.openFronts ? familyOf(d).mod.compile({...d.params, kind: d.kind, openFronts: true}) : (d === state.design ? state.compiled : compileOf(d));
 const issuesOf = (d, c) => d.family !== 'seating' ? familyOf(d).mod.validate(c, d.materials, buildMesh) : familyOf(d).mod.validate(c);
 const isTable = () => state.design.family === 'table';
 const isBedroom = () => state.design.family === 'bedroom';
 const isBed = () => isBedroom() && state.design.kind === 'bed';
 const isStorage = () => state.design.family === 'storage';
 const isKitchen = () => state.design.family === 'kitchen';
+const isBath = () => state.design.family === 'bath';
 /** Panel furniture (case goods and kitchens) shares fronts, materials and the open view. */
-const isPanel = () => isStorage() || isKitchen();
+const isPanel = () => isStorage() || isKitchen() || isBath();
 /** Families offered in the studio (the old bed-led bedroom set is not offered any more). */
-const FAMILY_NAV = [['seating', 'famSeating'], ['table', 'famTable'], ['storage', 'famStorage'], ['kitchen', 'famKitchen']];
+const FAMILY_NAV = [['seating', 'famSeating'], ['table', 'famTable'], ['storage', 'famStorage'], ['kitchen', 'famKitchen'], ['bath', 'famBath']];
 const focus = () => state.design.kind;
 
 // ---- Design state --------------------------------------------------------------
@@ -74,7 +75,7 @@ function setDesign(next, {record = true, keepPanel = false, sync = true} = {}) {
   store.set('aura-forma-design-' + next.family, next); store.set('aura-forma-family', next.family); store.set(`aura-forma-kind-${next.family}-${next.kind}`, next);
   state.drawingCache = null;
   if (familyChanged) shellNav();
-  { const ob = $('#openBtn'); if (ob) ob.hidden = !['storage', 'kitchen'].includes(next.family); }
+  { const ob = $('#openBtn'); if (ob) ob.hidden = !['storage', 'kitchen', 'bath'].includes(next.family); }
   renderCaption();
   if (!keepPanel) renderPanel(); else refreshReadouts();
 }
@@ -119,6 +120,11 @@ const UI = {
     dims: c => `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height} mm · ${L('worktopHeightL').toLowerCase()} ${c.params.worktopHeight}`,
     readout: m => [[L('kModules'), String(m.moduleCount)], [L('carcassBoard'), `${m.board} mm`], [L('drawerCount'), String(m.drawers)], [L('leaves'), String(m.leaves)], [L('hingesN'), String(m.hinges)], [L('weight'), `~${weightOf()} kg`]]
   },
+  bath: {
+    brand: 'BANYO', kinds: ['basin', 'column', 'mirror'],
+    dims: c => `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height} mm${c.meta.basinRim ? ` · ${partName('bParams', 'mountHeight', state.lang).toLowerCase()} ${c.meta.basinRim}` : ''}`,
+    readout: m => [[L('carcassBoard'), `${m.board} mm`], [L('drawerCount'), String(m.drawers)], [L('leaves'), String(m.leaves)], [L('weight'), `~${weightOf()} kg`]]
+  },
   storage: {
     brand: 'RİTMO', kinds: ['wardrobe', 'nightstand', 'dresser', 'vanity', 'tvunit', 'bookcase', 'vitrine', 'sideboard'],
     dims: c => `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height} mm · ${c.meta.board} mm ${L(c.params.board === 'solid' ? 'boardSolid' : 'boardMdf')}`,
@@ -142,16 +148,17 @@ function shell() {
   <header class="f-header">
     <a class="f-brand" href="index.html?lang=${state.lang}">AURA</a>
     <nav class="f-families" id="families" aria-label="${esc(L('title'))}"></nav>
+    <button class="f-guide-btn" id="guideBtn" type="button">${L('guide')}</button>
     <button class="f-account" id="accountBtn" type="button"></button>
     <label class="f-lang"><span class="sr">Language</span><select id="lang">${Object.entries(UI_LANGS).map(([k, v]) => `<option value="${k}" ${k === state.lang ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
   </header>
   <main class="f-layout">
     <section class="f-visual" aria-label="3D">
       <div class="f-caption"><div><p class="f-eyebrow" id="eyebrow"></p><h1 id="designTitle"></h1><p class="f-dims" id="dims"></p></div><p class="f-status" id="status"></p></div>
-      <div class="f-stage" id="stage" aria-label="${esc(L('perspective'))}"><button class="f-step f-prev" data-step="-1" aria-label="${esc(L('prevModel'))}">‹</button><button class="f-step f-next" data-step="1" aria-label="${esc(L('nextModel'))}">›</button><p class="f-start" id="startLabel"></p></div>
+      <div class="f-stage" id="stage" aria-label="${esc(L('perspective'))}"></div>
       <div class="f-toolbar" role="toolbar">
         <button data-view="angle" aria-pressed="true">${L('perspective')}</button><button data-view="front">${L('front')}</button><button data-view="side">${L('side')}</button><button data-view="top">${L('top')}</button>
-        <button id="modeBtn" aria-pressed="${!state.sketch}">${L(state.sketch ? 'modeRender' : 'modeSketch')}</button><button id="structureBtn" aria-pressed="false">${L('structure')}</button><button id="openBtn" aria-pressed="${!!state.openFronts}" ${['storage', 'kitchen'].includes(state.design.family) ? '' : 'hidden'}>${L('openFronts')}</button><button id="photoBtn">${L('photo')} ↓</button>
+        <button id="modeBtn" aria-pressed="${!state.sketch}">${L(state.sketch ? 'modeRender' : 'modeSketch')}</button><button id="structureBtn" aria-pressed="false">${L('structure')}</button><button id="openBtn" aria-pressed="${!!state.openFronts}" ${['storage', 'kitchen', 'bath'].includes(state.design.family) ? '' : 'hidden'}>${L('openFronts')}</button><button id="photoBtn">${L('photo')} ↓</button>
         <button data-zoom="1.12" aria-label="+">+</button><button data-zoom="0.9" aria-label="−">−</button>
         <button id="undoBtn">↶ ${L('undo')}</button><button id="redoBtn">↷ ${L('redo')}</button>
       </div>
@@ -170,7 +177,7 @@ function shell() {
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261017w').then(mod => { sceneModule = mod; const {createViewer} = mod;
+  import('./scene.js?v=20261018b').then(mod => { sceneModule = mod; const {createViewer} = mod;
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(shown(), state.design.materials); if (state.room) showRoom(); }
@@ -237,7 +244,7 @@ function linesSection() {
   let body = '';
   if (d.family === 'seating') body = enumGroup('stitch', 'stitchLine');
   else if (d.family === 'table') body = enumGroup('inlay', 'inlayLine');
-  else if (d.family === 'storage' || d.family === 'kitchen') body = enumGroup('caseLine', 'caseLineLbl') + (p.frontStyle !== 'flat' ? `<p class="f-note">${L('caseLineNote')}</p>` : '');
+  else if (['storage', 'kitchen', 'bath'].includes(d.family)) body = enumGroup('caseLine', 'caseLineLbl') + (p.frontStyle !== 'flat' ? `<p class="f-note">${L('caseLineNote')}</p>` : '');
   else {
     const soft = ['upholstered', 'wingback', 'framed'].includes(p.headType) || p.bedBase === 'baza';
     body = (soft ? enumGroup('stitch', 'stitchLine') : '') + enumGroup('caseLine', 'caseLineLbl') + (p.frontStyle !== 'flat' || p.wdDoorStyle !== 'flat' ? `<p class="f-note">${L('caseLineNote')}</p>` : '');
@@ -260,6 +267,7 @@ function partsBody() {
   if (isBedroom()) return bedroomPartsPanel(p);
   if (isStorage()) return storagePartsPanel(p);
   if (isKitchen()) return kitchenPartsPanel(p);
+  if (isBath()) return bathPartsPanel(p);
   if (!isTable()) {
     const legs = ['legs', 'frame'].includes(p.baseType);
     return `<h2>${L('tabParts')}</h2>${enumGroup('armType', 'arm')}${enumGroup('backType', 'back')}${enumGroup('seatType', 'seat')}${counter('seatCount', 'seats', [1, 2, 3, 4])}
@@ -391,6 +399,20 @@ function layoutAction(d) {
   return true;
 }
 
+// ---- Bathroom: vanity unit with its top and basin, tall column, mirror or mirror cabinet ----------------
+function bathPartsPanel(p) {
+  const k = p.kind, cab = k !== 'mirror' || p.mirrorCabinet === 'cabinet';
+  return `<h2>${L('tabParts')}</h2>
+  ${k === 'mirror' ? enumGroup('mirrorCabinet', 'bMirrorCabinet', 'bMirrorCabinet') : ''}
+  ${k === 'mirror' && !cab ? enumGroup('mirror', 'mirror') + enumGroup('mirrorLight', 'bMirrorLight', 'bMirrorLight') : ''}
+  ${k === 'basin' ? enumGroup('basinType', 'bBasinType', 'bBasinType') + enumGroup('basinShape', 'bBasinShape', 'bBasinShape') + (p.width >= 1100 ? enumGroup('basins', 'bBasins', 'bBasins') : '') + enumGroup('tap', 'bTap', 'bTap') : ''}
+  ${cab ? layoutEditor(p) : ''}
+  ${cab ? enumGroup('frontStyle', 'frontStyle') + enumGroup('pull', 'pull') : ''}
+  ${k !== 'mirror' ? enumGroup('base', 'caseBase', 'sBase') + (p.base === 'legs' ? enumGroup('legType', 'legType', 'sLegType') : '') : ''}
+  ${cab ? enumGroup('caseEdge', 'caseEdge') : ''}
+  ${k === 'basin' ? `<p class="f-note">${L('bathNote')}</p>` : ''}`;
+}
+
 // ---- Kitchen: modules along the run ---------------------------------------------------------------
 const KTYPES = ['drawers', 'doors', 'drawerDoor', 'sink', 'hob', 'oven', 'dishwasher', 'open', 'tallFridge', 'tallOven', 'pantry'];
 const KWIDTHS = {dishwasher: [450, 600], oven: [600], tallFridge: [600], tallOven: [600], hob: [600, 800, 900, 1000, 1200], sink: [450, 500, 600, 800, 900, 1000, 1200]};
@@ -443,6 +465,10 @@ function sizeGroups() {
     if (con.length) g.push(['construction', con]);
     return g;
   }
+  if (isBath()) {
+    const con = [...(p.kind === 'basin' ? ['topThickness'] : []), ...(['grooved', 'fluted', 'slats'].includes(p.frontStyle) ? ['fluteWidth'] : []), ...(p.board === 'solid' || p.frontBoard === 'solid' ? ['solidThickness'] : [])];
+    return [['general', ['width', 'height', 'depth', 'mountHeight']], ...(con.length ? [['construction', con]] : [])];
+  }
   if (isStorage()) {
     const g = [['general', ['width', 'height', 'depth']]];
     g.push(['base', p.base === 'plinth' ? ['plinthHeight'] : p.base === 'legs' ? ['legHeight', 'legSize'] : ['legHeight']]);
@@ -489,7 +515,7 @@ function sizeGroups() {
   return g;
 }
 /** Parameter label (case goods have their own wording for a few shared keys). */
-const paramName = k => { if (isKitchen()) { const n = partName('kParams', k, state.lang); if (n !== k) return n; } if (isPanel()) { const n = partName('sParams', k, state.lang); if (n !== k) return n; } return partName('params', k, state.lang); };
+const paramName = k => { if (isBath()) { const n = partName('bParams', k, state.lang); if (n !== k) return n; } if (isKitchen()) { const n = partName('kParams', k, state.lang); if (n !== k) return n; } if (isPanel()) { const n = partName('sParams', k, state.lang); if (n !== k) return n; } return partName('params', k, state.lang); };
 function sizePanel() {
   const fam = familyOf(state.design), p = state.design.params;
   const note = isPanel() ? `<p class="f-note">${esc(L('constructionNote').replace('{T}', state.compiled.meta.board))}</p>` : '';
@@ -658,6 +684,16 @@ function specRows(b) {
       [L('drawerCount'), `${mm.drawers}`], [L('leaves'), `${mm.leaves} · ${mm.hinges} ${L('hingesN').toLowerCase()}`], [L('weight'), `~${b.totals.weightKg} kg`]
     ];
   }
+  if (d.family === 'bath') {
+    const p = c.params, mm = c.meta, o = mm.overall, pn = (g, v) => partName(g, v, state.lang);
+    return [
+      [L('overall'), `${o.width} × ${o.depth} × ${o.height}`],
+      ...(p.kind === 'basin' ? [[L('bBasinType'), `${pn('bBasinType', p.basinType)} · ${pn('bBasinShape', p.basinShape)} · ${pn('bBasins', p.basins)} · ${pn('bTap', p.tap)}`], [partName('bParams', 'mountHeight', state.lang), `${p.mountHeight}`], [L('worktopMat'), `${surfaceShort(m.top)} · ${p.topThickness} mm`]] : []),
+      ...(p.kind === 'mirror' ? [[L('mirror'), `${pn('mirror', p.mirror)} · ${pn('bMirrorLight', p.mirrorLight)} · ${pn('bMirrorCabinet', p.mirrorCabinet)}`]] : []),
+      ...(mm.bays ? [[L('construction'), `${mm.board} mm ${L(p.board === 'solid' ? 'boardSolid' : 'boardMdf')} · 8 mm · 2 mm`], [L('frontStyle'), `${pn('frontStyle', p.frontStyle)} · ${pn('pull', p.pull)}`], [L('carcassMat'), surfaceShort(m.case)], [L('frontMat'), surfaceShort(m.front)], [L('drawerCount'), `${mm.drawers}`], [L('leaves'), `${mm.leaves} · ${mm.hinges} ${L('hingesN').toLowerCase()}`]] : []),
+      [L('weight'), `~${b.totals.weightKg} kg`]
+    ];
+  }
   if (d.family === 'storage') {
     const p = c.params, mm = c.meta, o = mm.overall, pn = (g, v) => partName(g, v, state.lang);
     return [
@@ -743,6 +779,11 @@ function sameDesign(d, kind) {
   if (d.family === 'kitchen') {
     const list = startList('kitchen', kind), e = list.find(x => x.style === d.style) || list[0], base = startDesign(e, 'kitchen', kind);
     const keep = ['frontStyle', 'pull', 'frontFit', 'caseEdge', 'caseLine', 'fluteWidth', 'solidThickness', 'sink', 'sinkMount', 'tap', 'hob', 'worktopHeight', 'topThickness', 'plinthHeight'];
+    return normalizeDesign({...base, style: d.style, params: {...base.params, ...Object.fromEntries(keep.map(k => [k, d.params[k]])), kind}, materials: structuredClone(d.materials)});
+  }
+  if (d.family === 'bath') {
+    const list = startList('bath', kind), e = list.find(x => x.style === d.style) || list[0], base = startDesign(e, 'bath', kind);
+    const keep = ['frontStyle', 'pull', 'frontFit', 'caseEdge', 'caseLine', 'fluteWidth', 'solidThickness'];
     return normalizeDesign({...base, style: d.style, params: {...base.params, ...Object.fromEntries(keep.map(k => [k, d.params[k]])), kind}, materials: structuredClone(d.materials)});
   }
   if (d.family === 'storage') {
@@ -998,9 +1039,9 @@ function applyActions(actions) {
       if (d.family === 'seating' && slot === 'wood' && mk === 'species' && value !== 'gurgen') { mk = 'stain'; value = SPECIES_TO_STAIN[value] || 'natural'; }
       if (d.family === 'seating' && (slot === 'top' || slot === 'base')) continue;
       if (d.family === 'table' && (slot === 'wood' || slot === 'fabric')) slot = 'top';
-      if (d.family === 'storage' || d.family === 'kitchen') {
+      if (['storage', 'kitchen', 'bath'].includes(d.family)) {
         // Case goods: wood words go to the carcass (and to the fronts when they match it); a colour means lacquer.
-        if (d.family === 'kitchen' && slot === 'top') { const patch = {[mk]: value}; if (mk === 'stone') patch.surface = 'stone'; if (mk === 'species') patch.surface = 'wood'; d.materials.top = {...d.materials.top, ...patch}; notes.push(materialLabel({slot, key: mk, value})); if (state.sketch) setSketch(false); continue; }
+        if ((d.family === 'kitchen' || d.family === 'bath') && slot === 'top') { const patch = {[mk]: value}; if (mk === 'stone') patch.surface = 'stone'; if (mk === 'species') patch.surface = 'wood'; d.materials.top = {...d.materials.top, ...patch}; notes.push(materialLabel({slot, key: mk, value})); if (state.sketch) setSketch(false); continue; }
         if (['top', 'base', 'fabric'].includes(slot) || (slot === 'wood' && mk !== 'finish')) slot = 'case';
         if (slot === 'case' || slot === 'front') {
           const same = sameFront(d.materials), patch = {[mk]: value};
@@ -1085,6 +1126,7 @@ function listen() {
 // ---- Events ----------------------------------------------------------------------------------
 function bindShell() {
   $('#accountBtn').onclick = () => openAccount();
+  $('#guideBtn').onclick = () => openGuide();
   renderAccountBtn();
   $('#lang').onchange = e => { state.lang = e.target.value; store.set('aura-forma-lang', state.lang); state.drawingCache = null; shell(); };
   $('#families').onclick = e => { const b = e.target.closest('[data-family]'); if (b && b.dataset.family !== state.design.family) switchFamily(b.dataset.family); };
@@ -1097,7 +1139,6 @@ function bindShell() {
   $('#micBtn').onclick = listen;
   for (const b of document.querySelectorAll('[data-tab]')) b.onclick = () => { state.tab = b.dataset.tab; if (state.room && state.tab !== 'deliver') { state.room = null; delete document.body.dataset.room; viewer?.setDesign(shown(), state.design.materials); } setSketch(!['material', 'deliver'].includes(state.tab)); renderPanel(); };
   $('#modeBtn').onclick = () => setSketch(!state.sketch);
-  for (const b of document.querySelectorAll('[data-step]')) b.onclick = () => stepStart(+b.dataset.step);
 
   const panel = $('#panel');
   panel.addEventListener('click', e => {
@@ -1180,6 +1221,36 @@ async function shrink(url, max) {
   return c.toDataURL('image/jpeg', 0.88);
 }
 
+// ---- First-visit guide: six illustrated steps (an infographic), shown once and from the header button ------------
+const GUIDE_ICONS = [
+  // 1 choose: chair, table, cabinet — the cabinet picked
+  '<path d="M6 40V26h10v14M6 30h10M8 26v-8h6v8"/><path d="M22 28h16M24 28v12M36 28v12"/><rect x="44" y="14" width="14" height="26" class="r"/><path d="M51 14v26M48 26h1M53 26h1" class="r"/>',
+  // 2 shape: a front with cells, one tapped
+  '<rect x="10" y="6" width="44" height="36"/><path d="M32 6v36M10 24h22M32 18h22M32 30h22"/><rect x="33.5" y="19.5" width="19" height="9" class="r"/><circle cx="46" cy="36" r="5" class="r"/>',
+  // 3 sizes: a box with dimension lines
+  '<rect x="14" y="10" width="30" height="26"/><path d="M14 42h30M14 40v4M44 40v4M50 10v26M48 10h4M48 36h4" class="r"/>',
+  // 4 material: three swatches
+  '<circle cx="16" cy="24" r="9"/><circle cx="32" cy="24" r="9" class="f"/><circle cx="48" cy="24" r="9" class="r"/><path d="M11 20l9 9M13 17l7 7" />',
+  // 5 project and room: a plan with pieces
+  '<rect x="6" y="6" width="52" height="36"/><rect x="10" y="9" width="20" height="7" class="r"/><rect x="36" y="9" width="10" height="6"/><rect x="18" y="26" width="18" height="10"/><path d="M50 30h4M52 28v4"/>',
+  // 6 send: a sheet and an arrow
+  '<path d="M12 6h22l8 8v28H12z"/><path d="M34 6v8h8M17 20h18M17 26h18M17 32h10"/><path d="M40 34h16M50 28l6 6-6 6" class="r"/>'
+];
+let guideThen = null;
+const guideDue = () => !store.get('aura-forma-guide-seen');
+function openGuide() {
+  document.querySelector('.f-modal')?.remove();
+  const m = document.createElement('div');
+  m.className = 'f-modal f-guide'; m.setAttribute('role', 'dialog'); m.setAttribute('aria-modal', 'true'); m.setAttribute('aria-label', L('guideTitle'));
+  const steps = [1, 2, 3, 4, 5, 6].map(i => `<li><svg viewBox="0 0 64 48" aria-hidden="true">${GUIDE_ICONS[i - 1]}</svg><span class="f-guide-n">${String(i).padStart(2, '0')}</span><b>${esc(L('guideS' + i))}</b><p>${esc(L('guideS' + i + 't'))}</p></li>`).join('');
+  m.innerHTML = `<div class="f-modal-box"><button class="f-modal-x" data-guide="close" aria-label="×">×</button><p class="f-eyebrow">AURA · ${esc(L('guide'))}</p><h2>${esc(L('guideTitle'))}</h2><p class="f-note">${esc(L('guideLead'))}</p>
+  <ol class="f-guide-steps">${steps}</ol><p class="f-guide-tip">${esc(L('guideTip'))}</p><div class="f-actions"><button class="f-primary" data-guide="close">${esc(L('guideStart'))} →</button></div></div>`;
+  const close = () => { store.set('aura-forma-guide-seen', 1); m.remove(); const t = guideThen; guideThen = null; t?.(); };
+  m.addEventListener('click', e => { if (e.target === m || e.target.closest('[data-guide="close"]')) close(); });
+  m.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.body.append(m); m.querySelector('.f-primary').focus({preventScroll: true});
+}
+
 // ---- Start -----------------------------------------------------------------------------------
 function initialDesign() {
   let family = FAMILIES[params.get('family')] ? params.get('family') : null, style = 'japandi', note = null;
@@ -1195,7 +1266,7 @@ function initialDesign() {
   }
   if (family === 'bedroom') family = 'storage'; // the bed-led set is no longer offered
   const storedFamily = store.get('aura-forma-family');
-  family ??= ['table', 'storage'].includes(storedFamily) ? storedFamily : storedFamily === 'bedroom' ? 'storage' : 'seating';
+  family ??= ['table', 'storage', 'kitchen', 'bath'].includes(storedFamily) ? storedFamily : storedFamily === 'bedroom' ? 'storage' : 'seating';
   if (params.get('style') && FAMILIES[family].byId[params.get('style')]) style = params.get('style');
   const kind = FAMILIES[family].kinds[params.get('kind')] ? params.get('kind') : undefined;
   const fromStore = store.get('aura-forma-design-' + family) || (family === 'seating' ? store.get('aura-forma-design') : null);
@@ -1222,8 +1293,9 @@ account.init().then(async u => {
   renderAccountBtn();
   account.onChange(() => renderAccountBtn());
   if (u) { try { if (await account.pull(designKey)) location.reload(); } catch {} }
-  else if (!store.get('aura-forma-account-skip') && !location.hash.includes('access_token')) openAccount(true);
+  else if (!store.get('aura-forma-account-skip') && !location.hash.includes('access_token')) { if (guideDue()) guideThen = () => openAccount(true); else openAccount(true); }
 }).catch(() => {});
+if (guideDue() && !location.hash.includes('access_token')) openGuide();
 window.addEventListener('pagehide', () => { account.flush(); });
 if (start.note) { feedback(start.note); state.tab = 'parts'; renderPanel(); }
 // A link from a PDF or package (#d= one design, #p= a whole project) opens that work.

@@ -319,12 +319,32 @@ let kitchenN = 0;
   }
   assert.ok(parse('mutfak', {family: 'seating'}).actions.some(a => a.value === 'kitchen'), 'kitchen word');
 }
+// 15. Bathroom: every curated vanity, column and mirror compiles, validates, has a bill and a clean sheet.
+let bathN = 0;
+{
+  const {FAMILIES} = await import('../assets/forma/families.js'), {normalizeDesign} = await import('../assets/forma/generate.js'), fam = FAMILIES.bath;
+  const extra = [{kind: 'basin', basinType: 'integrated', basins: 'double', width: 1600}, {kind: 'basin', basinType: 'undermount', base: 'legs'}, {kind: 'mirror', mirrorCabinet: 'cabinet'}, {kind: 'column', base: 'legs'}];
+  const cases = [...Object.entries(fam.starts).flatMap(([kind, list]) => list.map(e => [kind, e])), ...extra.map(p => [p.kind, {style: 'japandi', seed: 1, p: {...fam.mod.defaultsFor(p.kind), ...p}}])];
+  for (const [kind, e] of cases) for (const open of [false, true]) {
+    const d0 = sample({family: 'bath', style: e.style, kind, seed: e.seed}), d = normalizeDesign({...d0, kind, params: {...e.p, kind}, materials: e.m ? {...d0.materials, ...e.m} : d0.materials});
+    const c = fam.mod.compile({...d.params, kind, openFronts: open});
+    for (const q of c.parts) { const m = buildMesh(q); assert.ok(m.positions.length && m.positions.every(Number.isFinite), `bath ${kind}/${e.style}: ${q.id}`); }
+    if (open) continue;
+    assert.equal(fam.mod.validate(c).filter(i => i.level !== 'info').length, 0, `bath ${kind}/${e.style}/${e.seed}: ${JSON.stringify(fam.mod.validate(c))}`);
+    if (kind === 'basin') { assert.ok(c.meta.basinRim >= 800 && c.meta.basinRim <= 920, 'rim'); assert.ok(c.parts.some(q => q.role === 'basin') && c.parts.some(q => q.role === 'vanity-top'), 'basin + top'); }
+    const b = bom(c, d.materials, 'tr'); assert.ok(b.rows.length && !JSON.stringify(b).includes('NaN'), `bath ${kind}: bom`);
+    const sh = drawingSheet(c, labels, {rows: [['A', 'B']]}); assert.ok(!sh.svg.includes('NaN'), 'bath sheet');
+    bathN++;
+  }
+  assert.ok(parse('lavabo dolabı', {family: 'seating'}).actions.some(a => a.value === 'bath'), 'bath word');
+}
+console.log(`PASS forma: ${bathN} bathroom pieces (vanity units with top and basin, columns, mirrors, mirror cabinets) valid;`);
 // 14. Production: cutting plans place every panel on sheets without overlaps; booklets build for every panel family.
 let sheetN = 0;
 {
   const {FAMILIES} = await import('../assets/forma/families.js'), {normalizeDesign} = await import('../assets/forma/generate.js');
   const {cuttingPlan, CUT_RULES} = await import('../assets/forma/production/nesting.js'), {bookletPages} = await import('../assets/forma/production/assembly.js');
-  for (const [fam, kind] of [['storage', 'wardrobe'], ['storage', 'dresser'], ['storage', 'bookcase'], ['storage', 'vanity'], ['kitchen', 'run'], ['kitchen', 'island']]) {
+  for (const [fam, kind] of [['storage', 'wardrobe'], ['storage', 'dresser'], ['storage', 'bookcase'], ['storage', 'vanity'], ['kitchen', 'run'], ['kitchen', 'island'], ['bath', 'basin'], ['bath', 'column']]) {
     const F = FAMILIES[fam], e = F.starts[kind][0], d0 = sample({family: fam, style: e.style, kind, seed: e.seed}), d = normalizeDesign({...d0, kind, params: {...e.p, kind}, materials: e.m ? {...d0.materials, ...e.m} : d0.materials});
     const c = F.mod.compile({...d.params, kind}), cp = cuttingPlan(c, d, 3);
     const want = cp.rows.reduce((s, r) => s + r.qty, 0), got = cp.plan.reduce((s, b) => s + b.sheets.reduce((a, sh) => a + sh.placed.length, 0), 0);

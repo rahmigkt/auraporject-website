@@ -10,7 +10,8 @@ export const ROOM_TYPES = {
   dining: {fits: ['dining', 'console', 'side', 'armchair', 'dresser', 'sideboard', 'vitrine', 'bookcase']},
   bedroom: {fits: ['set', 'wardrobe', 'nightstand', 'dresser', 'vanity', 'side', 'console', 'armchair', 'desk', 'bookcase', 'tvunit']},
   kitchen: {fits: ['run', 'island', 'dining', 'side', 'console', 'armchair']},
-  study: {fits: ['desk', 'armchair', 'side', 'console', 'loveseat']}
+  study: {fits: ['desk', 'armchair', 'side', 'console', 'loveseat']},
+  bath: {fits: ['basin', 'column', 'mirror', 'side', 'bookcase']}
 };
 /** Item kind as used for room rules: the old bedroom family is one set; case goods are their own kind. */
 export const itemKind = d => d.family === 'bedroom' ? 'set' : d.kind;
@@ -20,6 +21,7 @@ const BEDROOM_KINDS = ['wardrobe', 'nightstand', 'vanity'];
 export function suggestRoom(items) {
   const k = items.map(i => itemKind(i.design));
   if (k.includes('run') || k.includes('island')) return 'kitchen';
+  if (k.length && k.every(x => ['basin', 'column', 'mirror'].includes(x))) return 'bath';
   if (k.includes('set') || k.some(x => BEDROOM_KINDS.includes(x)) || (k.includes('dresser') && !k.some(x => ['sofa', 'loveseat', 'dining'].includes(x)))) return 'bedroom';
   if (k.some(x => ['sofa', 'loveseat', 'armchair', 'coffee'].includes(x))) return 'living';
   if (k.includes('dining')) return 'dining';
@@ -64,6 +66,16 @@ function arrangeRaw(items, type, layout = 0) {
     let z = back + (runs[0]?.fp.d || 600) + 1100;
     isl.forEach((it, i) => { put(it, layout === 2 ? -W / 2 + 900 + it.fp.w / 2 : 0, z); z += it.fp.d + 1100; void i; });
     rest.forEach((it, i) => put(it, (i - (rest.length - 1) / 2) * (it.fp.w + 600), z + 200));
+    return {W, D, placed};
+  }
+  if (type === 'bath') {
+    // Along the back wall: tall columns at the ends, vanity units between, each mirror above a vanity (or in the row).
+    const basins = by('basin'), cols = by('column'), mirrors = by('mirror'), rest = items.filter(i => !basins.includes(i) && !cols.includes(i) && !mirrors.includes(i));
+    const free = mirrors.slice(basins.length), row = [...cols.slice(0, 1), ...basins, ...free, ...cols.slice(1), ...rest], g = 150;
+    const total = row.reduce((s, it, i) => s + it.fp.w + (i ? g : 0), 0);
+    W = Math.max(2600, total + 900); D = Math.max(2400, Math.max(0, ...row.map(i => i.fp.d)) + 1400);
+    const back = -D / 2 + 20; let x = (layout === 1 ? 1 : -1) * total / 2;
+    for (const it of row) { const cx = layout === 1 ? x - it.fp.w / 2 : x + it.fp.w / 2; put(it, cx, back); if (basins.includes(it) && mirrors[basins.indexOf(it)]) put(mirrors[basins.indexOf(it)], cx, back); x += (layout === 1 ? -1 : 1) * (it.fp.w + g); }
     return {W, D, placed};
   }
   if (type === 'bedroom' && !by('set').length) {

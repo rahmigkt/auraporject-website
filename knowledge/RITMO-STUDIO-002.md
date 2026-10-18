@@ -44,3 +44,16 @@ yield), `levha-plani.pdf` (guillotine layouts on 2800 × 2100 MDF / 2500 × 1250
 over-long parts split and joined), `montaj-kitapcigi.pdf` (cover, parts and hardware lists, steps with exploded
 isometric views), `onay.json` (approver, date, quantity, link). Booklet text: Turkish and English; other languages
 fall back to English until translated. Stone worktops, glass and mirrors are listed for separate order.
+
+## Bathroom (2026-10-18)
+
+Family **Banyo** (`bath`, `assets/forma/bath.js`): special pieces on the same panel engine, not catalogue units.
+Vanity unit (wall-hung or on slim legs) with its own top and basin: vessel bowl (round turned or thin-walled
+rectangle), stone trough one with the top (top ≥ 30 mm) or undermount; single or double (from 1100 mm); tap
+concealed in the wall or on the top. Mounting height is the basin rim (850–900 advised; warning outside 780–930).
+Drawers under a basin get a U-cut for the trap. Tall column (wall-hung or legs). Mirror: nine shapes on a 12 mm
+backing with a back halo or a lamp above, or a mirror cabinet with mirrored doors. Each style has its own starting
+models (travertine, terrazzo, concrete, Calacatta tops; fluted, slatted, grooved fronts).
+
+Studio: no more ‹ › model stepping on the drawing — only the customer's own piece is shown. A first-visit guide
+(six illustrated steps) opens once and from the "Rehber" button in the header.
