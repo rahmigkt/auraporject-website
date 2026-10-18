@@ -6,8 +6,8 @@ const hedges=[
   /\b(?:may|might|could|can|perhaps|maybe|possibly|imagine|potentially|seems? to|appears? to|need not|does not need to|do not need to|does not have to|do not have to)\b/gu
 ];
 export function hedgeMatches(text){
-  const s=text.toLocaleLowerCase('tr');
-  return hedges.flatMap(re=>[...s.matchAll(re)].map(m=>({text:m[0],index:m.index}))).sort((a,b)=>a.index-b.index);
+  const tr=text.toLocaleLowerCase('tr'),en=text.toLowerCase();
+  return hedges.flatMap((re,i)=>[...(i===hedges.length-1?en:tr).matchAll(re)].map(m=>({text:m[0],index:m.index}))).sort((a,b)=>a.index-b.index);
 }
 export const words=text=>text.trim().split(/\s+/u).filter(Boolean).length;
 export const sentenceLengths=text=>text.split(/[.!?]+/u).filter(s=>s.trim()).map(words);

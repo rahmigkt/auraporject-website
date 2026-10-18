@@ -55,6 +55,8 @@ assert.equal(hedgeMatches('Olabilir. Olabilir.').length,2);
 assert.equal(hedgeMatches('Belki düşünelim.').length,2);
 assert.equal(hedgeMatches('Dönebilir. Kurulabilir.').length,2);
 assert.equal(hedgeMatches('It may stay. It could return.').length,2);
+assert.equal(hedgeMatches('Imagine it. Perhaps it stays.').length,2);
+assert.equal(hedgeMatches('BELKİ DÜŞÜNELİM.').length,2);
 assert.equal(hedgeMatches('The mirror returns the glance.').length,0);
 assert.equal(hedgeMatches('Arka panel yok; bakış sürer.').length,0);
 const report={records:rows.length,designs:designs.size,word_range:[Math.min(...rows.map(r=>words(r.tanik))),Math.max(...rows.map(r=>words(r.tanik)))],hedge_uses:rows.reduce((n,r)=>n+hedgeMatches(r.tanik).length,0),pairs:30,new_on_A:15,new_on_B:15,independent_voice_review:'pending',blind_choices:'not_collected'};
