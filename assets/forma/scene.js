@@ -234,7 +234,7 @@ function geometryFor(part) {
 const SKETCH = {
   fill: new THREE.MeshStandardMaterial({color: '#fbfaf5', roughness: 1, metalness: 0, envMapIntensity: 0.35, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1}),
   edge: new THREE.LineBasicMaterial({color: '#57564f', transparent: true, opacity: 0.62, depthWrite: false, toneMapped: false}),
-  detail: new THREE.LineBasicMaterial({color: '#858177', transparent: true, opacity: 0.42, depthWrite: false, toneMapped: false}),
+  detail: new THREE.LineBasicMaterial({color: '#6c685f', transparent: true, opacity: 0.56, depthWrite: false, toneMapped: false}),
   // Screen-space silhouette: constant CSS-pixel weight in perspective and orthographic views.
   hull: new THREE.ShaderMaterial({side: THREE.BackSide, polygonOffset: true, polygonOffsetFactor: 3, polygonOffsetUnits: 6, uniforms: {color: {value: new THREE.Color('#383832')}, thickness: {value: 1.35}, resolution: {value: new THREE.Vector2(1, 1)}},
     vertexShader: 'uniform float thickness; uniform vec2 resolution; void main(){ gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); vec2 n = (projectionMatrix * vec4(normalMatrix * normal, 0.0)).xy; float len = length(n); if(len > 0.00001) gl_Position.xy += (n / len) * thickness * 2.0 / resolution * gl_Position.w; }',
@@ -268,12 +268,12 @@ function minExtent(hit) { if (hit.min === undefined) { hit.g.computeBoundingBox(
 
 /** Dimension lines (overall width, depth, height) drawn beside the piece, in metres, with mm labels. */
 function dimensionGroup(box) {
-  const g = new THREE.Group(), mat = new THREE.LineBasicMaterial({color: '#938579', transparent: true, opacity: 0.55, toneMapped: false, depthTest: true, depthWrite: false}), s = box.getSize(new THREE.Vector3());
+  const g = new THREE.Group(), mat = new THREE.LineBasicMaterial({color: '#75665c', transparent: true, opacity: 0.72, toneMapped: false, depthTest: true, depthWrite: false}), s = box.getSize(new THREE.Vector3());
   mat.userData.temp = true;
   const off = Math.max(0.12, Math.max(s.x, s.z) * 0.06), tick = off * 0.16, min = box.min, max = box.max;
   const label = (text, at) => {
     const c = document.createElement('canvas'); c.width = 256; c.height = 64; const x = c.getContext('2d');
-    x.font = '400 34px ui-monospace, Menlo, Consolas, monospace'; x.fillStyle = '#867567'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(text, 128, 34);
+    x.font = '600 38px ui-monospace, Menlo, Consolas, monospace'; x.fillStyle = '#6a5142'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(text, 128, 34);
     const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
     const sp = new THREE.Sprite(new THREE.SpriteMaterial({map: t, depthTest: false, depthWrite: false, transparent: true, toneMapped: false}));
     const h = Math.min(0.24, Math.max(0.07, Math.max(s.x, s.y, s.z) * 0.045)); sp.scale.set(h * 4, h, 1); sp.position.copy(at); sp.renderOrder = 10; g.add(sp);
