@@ -20,6 +20,7 @@ for(const {id,design:d} of fixtures){
   assert(stage.bounds.getSize(new THREE.Vector3()).distanceTo(size)<1e-8,id);
   assert(Math.abs(stage.bounds.min.y-Math.max(0,before.min.y))<1e-8,`${id}: mounting height`);
   assert.equal(stage.camera.userData.focalLengthMm,55);assert(stage.scene.environment.isTexture);
+  assert(stage.camera.position.y<stage.room.height,`${id}: camera above ceiling`);
   let area=0,directional=0;stage.scene.traverse(o=>{if(o.isRectAreaLight)area++;if(o.isDirectionalLight&&o.castShadow)directional++;});
   assert.equal(area,1);assert.equal(directional,1);
   for(const x of [stage.bounds.min.x,stage.bounds.max.x])for(const y of [stage.bounds.min.y,stage.bounds.max.y])for(const z of [stage.bounds.min.z,stage.bounds.max.z]){
