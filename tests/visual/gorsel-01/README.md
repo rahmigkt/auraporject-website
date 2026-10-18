@@ -67,10 +67,15 @@ görsel denetim sırasında doğrulanmalıdır.
 boşlukların korunması ve altı ailede sonlu/değiştirilmemiş motor geometrisini kontrol eder.
 Bu geometri kontrolü görsel kalite onayı veya WebGL shader derleme testi değildir.
 
-İlk taramada 17 mevcut kontrol ve yeni `sketch-check.mjs` geçti: ai-workspace, brief-pdf,
+Son taramada **18 mevcut kontrol ve yeni `sketch-check.mjs` geçti (19 başarılı)**: ai-workspace, brief-pdf,
 camera-framing, catalogue, catalogue-graph, choice-flow, kitchen-studies, model, panel-engine,
 preference-evidence, reference-studies, ritmo, room-family, sectional, space, studio-tools,
-upholstery-engine. Geniş `forma-check.mjs` koşusu ayrıca izlenmektedir.
+upholstery-engine ve forma.
+
+`forma-check.mjs` çıkış kodu 0: 37 banyo, 99 kesim paftası, 30 mutfak, 222 depolama
+tasarımı (13.385 parça), 18 oda düzeni, 270 başlangıç modeli, 339 çizgi ayrıntısı,
+80 yatak odası seti, 200 masa ve 360 oturma örneği; dokuma, 8 dil komutu, çizim, DXF,
+BOM, ZIP ve PDF kontrolleri geçti. Bu kontroller değişen shader'ı tarayıcıda çalıştırmaz.
 
 Üç arşiv kontrolü başlangıç dalında da bulunmayan `../../services/design/` modüllerini
 istediğinden `ERR_MODULE_NOT_FOUND` ile durur; bu PR onları veya eksik servisleri değiştirmez.
