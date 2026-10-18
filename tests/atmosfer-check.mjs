@@ -22,7 +22,7 @@ for(const {id,design:d} of fixtures){
   assert.equal(stage.camera.userData.focalLengthMm,55);assert(stage.scene.environment.isTexture);
   assert(stage.camera.position.y<stage.room.height,`${id}: camera above ceiling`);
   let area=0,directional=0;stage.scene.traverse(o=>{if(o.isRectAreaLight)area++;if(o.isDirectionalLight&&o.castShadow)directional++;});
-  assert.equal(area,1);assert.equal(directional,1);
+  assert.equal(area,2);assert.equal(directional,1);
   for(const x of [stage.bounds.min.x,stage.bounds.max.x])for(const y of [stage.bounds.min.y,stage.bounds.max.y])for(const z of [stage.bounds.min.z,stage.bounds.max.z]){
     const ndc=new THREE.Vector3(x,y,z).project(stage.camera);
     assert(Math.abs(ndc.x)<=.821&&Math.abs(ndc.y)<=.821&&ndc.z<1&&ndc.z>-1,`${id}: clipped product ${ndc.toArray()}`);

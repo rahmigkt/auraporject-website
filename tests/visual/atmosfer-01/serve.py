@@ -15,8 +15,8 @@ class ReviewServer(ThreadingHTTPServer):
 
 if __name__ == '__main__':
     root = Path(__file__).resolve().parents[3]
-    server = ReviewServer(('127.0.0.1', 8768), partial(QuietHandler, directory=str(root)))
-    print('http://127.0.0.1:8768/tests/visual/atmosfer-01/review.html', flush=True)
+    server = ReviewServer(('127.0.0.1', 8772), partial(QuietHandler, directory=str(root)))
+    print('http://127.0.0.1:8772/tests/visual/atmosfer-01/review.html', flush=True)
     try:
         server.serve_forever()
     except KeyboardInterrupt:

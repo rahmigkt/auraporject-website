@@ -8,14 +8,14 @@ export function buildMesh(q) {
   if (cache.has(key)) return cache.get(key);
   const g = q.geom; let mesh;
   if (g.fn === 'cushion') mesh = cushion(g);
-  else if (g.fn === 'box') mesh = cushion({w: g.w, h: g.h, d: g.d, r: 1.5});
+  else if (g.fn === 'box') mesh = cushion({w: g.w, h: g.h, d: g.d, r: 1.5, finalDetail:g.finalDetail});
   else if (g.fn === 'loft') mesh = loft(g.section, {length: g.length, noseFront: g.noseFront, noseBack: g.noseBack, shape: t => ({sy: 1 - g.slope * (1 - Math.min(1, (1 - t) * 3.2))})});
-  else if (g.fn === 'lathe') mesh = lathe(g.profile, {square: g.square, faceted: g.faceted, segments: g.segments || 28});
-  else if (g.fn === 'tube') mesh = tube(g.points, g.r);
+  else if (g.fn === 'lathe') mesh = lathe(g.profile, {square: g.square, faceted: g.faceted, segments: g.finalDetail ? 112 : g.segments || 28});
+  else if (g.fn === 'tube') mesh = tube(g.points, g.r, {sides:g.finalDetail?56:14});
   else if (g.fn === 'welt') mesh = weltLoop(g.w, g.d, g.r, g.cord);
   else if (g.fn === 'line') mesh = lineMesh(g);
   else if (g.fn === 'pillow') mesh = pillow(g);
-  else if (g.fn === 'slab') mesh = profiledSlab(g.outline, g.t, edgeProfile(...g.profile), {steps: g.profile[0] === 'square' ? 2 : 14});
+  else if (g.fn === 'slab') mesh = profiledSlab(g.outline, g.t, edgeProfile(...g.profile), {steps: g.profile[0] === 'square' ? 2 : g.finalDetail ? 56 : 14});
   else if (g.fn === 'clipped') {
     // A part tilted in place and cut flat at y0 / y1 (splayed legs, X bars): ends sit on the floor and under the top.
     const inner = buildMesh({geom: g.inner}), positions = transformPositions(inner.positions, g.offset, g.rot), normals = transformPositions(inner.normals, [0, 0, 0], g.rot);

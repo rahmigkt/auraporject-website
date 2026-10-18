@@ -1,0 +1,45 @@
+{
+  "physicalDevice": "Intel Iris Xe (single accessible device)",
+  "otherPhysicalDevice": "unavailable",
+  "runs": [
+    {
+      "channel": "chrome",
+      "requestedBackend": "d3d11",
+      "gpu": "ANGLE (Intel, Intel(R) Iris(R) Xe Graphics (0x00009A49) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "status": "FAIL",
+      "reason": "90 second diagnostic deadline",
+      "seconds": 167
+    },
+    {
+      "channel": "chrome",
+      "requestedBackend": "gl",
+      "status": "FAIL",
+      "reason": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8772/tests/visual/atmosfer-01/review.html\", waiting until \"load\"\u001b[22m\n",
+      "seconds": 63
+    },
+    {
+      "channel": "chrome",
+      "requestedBackend": "vulkan",
+      "gpu": "ANGLE (Intel, Vulkan 1.4.323 (Intel(R) Iris(R) Xe Graphics (0x00009A49)), Intel Corporation)",
+      "status": "PASS",
+      "result": {
+        "id": "seating-02",
+        "mode": "path",
+        "samples": 4,
+        "width": 192,
+        "height": 128,
+        "preset": "north",
+        "elapsedMs": 48105,
+        "fallbackReason": null
+      },
+      "seconds": 97
+    },
+    {
+      "channel": "msedge",
+      "requestedBackend": "d3d11",
+      "status": "FAIL",
+      "reason": "browserType.launch: Chromium distribution 'msedge' is not found at C:\\Users\\User\\AppData\\Local\\Microsoft\\Edge\\Application\\msedge.exe\nRun \"npx playwright install msedge\"",
+      "seconds": 0
+    }
+  ]
+}

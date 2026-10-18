@@ -1,36 +1,39 @@
-# ATMOSFER-01 · genel kareler
+# ATMOSFER-01 · dört yolun karşılaştırması
 
-Altı aileden ikişer sabit tasarım; gerçek tarayıcıda alınmış 12 adet
-2400 × 1600 JPEG ve aynı tasarımların stüdyo görünüşleri. Ürün geometrisi,
-malzemesi ve renkleri gerçek motordan gelir; görüntü üreten yapay zekâ yoktur.
-Kamera 55 mm'dir. Metin yeri boş bırakılmıştır.
+Eski raster byte olarak korunmuştur. Yeni raster **2400×1600**; yol izleme **deneysel Vulkan, 800×534 / 16 örnek**, denoiser yok; Cycles **CPU + OIDN, 1200×800 / 24 örnek** prototipidir. Aynı satır aynı tasarım JSON/seed kullanır. Çözünürlük, gürültü giderme ve ton eşleme farkları nedeniyle eşit piksel kalitesi iddia edilmez. Karar sahibi görsel onayı beklenir.
 
-**Bu karşılaştırmadaki 12 genel kare raster yedekle üretilmiştir.** Yol izleme
-çıktısı olarak sunulmaz. Stüdyo karşılığı da bütün malzeme haritaları
-tamamlandıktan sonra alınır. GTAO, 4096 gölge haritası ve SMAA kullanılır;
-fiziksel dolaylı ışık veya denoiser uygulanmış olduğu iddia edilmez.
-Karar sahibi estetik kabulü beklenir. Bu sayfa PR 1'in genel karelerini kapsar;
-beşli yakın plan paketi ve müşteri akışı PR 2'ye aittir.
+| Tasarım | Eski raster | Yeni raster | Yol izleme · deneysel | Cycles · CPU/OIDN |
+|---|---|---|---|---|
+| seating-01 | ![Eski](kareler/eski-raster/seating-01-final.jpg) | ![Yeni raster](kareler/seating-01-final.jpg) | ![Deneysel path](kareler/seating-01-path.jpg) | CPU üretimi sürüyor — henüz teslim edilmedi |
+| seating-02 | ![Eski](kareler/eski-raster/seating-02-final.jpg) | ![Yeni raster](kareler/seating-02-final.jpg) | ![Deneysel path](kareler/seating-02-path.jpg) | CPU üretimi sürüyor — henüz teslim edilmedi |
+| table-01 | ![Eski](kareler/eski-raster/table-01-final.jpg) | ![Yeni raster](kareler/table-01-final.jpg) | ![Deneysel path](kareler/table-01-path.jpg) | CPU üretimi sürüyor — henüz teslim edilmedi |
+| table-02 | ![Eski](kareler/eski-raster/table-02-final.jpg) | ![Yeni raster](kareler/table-02-final.jpg) | ![Deneysel path](kareler/table-02-path.jpg) | CPU üretimi sürüyor — henüz teslim edilmedi |
+| storage-01 | ![Eski](kareler/eski-raster/storage-01-final.jpg) | ![Yeni raster](kareler/storage-01-final.jpg) | ![Deneysel path](kareler/storage-01-path.jpg) | CPU üretimi sürüyor — henüz teslim edilmedi |
+| storage-02 | ![Eski](kareler/eski-raster/storage-02-final.jpg) | ![Yeni raster](kareler/storage-02-final.jpg) | ![Deneysel path](kareler/storage-02-path.jpg) | CPU üretimi sürüyor — henüz teslim edilmedi |
+| kitchen-01 | ![Eski](kareler/eski-raster/kitchen-01-final.jpg) | ![Yeni raster](kareler/kitchen-01-final.jpg) | ![Deneysel path](kareler/kitchen-01-path.jpg) | CPU üretimi sürüyor — henüz teslim edilmedi |
+| kitchen-02 | ![Eski](kareler/eski-raster/kitchen-02-final.jpg) | ![Yeni raster](kareler/kitchen-02-final.jpg) | ![Deneysel path](kareler/kitchen-02-path.jpg) | CPU üretimi sürüyor — henüz teslim edilmedi |
+| bath-01 | ![Eski](kareler/eski-raster/bath-01-final.jpg) | ![Yeni raster](kareler/bath-01-final.jpg) | ![Deneysel path](kareler/bath-01-path.jpg) | CPU üretimi sürüyor — henüz teslim edilmedi |
+| bath-02 | ![Eski](kareler/eski-raster/bath-02-final.jpg) | ![Yeni raster](kareler/bath-02-final.jpg) | ![Deneysel path](kareler/bath-02-path.jpg) | CPU üretimi sürüyor — henüz teslim edilmedi |
+| bedroom-01 | ![Eski](kareler/eski-raster/bedroom-01-final.jpg) | ![Yeni raster](kareler/bedroom-01-final.jpg) | ![Deneysel path](kareler/bedroom-01-path.jpg) | CPU üretimi sürüyor — henüz teslim edilmedi |
+| bedroom-02 | ![Eski](kareler/eski-raster/bedroom-02-final.jpg) | ![Yeni raster](kareler/bedroom-02-final.jpg) | ![Deneysel path](kareler/bedroom-02-path.jpg) | CPU üretimi sürüyor — henüz teslim edilmedi |
 
-[Gerçek çekim raporu](kareler/capture-report.json) ·
-[Mimari ve tekrar üretim](README.md)
+## Gerçek parçalardan yakın planlar
 
-| Tasarım | Stüdyo görünümü | Son görüntü · raster |
-|---|---|---|
-| Oturma · seating-01 · seed 101 | ![seating-01 stüdyo](kareler/seating-01-studio.png) | ![seating-01 son görüntü, raster](kareler/seating-01-final.jpg) |
-| Oturma · seating-02 · seed 202 | ![seating-02 stüdyo](kareler/seating-02-studio.png) | ![seating-02 son görüntü, raster](kareler/seating-02-final.jpg) |
-| Masa · table-01 · seed 102 | ![table-01 stüdyo](kareler/table-01-studio.png) | ![table-01 son görüntü, raster](kareler/table-01-final.jpg) |
-| Masa · table-02 · seed 202 | ![table-02 stüdyo](kareler/table-02-studio.png) | ![table-02 son görüntü, raster](kareler/table-02-final.jpg) |
-| Depolama · storage-01 · seed 103 | ![storage-01 stüdyo](kareler/storage-01-studio.png) | ![storage-01 son görüntü, raster](kareler/storage-01-final.jpg) |
-| Depolama · storage-02 · seed 202 | ![storage-02 stüdyo](kareler/storage-02-studio.png) | ![storage-02 son görüntü, raster](kareler/storage-02-final.jpg) |
-| Mutfak · kitchen-01 · seed 104 | ![kitchen-01 stüdyo](kareler/kitchen-01-studio.png) | ![kitchen-01 son görüntü, raster](kareler/kitchen-01-final.jpg) |
-| Mutfak · kitchen-02 · seed 202 | ![kitchen-02 stüdyo](kareler/kitchen-02-studio.png) | ![kitchen-02 son görüntü, raster](kareler/kitchen-02-final.jpg) |
-| Banyo · bath-01 · seed 105 | ![bath-01 stüdyo](kareler/bath-01-studio.png) | ![bath-01 son görüntü, raster](kareler/bath-01-final.jpg) |
-| Banyo · bath-02 · seed 202 | ![bath-02 stüdyo](kareler/bath-02-studio.png) | ![bath-02 son görüntü, raster](kareler/bath-02-final.jpg) |
-| Yatak odası · bedroom-01 · seed 106 | ![bedroom-01 stüdyo](kareler/bedroom-01-studio.png) | ![bedroom-01 son görüntü, raster](kareler/bedroom-01-final.jpg) |
-| Yatak odası · bedroom-02 · seed 202 | ![bedroom-02 stüdyo](kareler/bedroom-02-studio.png) | ![bedroom-02 son görüntü, raster](kareler/bedroom-02-final.jpg) |
+85 mm, f/5.6; CPU Cycles/OIDN. Üründe bulunmayan kumaş/dikiş veya ahşap eklenmez. Böyle bir sütunda ürünün gerçek yüzey alternatifi gösterilir ve raporda malzeme anahtarı belirtilir. Dosya adı istenen ayrıntı sınıfını taşır; gerçek malzemeyi rapordan okuyun.
 
-Kareler tek tek ve toplu olarak gözle denetlendi. Mutfak duvar aralığı ve yatak
-odası kamera yüksekliği bu denetimde düzeltildi. Son dosyaların boyutu,
-piksel varyansı ve çekimlerin boş hata listeleri ayrıca doğrulandı. Tarayıcı
-ve cihaz bilgisi rapordadır; bu tek cihaz koşusu geniş cihaz kabulü değildir.
+| Tasarım | Yüzey / varsa kumaş ve dikiş | Lif / varsa ahşap ve kesit | Kenar / birleşim |
+|---|---|---|---|
+| seating-01 | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi |
+| seating-02 | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi |
+| table-01 | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi |
+| table-02 | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi |
+| storage-01 | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi |
+| storage-02 | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi |
+| kitchen-01 | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi |
+| kitchen-02 | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi |
+| bath-01 | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi |
+| bath-02 | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi |
+| bedroom-01 | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi |
+| bedroom-02 | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi | CPU üretimi sürüyor — henüz teslim edilmedi |
+
+[Render mimarisi ve tekrar üretim](README.md) · [Cycles prototipi ve sunucu notu](CYCLES.md) · [CC0 kaynakları](cc0/README.md) · [Backend tanısı](path-diagnostics.json)

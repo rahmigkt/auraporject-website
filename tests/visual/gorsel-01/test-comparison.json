@@ -1,0 +1,377 @@
+{
+  "mainSha": "bc12e98302fa9998ac45ee5719c59fa2792782c8",
+  "branchSha": "2bfffc48913390aefa58ed6b2caffcef1094ba68",
+  "rows": [
+    {
+      "test": "ai-workspace-check.mjs",
+      "main": {
+        "test": "ai-workspace-check.mjs",
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 6.08,
+        "output": "PASS 3 imported home templates × 14 furniture families: proposals do not mutate rooms, bounds, occupancy, edit exclusion, sliding-door clearance and sanitised restore.\n"
+      },
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.19,
+        "output": "PASS 3 imported home templates × 14 furniture families: proposals do not mutate rooms, bounds, occupancy, edit exclusion, sliding-door clearance and sanitised restore.\n"
+      }
+    },
+    {
+      "test": "assistant-contract-check.mjs",
+      "main": {
+        "test": "assistant-contract-check.mjs",
+        "status": "FAIL",
+        "exitCode": 1,
+        "seconds": 4.96,
+        "output": "node:internal/modules/esm/resolve:271\n    throw new ERR_MODULE_NOT_FOUND(\n          ^\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\services\\design\\style-training.mjs' imported from C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\main-test-baseline\\tests\\assistant-contract-check.mjs\n    at finalizeResolution (node:internal/modules/esm/resolve:271:11)\n    at moduleResolve (node:internal/modules/esm/resolve:865:10)\n    at defaultResolve (node:internal/modules/esm/resolve:992:11)\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)\n    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)\n    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)\n    at #resolve (node:internal/modules/esm/loader:683:17)\n    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)\n    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)\n    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {\n  code: 'ERR_MODULE_NOT_FOUND',\n  url: 'file:///C:/Users/User/Documents/Codex/2026-10-18/rahmigkt-auraporject-website-deposunda-main-i/work/services/design/style-training.mjs'\n}\n\nNode.js v24.18.0\n"
+      },
+      "branch": {
+        "status": "FAIL",
+        "exitCode": 1,
+        "seconds": 0.16,
+        "output": "node:internal/modules/esm/resolve:271\n    throw new ERR_MODULE_NOT_FOUND(\n          ^\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\services\\design\\style-training.mjs' imported from C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\gorsel-01\\tests\\assistant-contract-check.mjs\n    at finalizeResolution (node:internal/modules/esm/resolve:271:11)\n    at moduleResolve (node:internal/modules/esm/resolve:865:10)\n    at defaultResolve (node:internal/modules/esm/resolve:992:11)\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)\n    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)\n    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)\n    at #resolve (node:internal/modules/esm/loader:683:17)\n    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)\n    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)\n    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {\n  code: 'ERR_MODULE_NOT_FOUND',\n  url: 'file:///C:/Users/User/Documents/Codex/2026-10-18/rahmigkt-auraporject-website-deposunda-main-i/work/services/design/style-training.mjs'\n}\n\nNode.js v24.18.0\n"
+      }
+    },
+    {
+      "test": "brief-pdf-check.mjs",
+      "main": {
+        "test": "brief-pdf-check.mjs",
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 4.67,
+        "output": "PASS brief PDF accepts no design and paginates long requests without invoking furniture drawing (mock canvas).\n"
+      },
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.19,
+        "output": "PASS brief PDF accepts no design and paginates long requests without invoking furniture drawing (mock canvas).\n"
+      }
+    },
+    {
+      "test": "camera-framing-check.mjs",
+      "main": {
+        "test": "camera-framing-check.mjs",
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 2.86,
+        "output": "PASS 243 perspective fits: all 3D envelope corners stay in frame.\n"
+      },
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.16,
+        "output": "PASS 243 perspective fits: all 3D envelope corners stay in frame.\n"
+      }
+    },
+    {
+      "test": "catalogue-check.mjs",
+      "main": {
+        "test": "catalogue-check.mjs",
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 3.92,
+        "output": "PASS 11 spaces, 14 groups, 88 product types, 62 valid paths; no misleading drawing for unsupported products; saved-state migration and invalid cross-room choices.\n"
+      },
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.21,
+        "output": "PASS 11 spaces, 14 groups, 88 product types, 62 valid paths; no misleading drawing for unsupported products; saved-state migration and invalid cross-room choices.\n"
+      }
+    },
+    {
+      "test": "catalogue-graph-check.mjs",
+      "main": {
+        "test": "catalogue-graph-check.mjs",
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 6.93,
+        "output": "PASS 62 allowed and 13490 rejected space/group/product triples, migrations and context resets.\n"
+      },
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.59,
+        "output": "PASS 62 allowed and 13490 rejected space/group/product triples, migrations and context resets.\n"
+      }
+    },
+    {
+      "test": "choice-flow-check.mjs",
+      "main": {
+        "test": "choice-flow-check.mjs",
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 5.7,
+        "output": "PASS 463 option variants across 14 complete family flows; fixed seats, rounded/sloped arms, back variants, chaise, round tops, project hand-off.\nPASS continuous back support for 9 armless seating variants\n"
+      },
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.39,
+        "output": "PASS 463 option variants across 14 complete family flows; fixed seats, rounded/sloped arms, back variants, chaise, round tops, project hand-off.\nPASS continuous back support for 9 armless seating variants\n"
+      }
+    },
+    {
+      "test": "codesign-check.mjs",
+      "main": {
+        "test": "codesign-check.mjs",
+        "status": "FAIL",
+        "exitCode": 1,
+        "seconds": 3.03,
+        "output": "node:internal/modules/esm/resolve:271\n    throw new ERR_MODULE_NOT_FOUND(\n          ^\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\services\\design\\server.mjs' imported from C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\main-test-baseline\\tests\\codesign-check.mjs\n    at finalizeResolution (node:internal/modules/esm/resolve:271:11)\n    at moduleResolve (node:internal/modules/esm/resolve:865:10)\n    at defaultResolve (node:internal/modules/esm/resolve:992:11)\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)\n    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)\n    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)\n    at #resolve (node:internal/modules/esm/loader:683:17)\n    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)\n    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)\n    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {\n  code: 'ERR_MODULE_NOT_FOUND',\n  url: 'file:///C:/Users/User/Documents/Codex/2026-10-18/rahmigkt-auraporject-website-deposunda-main-i/work/services/design/server.mjs'\n}\n\nNode.js v24.18.0\n"
+      },
+      "branch": {
+        "status": "FAIL",
+        "exitCode": 1,
+        "seconds": 0.16,
+        "output": "node:internal/modules/esm/resolve:271\n    throw new ERR_MODULE_NOT_FOUND(\n          ^\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\services\\design\\server.mjs' imported from C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\gorsel-01\\tests\\codesign-check.mjs\n    at finalizeResolution (node:internal/modules/esm/resolve:271:11)\n    at moduleResolve (node:internal/modules/esm/resolve:865:10)\n    at defaultResolve (node:internal/modules/esm/resolve:992:11)\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)\n    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)\n    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)\n    at #resolve (node:internal/modules/esm/loader:683:17)\n    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)\n    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)\n    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {\n  code: 'ERR_MODULE_NOT_FOUND',\n  url: 'file:///C:/Users/User/Documents/Codex/2026-10-18/rahmigkt-auraporject-website-deposunda-main-i/work/services/design/server.mjs'\n}\n\nNode.js v24.18.0\n"
+      }
+    },
+    {
+      "test": "forma-check.mjs",
+      "main": {
+        "test": "forma-check.mjs",
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 1006.6,
+        "output": "PASS forma: 37 bathroom pieces (vanity units with top and basin, columns, mirrors, mirror cabinets) valid;\nPASS forma: production — 99 cut sheets (guillotine, kerf, grain, banding) and assembly booklets;\nPASS forma: 30 kitchens (runs and islands) valid: modules, worktop, sink, hob, hood, appliances, open view, cut list, drawings;\nPASS forma: 222 RİTMO case goods valid (13385 parts; 18 mm MDF / solid panels, 8 mm back, 2 mm reveals, modules ≤ 1200, cut list, drawings, commands, design link);\nPASS forma: 18 room layouts (living, dining, bedroom × 3) without overlaps;\nPASS forma: 270 curated starting models (10 styles incl. AURA) valid;\nPASS forma: 339 line-detail parts (stitch, inlay, groove) on seating, tables and the bedroom set;\nPASS forma: 80 bedroom sets valid (wardrobe, bed, bedside, chest; set and piece views); matching, drawings, BOM, commands;\nPASS forma: 200 table designs valid; patterns, stain and stone maps;\nPASS forma: 360 style/kind/seed designs valid; 4 styles × 12 diverse proposals; 7 weave drafts; 8-language commands; drawings, DXF, BOM, ZIP, PDF; AI output sanitised.\n"
+      },
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 953.36,
+        "output": "PASS forma: 37 bathroom pieces (vanity units with top and basin, columns, mirrors, mirror cabinets) valid;\nPASS forma: production — 99 cut sheets (guillotine, kerf, grain, banding) and assembly booklets;\nPASS forma: 30 kitchens (runs and islands) valid: modules, worktop, sink, hob, hood, appliances, open view, cut list, drawings;\nPASS forma: 222 RİTMO case goods valid (13385 parts; 18 mm MDF / solid panels, 8 mm back, 2 mm reveals, modules ≤ 1200, cut list, drawings, commands, design link);\nPASS forma: 18 room layouts (living, dining, bedroom × 3) without overlaps;\nPASS forma: 270 curated starting models (10 styles incl. AURA) valid;\nPASS forma: 339 line-detail parts (stitch, inlay, groove) on seating, tables and the bedroom set;\nPASS forma: 80 bedroom sets valid (wardrobe, bed, bedside, chest; set and piece views); matching, drawings, BOM, commands;\nPASS forma: 200 table designs valid; patterns, stain and stone maps;\nPASS forma: 360 style/kind/seed designs valid; 4 styles × 12 diverse proposals; 7 weave drafts; 8-language commands; drawings, DXF, BOM, ZIP, PDF; AI output sanitised.\n"
+      }
+    },
+    {
+      "test": "kitchen-studies-check.mjs",
+      "main": {
+        "test": "kitchen-studies-check.mjs",
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.52,
+        "output": "PASS 9 kitchen studies, finite parts, 27 drawings, sink openings, fluting and waterfall ends.\n"
+      },
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 1.46,
+        "output": "PASS 9 kitchen studies, finite parts, 27 drawings, sink openings, fluting and waterfall ends.\n"
+      }
+    },
+    {
+      "test": "model-check.mjs",
+      "main": {
+        "test": "model-check.mjs",
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.29,
+        "output": "PASS: 192 boundary configurations, positive geometry, overall bounds, share/JSON round trips and invalid inputs.\n"
+      },
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 1.15,
+        "output": "PASS: 192 boundary configurations, positive geometry, overall bounds, share/JSON round trips and invalid inputs.\n"
+      }
+    },
+    {
+      "test": "panel-engine-check.mjs",
+      "main": {
+        "test": "panel-engine-check.mjs",
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.58,
+        "output": "PASS 48 panel constructions, clearances, internal drawer components and BOM consistency.\n"
+      },
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 1.88,
+        "output": "PASS 48 panel constructions, clearances, internal drawer components and BOM consistency.\n"
+      }
+    },
+    {
+      "test": "preference-evidence-check.mjs",
+      "main": {
+        "test": "preference-evidence-check.mjs",
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.33,
+        "output": "PASS exact named-style evidence in TR/EN/FR/DA and source-grounded correction of a semantically wrong model result.\n"
+      },
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.97,
+        "output": "PASS exact named-style evidence in TR/EN/FR/DA and source-grounded correction of a semantically wrong model result.\n"
+      }
+    },
+    {
+      "test": "reference-studies-check.mjs",
+      "main": {
+        "test": "reference-studies-check.mjs",
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 1.55,
+        "output": "PASS 528 reference study variants, positive parts, rotated bounds, source-specific features, SVG views and camera fit.\n"
+      },
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 6.09,
+        "output": "PASS 528 reference study variants, positive parts, rotated bounds, source-specific features, SVG views and camera fit.\n"
+      }
+    },
+    {
+      "test": "ritmo-check.mjs",
+      "main": {
+        "test": "ritmo-check.mjs",
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 2.28,
+        "output": "PASS 324 cabinet assemblies: part bounds, positive dimensions, stable identities, 2–5 bays, BOM, save/restore and independent compartment changes.\n"
+      },
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 7.55,
+        "output": "PASS 324 cabinet assemblies: part bounds, positive dimensions, stable identities, 2–5 bays, BOM, save/restore and independent compartment changes.\n"
+      }
+    },
+    {
+      "test": "room-family-check.mjs",
+      "main": {
+        "test": "room-family-check.mjs",
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.22,
+        "output": "PASS room-specific family lists, incompatible restored/changed selection reset, compatible selection and direct product room inference.\n"
+      },
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 2.2,
+        "output": "PASS room-specific family lists, incompatible restored/changed selection reset, compatible selection and direct product room inference.\n"
+      }
+    },
+    {
+      "test": "sectional-check.mjs",
+      "main": {
+        "test": "sectional-check.mjs",
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.44,
+        "output": "PASS 216 sectional bounds/support variants, mirrored layouts, real tool contract and seat/back variants.\n"
+      },
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 4.31,
+        "output": "PASS 216 sectional bounds/support variants, mirrored layouts, real tool contract and seat/back variants.\n"
+      }
+    },
+    {
+      "test": "sketch-check.mjs",
+      "main": {
+        "status": "not present"
+      },
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 43.78,
+        "output": "PASS sketch: overlap/reversal/collinearity, genuine gaps/reveals, detail classes, six-family finite/non-mutating geometry.\nseating: 1644 → 1045\ntable: 1822 → 518\nstorage: 24204 → 3072\nkitchen: 34882 → 12482\nbath: 8484 → 2938\nbedroom: 22888 → 4742\n"
+      }
+    },
+    {
+      "test": "space-check.mjs",
+      "main": {
+        "test": "space-check.mjs",
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.19,
+        "output": "PASS home room counts, retained dimensions, rotation, bounds, overlaps, door swing, obstacles, JSON round trip, size limits and SVG sanitisation.\n"
+      },
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 2.3,
+        "output": "PASS home room counts, retained dimensions, rotation, bounds, overlaps, door swing, obstacles, JSON round trip, size limits and SVG sanitisation.\n"
+      }
+    },
+    {
+      "test": "studio-agent-check.mjs",
+      "main": {
+        "test": "studio-agent-check.mjs",
+        "status": "FAIL",
+        "exitCode": 1,
+        "seconds": 0.14,
+        "output": "node:internal/modules/esm/resolve:271\n    throw new ERR_MODULE_NOT_FOUND(\n          ^\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\services\\design\\studio-agent.mjs' imported from C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\main-test-baseline\\tests\\studio-agent-check.mjs\n    at finalizeResolution (node:internal/modules/esm/resolve:271:11)\n    at moduleResolve (node:internal/modules/esm/resolve:865:10)\n    at defaultResolve (node:internal/modules/esm/resolve:992:11)\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)\n    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)\n    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)\n    at #resolve (node:internal/modules/esm/loader:683:17)\n    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)\n    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)\n    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {\n  code: 'ERR_MODULE_NOT_FOUND',\n  url: 'file:///C:/Users/User/Documents/Codex/2026-10-18/rahmigkt-auraporject-website-deposunda-main-i/work/services/design/studio-agent.mjs'\n}\n\nNode.js v24.18.0\n"
+      },
+      "branch": {
+        "status": "FAIL",
+        "exitCode": 1,
+        "seconds": 1.01,
+        "output": "node:internal/modules/esm/resolve:271\n    throw new ERR_MODULE_NOT_FOUND(\n          ^\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\services\\design\\studio-agent.mjs' imported from C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\gorsel-01\\tests\\studio-agent-check.mjs\n    at finalizeResolution (node:internal/modules/esm/resolve:271:11)\n    at moduleResolve (node:internal/modules/esm/resolve:865:10)\n    at defaultResolve (node:internal/modules/esm/resolve:992:11)\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)\n    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)\n    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)\n    at #resolve (node:internal/modules/esm/loader:683:17)\n    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)\n    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)\n    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {\n  code: 'ERR_MODULE_NOT_FOUND',\n  url: 'file:///C:/Users/User/Documents/Codex/2026-10-18/rahmigkt-auraporject-website-deposunda-main-i/work/services/design/studio-agent.mjs'\n}\n\nNode.js v24.18.0\n"
+      }
+    },
+    {
+      "test": "studio-tools-check.mjs",
+      "main": {
+        "test": "studio-tools-check.mjs",
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.28,
+        "output": "PASS all 14 families, option enums, drawing geometry, action allowlist, invalid calls, prototype keys and dimension adjustments.\n"
+      },
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 1.38,
+        "output": "PASS all 14 families, option enums, drawing geometry, action allowlist, invalid calls, prototype keys and dimension adjustments.\n"
+      }
+    },
+    {
+      "test": "table-geometry.mjs",
+      "main": {
+        "test": "table-geometry.mjs",
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.35,
+        "output": ""
+      },
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 1.83,
+        "output": ""
+      }
+    },
+    {
+      "test": "upholstery-engine-check.mjs",
+      "main": {
+        "test": "upholstery-engine-check.mjs",
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.86,
+        "output": "PASS 72 independent upholstery assemblies, part bounds, BOM totals, distinct topology, actual tuft mesh and style constraints.\n"
+      },
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 3.1,
+        "output": "PASS 72 independent upholstery assemblies, part bounds, BOM totals, distinct topology, actual tuft mesh and style constraints.\n"
+      }
+    }
+  ],
+  "newFailures": [],
+  "baselineFailures": [
+    "assistant-contract-check.mjs",
+    "codesign-check.mjs",
+    "studio-agent-check.mjs"
+  ],
+  "note": "table-geometry.mjs is an importable helper; its exit status is recorded separately from test acceptance."
+}

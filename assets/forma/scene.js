@@ -349,7 +349,9 @@ export function createRenderAsset(compiled, materials) {
     try {
       mats = materialSet(materials, {detail: true, onReady: () => {
         try {
-          const group = buildGroup(compiled, mats);
+          const finalCompiled={...compiled,parts:compiled.parts.map(p=>({...p,geom:{...p.geom,finalDetail:true}}))};
+          const group = buildGroup(finalCompiled, mats);
+          for(let i=0;i<group.children.length;i++){const o=group.children[i],part=compiled.parts.find(p=>p.id===o.userData.part);if(part){o.name=part.id;o.userData.role=part.role;o.userData.materialKey=part.mat;}}
           const geometries = new Map();
           group.traverse(o => {
             if (!o.geometry) return;

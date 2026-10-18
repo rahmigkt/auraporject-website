@@ -1,0 +1,36 @@
+{
+  "packageSource": "Microsoft official Enterprise x64 155.0.4283.62",
+  "packageSha256": "20119979eb1670f670d38c093fd1c61f5a91d880c473f8614825ce9aef35f68a",
+  "personalProfileUsed": false,
+  "runs": [
+    {
+      "requestedBackend": "d3d11",
+      "browser": "155.0.4283.62",
+      "gpu": "ANGLE (Intel, Intel(R) Iris(R) Xe Graphics (0x00009A49) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "status": "FAIL",
+      "reason": "page.evaluate: Error: Invalid path-traced pixel at 0.25,0.25: 0,0,0,0\n    at invalidPathFrame (http://127.0.0.1:55518/assets/forma/atmosfer.js:9:52)\n    at inspectFrame (http://127.0.0.1:55518/assets/forma/atmosfer.js:17:85)\n    at renderAtmosphere (http://127.0.0.1:55518/assets/forma/atmosfer.js:158:13)\n    at async window.renderFinal (http://127.0.0.1:55518/tests/visual/atmosfer-01/review.html:24:16)\n    at async <anonymous>:337:30",
+      "seconds": 159
+    },
+    {
+      "requestedBackend": "vulkan",
+      "browser": "155.0.4283.62",
+      "gpu": "ANGLE (Intel, Vulkan 1.4.323 (Intel(R) Iris(R) Xe Graphics (0x00009A49)), Intel Corporation)",
+      "result": {
+        "id": "seating-02",
+        "mode": "path",
+        "samples": 4,
+        "width": 192,
+        "height": 128,
+        "preset": "north",
+        "elapsedMs": 48699,
+        "fallbackReason": null
+      },
+      "status": "PASS",
+      "seconds": 95
+    }
+  ],
+  "executableSignature": "Valid Microsoft Corporation",
+  "executableSha256": "c2451a012ff88e82449834de5b526ebb42b5a3fc25958d795910d2b172c975b6",
+  "packageUrl": "https://msedge.sf.dl.delivery.mp.microsoft.com/filestreamingservice/files/bf3e7059-ee35-457f-946e-42963960692d/MicrosoftEdgeEnterpriseX64.msi",
+  "systemInstallationPerformed": false
+}

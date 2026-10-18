@@ -6,7 +6,8 @@ export const LIGHT_PRESETS = Object.freeze({
   evening: {name:'Akşam ışığı',window:'#e1eaff',sun:'#ffd4a0',power:1.4,environment:0.18,area:12,pitch:0.18}
 });
 
-// Analytic sky and original procedural room surfaces; no external HDRI or texture download.
+// Synchronous staging placeholders for geometry checks. Catalog rendering replaces
+// these with the local CC0 HDRI and maps in loadCatalogEnvironment.
 function sky(THREE,preset){
   const w=256,h=128,data=new Float32Array(w*h*4),top=new THREE.Color(preset.window),bottom=new THREE.Color('#bdafa0');
   for(let y=0;y<h;y++)for(let x=0;x<w;x++){
@@ -43,7 +44,7 @@ export function createAtmosphereStage(THREE,product,{family='seating',preset='no
   // Wall-mounted objects retain their actual mounting height. Only a below-floor origin is corrected.
   product.position.y-=Math.min(0,initial.min.y);product.updateMatrixWorld(true);scene.add(product);
   const bounds=new THREE.Box3().setFromObject(product),size=bounds.getSize(new THREE.Vector3()),target=bounds.getCenter(new THREE.Vector3());
-  const stone=['bath','kitchen'].includes(family),width=Math.max(7,size.x+4),height=Math.max(3.6,bounds.max.y+1);
+  const stone=['bath','kitchen'].includes(family),width=Math.max(7,size.x+4),height=Math.max(3.6,bounds.max.y+1,size.x*.8+2);
   const wallGap=['bath','kitchen'].includes(family)?0.035:family==='bedroom'?0.15:0.85;
   const rear=bounds.min.z-wallGap,left=-width/2;
   const maps=surfaceMaps(THREE,stone);textures.push(maps.map,maps.roughnessMap);
@@ -52,8 +53,12 @@ export function createAtmosphereStage(THREE,product,{family='seating',preset='no
   const trim=new THREE.MeshStandardMaterial({color:stone?'#c5c2b7':'#ddd4c4',roughness:0.72});
   owned.push(floor,plaster,trim);
   function box(w,h,d,x,y,z,material){const geometry=new THREE.BoxGeometry(w,h,d),mesh=new THREE.Mesh(geometry,material);
-    mesh.position.set(x,y,z);mesh.receiveShadow=true;mesh.castShadow=true;scene.add(mesh);owned.push(geometry);return mesh;}
-  box(width,0.12,18,0,-0.065,3,floor);
+    mesh.userData.roomSurface=material===floor?'floor':material===plaster?'plaster':null;mesh.name=mesh.userData.roomSurface||'skirting';mesh.position.set(x,y,z);mesh.receiveShadow=true;mesh.castShadow=true;scene.add(mesh);owned.push(geometry);return mesh;}
+  // The photographic floor must cover every long-lens frustum, not end in view.
+  const ground=box(80,0.12,80,0,-0.065,0,floor);
+  const groundPosition=ground.geometry.getAttribute('position'),groundUv=ground.geometry.getAttribute('uv');
+  for(let i=0;i<groundPosition.count;i++)groundUv.setXY(i,groundPosition.getX(i),groundPosition.getZ(i));
+  groundUv.needsUpdate=true;
   box(width,height,.12,0,height/2,rear-.06,plaster);
   box(width,.09,.018,0,.045,rear+.009,trim);
   box(.018,.09,12,left+.009,.045,rear+6,trim);
@@ -66,18 +71,20 @@ export function createAtmosphereStage(THREE,product,{family='seating',preset='no
   if(frontWidth>0)box(.12,openingH,frontWidth,left,sill+openingH/2,windowZ+windowW/2+frontWidth/2,plaster);
   // Narrow window reveal and sill; no decor or invented product parts.
   box(.24,.04,windowW+.16,left,sill,windowZ,trim);
-  box(width,.08,12,0,height+.04,rear+6,plaster);
+  // Open photographic set: no ceiling geometry can enter any frame.
   const environment=sky(THREE,light);textures.push(environment);scene.environment=environment;
   scene.environmentIntensity=light.environment;scene.background=new THREE.Color('#dcd8ce');
-  const area=new THREE.RectAreaLight(light.window,light.area,windowW,openingH);
+  const area=new THREE.RectAreaLight(light.window,5,windowW*1.5,openingH*1.3);
   area.position.set(left-.1,sill+openingH/2,windowZ);area.lookAt(target);scene.add(area);
-  const sun=new THREE.DirectionalLight(light.sun,light.power);sun.position.set(left-.7,sill+openingH*.8,windowZ+.4);
-  sun.target.position.copy(target);sun.castShadow=true;sun.shadow.mapSize.set(4096,4096);sun.shadow.bias=-.00015;sun.shadow.normalBias=.002;
+  // A low-energy broad shadow proxy, not direct sunlight. VSM blurs its moments.
+  const shadow=new THREE.DirectionalLight(light.window,0.65);shadow.name='window-shadow-proxy';
+  shadow.position.copy(area.position);shadow.target.position.copy(target);shadow.castShadow=true;
+  shadow.shadow.mapSize.set(2048,2048);shadow.shadow.bias=-.0001;shadow.shadow.normalBias=.002;
   const shadowExtent=Math.max(3,size.x,size.z)*1.1;
-  Object.assign(sun.shadow.camera,{left:-shadowExtent,right:shadowExtent,top:shadowExtent,bottom:-shadowExtent,near:.1,far:30});
-  sun.shadow.radius=4;scene.add(sun,sun.target);
-  // Raster fallback fill; path tracing obtains indirect illumination from the room and sky.
-  const fill=new THREE.HemisphereLight('#e8edff','#c5aa8a',preset==='evening'?.12:.32);scene.add(fill);
+  Object.assign(shadow.shadow.camera,{left:-shadowExtent,right:shadowExtent,top:shadowExtent,bottom:-shadowExtent,near:.1,far:40});
+  shadow.shadow.radius=8;shadow.shadow.blurSamples=16;scene.add(shadow,shadow.target);
+  const fill=new THREE.HemisphereLight('#f1f0eb','#bda98b',.35);fill.name='bounce-fill';scene.add(fill);
+  const bounce=new THREE.RectAreaLight('#e8d7bd',.18,3,3);bounce.position.set(2,1.3,3);bounce.lookAt(target);bounce.name='floor-bounce';scene.add(bounce);
   const camera=new THREE.PerspectiveCamera(35,aspect,.03,100);camera.setFocalLength(55);
   // A complete bedroom set is much wider than one piece. Keep its long-lens
   // camera below the ceiling instead of lifting the viewpoint above the room.
@@ -89,11 +96,11 @@ export function createAtmosphereStage(THREE,product,{family='seating',preset='no
     const v=new THREE.Vector3(x,y,z).sub(target);
     distance=Math.max(distance,v.dot(direction)+Math.max(Math.abs(v.dot(right))/(tanH*.82),Math.abs(v.dot(up))/(tanV*.82)));
   }
-  camera.position.copy(target).addScaledVector(direction,Math.max(distance,.8));camera.lookAt(target);camera.updateProjectionMatrix();
+  camera.position.copy(target).addScaledVector(direction,Math.max(distance,.8));camera.lookAt(target);camera.up.set(0,1,0);camera.updateProjectionMatrix();
   camera.userData={focalLengthMm:55,target:target.toArray(),family,preset};
   scene.updateMatrixWorld(true);camera.updateMatrixWorld(true);
   const stagedSize=bounds.getSize(new THREE.Vector3());
   if(stagedSize.distanceTo(before)>1e-8)throw new Error('Staging changed product dimensions');
   return {scene,camera,bounds,preset,room:{width,height,rear,floor:stone?'stone':'wood',window:{position:area.position.toArray(),width:windowW,height:openingH}},
-    dispose(){scene.remove(product);sun.shadow.map?.dispose();for(const asset of owned)asset.dispose();for(const texture of textures)texture.dispose();}};
+    dispose(){scene.remove(product);shadow.shadow.map?.dispose();shadow.shadow.mapPass?.dispose();for(const asset of owned)asset.dispose();for(const texture of textures)texture.dispose();}};
 }

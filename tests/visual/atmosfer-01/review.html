@@ -1,7 +1,7 @@
 <!doctype html><html lang="tr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><title>AURA · Atmosfer incelemesi</title>
 <style>*{box-sizing:border-box}body{margin:0;background:#eeeae1;color:#272c29;font:15px system-ui}header{padding:20px 28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}h1{font:26px Georgia;margin:0 auto 0 0}button,select{padding:9px;border:1px solid #a7aca0;background:#f7f5ed;color:inherit}button{cursor:pointer}main{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:0 28px 30px}.frame{aspect-ratio:1.5;background:#e1ded5;position:relative;overflow:hidden}.frame canvas{width:100%;height:100%;object-fit:contain}h2{font:20px Georgia}#status{min-height:28px}progress{width:220px}.text-place{min-height:44px;color:#686c63;font:15px Georgia}small{color:#666} @media(max-width:850px){main{grid-template-columns:1fr}}</style>
 <header><h1>Atmosfer incelemesi</h1><select id="design" aria-label="Tasarım"></select><select id="light" aria-label="Işık"><option value="north">Kuzey ışığı</option><option value="morning">Sabah</option><option value="noon">Öğle</option><option value="evening">Akşam</option></select><button id="render">Genel kareyi oluştur</button><button id="cancel" disabled>İptal</button><progress id="progress" max="1" value="0"></progress><span id="status" role="status">Son görüntü yalnız istenince hazırlanır.</span></header>
-<main><section><h2>Stüdyo görünümü</h2><div class="frame" id="studio"></div></section><section><h2>Son görüntü</h2><div class="frame"><canvas id="final"></canvas></div><p class="text-place" aria-label="Tanık metni için ayrılan yer"></p><small>PR 1: genel kare. Proje sonu akışı ve yakın planlar sonraki aşama.</small></section></main>
+<main><section><h2>Stüdyo görünümü</h2><div class="frame" id="studio"></div></section><section><h2>Son görüntü</h2><div class="frame"><canvas id="final"></canvas></div><p class="text-place" aria-label="Tanık metni için ayrılan yer"></p><small>Cycles ve yakın planlar örnek dosyalarındadır. Proje sonu akışı sonraki aşama.</small></section></main>
 <script type="module">
 import {createViewer} from '../../../assets/forma/scene.js';
 import {familyOf} from '../../../assets/forma/families.js';
@@ -10,6 +10,12 @@ for(const f of fixtures){const option=document.createElement('option');option.va
 const viewer=createViewer(document.querySelector('#studio'));if(!viewer)throw new Error('WebGL unavailable');
 let controller,lastResult;
 const setDesign=()=>{const row=fixtures.find(f=>f.id===select.value);viewer.setDesign(familyOf(row.design).mod.compile(row.design.params),row.design.materials);viewer.mode('render');viewer.view('angle');return row;};
+window.exportFinal=async id=>{
+ const row=fixtures.find(f=>f.id===id),{exportAtmosphere}=await import('../../../assets/forma/atmosfer-export.js');
+ const result=await exportAtmosphere({compiled:familyOf(row.design).mod.compile(row.design.params),materials:row.design.materials,family:row.design.family});
+ const bytes=new Uint8Array(result.glb);let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));
+ return {base64:btoa(binary),metadata:result.metadata};
+};
 window.setReviewDesign=async id=>{select.value=id;const row=setDesign();await new Promise(resolve=>{const poll=()=>viewer.texturesReady()?resolve():requestAnimationFrame(poll);poll();});await new Promise(resolve=>setTimeout(resolve,700));return {id:row.id,design:row.design};};
 window.renderFinal=async(options={})=>{
   const row=fixtures.find(f=>f.id===(options.id||select.value));if(!row)throw new Error('Unknown fixture');

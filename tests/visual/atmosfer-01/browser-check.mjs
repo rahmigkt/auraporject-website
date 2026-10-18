@@ -1,15 +1,16 @@
+const origin=process.env.ATMOSFER_ORIGIN||'http://127.0.0.1:8772';
 // Integration checks against the loopback review server; no external requests.
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import fs from 'node:fs/promises';
 const require=createRequire(import.meta.url),{chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
-const browser=await chromium.launch({channel:'chrome',headless:true});
+const browser=await chromium.launch({channel:'chrome',headless:true,args:['--no-proxy-server']});
 const context=await browser.newContext(),report={browser:browser.version(),checks:[]};
-await context.route('**/*',route=>new URL(route.request().url()).origin==='http://127.0.0.1:8768'?route.continue():route.abort());
+await context.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());
 try{
   const page=await context.newPage(),errors=[];
   page.on('pageerror',error=>errors.push(error.message));
-  await page.goto('http://127.0.0.1:8768/tests/visual/atmosfer-01/review.html');
+  await page.goto(origin+'/tests/visual/atmosfer-01/review.html');
   await page.waitForFunction(()=>window.reviewReady===true);
   assert.equal(await page.evaluate(()=>performance.getEntriesByType('resource').some(r=>r.name.includes('/pathtracer/')||r.name.endsWith('/atmosfer.js'))),false);
   report.checks.push('Final renderer absent before explicit request');

@@ -1,6 +1,7 @@
 // Final frames only: imported on demand, never by the interactive studio.
 import * as THREE from '../vendor/three.module.js?v=20261016b';
 import {createRenderAsset} from './scene.js';
+import {loadCatalogEnvironment} from './atmosfer-surfaces.js';
 import {createAtmosphereStage} from './atmosfer-room.js';
 
 const tick = () => new Promise(resolve => requestAnimationFrame(resolve));
@@ -99,19 +100,21 @@ export async function renderAtmosphere({compiled, materials, family, canvas = do
     asset = await cancellable(loading, signal);
     progress('room', 0.05);
     stage = createAtmosphereStage(THREE, asset.group, {family, preset, aspect: width / height});
+    await loadCatalogEnvironment(THREE, stage);
     renderer = new THREE.WebGLRenderer({canvas, antialias: false, alpha: false, preserveDrawingBuffer: true, powerPreference: 'high-performance'});
     renderer.setPixelRatio(1); renderer.setSize(width, height, false);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1;
+    renderer.toneMappingExposure = 1.05;
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = THREE.VSMShadowMap;
     renderer.debug.onShaderError = (_gl, _program, _vertex, _fragment) => { throw new Error('Final render shader compilation failed'); };
     const supported = renderer.capabilities.isWebGL2 && renderer.extensions.has('EXT_color_buffer_float') && renderer.extensions.has('OES_texture_float_linear');
     if (mode === 'path' && !supported) throw new Error('This graphics device does not support floating-point WebGL2 path tracing');
     actualMode = mode === 'raster' || !supported ? 'raster' : 'path';
     if (mode === 'auto' && !supported) fallbackReason = 'Floating-point WebGL2 path tracing is unavailable';
     if (actualMode === 'path') {
+      stage.scene.getObjectByName('window-shadow-proxy').visible=false;
       try {
         progress('acceleration', 0.08); await tick();
         const {WebGLPathTracer, GenerateMeshBVHWorker} = await import('../vendor/pathtracer/index.js');
@@ -174,11 +177,10 @@ export async function renderAtmosphere({compiled, materials, family, canvas = do
       }
     }
     if (actualMode === 'raster') {
+      stage.scene.getObjectByName('window-shadow-proxy').visible=true;
       progress('raster', 0.25); await tick();
-      // Area lights are sampled physically by the path tracer. The lightweight
-      // fallback uses the room's directional/window shadow and sky fill instead
-      // of loading a second set of large LTC lookup tables into the studio.
-      stage.scene.traverse(object => { if (object.isRectAreaLight) object.visible = false; });
+      const {RectAreaLightUniformsLib} = await import('../vendor/addons/lights/RectAreaLightUniformsLib.js');
+      RectAreaLightUniformsLib.init();
       const [{EffectComposer}, {RenderPass}, {GTAOPass}, {SMAAPass}, {OutputPass}] = await Promise.all([
         import('../vendor/addons/postprocessing/EffectComposer.js'), import('../vendor/addons/postprocessing/RenderPass.js'),
         import('../vendor/addons/postprocessing/GTAOPass.js'), import('../vendor/addons/postprocessing/SMAAPass.js'), import('../vendor/addons/postprocessing/OutputPass.js')]);

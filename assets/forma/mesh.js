@@ -69,10 +69,11 @@ const bump = u => Math.max(0, 1 - u * u);
  * Upholstered block: rounded box with crowned faces, optional camel top, tufting and pleats.
  * w,h,d outer size; r edge radius; crown* in mm; tufts: [{x,y}] on the +z face; tuftDepth mm.
  */
-export function cushion({w, h, d, r = 20, crownTop = 0, crownBottom = 0, crownFront = 0, camel = 0, tufts = null, tuftDepth = 0, pleats = null}) {
+export function cushion({w, h, d, r = 20, crownTop = 0, crownBottom = 0, crownFront = 0, camel = 0, tufts = null, tuftDepth = 0, pleats = null, finalDetail = false}) {
   r = Math.min(r, w / 2 - 0.5, h / 2 - 0.5, d / 2 - 0.5);
   const hw = w / 2, hh = h / 2, hd = d / 2, ix = hw - r, iy = hh - r, iz = hd - r;
-  const sx = clamp(Math.round(w / 22), 8, 72), sy = clamp(Math.round(h / 22), 6, 56), sz = clamp(Math.round(d / 22), 6, 56);
+  const density=finalDetail?2:1;
+  const sx = clamp(Math.round(w / 22), 8, 72)*density, sy = clamp(Math.round(h / 22), 6, 56)*density, sz = clamp(Math.round(d / 22), 6, 56)*density;
   const b = new Builder();
   const place = (x, y, z) => {
     const cx = clamp(x, -ix, ix), cy = clamp(y, -iy, iy), cz = clamp(z, -iz, iz);
@@ -108,7 +109,14 @@ export function cushion({w, h, d, r = 20, crownTop = 0, crownBottom = 0, crownFr
       b.quad(a, base[j * (nu + 1) + i + 1], c, base[(j + 1) * (nu + 1) + i]);
     }
   };
-  const L = (t, a) => -a + 2 * a * t;
+  const L = (t, a) => {
+    if(!finalDetail)return -a+2*a*t;
+    // Reserve samples at the existing radius; subdivision does not change it.
+    const edge=Math.min(r,a*.4),band=.15;
+    if(t<band)return -a+edge*t/band;
+    if(t>1-band)return a-edge*(1-t)/band;
+    return -a+edge+(2*a-2*edge)*(t-band)/(1-2*band);
+  };
   face(sx, sy, (u, v) => [L(u, hw), L(v, hh), hd]);
   face(sx, sy, (u, v) => [-L(u, hw), L(v, hh), -hd]);
   face(sz, sy, (u, v) => [hw, L(v, hh), -L(u, hd)]);
