@@ -1,0 +1,3629 @@
+{
+  "file": "tests\\ai-eval\\sinav-01b-test.jsonl",
+  "sha256": "52e73a6d4b53949e71bcd6ccde615ecc7b1e0e8e3e31b1c14c28982e6df807d3",
+  "freeze": "donmamış",
+  "system": "rules",
+  "mode": "ön skor (onaysız kayıtlar dahil)",
+  "date": "2026-10-18T11:38:08.134Z",
+  "records": 260,
+  "scored": 260,
+  "overall": {
+    "n": 260,
+    "exact": 0.277,
+    "precision": 0.311,
+    "recall": 0.472,
+    "f1": 0.375,
+    "forbidViolationRate": 0.585,
+    "clarifyAccuracy": 0.421,
+    "missing": 0
+  },
+  "bySplit": {
+    "test": {
+      "n": 260,
+      "exact": 0.277,
+      "precision": 0.311,
+      "recall": 0.472,
+      "f1": 0.375,
+      "forbidViolationRate": 0.585,
+      "clarifyAccuracy": 0.421,
+      "missing": 0
+    }
+  },
+  "byLang": {
+    "da": {
+      "n": 10,
+      "exact": 0.1,
+      "precision": 0.182,
+      "recall": 0.25,
+      "f1": 0.211,
+      "forbidViolationRate": 1,
+      "clarifyAccuracy": 0.333,
+      "missing": 0
+    },
+    "de": {
+      "n": 13,
+      "exact": 0.385,
+      "precision": 0.467,
+      "recall": 0.583,
+      "f1": 0.519,
+      "forbidViolationRate": 0.5,
+      "clarifyAccuracy": 0.5,
+      "missing": 0
+    },
+    "en": {
+      "n": 39,
+      "exact": 0.308,
+      "precision": 0.326,
+      "recall": 0.455,
+      "f1": 0.38,
+      "forbidViolationRate": 0.75,
+      "clarifyAccuracy": 0.385,
+      "missing": 0
+    },
+    "es": {
+      "n": 11,
+      "exact": 0.364,
+      "precision": 0.5,
+      "recall": 0.7,
+      "f1": 0.583,
+      "forbidViolationRate": null,
+      "clarifyAccuracy": 1,
+      "missing": 0
+    },
+    "fr": {
+      "n": 10,
+      "exact": 0.2,
+      "precision": 0.143,
+      "recall": 0.286,
+      "f1": 0.19,
+      "forbidViolationRate": 0.5,
+      "clarifyAccuracy": 0,
+      "missing": 0
+    },
+    "it": {
+      "n": 11,
+      "exact": 0.273,
+      "precision": 0.3,
+      "recall": 0.375,
+      "f1": 0.333,
+      "forbidViolationRate": 1,
+      "clarifyAccuracy": 0.333,
+      "missing": 0
+    },
+    "nl": {
+      "n": 10,
+      "exact": 0.3,
+      "precision": 0.286,
+      "recall": 0.333,
+      "f1": 0.308,
+      "forbidViolationRate": 0.5,
+      "clarifyAccuracy": 0.75,
+      "missing": 0
+    },
+    "tr": {
+      "n": 156,
+      "exact": 0.269,
+      "precision": 0.302,
+      "recall": 0.484,
+      "f1": 0.372,
+      "forbidViolationRate": 0.512,
+      "clarifyAccuracy": 0.409,
+      "missing": 0
+    }
+  },
+  "byCategory": {
+    "ambiguous": {
+      "n": 18,
+      "exact": 0.444,
+      "precision": 0,
+      "recall": 1,
+      "f1": 0,
+      "forbidViolationRate": null,
+      "clarifyAccuracy": 0.444,
+      "missing": 0
+    },
+    "colloquial": {
+      "n": 11,
+      "exact": 0.091,
+      "precision": 0.158,
+      "recall": 0.273,
+      "f1": 0.2,
+      "forbidViolationRate": 0.5,
+      "clarifyAccuracy": null,
+      "missing": 0
+    },
+    "color": {
+      "n": 13,
+      "exact": 0.308,
+      "precision": 0.474,
+      "recall": 0.6,
+      "f1": 0.529,
+      "forbidViolationRate": 0.5,
+      "clarifyAccuracy": null,
+      "missing": 0
+    },
+    "family": {
+      "n": 8,
+      "exact": 0.25,
+      "precision": 1,
+      "recall": 0.25,
+      "f1": 0.4,
+      "forbidViolationRate": 0,
+      "clarifyAccuracy": null,
+      "missing": 0
+    },
+    "kind": {
+      "n": 9,
+      "exact": 0.333,
+      "precision": 0.4,
+      "recall": 0.444,
+      "f1": 0.421,
+      "forbidViolationRate": 0.75,
+      "clarifyAccuracy": null,
+      "missing": 0
+    },
+    "layout": {
+      "n": 19,
+      "exact": 0.632,
+      "precision": 0,
+      "recall": 1,
+      "f1": 0,
+      "forbidViolationRate": null,
+      "clarifyAccuracy": 0.632,
+      "missing": 0
+    },
+    "material": {
+      "n": 19,
+      "exact": 0.263,
+      "precision": 0.433,
+      "recall": 0.684,
+      "f1": 0.531,
+      "forbidViolationRate": 0.571,
+      "clarifyAccuracy": 0,
+      "missing": 0
+    },
+    "mixed": {
+      "n": 25,
+      "exact": 0.2,
+      "precision": 0.65,
+      "recall": 0.531,
+      "f1": 0.584,
+      "forbidViolationRate": 0,
+      "clarifyAccuracy": null,
+      "missing": 0
+    },
+    "negation": {
+      "n": 35,
+      "exact": 0.114,
+      "precision": 0.02,
+      "recall": 0.125,
+      "f1": 0.035,
+      "forbidViolationRate": 0.8,
+      "clarifyAccuracy": 0.111,
+      "missing": 0
+    },
+    "offtopic": {
+      "n": 9,
+      "exact": 1,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "forbidViolationRate": null,
+      "clarifyAccuracy": 1,
+      "missing": 0
+    },
+    "part": {
+      "n": 17,
+      "exact": 0.294,
+      "precision": 0.4,
+      "recall": 0.471,
+      "f1": 0.432,
+      "forbidViolationRate": 0.2,
+      "clarifyAccuracy": null,
+      "missing": 0
+    },
+    "relative": {
+      "n": 22,
+      "exact": 0.182,
+      "precision": 0.25,
+      "recall": 0.35,
+      "f1": 0.292,
+      "forbidViolationRate": 0,
+      "clarifyAccuracy": 0,
+      "missing": 0
+    },
+    "size": {
+      "n": 14,
+      "exact": 0.357,
+      "precision": 0.409,
+      "recall": 0.643,
+      "f1": 0.5,
+      "forbidViolationRate": 0,
+      "clarifyAccuracy": null,
+      "missing": 0
+    },
+    "style": {
+      "n": 10,
+      "exact": 0.3,
+      "precision": 0.476,
+      "recall": 1,
+      "f1": 0.645,
+      "forbidViolationRate": null,
+      "clarifyAccuracy": null,
+      "missing": 0
+    },
+    "units": {
+      "n": 31,
+      "exact": 0.065,
+      "precision": 0.2,
+      "recall": 0.25,
+      "f1": 0.222,
+      "forbidViolationRate": 0,
+      "clarifyAccuracy": null,
+      "missing": 0
+    }
+  },
+  "failures": [
+    {
+      "id": "sinav01b-tr-seating-002",
+      "text": "İkilinin eni bir yetmiş iki olsun, kapıdan o geçiyor.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "loveseat"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-seating-003",
+      "text": "Berjerin sırtını biraz daha yatırabilir miyiz?",
+      "got": [
+        {
+          "type": "kind",
+          "value": "armchair"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-seating-009",
+      "text": "Koltuk işini sonra hallederiz, şimdi masa ailesini aç.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-seating-014",
+      "text": "Daha sakin bir Japandi yaklaşımını deneyelim bu ikilide.",
+      "got": [
+        {
+          "type": "style",
+          "value": "japandi"
+        },
+        {
+          "type": "kind",
+          "value": "loveseat"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-seating-015",
+      "text": "Döşemede kırık beyazı seçiyorum, diğer parçaları sonra konuşuruz.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "fabric",
+          "key": "color",
+          "value": "chalk"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-seating-016",
+      "text": "Şu kanepe 2.43 m genişlikte olmalı.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "sofa"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 2430
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-seating-018",
+      "text": "Sırtı kapitone yapalım, kolçaklar ise düz kare olsun.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "backType",
+          "value": "tufted"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-seating-019",
+      "text": "Eninden 13 santim kırpalım, geçişi kapatıyor.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-seating-021",
+      "text": "Kolçağın üst seviyesi yerden 62,5 cm olsun.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-seating-023",
+      "text": "Genişliği 168 cm yap ama kolların kalınlığını artırma.",
+      "got": [
+        {
+          "type": "delta",
+          "key": "width",
+          "value": 1680
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-seating-026",
+      "text": "Oturum biraz sığlaşırsa sırtım mindere yetişir.",
+      "got": [
+        {
+          "type": "delta",
+          "key": "cushionThickness",
+          "value": -10
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-seating-027",
+      "text": "Tekerlekli ayak tercih edeceğim, temizlerken çekebileyim.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "legType",
+          "value": "castor"
+        },
+        {
+          "type": "enum",
+          "key": "baseType",
+          "value": "legs"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-seating-028",
+      "text": "Minder kalınlığı 0,145 metre diye geçiyor çizimde.",
+      "got": [
+        {
+          "type": "command",
+          "name": "drawings"
+        },
+        {
+          "type": "delta",
+          "key": "cushionThickness",
+          "value": 1.45
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-seating-029",
+      "text": "Dikişler çift sıra görünmesin.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "stitch",
+          "value": "single"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-seating-030",
+      "text": "Kollar ince olsun, arkası da tek parça sabit döşensin.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "seatType",
+          "value": "bench"
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-seating-032",
+      "text": "ayak 12 bucuk santim olsun abi, altini silelim",
+      "got": [
+        {
+          "type": "set",
+          "key": "legHeight",
+          "value": 120
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-seating-034",
+      "text": "Kanepe derinliği 965 milimetre; eniyle karışmasın.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "sofa"
+        },
+        {
+          "type": "material",
+          "slot": "fabric",
+          "key": "fiber",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 965
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-seating-041",
+      "text": "Biye istemiyorum, kenarda şerit görünmesin.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "welt",
+          "value": "self"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-seating-044",
+      "text": "Kolçak genişliği sekiz santim yeter bana.",
+      "got": [
+        {
+          "type": "delta",
+          "key": "armWidth",
+          "value": 25
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-seating-045",
+      "text": "Ahşabın cilası mat görünsün, ışığı yansıtmasın.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-seating-048",
+      "text": "Az önceki rengi geri al desem hangisini anlayacaksın? Geçmiş elimde yok.",
+      "got": [
+        {
+          "type": "command",
+          "name": "undo"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-en-seating-049",
+      "text": "I've only got 2.27 metres along that wall for the sofa.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "sofa"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-en-seating-050",
+      "text": "Anything but leather for the upholstery, please.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "fabric",
+          "key": "fiber",
+          "value": "leather"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-en-seating-054",
+      "text": "I'd rather have one fixed seat than a removable cushion.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-en-seating-059",
+      "text": "Skip the contrast piping; I haven't picked an edge treatment yet.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "welt",
+          "value": "contrast"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-de-seating-064",
+      "text": "Die Armlehnen schmal, den Rücken aber mit losen Kissen.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "armType",
+          "value": "slim"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-fr-seating-068",
+      "text": "Ajoutez une petite tablette rabattable entre les deux places.",
+      "got": [
+        {
+          "type": "family",
+          "value": "table"
+        },
+        {
+          "type": "enum",
+          "key": "shelf",
+          "value": "solid"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 2,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-nl-seating-069",
+      "text": "Ik wil hier toch een tweezitter van maken.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-da-seating-073",
+      "text": "Sofaen må gerne være 2,61 meter bred.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "sofa"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-es-seating-077",
+      "text": "Probemos una versión más industrial de este sofá.",
+      "got": [
+        {
+          "type": "style",
+          "value": "industrial"
+        },
+        {
+          "type": "kind",
+          "value": "sofa"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-table-083",
+      "text": "Yan sehpayı biraz yükselt, koltuğun koluna yetişsin.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "side"
+        },
+        {
+          "type": "delta",
+          "key": "height",
+          "value": 10
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-table-084",
+      "text": "Konsolun üst tablasında ceviz ağacını tercih ediyorum.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "console"
+        },
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "walnut"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-table-085",
+      "text": "Üstteki lake yüzey beyaz renge dönsün.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "surface",
+          "value": "lacquer"
+        },
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-table-086",
+      "text": "Dikdörtgeni bıraktım; tabla oval olacak.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "topShape",
+          "value": "rect"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-table-087",
+      "text": "Şu orta sehpayı yan sehpa türüne geçirsek daha iyi.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "coffee"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-table-090",
+      "text": "Cam üst istemiyorum, ne önerirsin?",
+      "got": [
+        {
+          "type": "command",
+          "name": "variants"
+        },
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "surface",
+          "value": "glass"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 2,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-table-091",
+      "text": "Tablayı meşe seçelim ama ayaklar metal olsun.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-table-092",
+      "text": "sehpa boyu 114 santm olsun yeter",
+      "got": [
+        {
+          "type": "kind",
+          "value": "coffee"
+        },
+        {
+          "type": "set",
+          "key": "length",
+          "value": 1140
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-table-096",
+      "text": "Uzun kenar 2,32 metre, onu sisteme gir.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-table-097",
+      "text": "Mermer olmasın bu sehpa, başka malzeme seçmedim.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "coffee"
+        },
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "surface",
+          "value": "stone"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 2,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-table-103",
+      "text": "Ayağın metal bitişini pirinç seçiyorum.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "base",
+          "key": "surface",
+          "value": "metal"
+        },
+        {
+          "type": "material",
+          "slot": "base",
+          "key": "metal",
+          "value": "brass"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-table-105",
+      "text": "masanin genisligini 73 bucuk cm yaparmisin",
+      "got": [
+        {
+          "type": "kind",
+          "value": "dining"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 730
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-table-106",
+      "text": "Uzunluğu şimdi 220 cm; yarısı kadar kısalt demiyorum, 11 cm kısalt.",
+      "got": [
+        {
+          "type": "set",
+          "key": "length",
+          "value": 2200
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-table-108",
+      "text": "Ayaklarda krom hariç bir metal bakıyorum.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "base",
+          "key": "surface",
+          "value": "metal"
+        },
+        {
+          "type": "material",
+          "slot": "base",
+          "key": "metal",
+          "value": "chrome"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 2,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-table-110",
+      "text": "Masanın uzunluğu 153 cm olsun, alta da bir çekmece ekleyelim.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "dining"
+        },
+        {
+          "type": "set",
+          "key": "length",
+          "value": 1530
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-table-113",
+      "text": "Alt rafı ahşap çıtalı görmek istiyorum.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "shelf",
+          "value": "solid"
+        },
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "surface",
+          "value": "wood"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-table-114",
+      "text": "Çekmece kulpu topuz olmasın, alternatiflere bakalım.",
+      "got": [
+        {
+          "type": "command",
+          "name": "variants"
+        },
+        {
+          "type": "enum",
+          "key": "drawerPull",
+          "value": "knob"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 2,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-table-117",
+      "text": "Döşemeye göre sehpa yüksekliğini 365 mm hesapladım.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "coffee"
+        },
+        {
+          "type": "set",
+          "key": "height",
+          "value": 365
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-table-118",
+      "text": "Kenar yuvarlama yarıçapı 2,5 cm olarak çizilsin.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-table-120",
+      "text": "Çekmece sayısı şu anda iki; ben üç istiyorum, uzunluk aynı kalsın.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-table-121",
+      "text": "yemek masasini yuvarlak yapsak daha samimi durur",
+      "got": [
+        {
+          "type": "kind",
+          "value": "dining"
+        },
+        {
+          "type": "enum",
+          "key": "topShape",
+          "value": "round"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-table-122",
+      "text": "Taş tabla istiyorum, gri boya istemiyorum aslında.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "surface",
+          "value": "stone"
+        },
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "color",
+          "value": "silver"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-table-123",
+      "text": "Ayağı bir tık değiştirelim desem biçimi mi boyu mu anlamalısın?",
+      "got": [
+        {
+          "type": "material",
+          "slot": "base",
+          "key": "species",
+          "value": "teak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-en-table-130",
+      "text": "No marble on this one; the floor already has enough stone.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "surface",
+          "value": "stone"
+        },
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "color",
+          "value": "silver"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 2,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-en-table-132",
+      "text": "The console needs to be just 0.395 metres deep.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "console"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-en-table-133",
+      "text": "Could you shave 9 cm off its length?",
+      "got": [
+        {
+          "type": "set",
+          "key": "length",
+          "value": 90
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-en-table-136",
+      "text": "Make it match the one in that picture I haven't sent yet.",
+      "got": [
+        {
+          "type": "command",
+          "name": "photo"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-en-table-138",
+      "text": "Split the desktop into two independently adjustable halves.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "desk"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-de-table-144",
+      "text": "Passt die Konsole dazwischen? Ich kenne den Abstand noch nicht.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "console"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-fr-table-145",
+      "text": "Pas de plateau en verre, j'ai peur de le casser.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "surface",
+          "value": "glass"
+        },
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "color",
+          "value": "rust"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 2,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-fr-table-147",
+      "text": "La table basse pourrait être un tout petit peu moins haute.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "coffee"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-nl-table-149",
+      "text": "Liever geen chromen onderstel in de hal.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "base",
+          "key": "surface",
+          "value": "metal"
+        },
+        {
+          "type": "material",
+          "slot": "base",
+          "key": "metal",
+          "value": "chrome"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 2,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-nl-table-150",
+      "text": "Eén lade onder het bureaublad is voldoende.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "desk"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-da-table-152",
+      "text": "Bordpladen skal være af eg, synes jeg.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-da-table-154",
+      "text": "Konsollen må være 163 cm lang, har jeg målt.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "console"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-es-table-156",
+      "text": "La parte de abajo la quiero lacada en blanco.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-it-table-159",
+      "text": "Invece del tavolo da pranzo vorrei una scrivania.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "dining"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-it-table-160",
+      "text": "Non sceglierei il marmo, vediamo prima le altre superfici.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "surface",
+          "value": "stone"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-storage-164",
+      "text": "Makyaj masasının gövdesinde meşe ağacını kullanalım.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "vanity"
+        },
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-storage-165",
+      "text": "TV altındaki dolapta cam kapak istemiyorum.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "wardrobe"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-storage-167",
+      "text": "Vitrinin gövde boyası kırık beyaz olsun.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "vitrine"
+        },
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-storage-172",
+      "text": "ayna yuksekligi 84 santim olsun ya, duvara sigsin",
+      "got": [
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "rect"
+        },
+        {
+          "type": "set",
+          "key": "height",
+          "value": 840
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-storage-173",
+      "text": "Bunun eni 170 mi 180 mi daha iyi olur, sen karar verme daha.",
+      "got": [
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1700
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-storage-175",
+      "text": "Vitrine endüstriyel bir hava verelim, o tarza geç.",
+      "got": [
+        {
+          "type": "style",
+          "value": "industrial"
+        },
+        {
+          "type": "kind",
+          "value": "vitrine"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-storage-176",
+      "text": "Büfe derinliği 47,5 cm ile sınırlı, süpürgelik var.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "sideboard"
+        },
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 475
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-storage-178",
+      "text": "Eni 52 cm, gövdesi de meşe olsun şu komodinin.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "nightstand"
+        },
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 520
+        }
+      ],
+      "hit": 2,
+      "expected": 2,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-storage-179",
+      "text": "Şifonyerin boyu 109 santim olursa üstünü kullanabilirim.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "dresser"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-storage-180",
+      "text": "Tablası 24 mm masif kalınlığında olsun.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "surface",
+          "value": "wood"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-storage-181",
+      "text": "Cevizi tüm parçalardan çıkaralım; hangi ağaç olacağını sonra söylerim.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-storage-183",
+      "text": "Vitrinin boyunu 8 cm kısalt, tavana fazla yaklaştı.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "vitrine"
+        },
+        {
+          "type": "delta",
+          "key": "width",
+          "value": -80
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-storage-186",
+      "text": "Kulp topuz olursa takılırım, topuz koymayın.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "knob"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-storage-188",
+      "text": "Ayna biraz yukarı gelsin, montaj yerini değiştirelim.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "rect"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-storage-190",
+      "text": "Ansiklopediler için alttaki iki rafı birleştirip tek yüksek göz yap.",
+      "got": [
+        {
+          "type": "delta",
+          "key": "height",
+          "value": 50
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-storage-192",
+      "text": "Büfenin ayağını 175 milimetre yüksekliğe getirelim.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "sideboard"
+        },
+        {
+          "type": "set",
+          "key": "height",
+          "value": 1750
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-storage-194",
+      "text": "Komodin derinliği 36 santim, yataktan öne çıkmasın.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "nightstand"
+        },
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 360
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-storage-195",
+      "text": "Ön yüzlerde parlak cila hariç her şeye bakabilirim.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "finish",
+          "value": "lacquer"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-storage-199",
+      "text": "Gövde siyah değil beyaz olacak, yanlış seçmişim.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "color",
+          "value": "black"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-storage-206",
+      "text": "Kitaplığın gövde enini 0,92 metreye ayarla.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-storage-207",
+      "text": "vitrin bacagi azicik uzasin alti supurulsun",
+      "got": [
+        {
+          "type": "kind",
+          "value": "vitrine"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-en-storage-212",
+      "text": "At 118 cm wide the vanity would fit between those sockets.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "vanity"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1180
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-en-storage-214",
+      "text": "Could the whole bookcase be a little shallower?",
+      "got": [
+        {
+          "type": "kind",
+          "value": "bookcase"
+        },
+        {
+          "type": "delta",
+          "key": "depth",
+          "value": -20
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-en-storage-217",
+      "text": "Not sliding doors after all; hinged doors will be easier here.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "doorType",
+          "value": "sliding"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-en-storage-219",
+      "text": "Only the drawer fronts should be black, leave the carcass colour alone.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "color",
+          "value": "black"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-de-storage-221",
+      "text": "Eiche kommt für den Schrank überhaupt nicht infrage.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "wardrobe"
+        },
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 2,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-de-storage-222",
+      "text": "Der Nachttisch soll 48 Zentimeter breit werden.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "nightstand"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-de-storage-223",
+      "text": "Ich brauche drei Schubladen in der Kommode.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "dresser"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-de-storage-224",
+      "text": "Den Korpus in Nussbaum, die Fronten dagegen weiß.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-fr-storage-226",
+      "text": "La bibliothèque doit mesurer 212 cm de haut.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "bookcase"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-fr-storage-227",
+      "text": "Surtout pas de poignées en cuir sur la vitrine.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "vitrine"
+        },
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "bar"
+        },
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "color",
+          "value": "rust"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 3,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-nl-storage-228",
+      "text": "Voor de kast zelf kies ik walnotenhout.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-nl-storage-229",
+      "text": "Schuifdeuren lijken me handiger voor deze kledingkast.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "wardrobe"
+        },
+        {
+          "type": "enum",
+          "key": "doorType",
+          "value": "sliding"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-nl-storage-230",
+      "text": "Maak het nachtkastje iets hoger, mijn matras ligt vrij hoog.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "nightstand"
+        },
+        {
+          "type": "delta",
+          "key": "height",
+          "value": 20
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-da-storage-232",
+      "text": "Kan du få spejlet til at passe til det gamle? Jeg har intet billede.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "rect"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-da-storage-233",
+      "text": "Jeg vil ikke have sorte fronter på tv-møblet.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "black"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-da-storage-234",
+      "text": "Korpus i eg og hvide låger, det er kombinationen.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        },
+        {
+          "type": "delta",
+          "key": "height",
+          "value": -50
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-es-storage-235",
+      "text": "Me gustaría llevar la vitrina hacia un estilo industrial.",
+      "got": [
+        {
+          "type": "style",
+          "value": "industrial"
+        },
+        {
+          "type": "kind",
+          "value": "vitrine"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-es-storage-236",
+      "text": "Las puertas del aparador las prefiero de color crema.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "sideboard"
+        },
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "cream"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-it-storage-238",
+      "text": "Per la struttura della libreria sceglierei il rovere.",
+      "got": [
+        {
+          "type": "command",
+          "name": "structure"
+        },
+        {
+          "type": "kind",
+          "value": "bookcase"
+        },
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-it-storage-239",
+      "text": "La vetrina deve essere profonda 42,5 centimetri.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "vitrine"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-kitchen-241",
+      "text": "Tezgahın yerden bitmiş yüksekliğini 91,5 santim alalım.",
+      "got": [
+        {
+          "type": "set",
+          "key": "height",
+          "value": 915
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-kitchen-242",
+      "text": "Adanın üst tablası derinlikte 1,065 metre yer tutsun.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 1065
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-kitchen-244",
+      "text": "Ada tezgahı taş olsun, griye boyamayı kastetmiyorum.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "color",
+          "value": "silver"
+        },
+        {
+          "type": "kind",
+          "value": "island"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-kitchen-245",
+      "text": "Alt dolap kapaklarını beyaz renge alır mısın?",
+      "got": [
+        {
+          "type": "family",
+          "value": "storage"
+        },
+        {
+          "type": "kind",
+          "value": "wardrobe"
+        },
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "white"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-kitchen-248",
+      "text": "Mutfaktan çıkalım, depolama ailesine bakacağım.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-kitchen-251",
+      "text": "Kapaklar meşe, tezgah da taş seçilsin.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-kitchen-252",
+      "text": "ada tezgahi derinligi 103 santim yapsak?",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 1030
+        },
+        {
+          "type": "kind",
+          "value": "island"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 3,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-kitchen-253",
+      "text": "Buzdolabıyla ocak arasına biraz mesafe koyalım, ne kadar bilmiyorum.",
+      "got": [
+        {
+          "type": "family",
+          "value": "table"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-kitchen-256",
+      "text": "Üstteki taş 32 milimetre kalınlığında görünsün.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "color",
+          "value": "silver"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-kitchen-257",
+      "text": "Ceviz kullanmayalım hiç, dar mutfağı karartıyor.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "delta",
+          "key": "width",
+          "value": -100
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 2,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-kitchen-259",
+      "text": "Tezgah yüksekliğini yarım santim artırabiliriz.",
+      "got": [
+        {
+          "type": "delta",
+          "key": "height",
+          "value": 50
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-kitchen-264",
+      "text": "Ahşap tezgahın bitişinde yağlı yüzeyi seçerim.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "surface",
+          "value": "wood"
+        },
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "finish",
+          "value": "oil"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-kitchen-266",
+      "text": "Tezgahın derinliği biraz azalsın ki etrafında dolaşabilelim.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-kitchen-268",
+      "text": "Tezgah yüksekliği 0.905 metre olarak ayarlanacak.",
+      "got": [
+        {
+          "type": "set",
+          "key": "height",
+          "value": 905
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-kitchen-269",
+      "text": "Deri kulpları hiç düşünmeyelim.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-kitchen-271",
+      "text": "Üst dolap derinliğinde 345 milimetreyi geçmeyelim, tam o ölçü olsun.",
+      "got": [
+        {
+          "type": "family",
+          "value": "storage"
+        },
+        {
+          "type": "kind",
+          "value": "wardrobe"
+        },
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 345
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 4,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-kitchen-272",
+      "text": "tezgh tas dursun boya griye donmesin",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "color",
+          "value": "silver"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-kitchen-273",
+      "text": "Üst dolapları pencerenin üstünden geçirip köşede döndür.",
+      "got": [
+        {
+          "type": "family",
+          "value": "storage"
+        },
+        {
+          "type": "kind",
+          "value": "wardrobe"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 2,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-kitchen-274",
+      "text": "Ada tablasının derinliği 98,5 cm ölçüldü.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        },
+        {
+          "type": "set",
+          "key": "depth",
+          "value": 985
+        },
+        {
+          "type": "kind",
+          "value": "island"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 3,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-kitchen-281",
+      "text": "Kulpsuz değil, uzun bar kulp istiyorum.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "none"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-kitchen-282",
+      "text": "Evye alt montajlı olsun; tezgah yüksekliği de 93 cm'ye gelsin.",
+      "got": [
+        {
+          "type": "set",
+          "key": "height",
+          "value": 930
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-kitchen-283",
+      "text": "ust dolaplarin boyu 69 cm olcak diye anlastik",
+      "got": [
+        {
+          "type": "family",
+          "value": "storage"
+        },
+        {
+          "type": "kind",
+          "value": "wardrobe"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-kitchen-284",
+      "text": "Masif panel kalınlığı iki virgül altı santimetre olsun.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "surface",
+          "value": "wood"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-en-kitchen-289",
+      "text": "The finished worktop should sit 88.5 centimetres above the floor.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-en-kitchen-290",
+      "text": "Please keep walnut out of every part of the island.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        },
+        {
+          "type": "kind",
+          "value": "island"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 2,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-en-kitchen-291",
+      "text": "White fronts, oak carcasses, and an induction hob would be my choice.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        },
+        {
+          "type": "enum",
+          "key": "hob",
+          "value": "induction"
+        }
+      ],
+      "hit": 2,
+      "expected": 3,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-en-kitchen-293",
+      "text": "I wash big pans, so give me the pull-out tap.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-en-kitchen-294",
+      "text": "Move the sink one cabinet to the left of where it is now.",
+      "got": [
+        {
+          "type": "family",
+          "value": "storage"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-en-kitchen-295",
+      "text": "Stone is the worktop material, not a request for grey paint.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "finish",
+          "value": "matte"
+        },
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "color",
+          "value": "silver"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-en-kitchen-297",
+      "text": "No visible chimney hood; use the integrated type instead.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "hood",
+          "value": "chimney"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-de-kitchen-303",
+      "text": "Weiße Fronten passen gut zu einem Korpus aus Eiche.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-fr-kitchen-305",
+      "text": "Je veux de la pierre sur le plan de travail, pas une couleur grise.",
+      "got": [
+        {
+          "type": "command",
+          "name": "drawings"
+        },
+        {
+          "type": "material",
+          "slot": "top",
+          "key": "color",
+          "value": "silver"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-fr-kitchen-307",
+      "text": "Remontez un peu la hauteur du plan de travail.",
+      "got": [
+        {
+          "type": "command",
+          "name": "drawings"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-es-kitchen-316",
+      "text": "Baja un poco la altura de la encimera, me queda alta.",
+      "got": [
+        {
+          "type": "delta",
+          "key": "height",
+          "value": -20
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-it-kitchen-318",
+      "text": "Per il lavello prendiamo il miscelatore estraibile.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-it-kitchen-319",
+      "text": "Le ante le immagino color crema, il resto rimane com'è.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "color",
+          "value": "cream"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-bath-321",
+      "text": "Lavabo dolabına ayırdığımız genişlik 137 santim.",
+      "got": [
+        {
+          "type": "set",
+          "key": "width",
+          "value": 1370
+        },
+        {
+          "type": "kind",
+          "value": "basin"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-bath-323",
+      "text": "Aynayı biraz daha yukarı asabilir miyiz?",
+      "got": [
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "rect"
+        },
+        {
+          "type": "kind",
+          "value": "mirror"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-bath-325",
+      "text": "Uzun dolabın kapağı krem renkte görünsün.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "color",
+          "value": "cream"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-bath-326",
+      "text": "Aynanın etrafında arkadan bir ışık halesi olsun.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "rect"
+        },
+        {
+          "type": "kind",
+          "value": "mirror"
+        },
+        {
+          "type": "enum",
+          "key": "mirrorLight",
+          "value": "back"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-bath-327",
+      "text": "Lavabo dolabı yerine boy dolabı türünü açalım.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "basin"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-bath-328",
+      "text": "Banyoyu bırakıyorum şimdilik, oturma ailesine geçebiliriz.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-bath-329",
+      "text": "Ayna ortadan açılsın, arkasında ilaçları saklayalım.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "rect"
+        },
+        {
+          "type": "kind",
+          "value": "mirror"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 2,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-bath-330",
+      "text": "Tezgah üstü çanak lavabo olmasın, alttan montajlı seçelim.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "basin"
+        },
+        {
+          "type": "enum",
+          "key": "basinType",
+          "value": "vessel"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-bath-331",
+      "text": "Gövde meşe olsun, kapakta ise beyaz renk istiyorum.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-bath-332",
+      "text": "ayna boyu 93 santm olsun, priz yukarda kaliyo",
+      "got": [
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "rect"
+        },
+        {
+          "type": "kind",
+          "value": "mirror"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-bath-333",
+      "text": "Lavabonun etrafı ferah kalsın istiyorum, net ölçüm yok.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "basin"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-bath-335",
+      "text": "Ayna ünitesinde art deco tarzını denesek?",
+      "got": [
+        {
+          "type": "style",
+          "value": "art_deco"
+        },
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "rect"
+        },
+        {
+          "type": "kind",
+          "value": "mirror"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-bath-337",
+      "text": "Boy dolabında meşe hariç ağaçlara bakıyorum.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "oak"
+        },
+        {
+          "type": "kind",
+          "value": "column"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 2,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-bath-338",
+      "text": "Aynayı oval seçelim; ışığı da üst aplikten ver.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "rect"
+        },
+        {
+          "type": "kind",
+          "value": "mirror"
+        },
+        {
+          "type": "enum",
+          "key": "mirrorLight",
+          "value": "top"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-bath-341",
+      "text": "Aynanın genişliği 0.815 m, çerçeve dahil.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "rect"
+        },
+        {
+          "type": "set",
+          "key": "width",
+          "value": 815
+        },
+        {
+          "type": "kind",
+          "value": "mirror"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-bath-344",
+      "text": "Aynanın yüzeyi buğu tutmasın, bunu ekleyebilir misin?",
+      "got": [
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "rect"
+        },
+        {
+          "type": "kind",
+          "value": "mirror"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 2,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-bath-346",
+      "text": "Dolap derinliğinden bir buçuk santim alırsak kapıya sürtmez.",
+      "got": [
+        {
+          "type": "family",
+          "value": "storage"
+        },
+        {
+          "type": "kind",
+          "value": "wardrobe"
+        },
+        {
+          "type": "enum",
+          "key": "pull",
+          "value": "leather"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 3,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-bath-348",
+      "text": "Lavabo tablası 2,9 santim kalın olsun.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "basin"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-bath-350",
+      "text": "Yuvarlak ayna, arkadan aydınlatma; istediğim ikisi bu.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "round"
+        },
+        {
+          "type": "kind",
+          "value": "mirror"
+        }
+      ],
+      "hit": 1,
+      "expected": 2,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-bath-353",
+      "text": "Aynanın bir yanına açık diş fırçası rafı açabilir misin?",
+      "got": [
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "rect"
+        },
+        {
+          "type": "kind",
+          "value": "mirror"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 2,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-bath-355",
+      "text": "Kapak boyası siyah olmasın, rengi sonra konuşuruz.",
+      "got": [
+        {
+          "type": "material",
+          "slot": "front",
+          "key": "color",
+          "value": "black"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-tr-bath-361",
+      "text": "Duvara asılı değil, ayaklı boy dolabı seç.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "base",
+          "value": "wall"
+        },
+        {
+          "type": "kind",
+          "value": "column"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-bath-362",
+      "text": "Ayna dolaplı olsun ama arkadan ışık istemem.",
+      "got": [
+        {
+          "type": "family",
+          "value": "storage"
+        },
+        {
+          "type": "kind",
+          "value": "wardrobe"
+        },
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "rect"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 3,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-bath-364",
+      "text": "Dolap ayağı yirmi üç buçuk santim kadar olsun, net ölçü bu.",
+      "got": [
+        {
+          "type": "family",
+          "value": "storage"
+        },
+        {
+          "type": "kind",
+          "value": "wardrobe"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-bath-366",
+      "text": "Batarya duvardan çıksın, tezgaha oturmasın.",
+      "got": [
+        {
+          "type": "family",
+          "value": "kitchen"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-tr-bath-368",
+      "text": "Eskiden seçtiğim aynayı bulabilir misin, şekli de aklımda değil.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "rect"
+        },
+        {
+          "type": "kind",
+          "value": "mirror"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 2,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-en-bath-369",
+      "text": "Hang the vanity at 87.5 centimetres from the floor.",
+      "got": [
+        {
+          "type": "family",
+          "value": "storage"
+        },
+        {
+          "type": "kind",
+          "value": "vanity"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-en-bath-371",
+      "text": "An oval mirror with a light above it, rather than behind it.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "rect"
+        },
+        {
+          "type": "kind",
+          "value": "mirror"
+        }
+      ],
+      "hit": 0,
+      "expected": 2,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-en-bath-372",
+      "text": "Lower the mounting level slightly; the basin feels too high.",
+      "got": [
+        {
+          "type": "delta",
+          "key": "height",
+          "value": -20
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-en-bath-374",
+      "text": "Could this be the mirror cabinet version? I need the storage.",
+      "got": [
+        {
+          "type": "family",
+          "value": "storage"
+        },
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "rect"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-en-bath-375",
+      "text": "Walnut for the vanity carcass, please leave the fronts as they are.",
+      "got": [
+        {
+          "type": "family",
+          "value": "storage"
+        },
+        {
+          "type": "kind",
+          "value": "vanity"
+        },
+        {
+          "type": "material",
+          "slot": "case",
+          "key": "species",
+          "value": "walnut"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-en-bath-378",
+      "text": "Two basins and a wall-mounted tap arrangement, please.",
+      "got": [],
+      "hit": 0,
+      "expected": 2,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-en-bath-380",
+      "text": "No halo behind the mirror; let's consider the other lighting options first.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "rect"
+        },
+        {
+          "type": "kind",
+          "value": "mirror"
+        },
+        {
+          "type": "enum",
+          "key": "mirrorLight",
+          "value": "back"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 3,
+      "violations": 1,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-de-bath-383",
+      "text": "Beim Spiegelschrank würde ich gern Japandi ausprobieren.",
+      "got": [
+        {
+          "type": "style",
+          "value": "japandi"
+        },
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "rect"
+        },
+        {
+          "type": "kind",
+          "value": "mirror"
+        },
+        {
+          "type": "enum",
+          "key": "mirrorCabinet",
+          "value": "cabinet"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 3,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-fr-bath-385",
+      "text": "Passons aux meubles de rangement plutôt qu'à la salle de bains.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-nl-bath-388",
+      "text": "De hoge badkamerkast moet 182 centimeter hoog zijn.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-da-bath-391",
+      "text": "Lad os se på et spejl i stedet for højskabet.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "rect"
+        },
+        {
+          "type": "kind",
+          "value": "column"
+        }
+      ],
+      "hit": 0,
+      "expected": 1,
+      "extra": 2,
+      "violations": 1,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-da-bath-392",
+      "text": "Jeg vil skifte fra badeværelset til bordfamilien nu.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-da-bath-393",
+      "text": "Kan vi prøve en mere industriel stil til vaskeskabet?",
+      "got": [
+        {
+          "type": "style",
+          "value": "industrial"
+        },
+        {
+          "type": "delta",
+          "key": "width",
+          "value": 100
+        },
+        {
+          "type": "kind",
+          "value": "basin"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 2,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-es-bath-394",
+      "text": "La columna del baño debe medir 395 mm de ancho.",
+      "got": [
+        {
+          "type": "set",
+          "key": "width",
+          "value": 395
+        },
+        {
+          "type": "kind",
+          "value": "column"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-es-bath-395",
+      "text": "Quiero pasar del espejo al mueble de lavabo.",
+      "got": [
+        {
+          "type": "enum",
+          "key": "mirror",
+          "value": "rect"
+        },
+        {
+          "type": "kind",
+          "value": "basin"
+        }
+      ],
+      "hit": 1,
+      "expected": 1,
+      "extra": 1,
+      "violations": 0,
+      "clarify": null
+    },
+    {
+      "id": "sinav01b-it-bath-397",
+      "text": "La colonna deve entrare dietro la porta, ma devo ancora misurare lo spazio.",
+      "got": [
+        {
+          "type": "kind",
+          "value": "column"
+        }
+      ],
+      "hit": 0,
+      "expected": 0,
+      "extra": 1,
+      "violations": 0,
+      "clarify": false
+    },
+    {
+      "id": "sinav01b-it-bath-398",
+      "text": "Lasciamo il bagno e passiamo alla famiglia dei mobili contenitori.",
+      "got": [],
+      "hit": 0,
+      "expected": 1,
+      "extra": 0,
+      "violations": 0,
+      "clarify": null
+    }
+  ]
+}
