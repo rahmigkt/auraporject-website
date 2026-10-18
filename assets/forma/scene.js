@@ -341,6 +341,38 @@ function buildGroup(compiled, mats, {structure = false, sketch = false} = {}) {
 
 function disposeGroup(group) { group?.traverse(o => { if (o.geometry && !o.geometry.userData.cached && !(o.geometry.type === 'EdgesGeometry')) o.geometry.dispose(); if (o.material?.userData?.temp) o.material.dispose(); if (o.isSprite) { o.material.map?.dispose(); o.material.dispose(); } }); }
 
+/** Isolated final-render asset. Reuses the studio's real materials and mesh builder;
+ * cloned geometry belongs to this asset, never to the interactive geometry cache. */
+export function createRenderAsset(compiled, materials) {
+  return new Promise((resolve, reject) => {
+    let mats;
+    try {
+      mats = materialSet(materials, {detail: true, onReady: () => {
+        try {
+          const group = buildGroup(compiled, mats);
+          const geometries = new Map();
+          group.traverse(o => {
+            if (!o.geometry) return;
+            if (!geometries.has(o.geometry)) {
+              const clone = o.geometry.clone();
+              delete clone.userData.cached;
+              geometries.set(o.geometry, clone);
+            }
+            o.geometry = geometries.get(o.geometry);
+          });
+          let disposed = false;
+          resolve({group, dispose() {
+            if (disposed) return;
+            disposed = true;
+            for (const geometry of geometries.values()) geometry.dispose();
+            mats.dispose();
+          }});
+        } catch (error) { mats.dispose(); reject(error); }
+      }});
+    } catch (error) { mats?.dispose(); reject(error); }
+  });
+}
+
 function makeRenderer(canvas, {alpha = true} = {}) {
   const r = new THREE.WebGLRenderer({canvas, antialias: true, alpha, preserveDrawingBuffer: true});
   r.outputColorSpace = THREE.SRGBColorSpace; r.toneMapping = THREE.ACESFilmicToneMapping; r.toneMappingExposure = 1.0;
