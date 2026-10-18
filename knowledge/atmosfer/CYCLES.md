@@ -24,3 +24,7 @@ Tarayıcı dışa aktarımını alan bir iş kuyruğu, sabit Blender/CC0 paketli
 Maliyet hesabı: **kare maliyeti = worker saat fiyatı × ölçülen saniye / 3600**, buna boşta kalma, depolama ve trafik eklenir. Yalnız örnek hesap olarak saat ücreti 0,50 USD ve kare süresi 180 sn ise kare 0,025 USD, 12 genel kare 0,30 USD eder; bunlar sağlayıcı teklifi değildir. Bir worker'da süreler toplanır; 12 genel + 36 yakın plan için kuyruk gecikmesi ayrıca gösterilmelidir. Gerçek sunucu süresi bu dizüstü ölçümünden çıkarılamaz; seçilecek makinede aynı 12 sahneyle ölçülmelidir.
 
 Kaynaklar: [Blender komut satırı](https://docs.blender.org/manual/en/latest/advanced/command_line/arguments.html), [Cycles örnekleme ve denoise](https://docs.blender.org/manual/en/latest/render/cycles/render_settings/sampling.html), [CC0 kaynakları](cc0/README.md).
+
+Makro kamera dönüşü quaternion kipinde uygulanır; seçilen gerçek yüzeyin görüntü merkezinde olduğu `world_to_camera_view` ile doğrulanır. Kamera, genel bakıştan ilk görülen yüzeyin önüne alınarak dolabın içine yerleşmesi önlenir. Her yazılmış JPEG boş/karanlık kare denetiminden geçer. Ortak malzemeye bevel normal düğümü yalnız bir kez eklenir; kumaşa eklenmez.
+
+Genel kareler ilk geçerli CPU geçişinden korunur; kaynak commit ve dosya hashleri `kareler/cycles-general-report.json` içindedir. Makrolar ayrı kamera geçişiyle yenilenir; aynı geometri ve malzeme GLB hashleri korunur.
