@@ -10,7 +10,7 @@ arayüz dili sonraki PR'ların konusudur.
   cinsinden model boyutu çizginin ağırlığını değiştirmez.
 - Parça kenarı: 1 piksel, daha açık grafit ve %62 örtücülük; 36° eşik, küçük yüzey kırıklarının
   çizgi kalabalığını azaltır. Bu, üretim geometrisinin sadeleştirilmesi değildir.
-- Kulp, fitil, düğme, hasır ve benzeri iç ayrıntı: 1 piksel, daha açık ton ve %42 örtücülük.
+- Kulp, fitil, düğme, hasır ve benzeri iç ayrıntı: 1 piksel, daha açık ton ve %56 örtücülük.
   WebGL'nin taşınabilir çizgi genişliği 1 piksel olduğu için bu basamak tonal ağırlıkla ayrılır.
   Dikiş/kakma çizgileri kırmızı kalır, örtücülüğü %58'e iner.
 - Komşu parçaların dünya koordinatındaki aynı veya kısmen örtüşen eşdoğrusal kenarları tek
@@ -45,27 +45,50 @@ Tarayıcıda aşağıdaki yolları `http://127.0.0.1:8766` köküyle açın. `vi
 | Banyo | `/tests/visual/gorsel-01/capture.html?family=bath&version=before` | `/tests/visual/gorsel-01/capture.html?family=bath&version=after` |
 | Yatak odası | `/tests/visual/gorsel-01/capture.html?family=bedroom&version=before` | `/tests/visual/gorsel-01/capture.html?family=bedroom&version=after` |
 
-## Eksik görsel kanıt — PR taslak olarak açık
+## Gerçek tarayıcı kanıtı — karar sahibi onayı bekleniyor
 
-2026-10-18 oturumunda **hiçbir gerçek tarayıcı ekran görüntüsü alınamadı**. In-app browser
-sekmesi bağlanma zaman aşımına uğradı. Bilgisayar kullanımı aracı, ayrı Chrome penceresi
-açıldıktan sonra mevcut URL'yi yeterli güvenle belirleyemediği için bu turu güvenlik
-katmanında durdurdu:
+Kullanıcının Playwright ile açık doğrulama isteği üzerine, 2026-10-18 tarihinde aşağıdaki
+**12 gerçek WebGL tarayıcı ekran görüntüsü** alındı. Headless Chrome ayrı, geçici bir
+profil kullandı; yalnızca `127.0.0.1:8766` isteklerine izin verildi. Kişisel Chrome profiline
+ve yerel Windows arayüzüne erişilmedi. Her görüntü 1440 × 1000, cihaz piksel oranı 1'dir.
 
-> Computer Use has been stopped for this turn because it could not determine the current
-> browser URL on Windows with enough confidence to enforce policy.
+| Aile | Önce | Sonra |
+|---|---|---|
+| Oturma · seed 101 · 21 parça | ![Oturma önce](screenshots/seating-before.png) | ![Oturma sonra](screenshots/seating-after.png) |
+| Masa · seed 102 · 8 parça | ![Masa önce](screenshots/table-before.png) | ![Masa sonra](screenshots/table-after.png) |
+| Depolama · seed 103 · 117 parça | ![Depolama önce](screenshots/storage-before.png) | ![Depolama sonra](screenshots/storage-after.png) |
+| Mutfak · seed 104 · 421 parça | ![Mutfak önce](screenshots/kitchen-before.png) | ![Mutfak sonra](screenshots/kitchen-after.png) |
+| Banyo · seed 105 · 94 parça | ![Banyo önce](screenshots/bath-before.png) | ![Banyo sonra](screenshots/bath-after.png) |
+| Yatak odası · seed 106 · 151 parça | ![Yatak odası önce](screenshots/bedroom-before.png) | ![Yatak odası sonra](screenshots/bedroom-after.png) |
 
-Bu durdurma başka otomasyonla aşılmadı. Hazır karşılaştırma sayfası ekran görüntüsü yerine
-sayılmaz. Altı ailenin 12 gerçek önce/sonra ekran görüntüsü ve görsel onayı eklenene kadar
-bu teslim **tamamlanmış görsel denetim değildir**; PR birleştirilmemelidir. Siluet shader'ının
-gerçek WebGL cihazındaki sonucu, ince ayrıntıların okunurluğu ve etkileşim hızı da bu
-görsel denetim sırasında doğrulanmalıdır.
+Görüntüler tek tek incelendi: aynı parça sayısı ve kadraj korundu, ızgara kalktı,
+kapak/çekmece ayrımları ve açık raflar yerinde kaldı. İlk kontrolde fazla soluk çıkan
+ölçü etiketleri ve iç ayrıntı kontrastı yükseltildi; görüntüler son kodla yeniden alındı.
+Ölçülerin çizgileri ince, etiketleri okunabilir bırakıldı. Her iki sürümde de bazı eğik
+kenarlarda piksel ölçeğinde kesiklilik görülebilir; bu kanıt geniş cihaz/ölçek kabulü değildir.
+
+`capture-report.json` gerçek tarayıcı sürümünü, her çekimin URL/seed/parça/görünüş
+bilgisini ve boş hata listelerini kaydeder. Hiçbir sayfa/console hatası veya shader
+derleme hatası görülmedi. Çekim süreleri doku hazırlığı ve ekran kaydını da içerir;
+etkileşim hızı ölçümü olarak kullanılmaz. Karar sahibinin estetik onayı henüz verilmedi;
+PR birleştirilmedi.
+
+Tekrar almak için yerel `playwright` kurulumuyla, sunucu çalışırken:
+
+```sh
+node tests/visual/gorsel-01/capture.mjs
+```
+
+Paket başka konumdaysa `PLAYWRIGHT_MODULE` ortam değişkeni kurulu paket dizinine
+ayarlanabilir. Script kurulu Chrome'u headless çalıştırır, kişisel profil yüklemez.
+Dokular tamamlandıktan ve iki çizim karesi geçtikten sonra PNG kaydeder.
 
 ## Otomatik kontroller
 
 `node tests/sketch-check.mjs` eşdoğrusallık, ters yönlü kopyalar, kısmi örtüşme, gerçek
 boşlukların korunması ve altı ailede sonlu/değiştirilmemiş motor geometrisini kontrol eder.
-Bu geometri kontrolü görsel kalite onayı veya WebGL shader derleme testi değildir.
+Bu geometri kontrolü görsel kalite onayı değildir; gerçek shader yolu ayrıca yukarıdaki
+12 tarayıcı çekiminde çalıştırıldı.
 
 Son taramada **18 mevcut kontrol ve yeni `sketch-check.mjs` geçti (19 başarılı)**: ai-workspace, brief-pdf,
 camera-framing, catalogue, catalogue-graph, choice-flow, kitchen-studies, model, panel-engine,
@@ -75,7 +98,14 @@ upholstery-engine ve forma.
 `forma-check.mjs` çıkış kodu 0: 37 banyo, 99 kesim paftası, 30 mutfak, 222 depolama
 tasarımı (13.385 parça), 18 oda düzeni, 270 başlangıç modeli, 339 çizgi ayrıntısı,
 80 yatak odası seti, 200 masa ve 360 oturma örneği; dokuma, 8 dil komutu, çizim, DXF,
-BOM, ZIP ve PDF kontrolleri geçti. Bu kontroller değişen shader'ı tarayıcıda çalıştırmaz.
+BOM, ZIP ve PDF kontrolleri geçti. Bu otomatik geometri kontrolleri shader'ı çalıştırmaz;
+shader doğrulaması için tarayıcı kanıtı ayrıdır.
+
+Ekran görüntüsü turundan sonra yalnızca ölçü/ayrıntı kontrastı değiştiği için ilgili
+`sketch-check`, `camera-framing-check`, `studio-tools-check` ve JavaScript sözdizimi
+kontrolleri tekrar çalıştırıldı ve geçti. 12 PNG'nin 1440 × 1000 boyutu, altı çiftin aynı
+seed/style/parça/görünüş bilgisi ve boş hata listeleri ayrıca doğrulandı. Kapsamlı Forma
+koşusunun yukarıdaki sonucu önceki aynı geometri koduna aittir; gereksiz yere tekrarlanmadı.
 
 Üç arşiv kontrolü başlangıç dalında da bulunmayan `../../services/design/` modüllerini
 istediğinden `ERR_MODULE_NOT_FOUND` ile durur; bu PR onları veya eksik servisleri değiştirmez.
