@@ -23,17 +23,17 @@ Eski raster byte olarak korunmuştur. Yeni raster **2400×1600**; yol izleme **d
 
 | Tasarım | Yüzey / varsa kumaş ve dikiş | Lif / varsa ahşap ve kesit | Kenar / birleşim |
 |---|---|---|---|
-| seating-01 | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi |
-| seating-02 | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi |
-| table-01 | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi |
-| table-02 | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi |
-| storage-01 | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi |
-| storage-02 | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi |
-| kitchen-01 | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi |
-| kitchen-02 | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi |
-| bath-01 | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi |
-| bath-02 | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi |
-| bedroom-01 | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi |
-| bedroom-02 | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi | Makro kamera yenilemesi sürüyor — henüz teslim edilmedi |
+| seating-01 | ![fabric](kareler/seating-01-detail-fabric.jpg) | ![wood](kareler/seating-01-detail-wood.jpg) | ![joint](kareler/seating-01-detail-joint.jpg) <br> Ahşap yok; gerçek fabric gösterilir. |
+| seating-02 | ![fabric](kareler/seating-02-detail-fabric.jpg) | ![wood](kareler/seating-02-detail-wood.jpg) | ![joint](kareler/seating-02-detail-joint.jpg) <br> Ahşap yok; gerçek ahşap gösterilir. |
+| table-01 | ![fabric](kareler/table-01-detail-fabric.jpg) <br> Kumaş yok; gerçek tabla gösterilir. | ![wood](kareler/table-01-detail-wood.jpg) | ![joint](kareler/table-01-detail-joint.jpg) |
+| table-02 | ![fabric](kareler/table-02-detail-fabric.jpg) <br> Kumaş yok; gerçek tabla gösterilir. | ![wood](kareler/table-02-detail-wood.jpg) | ![joint](kareler/table-02-detail-joint.jpg) |
+| storage-01 | ![fabric](kareler/storage-01-detail-fabric.jpg) <br> Kumaş yok; gerçek kapak / ön yüz gösterilir. | ![wood](kareler/storage-01-detail-wood.jpg) | ![joint](kareler/storage-01-detail-joint.jpg) |
+| storage-02 | ![fabric](kareler/storage-02-detail-fabric.jpg) <br> Kumaş yok; gerçek kapak / ön yüz gösterilir. | ![wood](kareler/storage-02-detail-wood.jpg) | ![joint](kareler/storage-02-detail-joint.jpg) |
+| kitchen-01 | ![fabric](kareler/kitchen-01-detail-fabric.jpg) <br> Kumaş yok; gerçek kapak / ön yüz gösterilir. | ![wood](kareler/kitchen-01-detail-wood.jpg) | ![joint](kareler/kitchen-01-detail-joint.jpg) |
+| kitchen-02 | ![fabric](kareler/kitchen-02-detail-fabric.jpg) <br> Kumaş yok; gerçek kapak / ön yüz gösterilir. | ![wood](kareler/kitchen-02-detail-wood.jpg) | ![joint](kareler/kitchen-02-detail-joint.jpg) |
+| bath-01 | ![fabric](kareler/bath-01-detail-fabric.jpg) <br> Kumaş yok; gerçek kapak / ön yüz gösterilir. | ![wood](kareler/bath-01-detail-wood.jpg) | ![joint](kareler/bath-01-detail-joint.jpg) |
+| bath-02 | ![fabric](kareler/bath-02-detail-fabric.jpg) <br> Kumaş yok; gerçek kapak / ön yüz gösterilir. | ![wood](kareler/bath-02-detail-wood.jpg) <br> Ahşap yok; gerçek kapak / ön yüz gösterilir. | ![joint](kareler/bath-02-detail-joint.jpg) |
+| bedroom-01 | ![fabric](kareler/bedroom-01-detail-fabric.jpg) | ![wood](kareler/bedroom-01-detail-wood.jpg) | ![joint](kareler/bedroom-01-detail-joint.jpg) |
+| bedroom-02 | ![fabric](kareler/bedroom-02-detail-fabric.jpg) | ![wood](kareler/bedroom-02-detail-wood.jpg) | ![joint](kareler/bedroom-02-detail-joint.jpg) |
 
 [Render mimarisi ve tekrar üretim](README.md) · [Cycles prototipi ve sunucu notu](CYCLES.md) · [CC0 kaynakları](cc0/README.md) · [Backend tanısı](path-diagnostics.json)

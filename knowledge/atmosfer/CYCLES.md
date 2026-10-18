@@ -28,3 +28,7 @@ Kaynaklar: [Blender komut satırı](https://docs.blender.org/manual/en/latest/ad
 Makro kamera dönüşü quaternion kipinde uygulanır; seçilen gerçek yüzeyin görüntü merkezinde olduğu `world_to_camera_view` ile doğrulanır. Kamera, genel bakıştan ilk görülen yüzeyin önüne alınarak dolabın içine yerleşmesi önlenir. Her yazılmış JPEG boş/karanlık kare denetiminden geçer. Ortak malzemeye bevel normal düğümü yalnız bir kez eklenir; kumaşa eklenmez.
 
 Genel kareler ilk geçerli CPU geçişinden korunur; kaynak commit ve dosya hashleri `kareler/cycles-general-report.json` içindedir. Makrolar ayrı kamera geçişiyle yenilenir; aynı geometri ve malzeme GLB hashleri korunur.
+
+## Bu cihazdaki gerçek CPU süreleri
+
+12 genel kare toplam 1080 sn (kare başına 78–115 sn); 36 yakın planın ayrı geçişi toplam 1668 sn sürdü. İki geçişin toplamı 45.8 dakika. Yakın plan süresi sahne kurulumunu da içerir. Bu ölçümler bu dizüstü ve yukarıdaki prototip çözünürlükleri içindir; sunucu kapasitesi veya üretim kalitesi için süre garantisi değildir. Ayrıntılı sahne bazlı kayıtlar `kareler/cycles-report.json` ve ham makro geçişi `kareler/cycles-detail-run.json` içindedir.

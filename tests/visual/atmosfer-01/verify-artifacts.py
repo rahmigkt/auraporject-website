@@ -6,11 +6,19 @@ root=Path(__file__).resolve().parents[3];frames=root/'knowledge/atmosfer/kareler
 assert len(ids)==12
 exports={r['id']:r['sha256'] for r in json.loads((root/'knowledge/atmosfer/gltf-export-report.json').read_text())['fixtures']}
 cycles=json.loads((frames/'cycles-report.json').read_text(encoding='utf-8'));assert {r['id'] for r in cycles}==ids,'Cycles batch incomplete'
+general=json.loads((frames/'cycles-general-report.json').read_text(encoding='utf-8'));general_by_id={r['id']:r for r in general['frames']};assert set(general_by_id)==ids
+detail_script_hash=hashlib.sha256((root/'tests/visual/atmosfer-01/cycles.py').read_bytes()).hexdigest()
 for row in cycles:
  assert not row.get('probeOnly');assert row['cameraFovMatchesGltf'];assert row['engine']=='Cycles' and row['device']=='CPU' and row['denoiser']=='OPENIMAGEDENOISE'
  assert len(row['closeups'])==3 and {d['detail'] for d in row['closeups']}=={'fabric','wood','joint'}
  assert row['sourceGlbSha256']==exports[row['id']]
- for detail in row['closeups']:assert detail['focusDistanceM']>0 and detail['focusHitMesh'] and detail['focusHitMaterial'] and detail['fstop']==5.6
+ assert row['detailRenderScriptSha256']==detail_script_hash
+ assert row['detailMaxBevelNodesPerMaterial']<=1
+ assert hashlib.sha256((frames/(row['id']+'-cycles.jpg')).read_bytes()).hexdigest()==general_by_id[row['id']]['jpegSha256']
+ for detail in row['closeups']:
+  assert detail['focusDistanceM']>0 and detail['focusHitMesh'] and detail['focusHitMaterial'] and detail['fstop']==5.6
+  assert detail['opticalCentreVerified'] and detail['cameraOutsideScene']
+  assert (detail['width'],detail['height'],detail['samples'])==(1000,667,16)
 raster=json.loads((frames/'capture-report.json').read_text());path=json.loads((frames/'path-capture-report.json').read_text());assert {r['id'] for r in raster['captures']}==ids;assert {r['id'] for r in path['captures']}==ids
 for report,mode in [(raster,'raster'),(path,'path')]:
  for r in report['captures']:assert r['mode']==mode and not r['errors'] and r['lazyLoadVerified']
