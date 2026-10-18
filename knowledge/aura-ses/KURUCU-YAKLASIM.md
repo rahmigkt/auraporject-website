@@ -2,7 +2,8 @@
 
 Durum: **DENEMELERE TEMEL OLARAK ONAYLANDI**. METİN-01 / PR 1. Bu belge nihai marka kılavuzu değildir.
 Kurucu metnin cümlelerini çoğaltmak için değil, yeni metinlerin kararlarını tartışmak için hazırlanmıştır.
-Karar sahibinin aşağıdaki onayı yalnız bu ilk aşamanın 30 denemesine temel oluşturur; ölçekli üretim onayı değildir.
+Karar sahibinin aşağıdaki onayı ilk aşamanın 30 denemesine temel oluşturur. D3 sonrasında aşama 1b için
+verdiği açık revizyon talimatı K11'i ve aynı 30 kaydın yeniden yazımını yetkilendirir; ölçekli üretim onayı değildir.
 
 ## Kaynak sınırı
 
@@ -83,7 +84,8 @@ geçme veya görünmez bağlantı kullanıldığının teknik kanıtı değildir
 > “Yatak odasının en örtük anlarına eşlik eden de böyle bir varlıktır” — KAVELA
 
 Nesnenin insanın hayatında arka planda kalabilmesi düşünülür. Yeni bir tasarıma yaşanmış aile hatıraları,
-kuşaklar boyu kullanım veya geçmişten kalan izler mal edilmez. Olası bir kullanım anı ile olmuş olay ayrılır.
+kuşaklar boyu kullanım veya geçmişten kalan izler mal edilmez. İmgesel anlatım doğrulanmış müşteri geçmişi
+gibi sunulmaz; her imgenin başına olasılık fiili koymak gerekmez.
 Mahremiyet romantik bir sahiplik iddiasına veya kullanıcı hakkında varsayıma dönüşmez.
 
 ### K09 — Sakinlik bir sözcük listesi değil, dikkat biçimidir
@@ -104,6 +106,33 @@ taklit şablonu yapılmaz. “Kusursuz”, “eşsiz”, “lüksün zirvesi” 
 
 Yazı fiziksel ayrıntılardan ilişki açar. Enerji temizleme, ruhu iyileştirme, kaygıyı giderme veya ölçülmemiş
 akustik/ergonomik başarı vaat etmez. Kaynağın bütünsel yaklaşımı korunur; iddiaları ürün sertifikasına çevrilmez.
+
+### K11 — Olguda tam doğruluk; imgede, ritimde ve kesinlikte serbestlik
+
+> “İki yüzeyin kavuştuğu yerdeki o kusursuz, sessiz sadakat.” — GÖNYE
+>
+> “usulca bırakılmış, organik bir tanık” — İSKARPELA
+
+Malzeme, ölçü, köken, imalat ve vaat hakkında tam doğruluk gerekir. Somut iddia tasarımdaki etkin karşılığına
+bağlanır; sertifika, sağlık veya performans sonucu icat edilmez. **İmge, ritim ve anlatımın kesinliği ise
+serbesttir.** Nesnenin beklemesi, bir kenarın sözü devralması veya aynanın bakışı geri vermesi imgesel
+anlatımdır; olasılık fiiliyle korunmak zorunda değildir. İmgeyi gerçek müşteri hatırası, malzeme bileşimi
+veya ölçülmüş etki gibi sunmak bu serbestliğin dışında kalır.
+
+D3'ün saptadığı fazla temkin giderilir: olgusal doğruluk kuralı bütün cümleleri kararsızlaştırmaz.
+Kısa ve imgeli cümle, olgusal olarak yalansızken kesin konuşur. Kurucu metinlerin yoğunluğu ölçüdür;
+onların ifadeleri yeni tasarımlara şablon olarak kopyalanmaz.
+
+**Çekince sınırı:** `tanik` başına en çok **bir** çekince kalıbı. Aynı kalıbın iki kullanımı iki sayılır;
+iki farklı kalıp da iki sayılır. TR'de olasılık/korunma işlevindeki `olabilir`, `-ebilir/-abilir`,
+`belki`, `düşünelim`, `hayal edelim`, `zorunda değil`, `mümkün`, `yalnız … başlangıcıdır` ve benzerleri;
+EN'de `may`, `might`, `could`, olasılık anlamındaki `can`, `perhaps`, `maybe`, `imagine`,
+`does not need to` / `need not` / `does not have to` aynı bütçeyi paylaşır. Sınırı eşanlamlı bir
+çekinceyle dolaşmak kabul edilmez. Olumsuz cümle tek başına çekince değildir: doğrulanmış bir yokluk
+veya imgesel karşıtlık ayrıca değerlendirilir. Sayım, bağlama dair editoryal okumanın yerine geçmez.
+
+Bu ilke [D3 denetimi](../ai-egitim/DENETIM-D3.md) ve karar sahibinin 2026-10-18 tarihli açık aşama 1b
+talimatıyla eklendi; kurucu kaynağa yeni bir teknik iddia eklemez.
 
 ## İlkelerden editoryal karara
 

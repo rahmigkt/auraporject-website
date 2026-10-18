@@ -1,4 +1,4 @@
-# AURA'nın sesi — METİN-01 / PR 1
+# AURA'nın sesi — METİN-01 / aşama 1 ve 1b
 
 Bu dizin tasarımın ürün tanıtımından önce insan, nesne ve mekân ilişkisi içinden okunması için ilk
 düşünce ve deneme dilimini içerir. Görev: [METİN-01 v2](../ai-egitim/CODEX-IS-EMRI-METIN-01.md).
@@ -6,13 +6,18 @@ Başlangıç: main `cedd083`. Dal: `codex/aura-metin-01`. PR denetime açılır;
 
 ## Okuma sırası
 
-1. [Kurucu yaklaşım](KURUCU-YAKLASIM.md): PDF ve beş alt marka metninden alıntıyla destekli 10 ilke.
+1. [Kurucu yaklaşım](KURUCU-YAKLASIM.md): ilk aşamadaki 10 ilke ve D3 sonrasında eklenen K11.
 2. [Araştırma planı](arastirma/PLAN.md): bu ilk dilimin kapsamı, sayım yöntemi ve sonraki araştırmalar.
 3. [Fenomenoloji / barınma](arastirma/FENOMENOLOJI.md): 15 birincil eser/söyleşinin seçili bölümünden düşünce notları.
 4. [Malzeme](arastirma/MALZEME.md): 17 kurumsal/teknik yayından davranış ve iddia sınırları.
 5. [Malzeme anlam kartları](kartlar/MALZEME-KARTLARI.md): 67 kart, sözlük bağı, kaynak, ilişki sorusu ve sınır.
 6. [On tasarım × üç deneme](denemeler/DENEMELER.md): 20 TR + 10 EN, kart kökeni ve somut iddia kayıtları.
 7. [Doğrulama ve açık işler](DOGRULAMA.md).
+
+**D3 sonrasında:** [aşama 1b](denemeler/01b/README.md) aynı 30 kaydı daha kısa, imgeli ve kesin cümlelerle
+yeniden yazar. İlk kayıtlar karşılaştırma için korunur. Karar sahibi önce yalnız
+[etiketsiz kör okuma sayfasını](denemeler/01b/okuma.html) veya
+[yan yana okuma belgesini](denemeler/01b/KOR-OKUMA.md) açar; sürüm anahtarı tercihten sonra kullanılır.
 
 Kurucu yaklaşım, karar sahibinin bu görev konuşmasındaki 2026-10-18 tarihli “Yaklaşımı onaylıyorum;
 30 denemeye geç” yanıtından sonra denemelere temel oldu. Bu onay, 30 metnin seçildiği veya yayın/eğitim
