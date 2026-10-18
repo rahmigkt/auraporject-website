@@ -30,7 +30,9 @@ for(let i=0;i<rows.length;i++){
   const r=rows[i],before=old[i],k=key.pairs[i];
   assert.equal(r.tasarim,before.tasarim); assert.equal(k.record,r.id); assert.equal(k.design,r.tasarim);
   assert.equal(r.tanik,hand[r.id]);assert.notEqual(r.tanik,before.tanik);
-  assert.ok(words(r.tanik)>=50 && words(r.tanik)<=120,r.id);
+  // Current owner instruction supersedes the historical Stage 1 word budget for 1b only.
+  assert.ok(words(r.tanik)>=15 && words(r.tanik)<=35,`${r.id}: 15–35 words`);
+  assert.ok(sentenceLengths(r.tanik).length>=2 && sentenceLengths(r.tanik).length<=3,`${r.id}: 2–3 sentences`);
   assert.ok(hedgeMatches(r.tanik).length<=1,`${r.id}: hedge budget`);
   assert.ok(Math.max(...sentenceLengths(r.tanik))<=18,`${r.id}: long sentence`);
   for(const field of ['ad','iz','dil','kartlar','dayanak','etkinlik_kosullari'])assert.deepEqual(r[field],before[field],`${r.id}: factual context changed`);
@@ -59,7 +61,7 @@ assert.equal(hedgeMatches('Imagine it. Perhaps it stays.').length,2);
 assert.equal(hedgeMatches('BELKİ DÜŞÜNELİM.').length,2);
 assert.equal(hedgeMatches('The mirror returns the glance.').length,0);
 assert.equal(hedgeMatches('Arka panel yok; bakış sürer.').length,0);
-const report={records:rows.length,designs:designs.size,word_range:[Math.min(...rows.map(r=>words(r.tanik))),Math.max(...rows.map(r=>words(r.tanik)))],hedge_uses:rows.reduce((n,r)=>n+hedgeMatches(r.tanik).length,0),pairs:30,new_on_A:15,new_on_B:15,independent_voice_review:'pending',blind_choices:'not_collected'};
+const report={records:rows.length,designs:designs.size,word_range:[Math.min(...rows.map(r=>words(r.tanik))),Math.max(...rows.map(r=>words(r.tanik)))],sentence_range:[Math.min(...rows.map(r=>sentenceLengths(r.tanik).length)),Math.max(...rows.map(r=>sentenceLengths(r.tanik).length))],hedge_uses:rows.reduce((n,r)=>n+hedgeMatches(r.tanik).length,0),pairs:30,new_on_A:15,new_on_B:15,independent_voice_review:'pending',blind_choices:'not_collected'};
 for(const lang of ['tr','en']){
   const before=old.filter(x=>x.dil===lang).flatMap(x=>sentenceLengths(x.tanik));
   const after=rows.filter(x=>x.dil===lang).flatMap(x=>sentenceLengths(x.tanik));

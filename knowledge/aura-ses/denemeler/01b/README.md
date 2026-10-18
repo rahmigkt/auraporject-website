@@ -2,7 +2,7 @@
 
 [D3](../../../ai-egitim/DENETIM-D3.md) altyapıyı kabul etti; sesin fazla temkinli kalmasını düzeltmemizi istedi.
 Karar sahibinin 2026-10-18 tarihli açık talimatıyla kurucu yaklaşıma [K11](../../KURUCU-YAKLASIM.md) eklendi:
-**olguda tam doğruluk; imgede, ritimde ve kesinlikte serbestlik**. Yeni bir kurucu onay kapısı açılmadı;
+**olguda tam doğruluk; imgede, ritimde ve kesinlikte serbestlik**. Ardından karar sahibi [güncel iş sırasındaki](../../../ai-egitim/IS-SIRASI.md) ölçüyle aynı PR'ı kısaltmamızı istedi: **2–3 kısa cümle; ürün ve atmosfer birlikte**. Yeni bir kurucu onay kapısı açılmadı;
 bu düzeltmeyi ve 30 yeniden yazımı karar sahibi doğrudan istedi.
 
 ## Teslimin birimi
@@ -10,6 +10,7 @@ bu düzeltmeyi ve 30 yeniden yazımı karar sahibi doğrudan istedi.
 “Aynı 30 tasarım”, D3 ve ilk PR'deki veriyle birlikte, mevcut **10 tasarım × 3 deneme = 30 metin kaydı**
 olarak uygulandı. Yeni tasarım örneklenmedi. Tasarım kimlikleri, eski 30 metin, kartlar, somut izler,
 dayanaklar ve etkinlik koşulları korundu. Yeniden yazılan bölüm `tanik`tir; 20 TR ve 10 EN dağılımı aynı.
+Güncel 30 tanıklığın her biri iki kısa cümledir; son görüntünün altındaki okuma için kısaltıldı. Henüz arayüze bağlanmadı.
 Her metin tek tek yazıldı; otomatik cümle üretimi, model API'si, toplu varyasyon veya eğitim koşusu yok.
 
 ## Kör okuma
@@ -56,11 +57,12 @@ node tests/text-eval/verify-stage1.mjs
 
 | Ölçüm | İlk aşama | Aşama 1b |
 | --- | ---: | ---: |
-| TR ortalama cümle uzunluğu (kelime) | 11,41 | 7,55 |
-| EN ortalama cümle uzunluğu (kelime) | 13,81 | 9,03 |
-| Yeni TR metinlerde en uzun cümle | — | 16 |
-| Yeni EN metinlerde en uzun cümle | — | 18 |
-| Yeni tanıklıkların kelime aralığı | — | 60–74 |
+| TR ortalama cümle uzunluğu (kelime) | 11,41 | 9,28 |
+| EN ortalama cümle uzunluğu (kelime) | 13,81 | 10,25 |
+| Yeni TR metinlerde en uzun cümle | — | 13 |
+| Yeni EN metinlerde en uzun cümle | — | 13 |
+| Yeni tanıklıkların kelime aralığı | — | 16–22 |
+| Yeni tanıklık başına cümle | — | 2 |
 | Tanımlı çekince kalıpları kullanımı | — | 0 |
 
 Çekince üst sınırı metin başına birdir; bu 30 metinde hiç kullanılmadı. Aynı kalıbın tekrarı ayrı sayılır.
@@ -75,8 +77,11 @@ eşyanın beklemesi yaşanmış müşteri geçmişi sayılmaz. Ahşap türü, ka
 bu imgesel serbestliğin dışında, kayıttaki olgusal sınırlarını korur.
 
 Kontrol eski metin/tasarım kaynağının sabit hash'lerini, 30 birebir eşleşmeyi, korunmuş dayanakları,
-etkinlik değerlerini, 50–120 kelime sözleşmesini, çekince sınırını, cümle uzunluğunu, A/B dengesini,
+etkinlik değerlerini, yeni metinlerde 2–3 cümle ve 15–35 kelime aralığını, çekince sınırını, cümle uzunluğunu, A/B dengesini,
 iki okuma kopyasının içeriğini ve HTML'de anahtar/yazar/sürüm/ağ isteği bulunmadığını doğrular.
+İlk aşamanın 50–120 kelime sözleşmesi yalnız tarihsel eski metinlerde korunur; güncel 1b uzunluk ölçüsü onun yerine geçer.
+Kısaltma sonrası toplam uzunluk azaldı; ortalama cümle uzunluğu, önceki uzun 1b taslağıyla değil ilk aşamayla karşılaştırılır.
+Kör eşleştirme anahtarı değişmedi. Uzunluk farkı sürümü sezdirir; bu sunum yazarı etiketlemez ama tam sürüm körlüğü iddia etmez.
 Tercihler henüz toplanmadı; farklı model onayı, kör kazanan veya nihai ses başarısı ilan edilmez.
 
 Kapsam yalnız aşama 1b'dir. Aşama 2, TASARIM-01, ARAŞTIRMA-01 ve yerel model eğitimi başlatılmadı.

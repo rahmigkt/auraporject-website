@@ -141,7 +141,7 @@ talimatıyla eklendi; kurucu kaynağa yeni bir teknik iddia eklemez.
 3. İlişki yorumu ile somut iddia ayrılır. Somut iddianın tam tasarım yolu `dayanak`ta tutulur.
 4. Malzeme kartı araştırma zemini sağlar; tasarımda o malzemenin varlığını kanıtlamaz.
 5. TR ve EN aynı yaklaşımı kendi dilinde kurar; kurucu cümlelerin çeviri varyantları üretilmez.
-6. `ad`, 50–120 kelimelik `tanik`, tek somut cümlelik `iz`, `dayanak` ve kullanılan kartlar birlikte incelenir.
+6. `ad`, `tanik`, tek somut cümlelik `iz`, `dayanak` ve kullanılan kartlar birlikte incelenir. İlk aşamanın tarihsel 50–120 kelime aralığı eski kayıtlarda korunur. Karar sahibinin güncel talimatıyla aşama 1b tanıklığı **2–3 kısa cümledir**; ürünü ve atmosferi birlikte, net söyler. Bu denemelerde 15–35 kelime ve cümle başına en çok 18 kelime editoryal kontrol aralığıdır. Kullanıcı metni yalnız proje sonunda, son görüntünün altında görür; tasarım sürecinde değil.
 
 ## Karar sahibinin onayı
 
