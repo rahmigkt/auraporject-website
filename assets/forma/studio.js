@@ -177,7 +177,7 @@ function shell() {
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261018b').then(mod => { sceneModule = mod; const {createViewer} = mod;
+  import('./scene.js?v=20261018c').then(mod => { sceneModule = mod; const {createViewer} = mod;
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(shown(), state.design.materials); if (state.room) showRoom(); }
@@ -1293,7 +1293,7 @@ account.init().then(async u => {
   renderAccountBtn();
   account.onChange(() => renderAccountBtn());
   if (u) { try { if (await account.pull(designKey)) location.reload(); } catch {} }
-  else if (!store.get('aura-forma-account-skip') && !location.hash.includes('access_token')) { if (guideDue()) guideThen = () => openAccount(true); else openAccount(true); }
+  else if (!store.get('aura-forma-account-skip') && !location.hash.includes('access_token')) { if (!guideDue() && !document.querySelector('.f-modal')) openAccount(true); } // not on top of the first-visit guide
 }).catch(() => {});
 if (guideDue() && !location.hash.includes('access_token')) openGuide();
 window.addEventListener('pagehide', () => { account.flush(); });
