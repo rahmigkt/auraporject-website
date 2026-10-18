@@ -27,10 +27,10 @@ kaynakların fikirleri kendi cümlelerimizle, kaynak gösterilerek. Telifli eser
 eser ve sayfa bilgisi); telifi dolmuş ya da açık lisanslı metinden kısa alıntı alınabilir.
 
 1. **Fenomenoloji ve oturma/barınma düşüncesi:** nesne, ev, mekân, beden, dokunma, alışkanlık, zaman ve sessizlik
-   üzerine felsefe ve mimarlık düşüncesi (Doğu ve Batı; Türkçe düşünce ve edebiyat dahil). Hangi kavram AURA'nın
+   üzerine felsefe ve mimarlık düşüncesi (dünyanın bütün düşünce gelenekleri; tek bir kültüre ağırlık verilmez). Hangi kavram AURA'nın
    hangi ilkesine dayanak olur.
-2. **Nesneyle yaşamak:** edebiyatta eşya ve ev — nesnenin hatıra, tanık, miras olarak anlatılışı; Türk edebiyatı
-   ağırlıklı, dünya edebiyatı ile.
+2. **Nesneyle yaşamak:** edebiyatta eşya ve ev — nesnenin hatıra, tanık, miras olarak anlatılışı; dünya edebiyatı,
+   farklı dil ve kültürlerden dengeli.
 3. **Malzemenin fenomenolojisi:** stüdyodaki her malzeme için (her ahşap türü, taş, metal, cam, ayna, her lif ve
    dokuma, deri, hasır, lake) — elde, gözde, zamanda nasıl davranır, nasıl yaşlanır, nasıl ses verir, ısısı, kokusu;
    zanaat bilgisi ve gelenekteki yeri. Her malzemeye bir **anlam kartı**.
@@ -45,7 +45,7 @@ eser ve sayfa bilgisi); telifi dolmuş ya da açık lisanslı metinden kısa al�
 7. **Yazı zanaatı:** nesne üzerine iyi yazının örnekleri ve yöntemleri; klişe ve pazarlama dilinin dökümü (ne
    yazılmayacak).
 8. **Çok dillilik:** sesin diğer dillere çeviri değil yeniden yazım olarak aktarılması; her dilde karşılık gelen
-   düşünce ve edebiyat zemini (ilk aşama tr ve en; diğerleri sonra).
+   düşünce ve edebiyat zemini (AURA bir dünya markasıdır; ilk aşama en ve tr, diğerleri sonra).
 
 Hedef derinlik: her alanda en az 15 doğrulanmış kaynak; malzeme ve parça kartları stüdyonun bütün seçeneklerini
 kapsar.
