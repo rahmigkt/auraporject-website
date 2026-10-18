@@ -25,12 +25,15 @@ try{
  for(const fixture of selected){
   console.log(`${fixture.id}: preparing studio materials`);
   await page.evaluate(id=>window.setReviewDesign(id),fixture.id);
-  await page.locator('#studio canvas').screenshot({path:new URL(fixture.id+'-studio.png',output).pathname.replace(/^\/(.:)/,'$1')});
   console.log(`${fixture.id}: rendering final (${args.mode||'path'})`);
   let result;
   const progress=setInterval(()=>page.locator('#status').textContent({timeout:2000}).then(s=>console.log(`${fixture.id}: ${s}`),()=>{}),15000);
   try { result=await page.evaluate(async options=>window.renderFinal(options),{id:fixture.id,width:+args.width||2400,height:+args.height||1600,samples:+args.samples||64,mode:args.mode||'path',preset:args.preset||'north'}); }
   finally { clearInterval(progress); }
+  // The final asset waits for every material map. Capture the studio afterwards
+  // so both sides show those same completed maps, not its first ready texture.
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  await page.locator('#studio canvas').screenshot({path:new URL(fixture.id+'-studio.png',output).pathname.replace(/^\/(.:)/,'$1')});
   await fs.writeFile(new URL(fixture.id+'-final.jpg',output),Buffer.from(result.jpeg.split(',')[1],'base64'));delete result.jpeg;
   if(errors.length)throw new Error(errors.join('\n'));
   report.captures.push({...result,family:fixture.design.family,lazyLoadVerified:true,errors});console.log(JSON.stringify(result));

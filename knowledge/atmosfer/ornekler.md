@@ -6,7 +6,8 @@ malzemesi ve renkleri gerçek motordan gelir; görüntü üreten yapay zekâ yok
 Kamera 55 mm'dir. Metin yeri boş bırakılmıştır.
 
 **Bu karşılaştırmadaki 12 genel kare raster yedekle üretilmiştir.** Yol izleme
-çıktısı olarak sunulmaz. GTAO, 4096 gölge haritası ve SMAA kullanılır;
+çıktısı olarak sunulmaz. Stüdyo karşılığı da bütün malzeme haritaları
+tamamlandıktan sonra alınır. GTAO, 4096 gölge haritası ve SMAA kullanılır;
 fiziksel dolaylı ışık veya denoiser uygulanmış olduğu iddia edilmez.
 Karar sahibi estetik kabulü beklenir. Bu sayfa PR 1'in genel karelerini kapsar;
 beşli yakın plan paketi ve müşteri akışı PR 2'ye aittir.

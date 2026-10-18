@@ -16,7 +16,7 @@ window.renderFinal=async(options={})=>{
   controller=new AbortController();document.querySelector('#cancel').disabled=false;document.querySelector('#render').disabled=true;
   try{const {renderAtmosphere}=await import('../../../assets/forma/atmosfer.js');
     lastResult=await renderAtmosphere({compiled:familyOf(row.design).mod.compile(row.design.params),materials:row.design.materials,family:row.design.family,
-      canvas:document.querySelector('#final'),width:options.width||2400,height:options.height||1600,samples:options.samples||64,mode:options.mode||'auto',preset:options.preset||document.querySelector('#light').value,signal:controller.signal,
+      canvas:document.querySelector('#final'),width:options.width||2400,height:options.height||1600,samples:options.samples||64,mode:options.mode||'raster',preset:options.preset||document.querySelector('#light').value,signal:controller.signal,
       onProgress:p=>{window.renderProgress=p;document.querySelector('#progress').value=p.progress;document.querySelector('#status').textContent=p.phase+' · '+p.mode+' · '+p.samples+'/'+p.targetSamples;}});
     const result={id:row.id,mode:lastResult.mode,samples:lastResult.samples,width:lastResult.width,height:lastResult.height,preset:lastResult.preset,elapsedMs:lastResult.elapsedMs,fallbackReason:lastResult.fallbackReason,jpeg:lastResult.jpeg()};
     window.finalResult=result;return result;

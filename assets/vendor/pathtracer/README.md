@@ -42,8 +42,8 @@ Also bundle `three-mesh-bvh/src/workers/generateMeshBVH.worker.js` as
 `GenerateMeshBVHWorker.js` URL from `./generateMeshBVH.worker.js` to
 `./bvh-worker.js`. Copy the three licenses and update hashes when rebuilding.
 
-The primary mode traces six bounces and uses the actual procedural albedo,
-normal and roughness maps. The optional raster fallback uses GTAO and SMAA;
+The experimental path mode traces six bounces and uses the actual procedural
+albedo, normal and roughness maps. The validated default is raster with GTAO and SMAA;
 its result is labeled `mode: raster`, with `fallbackReason` if auto-selected.
 There is no denoiser in this first stage: sample count and noise remain visible
 for review, rather than claiming an unimplemented denoising stage.
