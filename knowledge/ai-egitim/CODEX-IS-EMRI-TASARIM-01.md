@@ -1,5 +1,7 @@
 # Codex iş emri önerisi — TASARIM-01: söyleneni anlayıp tasarımı çizen model
 
+> **BEKLEMEDE (2026-10-18):** karar sahibinin yönüyle öncelik METİN-01'de. Bu iş emri Codex'e iletilmedi.
+
 Hazırlayan: denetçi (Claude), 2026-10-18. Karar sahibinin yönü: yapay zekâ cümle ayıklamakla kalmasın; söyleneni
 anlayıp mevcut kategorilerde **eksiksiz, üretilebilir bir tasarım (çizim)** çıkarsın, sonra **özgün** tasarımlara
 geçsin. SINAV-01B bu modelin "dinleme" sınavı olarak kalır; asıl hedef aşağıdadır.

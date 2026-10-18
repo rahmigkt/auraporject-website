@@ -1,63 +1,82 @@
-# Codex iş emri önerisi — METİN-01: AURA'nın sesi — tasarıma tanıklık eden metinler
+# Codex iş emri önerisi — METİN-01 (2. sürüm): AURA'nın sesi — binlerce tasarım için tanıklık eden metinler
 
-Hazırlayan: denetçi (Claude), 2026-10-18. **Bu iş önceliklidir.** Karar sahibinin yönü: stüdyo yeterli; eksik olan
-ürünlerin metinsel anlatımı. AURA bir mobilya parçası satmaz, insanın birlikte yaşayacağı **tanıkları** üretir.
-Yapay zekânın kuracağı cümleler bu düzeyde, güçlü ve sanatsal olmalı. ARAŞTIRMA-01 bu işin ikinci planına iner:
-teknik kaynak taraması yalnız metne malzeme olduğu ölçüde yapılır.
+Hazırlayan: denetçi (Claude), 2026-10-18. Önceki sürümün yerine geçer. **Öncelikli iş.**
 
-## Kanon (sesin kaynağı)
+## Ne yapıyoruz, doğru anlamak için
 
-- `knowledge/aura-kaynak/AURA_PROJECT.pdf` (+ `.txt`) — manifesto, politika, terimler.
-- Eski site alt marka metinleri (`archive/site-v1/`): VEREV, GÖNYE, MASİF, İSKARPELA, KAVELA. Örnek:
-  "İki yüzeyin kavuştuğu yerdeki o kusursuz, sessiz sadakat."
-- Karar sahibinin bundan sonra yazacağı ve onaylayacağı metinler. **Kanonun son sözü karar sahibindedir.**
+AURA malzeme ya da mobilya satan bir site değil. Her tasarım, insanın birlikte yaşayacağı bir **tanık**tır; metin
+onu tanıtmaz, onunla kurulacak ilişkiyi açar. Stüdyo onlarca tarzda, binlerce farklı tasarım üretiyor; her biri
+kendine ait, doğru ve güçlü bir metni hak ediyor. Karar sahibinin yazdığı birkaç yüz kelime bunu tek başına
+taşıyamaz ve taklit edilecek bir şablon da değildir. O metinler **kurucu metin**dir: AURA'nın fenomenolojik
+yaklaşımının — nesneyi bedenle, mekânla, zamanla ve sessizlikle kurulan ilişki içinde görmenin — anayasası.
+Bu iş, o anayasadan binlerce özgün metin doğuran bir **bilgi ve dil sistemi** kurmaktır; bunun için ciddi bir
+araştırma gerekir.
 
-## 1. Ses kılavuzu (`knowledge/aura-ses/SES-KILAVUZU.md`)
+## Kurucu metin (değişmez temel)
 
-Kanondan çıkar, uydurma: temalar (mekân, beden, sessizlik, zaman, el teması, tanıklık, bütünlük), cümle ritmi ve
-uzunluğu, bakış (nesne konuşmaz, gözlenir), sözcük dağarcığı ve **AURA terimleri sözlüğü** (her terim: kanondaki
-tanımı + alıntı yeri). Yasaklar: pazarlama kalıpları ("lüks", "kaliteli", "şık", "modern çizgiler", "zamansız
-tasarım"), üstünlük sıfatları, ünlem, emoji, ürün özelliği sıralaması. Her kural kanondan bir örnekle gösterilir.
-Karar sahibi onaylamadan kılavuz kesinleşmez.
+`knowledge/aura-kaynak/AURA_PROJECT.pdf` + eski site alt marka metinleri (`archive/site-v1/`: VEREV, GÖNYE, MASİF,
+İSKARPELA, KAVELA). İlk iş: bunlardan **AURA'nın yaklaşımını** çıkarmak — cümleleri değil, bakışı: nesneye nasıl
+bakıldığı, neyin söylendiği ve neyin bilinçle söylenmediği, beden–nesne–mekân ilişkisinin nasıl kurulduğu.
+Çıktı: `knowledge/aura-ses/KURUCU-YAKLASIM.md` (her ilke kurucu metinden alıntıyla). Karar sahibi onaylamadan hiçbir
+üretim başlamaz.
 
-## 2. İlham kataloğu (`knowledge/aura-ses/ilham.jsonl`)
+## Araştırma programı (`knowledge/aura-ses/arastirma/`)
 
-Nesne, mekân, ev, zanaat, malzeme ve dokunma üzerine edebî ve felsefî metinler; Türkçe ağırlıklı, çok dilli.
-- Telif süresi dolmuş ya da açık lisanslı metinlerden kısa alıntı alınabilir (kaynak, lisans yazılır).
-- Telifli eserlerden **alıntı alınmaz**; yalnız fikir ve tema notu (eser, yazar, fikir özeti, AURA'da nereye).
-- Kayıt: `{eser, yazar, tarih, lisans, alıntı|null, fikir, tema, aura_bağlantısı}`. Hedef 100+ kayıt.
+Amaç alıntı toplamak değil, metinlerin dayanacağı **düşünce zeminini** kurmak. Her alan için bir derleme belgesi;
+kaynakların fikirleri kendi cümlelerimizle, kaynak gösterilerek. Telifli eserden alıntı alınmaz (yalnız fikir,
+eser ve sayfa bilgisi); telifi dolmuş ya da açık lisanslı metinden kısa alıntı alınabilir.
 
-## 3. Görev: tasarımdan metin
+1. **Fenomenoloji ve oturma/barınma düşüncesi:** nesne, ev, mekân, beden, dokunma, alışkanlık, zaman ve sessizlik
+   üzerine felsefe ve mimarlık düşüncesi (Doğu ve Batı; Türkçe düşünce ve edebiyat dahil). Hangi kavram AURA'nın
+   hangi ilkesine dayanak olur.
+2. **Nesneyle yaşamak:** edebiyatta eşya ve ev — nesnenin hatıra, tanık, miras olarak anlatılışı; Türk edebiyatı
+   ağırlıklı, dünya edebiyatı ile.
+3. **Malzemenin fenomenolojisi:** stüdyodaki her malzeme için (her ahşap türü, taş, metal, cam, ayna, her lif ve
+   dokuma, deri, hasır, lake) — elde, gözde, zamanda nasıl davranır, nasıl yaşlanır, nasıl ses verir, ısısı, kokusu;
+   zanaat bilgisi ve gelenekteki yeri. Her malzemeye bir **anlam kartı**.
+4. **Parçanın ve birleşimin fenomenolojisi:** stüdyodaki her parça ve seçenek (kol, sırt, oturum, ayak, tabla
+   kenarı, kapak, çekmece, kulp, derz, birleşim, lavabo, ayna biçimi…) bedenle nasıl karşılaşır. Her seçeneğe
+   anlam kartı. Bu kartlar motorun söz dağarcığına (`tests/ai-eval/vocab.json`) birebir bağlanır.
+5. **Tarzların düşünce kökleri:** stüdyodaki her tarzın (AURA, Japandi, İskandinav, Mid-Century, Minimalizm,
+   Wabi-Sabi, Endüstriyel, Bauhaus, Art Deco, Brütalizm) kendi yazılı dünyası — manifestoları, kurucu metinleri,
+   kavramları. Her tarz AURA sesinin içinde kendi tonunu nasıl bulur: **tarz sesi** belgesi.
+6. **Mekân ve kullanım anları:** salon, yemek odası, yatak odası, mutfak, banyo, çalışma köşesi — gün içindeki
+   anlar, ışık, ritüeller; nesnenin bu anlara nasıl eşlik ettiği.
+7. **Yazı zanaatı:** nesne üzerine iyi yazının örnekleri ve yöntemleri; klişe ve pazarlama dilinin dökümü (ne
+   yazılmayacak).
+8. **Çok dillilik:** sesin diğer dillere çeviri değil yeniden yazım olarak aktarılması; her dilde karşılık gelen
+   düşünce ve edebiyat zemini (ilk aşama tr ve en; diğerleri sonra).
 
-Girdi: stüdyonun tasarım JSON'u (aile, tür, tarz, ölçü, malzeme, parça, çizgi). Çıktı (JSON, 8 dil; önce tr, en):
-- `ad` — parçaya özgü kısa isim (alt marka geleneğinde; marka/kişi adı değil),
-- `tanik` — 50–110 kelime AURA sesinde metin,
-- `iz` — tek cümle: elin ya da gözün fark edeceği somut bir ayrıntı (birleşim, yüzey, oran),
-- `dayanak` — metindeki her somut iddianın tasarımdaki karşılığı (ör. "ceviz" → `materials.wood.species`).
+Hedef derinlik: her alanda en az 15 doğrulanmış kaynak; malzeme ve parça kartları stüdyonun bütün seçeneklerini
+kapsar.
 
-**Doğruluk zorunlu:** metin tasarımda olmayan malzeme, ölçü, işçilik ya da köken iddia edemez. `dayanak`
-otomatik denetlenir.
+## Üretim mimarisi (binlerce özgün metin için)
 
-## 4. Veri ve onay
+Metin şablondan değil, üç katmandan doğar:
+1. **Kurucu yaklaşım** (sabit): bakış, ilkeler, yasaklar.
+2. **Anlam katmanı** (tasarıma göre seçilir): tasarımın tarzı, türü, malzemeleri, parçaları, oranları ve konacağı
+   mekân → ilgili anlam kartları ve tarz sesi. İki tasarım aynı kartları nadiren paylaşır; çeşitlilik buradan gelir.
+3. **Yazıcı model**: kartları ve yaklaşımı alıp metni kurar; tasarımda olmayan hiçbir şeyi söyleyemez.
 
-- Her aile/türden 300 çeşitli tasarım (motor örnekler); her biri için gelişmiş bir yapay zekâ 3 taslak yazar,
-  kılavuz + kanon + ilham notları istemde.
-- Onay yapay zekâsı (yazandan farklı model) rubrikle puanlar: ses uyumu, doğruluk, özgünlük, klişe, tekrar.
-- **Altın küme:** en iyi 120 taslak karar sahibine gider; o düzeltir ya da yeniden yazar. Bu 120 metin sesin
-  ölçüsüdür; insan elinden geçmemiş metin altın sayılmaz.
-- Yerel model (Qwen3.5 4B) ince ayarı, altın küme + yapay zekâ onaylı metinlerle; karşılaştırma: eğitimsiz Qwen
-  ve API modeli aynı istemle.
+Çıktı (her tasarım): `ad` (parçaya özgü), `tanik` (50–120 kelime), `iz` (tek cümle somut ayrıntı), `dayanak`
+(her somut iddianın tasarımdaki karşılığı — otomatik denetlenir), kullanılan kartlar.
 
-## 5. Ölçütler (başlangıç değerleri)
+## Değerlendirme
 
-| Ölçüt | Yöntem | Hedef |
-|---|---|---|
-| Doğruluk | `dayanak` otomatik denetim | %100, ihlal = ret |
-| Ses uyumu | onay yapay zekâsı 1–5 + karar sahibinin kör seçimi (altın metinle yan yana) | ort. ≥ 4; kör seçimde altına ≥ %35 tercih |
-| Klişe | yasak listesi + n-gram tekrarı | yasak 0; ürünler arası tekrar düşük |
-| Çeşitlilik | aynı aile içi metin benzerliği | eşik rapordan |
+- **Doğruluk:** dayanak denetimi; ihlal = ret.
+- **Ses:** onay yapay zekâsı (yazıcıdan farklı model) kurucu yaklaşıma göre rubrikle puanlar; karar sahibi kör
+  okumada seçer.
+- **Özgünlük:** aynı aile/tarzdaki metinler arası benzerlik ve tekrar eden ifade oranı; yasak/klişe listesi.
+- **Derinlik:** metin bir kartı süslemek için değil bir ilişkiyi açmak için kullanıyor mu — rubrik maddesi.
+- Karar sahibinin seçtiği/düzelttiği metinler **altın küme** olur; yerel Qwen ince ayarı bu küme ve yapay zekâ
+  onaylı metinlerle, sonra.
 
-## Teslim (ilk PR)
-Ses kılavuzu taslağı + terim sözlüğü, ilham kataloğu, 30 örnek tasarım için taslak metinler (3'er), dayanak
-denetleyicisi, onay rubriği, karar sahibine gidecek okuma dosyası. Toplu üretim ve eğitim, kılavuz onaylanınca.
-Dal: `codex/aura-metin-01`. PR açılır, birleştirilmez; denetim D3.
+## Aşamalar ve teslim
+
+1. **PR 1:** `KURUCU-YAKLASIM.md` taslağı; araştırma planı ve ilk iki alanın (fenomenoloji, malzeme) derlemesi;
+   malzeme anlam kartlarının ilk yarısı; 10 tasarım için deneme metinleri (her biri 3 taslak) + hangi kartlardan
+   doğduğu. Karar sahibi okur, yön verir.
+2. **PR 2:** kalan araştırma alanları, bütün anlam kartları, tarz sesleri, dayanak denetleyicisi, rubrik; 100 tasarım.
+3. **PR 3:** ölçekli üretim (her aile/tür/tarz), değerlendirme raporu, eğitim verisi.
+
+Dal: `codex/aura-metin-01`. Her PR açılır, birleştirilmez; denetim D3, D4, D5.

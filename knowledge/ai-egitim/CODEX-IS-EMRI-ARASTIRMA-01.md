@@ -1,5 +1,7 @@
 # Codex iş emri önerisi — ARAŞTIRMA-01: önceki çalışmaları topla, AURA'ya göre derle
 
+> **BEKLEMEDE (2026-10-18):** karar sahibinin yönüyle öncelik METİN-01'de. Bu iş emri Codex'e iletilmedi.
+
 Hazırlayan: denetçi (Claude), 2026-10-18. Karar sahibinin yönü: sıfırdan başlamayalım; bu alanda yapılmış her şeyi
 toplayıp AURA'ya bağlayalım; çok sınırlayarak gitmeyelim. **TASARIM-01'den önce ya da onunla paralel yürür;
 TASARIM-01'in yöntemi bu derlemeye göre güncellenebilir.** İş emirlerindeki eşikler başlangıç değerleridir,
