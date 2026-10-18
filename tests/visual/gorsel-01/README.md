@@ -120,3 +120,8 @@ Test dosyalarının mevcut ve `f99efc1` blob SHA'ları aynıdır:
 Başlangıç commit'inde bu üç servis için `git ls-tree` boş döner; importların çözüldüğü
 depo dışındaki `../services/design/` yolları da yoktur. Dolayısıyla tüm testler geçti
 iddiasında bulunulmaz.
+
+
+## 18 Ekim akşam: güncel main karşılaştırması
+
+[Main ve #58 için ayrı gerçek test koşuları, bütün sonuçlar ve yeni başarısızlık denetimi](TEST-KARSILASTIRMA.md). Yeni başarısızlık **0**; karar sahibi görsel onayı beklenir.
