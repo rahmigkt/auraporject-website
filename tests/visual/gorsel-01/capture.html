@@ -13,4 +13,7 @@ if(!viewer) throw new Error('WebGL gerekli');
 viewer.setDesign(compiled,d.materials);viewer.view(q.get('view')||'angle');
 document.querySelector('#family').textContent=family;
 document.querySelector('#status').textContent=`${before?'ÖNCE':'SONRA'} · ${d.style} · seed ${d.seed} · ${compiled.parts.length} parça`;
+window.reviewInfo={family:d.family,seed:d.seed,style:d.style,parts:compiled.parts.length,view:q.get('view')||'angle'};
+// Texture callbacks rebuild the sketch too; wait for that completion before recording either version.
+const ready=()=>{if(!viewer.texturesReady()){requestAnimationFrame(ready);return;}requestAnimationFrame(()=>requestAnimationFrame(()=>{window.reviewReady=true;}));};ready();
 </script></html>
