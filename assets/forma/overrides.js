@@ -134,6 +134,12 @@ export function normalizeOverrides(list) {
       if (ops.length) out.push({tool: 'cut', id: o.id.slice(0, 60), ops});
     }
     else if (o.tool === 'array' && typeof o.id === 'string') out.push({tool: 'array', id: o.id.slice(0, 60), kind: o.kind === 'radial' ? 'radial' : 'linear', count: Math.max(2, Math.min(60, Math.round(num(o.count) || 2))), step: v3(o.step, 4000), angle: Math.max(-360, Math.min(360, num(o.angle) || 0)), center: v3(o.center, 4000)});
+    else if (o.tool === 'material' && typeof o.id === 'string' && o.spec && typeof o.spec === 'object') {
+      const sp = o.spec, str = (v, n = 30) => typeof v === 'string' ? v.slice(0, n) : undefined;
+      const spec = {surface: ['wood', 'veneer', 'stone', 'metal', 'lacquer', 'glass'].includes(sp.surface) ? sp.surface : 'wood', species: str(sp.species), stain: str(sp.stain), finish: str(sp.finish), stone: str(sp.stone), polish: str(sp.polish), metal: str(sp.metal), color: str(sp.color), glass: str(sp.glass)};
+      for (const k of Object.keys(spec)) if (spec[k] === undefined) delete spec[k];
+      out.push({tool: 'material', id: o.id.slice(0, 60), spec, grain: ['along', 'across', 'diag'].includes(o.grain) ? o.grain : 'along'});
+    }
     else if (o.tool === 'edge' && typeof o.id === 'string' && o.sides && typeof o.sides === 'object') {
       const sides = {}; for (const k of ['front', 'back', 'left', 'right']) { const e = o.sides[k]; if (Array.isArray(e) && EDGE_TYPES.includes(e[0])) sides[k] = [e[0], Math.max(1, Math.min(80, num(e[1]) || 6))]; }
       if (Object.keys(sides).length) out.push({tool: 'edge', id: o.id.slice(0, 60), sides});
@@ -205,6 +211,8 @@ export function applyOverrides(compiled, overrides) {
     }
     return q;
   });
+  // Per-part material and grain direction (copies inherit).
+  out = out.map(q => { const m = own('material', q); return m ? {...q, matSpec: m.spec, grain: m.grain} : q; });
   // Machining: holes, pockets, slots, grooves and flutes cut from the finished part shape (part-local mm).
   out = out.map(q => { const c = own('cut', q); return c ? {...q, geom: {fn: 'cut', inner: q.geom, ops: c.ops}, shaped: true, cuts: c.ops} : q; });
   out = out.map(q => {
