@@ -143,6 +143,16 @@ function woodMaterial(w) {
 }
 
 /** Surface material for table tops and bases: wood/veneer, stone, glass, lacquer or metal. */
+/** Designer-chosen material for one part, cached on the part's material set; maps arrive later and trigger onPart. */
+function partMaterial(spec, mats) {
+  const key = JSON.stringify(spec); mats.perPart ??= new Map();
+  if (!mats.perPart.has(key)) {
+    const jobs = [], m = surfaceMaterial(spec, mats, jobs); mats.perPart.set(key, m); (mats.extra ??= []).push(m);
+    mats.pendingParts = (mats.pendingParts || 0) + 1;
+    Promise.all(jobs).then(() => { mats.pendingParts--; mats.onPart?.(); });
+  }
+  return mats.perPart.get(key);
+}
 function surfaceMaterial(spec, set, jobs, {rotate = false} = {}) {
   if (spec.surface === 'wood' || spec.surface === 'veneer') {
     const mat = woodMaterial(spec); jobs.push(makeMaps('wood', {species: spec.species, finish: spec.finish, stain: spec.stain}).then(out => applyMaps(set, mat, out, out?.tileMm[0], out?.tileMm[1], {rotate}))); return mat;
@@ -243,7 +253,7 @@ function storageMaterialSet(materials, {detail = true, onReady} = {}) {
 const geoCache = new Map();
 /** Timber UVs: the grain (texture v) runs along the part's longest axis on every face, as in a real board;
  *  end faces get end grain. A per-part offset keeps neighbouring parts from showing the same figure. */
-function grainUV(m, id) {
+function grainUV(m, id, dir = 'along') {
   const P = m.positions, N = m.normals, lo = [Infinity, Infinity, Infinity], hi = [-Infinity, -Infinity, -Infinity];
   for (let i = 0; i < P.length; i += 3) for (let a = 0; a < 3; a++) { lo[a] = Math.min(lo[a], P[i + a]); hi[a] = Math.max(hi[a], P[i + a]); }
   const ext = [0, 1, 2].map(a => hi[a] - lo[a]), L = ext.indexOf(Math.max(...ext));
@@ -253,17 +263,19 @@ function grainUV(m, id) {
     const n = [Math.abs(N[i]), Math.abs(N[i + 1]), Math.abs(N[i + 2])], a = n.indexOf(Math.max(...n));
     const others = [0, 1, 2].filter(k => k !== a);
     if (a === L) { uv[v * 2] = P[i + others[0]] / 1000 + du; uv[v * 2 + 1] = P[i + others[1]] / 1000 * 0.12 + dv; } // end grain: compressed rings
-    else { const across = others.find(k => k !== L); uv[v * 2] = P[i + across] / 1000 + du; uv[v * 2 + 1] = P[i + L] / 1000 + dv; }
+    else { const across = others.find(k => k !== L); let u = P[i + across] / 1000, w = P[i + L] / 1000;
+      if (dir === 'across') [u, w] = [w, u]; else if (dir === 'diag') [u, w] = [(u - w) * Math.SQRT1_2, (u + w) * Math.SQRT1_2];
+      uv[v * 2] = u + du; uv[v * 2 + 1] = w + dv; }
   }
   return uv;
 }
 
 function geometryFor(part, timber = false) {
-  const key = JSON.stringify(part.geom) + (timber ? '|g' + part.id : '');
+  const grain = part.grain || 'along', key = JSON.stringify(part.geom) + (timber ? '|g' + part.id + grain : '');
   let hit = geoCache.get(key);
   if (!hit) {
     const m = buildMesh(part), g = new THREE.BufferGeometry();
-    if (timber) m.uvs = grainUV(m, part.id);
+    if (timber) m.uvs = grainUV(m, part.id, grain);
     g.setAttribute('position', new THREE.BufferAttribute(m.positions, 3));
     g.setAttribute('normal', new THREE.BufferAttribute(m.normals, 3));
     g.setAttribute('uv', new THREE.BufferAttribute(m.uvs, 2));
@@ -367,7 +379,7 @@ function buildGroup(compiled, mats, {structure = false, sketch = false} = {}) {
       continue;
     }
     if (part.planOnly) continue;
-    let mat = mats[part.mat] || (part.mat?.startsWith('lac:') && mats.lacquer?.(part.mat.slice(4))) || mats.fabric;
+    let mat = (part.matSpec && partMaterial(part.matSpec, mats)) || mats[part.mat] || (part.mat?.startsWith('lac:') && mats.lacquer?.(part.mat.slice(4))) || mats.fabric;
     if (structure && part.decor) continue;
     if (structure && !part.internal && ['fabric', 'welt', 'top', 'case', 'front'].includes(part.mat)) {
       mat = mat.clone(); mat.transparent = true; mat.opacity = 0.16; mat.depthWrite = false; mat.userData.temp = true;
@@ -514,7 +526,7 @@ export function createViewer(host, {onRotate} = {}) {
   /** Catalogue photograph of one product: a seamless warm backdrop, a large soft key light (many shadow samples from
    *  an area, averaged), sub-pixel jitter for clean edges, a longer lens and a gentle vignette. Runs in the browser. */
   async function studioPhoto({width = 2400, height = 1600, samples = 48, yaw: y = yaw, pitch: pt = 0.16, lens = 24, zoom: zm = 1.04, focus: fc = null} = {}) {
-    for (let t = 0; !matsReady && t < 150; t++) await new Promise(r => setTimeout(r, 100)); // full-resolution maps first
+    for (let t = 0; (!matsReady || mats?.pendingParts) && t < 200; t++) await new Promise(r => setTimeout(r, 100)); // full-resolution maps first (incl. per-part materials)
     if (shooting) return null; shooting = true; cancelAnimationFrame(raf);
     try {
     const keep = {bg: scene.background, env: scene.environmentIntensity, tm: renderer.toneMapping, exp: renderer.toneMappingExposure, sun: sun.position.clone(), si: sun.intensity, fov: persp.fov, yaw, pitch, view, zoom, pr: renderer.getPixelRatio()};
@@ -562,7 +574,7 @@ export function createViewer(host, {onRotate} = {}) {
   return {
     setDesign(next, nextMaterials) {
       const matKey = JSON.stringify(nextMaterials);
-      if (!mats || matKey !== JSON.stringify(materials)) { mats?.dispose(); matsReady = false; mats = materialSet(nextMaterials, {onReady: () => { matsReady = true; rebuild(); }}); materials = structuredClone(nextMaterials); }
+      if (!mats || matKey !== JSON.stringify(materials)) { mats?.perPart?.forEach(m => m.dispose()); mats?.dispose(); matsReady = false; mats = materialSet(nextMaterials, {onReady: () => { matsReady = true; rebuild(); }}); mats.onPart = () => rebuild(); materials = structuredClone(nextMaterials); }
       compiled = next; room = null; rebuild();
     },
     /** Project room: {shell (compiled room shell), roomMaterials, items: [{compiled, materials, x, z, rot}]}; null leaves it. */

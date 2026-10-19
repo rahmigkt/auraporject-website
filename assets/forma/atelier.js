@@ -7,6 +7,7 @@ import {editableParts, currentShape, sampleCurve, bbox, silhouetteDxf, ADD_SHAPE
 import {analyse} from './physics.js';
 import {loadCsg} from './csg.js';
 import {worldPositions} from './build.js';
+import {WOODS, STAINS, FINISHES, STONES, METALS, COLORS, GLASS} from './catalog.js';
 import {download} from './package.js';
 
 const $ = s => document.querySelector(s);
@@ -288,7 +289,7 @@ function structurePanel() {
   <div class="a-grid"><span>Kaydır mm</span>${num('m0', round1(t.move[0]), 5)}${num('m1', round1(t.move[1]), 5)}${num('m2', round1(t.move[2]), 5)}
   <span>Döndür °</span>${num('r0', round1(t.rot[0] * R2D), 1)}${num('r1', round1(t.rot[1] * R2D), 1)}${num('r2', round1(t.rot[2] * R2D), 1)}
   <span>Ölçek %</span>${num('s0', round1(t.scale[0] * 100), 1)}${num('s1', round1(t.scale[1] * 100), 1)}${num('s2', round1(t.scale[2] * 100), 1)}</div>
-  ${edgePanel(q)}${sweepPanel(q)}${cutPanel(q)}${arrangePanel(q)}
+  ${edgePanel(q)}${sweepPanel(q)}${materialPanel(q)}${cutPanel(q)}${arrangePanel(q)}
   <div class="a-tools"><button data-dup>Çoğalt</button><button data-mirror>Aynala (karşı taraf)</button><button data-tfreset>Konumu sıfırla</button><button data-delpart>Sil</button></div>`
   : '<p class="a-note">3D görünümde bir parçaya dokunun. Seçilen parçayı tutamaçlarla taşıyın, döndürün ya da ölçekleyin; sayıyla da girebilirsiniz.</p>'}
   <div class="a-tools"><button data-sundo ${S.hist.length ? '' : 'disabled'}>↶ Yapı geri</button><button data-sredo ${S.fut.length ? '' : 'disabled'}>↷ Yapı ileri</button></div>
@@ -322,6 +323,31 @@ function makeArray() {
   const id = S.part; if (!id) return; const g = k => +($(`[data-arr=${k}]`)?.value) || 0, kind = $('[data-arr=kind]').value;
   const list = ovs().filter(o => !(o.tool === 'array' && o.id === id));
   commit([...list, {tool: 'array', id, kind, count: g('count'), step: [g('sx'), g('sy'), g('sz')], angle: g('angle'), center: [0, 0, 0]}]);
+}
+const SURF_TR = {wood: 'Masif ahşap', veneer: 'Ahşap kaplama', stone: 'Taş', metal: 'Metal', lacquer: 'Lake / boya', glass: 'Cam'};
+const trName = (o, k) => o[k]?.tr || k;
+const matOf = id => ovs().filter(o => o.tool === 'material' && o.id === id).at(-1);
+function materialPanel(q) {
+  if (!q) return '';
+  const m = matOf(q.id), sp = m?.spec || {surface: 'wood', species: 'oak', stain: 'natural', finish: 'oil'}, grain = m?.grain || 'along';
+  const sel = (k, obj, v) => `<select data-mat="${k}">${Object.keys(obj).map(x => `<option value="${x}" ${x === v ? 'selected' : ''}>${trName(obj, x)}</option>`).join('')}</select>`;
+  const rows = sp.surface === 'wood' || sp.surface === 'veneer' ? `<span>Ağaç</span>${sel('species', WOODS, sp.species)}<span>Renk</span>${sel('stain', STAINS, sp.stain)}<span>Yüzey</span>${sel('finish', FINISHES, sp.finish)}
+      <span>Damar</span><select data-mat="grain">${Object.entries({along: 'Boyuna', across: 'Enine', diag: '45°'}).map(([k, v]) => `<option value="${k}" ${k === grain ? 'selected' : ''}>${v}</option>`).join('')}</select>`
+    : sp.surface === 'stone' ? `<span>Taş</span>${sel('stone', STONES, sp.stone)}<span>Yüzey</span><select data-mat="polish"><option value="honed" ${sp.polish !== 'polished' ? 'selected' : ''}>Mat</option><option value="polished" ${sp.polish === 'polished' ? 'selected' : ''}>Parlak</option></select>`
+    : sp.surface === 'metal' ? `<span>Metal</span>${sel('metal', METALS, sp.metal)}`
+    : sp.surface === 'glass' ? `<span>Cam</span>${sel('glass', GLASS, sp.glass)}`
+    : `<span>Renk</span>${sel('color', COLORS, sp.color)}<span>Parlaklık</span><select data-mat="finish"><option value="matte">Mat</option><option value="lacquer" ${sp.finish === 'lacquer' ? 'selected' : ''}>Parlak lake</option></select>`;
+  return sec('mat', 'Malzeme ve damar', `<div class="a-grid a-grid2"><span>Tür</span><select data-mat="surface">${Object.entries(SURF_TR).map(([k, v]) => `<option value="${k}" ${k === sp.surface ? 'selected' : ''}>${v}</option>`).join('')}</select>${rows}</div>
+    ${m ? '<div class="a-tools"><button data-matoff>Tasarımın malzemesine dön</button></div>' : '<p class="a-note">Şu an tasarımın ortak malzemesi kullanılıyor; bir seçim yapınca yalnız bu parça değişir.</p>'}`);
+}
+function readMaterial() {
+  const g = k => $(`[data-mat=${k}]`)?.value, surface = g('surface'), spec = {surface};
+  if (surface === 'wood' || surface === 'veneer') Object.assign(spec, {species: g('species') || 'oak', stain: g('stain') || 'natural', finish: g('finish') || 'oil'});
+  else if (surface === 'stone') Object.assign(spec, {stone: g('stone') || Object.keys(STONES)[0], polish: g('polish') || 'honed'});
+  else if (surface === 'metal') spec.metal = g('metal') || Object.keys(METALS)[0];
+  else if (surface === 'glass') spec.glass = g('glass') || Object.keys(GLASS)[0];
+  else Object.assign(spec, {color: g('color') || 'white', finish: g('finish') || 'matte'});
+  return {spec, grain: g('grain') || 'along'};
 }
 const AX = ['X', 'Y', 'Z'];
 S.open = new Set(); const sec = (k, title, body) => `<details data-sec="${k}" ${S.open.has(k) ? 'open' : ''}><summary>${title}</summary>${body}</details>`;
@@ -374,6 +400,7 @@ $('#panel').addEventListener('click', async e => {
   if (b.hasAttribute('data-delpart')) return deletePart();
   if (b.hasAttribute('data-tfreset')) return commit(ovs().filter(o => !(o.tool === 'transform' && o.id === S.part)));
   if (b.hasAttribute('data-add')) return addPart();
+  if (b.hasAttribute('data-matoff')) return commit(ovs().filter(o => !(o.tool === 'material' && o.id === S.part)));
   if (b.hasAttribute('data-multi')) { S.multiOn = !S.multiOn; S.multi = S.multiOn && S.part ? [S.part] : []; renderPanel(); syncViewerSel(); return; }
   if (b.hasAttribute('data-snap')) { S.snap = !S.snap; viewer?.snap(S.snap ? 5 : 0, S.snap ? 5 : 0); renderPanel(); return; }
   if (b.dataset.align) { const [a, w] = b.dataset.align.split(':'); return alignParts(+a, w); }
@@ -404,6 +431,7 @@ $('#panel').addEventListener('click', async e => {
 });
 $('#panel').addEventListener('toggle', e => { const k = e.target.dataset?.sec; if (k) e.target.open ? S.open.add(k) : S.open.delete(k); }, true);
 $('#panel').addEventListener('change', e => {
+  if (S.part && e.target.dataset?.mat) { const prev = matOf(S.part)?.spec?.surface, r = readMaterial(); if (e.target.dataset.mat === 'surface' && prev !== r.spec.surface) { const sf = r.spec.surface; r.spec = sf === 'wood' || sf === 'veneer' ? {surface: sf, species: 'oak', stain: 'natural', finish: 'oil'} : {surface: sf}; } return commit([...ovs().filter(o => !(o.tool === 'material' && o.id === S.part)), {tool: 'material', id: S.part, ...r}]); }
   if (e.target.dataset?.cut === 'type') { S.cutType = e.target.value; renderPanel(); return; }
   if (S.part && (e.target.dataset?.sw || e.target.hasAttribute?.('data-swall'))) { const q = partOf(S.part); return setSweep(q, readSweep(), $('[data-swall]').checked); }
   const ed = e.target.dataset?.edge, es = e.target.dataset?.edgesize;
