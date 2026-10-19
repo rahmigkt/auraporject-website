@@ -11,6 +11,7 @@ const G = 9.81;
 
 /** Material class of a part from its slot and the design's materials. */
 function matClass(q, materials = {}) {
+  const sp = q.matSpec; if (sp) return sp.surface === 'stone' ? 'stone' : sp.surface === 'metal' ? 'metal' : sp.surface === 'glass' ? 'glass' : sp.surface === 'wood' ? 'wood' : 'mdf';
   const m = q.mat || '';
   if (/^lac:/.test(m)) return 'mdf';
   if (['metal', 'steel', 'hardware', 'appliance'].includes(m)) return 'metal';
@@ -74,8 +75,9 @@ export function analyse(compiled, materials = {}, family = compiled.family) {
   }
   // Deflection of flat tops and shelves: simply supported over the widest gap between supports beneath, 50 kg at mid-span.
   for (const s of solids) {
-    if (s.q.geom.fn !== 'slab' || !['top', 'shelf', 'case-top', 'vanity-top', 'worktop'].includes(s.q.role)) continue;
-    const t = s.q.geom.t || 20, under = solids.filter(o => o !== s && o.y1 <= s.y0 + 2 && o.y1 > s.y0 - 60 && o.x1 > s.x0 && o.x0 < s.x1);
+    const plate = s.q.added && (s.y1 - s.y0) < 0.3 * Math.min(s.x1 - s.x0, s.z1 - s.z0); // designer-added shelf or board
+    if (!plate && (s.q.geom.fn !== 'slab' || !['top', 'shelf', 'case-top', 'vanity-top', 'worktop'].includes(s.q.role))) continue;
+    const t = plate ? Math.round(s.y1 - s.y0) : s.q.geom.t || 20, under = solids.filter(o => o !== s && o.y1 <= s.y0 + 2 && o.y1 > s.y0 - 60 && o.x1 > s.x0 && o.x0 < s.x1);
     const xs = under.flatMap(o => [o.x0, o.x1]).sort((a, b) => a - b);
     let span = 0; for (let i = 1; i < xs.length; i++) span = Math.max(span, xs[i] - xs[i - 1]);
     if (!under.length) continue;
@@ -119,6 +121,27 @@ export function analyse(compiled, materials = {}, family = compiled.family) {
     const minR = s.cls === 'metal' ? 6 : 9;
     if (rMin < minR - 0.3) add(rMin < minR * 0.8 ? 'error' : 'warn', 'section', `${s.q.role}: en ince kesit Ø${(rMin * 2).toFixed(0)} mm (${s.cls === 'metal' ? 'metal' : 'ahşap'} için en az Ø${minR * 2})`, `${s.q.role}: thinnest section Ø${(rMin * 2).toFixed(0)} mm (min Ø${minR * 2})`, rMin);
     const slender = H / (2 * rMin); if (slender > 40) add('warn', 'slender', `${s.q.role}: narinlik ${slender.toFixed(0)} (boy/çap) — titreşim ve burkulma riski`, `${s.q.role}: slenderness ${slender.toFixed(0)} — risk of wobble`, slender);
+  }
+  // Every part must reach the floor (or the wall) through parts it touches: catches pieces left floating after
+  // moving, bending (sabre legs leaving their stretchers) or deleting a support. Boxes are compared with 3 mm slack.
+  {
+    const body = solids.filter(x => x.cls !== 'light' && !['drain', 'grommet', 'pull', 'hinge', 'seam'].includes(x.q.role) && !/drain|grommet/.test(x.q.id)), touch = (a, b) => a.x0 <= b.x1 + 3 && b.x0 <= a.x1 + 3 && a.y0 <= b.y1 + 3 && b.y0 <= a.y1 + 3 && a.z0 <= b.z1 + 3 && b.z0 <= a.z1 + 3;
+    const zMin = Math.min(...body.map(x => x.z0)), seen = new Set(body.filter(x => x.y0 < minY + 4 || ((wallHung || ['kitchen', 'bath', 'storage'].includes(family)) && x.z0 < zMin + 4))), queue = [...seen];
+    while (queue.length) { const a = queue.pop(); for (const b of body) if (!seen.has(b) && touch(a, b)) { seen.add(b); queue.push(b); } }
+    const loose = body.filter(x => !seen.has(x));
+    if (loose.length) add('error', 'floating', `Havada kalan parça: ${loose.slice(0, 6).map(x => x.q.id).join(', ')}${loose.length > 6 ? ' …' : ''} — hiçbir taşıyıcıya değmiyor`, `Floating part: ${loose.slice(0, 6).map(x => x.q.id).join(', ')} — touches no support`, loose.length);
+  }
+  // Machining: holes and pockets too close to an edge or cutting through most of the section.
+  for (const s of solids) {
+    if (!s.q.cuts?.length) continue;
+    const P = buildMesh({geom: s.q.geom.inner || s.q.geom}).positions, lo = [Infinity, Infinity, Infinity], hi = [-Infinity, -Infinity, -Infinity];
+    for (let i = 0; i < P.length; i += 3) for (let k = 0; k < 3; k++) { lo[k] = Math.min(lo[k], P[i + k]); hi[k] = Math.max(hi[k], P[i + k]); }
+    for (const c of s.q.cuts) {
+      const r = c.type === 'hole' ? c.dia / 2 : c.type === 'pocket' || c.type === 'slot' ? Math.max(c.a, c.b) / 2 : 0, plane = [0, 1, 2].filter(k => k !== c.axis);
+      const edge = Math.min(...plane.flatMap(k => [c.at[k] - lo[k], hi[k] - c.at[k]])) - r, thick = hi[c.axis] - lo[c.axis];
+      if (r && edge < Math.max(8, r * 0.5)) add(edge < 3 ? 'error' : 'warn', 'cutEdge', `${s.q.id}: ${c.type === 'hole' ? 'delik' : 'cep'} kenara ${Math.max(0, edge).toFixed(0)} mm — kırılma/yarılma riski`, `${s.q.id}: cut ${Math.max(0, edge).toFixed(0)} mm from the edge`, edge);
+      if (c.depth > 0 && c.depth > thick * 0.7) add('warn', 'cutDeep', `${s.q.id}: ${c.depth} mm derinlik, ${thick.toFixed(0)} mm kesitin %${Math.round(c.depth / thick * 100)}'i — taban çok inceliyor`, `${s.q.id}: cut depth ${c.depth} of ${thick.toFixed(0)} mm`, c.depth);
+    }
   }
   if (!checks.some(c => c.level !== 'ok')) add('ok', 'all', 'Fizik ve üretim denetimleri geçti', 'Physical and production checks passed', 0);
   return {mass: Math.round(mass * 10) / 10, com, checks};
