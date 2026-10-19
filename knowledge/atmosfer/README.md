@@ -32,4 +32,4 @@ node tests/visual/atmosfer-01/run-local.mjs tests/visual/atmosfer-01/render-suit
 node tests/atmosfer-check.mjs
 ```
 
-Playwright yalnız loopback sunucuya ve temiz profile erişir; dış ağ istekleri engellenir. [Cycles CLI ve sunucu notu](CYCLES.md). Tarayıcı modülü yalnız istenince yüklenir; lazy yükleme/iptal/gerekçeli raster yedeği kontrol edilir. API anahtarı, bulut render ve ürün için görüntü üreten AI kullanılmaz. score.mjs ve METİN kayıtlarına dokunulmaz.
+Playwright yalnız loopback sunucuya ve temiz profile erişir; dış ağ istekleri engellenir. İzole tarayıcı kapatması süre sınırına bağlıdır; zorunlu süreç temizliği rapora ayrı yazılır. [Cycles CLI ve sunucu notu](CYCLES.md). Tarayıcı modülü yalnız istenince yüklenir; lazy yükleme/iptal/gerekçeli raster yedeği kontrol edilir. API anahtarı, bulut render ve ürün için görüntü üreten AI kullanılmaz. score.mjs ve METİN kayıtlarına dokunulmaz.

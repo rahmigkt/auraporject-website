@@ -2,14 +2,16 @@ const origin=process.env.ATMOSFER_ORIGIN||'http://127.0.0.1:8772';
 // Explicit user-authorized Playwright; ephemeral profile and loopback only.
 import {createRequire} from 'node:module';
 import fs from 'node:fs/promises';
+import {launchIsolated,closeIsolated} from './isolated-browser.mjs';
 const require=createRequire(import.meta.url),{chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const args=Object.fromEntries(process.argv.slice(2).map(a=>{const [k,v]=a.split('=');return[k.replace(/^--/,''),v];}));
-const browser=await chromium.launch({channel:'chrome',headless:true,args:['--no-proxy-server',...(args.backend?[`--use-angle=${args.backend}`]:[])]});
+const {browser,server}=await launchIsolated(chromium,{channel:'chrome',headless:true,args:['--no-proxy-server',...(args.backend?[`--use-angle=${args.backend}`]:[])]});
 const context=await browser.newContext({viewport:{width:1440,height:1050},deviceScaleFactor:1});
 await context.route('**/*',r=>{const u=new URL(r.request().url());return u.origin===origin||u.protocol==='data:'?r.continue():r.abort();});
 const output=new URL('../../../knowledge/atmosfer/kareler/',import.meta.url);await fs.mkdir(output,{recursive:true});
 const report={browser:browser.version(),requestedMode:args.mode||'raster',captures:[]};
-const reportFile=new URL(args.mode==='path'?'path-capture-report.json':args.id?`capture-report-${args.id.replaceAll(',','_')}.json`:'capture-report.json',output);report.requestedBackend=args.backend||'default';
+const reportFile=new URL(args.mode==='path'?(args.id?`path-capture-report-${args.id.replaceAll(',','_')}.json`:'path-capture-report.json'):args.id?`capture-report-${args.id.replaceAll(',','_')}.json`:'capture-report.json',output);report.requestedBackend=args.backend||'default';
+let passed=false;
 try{
  const all=JSON.parse(await fs.readFile(new URL('./designs.json',import.meta.url),'utf8'));
  const selected=all.filter(d=>!args.id||args.id.split(',').includes(d.id));
@@ -40,4 +42,6 @@ try{
   report.captures.push({...result,family:fixture.design.family,lazyLoadVerified:true,errors});console.log(JSON.stringify(result));
   await fs.writeFile(reportFile,JSON.stringify(report,null,2)+'\n');
  }
-}finally{await browser.close();}
+ passed=true;
+}catch(error){console.error(error);throw error;}
+finally{report.cleanup=await closeIsolated(browser,server);await fs.writeFile(reportFile,JSON.stringify(report,null,2)+'\n');process.exit(passed?0:1);}

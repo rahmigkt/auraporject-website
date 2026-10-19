@@ -8,6 +8,8 @@ import {renderAtmosphere} from '../assets/forma/atmosfer.js';
 const fixtures=JSON.parse(fs.readFileSync(new URL('./visual/atmosfer-01/designs.json',import.meta.url)));
 assert.equal(fixtures.length,12);assert.equal(new Set(fixtures.map(f=>f.design.family)).size,5);
 for(const {id,design:d} of fixtures){
+  const coupled=structuredClone(d);familyOf(coupled).couple?.(coupled);
+  assert.deepEqual(coupled.params,d.params,`${id}: material/panel thickness coupling`);
   const compiled=familyOf(d).mod.compile(d.params),snapshot=JSON.stringify(compiled),group=new THREE.Group();group.scale.setScalar(.001);
   const mat=new THREE.MeshStandardMaterial();
   for(const part of compiled.parts){
