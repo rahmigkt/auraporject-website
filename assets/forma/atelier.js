@@ -3,7 +3,7 @@
 // No AI: the designer gives the form, the engine builds it and checks it.
 import {normalizeDesign, compileDesign} from './generate.js';
 import {readLink, designLink, projectLink} from './link.js';
-import {editableParts, currentShape, sampleCurve, bbox, silhouetteDxf, ADD_SHAPES} from './overrides.js';
+import {editableParts, currentShape, sampleCurve, bbox, silhouetteDxf, ADD_SHAPES, EDGE_TYPES} from './overrides.js';
 import {analyse} from './physics.js';
 import {download} from './package.js';
 
@@ -225,6 +225,18 @@ function addPart() {
 }
 function undoStructure() { if (!S.hist.length) return; S.fut.push(JSON.stringify(design().overrides || [])); S.items[S.cur].design = normalizeDesign({...design(), overrides: JSON.parse(S.hist.pop())}); if (S.part && !compileDesign(design()).parts.some(q => q.id === S.part)) S.part = null; rebuild(); renderItems(); renderPanel(); syncViewerSel(); }
 function redoStructure() { if (!S.fut.length) return; S.hist.push(JSON.stringify(design().overrides || [])); S.items[S.cur].design = normalizeDesign({...design(), overrides: JSON.parse(S.fut.pop())}); rebuild(); renderItems(); renderPanel(); syncViewerSel(); }
+const EDGE_TR = {square: 'Düz', eased: 'Kırık (yumuşak)', chamfer: 'Pah', underbevel: 'Alt pah', bullnose: 'Yarım yuvarlak', ogee: 'Ogee'};
+const SIDE_TR = {front: 'Ön', back: 'Arka', left: 'Sol', right: 'Sağ'};
+const edgeable = q => q && (q.geom.fn === 'slab' || (q.geom.fn === 'cushion' && !q.geom.crownTop && !q.geom.crownFront));
+const edgeOf = id => ovs().filter(o => o.tool === 'edge' && o.id === id).at(-1)?.sides || {};
+function setEdge(id, sides) { const cur = {...edgeOf(id), ...sides}; commit([...ovs().filter(o => !(o.tool === 'edge' && o.id === id)), {tool: 'edge', id, sides: cur}]); }
+function edgePanel(q) {
+  if (!edgeable(q)) return '';
+  const cur = edgeOf(q.id), def = q.geom.fn === 'slab' ? [q.geom.profile[0], q.geom.profile[2] ?? 6] : ['square', 0];
+  const row = k => { const [t, v] = cur[k] || def; return `<span>${SIDE_TR[k]}</span><select data-edge="${k}">${EDGE_TYPES.map(e => `<option value="${e}" ${e === t ? 'selected' : ''}>${EDGE_TR[e]}</option>`).join('')}</select><input type="number" data-edgesize="${k}" value="${Math.round(v)}" min="1" max="80" inputmode="numeric"><span>mm</span>`; };
+  return `<h2>Kenar profili</h2><div class="a-grid a-grid4">${['front', 'back', 'left', 'right'].map(row).join('')}
+  <span>Tümü</span><select data-edge="all"><option value="">—</option>${EDGE_TYPES.map(e => `<option value="${e}">${EDGE_TR[e]}</option>`).join('')}</select><span></span><span></span></div>`;
+}
 const SHAPE_TR = {box: 'Kutu', softbox: 'Yuvarlatılmış kutu', round: 'Yuvarlak çubuk', square: 'Kare çubuk', panel: 'Panel'};
 const MAT_TR = {wood: 'Ahşap', metal: 'Metal', fabric: 'Kumaş', dark: 'Koyu', case: 'Gövde', front: 'Kapak', top: 'Tabla', base: 'Alt yapı', steel: 'Çelik', frame: 'Çerçeve', welt: 'Biye'};
 function structurePanel() {
@@ -236,6 +248,7 @@ function structurePanel() {
   <div class="a-grid"><span>Kaydır mm</span>${num('m0', round1(t.move[0]), 5)}${num('m1', round1(t.move[1]), 5)}${num('m2', round1(t.move[2]), 5)}
   <span>Döndür °</span>${num('r0', round1(t.rot[0] * R2D), 1)}${num('r1', round1(t.rot[1] * R2D), 1)}${num('r2', round1(t.rot[2] * R2D), 1)}
   <span>Ölçek %</span>${num('s0', round1(t.scale[0] * 100), 1)}${num('s1', round1(t.scale[1] * 100), 1)}${num('s2', round1(t.scale[2] * 100), 1)}</div>
+  ${edgePanel(q)}
   <div class="a-tools"><button data-dup>Çoğalt</button><button data-mirror>Aynala (karşı taraf)</button><button data-tfreset>Konumu sıfırla</button><button data-delpart>Sil</button></div>`
   : '<p class="a-note">3D görünümde bir parçaya dokunun. Seçilen parçayı tutamaçlarla taşıyın, döndürün ya da ölçekleyin; sayıyla da girebilirsiniz.</p>'}
   <div class="a-tools"><button data-sundo ${S.hist.length ? '' : 'disabled'}>↶ Yapı geri</button><button data-sredo ${S.fut.length ? '' : 'disabled'}>↷ Yapı ileri</button></div>
@@ -301,6 +314,11 @@ $('#panel').addEventListener('click', async e => {
   if (act === 'json') download(`AURA-${design().kind}-design.json`, JSON.stringify(design(), null, 2), 'application/json');
 });
 $('#panel').addEventListener('change', e => {
+  const ed = e.target.dataset?.edge, es = e.target.dataset?.edgesize;
+  if (S.part && (ed || es)) {
+    if (ed === 'all') { if (!e.target.value) return; const sz = +($('[data-edgesize=front]')?.value) || 6; return setEdge(S.part, Object.fromEntries(['front', 'back', 'left', 'right'].map(k => [k, [e.target.value, sz]]))); }
+    const k = ed || es, t = $(`[data-edge=${k}]`).value, v = +$(`[data-edgesize=${k}]`).value || 6; return setEdge(S.part, {[k]: [t, v]});
+  }
   const k = e.target.dataset?.tf; if (!k || !S.part) return; const v = +e.target.value, i = +k[1];
   setTransform(S.part, t => { if (k[0] === 'm') t.move[i] = v; else if (k[0] === 'r') t.rot[i] = v / R2D; else t.scale[i] = Math.max(5, v) / 100; });
 });

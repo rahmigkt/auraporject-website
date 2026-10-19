@@ -9,9 +9,10 @@ await p.goto('http://127.0.0.1:8812/tasarla.html'); // seed a design in storage
 await p.evaluate(async f=>{const g=await import('/assets/forma/generate.js'); const d=g.sample({family:f,seed:3}); localStorage.setItem('aura-forma-family',JSON.stringify(f)); localStorage.setItem('aura-forma-design-'+f,JSON.stringify(d)); localStorage.removeItem('aura-forma-project');},fam);
 await p.goto('http://127.0.0.1:8812/tasarimci.html'); await p.waitForTimeout(6000);
 const cv=await p.$('#stage canvas'), bx=await cv.boundingBox();
-await p.mouse.click(bx.x+bx.width*0.5, bx.y+bx.height*0.36); await p.waitForTimeout(1500);
+await p.mouse.click(bx.x+bx.width*0.5, bx.y+bx.height*0.30); await p.waitForTimeout(1500);
 const sel=await p.evaluate(()=>document.querySelector('#panel .a-note b')?.textContent||'none'); console.log('selected:',sel);
 await p.screenshot({path:`${out}/atolye-1.png`});
+if(await p.$('[data-edge=front]')){ await p.selectOption('[data-edge=all]','ogee'); await p.waitForTimeout(2000); await p.selectOption('[data-edge=back]','chamfer'); await p.waitForTimeout(2000); await p.screenshot({path:`${out}/atolye-kenar.png`}); console.log('edge ok'); }
 if(sel!=='none'){
   await p.fill('[data-tf=m1]','120'); await p.dispatchEvent('[data-tf=m1]','change'); await p.waitForTimeout(1500);
   await p.click('[data-mirror]'); await p.waitForTimeout(1500);

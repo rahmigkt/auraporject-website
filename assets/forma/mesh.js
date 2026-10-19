@@ -373,6 +373,20 @@ export function clipX(pts, x0, x1) {
 }
 
 /** Offset a convex CCW outline by d (positive = inward) along vertex bisectors. */
+/** Inset that varies around the outline: d(outward unit normal at the vertex) — per-side edge profiles. */
+export function offsetOutlineBy(pts, dOf) {
+  const n = pts.length, out = [];
+  for (let i = 0; i < n; i++) {
+    const p = pts[(i - 1 + n) % n], c = pts[i], q = pts[(i + 1) % n];
+    let e1 = [c[0] - p[0], c[1] - p[1]], e2 = [q[0] - c[0], q[1] - c[1]];
+    const l1 = Math.hypot(...e1) || 1, l2 = Math.hypot(...e2) || 1; e1 = [e1[0] / l1, e1[1] / l1]; e2 = [e2[0] / l2, e2[1] / l2];
+    const n1 = [-e1[1], e1[0]], n2 = [-e2[1], e2[0]], nb = [n1[0] + n2[0], n1[1] + n2[1]], lb = Math.hypot(...nb) || 1;
+    const cos = Math.max(0.35, (nb[0] / lb) * n1[0] + (nb[1] / lb) * n1[1]), d = dOf([-nb[0] / lb, -nb[1] / lb]);
+    out.push([c[0] + nb[0] / lb * d / cos, c[1] + nb[1] / lb * d / cos]);
+  }
+  return out;
+}
+
 export function offsetOutline(pts, d) {
   const n = pts.length, out = [];
   for (let i = 0; i < n; i++) {
@@ -429,7 +443,7 @@ export function profiledSlab(outline, t, inset = () => 0, {steps = 12} = {}) {
   const ccw = area > 0 ? outline : [...outline].reverse();
   const rings = [];
   for (let k = 0; k <= steps; k++) {
-    const s = k / steps, y = t * (1 - s), ring = offsetOutline(ccw, inset(s));
+    const s = k / steps, y = t * (1 - s), ring = inset.length >= 2 ? offsetOutlineBy(ccw, nrm => inset(s, nrm)) : offsetOutline(ccw, inset(s));
     rings.push(ring.map(([x, z]) => b.v(x, y, z)));
   }
   for (let r = 0; r < rings.length - 1; r++) for (let i = 0; i < n; i++) { const j = (i + 1) % n; b.quad(rings[r][i], rings[r + 1][i], rings[r + 1][j], rings[r][j]); }

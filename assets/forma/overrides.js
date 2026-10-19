@@ -71,6 +71,7 @@ export function resample(pts, n, closed) {
 }
 
 /** Shapes a designer can add: box (sharp), soft box (radius), round bar, square bar, panel. Sizes in mm (w, h, d). */
+export const EDGE_TYPES = ['square', 'eased', 'chamfer', 'underbevel', 'bullnose', 'ogee'];
 export const ADD_SHAPES = ['box', 'softbox', 'round', 'square', 'panel'];
 const v3 = (a, lim, def = 0) => [0, 1, 2].map(i => { const v = Array.isArray(a) && Number.isFinite(+a[i]) ? +a[i] : def; return Math.max(-lim, Math.min(lim, v)); });
 
@@ -98,6 +99,10 @@ export function normalizeOverrides(list) {
     else if (o.tool === 'add' && typeof o.id === 'string' && ADD_SHAPES.includes(o.shape)) {
       const sz = (o.size || []).slice(0, 3).map(v => Math.max(2, Math.min(4000, num(v))));
       out.push({tool: 'add', id: o.id.slice(0, 60), shape: o.shape, size: [sz[0] || 400, sz[1] || 40, sz[2] || 400], mat: typeof o.mat === 'string' ? o.mat.slice(0, 30) : 'wood', pos: v3(o.pos, 5000), radius: Math.max(0, Math.min(200, num(o.radius ?? 3)))});
+    }
+    else if (o.tool === 'edge' && typeof o.id === 'string' && o.sides && typeof o.sides === 'object') {
+      const sides = {}; for (const k of ['front', 'back', 'left', 'right']) { const e = o.sides[k]; if (Array.isArray(e) && EDGE_TYPES.includes(e[0])) sides[k] = [e[0], Math.max(1, Math.min(80, num(e[1]) || 6))]; }
+      if (Object.keys(sides).length) out.push({tool: 'edge', id: o.id.slice(0, 60), sides});
     }
     else if (o.tool === 'transform' && typeof o.id === 'string') {
       const sc = v3(o.scale, 10, 1).map(v => Math.max(0.05, Math.min(10, v || 1)));
@@ -138,6 +143,16 @@ export function applyOverrides(compiled, overrides) {
     if (o.tool === 'duplicate') { const q = out.find(x => x.id === o.id); if (q && !out.some(x => x.id === o.as)) out.push({...q, id: o.as, pos: o.mirror ? [-q.pos[0], q.pos[1], q.pos[2]] : [q.pos[0] + 60, q.pos[1], q.pos[2] + 60], rot: o.mirror ? [q.rot[0], -q.rot[1], -q.rot[2]] : q.rot.slice(), added: true}); }
     if (o.tool === 'add' && !out.some(x => x.id === o.id)) { const [w, h, d] = o.size; out.push({id: o.id, role: 'added-' + o.shape, mat: o.mat, geom: addedGeom(o), pos: o.pos.slice(), rot: [0, 0, 0], added: true, cut: ['round', 'square'].includes(o.shape) ? [Math.round(h), Math.round(w), Math.round(w)] : [Math.round(w), Math.round(d), Math.round(h)].sort((a, b) => b - a)}); }
   }
+  // Edge profiles per side. Box-like parts become slabs (plan outline × thickness) so every side can take a profile.
+  out = out.map(q => {
+    const e = list.filter(o => o.tool === 'edge' && o.id === q.id).at(-1); if (!e) return q;
+    if (q.geom.fn === 'slab') return {...q, geom: {...q.geom, edges: {...(q.geom.edges || {}), ...e.sides}}, shaped: true};
+    if (q.geom.fn === 'cushion' && !q.geom.crownTop && !q.geom.crownFront) {
+      const {w, h, d} = q.geom, hw = w / 2, hd = d / 2;
+      return {...q, geom: {fn: 'slab', outline: [[-hw, -hd], [hw, -hd], [hw, hd], [-hw, hd]], t: h, profile: ['square', h, 0], edges: e.sides}, pos: [q.pos[0], q.pos[1] - h / 2, q.pos[2]], shaped: true};
+    }
+    return q;
+  });
   out = out.map(q => {
     const t = list.filter(o => o.tool === 'transform' && o.id === q.id).at(-1); if (!t) return q;
     const s3 = t.scale, scaled = s3.some(v => Math.abs(v - 1) > 1e-6);
