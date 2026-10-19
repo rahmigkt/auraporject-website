@@ -3,7 +3,8 @@
 import {normalizeDesign, sample} from './generate.js';
 import {RANGES, ENUMS} from './sofa.js';
 import {STYLE_BY_ID} from './styles.js';
-import {COLORS, FIBERS, WEAVES, PATTERNS, WOODS, FINISHES, METALS} from './catalog.js';
+import {COLORS, FIBERS, WEAVES, PATTERNS, WOODS, FINISHES, METALS, STAINS, STONES, GLASS, SURFACES, SINK_FINISHES} from './catalog.js';
+import {FAMILIES} from './families.js';
 
 const ENDPOINT = 'api/forma-ai.php';
 let status = null;
@@ -25,31 +26,35 @@ async function call(action, body) {
   return j;
 }
 
-/** Schema the server passes to the model, so the model can only answer with known values. */
-export function vocabulary() {
-  return {
-    params: Object.fromEntries(Object.entries(RANGES).map(([k, [lo, hi]]) => [k, [lo, hi]])),
-    enums: ENUMS, styles: Object.keys(STYLE_BY_ID), kinds: ['sofa', 'loveseat', 'armchair'],
-    fabric: {fiber: Object.keys(FIBERS), weave: Object.keys(WEAVES), pattern: Object.keys(PATTERNS), color: Object.keys(COLORS)},
-    wood: {species: Object.keys(WOODS), finish: Object.keys(FINISHES)}, metal: {finish: Object.keys(METALS)}
-  };
+/** Options for one material key (slot-aware: a metal or sink finish is not a wood finish). */
+const OPTIONS = (slot, key) => ({fiber: FIBERS, weave: WEAVES, pattern: PATTERNS, color: COLORS, color2: COLORS, species: WOODS, stain: STAINS, stone: STONES, glass: GLASS, surface: SURFACES, metal: METALS,
+  polish: {honed: 1, polished: 1}, finish: slot === 'metal' ? METALS : slot === 'sink' ? Object.fromEntries(SINK_FINISHES.map(k => [k, 1])) : FINISHES})[key];
+/** Schema the server passes to the model for the design in hand, so it can only answer with known values. */
+export function vocabulary(design = {family: 'seating', kind: 'sofa', materials: {}}) {
+  const fam = FAMILIES[design.family] || FAMILIES.seating, mod = fam.mod, p = {kind: design.kind, ...(design.params || {})};
+  const params = Object.fromEntries(Object.keys(mod.RANGES || {}).map(k => { const [lo, hi] = mod.rangeFor ? mod.rangeFor(k, p) : mod.RANGES[k]; return [k, [lo, hi]]; }));
+  const materials = {};
+  const mats = design.materials && Object.keys(design.materials).length ? design.materials : sample({family: fam.id, kind: design.kind}).materials;
+  for (const [slot, spec] of Object.entries(mats)) for (const key of Object.keys(spec || {})) { const o = OPTIONS(slot, key); if (o) (materials[slot] ??= {})[key] = Object.keys(o); }
+  return {family: fam.id, params, enums: mod.ENUMS || {}, styles: fam.styles.map(s => s.id), kinds: Object.keys(fam.kinds), materials};
 }
 
 /** Free-text edit → validated actions (same format as commands.parse). */
 export async function interpret(text, design, lang) {
-  const j = await call('command', {text: String(text).slice(0, 600), lang, design: {kind: design.kind, style: design.style, params: design.params, materials: design.materials}, vocabulary: vocabulary()});
-  return sanitizeActions(j.actions || []);
+  const v = vocabulary(design);
+  const j = await call('command', {text: String(text).slice(0, 600), lang, design: {family: design.family, kind: design.kind, style: design.style, params: design.params, materials: design.materials}, vocabulary: v});
+  return sanitizeActions(j.actions || [], v);
 }
 
-export function sanitizeActions(list) {
-  const v = vocabulary(), out = [];
+export function sanitizeActions(list, v = vocabulary()) {
+  const out = [];
   for (const a of Array.isArray(list) ? list.slice(0, 20) : []) {
     if (!a || typeof a !== 'object') continue;
     if ((a.type === 'set' || a.type === 'delta') && v.params[a.key] && Number.isFinite(+a.value)) out.push({type: a.type, key: a.key, value: +a.value});
-    else if (a.type === 'enum' && v.enums[a.key]?.includes(a.value)) out.push(a);
-    else if (a.type === 'style' && v.styles.includes(a.value)) out.push(a);
-    else if (a.type === 'kind' && v.kinds.includes(a.value)) out.push(a);
-    else if (a.type === 'material' && ((a.slot === 'fabric' && v.fabric[a.key]?.includes(a.value)) || (a.slot === 'wood' && v.wood[a.key]?.includes(a.value)) || (a.slot === 'metal' && a.key === 'finish' && v.metal.finish.includes(a.value)) || (a.slot === 'welt' && a.key === 'color' && v.fabric.color.includes(a.value)))) out.push(a);
+    else if (a.type === 'enum' && v.enums[a.key]?.includes(a.value)) out.push({type: 'enum', key: a.key, value: a.value});
+    else if (a.type === 'style' && v.styles.includes(a.value)) out.push({type: 'style', value: a.value});
+    else if (a.type === 'kind' && v.kinds.includes(a.value)) out.push({type: 'kind', value: a.value});
+    else if (a.type === 'material' && v.materials[a.slot]?.[a.key]?.includes(a.value)) out.push({type: 'material', slot: a.slot, key: a.key, value: a.value});
   }
   return out;
 }
@@ -59,7 +64,7 @@ export function sanitizeActions(list) {
  * answers only with known part types and ranges; dimensions it cannot see are marked as estimates.
  */
 export async function designFromImage(dataUrl, lang) {
-  const j = await call('vision', {image: dataUrl, lang, vocabulary: vocabulary()});
+  const j = await call('vision', {image: dataUrl, lang, vocabulary: vocabulary(sample({family: 'seating', kind: 'sofa'}))});
   return mapVisionToDesign(j.design || {});
 }
 
