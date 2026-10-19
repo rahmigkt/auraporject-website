@@ -7,5 +7,5 @@ const d=sample({family:fam,seed,style});
 const v=createViewer(document.getElementById('v')); v.mode('render'); v.setDesign(compileDesign(d), d.materials);
 const t0=performance.now(); while(!v.texturesReady() && performance.now()-t0<20000) await new Promise(r=>setTimeout(r,200));
 await new Promise(r=>setTimeout(r,800));
-window.shot=await v.photo(2,{width:+(q.get('w')||1200),height:+(q.get('h')||800),samples:+(q.get('n')||12)}); window.ready=true;
+window.shot=await v.photo(2,{width:+(q.get('w')||1200),height:+(q.get('h')||800),samples:+(q.get('n')||12),zoom:+(q.get('z')||1.04),yaw:q.get('yaw')?+q.get('yaw'):undefined,pitch:+(q.get('p')||0.16),focus:q.get('f')?q.get('f').split(',').map(Number):null}); window.ready=true;
 </script>

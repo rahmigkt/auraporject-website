@@ -88,7 +88,8 @@ function seatingMaterialSet(materials, {detail = true, onReady} = {}) {
   // Napped hides: no gloss, a soft sheen that lightens at grazing angles.
   if (f.fiber === 'suede' || f.fiber === 'nubuck') { fabric.sheenRoughness = f.fiber === 'suede' ? 0.85 : 0.7; fabric.sheenColor = base.clone().lerp(new THREE.Color('#ffffff'), 0.22); }
   const weltSpec = {...f, color: materials.welt.color || f.color2, pattern: 'none'};
-  const welt = fabric.clone(); welt.color = hexColor(COLORS[weltSpec.color].hex); welt.sheenColor = welt.color.clone().lerp(new THREE.Color('#fff'), 0.35);
+  fabricMacro(fabric, f.fiber === 'leather' ? 0.1 : f.fiber === 'velvet' ? 0.09 : 0.06);
+  const welt = fabric.clone(); fabricMacro(welt, 0.05); welt.color = hexColor(COLORS[weltSpec.color].hex); welt.sheenColor = welt.color.clone().lerp(new THREE.Color('#fff'), 0.35);
   const wood = woodMaterial(materials.wood);
   const M = METALS[materials.metal.finish];
   const metal = new THREE.MeshPhysicalMaterial({color: hexColor(M.hex), metalness: 1, roughness: M.rough});
@@ -108,10 +109,34 @@ function seatingMaterialSet(materials, {detail = true, onReady} = {}) {
   return set;
 }
 
+
+/** Upholstery is never one flat colour: soft mottling and pile direction in world space (no tile repeat),
+ *  a little darker in the folds the eye expects, and slightly varied roughness. */
+const MACRO_GLSL = `
+float mh(vec3 p){ return fract(sin(dot(p, vec3(127.1, 311.7, 74.7))) * 43758.5453); }
+float mn(vec3 p){ vec3 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
+  return mix(mix(mix(mh(i), mh(i + vec3(1,0,0)), f.x), mix(mh(i + vec3(0,1,0)), mh(i + vec3(1,1,0)), f.x), f.y),
+             mix(mix(mh(i + vec3(0,0,1)), mh(i + vec3(1,0,1)), f.x), mix(mh(i + vec3(0,1,1)), mh(i + vec3(1,1,1)), f.x), f.y), f.z); }
+float mfbm(vec3 p){ return 0.55 * mn(p) + 0.3 * mn(p * 2.3 + 7.1) + 0.15 * mn(p * 5.7 + 3.3); }`;
+function fabricMacro(mat, amount = 0.07) {
+  mat.onBeforeCompile = sh => {
+    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vMacroPos;')
+      .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvMacroPos = (modelMatrix * vec4(transformed, 1.0)).xyz;');
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec3 vMacroPos;' + MACRO_GLSL)
+      .replace('#include <map_fragment>', `#include <map_fragment>
+        float macroN = mfbm(vMacroPos * 7.0);
+        diffuseColor.rgb *= 1.0 + ${amount.toFixed(3)} * (macroN - 0.5) * 2.0;`)
+      .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
+        roughnessFactor = clamp(roughnessFactor + 0.06 * (mfbm(vMacroPos * 11.0 + 5.0) - 0.5), 0.04, 1.0);`);
+  };
+  mat.customProgramCacheKey = () => 'fabricMacro' + amount;
+  return mat;
+}
+
 function woodMaterial(w) {
   const W = WOODS[w.species] || WOODS.oak, Fi = FINISHES[w.finish] || FINISHES.matte, St = STAINS[w.stain];
   const color = hexColor(W.base); if (St?.hex) color.lerp(hexColor(St.hex), St.k);
-  return new THREE.MeshPhysicalMaterial({color, roughness: Fi.rough, clearcoat: Fi.clearcoat, clearcoatRoughness: 0.2});
+  const m = new THREE.MeshPhysicalMaterial({color, roughness: Fi.rough, clearcoat: Fi.clearcoat, clearcoatRoughness: 0.2}); m.userData.timber = true; return m;
 }
 
 /** Surface material for table tops and bases: wood/veneer, stone, glass, lacquer or metal. */
@@ -135,7 +160,7 @@ function surfaceMaterial(spec, set, jobs, {rotate = false} = {}) {
 function tableMaterialSet(materials, {detail = true, onReady} = {}) {
   const set = {textures: []}, jobs = [];
   const quiet = detail ? jobs : [];
-  set.top = surfaceMaterial(materials.top, set, quiet, {rotate: true});
+  set.top = surfaceMaterial(materials.top, set, quiet, {rotate: false});
   set.base = materials.base.surface === 'same' ? set.top : surfaceMaterial(materials.base, set, quiet);
   const M = METALS[materials.hardware?.metal] || METALS.brass;
   set.metal = materials.base.surface === 'metal' ? set.base : new THREE.MeshPhysicalMaterial({color: hexColor(M.hex), metalness: 1, roughness: M.rough});
@@ -197,7 +222,7 @@ function storageMaterialSet(materials, {detail = true, onReady} = {}) {
   set.inlay = set.metal; set.stitch = set.dark; set.shadow = set.dark; set.fabric = set.case;
   set.led = new THREE.MeshStandardMaterial({color: '#fff1d6', emissive: new THREE.Color('#ffd9a0'), emissiveIntensity: 2.2, roughness: 0.5});
   // Kitchen: worktop, stainless steel, appliance glass, sink.
-  if (materials.top) set.top = surfaceMaterial(materials.top, set, quiet, {rotate: true});
+  if (materials.top) set.top = surfaceMaterial(materials.top, set, quiet, {rotate: false});
   set.steel = new THREE.MeshPhysicalMaterial({color: '#c9ccce', metalness: 1, roughness: 0.32});
   set.appliance = new THREE.MeshPhysicalMaterial({color: '#141617', roughness: 0.18, metalness: 0.2, clearcoat: 1, clearcoatRoughness: 0.05});
   const SF = {steel: null, black: '#2a2b2b', grey: '#6d6e6b', white: '#e9e7e2'}[materials.sink?.finish || 'steel'];
@@ -213,11 +238,29 @@ function storageMaterialSet(materials, {detail = true, onReady} = {}) {
 
 // Geometry cache shared by rebuilds (slider moves rebuild the group; meshes and their sketch edges are reused).
 const geoCache = new Map();
-function geometryFor(part) {
-  const key = JSON.stringify(part.geom);
+/** Timber UVs: the grain (texture v) runs along the part's longest axis on every face, as in a real board;
+ *  end faces get end grain. A per-part offset keeps neighbouring parts from showing the same figure. */
+function grainUV(m, id) {
+  const P = m.positions, N = m.normals, lo = [Infinity, Infinity, Infinity], hi = [-Infinity, -Infinity, -Infinity];
+  for (let i = 0; i < P.length; i += 3) for (let a = 0; a < 3; a++) { lo[a] = Math.min(lo[a], P[i + a]); hi[a] = Math.max(hi[a], P[i + a]); }
+  const ext = [0, 1, 2].map(a => hi[a] - lo[a]), L = ext.indexOf(Math.max(...ext));
+  let h = 0; for (const ch of String(id)) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  const du = (h % 997) / 997 * 0.3, dv = (h % 613) / 613 * 0.6, uv = new Float32Array(P.length / 3 * 2);
+  for (let v = 0, i = 0; i < P.length; v++, i += 3) {
+    const n = [Math.abs(N[i]), Math.abs(N[i + 1]), Math.abs(N[i + 2])], a = n.indexOf(Math.max(...n));
+    const others = [0, 1, 2].filter(k => k !== a);
+    if (a === L) { uv[v * 2] = P[i + others[0]] / 1000 + du; uv[v * 2 + 1] = P[i + others[1]] / 1000 * 0.12 + dv; } // end grain: compressed rings
+    else { const across = others.find(k => k !== L); uv[v * 2] = P[i + across] / 1000 + du; uv[v * 2 + 1] = P[i + L] / 1000 + dv; }
+  }
+  return uv;
+}
+
+function geometryFor(part, timber = false) {
+  const key = JSON.stringify(part.geom) + (timber ? '|g' + part.id : '');
   let hit = geoCache.get(key);
   if (!hit) {
     const m = buildMesh(part), g = new THREE.BufferGeometry();
+    if (timber) m.uvs = grainUV(m, part.id);
     g.setAttribute('position', new THREE.BufferAttribute(m.positions, 3));
     g.setAttribute('normal', new THREE.BufferAttribute(m.normals, 3));
     g.setAttribute('uv', new THREE.BufferAttribute(m.uvs, 2));
@@ -325,7 +368,7 @@ function buildGroup(compiled, mats, {structure = false, sketch = false} = {}) {
     if (structure && !part.internal && ['fabric', 'welt', 'top', 'case', 'front'].includes(part.mat)) {
       mat = mat.clone(); mat.transparent = true; mat.opacity = 0.16; mat.depthWrite = false; mat.userData.temp = true;
     }
-    const mesh = new THREE.Mesh(geometryFor(part).g, mat);
+    const mesh = new THREE.Mesh(geometryFor(part, !!mat.userData?.timber).g, mat);
     mesh.position.set(...part.pos); mesh.rotation.set(...part.rot);
     mesh.castShadow = !part.noShadow && (!structure || part.internal); mesh.receiveShadow = !part.line;
     mesh.userData.part = part.id;
@@ -380,7 +423,7 @@ export function createViewer(host, {onRotate} = {}) {
   const {scene, contact, sun} = makeStage(renderer, SHEET);
   // A calm, untextured sheet: dimensions supply scale without a receding grid behind every part.
   const persp = new THREE.PerspectiveCamera(30, 1, 0.05, 60), ortho = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.05, 60);
-  let userMoved = false, sketch = true, dims = null, camera = persp, view = 'angle', yaw = 0.62, pitch = 0.2, zoom = 1, group = null, mats = null, compiled = null, materials = null, structure = false, size = [1, 1, 1], baseY = 0;
+  let userMoved = false, sketch = true, dims = null, camera = persp, view = 'angle', yaw = 0.62, pitch = 0.2, zoom = 1, group = null, mats = null, compiled = null, materials = null, structure = false, size = [1, 1, 1], baseY = 0, focus = null, matsReady = false;
   const composer = new EffectComposer(renderer);
   const renderPass = new RenderPass(scene, camera), ao = new GTAOPass(scene, camera, 1, 1), smaa = new SMAAPass(), out = new OutputPass();
   ao.blendIntensity = 0.85; ao.updateGtaoMaterial({radius: 0.35, distanceExponent: 1.4, thickness: 1.2, scale: 1.0, samples: 16});
@@ -390,7 +433,7 @@ export function createViewer(host, {onRotate} = {}) {
   function sketchResolution() { const r = host.getBoundingClientRect(); SKETCH.hull.uniforms.resolution.value.set(Math.max(1, r.width), Math.max(1, r.height)); }
   function place() {
     const rect = host.getBoundingClientRect(), aspect = Math.max(0.2, rect.width / Math.max(1, rect.height));
-    const [W, H, D] = size, target = new THREE.Vector3(0, baseY + H * (H > 1.5 * Math.max(W, D) ? 0.5 : 0.45), 0); // wall-hung pieces start above the floor
+    const [W, H, D] = size, target = focus ? new THREE.Vector3(...focus) : new THREE.Vector3(0, baseY + H * (H > 1.5 * Math.max(W, D) ? 0.5 : 0.45), 0); // wall-hung pieces start above the floor
     if (view === 'angle') {
       camera = persp; persp.aspect = aspect;
       const radius = Math.hypot(W, H, D) * 0.5, fov = persp.fov * Math.PI / 180;
@@ -451,12 +494,19 @@ export function createViewer(host, {onRotate} = {}) {
   }
   /** Catalogue photograph of one product: a seamless warm backdrop, a large soft key light (many shadow samples from
    *  an area, averaged), sub-pixel jitter for clean edges, a longer lens and a gentle vignette. Runs in the browser. */
-  async function studioPhoto({width = 2400, height = 1600, samples = 48, yaw: y = yaw, pitch: pt = 0.16, lens = 24} = {}) {
+  async function studioPhoto({width = 2400, height = 1600, samples = 48, yaw: y = yaw, pitch: pt = 0.16, lens = 24, zoom: zm = 1.04, focus: fc = null} = {}) {
+    for (let t = 0; !matsReady && t < 150; t++) await new Promise(r => setTimeout(r, 100)); // full-resolution maps first
     const keep = {bg: scene.background, env: scene.environmentIntensity, tm: renderer.toneMapping, exp: renderer.toneMappingExposure, sun: sun.position.clone(), si: sun.intensity, fov: persp.fov, yaw, pitch, view, zoom, pr: renderer.getPixelRatio()};
     const floor = scene.children.find(o => o.material?.isShadowMaterial), fo = floor?.material.opacity;
     scene.background = new THREE.Color('#f4f0e8'); renderer.toneMapping = THREE.NeutralToneMapping; renderer.toneMappingExposure = 1.0;
     scene.environmentIntensity = 0.75; sun.intensity = 2.6; if (floor) floor.material.opacity = 0.34; contact.material.opacity = 0.75;
-    persp.fov = lens; yaw = y; pitch = pt; view = 'angle'; zoom = 1.04;
+    // Wall-hung pieces (wall cabinets, wall taps, mirrors) get the wall they hang on, so nothing floats.
+    let wall = null; const bb = new THREE.Box3().setFromObject(group);
+    if (compiled.parts.some(q => ['tap', 'wall-rail', 'hood', 'mirror'].includes(q.role) && q.pos?.[1] > 900)) {
+      wall = new THREE.Mesh(new THREE.PlaneGeometry(40, 12), new THREE.MeshStandardMaterial({color: '#efeae1', roughness: 0.95}));
+      wall.position.set(0, 6, bb.min.z - 0.002); wall.receiveShadow = true; scene.add(wall);
+    }
+    persp.fov = lens; yaw = y; pitch = pt; view = 'angle'; zoom = zm; focus = fc;
     renderer.setPixelRatio(1); renderer.setSize(width, height, false); composer.setPixelRatio(1); composer.setSize(width, height);
     const hostRect = host.getBoundingClientRect, fake = {width, height}; host.getBoundingClientRect = () => fake; // frame for the photo, not the panel
     place(); host.getBoundingClientRect = hostRect;
@@ -481,15 +531,16 @@ export function createViewer(host, {onRotate} = {}) {
       for (let j = 0; j < 3; j++) img.data[k + j] = acc[k + j] / samples * v; img.data[k + 3] = 255;
     }
     g.putImageData(img, 0, 0);
+    if (wall) { scene.remove(wall); wall.geometry.dispose(); wall.material.dispose(); }
     Object.assign(scene, {background: keep.bg, environmentIntensity: keep.env}); renderer.toneMapping = keep.tm; renderer.toneMappingExposure = keep.exp;
     sun.position.copy(keep.sun); sun.intensity = keep.si; if (floor) floor.material.opacity = fo; contact.material.opacity = 1;
-    persp.fov = keep.fov; ({yaw, pitch, view, zoom} = keep); ao.updateGtaoMaterial({samples: 16}); renderer.setPixelRatio(keep.pr); resize();
+    persp.fov = keep.fov; focus = null; ({yaw, pitch, view, zoom} = keep); ao.updateGtaoMaterial({samples: 16}); renderer.setPixelRatio(keep.pr); resize();
     return c2.toDataURL('image/jpeg', 0.92);
   }
   return {
     setDesign(next, nextMaterials) {
       const matKey = JSON.stringify(nextMaterials);
-      if (!mats || matKey !== JSON.stringify(materials)) { mats?.dispose(); mats = materialSet(nextMaterials, {onReady: () => rebuild()}); materials = structuredClone(nextMaterials); }
+      if (!mats || matKey !== JSON.stringify(materials)) { mats?.dispose(); matsReady = false; mats = materialSet(nextMaterials, {onReady: () => { matsReady = true; rebuild(); }}); materials = structuredClone(nextMaterials); }
       compiled = next; room = null; rebuild();
     },
     /** Project room: {shell (compiled room shell), roomMaterials, items: [{compiled, materials, x, z, rot}]}; null leaves it. */
@@ -533,7 +584,7 @@ export function createViewer(host, {onRotate} = {}) {
       const exportGroup = buildGroup(compiled, exportMats, {structure: false});
       return new Promise((resolve, reject) => new GLTFExporter().parse(exportGroup, r => { disposeGroup(exportGroup); for (const m of Object.values(exportMats)) m.dispose(); for (const t of conv.values()) t.dispose(); resolve(r); }, reject, {binary: true}));
     },
-    texturesReady: () => !!mats?.textures.length,
+    texturesReady: () => matsReady,
     dispose() { ro.disconnect(); mats?.dispose(); roomMats?.dispose(); for (const m of itemMats.values()) m.dispose(); disposeGroup(group); composer.dispose(); renderer.dispose(); canvas.remove(); }
   };
 }
