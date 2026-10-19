@@ -6,8 +6,8 @@ const unb64u = text => { const s = atob(text.replace(/-/g, '+').replace(/_/g, '/
 const pipe = async (bytes, stream) => new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(stream)).arrayBuffer());
 
 /** Only what is needed to rebuild a design. */
-const slim = d => ({f: d.family, k: d.kind, s: d.style, n: d.seed, p: d.params, m: d.materials});
-const full = x => ({family: x.f, kind: x.k, style: x.s, seed: x.n, params: x.p, materials: x.m});
+const slim = d => ({f: d.family, k: d.kind, s: d.style, n: d.seed, p: d.params, m: d.materials, ...(d.overrides?.length ? {o: d.overrides} : {})});
+const full = x => ({family: x.f, kind: x.k, style: x.s, seed: x.n, params: x.p, materials: x.m, ...(x.o ? {overrides: x.o} : {})});
 
 export async function encode(obj) {
   const json = new TextEncoder().encode(JSON.stringify(obj));

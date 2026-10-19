@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AURA · Tasarımcı Atölyesi</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/forma/studio.css?v=20261019c">
+<style>
+body{background:var(--paper,#f1eee6);color:var(--ink,#1f2420);margin:0;font-family:Inter,Helvetica,Arial,sans-serif;touch-action:manipulation}
+.a-head{display:flex;align-items:center;gap:16px;padding:10px 18px;border-bottom:1px solid var(--hair,#ddd8cc);flex-wrap:wrap}
+.a-head b{font-family:Georgia,serif;font-weight:400;font-size:20px;letter-spacing:.06em}.a-head .f-eyebrow{margin:0}
+.a-load{display:flex;gap:8px;flex:1;min-width:260px}.a-load input{flex:1;font:inherit;padding:8px;border:1px solid var(--hair,#ddd8cc);background:#fff}
+.a-main{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(360px,1fr);min-height:calc(100vh - 58px)}
+.a-left{border-right:1px solid var(--hair,#ddd8cc);display:flex;flex-direction:column}
+#stage{height:calc(100vh - 130px);min-height:360px;position:relative;overflow:hidden}
+.a-items{display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px;border-top:1px solid var(--hair,#ddd8cc)}
+.a-right{padding:14px 16px 40px;overflow:auto}
+.a-right h2{font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:#5c625a;margin:14px 0 8px}
+.a-parts{display:flex;gap:6px;flex-wrap:wrap}
+.a-tools{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.a-tools button,.a-parts button,.a-items button,.a-acts button{font:inherit;font-size:13px;padding:9px 12px;border:1px solid var(--hair,#ddd8cc);background:#fbfaf6;cursor:pointer;min-height:40px}
+.a-tools button[aria-pressed=true],.a-parts button[aria-pressed=true],.a-items button[aria-pressed=true]{border-color:#a24a2a;color:#a24a2a}
+.a-tools button:disabled{opacity:.4}
+#editor{width:100%;aspect-ratio:1.25;background:#fbfaf6;border:1px solid var(--hair,#ddd8cc);touch-action:none;user-select:none;display:block}
+#editor .orig{fill:none;stroke:#c9c2b2;stroke-width:1.5;stroke-dasharray:6 5;vector-effect:non-scaling-stroke}
+#editor .shape{fill:rgba(162,74,42,.06);stroke:#1f2420;stroke-width:2;vector-effect:non-scaling-stroke}
+#editor .grid{stroke:#ebe6da;stroke-width:1;vector-effect:non-scaling-stroke}
+#editor .axis{stroke:#d7cfbf;stroke-width:1;stroke-dasharray:4 4;vector-effect:non-scaling-stroke}
+#editor .h{fill:#fff;stroke:#1f2420;stroke-width:2;vector-effect:non-scaling-stroke;cursor:grab}
+#editor .h.sel{fill:#a24a2a;stroke:#a24a2a}
+#editor .dim{font:11px ui-monospace,Menlo,monospace;fill:#8b8577}
+.a-checks{list-style:none;padding:0;margin:0}.a-checks li{padding:7px 10px;margin:4px 0;font-size:13px;border-left:3px solid #6f8f6b;background:#f6f4ee}
+.a-checks li.warn{border-color:#c79a2c}.a-checks li.error{border-color:#a24a2a;background:#f8ece7}
+.a-note{font-size:12px;color:#5c625a}.a-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.a-acts .f-primary{background:#1f2420;color:#fff;border-color:#1f2420}
+#linkOut{width:100%;font:12px ui-monospace,Menlo,monospace;padding:6px;margin-top:8px;border:1px solid var(--hair,#ddd8cc)}
+@media (max-width:900px){.a-main{grid-template-columns:1fr}.a-left{border-right:0;border-bottom:1px solid var(--hair,#ddd8cc)}#stage{min-height:300px;height:42vh}}
+</style>
+</head>
+<body>
+<header class="a-head">
+  <b>AURA</b><p class="f-eyebrow">Tasarımcı Atölyesi</p>
+  <div class="a-load"><input id="link" placeholder="Müşterinin tasarım ya da proje bağlantısı (…tasarla.html#d=… / #p=…)"><button class="f-secondary" id="loadBtn">Aç</button></div>
+</header>
+<main class="a-main">
+  <section class="a-left"><div id="stage"></div><div class="a-items" id="items"></div></section>
+  <section class="a-right" id="panel"><p class="a-note">Bir bağlantı açın ya da stüdyoda son çalışılan tasarım yüklenir.</p></section>
+</main>
+<script type="module" src="assets/forma/atelier.js?v=20261019c"></script>
+</body>
+</html>

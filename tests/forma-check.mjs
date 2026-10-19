@@ -285,6 +285,37 @@ let bathN = 0;
   assert.ok(parse('lavabo dolabı', {family: 'seating'}).actions.some(a => a.value === 'bath'), 'bath word');
 }
 console.log(`PASS forma: ${bathN} bathroom pieces (vanity units with top and basin, columns, mirrors, mirror cabinets) valid;`);
+
+// 16. Designer workshop layer: silhouettes and turned profiles survive normalise/link, change geometry, keep cut sizes, and
+// the physics checks catch a tipping top, a too-thin leg and a too-tight CNC corner.
+{
+  const {normalizeDesign: nd, compileDesign} = await import('../assets/forma/generate.js');
+  const O = await import('../assets/forma/overrides.js'), {analyse} = await import('../assets/forma/physics.js');
+  const d = nd(sample({family: 'table', kind: 'dining', style: 'scandinavian_modern', seed: 1}));
+  const c0 = compileDesign(d), ed = O.editableParts(c0);
+  assert.ok(ed.some(t => t.tool === 'silhouette' && t.id === 'top'), 'top is shapeable');
+  const oval = Array.from({length: 12}, (_, i) => [0.5 * Math.cos(i / 6 * Math.PI), 0.5 * Math.sin(i / 6 * Math.PI)]);
+  const d1 = nd({...d, overrides: [{tool: 'silhouette', id: 'top', points: oval}, {tool: 'profile', role: ed.find(t => t.tool === 'profile')?.role || 'leg', points: [[0, 12], [0.5, 20], [1, 14]]}]});
+  assert.equal(d1.overrides.length, 2, 'overrides kept by normalizeDesign');
+  const c1 = compileDesign(d1), top = c1.parts.find(q => q.id === 'top');
+  assert.ok(top.shaped && top.geom.outline.length > 40, 'silhouette applied');
+  for (const q of c1.parts) { const m = buildMesh(q); assert.ok(m.positions.every(Number.isFinite), `finite ${q.id}`); }
+  const r1 = analyse(c1, d1.materials, 'table'); assert.ok(r1.checks.length && r1.mass > 5, 'physics runs');
+  // Thin leg → section error; deep concave notch → CNC error; top far beyond the legs → tipping error.
+  const thin = analyse(compileDesign(nd({...d, overrides: [{tool: 'profile', role: 'leg', points: [[0, 4], [1, 4]]}]})), d.materials, 'table');
+  assert.ok(thin.checks.some(x => x.code === 'section' && x.level === 'error'), 'thin leg caught');
+  const notch = [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [0.001, 0.5], [0, 0.0], [-0.001, 0.5], [-0.5, 0.5]];
+  const cn = analyse(compileDesign(nd({...d, overrides: [{tool: 'silhouette', id: 'top', points: notch}]})), d.materials, 'table');
+  assert.ok(cn.checks.some(x => x.code === 'cnc' && x.level === 'error'), 'tight CNC corner caught');
+  const wide = analyse(compileDesign(nd({...d, params: {...d.params, length: 2400, width: 1100, overhang: 600}})), d.materials, 'table');
+  assert.ok(wide.checks.some(x => x.code === 'tip'), 'tipping evaluated');
+  assert.ok(O.silhouetteDxf(c1).includes('POLYLINE'), 'CNC DXF');
+  globalThis.location ??= {origin: 'https://auraproject.com.tr', pathname: '/tasarla.html', hash: ''};
+  const {designLink: dl, readLink: rl} = await import('../assets/forma/link.js');
+  const url = await dl(d1, 'tr'), back = await rl(url.slice(url.indexOf('#')));
+  assert.equal(nd(back.design).overrides.length, 2, 'overrides travel in the link');
+}
+console.log('PASS forma: designer workshop layer (silhouette, turned profile, link, DXF) and physics checks (tipping, section, CNC radius);');
 // 14. Production: cutting plans place every panel on sheets without overlaps; booklets build for every panel family.
 let sheetN = 0;
 {
