@@ -177,7 +177,7 @@ function shell() {
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261019g').then(mod => { sceneModule = mod; const {createViewer} = mod;
+  import('./scene.js?v=20261019h').then(mod => { sceneModule = mod; const {createViewer} = mod;
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(shown(), state.design.materials); if (state.room) showRoom(); }
@@ -498,7 +498,7 @@ function sizeGroups() {
     g.push(['back', ['backRake', 'backThickness', ...(p.backType === 'camel' ? ['camel'] : []), ...(p.backType === 'channel' ? ['channelCount'] : []), ...(p.backType === 'tufted' ? ['tuftSpacing'] : [])]]);
     g.push(['cushions', ['cushionThickness', 'cushionCrown', ...(p.pillows ? ['pillowSize'] : [])]]);
     g.push(['base', ['legHeight', ...(['legs', 'frame', 'sled'].includes(p.baseType) ? ['legSize'] : []), ...(['legs', 'frame'].includes(p.baseType) ? ['legTaper', 'legSplay', 'legInset'] : [])]]);
-    g.push(['body', [...(['legs', 'frame'].includes(p.baseType) ? ['bodyDrop'] : []), ...(p.baseType !== 'frame' ? ['bodyInset'] : []), 'bodyRadius']]);
+    g.push(['body', [...(['legs', 'frame'].includes(p.baseType) ? ['bodyDrop'] : []), ...(p.baseType !== 'frame' ? ['bodyInset', 'bodyInsetZ'] : []), 'bodyRadius']]);
     return g;
   }
   const bt = p.baseType, g = [['general', ['length', ...(p.topShape === 'round' ? [] : ['width']), 'height'].filter(Boolean)]];

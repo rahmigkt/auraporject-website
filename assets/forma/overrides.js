@@ -70,16 +70,39 @@ export function resample(pts, n, closed) {
   return out;
 }
 
+/** Shapes a designer can add: box (sharp), soft box (radius), round bar, square bar, panel. Sizes in mm (w, h, d). */
+export const ADD_SHAPES = ['box', 'softbox', 'round', 'square', 'panel'];
+const v3 = (a, lim, def = 0) => [0, 1, 2].map(i => { const v = Array.isArray(a) && Number.isFinite(+a[i]) ? +a[i] : def; return Math.max(-lim, Math.min(lim, v)); });
+
+/** Geometry for an added part. Bars stand on their base (y from 0 to h); boxes and panels are centred. */
+export function addedGeom(o) {
+  const [w, h, d] = o.size;
+  if (o.shape === 'round') return {fn: 'lathe', profile: [[0, w / 2], [h, w / 2]]};
+  if (o.shape === 'square') return {fn: 'lathe', profile: [[0, w / 2], [h, w / 2]], square: true};
+  if (o.shape === 'softbox') return {fn: 'cushion', w, h, d, r: Math.min(o.radius || 20, w / 2 - 1, h / 2 - 1, d / 2 - 1)};
+  return {fn: 'cushion', w, h, d, r: Math.min(o.shape === 'panel' ? 1.5 : Math.max(1, o.radius || 2), w / 2 - 0.5, h / 2 - 0.5, d / 2 - 0.5)};
+}
+
 /** Clean an overrides list from a link, file or editor. */
 export function normalizeOverrides(list) {
   if (!Array.isArray(list)) return [];
   const num = v => Number.isFinite(+v) ? +v : 0, out = [];
-  for (const o of list.slice(0, 40)) {
+  for (const o of list.slice(0, 120)) {
     if (!o || typeof o !== 'object') continue;
     if (o.tool === 'silhouette' && typeof o.id === 'string' && Array.isArray(o.points) && o.points.length >= 3)
       out.push({tool: 'silhouette', id: o.id.slice(0, 60), symmetric: !!o.symmetric, points: o.points.slice(0, 80).map(p => [Math.max(-1, Math.min(1, num(p[0]))), Math.max(-1, Math.min(1, num(p[1])))])});
     else if (o.tool === 'profile' && typeof o.role === 'string' && Array.isArray(o.points) && o.points.length >= 2)
       out.push({tool: 'profile', role: o.role.slice(0, 40), points: o.points.slice(0, 40).map(p => [Math.max(0, Math.min(1, num(p[0]))), Math.max(0.5, Math.min(400, num(p[1])))]).sort((a, b) => a[0] - b[0])});
+    else if (o.tool === 'remove' && typeof o.id === 'string') out.push({tool: 'remove', id: o.id.slice(0, 60)});
+    else if (o.tool === 'duplicate' && typeof o.id === 'string' && typeof o.as === 'string') out.push({tool: 'duplicate', id: o.id.slice(0, 60), as: o.as.slice(0, 60), mirror: !!o.mirror});
+    else if (o.tool === 'add' && typeof o.id === 'string' && ADD_SHAPES.includes(o.shape)) {
+      const sz = (o.size || []).slice(0, 3).map(v => Math.max(2, Math.min(4000, num(v))));
+      out.push({tool: 'add', id: o.id.slice(0, 60), shape: o.shape, size: [sz[0] || 400, sz[1] || 40, sz[2] || 400], mat: typeof o.mat === 'string' ? o.mat.slice(0, 30) : 'wood', pos: v3(o.pos, 5000), radius: Math.max(0, Math.min(200, num(o.radius ?? 3)))});
+    }
+    else if (o.tool === 'transform' && typeof o.id === 'string') {
+      const sc = v3(o.scale, 10, 1).map(v => Math.max(0.05, Math.min(10, v || 1)));
+      out.push({tool: 'transform', id: o.id.slice(0, 60), move: v3(o.move, 5000), rot: v3(o.rot, Math.PI * 2), scale: sc});
+    }
   }
   return out;
 }
@@ -108,7 +131,19 @@ export function applyOverrides(compiled, overrides) {
     }
     return p;
   });
-  return {...compiled, parts, meta: {...compiled.meta, shaped: list.length}};
+  // Structure: remove, duplicate (optionally mirrored across the centre), add; then move / rotate / scale.
+  const removed = new Set(list.filter(o => o.tool === 'remove').map(o => o.id));
+  let out = parts.filter(q => !removed.has(q.id));
+  for (const o of list) {
+    if (o.tool === 'duplicate') { const q = out.find(x => x.id === o.id); if (q && !out.some(x => x.id === o.as)) out.push({...q, id: o.as, pos: o.mirror ? [-q.pos[0], q.pos[1], q.pos[2]] : [q.pos[0] + 60, q.pos[1], q.pos[2] + 60], rot: o.mirror ? [q.rot[0], -q.rot[1], -q.rot[2]] : q.rot.slice(), added: true}); }
+    if (o.tool === 'add' && !out.some(x => x.id === o.id)) { const [w, h, d] = o.size; out.push({id: o.id, role: 'added-' + o.shape, mat: o.mat, geom: addedGeom(o), pos: o.pos.slice(), rot: [0, 0, 0], added: true, cut: ['round', 'square'].includes(o.shape) ? [Math.round(h), Math.round(w), Math.round(w)] : [Math.round(w), Math.round(d), Math.round(h)].sort((a, b) => b - a)}); }
+  }
+  out = out.map(q => {
+    const t = list.filter(o => o.tool === 'transform' && o.id === q.id).at(-1); if (!t) return q;
+    const s3 = t.scale, scaled = s3.some(v => Math.abs(v - 1) > 1e-6);
+    return {...q, pos: q.pos.map((v, i) => v + t.move[i]), rot: q.rot.map((v, i) => v + t.rot[i]), geom: scaled ? {fn: 'scaled', s: s3, inner: q.geom} : q.geom, cut: scaled && Array.isArray(q.cut) ? q.cut.map(v => Math.round(v * Math.max(...s3))) : q.cut, shaped: q.shaped || scaled};
+  });
+  return {...compiled, parts: out, meta: {...compiled.meta, shaped: list.length}};
 }
 
 /** DXF (R12 polylines, mm) of every shaped silhouette, for CNC: one closed outline per part, named by part id. */
