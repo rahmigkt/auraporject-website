@@ -18,6 +18,14 @@ const LINE_KEYS = ['stitch', 'inlay', 'caseLine'];
 /** Stain tone that keeps the style's intended wood colour on a gürgen (beech) frame. */
 const STAIN_FOR = {oak: 'oak', ash: 'lightOak', beech: 'natural', gurgen: 'natural', walnut: 'walnut', cherry: 'cherry', teak: 'teak', smoked: 'darkWalnut', ebonized: 'black'};
 /** Extra pattern ideas per style so upholstery is not always plain. */
+// Kitchen and bath cabinets are lacquered (MDF); only a kitchen island may also be solid wood. Channelled and
+// striped fronts (grooved, fluted, slats) are not offered there.
+const wetRoom = d => {
+  const allowWood = d.family === 'kitchen' && d.kind === 'island';
+  for (const k of ['case', 'front']) { const m = d.materials[k]; if (m && m.surface !== 'lacquer' && !(allowWood && m.surface === 'wood')) d.materials[k] = {...m, surface: 'lacquer', color: m.color || 'white', finish: 'matte'}; }
+  if (['grooved', 'fluted', 'slats'].includes(d.params.frontStyle)) d.params.frontStyle = 'flat';
+  return d;
+};
 const PATTERN_HINTS = {rococo_revival: 'trellis:3 stripe:2 argyle:1', tropical_resort: 'stripe:2 trellis:1 tweed:1', memphis: 'polka:2 geometric:2 chevron:1', scandinavian_pastel: 'polka:2 check:1 pinstripe:1', dark_academia: 'plaid:2 houndstooth:2 windowpane:1', neo_classical_restrained: 'stripe:2 trellis:2 pinstripe:1', mid_century_modern: 'geometric:2 houndstooth:1 tweed:1', industrial: 'houndstooth:1 tweed:1', japandi: 'stripe:1 pinstripe:1', aura: 'check:1 houndstooth:1 windowpane:1', neo_gothic: 'argyle:2 trellis:2', hollywood_regency: 'stripe:2 geometric:1', art_deco: 'geometric:2 chevron:1', wabi_sabi_rustic: 'stripe:1 check:1'};
 const weights = text => Object.fromEntries(text.split(' ').map(t => { const [k, v] = t.split(':'); return [k, +v]; }));
 
@@ -144,7 +152,7 @@ export const FAMILIES = {
     featureWeights: {frontStyle: 1.4, pull: 0.8, frontFit: 0.6, caseEdge: 0.4, sink: 0.5, hob: 0.4, hood: 0.4, backsplash: 0.3, board: 0, frontBoard: 0},
     similarEnums: ['frontStyle', 'pull', 'caseEdge'], fixedKeys: ['solidThickness'],
     normalizeMaterials: normalizeKitchenMaterials,
-    couple(d) { d.params.board = d.materials.case.surface === 'wood' ? 'solid' : 'mdf'; d.params.frontBoard = d.materials.front.surface === 'wood' ? 'solid' : 'mdf'; return d; },
+    couple(d) { wetRoom(d); d.params.board = d.materials.case.surface === 'wood' ? 'solid' : 'mdf'; d.params.frontBoard = d.materials.front.surface === 'wood' ? 'solid' : 'mdf'; return d; },
     sampleParams(st, kind, r, locks) {
       const list = KITCHEN_STARTS[kind].filter(e => e.style === st.id);
       return {...structuredClone(r.pick(list.length ? list : KITCHEN_STARTS[kind]).p), ...(locks.params || {})};
@@ -157,7 +165,7 @@ export const FAMILIES = {
     featureWeights: {frontStyle: 1.4, pull: 0.8, basinType: 1, basinShape: 0.6, tap: 0.4, base: 0.6, mirror: 1, mirrorLight: 0.4, board: 0, frontBoard: 0},
     similarEnums: ['frontStyle', 'pull', 'basinType', 'mirror'], fixedKeys: ['solidThickness'],
     normalizeMaterials: m => normalizeKitchenMaterials({...m, sink: m?.sink || {finish: 'white'}}),
-    couple(d) { d.params.board = d.materials.case.surface === 'wood' ? 'solid' : 'mdf'; d.params.frontBoard = d.materials.front.surface === 'wood' ? 'solid' : 'mdf'; return d; },
+    couple(d) { wetRoom(d); d.params.board = d.materials.case.surface === 'wood' ? 'solid' : 'mdf'; d.params.frontBoard = d.materials.front.surface === 'wood' ? 'solid' : 'mdf'; return d; },
     sampleParams(st, kind, r, locks) {
       const list = BATH_STARTS[kind].filter(e => e.style === st.id);
       return {...structuredClone(r.pick(list.length ? list : BATH_STARTS[kind]).p), ...(locks.params || {})};

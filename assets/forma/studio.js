@@ -185,7 +185,7 @@ function shell() {
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261020a').then(mod => { sceneModule = mod; const {createViewer} = mod;
+  import('./scene.js?v=20261020b').then(mod => { sceneModule = mod; const {createViewer} = mod;
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(shown(), state.design.materials); if (state.room) showRoom(); }
@@ -548,7 +548,7 @@ const metalChips = (attr, cur) => `<div class="f-chips">${Object.keys(METALS).ma
 function materialPanel() { return isTable() ? tableMaterialPanel() : isPanel() ? storageMaterialPanel() : isBedroom() ? bedroomMaterialPanel() : seatingMaterialPanel(); }
 const sameFront = m => JSON.stringify(m.front) === JSON.stringify(m.case);
 function storageMaterialPanel() {
-  const d = state.design, m = d.materials, p = d.params, same = sameFront(m), kinds = ['wood', 'veneer', 'lacquer'];
+  const d = state.design, m = d.materials, p = d.params, same = sameFront(m), kinds = d.family === 'kitchen' ? (d.kind === 'island' ? ['lacquer', 'wood'] : ['lacquer']) : d.family === 'bath' ? ['lacquer'] : ['wood', 'veneer', 'lacquer'];
   const glass = p.bays ? p.bays.some(b => b.cells.some(c => c.type === 'glass')) : p.modules.some(x => x.wall === 'glass');
   return `<h2>${L('tabMaterial')}</h2>
   <div class="f-fabric-preview"><div class="f-swatchpair"><figure><canvas id="surfacePreview" width="320" height="320" aria-label="${esc(L('carcassMat'))}"></canvas><figcaption>${L('carcassMat')}</figcaption></figure><figure><canvas id="frontPreview" width="320" height="320" aria-label="${esc(L('frontMat'))}"></canvas><figcaption>${L('frontMat')}</figcaption></figure></div>
