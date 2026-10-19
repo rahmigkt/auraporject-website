@@ -1,5 +1,5 @@
 import {groundedTasteReply} from './assistant-classifier.js?v=20261016s';
-import {siteHeader,siteFooter} from './aura-home.js?v=20261019o';
+import {siteHeader,siteFooter} from './aura-home.js?v=20261019p';
 import {CATEGORIES,STYLE_DIRECTIONS,direction} from './style-directions.js?v=20261016s';
 import {validateAssistantReply,normalizeTaste} from './assistant-contract.js?v=20261016s';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])), $=id=>document.getElementById(id),params=new URLSearchParams(location.search);

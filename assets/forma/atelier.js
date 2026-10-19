@@ -289,7 +289,7 @@ function structurePanel() {
   <div class="a-grid"><span>Kaydır mm</span>${num('m0', round1(t.move[0]), 5)}${num('m1', round1(t.move[1]), 5)}${num('m2', round1(t.move[2]), 5)}
   <span>Döndür °</span>${num('r0', round1(t.rot[0] * R2D), 1)}${num('r1', round1(t.rot[1] * R2D), 1)}${num('r2', round1(t.rot[2] * R2D), 1)}
   <span>Ölçek %</span>${num('s0', round1(t.scale[0] * 100), 1)}${num('s1', round1(t.scale[1] * 100), 1)}${num('s2', round1(t.scale[2] * 100), 1)}</div>
-  ${edgePanel(q)}${sweepPanel(q)}${materialPanel(q)}${cutPanel(q)}${arrangePanel(q)}
+  ${edgePanel(q)}${sweepPanel(q)}${materialPanel(q)}${upholsterPanel(q)}${cutPanel(q)}${arrangePanel(q)}
   <div class="a-tools"><button data-dup>Çoğalt</button><button data-mirror>Aynala (karşı taraf)</button><button data-tfreset>Konumu sıfırla</button><button data-delpart>Sil</button></div>`
   : '<p class="a-note">3D görünümde bir parçaya dokunun. Seçilen parçayı tutamaçlarla taşıyın, döndürün ya da ölçekleyin; sayıyla da girebilirsiniz.</p>'}
   <div class="a-tools"><button data-sundo ${S.hist.length ? '' : 'disabled'}>↶ Yapı geri</button><button data-sredo ${S.fut.length ? '' : 'disabled'}>↷ Yapı ileri</button></div>
@@ -339,6 +339,15 @@ function materialPanel(q) {
     : `<span>Renk</span>${sel('color', COLORS, sp.color)}<span>Parlaklık</span><select data-mat="finish"><option value="matte">Mat</option><option value="lacquer" ${sp.finish === 'lacquer' ? 'selected' : ''}>Parlak lake</option></select>`;
   return sec('mat', 'Malzeme ve damar', `<div class="a-grid a-grid2"><span>Tür</span><select data-mat="surface">${Object.entries(SURF_TR).map(([k, v]) => `<option value="${k}" ${k === sp.surface ? 'selected' : ''}>${v}</option>`).join('')}</select>${rows}</div>
     ${m ? '<div class="a-tools"><button data-matoff>Tasarımın malzemesine dön</button></div>' : '<p class="a-note">Şu an tasarımın ortak malzemesi kullanılıyor; bir seçim yapınca yalnız bu parça değişir.</p>'}`);
+}
+const isCushion = q => q && q.geom.fn === 'cushion' && /fabric|welt|leather/.test(q.mat || '');
+function upholsterPanel(q) {
+  if (!isCushion(q)) return '';
+  const o = ovs().filter(x => x.tool === 'upholster' && (x.id === q.id || x.role === q.role)).at(-1) || {crownTop: q.geom.crownTop || 0, crownFront: q.geom.crownFront || 0, r: q.geom.r || 20, rows: 0, cols: 0, depth: 0};
+  const f = (k, label, v) => `<span>${label}</span><input type="number" data-up="${k}" value="${Math.round(v)}" inputmode="numeric">`;
+  return sec('uph', 'Döşeme biçimi', `<div class="a-grid a-grid2">${f('crownTop', 'Üst kabarıklık mm', o.crownTop)}${f('crownFront', 'Ön kabarıklık mm', o.crownFront)}${f('r', 'Kenar yuvarlaklığı mm', o.r)}${f('rows', 'Kapitone sıra', o.rows)}${f('cols', 'Kapitone sütun', o.cols)}${f('depth', 'Düğme derinliği mm', o.depth)}
+    <span>Desen</span><select data-up="diamond"><option value="">Kare ızgara</option><option value="1" ${o.diamond ? 'selected' : ''}>Baklava (kapitone)</option></select></div>
+    <label class="a-note"><input type="checkbox" data-upall ${o.role ? 'checked' : ''}> Aynı türdeki tüm minderler</label>`);
 }
 function readMaterial() {
   const g = k => $(`[data-mat=${k}]`)?.value, surface = g('surface'), spec = {surface};
@@ -450,6 +459,11 @@ $('#panel').addEventListener('click', async e => {
 });
 $('#panel').addEventListener('toggle', e => { const k = e.target.dataset?.sec; if (k) e.target.open ? S.open.add(k) : S.open.delete(k); }, true);
 $('#panel').addEventListener('change', e => {
+  if (S.part && (e.target.dataset?.up !== undefined || e.target.hasAttribute?.('data-upall'))) {
+    const q = partOf(S.part), all = $('[data-upall]').checked, g = k => +($(`[data-up=${k}]`).value) || 0;
+    const v = {crownTop: g('crownTop'), crownFront: g('crownFront'), r: g('r'), rows: g('rows'), cols: g('cols'), depth: g('depth'), diamond: !!$('[data-up=diamond]').value};
+    return commit([...ovs().filter(o => !(o.tool === 'upholster' && (o.id === q.id || o.role === q.role))), {tool: 'upholster', ...(all ? {role: q.role} : {id: q.id}), ...v}]);
+  }
   if (S.part && e.target.dataset?.mat) { const prev = matOf(S.part)?.spec?.surface, r = readMaterial(); if (e.target.dataset.mat === 'surface' && prev !== r.spec.surface) { const sf = r.spec.surface; r.spec = sf === 'wood' || sf === 'veneer' ? {surface: sf, species: 'oak', stain: 'natural', finish: 'oil'} : {surface: sf}; } return commit([...ovs().filter(o => !(o.tool === 'material' && o.id === S.part)), {tool: 'material', id: S.part, ...r}]); }
   if (e.target.dataset?.cut === 'type') { S.cutType = e.target.value; renderPanel(); return; }
   if (S.part && (e.target.dataset?.sw || e.target.hasAttribute?.('data-swall'))) { const q = partOf(S.part); return setSweep(q, readSweep(), $('[data-swall]').checked); }
