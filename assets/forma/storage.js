@@ -426,8 +426,9 @@ function pull(parts, id, f, p, kind, side, counts) {
   } else if (h > 260) y = f.y1 - 90;
   if (p.pull === 'none') { counts.push++; return; }
   counts.pulls++;
+  const fitY = len => vertical ? clamp(y, f.y0 + len / 2 + 5, Math.max(f.y0 + len / 2 + 5, f.y1 - len / 2 - 5)) : y; // a vertical pull stays on its door
   if (p.pull === 'bar') {
-    const len = pickBar(vertical ? Math.min(h * 0.35, 480) : Math.min(w * 0.45, 320)), a = len / 2, sd = 30;
+    const len = pickBar(vertical ? Math.min(h * 0.35, 480) : Math.min(w * 0.45, 320)), a = len / 2, sd = 30; y = fitY(len);
     const pts = vertical ? [[x, y - a, z], [x, y - a, z + sd], [x, y + a, z + sd], [x, y + a, z]] : [[x - a, y, z], [x - a, y, z + sd], [x + a, y, z + sd], [x + a, y, z]];
     parts.push(part(`${id}-pull`, 'pull', 'metal', {fn: 'tube', points: pts, r: 6}, [0, 0, 0], [0, 0, 0], {nocut: true, pitch: len}));
   } else if (p.pull === 'knob') {
@@ -435,15 +436,15 @@ function pull(parts, id, f, p, kind, side, counts) {
     if (!vertical && w > 700) counts.pulls++;
   } else if (p.pull === 'edge') {
     // Aluminium edge profile on the top edge of a drawer, on the opening edge of a door.
-    if (vertical) pnl(parts, `${id}-pull`, 'pull', 'metal', [side > 0 ? f.x1 - 3 : f.x0 - 1, side > 0 ? f.x1 + 1 : f.x0 + 3], [y - Math.min(h * 0.45, 900) / 2, y + Math.min(h * 0.45, 900) / 2], [f.z0 - 2, z + 16], {nocut: true}, 0.8);
+    if (vertical) { const L = Math.min(h * 0.45, 900); y = fitY(L); } if (vertical) pnl(parts, `${id}-pull`, 'pull', 'metal', [side > 0 ? f.x1 - 3 : f.x0 - 1, side > 0 ? f.x1 + 1 : f.x0 + 3], [y - Math.min(h * 0.45, 900) / 2, y + Math.min(h * 0.45, 900) / 2], [f.z0 - 2, z + 16], {nocut: true}, 0.8);
     else pnl(parts, `${id}-pull`, 'pull', 'metal', [x - Math.min(w * 0.5, 300) / 2, x + Math.min(w * 0.5, 300) / 2], [f.y1 - 3, f.y1 + 1], [f.z0 - 2, z + 16], {nocut: true}, 0.8);
   } else if (p.pull === 'cutout') {
     // Finger cut-out routed into the front edge.
-    if (vertical) pnl(parts, `${id}-pull`, 'pull', 'dark', [side > 0 ? f.x1 - 22 : f.x0, side > 0 ? f.x1 : f.x0 + 22], [y - 70, y + 70], [f.z0 + 4, z + 0.3], {nocut: true}, 6);
+    if (vertical) y = fitY(140); if (vertical) pnl(parts, `${id}-pull`, 'pull', 'dark', [side > 0 ? f.x1 - 22 : f.x0, side > 0 ? f.x1 : f.x0 + 22], [y - 70, y + 70], [f.z0 + 4, z + 0.3], {nocut: true}, 6);
     else pnl(parts, `${id}-pull`, 'pull', 'dark', [x - 65, x + 65], [f.y1 - 22, f.y1], [f.z0 + 4, z + 0.3], {nocut: true}, 6);
   } else if (p.pull === 'leather') {
-    if (vertical) pnl(parts, `${id}-pull`, 'pull', 'leather', [side > 0 ? f.x1 - 6 : f.x0 - 30, side > 0 ? f.x1 + 30 : f.x0 + 6], [y - 60, y + 60], [z - 1, z + 4], {nocut: true}, 1.5);
-    else pnl(parts, `${id}-pull`, 'pull', 'leather', [x - 20, x + 20], [f.y1 - 60, f.y1 + 25], [z - 1, z + 4], {nocut: true}, 1.5);
+    if (vertical) y = fitY(120); if (vertical) pnl(parts, `${id}-pull`, 'pull', 'leather', [side > 0 ? f.x1 - 6 : f.x0 - 30, side > 0 ? f.x1 + 30 : f.x0 + 6], [y - 60, y + 60], [z - 1, z + 4], {nocut: true}, 1.5);
+    else pnl(parts, `${id}-pull`, 'pull', 'leather', [x - 20, x + 20], [f.y1 - 70, f.y1 - 4], [z - 1, z + 4], {nocut: true}, 1.5);
   }
 }
 

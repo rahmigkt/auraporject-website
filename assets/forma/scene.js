@@ -198,7 +198,7 @@ function bedroomMaterialSet(materials, {detail = true, onReady} = {}) {
   const L = COLORS[materials.linen?.color] || COLORS.white;
   set.linen = new THREE.MeshPhysicalMaterial({color: hexColor(L.hex), roughness: 0.92, sheen: 0.5, sheenRoughness: 0.85, sheenColor: hexColor(L.hex).lerp(new THREE.Color('#fff'), 0.4)});
   set.leather = new THREE.MeshPhysicalMaterial({color: '#6b4428', roughness: 0.55, clearcoat: 0.2});
-  set.mirror = new THREE.MeshPhysicalMaterial({color: '#d3dcdf', metalness: 0.55, roughness: 0.08, clearcoat: 1, clearcoatRoughness: 0.02});
+  set.mirror = new THREE.MeshPhysicalMaterial({color: '#e6ecee', metalness: 0.9, roughness: 0.03, envMapIntensity: 1.4});
   set.shadow = new THREE.MeshStandardMaterial({color: '#191714', roughness: 1});
   set.cane = new THREE.MeshStandardMaterial({color: '#d6b880', roughness: 0.6, side: THREE.DoubleSide});
   roomMaterials(set, materials, detail, jobs);
@@ -226,7 +226,7 @@ function storageMaterialSet(materials, {detail = true, onReady} = {}) {
   set.metal = new THREE.MeshPhysicalMaterial({color: hexColor(M.hex), metalness: 1, roughness: M.rough});
   set.dark = new THREE.MeshStandardMaterial({color: '#1d1c1a', roughness: 0.8});
   set.frame = new THREE.MeshStandardMaterial({color: '#e2cfa9', roughness: 0.8});
-  set.mirror = new THREE.MeshPhysicalMaterial({color: '#d3dcdf', metalness: 0.55, roughness: 0.08, clearcoat: 1, clearcoatRoughness: 0.02});
+  set.mirror = new THREE.MeshPhysicalMaterial({color: '#e6ecee', metalness: 0.9, roughness: 0.03, envMapIntensity: 1.4});
   const G = GLASS[materials.glass?.glass] || GLASS.clear;
   set.glass = new THREE.MeshPhysicalMaterial({color: hexColor(G.hex), roughness: materials.glass?.glass === 'frosted' ? 0.55 : 0.04, transparent: true, opacity: 0.22 + G.opacity * 0.8, clearcoat: 1, clearcoatRoughness: 0.03, depthWrite: false});
   set.leather = new THREE.MeshPhysicalMaterial({color: '#6b4428', roughness: 0.55, clearcoat: 0.2});
@@ -543,11 +543,12 @@ export function createViewer(host, {onRotate} = {}) {
     try {
     const keep = {bg: scene.background, env: scene.environmentIntensity, tm: renderer.toneMapping, exp: renderer.toneMappingExposure, sun: sun.position.clone(), si: sun.intensity, fov: persp.fov, yaw, pitch, view, zoom, pr: renderer.getPixelRatio()};
     const floor = scene.children.find(o => o.material?.isShadowMaterial), fo = floor?.material.opacity;
-    scene.background = new THREE.Color('#f4f0e8'); renderer.toneMapping = THREE.NeutralToneMapping; renderer.toneMappingExposure = 1.0;
+    scene.background = new THREE.Color('#ebe6dc'); renderer.toneMapping = THREE.NeutralToneMapping; renderer.toneMappingExposure = 1.0;
     scene.environmentIntensity = 0.75; sun.intensity = 2.6; if (floor) floor.material.opacity = 0.34; contact.material.opacity = 0.75;
     // Wall-hung pieces (wall cabinets, wall taps, mirrors) get the wall they hang on, so nothing floats.
     let wall = null; const bb = new THREE.Box3().setFromObject(group);
-    if (compiled.parts.some(q => ['tap', 'wall-rail', 'hood', 'mirror'].includes(q.role) && q.pos?.[1] > 900)) {
+    const hung = bb.min.y > 0.04 || compiled.params?.base === 'wall' || compiled.parts.some(q => ['mirror', 'mirror-frame'].includes(q.role));
+    if (hung || compiled.parts.some(q => ['tap', 'wall-rail', 'hood', 'mirror'].includes(q.role) && q.pos?.[1] > 900)) {
       wall = new THREE.Mesh(new THREE.PlaneGeometry(40, 12), new THREE.MeshStandardMaterial({color: '#efeae1', roughness: 0.95}));
       wall.position.set(0, 6, bb.min.z - 0.002); wall.receiveShadow = true; scene.add(wall);
     }
