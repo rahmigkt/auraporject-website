@@ -140,6 +140,8 @@ export function normalizeOverrides(list) {
       for (const k of Object.keys(spec)) if (spec[k] === undefined) delete spec[k];
       out.push({tool: 'material', id: o.id.slice(0, 60), spec, grain: ['along', 'across', 'diag'].includes(o.grain) ? o.grain : 'along'});
     }
+    else if (o.tool === 'upholster' && (typeof o.id === 'string' || typeof o.role === 'string')) out.push({tool: 'upholster', ...(typeof o.id === 'string' ? {id: o.id.slice(0, 60)} : {role: o.role.slice(0, 40)}),
+      crownTop: Math.max(0, Math.min(80, num(o.crownTop))), crownFront: Math.max(0, Math.min(80, num(o.crownFront))), r: Math.max(1, Math.min(150, num(o.r) || 20)), rows: Math.max(0, Math.min(8, Math.round(num(o.rows)))), cols: Math.max(0, Math.min(16, Math.round(num(o.cols)))), depth: Math.max(0, Math.min(40, num(o.depth) || 0)), diamond: !!o.diamond});
     else if (o.tool === 'edge' && typeof o.id === 'string' && o.sides && typeof o.sides === 'object') {
       const sides = {}; for (const k of ['front', 'back', 'left', 'right']) { const e = o.sides[k]; if (Array.isArray(e) && EDGE_TYPES.includes(e[0])) sides[k] = [e[0], Math.max(1, Math.min(80, num(e[1]) || 6))]; }
       if (Object.keys(sides).length) out.push({tool: 'edge', id: o.id.slice(0, 60), sides});
@@ -193,6 +195,16 @@ export function applyOverrides(compiled, overrides) {
     }
     if (o.tool === 'add' && !out.some(x => x.id === o.id)) { const [w, h, d] = o.size; out.push({id: o.id, role: 'added-' + o.shape, mat: o.mat, geom: addedGeom(o), pos: o.pos.slice(), rot: [0, 0, 0], added: true, cut: ['round', 'square'].includes(o.shape) ? [Math.round(h), Math.round(w), Math.round(w)] : [Math.round(w), Math.round(d), Math.round(h)].sort((a, b) => b - a)}); }
   }
+  // Upholstery shaping on cushion parts: crown, edge roundness, button tufting on the show face (grid or diamond).
+  out = out.flatMap(q => {
+    const u = list.filter(o => o.tool === 'upholster' && (o.id === q.id || (o.role && o.role === q.role))).at(-1); if (!u || q.geom.fn !== 'cushion') return [q];
+    const g = {...q.geom, crownTop: u.crownTop, crownFront: u.crownFront, r: u.r};
+    if (u.rows && u.cols && u.depth) { const tufts = [], mx = g.w * 0.42, my = g.h * 0.4; for (let i = 0; i < u.rows; i++) for (let j = 0; j < u.cols + (u.diamond && i % 2 ? -1 : 0); j++) { const off = u.diamond && i % 2 ? 0.5 : 0; tufts.push({x: u.cols > 1 ? -mx + 2 * mx * (j + off) / (u.cols - 1) : 0, y: u.rows > 1 ? -my + 2 * my * i / (u.rows - 1) : 0}); } Object.assign(g, {tufts, tuftDepth: u.depth}); }
+    else { delete g.tufts; g.tuftDepth = 0; return [{...q, geom: g, shaped: true}]; }
+    // buttons sit in the dimples of the show face (part-local, same placement as the cushion)
+    const z = g.d / 2 + g.crownFront * 0.6 - g.tuftDepth * 0.95, btn = {id: `${q.id}-dugme`, role: 'tuft-button', mat: q.mat, geom: {fn: 'buttons', points: g.tufts.map(t => [t.x, t.y, z]), r: 9}, pos: q.pos.slice(), rot: q.rot.slice(), qty: g.tufts.length};
+    return [{...q, geom: g, shaped: true}, btn];
+  });
   // Copies (duplicate / array) inherit their source's sweep, edge and cut unless they have their own.
   const own = (tool, q, extra = () => false) => { const mine = list.filter(o => o.tool === tool && (o.id === q.id || extra(o))); return mine.length ? mine.at(-1) : q.src ? list.filter(o => o.tool === tool && o.id === q.src).at(-1) : undefined; };
   // Swept members: by id, or every part of a role (all legs at once).

@@ -86,7 +86,7 @@ export function cushion({w, h, d, r = 20, crownTop = 0, crownBottom = 0, crownFr
     const front = Math.max(0, uz) ** 3;
     pz += crownFront * bump(ux) * bump(uy) * front;
     if (tufts && front > 0) {
-      const sigma = tuftDepth * 1.35;
+      const sigma = Math.max(14, tuftDepth * 1.6);
       let dent = 0;
       for (const t of tufts) dent += Math.exp(-((px - t.x) ** 2 + (py - t.y) ** 2) / (2 * sigma * sigma));
       if (pleats) for (const [a, c] of pleats) {
