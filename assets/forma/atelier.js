@@ -295,7 +295,7 @@ function structurePanel() {
   const q = S.part && partOf(S.part), t = q && transformOf(q.id), mats = [...new Set(S.compiled.parts.filter(p => !p.line && typeof p.mat === 'string' && !p.mat.startsWith('lac:')).map(p => p.mat))];
   const num = (k, v, step) => `<input type="number" data-tf="${k}" value="${v}" step="${step}" inputmode="decimal">`;
   const editable = q && editableParts(S.compiled).find(e => e.id === q.id || (e.tool === 'profile' && e.role === q.role));
-  return `<div class="a-tools"><button data-multi aria-pressed="${S.multiOn}">Çoklu seçim</button><button data-snap aria-pressed="${S.snap}">Yakalama 5 mm / 5°</button></div>${S.multiOn ? arrangePanel(null) : ''}<h2>Seçili parça</h2>${q ? `<p class="a-note"><b>${NAMES[q.role] || q.role}</b> · ${q.id}${q.added ? ' · eklenen' : ''}</p>
+  return `<div class="a-tools"><button data-multi aria-pressed="${S.multiOn}">Çoklu seçim</button><button data-snap aria-pressed="${S.snap}">Yakalama 5 mm / 5°</button></div>${S.multiOn ? arrangePanel(null) + jointPanel() : ''}<h2>Seçili parça</h2>${q ? `<p class="a-note"><b>${NAMES[q.role] || q.role}</b> · ${q.id}${q.added ? ' · eklenen' : ''}</p>
   <div class="a-tools">${['translate', 'rotate', 'scale'].map(m => `<button data-mode="${m}" aria-pressed="${S.mode === m}">${{translate: 'Taşı', rotate: 'Döndür', scale: 'Ölçekle'}[m]}</button>`).join('')}${editable ? `<button data-shape="${editable.key}">Biçimi düzenle</button>` : ''}</div>
   <div class="a-grid"><span>Kaydır mm</span>${num('m0', round1(t.move[0]), 5)}${num('m1', round1(t.move[1]), 5)}${num('m2', round1(t.move[2]), 5)}
   <span>Döndür °</span>${num('r0', round1(t.rot[0] * R2D), 1)}${num('r1', round1(t.rot[1] * R2D), 1)}${num('r2', round1(t.rot[2] * R2D), 1)}
@@ -369,6 +369,53 @@ function readMaterial() {
   else Object.assign(spec, {color: g('color') || 'white', finish: g('finish') || 'matte'});
   return {spec, grain: g('grain') || 'along'};
 }
+// ---- Joints between two touching parts (EKSIKLER #6), from the sourced table knowledge/atolye/veri/birlesim.json ----
+// Only sourced sizes are used: dowel Ø/length (Hettich), DOMINO thickness/length (Festool), confirmat 5/7/10 (Häfele).
+// Depths the table leaves open (mortise/tenon) are entered by the designer; connector depth = length / 2 per side.
+const JOINTS = {
+  dowel6: {tr: 'Kavela Ø6×35', kind: 'hole', dia: 6, len: 35}, dowel8: {tr: 'Kavela Ø8×40', kind: 'hole', dia: 8, len: 40},
+  domino5: {tr: 'DOMINO 5×30', kind: 'slot', t: 5, len: 30, w: 18.8}, domino6: {tr: 'DOMINO 6×40', kind: 'slot', t: 6, len: 40, w: 20}, domino8: {tr: 'DOMINO 8×40', kind: 'slot', t: 8, len: 40, w: 22}, domino10: {tr: 'DOMINO 10×50', kind: 'slot', t: 10, len: 50, w: 23.9},
+  confirmat: {tr: 'Konfirmat 7×50', kind: 'confirmat', len: 50},
+  mortise: {tr: 'Kör zıvana (kalınlık T/3)', kind: 'mortise'}
+};
+const rotM = ([x, y, z]) => { const cx = Math.cos(x), sx = Math.sin(x), cy = Math.cos(y), sy = Math.sin(y), cz = Math.cos(z), sz = Math.sin(z);
+  return [[cy * cz, -cy * sz, sy], [cx * sz + sx * sy * cz, cx * cz - sx * sy * sz, -sx * cy], [sx * sz - cx * sy * cz, sx * cz + cx * sy * sz, cx * cy]]; }; // three.js Euler XYZ
+const toLocal = (q, w) => { const R = rotM(q.rot), d = w.map((v, i) => v - q.pos[i]); return [0, 1, 2].map(j => R[0][j] * d[0] + R[1][j] * d[1] + R[2][j] * d[2]); };
+const dirLocal = (q, v) => { const R = rotM(q.rot); return [0, 1, 2].map(j => R[0][j] * v[0] + R[1][j] * v[1] + R[2][j] * v[2]); };
+function addJoint(key, count, depthIn) {
+  const [ia, ib] = S.multi.slice(-2), A = partOf(ia), B = partOf(ib), ba = worldBox(ia), bb = worldBox(ib); if (!A || !B) return 'İki parça seçin.';
+  const ov = [0, 1, 2].map(k => Math.min(ba.hi[k], bb.hi[k]) - Math.max(ba.lo[k], bb.lo[k]));
+  if (ov.some(v => v < -3)) return 'Parçalar birbirine değmiyor.';
+  const ax = ov.indexOf(Math.min(...ov)), lo = [0, 1, 2].map(k => Math.max(ba.lo[k], bb.lo[k])), hi = [0, 1, 2].map(k => Math.min(ba.hi[k], bb.hi[k]));
+  const face = [0, 1, 2].map(k => (lo[k] + hi[k]) / 2), along = [0, 1, 2].filter(k => k !== ax).sort((a, b) => (hi[b] - lo[b]) - (hi[a] - lo[a]))[0];
+  const J = JOINTS[key], n = Math.max(1, Math.min(12, count || Math.max(2, Math.round((hi[along] - lo[along]) / 160)))), span = hi[along] - lo[along];
+  const pts = Array.from({length: n}, (_, i) => { const p = face.slice(); p[along] = n === 1 ? face[along] : lo[along] + span * (0.15 + 0.7 * i / (n - 1)); return p; });
+  const sgnA = Math.sign(bb.c[ax] - ba.c[ax]) || 1, list = ovs(), add = (q, sg, mk) => {
+    const n3 = [0, 0, 0]; n3[ax] = sg; const nl = dirLocal(q, n3), lax = [0, 1, 2].reduce((m, i) => Math.abs(nl[i]) > Math.abs(nl[m]) ? i : m, 0), dirAlong = [0, 0, 0]; dirAlong[along] = 1;
+    const al = dirLocal(q, dirAlong), turn = Math.abs(al[lax === 0 ? 1 : 0]) > Math.abs(al[lax === 2 ? 1 : 2]) ? 0 : 90;
+    const ops = pts.map(p => ({...mk(), at: toLocal(q, p).map(v => Math.round(v * 10) / 10), axis: lax, sign: nl[lax] < 0 ? -1 : 1, dir: turn, label: J.tr}));
+    const prev = list.filter(o => o.tool === 'cut' && o.id === q.id).at(-1)?.ops || [];
+    return {tool: 'cut', id: q.id, ops: [...prev, ...ops]};
+  };
+  let mkA, mkB;
+  if (J.kind === 'hole') { mkA = mkB = () => ({type: 'hole', dia: J.dia, depth: J.len / 2 + 1}); }
+  else if (J.kind === 'slot') { mkA = mkB = () => ({type: 'slot', a: J.w, b: J.t, depth: J.len / 2 + 1}); }
+  else if (J.kind === 'confirmat') { mkA = () => ({type: 'hole', dia: 7, depth: 0}); mkB = () => ({type: 'hole', dia: 5, depth: J.len - 10}); }
+  else { // mortise in B, tenon thickness T/3 of A's thickness along the joint axis' smaller section; depth from the designer
+    if (!(depthIn > 0)) return 'Zıvana derinliğini girin (kaynak tabloda derinlik yok).';
+    const tA = Math.min(...[0, 1, 2].filter(k => k !== ax).map(k => ba.hi[k] - ba.lo[k])), t = Math.round(tA / 3), w = Math.round(Math.min(span * 0.8, Math.max(...[0, 1, 2].filter(k => k !== ax).map(k => ba.hi[k] - ba.lo[k])) * 0.8));
+    pts.splice(0, pts.length, face); mkA = null; mkB = () => ({type: 'pocket', a: w, b: t, depth: depthIn});
+  }
+  const next = list.filter(o => !(o.tool === 'cut' && (o.id === A.id || o.id === B.id)));
+  if (mkA) next.push(add(A, sgnA, mkA)); else { const pa = list.filter(o => o.tool === 'cut' && o.id === A.id).at(-1); if (pa) next.push(pa); }
+  next.push(add(B, -sgnA, mkB)); commit(next); return `${J.tr}: ${pts.length} adet eklendi.`;
+}
+function jointPanel() {
+  if (!S.multiOn || S.multi.length < 2) return '';
+  return `<h2>Birleşim (son iki parça)</h2><div class="a-grid a-grid2"><span>Tür</span><select id="jType">${Object.entries(JOINTS).map(([k, j]) => `<option value="${k}">${j.tr}</option>`).join('')}</select>
+    <span>Adet (0 = otomatik)</span><input id="jCount" type="number" value="0" inputmode="numeric"><span>Zıvana derinliği mm</span><input id="jDepth" type="number" value="" placeholder="yalnız zıvana" inputmode="numeric"></div>
+    <div class="a-tools"><button data-joint>Birleşimi ekle</button></div><p class="a-note" id="jOut">${S.jmsg ? `<b>${S.jmsg}</b><br>` : ''}Ölçüler: Hettich kavela, Festool DOMINO, Häfele konfirmat kayıtları (birlesim.json). Mukavemet onayı değildir.</p>`;
+}
 const AX = ['X', 'Y', 'Z'];
 S.open = new Set(); const sec = (k, title, body) => `<details data-sec="${k}" ${S.open.has(k) ? 'open' : ''}><summary>${title}</summary>${body}</details>`;
 function arrangePanel(q) {
@@ -394,7 +441,7 @@ function cutList() {
     const g = q.geom.fn === 'cut' ? q.geom.inner : q.geom, L = g.fn === 'lathe' ? g : g.fn === 'clipped' && g.inner?.fn === 'lathe' ? g.inner : null;
     const turned = L && [Math.round(Math.max(...L.profile.map(r => r[0])) / (g.fn === 'clipped' ? Math.cos(Math.max(...(g.rot || [0]).map(Math.abs))) : 1)), Math.round(2 * Math.max(...L.profile.map(r => r[1]))), Math.round(2 * Math.max(...L.profile.map(r => r[1])))];
     const dims = (turned || (Array.isArray(q.cut) ? q.cut.slice() : hi.map((v, k) => Math.round(v - lo[k])))).sort((a, b) => b - a);
-    const ops = (q.cuts || []).map(c => c.type === 'hole' ? `delik Ø${c.dia}${c.depth ? ' d' + c.depth : ''}` : `${c.type} ${c.a}×${c.b}${c.depth ? ' d' + c.depth : ''}${c.count > 1 ? ' ×' + c.count : ''}`).join('; ');
+    const ops = (q.cuts || []).map(c => c.label ? `${c.label}` : c.type === 'hole' ? `delik Ø${c.dia}${c.depth ? ' d' + c.depth : ''}` : `${c.type} ${c.a}×${c.b}${c.depth ? ' d' + c.depth : ''}${c.count > 1 ? ' ×' + c.count : ''}`).join('; ');
     rows.push([NAMES[q.role] || q.role, q.id, matName(q), ...dims.slice(0, 3), q.grain || 'boyuna', ops, [q.added ? 'eklenen' : '', q.shaped ? 'biçimli (CNC)' : ''].filter(Boolean).join(' ')]);
   }
   return '\ufeff' + rows.map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(';')).join('\n');
@@ -438,6 +485,7 @@ $('#panel').addEventListener('click', async e => {
   if (b.hasAttribute('data-delpart')) return deletePart();
   if (b.hasAttribute('data-tfreset')) return commit(ovs().filter(o => !(o.tool === 'transform' && o.id === S.part)));
   if (b.hasAttribute('data-add')) return addPart();
+  if (b.hasAttribute('data-joint')) { const msg = addJoint($('#jType').value, +$('#jCount').value, +$('#jDepth').value); S.jmsg = msg; renderPanel(); return; }
   if (b.hasAttribute('data-compare')) { S.compare = !S.compare; rebuild(); renderPanel(); return; }
   if (b.dataset.restore !== undefined) { const v = versions()[+b.dataset.restore]; if (v) commit(v.ov.slice(), false); return; }
   if (b.hasAttribute('data-share')) {
@@ -507,4 +555,5 @@ import('./scene.js').then(({createViewer}) => {
   }
 }).catch(() => {});
 loadCsg().then(() => rebuild());
+window.__atelier = {S, pickPart}; // test hook
 load(location.hash);
