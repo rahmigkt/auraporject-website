@@ -363,6 +363,23 @@ function arrangePanel(q) {
     <div class="a-tools"><button data-arrmake>Diziyi uygula</button>${ovs().some(o => o.tool === 'array' && o.id === q.id) ? '<button data-arrdel>Diziyi kaldır</button>' : ''}<button data-mirrorz>Aynala (ön/arka)</button></div>`);
 }
 
+/** Cut list of the designed piece: every solid part with finished size (mm), material and machining. */
+function cutList() {
+  const rows = [['Parça', 'Kimlik', 'Malzeme', 'Boy', 'En', 'Kalınlık', 'Damar', 'İşlemler', 'Not']];
+  const d = design(), matName = q => { const sp = q.matSpec; if (sp) return [sp.surface, sp.species || sp.stone || sp.metal || sp.color || sp.glass, sp.stain].filter(Boolean).join(' '); const m = d.materials?.[q.mat]; return [q.mat, m?.species || m?.stone || m?.color || m?.fiber || ''].filter(Boolean).join(' '); };
+  for (const q of S.compiled.parts) {
+    if (q.line || q.planOnly || q.decor || /fabric|welt|led/.test(q.mat || '')) continue;
+    const P = worldPositions({...q, pos: [0, 0, 0], rot: [0, 0, 0]}), lo = [Infinity, Infinity, Infinity], hi = [-Infinity, -Infinity, -Infinity];
+    for (let i = 0; i < P.length; i += 3) for (let k = 0; k < 3; k++) { lo[k] = Math.min(lo[k], P[i + k]); hi[k] = Math.max(hi[k], P[i + k]); }
+    const g = q.geom.fn === 'cut' ? q.geom.inner : q.geom, L = g.fn === 'lathe' ? g : g.fn === 'clipped' && g.inner?.fn === 'lathe' ? g.inner : null;
+    const turned = L && [Math.round(Math.max(...L.profile.map(r => r[0])) / (g.fn === 'clipped' ? Math.cos(Math.max(...(g.rot || [0]).map(Math.abs))) : 1)), Math.round(2 * Math.max(...L.profile.map(r => r[1]))), Math.round(2 * Math.max(...L.profile.map(r => r[1])))];
+    const dims = (turned || (Array.isArray(q.cut) ? q.cut.slice() : hi.map((v, k) => Math.round(v - lo[k])))).sort((a, b) => b - a);
+    const ops = (q.cuts || []).map(c => c.type === 'hole' ? `delik Ø${c.dia}${c.depth ? ' d' + c.depth : ''}` : `${c.type} ${c.a}×${c.b}${c.depth ? ' d' + c.depth : ''}${c.count > 1 ? ' ×' + c.count : ''}`).join('; ');
+    rows.push([NAMES[q.role] || q.role, q.id, matName(q), ...dims.slice(0, 3), q.grain || 'boyuna', ops, [q.added ? 'eklenen' : '', q.shaped ? 'biçimli (CNC)' : ''].filter(Boolean).join(' ')]);
+  }
+  return '\ufeff' + rows.map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(';')).join('\n');
+}
+
 // ---- Panel ------------------------------------------------------------------------------------------------------
 function renderPanel() {
   const d = design(), p = $('#panel');
@@ -376,7 +393,7 @@ function renderPanel() {
   <div class="a-tools"><button data-undo>↶ Geri</button><button data-redo>↷ İleri</button><button data-del>Noktayı sil</button><button data-zoom="0.85">+</button><button data-zoom="1.18">−</button><button data-fit>Sığdır</button><button data-reset>Özgün biçim</button></div>
   <p class="a-note">Noktayı sürükleyin; eğriye dokunarak nokta ekleyin; noktaya uzun basarak silin. İki parmakla yakınlaştırın. Kesik çizgi özgün biçimdir.</p>` : '<p class="a-note">Biçimlendirmek için bir parça seçin.</p>'}
   <h2>Fizik ve üretim</h2><ul class="a-checks" id="checks"></ul>
-  <h2>Teslim</h2><div class="a-acts"><button class="f-primary" data-act="prod">Üretime gönder →</button><button data-act="link">Bağlantıyı kopyala</button><button data-act="dxf">CNC (DXF) ↓</button><button data-act="json">design.json ↓</button></div>
+  <h2>Teslim</h2><div class="a-acts"><button class="f-primary" data-act="prod">Üretime gönder →</button><button data-act="link">Bağlantıyı kopyala</button><button data-act="dxf">CNC (DXF) ↓</button><button data-act="stl">STL ↓</button><button data-act="cut">Kesim listesi ↓</button><button data-act="json">design.json ↓</button></div>
   <input id="linkOut" readonly hidden>`;
   if (S.target) { drawEditor(); bindEditor(); renderToolState(); }
   renderChecks();
@@ -427,6 +444,8 @@ $('#panel').addEventListener('click', async e => {
   if (act === 'link') { const o = $('#linkOut'); o.hidden = false; o.value = link; o.select(); try { await navigator.clipboard.writeText(link); } catch {} }
   if (act === 'prod') location.href = `uretim.html${link.slice(link.indexOf('#'))}`;
   if (act === 'dxf') download(`AURA-${design().kind}-siluet.dxf`, silhouetteDxf(S.compiled), 'application/dxf');
+  if (act === 'stl' && viewer) { const data = await viewer.exportSTL(); download(`AURA-${design().kind}.stl`, new Uint8Array(data.buffer || data), 'model/stl'); }
+  if (act === 'cut') download(`AURA-${design().kind}-kesim-listesi.csv`, cutList(), 'text/csv');
   if (act === 'json') download(`AURA-${design().kind}-design.json`, JSON.stringify(design(), null, 2), 'application/json');
 });
 $('#panel').addEventListener('toggle', e => { const k = e.target.dataset?.sec; if (k) e.target.open ? S.open.add(k) : S.open.delete(k); }, true);
