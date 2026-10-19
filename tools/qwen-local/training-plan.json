@@ -1,0 +1,41 @@
+{
+  "schema": "aura.qwen.training-plan/1",
+  "model": "Qwen/Qwen3.5-9B",
+  "execution": "temporary-single-gpu-training-then-local-inference",
+  "method": "bf16-lora",
+  "gpu_target_vram_gb": 48,
+  "host_ram_target_gb": 64,
+  "disk_target_gb": 100,
+  "max_sequence_length": 4096,
+  "micro_batch_size": 1,
+  "gradient_accumulation_steps": 8,
+  "gpu_count": 1,
+  "lora_rank": 16,
+  "lora_alpha": 16,
+  "learning_rate_initial_candidate": 0.0001,
+  "gradient_checkpointing": true,
+  "packing": false,
+  "vision_encoder_training_in_first_text_pilot": false,
+  "benchmark": {
+    "warmup_optimizer_steps": 10,
+    "timed_optimizer_steps": 20,
+    "collect": ["step_seconds", "peak_vram_gb", "actual_input_tokens", "padding_tokens", "package_versions", "model_revision", "dataset_sha256"],
+    "note": "Full optimizer step includes all 8 micro batches; exclude kernel compilation and 10 warmup steps from steady-state timing."
+  },
+  "planning_seconds_per_optimizer_step": [10, 20, 40],
+  "planning_note": "Hypothetical sensitivity inputs, NOT measured GPU benchmarks or performance guarantees.",
+  "stages": [
+    {"id": "geometry-pilot", "training_examples": 1000, "epochs": 2, "available": false, "setup_eval_export_hours": 0.5, "runtime_overhead_fraction": 0.25},
+    {"id": "first-mixed-text", "training_examples": 6000, "epochs": 2, "available": false, "setup_eval_export_hours": 1, "runtime_overhead_fraction": 0.25}
+  ],
+  "vision_stage": "Separate benchmark required; image tokens/resolution change memory and speed. Not included in text-stage duration.",
+  "gates": [
+    "Exact local tokenization: no silent truncation; split or reject sequences longer than context",
+    "Source/license checks; group-held-out split; no dev/test examples in training",
+    "Current engine labels stay unreviewed; no official-gold or aesthetic-quality claim",
+    "Record base dev result before adaptation and compare after adaptation",
+    "No unsafe-pass increase; command and vision regression evaluation before release",
+    "Copy adapter, base revision, processor/template and training logs locally before releasing GPU",
+    "Validate merged model and local quantized export independently"
+  ]
+}

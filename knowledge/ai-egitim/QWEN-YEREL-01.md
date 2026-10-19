@@ -5,6 +5,10 @@ Qwen3.5-9B; açık kaynak yöntemlerle, uzun süre tasarımcı verisi beklemeden
 Bu belge SUNUCU-01'in kiralık sunucu önerisinin yerine geçer. TASARIM-01 ve
 ARAŞTIRMA-01'in eski geniş kapsamlı iş emirleri başlatılmadı. Bu dal dar bir pilot.
 
+Eğitim hazırlığı güncellemesi: [QWEN-EGITIM-HAZIRLIK-01](QWEN-EGITIM-HAZIRLIK-01.md).
+Sanal GPU yalnız geçici eğitim içindir; son kullanım yereldedir. BF16 LoRA ayarları,
+GPU kapasite hedefi ve ölçülmemiş varsayımları açık süre hesabı bu belgede bulunur.
+
 ## Çalışma mimarisi
 
 Yerel Qwen → şemalı tasarım/işlem önerisi → mevcut AURA çizim motoru → geometri ve
