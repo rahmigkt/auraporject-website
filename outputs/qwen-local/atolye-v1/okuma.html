@@ -1,0 +1,7195 @@
+<!doctype html><meta charset="utf-8"><title>Atölye eylemleri: 40 aday</title><style>body{font:18px system-ui;max-width:1000px;margin:30px auto}section{border-bottom:1px solid #aaa;padding:20px}pre{white-space:pre-wrap;font-size:13px}</style><h1>40 onaysız Atölye örneği</h1><p>Şablon etiketleri; model çalıştırılmadı. Bu JSON canlı ai.js sözleşmesine henüz eklenmedi. Test parçaları estetik veya mühendislik önerisi değildir.</p><section><h2>1: add / tr</h2><p>210 mm genişliğinde, 20 mm yüksekliğinde, 150 mm derinliğinde bir ahşap paneli x=0, y=300, z=0 mm konumuna ekle; kenar yarıçapı 2 mm olsun.</p><pre>{
+  "actions": [
+    {
+      "tool": "add",
+      "id": "user:new-1",
+      "shape": "panel",
+      "size": [
+        210,
+        20,
+        150
+      ],
+      "mat": "wood",
+      "pos": [
+        0,
+        300,
+        0
+      ],
+      "radius": 2
+    }
+  ],
+  "reply": "Düzenleme önerisini hazırladım."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "add-tr-1",
+  "selected": "user:new-1",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 6,
+    "expectedPartDelta": 1,
+    "targetBefore": null,
+    "targetAfter": {
+      "id": "user:new-1",
+      "bounds": {
+        "lo": [
+          -105,
+          290,
+          -75
+        ],
+        "hi": [
+          105,
+          310,
+          75
+        ],
+        "size": [
+          210,
+          20,
+          150
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "cushion",
+      "w": 210,
+      "h": 20,
+      "d": 150,
+      "r": 1.5
+    },
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>add-tr-1: unreviewed</small></section><section><h2>2: add / tr</h2><p>Lütfen 220 mm genişliğinde, 20 mm yüksekliğinde, 150 mm derinliğinde bir ahşap paneli x=0, y=300, z=0 mm konumuna ekle; kenar yarıçapı 2 mm olsun.</p><pre>{
+  "actions": [
+    {
+      "tool": "add",
+      "id": "user:new-2",
+      "shape": "panel",
+      "size": [
+        220,
+        20,
+        150
+      ],
+      "mat": "wood",
+      "pos": [
+        0,
+        300,
+        0
+      ],
+      "radius": 2
+    }
+  ],
+  "reply": "Düzenleme önerisini hazırladım."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "add-tr-2",
+  "selected": "user:new-2",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "storage",
+    "kind": "wardrobe",
+    "style": "japandi",
+    "seed": 102,
+    "params": {
+      "solidThickness": 22,
+      "plinthHeight": 80,
+      "legHeight": 150,
+      "legSize": 40,
+      "topThickness": 26,
+      "topOverhang": 0,
+      "fluteWidth": 40,
+      "mirrorHeight": 800,
+      "mirrorWidth": 0.7,
+      "frontFit": "overlay",
+      "doorType": "hinged",
+      "frontStyle": "grooved",
+      "pull": "cutout",
+      "base": "plinth",
+      "legType": "block",
+      "topType": "flush",
+      "caseEdge": "eased",
+      "caseLine": "none",
+      "mirror": "none",
+      "backPanel": "on",
+      "led": "off",
+      "board": "mdf",
+      "frontBoard": "mdf",
+      "width": 1800,
+      "height": 2400,
+      "depth": 600,
+      "bays": [
+        {
+          "id": "b1",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b1c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hang",
+              "k": 4
+            }
+          ]
+        },
+        {
+          "id": "b2",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b2c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "shelves",
+              "k": 5
+            }
+          ]
+        },
+        {
+          "id": "b3",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b3c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hangDrawers",
+              "k": 4
+            }
+          ]
+        }
+      ],
+      "kind": "wardrobe"
+    },
+    "materials": {
+      "case": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "front": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "wood": {
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil"
+      },
+      "metal": {
+        "finish": "bronze"
+      },
+      "glass": {
+        "glass": "clear"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 113,
+    "afterParts": 114,
+    "expectedPartDelta": 1,
+    "targetBefore": null,
+    "targetAfter": {
+      "id": "user:new-2",
+      "bounds": {
+        "lo": [
+          -110,
+          290,
+          -75
+        ],
+        "hi": [
+          110,
+          310,
+          75
+        ],
+        "size": [
+          220,
+          20,
+          150
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "cushion",
+      "w": 220,
+      "h": 20,
+      "d": 150,
+      "r": 1.5
+    },
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>add-tr-2: unreviewed</small></section><section><h2>3: add / en</h2><p>Please add a wood panel 210 mm wide, 20 mm high and 150 mm deep at x=0, y=300, z=0 mm, with a 2 mm edge radius.</p><pre>{
+  "actions": [
+    {
+      "tool": "add",
+      "id": "user:new-1",
+      "shape": "panel",
+      "size": [
+        210,
+        20,
+        150
+      ],
+      "mat": "wood",
+      "pos": [
+        0,
+        300,
+        0
+      ],
+      "radius": 2
+    }
+  ],
+  "reply": "I prepared the edit proposal."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "add-en-1",
+  "selected": "user:new-1",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 6,
+    "expectedPartDelta": 1,
+    "targetBefore": null,
+    "targetAfter": {
+      "id": "user:new-1",
+      "bounds": {
+        "lo": [
+          -105,
+          290,
+          -75
+        ],
+        "hi": [
+          105,
+          310,
+          75
+        ],
+        "size": [
+          210,
+          20,
+          150
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "cushion",
+      "w": 210,
+      "h": 20,
+      "d": 150,
+      "r": 1.5
+    },
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>add-en-1: unreviewed</small></section><section><h2>4: add / en</h2><p>Could you add a wood panel 220 mm wide, 20 mm high and 150 mm deep at x=0, y=300, z=0 mm, with a 2 mm edge radius?</p><pre>{
+  "actions": [
+    {
+      "tool": "add",
+      "id": "user:new-2",
+      "shape": "panel",
+      "size": [
+        220,
+        20,
+        150
+      ],
+      "mat": "wood",
+      "pos": [
+        0,
+        300,
+        0
+      ],
+      "radius": 2
+    }
+  ],
+  "reply": "I prepared the edit proposal."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "add-en-2",
+  "selected": "user:new-2",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "storage",
+    "kind": "wardrobe",
+    "style": "japandi",
+    "seed": 102,
+    "params": {
+      "solidThickness": 22,
+      "plinthHeight": 80,
+      "legHeight": 150,
+      "legSize": 40,
+      "topThickness": 26,
+      "topOverhang": 0,
+      "fluteWidth": 40,
+      "mirrorHeight": 800,
+      "mirrorWidth": 0.7,
+      "frontFit": "overlay",
+      "doorType": "hinged",
+      "frontStyle": "grooved",
+      "pull": "cutout",
+      "base": "plinth",
+      "legType": "block",
+      "topType": "flush",
+      "caseEdge": "eased",
+      "caseLine": "none",
+      "mirror": "none",
+      "backPanel": "on",
+      "led": "off",
+      "board": "mdf",
+      "frontBoard": "mdf",
+      "width": 1800,
+      "height": 2400,
+      "depth": 600,
+      "bays": [
+        {
+          "id": "b1",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b1c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hang",
+              "k": 4
+            }
+          ]
+        },
+        {
+          "id": "b2",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b2c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "shelves",
+              "k": 5
+            }
+          ]
+        },
+        {
+          "id": "b3",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b3c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hangDrawers",
+              "k": 4
+            }
+          ]
+        }
+      ],
+      "kind": "wardrobe"
+    },
+    "materials": {
+      "case": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "front": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "wood": {
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil"
+      },
+      "metal": {
+        "finish": "bronze"
+      },
+      "glass": {
+        "glass": "clear"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 113,
+    "afterParts": 114,
+    "expectedPartDelta": 1,
+    "targetBefore": null,
+    "targetAfter": {
+      "id": "user:new-2",
+      "bounds": {
+        "lo": [
+          -110,
+          290,
+          -75
+        ],
+        "hi": [
+          110,
+          310,
+          75
+        ],
+        "size": [
+          220,
+          20,
+          150
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "cushion",
+      "w": 220,
+      "h": 20,
+      "d": 150,
+      "r": 1.5
+    },
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>add-en-2: unreviewed</small></section><section><h2>5: remove / tr</h2><p>seçili parçayı sil.</p><pre>{
+  "actions": [
+    {
+      "tool": "remove",
+      "id": "top"
+    }
+  ],
+  "reply": "Düzenleme önerisini hazırladım."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "remove-tr-1",
+  "selected": "top",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 4,
+    "expectedPartDelta": -1,
+    "targetBefore": {
+      "id": "top",
+      "bounds": {
+        "lo": [
+          -675,
+          711,
+          -675
+        ],
+        "hi": [
+          675,
+          750,
+          675
+        ],
+        "size": [
+          1350,
+          39,
+          1350
+        ]
+      }
+    },
+    "targetAfter": null,
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>remove-tr-1: unreviewed</small></section><section><h2>6: remove / tr</h2><p>Lütfen seçili parçayı sil.</p><pre>{
+  "actions": [
+    {
+      "tool": "remove",
+      "id": "m1-side-L"
+    }
+  ],
+  "reply": "Düzenleme önerisini hazırladım."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "remove-tr-2",
+  "selected": "m1-side-L",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "storage",
+    "kind": "wardrobe",
+    "style": "japandi",
+    "seed": 102,
+    "params": {
+      "solidThickness": 22,
+      "plinthHeight": 80,
+      "legHeight": 150,
+      "legSize": 40,
+      "topThickness": 26,
+      "topOverhang": 0,
+      "fluteWidth": 40,
+      "mirrorHeight": 800,
+      "mirrorWidth": 0.7,
+      "frontFit": "overlay",
+      "doorType": "hinged",
+      "frontStyle": "grooved",
+      "pull": "cutout",
+      "base": "plinth",
+      "legType": "block",
+      "topType": "flush",
+      "caseEdge": "eased",
+      "caseLine": "none",
+      "mirror": "none",
+      "backPanel": "on",
+      "led": "off",
+      "board": "mdf",
+      "frontBoard": "mdf",
+      "width": 1800,
+      "height": 2400,
+      "depth": 600,
+      "bays": [
+        {
+          "id": "b1",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b1c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hang",
+              "k": 4
+            }
+          ]
+        },
+        {
+          "id": "b2",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b2c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "shelves",
+              "k": 5
+            }
+          ]
+        },
+        {
+          "id": "b3",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b3c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hangDrawers",
+              "k": 4
+            }
+          ]
+        }
+      ],
+      "kind": "wardrobe"
+    },
+    "materials": {
+      "case": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "front": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "wood": {
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil"
+      },
+      "metal": {
+        "finish": "bronze"
+      },
+      "glass": {
+        "glass": "clear"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 113,
+    "afterParts": 112,
+    "expectedPartDelta": -1,
+    "targetBefore": {
+      "id": "m1-side-L",
+      "bounds": {
+        "lo": [
+          -900,
+          80,
+          -300
+        ],
+        "hi": [
+          -882,
+          2400,
+          281
+        ],
+        "size": [
+          18,
+          2320,
+          581
+        ]
+      }
+    },
+    "targetAfter": null,
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>remove-tr-2: unreviewed</small></section><section><h2>7: remove / en</h2><p>Please remove the selected part.</p><pre>{
+  "actions": [
+    {
+      "tool": "remove",
+      "id": "top"
+    }
+  ],
+  "reply": "I prepared the edit proposal."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "remove-en-1",
+  "selected": "top",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 4,
+    "expectedPartDelta": -1,
+    "targetBefore": {
+      "id": "top",
+      "bounds": {
+        "lo": [
+          -675,
+          711,
+          -675
+        ],
+        "hi": [
+          675,
+          750,
+          675
+        ],
+        "size": [
+          1350,
+          39,
+          1350
+        ]
+      }
+    },
+    "targetAfter": null,
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>remove-en-1: unreviewed</small></section><section><h2>8: remove / en</h2><p>Could you remove the selected part?</p><pre>{
+  "actions": [
+    {
+      "tool": "remove",
+      "id": "m1-side-L"
+    }
+  ],
+  "reply": "I prepared the edit proposal."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "remove-en-2",
+  "selected": "m1-side-L",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "storage",
+    "kind": "wardrobe",
+    "style": "japandi",
+    "seed": 102,
+    "params": {
+      "solidThickness": 22,
+      "plinthHeight": 80,
+      "legHeight": 150,
+      "legSize": 40,
+      "topThickness": 26,
+      "topOverhang": 0,
+      "fluteWidth": 40,
+      "mirrorHeight": 800,
+      "mirrorWidth": 0.7,
+      "frontFit": "overlay",
+      "doorType": "hinged",
+      "frontStyle": "grooved",
+      "pull": "cutout",
+      "base": "plinth",
+      "legType": "block",
+      "topType": "flush",
+      "caseEdge": "eased",
+      "caseLine": "none",
+      "mirror": "none",
+      "backPanel": "on",
+      "led": "off",
+      "board": "mdf",
+      "frontBoard": "mdf",
+      "width": 1800,
+      "height": 2400,
+      "depth": 600,
+      "bays": [
+        {
+          "id": "b1",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b1c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hang",
+              "k": 4
+            }
+          ]
+        },
+        {
+          "id": "b2",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b2c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "shelves",
+              "k": 5
+            }
+          ]
+        },
+        {
+          "id": "b3",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b3c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hangDrawers",
+              "k": 4
+            }
+          ]
+        }
+      ],
+      "kind": "wardrobe"
+    },
+    "materials": {
+      "case": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "front": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "wood": {
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil"
+      },
+      "metal": {
+        "finish": "bronze"
+      },
+      "glass": {
+        "glass": "clear"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 113,
+    "afterParts": 112,
+    "expectedPartDelta": -1,
+    "targetBefore": {
+      "id": "m1-side-L",
+      "bounds": {
+        "lo": [
+          -900,
+          80,
+          -300
+        ],
+        "hi": [
+          -882,
+          2400,
+          281
+        ],
+        "size": [
+          18,
+          2320,
+          581
+        ]
+      }
+    },
+    "targetAfter": null,
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>remove-en-2: unreviewed</small></section><section><h2>9: duplicate / tr</h2><p>seçili örnek panelin bir kopyasını oluştur; aynalama yapma.</p><pre>{
+  "actions": [
+    {
+      "tool": "duplicate",
+      "id": "user:panel",
+      "as": "user:copy-1",
+      "mirror": false
+    }
+  ],
+  "reply": "Düzenleme önerisini hazırladım."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "duplicate-tr-1",
+  "selected": "user:panel",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 6,
+    "expectedPartDelta": 1,
+    "targetBefore": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetAfter": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "cushion",
+      "w": 600,
+      "h": 30,
+      "d": 400,
+      "r": 1.5
+    },
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>duplicate-tr-1: unreviewed</small></section><section><h2>10: duplicate / tr</h2><p>Lütfen seçili örnek panelin bir kopyasını oluştur; aynalama yapma.</p><pre>{
+  "actions": [
+    {
+      "tool": "duplicate",
+      "id": "user:panel",
+      "as": "user:copy-2",
+      "mirror": false
+    }
+  ],
+  "reply": "Düzenleme önerisini hazırladım."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "duplicate-tr-2",
+  "selected": "user:panel",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "storage",
+    "kind": "wardrobe",
+    "style": "japandi",
+    "seed": 102,
+    "params": {
+      "solidThickness": 22,
+      "plinthHeight": 80,
+      "legHeight": 150,
+      "legSize": 40,
+      "topThickness": 26,
+      "topOverhang": 0,
+      "fluteWidth": 40,
+      "mirrorHeight": 800,
+      "mirrorWidth": 0.7,
+      "frontFit": "overlay",
+      "doorType": "hinged",
+      "frontStyle": "grooved",
+      "pull": "cutout",
+      "base": "plinth",
+      "legType": "block",
+      "topType": "flush",
+      "caseEdge": "eased",
+      "caseLine": "none",
+      "mirror": "none",
+      "backPanel": "on",
+      "led": "off",
+      "board": "mdf",
+      "frontBoard": "mdf",
+      "width": 1800,
+      "height": 2400,
+      "depth": 600,
+      "bays": [
+        {
+          "id": "b1",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b1c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hang",
+              "k": 4
+            }
+          ]
+        },
+        {
+          "id": "b2",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b2c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "shelves",
+              "k": 5
+            }
+          ]
+        },
+        {
+          "id": "b3",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b3c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hangDrawers",
+              "k": 4
+            }
+          ]
+        }
+      ],
+      "kind": "wardrobe"
+    },
+    "materials": {
+      "case": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "front": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "wood": {
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil"
+      },
+      "metal": {
+        "finish": "bronze"
+      },
+      "glass": {
+        "glass": "clear"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 113,
+    "afterParts": 114,
+    "expectedPartDelta": 1,
+    "targetBefore": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetAfter": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "cushion",
+      "w": 600,
+      "h": 30,
+      "d": 400,
+      "r": 1.5
+    },
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>duplicate-tr-2: unreviewed</small></section><section><h2>11: duplicate / en</h2><p>Please duplicate the selected reference panel once, without mirroring.</p><pre>{
+  "actions": [
+    {
+      "tool": "duplicate",
+      "id": "user:panel",
+      "as": "user:copy-1",
+      "mirror": false
+    }
+  ],
+  "reply": "I prepared the edit proposal."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "duplicate-en-1",
+  "selected": "user:panel",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 6,
+    "expectedPartDelta": 1,
+    "targetBefore": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetAfter": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "cushion",
+      "w": 600,
+      "h": 30,
+      "d": 400,
+      "r": 1.5
+    },
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>duplicate-en-1: unreviewed</small></section><section><h2>12: duplicate / en</h2><p>Could you duplicate the selected reference panel once, without mirroring?</p><pre>{
+  "actions": [
+    {
+      "tool": "duplicate",
+      "id": "user:panel",
+      "as": "user:copy-2",
+      "mirror": false
+    }
+  ],
+  "reply": "I prepared the edit proposal."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "duplicate-en-2",
+  "selected": "user:panel",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "storage",
+    "kind": "wardrobe",
+    "style": "japandi",
+    "seed": 102,
+    "params": {
+      "solidThickness": 22,
+      "plinthHeight": 80,
+      "legHeight": 150,
+      "legSize": 40,
+      "topThickness": 26,
+      "topOverhang": 0,
+      "fluteWidth": 40,
+      "mirrorHeight": 800,
+      "mirrorWidth": 0.7,
+      "frontFit": "overlay",
+      "doorType": "hinged",
+      "frontStyle": "grooved",
+      "pull": "cutout",
+      "base": "plinth",
+      "legType": "block",
+      "topType": "flush",
+      "caseEdge": "eased",
+      "caseLine": "none",
+      "mirror": "none",
+      "backPanel": "on",
+      "led": "off",
+      "board": "mdf",
+      "frontBoard": "mdf",
+      "width": 1800,
+      "height": 2400,
+      "depth": 600,
+      "bays": [
+        {
+          "id": "b1",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b1c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hang",
+              "k": 4
+            }
+          ]
+        },
+        {
+          "id": "b2",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b2c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "shelves",
+              "k": 5
+            }
+          ]
+        },
+        {
+          "id": "b3",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b3c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hangDrawers",
+              "k": 4
+            }
+          ]
+        }
+      ],
+      "kind": "wardrobe"
+    },
+    "materials": {
+      "case": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "front": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "wood": {
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil"
+      },
+      "metal": {
+        "finish": "bronze"
+      },
+      "glass": {
+        "glass": "clear"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 113,
+    "afterParts": 114,
+    "expectedPartDelta": 1,
+    "targetBefore": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetAfter": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "cushion",
+      "w": 600,
+      "h": 30,
+      "d": 400,
+      "r": 1.5
+    },
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>duplicate-en-2: unreviewed</small></section><section><h2>13: transform / tr</h2><p>seçili örnek paneli X yönünde 10 mm taşı; döndürme veya ölçekleme yapma.</p><pre>{
+  "actions": [
+    {
+      "tool": "transform",
+      "id": "user:panel",
+      "move": [
+        10,
+        0,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    }
+  ],
+  "reply": "Düzenleme önerisini hazırladım."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "transform-tr-1",
+  "selected": "user:panel",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 5,
+    "expectedPartDelta": 0,
+    "targetBefore": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetAfter": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -290,
+          885,
+          -200
+        ],
+        "hi": [
+          310,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "cushion",
+      "w": 600,
+      "h": 30,
+      "d": 400,
+      "r": 1.5
+    },
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>transform-tr-1: unreviewed</small></section><section><h2>14: transform / tr</h2><p>Lütfen seçili örnek paneli X yönünde 20 mm taşı; döndürme veya ölçekleme yapma.</p><pre>{
+  "actions": [
+    {
+      "tool": "transform",
+      "id": "user:panel",
+      "move": [
+        20,
+        0,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    }
+  ],
+  "reply": "Düzenleme önerisini hazırladım."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "transform-tr-2",
+  "selected": "user:panel",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "storage",
+    "kind": "wardrobe",
+    "style": "japandi",
+    "seed": 102,
+    "params": {
+      "solidThickness": 22,
+      "plinthHeight": 80,
+      "legHeight": 150,
+      "legSize": 40,
+      "topThickness": 26,
+      "topOverhang": 0,
+      "fluteWidth": 40,
+      "mirrorHeight": 800,
+      "mirrorWidth": 0.7,
+      "frontFit": "overlay",
+      "doorType": "hinged",
+      "frontStyle": "grooved",
+      "pull": "cutout",
+      "base": "plinth",
+      "legType": "block",
+      "topType": "flush",
+      "caseEdge": "eased",
+      "caseLine": "none",
+      "mirror": "none",
+      "backPanel": "on",
+      "led": "off",
+      "board": "mdf",
+      "frontBoard": "mdf",
+      "width": 1800,
+      "height": 2400,
+      "depth": 600,
+      "bays": [
+        {
+          "id": "b1",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b1c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hang",
+              "k": 4
+            }
+          ]
+        },
+        {
+          "id": "b2",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b2c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "shelves",
+              "k": 5
+            }
+          ]
+        },
+        {
+          "id": "b3",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b3c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hangDrawers",
+              "k": 4
+            }
+          ]
+        }
+      ],
+      "kind": "wardrobe"
+    },
+    "materials": {
+      "case": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "front": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "wood": {
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil"
+      },
+      "metal": {
+        "finish": "bronze"
+      },
+      "glass": {
+        "glass": "clear"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 113,
+    "afterParts": 113,
+    "expectedPartDelta": 0,
+    "targetBefore": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetAfter": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -280,
+          885,
+          -200
+        ],
+        "hi": [
+          320,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "cushion",
+      "w": 600,
+      "h": 30,
+      "d": 400,
+      "r": 1.5
+    },
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>transform-tr-2: unreviewed</small></section><section><h2>15: transform / en</h2><p>Please move the selected reference panel 10 mm along X, with no rotation or scaling.</p><pre>{
+  "actions": [
+    {
+      "tool": "transform",
+      "id": "user:panel",
+      "move": [
+        10,
+        0,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    }
+  ],
+  "reply": "I prepared the edit proposal."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "transform-en-1",
+  "selected": "user:panel",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 5,
+    "expectedPartDelta": 0,
+    "targetBefore": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetAfter": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -290,
+          885,
+          -200
+        ],
+        "hi": [
+          310,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "cushion",
+      "w": 600,
+      "h": 30,
+      "d": 400,
+      "r": 1.5
+    },
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>transform-en-1: unreviewed</small></section><section><h2>16: transform / en</h2><p>Could you move the selected reference panel 20 mm along X, with no rotation or scaling?</p><pre>{
+  "actions": [
+    {
+      "tool": "transform",
+      "id": "user:panel",
+      "move": [
+        20,
+        0,
+        0
+      ],
+      "rot": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    }
+  ],
+  "reply": "I prepared the edit proposal."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "transform-en-2",
+  "selected": "user:panel",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "storage",
+    "kind": "wardrobe",
+    "style": "japandi",
+    "seed": 102,
+    "params": {
+      "solidThickness": 22,
+      "plinthHeight": 80,
+      "legHeight": 150,
+      "legSize": 40,
+      "topThickness": 26,
+      "topOverhang": 0,
+      "fluteWidth": 40,
+      "mirrorHeight": 800,
+      "mirrorWidth": 0.7,
+      "frontFit": "overlay",
+      "doorType": "hinged",
+      "frontStyle": "grooved",
+      "pull": "cutout",
+      "base": "plinth",
+      "legType": "block",
+      "topType": "flush",
+      "caseEdge": "eased",
+      "caseLine": "none",
+      "mirror": "none",
+      "backPanel": "on",
+      "led": "off",
+      "board": "mdf",
+      "frontBoard": "mdf",
+      "width": 1800,
+      "height": 2400,
+      "depth": 600,
+      "bays": [
+        {
+          "id": "b1",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b1c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hang",
+              "k": 4
+            }
+          ]
+        },
+        {
+          "id": "b2",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b2c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "shelves",
+              "k": 5
+            }
+          ]
+        },
+        {
+          "id": "b3",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b3c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hangDrawers",
+              "k": 4
+            }
+          ]
+        }
+      ],
+      "kind": "wardrobe"
+    },
+    "materials": {
+      "case": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "front": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "wood": {
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil"
+      },
+      "metal": {
+        "finish": "bronze"
+      },
+      "glass": {
+        "glass": "clear"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 113,
+    "afterParts": 113,
+    "expectedPartDelta": 0,
+    "targetBefore": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetAfter": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -280,
+          885,
+          -200
+        ],
+        "hi": [
+          320,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "cushion",
+      "w": 600,
+      "h": 30,
+      "d": 400,
+      "r": 1.5
+    },
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>transform-en-2: unreviewed</small></section><section><h2>17: edge / tr</h2><p>seçili örnek panelin yalnız ön kenarına 3 mm pah uygula.</p><pre>{
+  "actions": [
+    {
+      "tool": "edge",
+      "id": "user:panel",
+      "sides": {
+        "front": [
+          "chamfer",
+          3
+        ]
+      }
+    }
+  ],
+  "reply": "Düzenleme önerisini hazırladım."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "edge-tr-1",
+  "selected": "user:panel",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 5,
+    "expectedPartDelta": 0,
+    "targetBefore": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetAfter": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "slab",
+      "outline": [
+        [
+          -300,
+          -200
+        ],
+        [
+          300,
+          -200
+        ],
+        [
+          300,
+          200
+        ],
+        [
+          -300,
+          200
+        ]
+      ],
+      "t": 30,
+      "profile": [
+        "square",
+        30,
+        0
+      ],
+      "edges": {
+        "front": [
+          "chamfer",
+          3
+        ]
+      }
+    },
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>edge-tr-1: unreviewed</small></section><section><h2>18: edge / tr</h2><p>Lütfen seçili örnek panelin yalnız ön kenarına 4 mm pah uygula.</p><pre>{
+  "actions": [
+    {
+      "tool": "edge",
+      "id": "user:panel",
+      "sides": {
+        "front": [
+          "chamfer",
+          4
+        ]
+      }
+    }
+  ],
+  "reply": "Düzenleme önerisini hazırladım."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "edge-tr-2",
+  "selected": "user:panel",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "storage",
+    "kind": "wardrobe",
+    "style": "japandi",
+    "seed": 102,
+    "params": {
+      "solidThickness": 22,
+      "plinthHeight": 80,
+      "legHeight": 150,
+      "legSize": 40,
+      "topThickness": 26,
+      "topOverhang": 0,
+      "fluteWidth": 40,
+      "mirrorHeight": 800,
+      "mirrorWidth": 0.7,
+      "frontFit": "overlay",
+      "doorType": "hinged",
+      "frontStyle": "grooved",
+      "pull": "cutout",
+      "base": "plinth",
+      "legType": "block",
+      "topType": "flush",
+      "caseEdge": "eased",
+      "caseLine": "none",
+      "mirror": "none",
+      "backPanel": "on",
+      "led": "off",
+      "board": "mdf",
+      "frontBoard": "mdf",
+      "width": 1800,
+      "height": 2400,
+      "depth": 600,
+      "bays": [
+        {
+          "id": "b1",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b1c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hang",
+              "k": 4
+            }
+          ]
+        },
+        {
+          "id": "b2",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b2c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "shelves",
+              "k": 5
+            }
+          ]
+        },
+        {
+          "id": "b3",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b3c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hangDrawers",
+              "k": 4
+            }
+          ]
+        }
+      ],
+      "kind": "wardrobe"
+    },
+    "materials": {
+      "case": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "front": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "wood": {
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil"
+      },
+      "metal": {
+        "finish": "bronze"
+      },
+      "glass": {
+        "glass": "clear"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 113,
+    "afterParts": 113,
+    "expectedPartDelta": 0,
+    "targetBefore": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetAfter": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "slab",
+      "outline": [
+        [
+          -300,
+          -200
+        ],
+        [
+          300,
+          -200
+        ],
+        [
+          300,
+          200
+        ],
+        [
+          -300,
+          200
+        ]
+      ],
+      "t": 30,
+      "profile": [
+        "square",
+        30,
+        0
+      ],
+      "edges": {
+        "front": [
+          "chamfer",
+          4
+        ]
+      }
+    },
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>edge-tr-2: unreviewed</small></section><section><h2>19: edge / en</h2><p>Please chamfer only the front edge of the selected reference panel by 3 mm.</p><pre>{
+  "actions": [
+    {
+      "tool": "edge",
+      "id": "user:panel",
+      "sides": {
+        "front": [
+          "chamfer",
+          3
+        ]
+      }
+    }
+  ],
+  "reply": "I prepared the edit proposal."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "edge-en-1",
+  "selected": "user:panel",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 5,
+    "expectedPartDelta": 0,
+    "targetBefore": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetAfter": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "slab",
+      "outline": [
+        [
+          -300,
+          -200
+        ],
+        [
+          300,
+          -200
+        ],
+        [
+          300,
+          200
+        ],
+        [
+          -300,
+          200
+        ]
+      ],
+      "t": 30,
+      "profile": [
+        "square",
+        30,
+        0
+      ],
+      "edges": {
+        "front": [
+          "chamfer",
+          3
+        ]
+      }
+    },
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>edge-en-1: unreviewed</small></section><section><h2>20: edge / en</h2><p>Could you chamfer only the front edge of the selected reference panel by 4 mm?</p><pre>{
+  "actions": [
+    {
+      "tool": "edge",
+      "id": "user:panel",
+      "sides": {
+        "front": [
+          "chamfer",
+          4
+        ]
+      }
+    }
+  ],
+  "reply": "I prepared the edit proposal."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "edge-en-2",
+  "selected": "user:panel",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "storage",
+    "kind": "wardrobe",
+    "style": "japandi",
+    "seed": 102,
+    "params": {
+      "solidThickness": 22,
+      "plinthHeight": 80,
+      "legHeight": 150,
+      "legSize": 40,
+      "topThickness": 26,
+      "topOverhang": 0,
+      "fluteWidth": 40,
+      "mirrorHeight": 800,
+      "mirrorWidth": 0.7,
+      "frontFit": "overlay",
+      "doorType": "hinged",
+      "frontStyle": "grooved",
+      "pull": "cutout",
+      "base": "plinth",
+      "legType": "block",
+      "topType": "flush",
+      "caseEdge": "eased",
+      "caseLine": "none",
+      "mirror": "none",
+      "backPanel": "on",
+      "led": "off",
+      "board": "mdf",
+      "frontBoard": "mdf",
+      "width": 1800,
+      "height": 2400,
+      "depth": 600,
+      "bays": [
+        {
+          "id": "b1",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b1c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hang",
+              "k": 4
+            }
+          ]
+        },
+        {
+          "id": "b2",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b2c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "shelves",
+              "k": 5
+            }
+          ]
+        },
+        {
+          "id": "b3",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b3c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hangDrawers",
+              "k": 4
+            }
+          ]
+        }
+      ],
+      "kind": "wardrobe"
+    },
+    "materials": {
+      "case": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "front": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "wood": {
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil"
+      },
+      "metal": {
+        "finish": "bronze"
+      },
+      "glass": {
+        "glass": "clear"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 113,
+    "afterParts": 113,
+    "expectedPartDelta": 0,
+    "targetBefore": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetAfter": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "slab",
+      "outline": [
+        [
+          -300,
+          -200
+        ],
+        [
+          300,
+          -200
+        ],
+        [
+          300,
+          200
+        ],
+        [
+          -300,
+          200
+        ]
+      ],
+      "t": 30,
+      "profile": [
+        "square",
+        30,
+        0
+      ],
+      "edges": {
+        "front": [
+          "chamfer",
+          4
+        ]
+      }
+    },
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>edge-en-2: unreviewed</small></section><section><h2>21: sweep / tr</h2><p>seçili örnek çubuğu kare kesitli kılıç ayak yap; X yönünde 22 mm eğ; başlangıç ölçeği 1, bitiş ölçeği 0,6 olsun.</p><pre>{
+  "actions": [
+    {
+      "tool": "sweep",
+      "id": "user:bar",
+      "mode": "sabre",
+      "shape": "square",
+      "bow": 22,
+      "dir": "+x",
+      "taper0": 1,
+      "taper1": 0.6
+    }
+  ],
+  "reply": "Düzenleme önerisini hazırladım."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "sweep-tr-1",
+  "selected": "user:bar",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 5,
+    "expectedPartDelta": 0,
+    "targetBefore": {
+      "id": "user:bar",
+      "bounds": {
+        "lo": [
+          380,
+          0,
+          -20
+        ],
+        "hi": [
+          420,
+          500,
+          20
+        ],
+        "size": [
+          40,
+          500,
+          40
+        ]
+      }
+    },
+    "targetAfter": {
+      "id": "user:bar",
+      "bounds": {
+        "lo": [
+          387.2746276855469,
+          -1.7532246112823486,
+          -20
+        ],
+        "hi": [
+          441.9230041503906,
+          500,
+          20
+        ],
+        "size": [
+          54.64837646484375,
+          501.75322461128235,
+          40
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "sweep",
+      "axis": 1,
+      "bend": [
+        1,
+        0,
+        0
+      ],
+      "L": 500,
+      "start": 0,
+      "w": 40,
+      "d": 40,
+      "shape": "square",
+      "bow": 22,
+      "mode": "sabre",
+      "taper0": 1,
+      "taper1": 0.6
+    },
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>sweep-tr-1: unreviewed</small></section><section><h2>22: sweep / tr</h2><p>Lütfen seçili örnek çubuğu kare kesitli kılıç ayak yap; X yönünde 24 mm eğ; başlangıç ölçeği 1, bitiş ölçeği 0,6 olsun.</p><pre>{
+  "actions": [
+    {
+      "tool": "sweep",
+      "id": "user:bar",
+      "mode": "sabre",
+      "shape": "square",
+      "bow": 24,
+      "dir": "+x",
+      "taper0": 1,
+      "taper1": 0.6
+    }
+  ],
+  "reply": "Düzenleme önerisini hazırladım."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "sweep-tr-2",
+  "selected": "user:bar",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "storage",
+    "kind": "wardrobe",
+    "style": "japandi",
+    "seed": 102,
+    "params": {
+      "solidThickness": 22,
+      "plinthHeight": 80,
+      "legHeight": 150,
+      "legSize": 40,
+      "topThickness": 26,
+      "topOverhang": 0,
+      "fluteWidth": 40,
+      "mirrorHeight": 800,
+      "mirrorWidth": 0.7,
+      "frontFit": "overlay",
+      "doorType": "hinged",
+      "frontStyle": "grooved",
+      "pull": "cutout",
+      "base": "plinth",
+      "legType": "block",
+      "topType": "flush",
+      "caseEdge": "eased",
+      "caseLine": "none",
+      "mirror": "none",
+      "backPanel": "on",
+      "led": "off",
+      "board": "mdf",
+      "frontBoard": "mdf",
+      "width": 1800,
+      "height": 2400,
+      "depth": 600,
+      "bays": [
+        {
+          "id": "b1",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b1c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hang",
+              "k": 4
+            }
+          ]
+        },
+        {
+          "id": "b2",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b2c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "shelves",
+              "k": 5
+            }
+          ]
+        },
+        {
+          "id": "b3",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b3c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hangDrawers",
+              "k": 4
+            }
+          ]
+        }
+      ],
+      "kind": "wardrobe"
+    },
+    "materials": {
+      "case": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "front": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "wood": {
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil"
+      },
+      "metal": {
+        "finish": "bronze"
+      },
+      "glass": {
+        "glass": "clear"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 113,
+    "afterParts": 113,
+    "expectedPartDelta": 0,
+    "targetBefore": {
+      "id": "user:bar",
+      "bounds": {
+        "lo": [
+          380,
+          0,
+          -20
+        ],
+        "hi": [
+          420,
+          500,
+          20
+        ],
+        "size": [
+          40,
+          500,
+          40
+        ]
+      }
+    },
+    "targetAfter": {
+      "id": "user:bar",
+      "bounds": {
+        "lo": [
+          387.3387145996094,
+          -1.9112132787704468,
+          -20
+        ],
+        "hi": [
+          443.9084777832031,
+          500,
+          20
+        ],
+        "size": [
+          56.56976318359375,
+          501.91121327877045,
+          40
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "sweep",
+      "axis": 1,
+      "bend": [
+        1,
+        0,
+        0
+      ],
+      "L": 500,
+      "start": 0,
+      "w": 40,
+      "d": 40,
+      "shape": "square",
+      "bow": 24,
+      "mode": "sabre",
+      "taper0": 1,
+      "taper1": 0.6
+    },
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>sweep-tr-2: unreviewed</small></section><section><h2>23: sweep / en</h2><p>Please make the selected reference bar a square-section sabre member, bending 22 mm toward positive X with start scale 1 and end scale 0.6.</p><pre>{
+  "actions": [
+    {
+      "tool": "sweep",
+      "id": "user:bar",
+      "mode": "sabre",
+      "shape": "square",
+      "bow": 22,
+      "dir": "+x",
+      "taper0": 1,
+      "taper1": 0.6
+    }
+  ],
+  "reply": "I prepared the edit proposal."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "sweep-en-1",
+  "selected": "user:bar",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 5,
+    "expectedPartDelta": 0,
+    "targetBefore": {
+      "id": "user:bar",
+      "bounds": {
+        "lo": [
+          380,
+          0,
+          -20
+        ],
+        "hi": [
+          420,
+          500,
+          20
+        ],
+        "size": [
+          40,
+          500,
+          40
+        ]
+      }
+    },
+    "targetAfter": {
+      "id": "user:bar",
+      "bounds": {
+        "lo": [
+          387.2746276855469,
+          -1.7532246112823486,
+          -20
+        ],
+        "hi": [
+          441.9230041503906,
+          500,
+          20
+        ],
+        "size": [
+          54.64837646484375,
+          501.75322461128235,
+          40
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "sweep",
+      "axis": 1,
+      "bend": [
+        1,
+        0,
+        0
+      ],
+      "L": 500,
+      "start": 0,
+      "w": 40,
+      "d": 40,
+      "shape": "square",
+      "bow": 22,
+      "mode": "sabre",
+      "taper0": 1,
+      "taper1": 0.6
+    },
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>sweep-en-1: unreviewed</small></section><section><h2>24: sweep / en</h2><p>Could you make the selected reference bar a square-section sabre member, bending 24 mm toward positive X with start scale 1 and end scale 0.6?</p><pre>{
+  "actions": [
+    {
+      "tool": "sweep",
+      "id": "user:bar",
+      "mode": "sabre",
+      "shape": "square",
+      "bow": 24,
+      "dir": "+x",
+      "taper0": 1,
+      "taper1": 0.6
+    }
+  ],
+  "reply": "I prepared the edit proposal."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "sweep-en-2",
+  "selected": "user:bar",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "storage",
+    "kind": "wardrobe",
+    "style": "japandi",
+    "seed": 102,
+    "params": {
+      "solidThickness": 22,
+      "plinthHeight": 80,
+      "legHeight": 150,
+      "legSize": 40,
+      "topThickness": 26,
+      "topOverhang": 0,
+      "fluteWidth": 40,
+      "mirrorHeight": 800,
+      "mirrorWidth": 0.7,
+      "frontFit": "overlay",
+      "doorType": "hinged",
+      "frontStyle": "grooved",
+      "pull": "cutout",
+      "base": "plinth",
+      "legType": "block",
+      "topType": "flush",
+      "caseEdge": "eased",
+      "caseLine": "none",
+      "mirror": "none",
+      "backPanel": "on",
+      "led": "off",
+      "board": "mdf",
+      "frontBoard": "mdf",
+      "width": 1800,
+      "height": 2400,
+      "depth": 600,
+      "bays": [
+        {
+          "id": "b1",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b1c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hang",
+              "k": 4
+            }
+          ]
+        },
+        {
+          "id": "b2",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b2c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "shelves",
+              "k": 5
+            }
+          ]
+        },
+        {
+          "id": "b3",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b3c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hangDrawers",
+              "k": 4
+            }
+          ]
+        }
+      ],
+      "kind": "wardrobe"
+    },
+    "materials": {
+      "case": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "front": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "wood": {
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil"
+      },
+      "metal": {
+        "finish": "bronze"
+      },
+      "glass": {
+        "glass": "clear"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 113,
+    "afterParts": 113,
+    "expectedPartDelta": 0,
+    "targetBefore": {
+      "id": "user:bar",
+      "bounds": {
+        "lo": [
+          380,
+          0,
+          -20
+        ],
+        "hi": [
+          420,
+          500,
+          20
+        ],
+        "size": [
+          40,
+          500,
+          40
+        ]
+      }
+    },
+    "targetAfter": {
+      "id": "user:bar",
+      "bounds": {
+        "lo": [
+          387.3387145996094,
+          -1.9112132787704468,
+          -20
+        ],
+        "hi": [
+          443.9084777832031,
+          500,
+          20
+        ],
+        "size": [
+          56.56976318359375,
+          501.91121327877045,
+          40
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "sweep",
+      "axis": 1,
+      "bend": [
+        1,
+        0,
+        0
+      ],
+      "L": 500,
+      "start": 0,
+      "w": 40,
+      "d": 40,
+      "shape": "square",
+      "bow": 24,
+      "mode": "sabre",
+      "taper0": 1,
+      "taper1": 0.6
+    },
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>sweep-en-2: unreviewed</small></section><section><h2>25: cut / tr</h2><p>seçili örnek panelin üst yüz merkezinden aşağı doğru 8 mm çapında bir geçişli delik aç.</p><pre>{
+  "actions": [
+    {
+      "tool": "cut",
+      "id": "user:panel",
+      "ops": [
+        {
+          "type": "hole",
+          "at": [
+            0,
+            15,
+            0
+          ],
+          "axis": 1,
+          "sign": -1,
+          "dia": 8,
+          "a": 40,
+          "b": 10,
+          "depth": 0,
+          "count": 1,
+          "pitch": 0,
+          "dir": 0
+        }
+      ]
+    }
+  ],
+  "reply": "Düzenleme önerisini hazırladım."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "cut-tr-1",
+  "selected": "user:panel",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 5,
+    "expectedPartDelta": 0,
+    "targetBefore": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetAfter": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "cut",
+      "inner": {
+        "fn": "cushion",
+        "w": 600,
+        "h": 30,
+        "d": 400,
+        "r": 1.5
+      },
+      "ops": [
+        {
+          "type": "hole",
+          "at": [
+            0,
+            15,
+            0
+          ],
+          "axis": 1,
+          "sign": -1,
+          "dia": 8,
+          "a": 40,
+          "b": 10,
+          "depth": 0,
+          "count": 1,
+          "pitch": 0,
+          "dir": 0
+        }
+      ]
+    },
+    "volumeBeforeMm3": 7175308.46172259,
+    "volumeAfterMm3": 7175208.343663394,
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>cut-tr-1: unreviewed</small></section><section><h2>26: cut / tr</h2><p>Lütfen seçili örnek panelin üst yüz merkezinden aşağı doğru 9 mm çapında bir geçişli delik aç.</p><pre>{
+  "actions": [
+    {
+      "tool": "cut",
+      "id": "user:panel",
+      "ops": [
+        {
+          "type": "hole",
+          "at": [
+            0,
+            15,
+            0
+          ],
+          "axis": 1,
+          "sign": -1,
+          "dia": 9,
+          "a": 40,
+          "b": 10,
+          "depth": 0,
+          "count": 1,
+          "pitch": 0,
+          "dir": 0
+        }
+      ]
+    }
+  ],
+  "reply": "Düzenleme önerisini hazırladım."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "cut-tr-2",
+  "selected": "user:panel",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "storage",
+    "kind": "wardrobe",
+    "style": "japandi",
+    "seed": 102,
+    "params": {
+      "solidThickness": 22,
+      "plinthHeight": 80,
+      "legHeight": 150,
+      "legSize": 40,
+      "topThickness": 26,
+      "topOverhang": 0,
+      "fluteWidth": 40,
+      "mirrorHeight": 800,
+      "mirrorWidth": 0.7,
+      "frontFit": "overlay",
+      "doorType": "hinged",
+      "frontStyle": "grooved",
+      "pull": "cutout",
+      "base": "plinth",
+      "legType": "block",
+      "topType": "flush",
+      "caseEdge": "eased",
+      "caseLine": "none",
+      "mirror": "none",
+      "backPanel": "on",
+      "led": "off",
+      "board": "mdf",
+      "frontBoard": "mdf",
+      "width": 1800,
+      "height": 2400,
+      "depth": 600,
+      "bays": [
+        {
+          "id": "b1",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b1c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hang",
+              "k": 4
+            }
+          ]
+        },
+        {
+          "id": "b2",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b2c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "shelves",
+              "k": 5
+            }
+          ]
+        },
+        {
+          "id": "b3",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b3c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hangDrawers",
+              "k": 4
+            }
+          ]
+        }
+      ],
+      "kind": "wardrobe"
+    },
+    "materials": {
+      "case": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "front": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "wood": {
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil"
+      },
+      "metal": {
+        "finish": "bronze"
+      },
+      "glass": {
+        "glass": "clear"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 113,
+    "afterParts": 113,
+    "expectedPartDelta": 0,
+    "targetBefore": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetAfter": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "cut",
+      "inner": {
+        "fn": "cushion",
+        "w": 600,
+        "h": 30,
+        "d": 400,
+        "r": 1.5
+      },
+      "ops": [
+        {
+          "type": "hole",
+          "at": [
+            0,
+            15,
+            0
+          ],
+          "axis": 1,
+          "sign": -1,
+          "dia": 9,
+          "a": 40,
+          "b": 10,
+          "depth": 0,
+          "count": 1,
+          "pitch": 0,
+          "dir": 0
+        }
+      ]
+    },
+    "volumeBeforeMm3": 7175308.46172259,
+    "volumeAfterMm3": 7175181.749803387,
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>cut-tr-2: unreviewed</small></section><section><h2>27: cut / en</h2><p>Please cut a 8 mm diameter through-hole downward from the top face centre of the selected reference panel.</p><pre>{
+  "actions": [
+    {
+      "tool": "cut",
+      "id": "user:panel",
+      "ops": [
+        {
+          "type": "hole",
+          "at": [
+            0,
+            15,
+            0
+          ],
+          "axis": 1,
+          "sign": -1,
+          "dia": 8,
+          "a": 40,
+          "b": 10,
+          "depth": 0,
+          "count": 1,
+          "pitch": 0,
+          "dir": 0
+        }
+      ]
+    }
+  ],
+  "reply": "I prepared the edit proposal."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "cut-en-1",
+  "selected": "user:panel",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 5,
+    "expectedPartDelta": 0,
+    "targetBefore": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetAfter": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "cut",
+      "inner": {
+        "fn": "cushion",
+        "w": 600,
+        "h": 30,
+        "d": 400,
+        "r": 1.5
+      },
+      "ops": [
+        {
+          "type": "hole",
+          "at": [
+            0,
+            15,
+            0
+          ],
+          "axis": 1,
+          "sign": -1,
+          "dia": 8,
+          "a": 40,
+          "b": 10,
+          "depth": 0,
+          "count": 1,
+          "pitch": 0,
+          "dir": 0
+        }
+      ]
+    },
+    "volumeBeforeMm3": 7175308.46172259,
+    "volumeAfterMm3": 7175208.343663394,
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>cut-en-1: unreviewed</small></section><section><h2>28: cut / en</h2><p>Could you cut a 9 mm diameter through-hole downward from the top face centre of the selected reference panel?</p><pre>{
+  "actions": [
+    {
+      "tool": "cut",
+      "id": "user:panel",
+      "ops": [
+        {
+          "type": "hole",
+          "at": [
+            0,
+            15,
+            0
+          ],
+          "axis": 1,
+          "sign": -1,
+          "dia": 9,
+          "a": 40,
+          "b": 10,
+          "depth": 0,
+          "count": 1,
+          "pitch": 0,
+          "dir": 0
+        }
+      ]
+    }
+  ],
+  "reply": "I prepared the edit proposal."
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "cut-en-2",
+  "selected": "user:panel",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "storage",
+    "kind": "wardrobe",
+    "style": "japandi",
+    "seed": 102,
+    "params": {
+      "solidThickness": 22,
+      "plinthHeight": 80,
+      "legHeight": 150,
+      "legSize": 40,
+      "topThickness": 26,
+      "topOverhang": 0,
+      "fluteWidth": 40,
+      "mirrorHeight": 800,
+      "mirrorWidth": 0.7,
+      "frontFit": "overlay",
+      "doorType": "hinged",
+      "frontStyle": "grooved",
+      "pull": "cutout",
+      "base": "plinth",
+      "legType": "block",
+      "topType": "flush",
+      "caseEdge": "eased",
+      "caseLine": "none",
+      "mirror": "none",
+      "backPanel": "on",
+      "led": "off",
+      "board": "mdf",
+      "frontBoard": "mdf",
+      "width": 1800,
+      "height": 2400,
+      "depth": 600,
+      "bays": [
+        {
+          "id": "b1",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b1c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hang",
+              "k": 4
+            }
+          ]
+        },
+        {
+          "id": "b2",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b2c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "shelves",
+              "k": 5
+            }
+          ]
+        },
+        {
+          "id": "b3",
+          "w": 1,
+          "mm": 0,
+          "cells": [
+            {
+              "id": "b3c1",
+              "joined": false,
+              "color": null,
+              "type": "door",
+              "h": 1,
+              "mm": 0,
+              "n": 1,
+              "inside": "hangDrawers",
+              "k": 4
+            }
+          ]
+        }
+      ],
+      "kind": "wardrobe"
+    },
+    "materials": {
+      "case": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "front": {
+        "surface": "veneer",
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil",
+        "color": "cream"
+      },
+      "wood": {
+        "species": "ash",
+        "stain": "natural",
+        "finish": "oil"
+      },
+      "metal": {
+        "finish": "bronze"
+      },
+      "glass": {
+        "glass": "clear"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 113,
+    "afterParts": 113,
+    "expectedPartDelta": 0,
+    "targetBefore": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetAfter": {
+      "id": "user:panel",
+      "bounds": {
+        "lo": [
+          -300,
+          885,
+          -200
+        ],
+        "hi": [
+          300,
+          915,
+          200
+        ],
+        "size": [
+          600,
+          30,
+          400
+        ]
+      }
+    },
+    "targetGeometry": {
+      "fn": "cut",
+      "inner": {
+        "fn": "cushion",
+        "w": 600,
+        "h": 30,
+        "d": 400,
+        "r": 1.5
+      },
+      "ops": [
+        {
+          "type": "hole",
+          "at": [
+            0,
+            15,
+            0
+          ],
+          "axis": 1,
+          "sign": -1,
+          "dia": 9,
+          "a": 40,
+          "b": 10,
+          "depth": 0,
+          "count": 1,
+          "pitch": 0,
+          "dir": 0
+        }
+      ]
+    },
+    "volumeBeforeMm3": 7175308.46172259,
+    "volumeAfterMm3": 7175181.749803387,
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>cut-en-2: unreviewed</small></section><section><h2>29: add / tr</h2><p>Bu add isteğini uygula: {"tool":"add","id":"user:panel","shape":"panel","size":[210,20,150],"mat":"wood","pos":[0,300,0],"radius":2}</p><pre>{
+  "actions": [],
+  "reply": "Parça veya ölçü geçerli değil; düzeltir misiniz?"
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "reject-add-tr-unknown_part",
+  "selected": "user:panel",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 5,
+    "expectedPartDelta": 0,
+    "targetBefore": null,
+    "targetAfter": null,
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>reject-add-tr-unknown_part: unreviewed</small></section><section><h2>30: remove / tr</h2><p>Bu remove isteğini uygula: {"tool":"remove","id":"missing-part"}</p><pre>{
+  "actions": [],
+  "reply": "Parça veya ölçü geçerli değil; düzeltir misiniz?"
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "reject-remove-tr-invalid_dimension",
+  "selected": "missing-part",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 5,
+    "expectedPartDelta": 0,
+    "targetBefore": null,
+    "targetAfter": null,
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>reject-remove-tr-invalid_dimension: unreviewed</small></section><section><h2>31: duplicate / tr</h2><p>Bu duplicate isteğini uygula: {"tool":"duplicate","id":"missing-part","as":"user:copy-1","mirror":false}</p><pre>{
+  "actions": [],
+  "reply": "Parça veya ölçü geçerli değil; düzeltir misiniz?"
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "reject-duplicate-tr-unknown_part",
+  "selected": "missing-part",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 5,
+    "expectedPartDelta": 0,
+    "targetBefore": null,
+    "targetAfter": null,
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>reject-duplicate-tr-unknown_part: unreviewed</small></section><section><h2>32: transform / tr</h2><p>Bu transform isteğini uygula: {"tool":"transform","id":"user:panel","move":[10,0,0],"rot":[0,0,0],"scale":[0,1,1]}</p><pre>{
+  "actions": [],
+  "reply": "Parça veya ölçü geçerli değil; düzeltir misiniz?"
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "reject-transform-tr-invalid_dimension",
+  "selected": "user:panel",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 5,
+    "expectedPartDelta": 0,
+    "targetBefore": null,
+    "targetAfter": null,
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>reject-transform-tr-invalid_dimension: unreviewed</small></section><section><h2>33: edge / tr</h2><p>Bu edge isteğini uygula: {"tool":"edge","id":"missing-part","sides":{"front":["chamfer",3]}}</p><pre>{
+  "actions": [],
+  "reply": "Parça veya ölçü geçerli değil; düzeltir misiniz?"
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "reject-edge-tr-unknown_part",
+  "selected": "missing-part",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 5,
+    "expectedPartDelta": 0,
+    "targetBefore": null,
+    "targetAfter": null,
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>reject-edge-tr-unknown_part: unreviewed</small></section><section><h2>34: sweep / tr</h2><p>Bu sweep isteğini uygula: {"tool":"sweep","id":"user:bar","mode":"sabre","shape":"square","bow":1000,"dir":"+x","taper0":1,"taper1":0.6}</p><pre>{
+  "actions": [],
+  "reply": "Parça veya ölçü geçerli değil; düzeltir misiniz?"
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "reject-sweep-tr-invalid_dimension",
+  "selected": "user:bar",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 5,
+    "expectedPartDelta": 0,
+    "targetBefore": null,
+    "targetAfter": null,
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>reject-sweep-tr-invalid_dimension: unreviewed</small></section><section><h2>35: cut / tr</h2><p>Bu cut isteğini uygula: {"tool":"cut","id":"missing-part","ops":[{"type":"hole","at":[0,15,0],"axis":1,"sign":-1,"dia":8,"a":40,"b":10,"depth":0,"count":1,"pitch":0,"dir":0}]}</p><pre>{
+  "actions": [],
+  "reply": "Parça veya ölçü geçerli değil; düzeltir misiniz?"
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "reject-cut-tr-unknown_part",
+  "selected": "missing-part",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 5,
+    "expectedPartDelta": 0,
+    "targetBefore": null,
+    "targetAfter": null,
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>reject-cut-tr-unknown_part: unreviewed</small></section><section><h2>36: add / en</h2><p>Apply this add request: {"tool":"add","id":"user:panel","shape":"panel","size":[210,20,150],"mat":"wood","pos":[0,300,0],"radius":2}</p><pre>{
+  "actions": [],
+  "reply": "The part or dimension is invalid; could you correct it?"
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "reject-add-en-unknown_part",
+  "selected": "user:panel",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 5,
+    "expectedPartDelta": 0,
+    "targetBefore": null,
+    "targetAfter": null,
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>reject-add-en-unknown_part: unreviewed</small></section><section><h2>37: remove / en</h2><p>Apply this remove request: {"tool":"remove","id":"missing-part"}</p><pre>{
+  "actions": [],
+  "reply": "The part or dimension is invalid; could you correct it?"
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "reject-remove-en-unknown_part",
+  "selected": "missing-part",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 5,
+    "expectedPartDelta": 0,
+    "targetBefore": null,
+    "targetAfter": null,
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>reject-remove-en-unknown_part: unreviewed</small></section><section><h2>38: duplicate / en</h2><p>Apply this duplicate request: {"tool":"duplicate","id":"missing-part","as":"user:copy-1","mirror":false}</p><pre>{
+  "actions": [],
+  "reply": "The part or dimension is invalid; could you correct it?"
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "reject-duplicate-en-unknown_part",
+  "selected": "missing-part",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 5,
+    "expectedPartDelta": 0,
+    "targetBefore": null,
+    "targetAfter": null,
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>reject-duplicate-en-unknown_part: unreviewed</small></section><section><h2>39: transform / en</h2><p>Apply this transform request: {"tool":"transform","id":"missing-part","move":[10,0,0],"rot":[0,0,0],"scale":[1,1,1]}</p><pre>{
+  "actions": [],
+  "reply": "The part or dimension is invalid; could you correct it?"
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "reject-transform-en-unknown_part",
+  "selected": "missing-part",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 5,
+    "expectedPartDelta": 0,
+    "targetBefore": null,
+    "targetAfter": null,
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>reject-transform-en-unknown_part: unreviewed</small></section><section><h2>40: edge / en</h2><p>Apply this edge request: {"tool":"edge","id":"missing-part","sides":{"front":["chamfer",3]}}</p><pre>{
+  "actions": [],
+  "reply": "The part or dimension is invalid; could you correct it?"
+}</pre><details><summary>Girdi, seçili parça ve gerçek derleme</summary><pre>{
+  "id": "reject-edge-en-unknown_part",
+  "selected": "missing-part",
+  "design": {
+    "schema": "aura.forma.design/1",
+    "family": "table",
+    "kind": "dining",
+    "style": "japandi",
+    "seed": 101,
+    "params": {
+      "length": 1350,
+      "width": 1350,
+      "height": 750,
+      "topThickness": 39,
+      "cornerRadius": 25,
+      "shapeN": 3,
+      "boatBow": 0.05,
+      "edgeSize": 9,
+      "overhang": 235,
+      "sideOverhang": 85,
+      "legSize": 38,
+      "legTaper": 0.8,
+      "legSplay": 0,
+      "apronHeight": 65,
+      "apronThickness": 24,
+      "apronSetback": 10,
+      "stretcherHeight": 150,
+      "columnSize": 190,
+      "footSpread": 0.61,
+      "panelThickness": 35,
+      "tubeSize": 39,
+      "shelfHeight": 115,
+      "shelfThickness": 19,
+      "drawers": 0,
+      "leaves": 0,
+      "leafLength": 480,
+      "topShape": "round",
+      "edge": "eased",
+      "baseType": "slabEnds",
+      "legType": "roundTaper",
+      "pedestalType": "column",
+      "stretcher": "H",
+      "shelf": "none",
+      "drawerPull": "none",
+      "backPanel": "none",
+      "extended": "closed",
+      "inlay": "none",
+      "kind": "dining"
+    },
+    "materials": {
+      "top": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "stone": "concrete",
+        "glass": "clear",
+        "color": "cream",
+        "polish": "honed"
+      },
+      "base": {
+        "surface": "wood",
+        "species": "oak",
+        "stain": "lightOak",
+        "finish": "oil",
+        "metal": "black",
+        "color": "black"
+      },
+      "hardware": {
+        "metal": "black"
+      }
+    },
+    "overrides": [
+      {
+        "tool": "add",
+        "id": "user:panel",
+        "shape": "panel",
+        "size": [
+          600,
+          30,
+          400
+        ],
+        "mat": "wood",
+        "pos": [
+          0,
+          900,
+          0
+        ],
+        "radius": 2
+      },
+      {
+        "tool": "add",
+        "id": "user:bar",
+        "shape": "square",
+        "size": [
+          40,
+          500,
+          40
+        ],
+        "mat": "wood",
+        "pos": [
+          400,
+          0,
+          0
+        ],
+        "radius": 2
+      }
+    ]
+  },
+  "evidence": {
+    "beforeParts": 5,
+    "afterParts": 5,
+    "expectedPartDelta": 0,
+    "targetBefore": null,
+    "targetAfter": null,
+    "scope": "Node compile + counts/coordinates/mesh bounds/descriptor effect; NOT a browser or machining/strength test"
+  }
+}</pre></details><small>reject-edge-en-unknown_part: unreviewed</small></section>
