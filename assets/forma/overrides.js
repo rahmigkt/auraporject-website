@@ -223,14 +223,35 @@ export function applyOverrides(compiled, overrides) {
   return {...compiled, parts: out, meta: {...compiled.meta, shaped: list.length}};
 }
 
-/** DXF (R12 polylines, mm) of every shaped silhouette, for CNC: one closed outline per part, named by part id. */
+/** DXF (R12, mm) for CNC: every shaped or machined flat part laid out side by side in plan (x right, y = part depth),
+ * outline on AURA_<id>, holes as circles on DELIK_<Ø>_<depth|BOYDAN>, pockets/slots/grooves as closed polylines on
+ * CEP_/YARIK_/KANAL_<depth>. Machining from the top face (axis y) is drawn; side work is listed on NOT as text. */
 export function silhouetteDxf(compiled) {
-  const out = ['0', 'SECTION', '2', 'ENTITIES'];
+  const out = ['0', 'SECTION', '2', 'ENTITIES'], f = v => (Math.round(v * 100) / 100).toFixed(2);
+  const poly = (layer, pts, ox) => { out.push('0', 'POLYLINE', '8', layer, '66', '1', '70', '1'); for (const [x, y] of pts) out.push('0', 'VERTEX', '8', layer, '10', f(x + ox), '20', f(y)); out.push('0', 'SEQEND'); };
+  const text = (layer, x, y, h, str) => out.push('0', 'TEXT', '8', layer, '10', f(x), '20', f(y), '40', f(h), '1', str);
+  let ox = 0;
   for (const q of compiled.parts) {
-    if (!q.shaped || q.geom.fn !== 'slab') continue;
-    out.push('0', 'POLYLINE', '8', `AURA_${q.id}`, '66', '1', '70', '1');
-    for (const [x, y] of q.geom.outline) out.push('0', 'VERTEX', '8', `AURA_${q.id}`, '10', x.toFixed(2), '20', y.toFixed(2));
-    out.push('0', 'SEQEND');
+    const g = G(q), cuts = q.cuts || [];
+    if (!(q.shaped && g.fn === 'slab') && !cuts.length) continue;
+    let outline;
+    if (g.fn === 'slab') outline = g.outline;
+    else if (g.fn === 'cushion' || g.fn === 'box') outline = [[-g.w / 2, -g.d / 2], [g.w / 2, -g.d / 2], [g.w / 2, g.d / 2], [-g.w / 2, g.d / 2]];
+    else continue;
+    const b = bbox(outline), shift = -b.x0 + ox; poly(`AURA_${q.id}`, outline.map(([x, z]) => [x, -z]), shift);
+    text('NOT', b.x0 + shift, -b.y1 - 40, 18, `${q.id} t=${g.t ?? g.h} mm`);
+    let note = -b.y1 - 70;
+    for (const c of cuts) {
+      const tag = c.depth > 0 ? String(c.depth) : 'BOYDAN';
+      if (c.axis !== 1) { text('NOT', b.x0 + shift, note, 12, `${c.type} yan yuz eksen ${'XYZ'[c.axis]} @ ${c.at.map(v => Math.round(v)).join(',')} derinlik ${tag}`); note -= 20; continue; }
+      const cx = c.at[0], cy = -c.at[2];
+      if (c.type === 'hole') { out.push('0', 'CIRCLE', '8', `DELIK_${c.dia}_${tag}`, '10', f(cx + shift), '20', f(cy), '40', f(c.dia / 2)); continue; }
+      const rect = (a, bb, ang = 0) => { const r = ang * Math.PI / 180, co = Math.cos(r), si = Math.sin(r); return [[-a / 2, -bb / 2], [a / 2, -bb / 2], [a / 2, bb / 2], [-a / 2, bb / 2]].map(([x, y]) => [cx + x * co - y * si, cy + x * si + y * co]); };
+      if (c.type === 'pocket') poly(`CEP_${tag}`, rect(c.a, c.b), shift);
+      else if (c.type === 'slot') poly(`YARIK_${tag}`, rect(c.a, c.b), shift);
+      else { const n = c.type === 'flutes' ? c.count : 1, gap = c.pitch || c.b * 2; for (let i = 0; i < n; i++) { const off = (i - (n - 1) / 2) * gap, r = (c.dir || 0) * Math.PI / 180; const pts = [[-c.a / 2, off - c.b / 2], [c.a / 2, off - c.b / 2], [c.a / 2, off + c.b / 2], [-c.a / 2, off + c.b / 2]].map(([x, y]) => [cx + x * Math.cos(r) - y * Math.sin(r), cy - (x * Math.sin(r) + y * Math.cos(r))]); poly(`KANAL_${c.depth}`, pts, shift); } }
+    }
+    ox += b.w + 80;
   }
   out.push('0', 'ENDSEC', '0', 'EOF');
   return out.join('\n');

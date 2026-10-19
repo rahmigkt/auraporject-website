@@ -636,6 +636,12 @@ export function createViewer(host, {onRotate} = {}) {
       return url;
     },
     capture() { place(); sketchResolution(); composer.render(); return canvas; },
+    /** Binary STL of what is shown, in millimetres. */
+    async exportSTL() {
+      const {STLExporter} = await import('../vendor/addons/exporters/STLExporter.js');
+      const g = new THREE.Group(); g.add(buildGroup(compiled, mats, {structure: false})); g.children[0].scale.setScalar(1); g.updateMatrixWorld(true);
+      const data = new STLExporter().parse(g, {binary: true}); disposeGroup(g.children[0]); return data;
+    },
     async exportGLB() {
       const {GLTFExporter} = await import('../vendor/addons/exporters/GLTFExporter.js');
       // GLTFExporter needs canvas images: convert the generated DataTextures once per export.
