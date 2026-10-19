@@ -130,7 +130,7 @@ export function normalizeOverrides(list) {
     }
     else if (o.tool === 'cut' && typeof o.id === 'string' && Array.isArray(o.ops)) {
       const ops = o.ops.slice(0, 60).filter(c => c && ['hole', 'pocket', 'slot', 'groove', 'flutes'].includes(c.type)).map(c => ({type: c.type, at: v3(c.at, 4000), axis: [0, 1, 2].includes(+c.axis) ? +c.axis : 1, sign: +c.sign < 0 ? -1 : 1,
-        dia: Math.max(1, Math.min(300, num(c.dia) || 8)), a: Math.max(1, Math.min(4000, num(c.a) || 40)), b: Math.max(1, Math.min(1000, num(c.b) || 10)), depth: Math.max(0, Math.min(1000, num(c.depth))), count: Math.max(1, Math.min(60, num(c.count) || 1)), pitch: Math.max(0, Math.min(500, num(c.pitch))), dir: num(c.dir) % 360}));
+        dia: Math.max(1, Math.min(300, num(c.dia) || 8)), a: Math.max(1, Math.min(4000, num(c.a) || 40)), b: Math.max(1, Math.min(1000, num(c.b) || 10)), depth: Math.max(0, Math.min(1000, num(c.depth))), count: Math.max(1, Math.min(60, num(c.count) || 1)), pitch: Math.max(0, Math.min(500, num(c.pitch))), dir: num(c.dir) % 360, ...(typeof c.label === 'string' ? {label: c.label.slice(0, 40)} : {})}));
       if (ops.length) out.push({tool: 'cut', id: o.id.slice(0, 60), ops});
     }
     else if (o.tool === 'array' && typeof o.id === 'string') out.push({tool: 'array', id: o.id.slice(0, 60), kind: o.kind === 'radial' ? 'radial' : 'linear', count: Math.max(2, Math.min(60, Math.round(num(o.count) || 2))), step: v3(o.step, 4000), angle: Math.max(-360, Math.min(360, num(o.angle) || 0)), center: v3(o.center, 4000)});
@@ -227,6 +227,7 @@ export function applyOverrides(compiled, overrides) {
   out = out.map(q => { const m = own('material', q); return m ? {...q, matSpec: m.spec, grain: m.grain} : q; });
   // Machining: holes, pockets, slots, grooves and flutes cut from the finished part shape (part-local mm).
   out = out.map(q => { const c = own('cut', q); return c ? {...q, geom: {fn: 'cut', inner: q.geom, ops: c.ops}, shaped: true, cuts: c.ops} : q; });
+  out = out.filter(q => !removed.has(q.id)); // a part added or copied and later removed
   out = out.map(q => {
     const t = list.filter(o => o.tool === 'transform' && o.id === q.id).at(-1); if (!t) return q;
     const s3 = t.scale, scaled = s3.some(v => Math.abs(v - 1) > 1e-6);
