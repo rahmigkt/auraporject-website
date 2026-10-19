@@ -11,6 +11,7 @@ await p.goto('http://127.0.0.1:8812/tasarimci.html'); await p.waitForTimeout(600
 const cv=await p.$('#stage canvas'), bx=await cv.boundingBox();
 await p.mouse.click(bx.x+bx.width*0.5, bx.y+bx.height*0.30); await p.waitForTimeout(1500);
 const sel=await p.evaluate(()=>document.querySelector('#panel .a-note b')?.textContent||'none'); console.log('selected:',sel);
+await p.evaluate(()=>document.querySelectorAll('#panel details').forEach(d=>d.open=true)); await p.waitForTimeout(300);
 await p.screenshot({path:`${out}/atolye-1.png`});
 if(await p.$('[data-edge=front]')){ await p.selectOption('[data-edge=all]','ogee'); await p.waitForTimeout(2000); await p.selectOption('[data-edge=back]','chamfer'); await p.waitForTimeout(2000); await p.screenshot({path:`${out}/atolye-kenar.png`}); console.log('edge ok'); }
 if(sel!=='none'){
@@ -21,6 +22,14 @@ if(sel!=='none'){
   await p.fill('[data-tf=m1]','120'); await p.dispatchEvent('[data-tf=m1]','change'); await p.waitForTimeout(1500);
   await p.click('[data-mirror]'); await p.waitForTimeout(1500);
 }
+await p.selectOption('#addShape','box'); await p.fill('#addW','600'); await p.fill('#addH','20'); await p.fill('#addD','40'); await p.click('[data-add]'); await p.waitForTimeout(1500);
+await p.evaluate(()=>document.querySelectorAll('#panel details').forEach(d=>d.open=true)); await p.waitForTimeout(300); await p.fill('[data-arr=count]','5'); await p.fill('[data-arr=sz]','120'); await p.click('[data-arrmake]'); await p.waitForTimeout(2000);
+console.log('array parts', await p.evaluate(()=>document.querySelectorAll('#panel').length));
+await p.screenshot({path:`${out}/atolye-array.png`});
+await p.click('[data-multi]'); await p.waitForTimeout(500);
+await p.mouse.click(bx.x+bx.width*0.5, bx.y+bx.height*0.30); await p.waitForTimeout(1200);
+console.log('multi', await p.evaluate(()=>document.querySelector('#panel h2')?.textContent));
+await p.click('[data-multi]'); await p.waitForTimeout(500);
 await p.selectOption('#addShape','round'); await p.fill('#addW','40'); await p.fill('#addH','500'); await p.click('[data-add]'); await p.waitForTimeout(1500);
 await p.fill('[data-tf=m0]','300'); await p.dispatchEvent('[data-tf=m0]','change'); await p.waitForTimeout(1500);
 await p.click('[data-mode=rotate]'); await p.waitForTimeout(1500);

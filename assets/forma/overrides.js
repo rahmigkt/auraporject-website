@@ -118,7 +118,7 @@ export function normalizeOverrides(list) {
     else if (o.tool === 'profile' && typeof o.role === 'string' && Array.isArray(o.points) && o.points.length >= 2)
       out.push({tool: 'profile', role: o.role.slice(0, 40), points: o.points.slice(0, 40).map(p => [Math.max(0, Math.min(1, num(p[0]))), Math.max(0.5, Math.min(400, num(p[1])))]).sort((a, b) => a[0] - b[0])});
     else if (o.tool === 'remove' && typeof o.id === 'string') out.push({tool: 'remove', id: o.id.slice(0, 60)});
-    else if (o.tool === 'duplicate' && typeof o.id === 'string' && typeof o.as === 'string') out.push({tool: 'duplicate', id: o.id.slice(0, 60), as: o.as.slice(0, 60), mirror: !!o.mirror});
+    else if (o.tool === 'duplicate' && typeof o.id === 'string' && typeof o.as === 'string') out.push({tool: 'duplicate', id: o.id.slice(0, 60), as: o.as.slice(0, 60), mirror: o.mirror === 'z' ? 'z' : o.mirror ? 'x' : false});
     else if (o.tool === 'add' && typeof o.id === 'string' && ADD_SHAPES.includes(o.shape)) {
       const sz = (o.size || []).slice(0, 3).map(v => Math.max(2, Math.min(4000, num(v))));
       out.push({tool: 'add', id: o.id.slice(0, 60), shape: o.shape, size: [sz[0] || 400, sz[1] || 40, sz[2] || 400], mat: typeof o.mat === 'string' ? o.mat.slice(0, 30) : 'wood', pos: v3(o.pos, 5000), radius: Math.max(0, Math.min(200, num(o.radius ?? 3)))});
@@ -133,6 +133,7 @@ export function normalizeOverrides(list) {
         dia: Math.max(1, Math.min(300, num(c.dia) || 8)), a: Math.max(1, Math.min(4000, num(c.a) || 40)), b: Math.max(1, Math.min(1000, num(c.b) || 10)), depth: Math.max(0, Math.min(1000, num(c.depth))), count: Math.max(1, Math.min(60, num(c.count) || 1)), pitch: Math.max(0, Math.min(500, num(c.pitch))), dir: num(c.dir) % 360}));
       if (ops.length) out.push({tool: 'cut', id: o.id.slice(0, 60), ops});
     }
+    else if (o.tool === 'array' && typeof o.id === 'string') out.push({tool: 'array', id: o.id.slice(0, 60), kind: o.kind === 'radial' ? 'radial' : 'linear', count: Math.max(2, Math.min(60, Math.round(num(o.count) || 2))), step: v3(o.step, 4000), angle: Math.max(-360, Math.min(360, num(o.angle) || 0)), center: v3(o.center, 4000)});
     else if (o.tool === 'edge' && typeof o.id === 'string' && o.sides && typeof o.sides === 'object') {
       const sides = {}; for (const k of ['front', 'back', 'left', 'right']) { const e = o.sides[k]; if (Array.isArray(e) && EDGE_TYPES.includes(e[0])) sides[k] = [e[0], Math.max(1, Math.min(80, num(e[1]) || 6))]; }
       if (Object.keys(sides).length) out.push({tool: 'edge', id: o.id.slice(0, 60), sides});
@@ -173,18 +174,30 @@ export function applyOverrides(compiled, overrides) {
   const removed = new Set(list.filter(o => o.tool === 'remove').map(o => o.id));
   let out = parts.filter(q => !removed.has(q.id));
   for (const o of list) {
-    if (o.tool === 'duplicate') { const q = out.find(x => x.id === o.id); if (q && !out.some(x => x.id === o.as)) out.push({...q, id: o.as, pos: o.mirror ? [-q.pos[0], q.pos[1], q.pos[2]] : [q.pos[0] + 60, q.pos[1], q.pos[2] + 60], rot: o.mirror ? [q.rot[0], -q.rot[1], -q.rot[2]] : q.rot.slice(), added: true}); }
+    if (o.tool === 'duplicate') { const q = out.find(x => x.id === o.id); if (q && !out.some(x => x.id === o.as)) {
+      const mx = o.mirror === 'x' || o.mirror === true, mz = o.mirror === 'z';
+      out.push({...q, id: o.as, src: q.src || q.id, pos: mx ? [-q.pos[0], q.pos[1], q.pos[2]] : mz ? [q.pos[0], q.pos[1], -q.pos[2]] : [q.pos[0] + 60, q.pos[1], q.pos[2] + 60], rot: mx ? [q.rot[0], -q.rot[1], -q.rot[2]] : mz ? [-q.rot[0], -q.rot[1], q.rot[2]] : q.rot.slice(), added: true}); } }
+    if (o.tool === 'array') { // copies <id>-a1 … : linear (step mm) or radial (angle° about a vertical axis through center)
+      const q = out.find(x => x.id === o.id); if (q) for (let i = 1; i < o.count; i++) {
+        const id = `${o.id}-a${i}`; if (out.some(x => x.id === id)) continue;
+        if (o.kind === 'radial') { const a = o.angle * i * Math.PI / 180, dx = q.pos[0] - o.center[0], dz = q.pos[2] - o.center[2], c = Math.cos(a), s2 = Math.sin(a);
+          out.push({...q, id, pos: [o.center[0] + dx * c + dz * s2, q.pos[1], o.center[2] - dx * s2 + dz * c], rot: [q.rot[0], q.rot[1] + a, q.rot[2]], added: true, src: q.src || q.id}); }
+        else out.push({...q, id, pos: q.pos.map((v, k) => v + o.step[k] * i), rot: q.rot.slice(), added: true, src: q.src || q.id});
+      }
+    }
     if (o.tool === 'add' && !out.some(x => x.id === o.id)) { const [w, h, d] = o.size; out.push({id: o.id, role: 'added-' + o.shape, mat: o.mat, geom: addedGeom(o), pos: o.pos.slice(), rot: [0, 0, 0], added: true, cut: ['round', 'square'].includes(o.shape) ? [Math.round(h), Math.round(w), Math.round(w)] : [Math.round(w), Math.round(d), Math.round(h)].sort((a, b) => b - a)}); }
   }
+  // Copies (duplicate / array) inherit their source's sweep, edge and cut unless they have their own.
+  const own = (tool, q, extra = () => false) => { const mine = list.filter(o => o.tool === tool && (o.id === q.id || extra(o))); return mine.length ? mine.at(-1) : q.src ? list.filter(o => o.tool === tool && o.id === q.src).at(-1) : undefined; };
   // Swept members: by id, or every part of a role (all legs at once).
   out = out.map(q => {
-    const sw = list.filter(o => o.tool === 'sweep' && (o.id === q.id || (o.role && o.role === q.role))).at(-1); if (!sw) return q;
+    const sw = own('sweep', q, o => o.role && o.role === q.role); if (!sw) return q;
     if (q.geom.fn === 'clipped' && q.geom.inner) { const gi = sweepGeom({...q, geom: q.geom.inner}, sw); return gi ? {...q, geom: {...q.geom, inner: gi}, shaped: true} : q; } // splayed: bend inside the tilt
     const g = sweepGeom(q, sw); return g ? {...q, geom: g, shaped: true} : q;
   });
   // Edge profiles per side. Box-like parts become slabs (plan outline × thickness) so every side can take a profile.
   out = out.map(q => {
-    const e = list.filter(o => o.tool === 'edge' && o.id === q.id).at(-1); if (!e) return q;
+    const e = own('edge', q); if (!e) return q;
     if (q.geom.fn === 'slab') return {...q, geom: {...q.geom, edges: {...(q.geom.edges || {}), ...e.sides}}, shaped: true};
     if (q.geom.fn === 'cushion' && !q.geom.crownTop && !q.geom.crownFront) {
       const {w, h, d} = q.geom, hw = w / 2, hd = d / 2;
@@ -193,7 +206,7 @@ export function applyOverrides(compiled, overrides) {
     return q;
   });
   // Machining: holes, pockets, slots, grooves and flutes cut from the finished part shape (part-local mm).
-  out = out.map(q => { const c = list.filter(o => o.tool === 'cut' && o.id === q.id).at(-1); return c ? {...q, geom: {fn: 'cut', inner: q.geom, ops: c.ops}, shaped: true, cuts: c.ops} : q; });
+  out = out.map(q => { const c = own('cut', q); return c ? {...q, geom: {fn: 'cut', inner: q.geom, ops: c.ops}, shaped: true, cuts: c.ops} : q; });
   out = out.map(q => {
     const t = list.filter(o => o.tool === 'transform' && o.id === q.id).at(-1); if (!t) return q;
     const s3 = t.scale, scaled = s3.some(v => Math.abs(v - 1) > 1e-6);

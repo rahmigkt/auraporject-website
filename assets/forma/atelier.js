@@ -6,6 +6,7 @@ import {readLink, designLink, projectLink} from './link.js';
 import {editableParts, currentShape, sampleCurve, bbox, silhouetteDxf, ADD_SHAPES, EDGE_TYPES} from './overrides.js';
 import {analyse} from './physics.js';
 import {loadCsg} from './csg.js';
+import {worldPositions} from './build.js';
 import {download} from './package.js';
 
 const $ = s => document.querySelector(s);
@@ -13,7 +14,7 @@ const NAMES = {top: 'Tabla', leg: 'Ayak', 'case-top': 'Üst tabla', 'vanity-top'
   column: 'Sütun', foot: 'Taban', 'top-plate': 'Tabla altı tablası', shelf: 'Raf', worktop: 'Tezgah', led: 'Işık', headboard: 'Başlık', 'added-box': 'Eklenen kutu', 'added-softbox': 'Eklenen yuvarlatılmış kutu', 'added-round': 'Eklenen yuvarlak çubuk', 'added-square': 'Eklenen kare çubuk', 'added-panel': 'Eklenen panel',
   rail: 'Kayıt', apron: 'Kayıt', stretcher: 'Germe', 'arm-top': 'Kol', 'base-rail': 'Çerçeve rayı', 'seat-deck': 'Oturma gövdesi', 'seat-cushion': 'Oturma minderi', 'back-cushion': 'Sırt minderi', arm: 'Kol', side: 'Yan', door: 'Kapak', drawer: 'Çekmece', back: 'Arkalık'};
 const nameOf = t => `${NAMES[t.role] || t.role}${t.tool === 'profile' ? ' · profil' : ' · siluet'}`;
-const S = {items: [], cur: 0, target: null, pts: null, sel: -1, sym: true, undo: [], redo: [], view: null, compiled: null, part: null, mode: 'translate', hist: [], fut: []};
+const S = {items: [], cur: 0, target: null, pts: null, sel: -1, sym: true, undo: [], redo: [], view: null, compiled: null, part: null, mode: 'translate', hist: [], fut: [], multi: [], multiOn: false, snap: true};
 let viewer = null, checkTimer = 0;
 
 // ---- Loading ---------------------------------------------------------------------------------------------------
@@ -202,16 +203,18 @@ function commit(list, keepPart = true) {
   if (!keepPart || (S.part && !partOf(S.part) && !compileDesign(design()).parts.some(q => q.id === S.part))) S.part = null;
   rebuild(); renderItems(); renderPanel(); syncViewerSel();
 }
-function syncViewerSel() { viewer?.select(S.part); viewer?.gizmo(S.part, S.mode, onGizmoEnd); }
+function syncViewerSel() { viewer?.select(S.multiOn && S.multi.length ? S.multi : S.part); viewer?.gizmo(S.part, S.mode, onGizmoEnd); }
 const transformOf = id => ovs().filter(o => o.tool === 'transform' && o.id === id).at(-1) || {tool: 'transform', id, move: [0, 0, 0], rot: [0, 0, 0], scale: [1, 1, 1]};
 function setTransform(id, f) { const t = structuredClone(transformOf(id)); f(t); commit([...ovs().filter(o => !(o.tool === 'transform' && o.id === id)), t]); }
 function onGizmoEnd({pos, rot, scale}) {
   const q = partOf(S.part); if (!q) return;
   setTransform(S.part, t => { t.move = t.move.map((v, i) => round1(v + pos[i] - q.pos[i])); t.rot = t.rot.map((v, i) => v + rot[i] - q.rot[i]); t.scale = t.scale.map((v, i) => Math.round(v * scale[i] * 1000) / 1000); });
 }
-function pickPart(id) { S.part = id; S.placing = false; renderPanel(); syncViewerSel(); }
+function pickPart(id) {
+  if (S.multiOn && id) { S.multi = S.multi.includes(id) ? S.multi.filter(x => x !== id) : [...S.multi, id]; S.part = S.multi.at(-1) || null; renderPanel(); syncViewerSel(); return; }
+  S.part = id; S.placing = false; renderPanel(); syncViewerSel(); }
 function uniqueId(base) { const ids = new Set(S.compiled.parts.map(q => q.id)); let k = 2; while (ids.has(`${base}-${k}`)) k++; return `${base}-${k}`; }
-function duplicatePart(mirror) { const id = S.part; if (!id) return; const as = uniqueId(id); commit([...ovs(), {tool: 'duplicate', id, as, mirror}]); pickPart(as); }
+function duplicatePart(mirror) { if (mirror === true) mirror = 'x'; const id = S.part; if (!id) return; const as = uniqueId(id); commit([...ovs(), {tool: 'duplicate', id, as, mirror}]); pickPart(as); }
 function deletePart() {
   const id = S.part; if (!id) return; const list = ovs();
   const own = list.filter(o => (o.tool === 'add' && o.id === id) || (o.tool === 'duplicate' && o.as === id));
@@ -239,10 +242,10 @@ function sweepPanel(q) {
   if (!sweepable(q)) return '';
   const o = sweepOf(q) || {mode: 'straight', bow: 40, dir: 'out', taper0: 1, taper1: 1, shape: q.geom.square || q.geom.inner?.square || q.geom.fn === 'cushion' ? 'square' : 'round'};
   const opt = (k, map) => `<select data-sw="${k}">${Object.entries(map).map(([v, t]) => `<option value="${v}" ${String(o[k]) === v ? 'selected' : ''}>${t}</option>`).join('')}</select>`;
-  return `<h2>Eğri ve incelme</h2><div class="a-grid"><span>Biçim</span>${opt('mode', {straight: 'Düz', arc: 'Kavis', sabre: 'Kılıç'})}${opt('shape', {square: 'Kare kesit', round: 'Yuvarlak kesit'})}${opt('dir', {out: 'Dışa', in: 'İçe', '+x': '+X', '-x': '−X', '+z': 'Öne', '-z': 'Arkaya'})}
+  return sec('sweep', 'Eğri ve incelme', `<div class="a-grid"><span>Biçim</span>${opt('mode', {straight: 'Düz', arc: 'Kavis', sabre: 'Kılıç'})}${opt('shape', {square: 'Kare kesit', round: 'Yuvarlak kesit'})}${opt('dir', {out: 'Dışa', in: 'İçe', '+x': '+X', '-x': '−X', '+z': 'Öne', '-z': 'Arkaya'})}
   <span>Kavis mm</span><input type="number" data-sw="bow" value="${o.bow}" inputmode="numeric"><span>Uç / dip %</span><input type="number" data-sw="taper0" value="${Math.round(o.taper0 * 100)}" inputmode="numeric">
   <span>Üst / baş %</span><input type="number" data-sw="taper1" value="${Math.round(o.taper1 * 100)}" inputmode="numeric"><label class="a-note"><input type="checkbox" data-swall ${o.role ? 'checked' : ''}> Aynı türdeki tüm parçalar</label><span></span></div>
-  ${sweepOf(q) ? '<div class="a-tools"><button data-swoff>Eğriyi kaldır</button></div>' : ''}<p class="a-note">Kılıç: dipte açılan kavis. Uç %: alt ya da baş ucundaki kesit oranı (incelme).</p>`;
+  ${sweepOf(q) ? '<div class="a-tools"><button data-swoff>Eğriyi kaldır</button></div>' : ''}<p class="a-note">Kılıç: dipte açılan kavis. Uç %: alt ya da baş ucundaki kesit oranı (incelme).</p>`);
 }
 function readSweep() { const g = k => $(`[data-sw=${k}]`).value; return {mode: g('mode'), shape: g('shape'), dir: g('dir'), bow: +g('bow') || 0, taper0: (+g('taper0') || 100) / 100, taper1: (+g('taper1') || 100) / 100}; }
 const CUT_TR = {hole: 'Delik', pocket: 'Cep', slot: 'Uzun delik (yarık)', groove: 'Kanal', flutes: 'Yiv dizisi (fluting)'};
@@ -257,9 +260,9 @@ function cutPanel(q) {
     : t === 'groove' ? f('a', 'Uzunluk mm', 400) + f('b', 'Genişlik mm', 8) + f('depth', 'Derinlik mm', 6) + f('dir', 'Yön °', 0)
     : f('a', 'En mm', t === 'slot' ? 120 : 120) + f('b', 'Boy mm', t === 'slot' ? 25 : 80) + f('depth', 'Derinlik mm (0 = boydan boya)', t === 'slot' ? 0 : 10);
   const list = cutsOf(q.id);
-  return `<h2>İşleme (CNC)</h2><div class="a-grid a-grid2"><span>Tür</span><select data-cut="type">${Object.entries(CUT_TR).map(([k, v]) => `<option value="${k}" ${k === t ? 'selected' : ''}>${v}</option>`).join('')}</select>${fields}</div>
+  return sec('cut', 'İşleme (CNC)', `<div class="a-grid a-grid2"><span>Tür</span><select data-cut="type">${Object.entries(CUT_TR).map(([k, v]) => `<option value="${k}" ${k === t ? 'selected' : ''}>${v}</option>`).join('')}</select>${fields}</div>
   <div class="a-tools"><button data-place aria-pressed="${!!S.placing}">${S.placing ? 'Yüzeye dokunun…' : 'Yüzeye dokunarak yerleştir'}</button></div>
-  ${list.length ? `<ul class="a-checks">${list.map((c, i) => `<li>${CUT_TR[c.type]} · ${c.type === 'hole' ? 'Ø' + c.dia : c.a + '×' + c.b}${c.depth ? ' · ' + c.depth + ' mm' : ' · boydan'}${c.type === 'flutes' ? ' · ' + c.count + ' adet' : ''} <button data-cutdel="${i}">Sil</button></li>`).join('')}</ul>` : ''}`;
+  ${list.length ? `<ul class="a-checks">${list.map((c, i) => `<li>${CUT_TR[c.type]} · ${c.type === 'hole' ? 'Ø' + c.dia : c.a + '×' + c.b}${c.depth ? ' · ' + c.depth + ' mm' : ' · boydan'}${c.type === 'flutes' ? ' · ' + c.count + ' adet' : ''} <button data-cutdel="${i}">Sil</button></li>`).join('')}</ul>` : ''}`);
 }
 function placeCut(hit) {
   const q = partOf(S.part); if (!q || hit.id !== q.id) return false;
@@ -271,8 +274,8 @@ function edgePanel(q) {
   if (!edgeable(q)) return '';
   const cur = edgeOf(q.id), gq = g0(q), def = gq.fn === 'slab' ? [gq.profile[0], gq.profile[2] ?? 6] : ['square', 0];
   const row = k => { const [t, v] = cur[k] || def; return `<span>${SIDE_TR[k]}</span><select data-edge="${k}">${EDGE_TYPES.map(e => `<option value="${e}" ${e === t ? 'selected' : ''}>${EDGE_TR[e]}</option>`).join('')}</select><input type="number" data-edgesize="${k}" value="${Math.round(v)}" min="1" max="80" inputmode="numeric"><span>mm</span>`; };
-  return `<h2>Kenar profili</h2><div class="a-grid a-grid4">${['front', 'back', 'left', 'right'].map(row).join('')}
-  <span>Tümü</span><select data-edge="all"><option value="">—</option>${EDGE_TYPES.map(e => `<option value="${e}">${EDGE_TR[e]}</option>`).join('')}</select><span></span><span></span></div>`;
+  return sec('edge', 'Kenar profili', `<div class="a-grid a-grid4">${['front', 'back', 'left', 'right'].map(row).join('')}
+  <span>Tümü</span><select data-edge="all"><option value="">—</option>${EDGE_TYPES.map(e => `<option value="${e}">${EDGE_TR[e]}</option>`).join('')}</select><span></span><span></span></div>`);
 }
 const SHAPE_TR = {box: 'Kutu', softbox: 'Yuvarlatılmış kutu', round: 'Yuvarlak çubuk', square: 'Kare çubuk', panel: 'Panel'};
 const MAT_TR = {wood: 'Ahşap', metal: 'Metal', fabric: 'Kumaş', dark: 'Koyu', case: 'Gövde', front: 'Kapak', top: 'Tabla', base: 'Alt yapı', steel: 'Çelik', frame: 'Çerçeve', welt: 'Biye'};
@@ -280,12 +283,12 @@ function structurePanel() {
   const q = S.part && partOf(S.part), t = q && transformOf(q.id), mats = [...new Set(S.compiled.parts.filter(p => !p.line && typeof p.mat === 'string' && !p.mat.startsWith('lac:')).map(p => p.mat))];
   const num = (k, v, step) => `<input type="number" data-tf="${k}" value="${v}" step="${step}" inputmode="decimal">`;
   const editable = q && editableParts(S.compiled).find(e => e.id === q.id || (e.tool === 'profile' && e.role === q.role));
-  return `<h2>Seçili parça</h2>${q ? `<p class="a-note"><b>${NAMES[q.role] || q.role}</b> · ${q.id}${q.added ? ' · eklenen' : ''}</p>
+  return `<div class="a-tools"><button data-multi aria-pressed="${S.multiOn}">Çoklu seçim</button><button data-snap aria-pressed="${S.snap}">Yakalama 5 mm / 5°</button></div>${S.multiOn ? arrangePanel(null) : ''}<h2>Seçili parça</h2>${q ? `<p class="a-note"><b>${NAMES[q.role] || q.role}</b> · ${q.id}${q.added ? ' · eklenen' : ''}</p>
   <div class="a-tools">${['translate', 'rotate', 'scale'].map(m => `<button data-mode="${m}" aria-pressed="${S.mode === m}">${{translate: 'Taşı', rotate: 'Döndür', scale: 'Ölçekle'}[m]}</button>`).join('')}${editable ? `<button data-shape="${editable.key}">Biçimi düzenle</button>` : ''}</div>
   <div class="a-grid"><span>Kaydır mm</span>${num('m0', round1(t.move[0]), 5)}${num('m1', round1(t.move[1]), 5)}${num('m2', round1(t.move[2]), 5)}
   <span>Döndür °</span>${num('r0', round1(t.rot[0] * R2D), 1)}${num('r1', round1(t.rot[1] * R2D), 1)}${num('r2', round1(t.rot[2] * R2D), 1)}
   <span>Ölçek %</span>${num('s0', round1(t.scale[0] * 100), 1)}${num('s1', round1(t.scale[1] * 100), 1)}${num('s2', round1(t.scale[2] * 100), 1)}</div>
-  ${edgePanel(q)}${sweepPanel(q)}${cutPanel(q)}
+  ${edgePanel(q)}${sweepPanel(q)}${cutPanel(q)}${arrangePanel(q)}
   <div class="a-tools"><button data-dup>Çoğalt</button><button data-mirror>Aynala (karşı taraf)</button><button data-tfreset>Konumu sıfırla</button><button data-delpart>Sil</button></div>`
   : '<p class="a-note">3D görünümde bir parçaya dokunun. Seçilen parçayı tutamaçlarla taşıyın, döndürün ya da ölçekleyin; sayıyla da girebilirsiniz.</p>'}
   <div class="a-tools"><button data-sundo ${S.hist.length ? '' : 'disabled'}>↶ Yapı geri</button><button data-sredo ${S.fut.length ? '' : 'disabled'}>↷ Yapı ileri</button></div>
@@ -293,6 +296,45 @@ function structurePanel() {
   <select id="addMat">${mats.sort((a, b) => (b === 'wood') - (a === 'wood')).map(m => `<option value="${m}">${MAT_TR[m] || m}</option>`).join('')}</select><span></span>
   <span>G × Y × D mm</span><input id="addW" type="number" value="400" inputmode="numeric"><input id="addH" type="number" value="30" inputmode="numeric"><input id="addD" type="number" value="300" inputmode="numeric"></div>
   <div class="a-tools"><button data-add>+ Ekle</button></div><p class="a-note">Çubuklarda G çaptır, Y boydur.</p>`;
+}
+
+
+// ---- Arrays, mirrors, alignment, equal spacing ----------------------------------------------------------------
+function worldBox(id) { const q = partOf(id); if (!q) return null; const P = worldPositions(q), lo = [Infinity, Infinity, Infinity], hi = [-Infinity, -Infinity, -Infinity]; for (let i = 0; i < P.length; i += 3) for (let k = 0; k < 3; k++) { lo[k] = Math.min(lo[k], P[i + k]); hi[k] = Math.max(hi[k], P[i + k]); } return {lo, hi, c: lo.map((v, k) => (v + hi[k]) / 2)}; }
+function moveMany(moves) { // moves: {id: [dx,dy,dz]} added to each part's transform, one undo step
+  let list = ovs();
+  for (const [id, d] of Object.entries(moves)) { const t = structuredClone(transformOf(id)); t.move = t.move.map((v, i) => round1(v + d[i])); list = [...list.filter(o => !(o.tool === 'transform' && o.id === id)), t]; }
+  commit(list);
+}
+function alignParts(axis, where) {
+  const boxes = S.multi.map(id => [id, worldBox(id)]).filter(([, b]) => b); if (boxes.length < 2) return;
+  const ref = boxes.at(-1)[1], target = where === 'min' ? ref.lo[axis] : where === 'max' ? ref.hi[axis] : ref.c[axis], moves = {};
+  for (const [id, b] of boxes.slice(0, -1)) { const cur = where === 'min' ? b.lo[axis] : where === 'max' ? b.hi[axis] : b.c[axis], d = [0, 0, 0]; d[axis] = target - cur; moves[id] = d; }
+  moveMany(moves);
+}
+function distribute(axis) {
+  const boxes = S.multi.map(id => [id, worldBox(id)]).filter(([, b]) => b).sort((a, b) => a[1].c[axis] - b[1].c[axis]); if (boxes.length < 3) return;
+  const a = boxes[0][1].c[axis], z = boxes.at(-1)[1].c[axis], moves = {};
+  boxes.forEach(([id, b], i) => { if (i === 0 || i === boxes.length - 1) return; const d = [0, 0, 0]; d[axis] = a + (z - a) * i / (boxes.length - 1) - b.c[axis]; moves[id] = d; });
+  moveMany(moves);
+}
+function makeArray() {
+  const id = S.part; if (!id) return; const g = k => +($(`[data-arr=${k}]`)?.value) || 0, kind = $('[data-arr=kind]').value;
+  const list = ovs().filter(o => !(o.tool === 'array' && o.id === id));
+  commit([...list, {tool: 'array', id, kind, count: g('count'), step: [g('sx'), g('sy'), g('sz')], angle: g('angle'), center: [0, 0, 0]}]);
+}
+const AX = ['X', 'Y', 'Z'];
+S.open = new Set(); const sec = (k, title, body) => `<details data-sec="${k}" ${S.open.has(k) ? 'open' : ''}><summary>${title}</summary>${body}</details>`;
+function arrangePanel(q) {
+  if (S.multiOn && q) return '';
+  if (S.multiOn) return `<h2>Hizala ve dağıt (${S.multi.length} parça)</h2><p class="a-note">Son seçilen parça referanstır.</p>
+    ${[0, 1, 2].map(a => `<div class="a-tools"><span class="a-note">${AX[a]}</span><button data-align="${a}:min">En küçük</button><button data-align="${a}:mid">Orta</button><button data-align="${a}:max">En büyük</button>${a !== 1 ? `<button data-dist="${a}">Eşit aralık</button>` : `<button data-dist="1">Eşit aralık</button>`}</div>`).join('')}`;
+  if (!q) return '';
+  const arr = ovs().filter(o => o.tool === 'array' && o.id === q.id).at(-1) || {kind: 'linear', count: 4, step: [0, 0, 150], angle: 90};
+  const f = (k, label, v) => `<span>${label}</span><input type="number" data-arr="${k}" value="${v}" inputmode="decimal">`;
+  return sec('array', 'Dizi ve ayna', `<div class="a-grid a-grid2"><span>Tür</span><select data-arr="kind"><option value="linear" ${arr.kind === 'linear' ? 'selected' : ''}>Doğrusal</option><option value="radial" ${arr.kind === 'radial' ? 'selected' : ''}>Dairesel (dikey eksen)</option></select>
+    ${f('count', 'Adet (toplam)', arr.count)}${f('sx', 'Adım X mm', arr.step[0])}${f('sy', 'Adım Y mm', arr.step[1])}${f('sz', 'Adım Z mm', arr.step[2])}${f('angle', 'Açı ° (dairesel)', arr.angle)}</div>
+    <div class="a-tools"><button data-arrmake>Diziyi uygula</button>${ovs().some(o => o.tool === 'array' && o.id === q.id) ? '<button data-arrdel>Diziyi kaldır</button>' : ''}<button data-mirrorz>Aynala (ön/arka)</button></div>`);
 }
 
 // ---- Panel ------------------------------------------------------------------------------------------------------
@@ -332,6 +374,13 @@ $('#panel').addEventListener('click', async e => {
   if (b.hasAttribute('data-delpart')) return deletePart();
   if (b.hasAttribute('data-tfreset')) return commit(ovs().filter(o => !(o.tool === 'transform' && o.id === S.part)));
   if (b.hasAttribute('data-add')) return addPart();
+  if (b.hasAttribute('data-multi')) { S.multiOn = !S.multiOn; S.multi = S.multiOn && S.part ? [S.part] : []; renderPanel(); syncViewerSel(); return; }
+  if (b.hasAttribute('data-snap')) { S.snap = !S.snap; viewer?.snap(S.snap ? 5 : 0, S.snap ? 5 : 0); renderPanel(); return; }
+  if (b.dataset.align) { const [a, w] = b.dataset.align.split(':'); return alignParts(+a, w); }
+  if (b.dataset.dist) return distribute(+b.dataset.dist);
+  if (b.hasAttribute('data-arrmake')) return makeArray();
+  if (b.hasAttribute('data-arrdel')) return commit(ovs().filter(o => !(o.tool === 'array' && o.id === S.part)));
+  if (b.hasAttribute('data-mirrorz')) return duplicatePart('z');
   if (b.hasAttribute('data-place')) { S.placing = !S.placing; renderPanel(); return; }
   if (b.dataset.cutdel !== undefined) { const l = cutsOf(S.part).slice(); l.splice(+b.dataset.cutdel, 1); return setCuts(S.part, l); }
   if (b.hasAttribute('data-swoff')) return setSweep(partOf(S.part), null);
@@ -353,6 +402,7 @@ $('#panel').addEventListener('click', async e => {
   if (act === 'dxf') download(`AURA-${design().kind}-siluet.dxf`, silhouetteDxf(S.compiled), 'application/dxf');
   if (act === 'json') download(`AURA-${design().kind}-design.json`, JSON.stringify(design(), null, 2), 'application/json');
 });
+$('#panel').addEventListener('toggle', e => { const k = e.target.dataset?.sec; if (k) e.target.open ? S.open.add(k) : S.open.delete(k); }, true);
 $('#panel').addEventListener('change', e => {
   if (e.target.dataset?.cut === 'type') { S.cutType = e.target.value; renderPanel(); return; }
   if (S.part && (e.target.dataset?.sw || e.target.hasAttribute?.('data-swall'))) { const q = partOf(S.part); return setSweep(q, readSweep(), $('[data-swall]').checked); }
