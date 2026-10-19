@@ -45,17 +45,17 @@ export function woodMaps(species, finish, {w = 1024, h = 2048, stain = 'natural'
       const tone = late * edge * (0.55 + 0.45 * pfbm(u, v, seed + 17, 3, 6, 2));
       const fib = (pn(u * 600, v * 18, seed + 3, 600, 18) - 0.5) * 0.26 + (pn(u * 1000, v * 44, seed + 4, 1000, 44) - 0.5) * 0.16 + (pn(u * 120, v * 6, seed + 9, 120, 6) - 0.5) * 0.18;
       const sub = Math.pow(Math.abs(Math.sin(Math.PI * R * 3)), 18) * 0.18 * (1 - late);
-      const poreN = pn(u * 800, v * 36, seed + 11, 800, 36), pore = poreN > (ringPorous ? 0.8 - (1 - late) * 0.12 : 0.9) ? (ringPorous ? 1 : 0.5) : 0;
+      const poreN = pn(u * 1000, v * 24, seed + 11, 1000, 24), pore = poreN > (ringPorous ? 0.8 - (1 - late) * 0.12 : 0.9) ? (ringPorous ? 1 : 0.5) : 0;
       let ray = 0; if (S.rays > 0.2) { const rn = pn(u * 320, v * 60, seed + 2, 320, 60); if (rn > 1 - S.rays * 0.1) ray = (rn - (1 - S.rays * 0.1)) / (S.rays * 0.1); }
       const drift = (pfbm(u, v, seed + 21, 2, 1, 3) - 0.5) * 0.16;
-      const t = Math.max(0, Math.min(1, tone * 0.62 + sub + fib * 0.5 + pore * 0.3));
+      const t = Math.max(0, Math.min(1, tone * 0.62 + sub + fib * 0.5 + pore * 0.12)); // pores: fine, soft streaks
       for (let c = 0; c < 3; c++) albedo[k + c] = clamp((base[c] + (grain[c] - base[c]) * t) * (1 + drift) + ray * 26 * (1 - t), 0, 255);
       if (stainRgb) {
         const lum = (albedo[k] + albedo[k + 1] + albedo[k + 2]) / 3 / baseLum, g = clamp(0.62 + 0.4 * lum, 0.55, 1.25);
         for (let c = 0; c < 3; c++) albedo[k + c] = clamp(albedo[k + c] + (stainRgb[c] * g - albedo[k + c]) * St.k, 0, 255);
       }
       albedo[k + 3] = 255;
-      height[y * w + x] = tone * 0.35 - pore * 0.9 + fib * 0.25 + ray * 0.15;
+      height[y * w + x] = tone * 0.35 - pore * 0.45 + fib * 0.25 + ray * 0.15;
       rough[k] = rough[k + 1] = rough[k + 2] = clamp(Fi.rough + pore * 0.25 - ray * 0.08 + late * 0.03, 0.04, 1) * 255; rough[k + 3] = 255;
     }
   }
