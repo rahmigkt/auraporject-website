@@ -5,7 +5,7 @@ $secrets = is_file(__DIR__.'/forma-secrets.php') ? require __DIR__.'/forma-secre
 return array_merge([
  // AI (text commands + image reading). Provider: 'qwen' (own GPU server, OpenAI-compatible vLLM) or 'anthropic'.
  'ai_enabled' => false,
- 'ai_provider' => 'qwen',
+ 'ai_provider' => 'anthropic',  // 'qwen' when the AURA machine is online (SUNUCU-01)
  'qwen_url' => getenv('AURA_QWEN_URL') ?: '',      // e.g. https://ai.auraproject.com.tr
  'qwen_token' => getenv('AURA_QWEN_TOKEN') ?: '',  // bearer token set on the server
  'qwen_model' => 'aura-qwen',                      // served model name (Qwen3.5-9B, later the AURA fine-tune)
