@@ -24,7 +24,7 @@ export const RANGES = {
   wallGap: [450, 750, 10], wallHeight: [360, 960, 10], wallDepth: [280, 400, 5], solidThickness: [20, 30, 1], fluteWidth: [12, 60, 1]
 };
 export const ENUMS = {
-  frontStyle: S.ENUMS.frontStyle, pull: S.ENUMS.pull, frontFit: S.ENUMS.frontFit, caseEdge: S.ENUMS.caseEdge, caseLine: S.ENUMS.caseLine,
+  frontStyle: S.ENUMS.frontStyle.filter(x => !['grooved', 'fluted', 'slats'].includes(x)), // no channelled/striped fronts in wet rooms pull: S.ENUMS.pull, frontFit: S.ENUMS.frontFit, caseEdge: S.ENUMS.caseEdge, caseLine: S.ENUMS.caseLine,
   sink: ['single', 'double', 'drainer'], sinkMount: ['undermount', 'inset'], tap: ['arc', 'straight', 'pullout'],
   hob: ['induction', 'gas'], hood: ['chimney', 'integrated', 'none'], backsplash: ['none', 'low', 'full'],
   board: ['mdf', 'solid'], frontBoard: ['mdf', 'solid']

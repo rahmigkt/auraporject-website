@@ -18,7 +18,7 @@ const SIZE = {
 };
 export const rangeFor = (key, p) => { const s = SIZE[p.kind]?.[key]; return s ? [s[0], s[1], RANGES[key][2]] : RANGES[key]; };
 export const ENUMS = {
-  frontStyle: S.ENUMS.frontStyle, pull: S.ENUMS.pull, frontFit: S.ENUMS.frontFit, caseEdge: S.ENUMS.caseEdge, caseLine: S.ENUMS.caseLine,
+  frontStyle: S.ENUMS.frontStyle.filter(x => !['grooved', 'fluted', 'slats'].includes(x)), // no channelled/striped fronts in wet rooms pull: S.ENUMS.pull, frontFit: S.ENUMS.frontFit, caseEdge: S.ENUMS.caseEdge, caseLine: S.ENUMS.caseLine,
   base: ['wall', 'legs'], legType: S.ENUMS.legType,
   basinType: ['vessel', 'integrated', 'undermount'], basinShape: ['round', 'rect'], basins: ['single', 'double'], tap: ['wall', 'deck'],
   mirror: S.ENUMS.mirror.filter(m => m !== 'none'), mirrorLight: ['none', 'back', 'top'], mirrorCabinet: ['none', 'cabinet'],
