@@ -55,12 +55,13 @@ function arrangeRaw(items, type, layout = 0) {
     else if (rot === Math.PI) placed.push({id: it.id, x: cx + (f.x0 + f.x1) / 2, z: backZ + f.z0, rot});
     else placed.push({id: it.id, x: backZ - (rot > 0 ? f.z0 : -f.z0), z: cx + (rot > 0 ? (f.x0 + f.x1) / 2 : -(f.x0 + f.x1) / 2), rot});
   };
-  let W = 4200, D = 3800;
+  // Rooms are sized to the pieces (a tight, believable room), not a hall around them.
+  let W = 3200, D = 3000;
   if (type === 'kitchen') {
     // The run along the back wall, islands in front with a 1100 mm walkway, a dining table beyond.
     const runs = by('run'), isl = by('island'), rest = items.filter(i => !runs.includes(i) && !isl.includes(i));
     const runW = runs.reduce((s, r) => s + r.fp.w + 300, -300), islW = Math.max(0, ...isl.map(i => i.fp.w));
-    W = Math.max(4200, runW + 900, islW + 1800); D = Math.max(4000, (runs[0]?.fp.d || 600) + 1100 + isl.reduce((s, i) => s + i.fp.d + 1100, 0) + (rest.length ? 1600 : 400));
+    W = Math.max(3000, runW + 900, islW + 1800); D = Math.max(3000, (runs[0]?.fp.d || 600) + 1100 + isl.reduce((s, i) => s + i.fp.d + 1100, 0) + (rest.length ? 1600 : 400));
     const back = -D / 2 + 20; let x = -runW / 2;
     for (const r of runs) { put(r, (layout === 1 ? -1 : 1) * (x + r.fp.w / 2), back); x += r.fp.w + 300; }
     let z = back + (runs[0]?.fp.d || 600) + 1100;
@@ -88,7 +89,7 @@ function arrangeRaw(items, type, layout = 0) {
     const side = layout === 2 ? [] : drs, rowItems = layout === 1 ? [...side, 'bed', ...wds] : [...wds, 'bed', ...side];
     const total = rowItems.reduce((s, it, i) => s + (it === 'bed' ? groupBed : it.fp.w) + (i ? gapG : 0), 0) + others.reduce((s, it) => s + it.fp.w + gapG, 0);
     rowItems.push(...others);
-    W = Math.max(4200, total + 900); D = Math.max(4200, bed.l + 1500 + (layout === 2 ? 0 : 0));
+    W = Math.max(3200, total + 600); D = Math.max(3400, bed.l + 1100, layout === 2 ? Math.max(0, ...rowItems.filter(i => i !== 'bed').map(i => i.fp.d)) + drs.reduce((s, it) => s + it.fp.w + 400, 0) + 700 : 0);
     const back = -D / 2 + 20, left = -W / 2 + 20; let x = -total / 2, bedAt = null;
     rowItems.forEach((it, i) => {
       if (i) x += gapG;
@@ -109,8 +110,8 @@ function arrangeRaw(items, type, layout = 0) {
   }
   const seats = [...by('sofa'), ...by('loveseat')], chairs = by('armchair'), coffee = by('coffee'), sides = by('side'), consoles = [...by('console'), ...by('sideboard'), ...by('tvunit'), ...by('vitrine'), ...by('bookcase')], dining = by('dining'), desks = by('desk');
   const main = seats[0], rest = seats.slice(1), r0 = rest[0];
-  W = Math.max(4200, (main?.fp.w || 2000) + 2 * walk + (layout === 1 && r0 ? r0.fp.d + 300 : 0), dining[0] ? dining[0].fp.w + 2 * 1100 : 0);
-  D = Math.max(3800, (main?.fp.d || 900) + gap + (coffee[0]?.fp.d || 600) + gap + (r0 || chairs[0] ? 1000 : 0) + walk);
+  W = Math.max(3200, (main?.fp.w || 2000) + 2 * walk + (layout === 1 && r0 ? r0.fp.d + 300 : 0), dining[0] ? dining[0].fp.w + 2 * 1100 : 0);
+  D = Math.max(3000, (main?.fp.d || 900) + gap + (coffee[0]?.fp.d || 600) + gap + (r0 || chairs[0] ? 1000 : 0) + walk);
   if (layout === 2) W = Math.max(W, (main?.fp.d || 900) + gap + (coffee[0]?.fp.d || 600) + gap + (r0?.fp.d || 0) + walk + 600);
   const back = -D / 2 + 20, left = -W / 2 + 20;
   // Layout 0: sofa on the back wall, second sofa facing it, armchairs beside it turned in.
