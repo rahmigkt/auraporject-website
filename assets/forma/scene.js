@@ -102,6 +102,8 @@ function seatingMaterialSet(materials, {detail = true, onReady} = {}) {
   if (detail) Promise.all([makeMaps('fabric', f), makeMaps('fabric', weltSpec, 512), makeMaps('wood', materials.wood)]).then(([a, b, c]) => {
     if (set.disposed) return;
     applyMaps(set, fabric, a, a?.tileMm, a?.tileMm); applyMaps(set, welt, b, b?.tileMm, b?.tileMm);
+    // Real cloth never reflects like paper: cap the albedo so whites keep their weave/loops under the key light.
+    for (const m of [fabric, welt]) m.color.setScalar(0.84);
     if (c) applyMaps(set, wood, c, c.tileMm[0], c.tileMm[1]);
     onReady?.();
   });
@@ -429,7 +431,8 @@ export function createViewer(host, {onRotate} = {}) {
   ao.blendIntensity = 0.85; ao.updateGtaoMaterial({radius: 0.35, distanceExponent: 1.4, thickness: 1.2, scale: 1.0, samples: 16});
   composer.addPass(renderPass); composer.addPass(ao); composer.addPass(smaa); composer.addPass(out);
   let raf = 0;
-  const draw = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { place(); sketchResolution(); renderPass.camera = camera; ao.camera = camera; composer.render(); }); };
+  let shooting = false; // while a photo accumulates, nothing else may touch camera, size or scene
+  const draw = () => { if (shooting) return; cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { place(); sketchResolution(); renderPass.camera = camera; ao.camera = camera; composer.render(); }); };
   function sketchResolution() { const r = host.getBoundingClientRect(); SKETCH.hull.uniforms.resolution.value.set(Math.max(1, r.width), Math.max(1, r.height)); }
   function place() {
     const rect = host.getBoundingClientRect(), aspect = Math.max(0.2, rect.width / Math.max(1, rect.height));
@@ -448,7 +451,7 @@ export function createViewer(host, {onRotate} = {}) {
       ortho.lookAt(view === 'top' ? new THREE.Vector3(0, 0, 0) : new THREE.Vector3(0, baseY + H / 2, 0)); ortho.updateProjectionMatrix();
     }
   }
-  const resize = () => { const r = host.getBoundingClientRect(), pr = Math.min(2, window.devicePixelRatio || 1); renderer.setPixelRatio(pr); renderer.setSize(Math.max(1, r.width), Math.max(1, r.height), false); composer.setPixelRatio(pr); composer.setSize(Math.max(1, r.width), Math.max(1, r.height)); draw(); };
+  const resize = () => { if (shooting) return; const r = host.getBoundingClientRect(), pr = Math.min(2, window.devicePixelRatio || 1); renderer.setPixelRatio(pr); renderer.setSize(Math.max(1, r.width), Math.max(1, r.height), false); composer.setPixelRatio(pr); composer.setSize(Math.max(1, r.width), Math.max(1, r.height)); draw(); };
   const ro = new ResizeObserver(resize); ro.observe(host);
   // Orbit with pointer; wheel zoom; arrow keys.
   let drag = null;
@@ -471,7 +474,9 @@ export function createViewer(host, {onRotate} = {}) {
     }
     return g;
   }
+  let pendingRebuild = false;
   function rebuild() {
+    if (shooting) { pendingRebuild = true; return; }
     if (!compiled && !room) return;
     if (group) { scene.remove(group); disposeGroup(group); }
     group = room ? roomGroup() : buildGroup(compiled, mats, {structure, sketch}); scene.add(group);
@@ -496,6 +501,8 @@ export function createViewer(host, {onRotate} = {}) {
    *  an area, averaged), sub-pixel jitter for clean edges, a longer lens and a gentle vignette. Runs in the browser. */
   async function studioPhoto({width = 2400, height = 1600, samples = 48, yaw: y = yaw, pitch: pt = 0.16, lens = 24, zoom: zm = 1.04, focus: fc = null} = {}) {
     for (let t = 0; !matsReady && t < 150; t++) await new Promise(r => setTimeout(r, 100)); // full-resolution maps first
+    if (shooting) return null; shooting = true; cancelAnimationFrame(raf);
+    try {
     const keep = {bg: scene.background, env: scene.environmentIntensity, tm: renderer.toneMapping, exp: renderer.toneMappingExposure, sun: sun.position.clone(), si: sun.intensity, fov: persp.fov, yaw, pitch, view, zoom, pr: renderer.getPixelRatio()};
     const floor = scene.children.find(o => o.material?.isShadowMaterial), fo = floor?.material.opacity;
     scene.background = new THREE.Color('#f4f0e8'); renderer.toneMapping = THREE.NeutralToneMapping; renderer.toneMappingExposure = 1.0;
@@ -534,8 +541,9 @@ export function createViewer(host, {onRotate} = {}) {
     if (wall) { scene.remove(wall); wall.geometry.dispose(); wall.material.dispose(); }
     Object.assign(scene, {background: keep.bg, environmentIntensity: keep.env}); renderer.toneMapping = keep.tm; renderer.toneMappingExposure = keep.exp;
     sun.position.copy(keep.sun); sun.intensity = keep.si; if (floor) floor.material.opacity = fo; contact.material.opacity = 1;
-    persp.fov = keep.fov; focus = null; ({yaw, pitch, view, zoom} = keep); ao.updateGtaoMaterial({samples: 16}); renderer.setPixelRatio(keep.pr); resize();
+    persp.fov = keep.fov; focus = null; ({yaw, pitch, view, zoom} = keep); ao.updateGtaoMaterial({samples: 16}); renderer.setPixelRatio(keep.pr);
     return c2.toDataURL('image/jpeg', 0.92);
+    } finally { shooting = false; if (pendingRebuild) { pendingRebuild = false; rebuild(); } resize(); }
   }
   return {
     setDesign(next, nextMaterials) {
