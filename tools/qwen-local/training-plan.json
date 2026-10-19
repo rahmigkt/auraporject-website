@@ -25,10 +25,18 @@
   "planning_seconds_per_optimizer_step": [10, 20, 40],
   "planning_note": "Hypothetical sensitivity inputs, NOT measured GPU benchmarks or performance guarantees.",
   "stages": [
-    {"id": "geometry-pilot", "training_examples": 1000, "epochs": 2, "available": false, "setup_eval_export_hours": 0.5, "runtime_overhead_fraction": 0.25},
+    {"id": "geometry-pilot", "training_examples": 1000, "epochs": 2, "available": true, "data": "outputs/qwen-local/geometry-v1/sft-unreviewed.jsonl", "scope": "unreviewed exercise DSL; not AURA/CAD integration or aesthetics", "setup_eval_export_hours": 0.5, "runtime_overhead_fraction": 0.25},
     {"id": "first-mixed-text", "training_examples": 6000, "epochs": 2, "available": false, "setup_eval_export_hours": 1, "runtime_overhead_fraction": 0.25}
   ],
   "vision_stage": "Separate benchmark required; image tokens/resolution change memory and speed. Not included in text-stage duration.",
+  "progression": {
+    "automatic_advance": false,
+    "max_pilot_epochs": 2,
+    "pilot_training_step_limit": 250,
+    "scale_up_only_if": ["No invalid geometry rate increase on dev", "Exact edit and repair accuracy improves versus base on held-out groups", "Existing command and vision evaluation shows no material regression", "Kernel/memory benchmark and revised duration logged"],
+    "if_no_gain": "Inspect labels/format and run at most one corrected pilot; do not launch the 6000-example run automatically.",
+    "no_gain_warning": "Thresholds and independent human-reviewed evaluation must be fixed before reading model results; current exercise labels remain provisional."
+  },
   "gates": [
     "Exact local tokenization: no silent truncation; split or reject sequences longer than context",
     "Source/license checks; group-held-out split; no dev/test examples in training",

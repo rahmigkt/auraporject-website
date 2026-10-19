@@ -38,7 +38,7 @@ def main():
         'available_training_rows': len(rows),
         'characters': {'total': sum(chars), 'median': statistics.median(chars), 'max': max(chars)},
         'exact_token_count': None,
-        'note': 'Character statistics are NOT token counts. Planned 1000/6000 row datasets do not yet exist. Vision training, data preparation, human review and repeated experiments excluded.',
+        'note': 'Character statistics are NOT token counts. Stage availability/scope is recorded in training-plan.json; the 6000-row mixed dataset is not ready. Vision training, data preparation, human review and repeated experiments excluded.',
         'scenarios': [{'seconds_per_optimizer_step': s, 'stages': {stage['id']: estimate_stage(stage, plan, s) for stage in plan['stages']}} for s in seconds]
     }
     print(json.dumps(report, ensure_ascii=False, indent=2))

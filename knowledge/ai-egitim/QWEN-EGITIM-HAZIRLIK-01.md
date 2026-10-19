@@ -23,17 +23,25 @@ L40S/A6000 sınıfı kapasite adayıdır; bunlar arasında hız eşitliği varsa
 Bu bir kapasite planıdır; gerçek bellek gereksinimi bağlam, görüntü ve çekirdeklere
 göre ilk denemede doğrulanır. Sağlayıcı seçilmedi ve rezervasyon yapılmadı.
 GPU'da ortam test edildikten sonra paket sürümleri, model revision'u ve kernel
-seçimi kaydedilir; şu anda doğrulanmış bir CUDA ortamı veya eğitim betiği yok.
+seçimi kaydedilir. `train_gpu.py` aday çalıştırıcıdır; gerçek CUDA ortamında henüz
+doğrulanmadı. Varsayılan hazırlık modu modeli veya CUDA kütüphanelerini yüklemez.
 
 ## Elde olan ile planlanan veri
 
 - Mevcut dosyalarda 45 örnek var; yalnız 15'i train. Bu motor-denetimi pilotudur,
   yeterli tasarım/estetik eğitimi değildir. Train içerikleri toplam 21.833 karakter,
   medyan 1.447, en uzun 1.891 karakter. Bunlar token sayısı değildir.
-- Birinci hedef: **1.000 eğitim örnekli geometri/düzenleme/düzeltme pilotu**.
+- İlk dar geometri seti hazır: **1.000 train + 200 dev + 200 test**.
+  `geometry-v1` ayrı alıştırma şemasıdır: merkezli, yuvarlatılmış dikdörtgen
+  ekstrüzyon ve bir delik. 500/100/100 farklı temel geometri; her birinde boyut
+  düzenleme ve kısıt düzeltme örneği. Boyut, köşe yarıçapı, delik açıklığı ve
+  alıştırmaya özgü 3 mm minimum yükseklik/duvar koşulu sayısal doğrulanır.
+  Bu değer bir malzemenin mühendislik standardı değildir. Ağ oluşturma, AURA
+  parçasına dönüştürme, estetik veya fizik dayanımı denetimi iddia edilmez.
+  Bu küçük set, öğrenme/onarım hattını ucuzca doğrulamak içindir.
 - İkinci hedef: **6.000 eğitim örnekli ilk karma metin koşusu**. Komut, geometrik
   işlem, kısıt açıklama ve hata düzeltme; yeterli denetimli kısa anlatım örneği varsa
-  unutmayı azaltacak karışım. Bu veri henüz üretilmedi. Çok dilli örnekler ve
+  unutmayı azaltacak karışım. Bu karma veri henüz üretilmedi. Çok dilli örnekler ve
   grup dışı dev/test kayıtları bu sayılara eklenir.
 - Görsel ve estetik tercih eğitimi ayrı veri/etiket hazırlığıdır; aşağıdaki
   metin hesabı bütün çok görevli modelin tamamlanma süresi değildir.
@@ -70,7 +78,9 @@ python tests/qwen-training-plan-check.py
 ```
 
 `tools/qwen-local/training-plan.json` ayar ve geçiş kontrollerini,
-`outputs/qwen-local/training-estimate.json` mevcut koşullu hesabı taşır. Tahmin
+`outputs/qwen-local/training-estimate.json` eski motor pilotunun,
+`outputs/qwen-local/geometry-training-estimate.json` yeni geometri setinin
+istatistiklerini ve koşullu süre hesabını taşır. Tahmin
 betiği yalnız standart Python kullanır, modeli/tokenizer'ı indirmez. Kesin token
 sayısı veya ölçülmüş hız varmış gibi sonuç üretmez.
 
@@ -81,8 +91,10 @@ sayısı veya ölçülmüş hız varmış gibi sonuç üretmez.
 2. Geçerli ve hatalı işlemler ile doğrulanmış düzeltmeler; aynı geometrinin
    varyasyonları tek bölümde; dev/test eğitimden ayrı tutulur. İnsan denetimi
    olmayan etiketler `unreviewed` kalır, altın cevap diye gösterilmez.
-3. GPU'da kullanılacak eğitim giriş betiği, tam token kontrolü, adaptör kaydı ve
-   zamanlama günlükleri. Şu anki JSON bir çalıştırıcı değildir; hazırlık sözleşmesidir.
+3. GPU aday çalıştırıcısı `train_gpu.py`: veri hash kontrolü, yalnız train kimlikleri,
+   gerçek token uzunlukları, sessiz kesmeyi reddetme, yerel ağırlık yükleme,
+   adaptör kaydı ve adım/bellek günlükleri. Hazırlık modu çalıştırıldı; CUDA/Unsloth
+   entegrasyonu henüz doğrulanmadı. Benchmark 30, pilot en çok 250 optimizasyon adımı.
 4. Oturumda önce uyumluluk ve 30-adım ölçümü; sonra güncellenmiş süreyle küçük pilot.
    Yerel işlemci üzerinde model/eğitim başlamaz. Taban ve adaptör sonuçları aynı
    dev setinde karşılaştırılır; donmuş test istem ayarlamak için kullanılmaz.
@@ -92,3 +104,27 @@ yerel diske alınır. Adaptör birleştirme ve GGUF çıktısı yerelde kullanı
 çalıştırıcıya göre doğrulanır; görüntü yeteneği için gerekli görsel bileşenler de
 korunur. Kuantize çıktının komut/görsel becerileri tekrar sınanır. Kalıcı GPU
 hizmeti bu teslimin parçası değildir.
+
+## Kısa deneme uygulaması
+
+```sh
+python tools/qwen-local/geometry_data.py
+python tests/qwen-geometry-data-check.py
+python tools/qwen-local/train_gpu.py
+# Aşağıdakiler yalnız seçilmiş GPU makinesinde, ortam/model kurulduktan sonra:
+python tools/qwen-local/train_gpu.py --execute benchmark --experimental-unreviewed --model-dir /work/Qwen3.5-9B --output /work/benchmark-01
+python tools/qwen-local/train_gpu.py --execute pilot --experimental-unreviewed --model-dir /work/Qwen3.5-9B --output /work/pilot-01
+python tools/qwen-local/geometry_evaluate.py --predictions /work/base-dev.jsonl
+```
+
+Model dizini önceden kurulmuş olmalıdır; çalıştırıcı HF çevrimdışı modunu zorlar,
+model indirmez, adaptör yayımlamaz, CPU'da eğitim yapmaz. Bir görünür BF16 CUDA GPU
+ve en az 40 GiB VRAM kontrolü bulunur. Pilot döngüsü için 4 saatlik yumuşak durma
+kontrolü vardır; yalnız tamamlanan adımlarda çalışır, makineyi kapatmaz ve sağlayıcı
+faturasına sert sınır getirmez. Sağlayıcının süre/harcama sınırı ayrıca kurulmalıdır.
+
+Büyük karma koşuya otomatik geçiş yok. Dev'de geometrik geçerlilik bozulursa veya
+başlangıca göre düzenleme/düzeltme başarısı artmazsa veri/biçim incelenir; en fazla
+bir düzeltilmiş pilot, sonra yeniden karar. Bu dar alıştırma başarısı estetik veya
+ürün kalitesi kazanımı sayılmaz. Resmî eşikler ve insan denetimli sınav, model
+sonuçları görülmeden sabitlenmelidir.
