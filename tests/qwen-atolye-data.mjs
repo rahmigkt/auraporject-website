@@ -1,7 +1,7 @@
 // Experimental workshop examples, not the live ai.js action vocabulary.
 // Authoritative shapes and execution come from the pinned studio; nothing edits assets/.
 import assert from 'node:assert/strict';
-import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {readFileSync,writeFileSync,mkdirSync,existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {sample,compileDesign,normalizeDesign} from '../assets/forma/generate.js';
@@ -103,7 +103,9 @@ if(process.argv[2]==='--check'){
  console.log('PASS source and file hashes, staleness negative, 210 edits +28 rejects, all compiled and checked');
 }else if(process.argv[2]==='--generate'){
  await loadCsg();assert(csgReady(),'CSG_WASM_NOT_READY');
- const s=source(),rows=build();mkdirSync(out,{recursive:true});
+ const s=source();
+ if(existsSync(out+'/manifest.json')){const previous=JSON.parse(readFileSync(out+'/manifest.json','utf8'));if(previous.source.sha256!==s.sha256){writeFileSync(out+'/STALE.json',JSON.stringify({previous:previous.source.sha256,current:s.sha256,reason:'studio changed; frozen v1 not overwritten'},null,2)+'\n');throw Error('STALE_SOURCE: use a new dataset version and new review');}}
+ const rows=build();mkdirSync(out,{recursive:true});
  const selected=[];for(const tool of types)for(const lang of ['tr','en'])selected.push(...rows.filter(r=>r.tool===tool&&r.lang===lang&&r.decision==='edit'&&r.split==='train').slice(0,2));
  types.forEach((tool,i)=>selected.push(rows.find(r=>r.tool===tool&&r.decision==='reject'&&r.lang==='tr'&&r.id.endsWith(i%2?'invalid_dimension':'unknown_part'))));
  types.slice(0,5).forEach(tool=>selected.push(rows.find(r=>r.tool===tool&&r.decision==='reject'&&r.lang==='en')));assert.equal(selected.length,40);
