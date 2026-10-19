@@ -77,7 +77,7 @@ export function build(){const rows=[];
   const family=['table','storage','kitchen','bath','seating'][i%5],design=fixtures(family,101+i),a=action(tool,i);
   if(tool==='remove')a.id=compileDesign(sample({family,seed:101+i})).parts.find(p=>!p.line&&!p.internal).id;
   const text=templates[i].replace('{x}',descriptions(a)[index]);
-  const row={schema:'aura.atelier.examples/1',id:`${tool}-${lang}-${i+1}`,group:`fixture-${family}-${101+i}`,split:i<11?'train':i<13?'dev':'test',review:'unreviewed',fixture:'Added calibration panel and bar, not an aesthetic/structural furniture proposal',tool,lang,decision:'edit',input:{text,design,selectedPartId:a.id},expected:{actions:[a],reply:lang==='tr'?'Düzenleme önerisini hazırladım.':'I prepared the edit proposal.'}};
+  const row={schema:'aura.atelier.examples/1',id:`${tool}-${lang}-${i+1}`,group:`fixture-${family}-${101+i}`,split:i<11?'train':i<13?'dev':'test',review:'unreviewed',fixture:'Added calibration panel and bar, not an aesthetic/structural furniture proposal',tool,lang,decision:'edit',input:{text,design,selectedPartId:tool==='add'?null:a.id},expected:{actions:[a],reply:lang==='tr'?'Düzenleme önerisini hazırladım.':'I prepared the edit proposal.'}};
   row.evidence=replay(row);rows.push(row);
  }
  for(const tool of types)for(const lang of ['tr','en'])for(const invalid of ['unknown_part','invalid_dimension']){
