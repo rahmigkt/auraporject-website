@@ -1,5 +1,5 @@
 // Builds meshes from part geometry descriptors (shared by every family). Cached by descriptor.
-import {cushion, loft, lathe, tube, lineMesh, pillow, weltLoop, sphere, profiledSlab, transformPositions, computeNormals} from './mesh.js';
+import {sweep, cushion, loft, lathe, tube, lineMesh, pillow, weltLoop, sphere, profiledSlab, transformPositions, computeNormals} from './mesh.js';
 import {edgeProfile} from './table.js';
 
 const cache = new Map();
@@ -31,6 +31,7 @@ export function buildMesh(q) {
     }
     mesh = {positions, normals, uvs: inner.uvs, indices: inner.indices};
   }
+  else if (g.fn === 'sweep') mesh = sweep(g);
   else if (g.fn === 'scaled') {
     // Designer scale: stretch the inner part along its own axes; normals take the inverse scale.
     const inner = buildMesh({geom: g.inner}), [sx, sy, sz] = g.s, positions = new Float32Array(inner.positions), normals = new Float32Array(inner.normals);

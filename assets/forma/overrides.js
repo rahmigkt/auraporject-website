@@ -84,6 +84,26 @@ export function addedGeom(o) {
   return {fn: 'cushion', w, h, d, r: Math.min(o.shape === 'panel' ? 1.5 : Math.max(1, o.radius || 2), w / 2 - 0.5, h / 2 - 0.5, d / 2 - 0.5)};
 }
 
+
+/** Size of a part in its own axes and where its origin sits (base of a turned part, centre of a box). */
+function partFrame(q) {
+  const g = q.geom;
+  if (g.fn === 'lathe') { const H = Math.max(...g.profile.map(p => p[0])), R = Math.max(...g.profile.map(p => p[1])); return {axis: 1, L: H, start: 0, w: 2 * R, d: 2 * R}; }
+  if (g.fn === 'cushion' || g.fn === 'box') { const dims = [g.w, g.h, g.d], axis = dims.indexOf(Math.max(...dims)), o = [0, 1, 2].filter(i => i !== axis); return {axis, L: dims[axis], start: -dims[axis] / 2, w: dims[o[0]], d: dims[o[1]], o}; }
+  return null;
+}
+function sweepGeom(q, s) {
+  const f = partFrame(q); if (!f) return null;
+  const A = [0, 0, 0]; A[f.axis] = 1;
+  // bend direction ⟂ axis: outward from the piece's centre along the dominant horizontal axis, or a fixed one
+  let B;
+  if (s.dir === 'out' || s.dir === 'in') { const sg = s.dir === 'out' ? 1 : -1, cand = f.axis === 1 ? (Math.abs(q.pos[0]) >= Math.abs(q.pos[2]) ? [Math.sign(q.pos[0]) || 1, 0, 0] : [0, 0, Math.sign(q.pos[2]) || 1]) : (f.axis === 0 ? [0, 0, Math.sign(q.pos[2]) || 1] : [Math.sign(q.pos[0]) || 1, 0, 0]); B = cand.map(v => v * sg); }
+  else { B = [0, 0, 0]; B[s.dir[1] === 'x' ? 0 : 2] = s.dir[0] === '+' ? 1 : -1; }
+  if (B[f.axis]) B = f.axis === 0 ? [0, 0, 1] : [1, 0, 0];
+  const bendAxis = B.findIndex(v => v !== 0), w = f.o ? (bendAxis === f.o[0] ? f.w : f.d) : f.w, d = f.o ? (bendAxis === f.o[0] ? f.d : f.w) : f.d;
+  return {fn: 'sweep', axis: f.axis, bend: B, L: f.L, start: f.start, w, d, shape: s.shape, bow: s.mode === 'straight' ? 0 : s.bow, mode: s.mode === 'sabre' ? 'sabre' : 'arc', taper0: s.taper0, taper1: s.taper1};
+}
+
 /** Clean an overrides list from a link, file or editor. */
 export function normalizeOverrides(list) {
   if (!Array.isArray(list)) return [];
@@ -99,6 +119,11 @@ export function normalizeOverrides(list) {
     else if (o.tool === 'add' && typeof o.id === 'string' && ADD_SHAPES.includes(o.shape)) {
       const sz = (o.size || []).slice(0, 3).map(v => Math.max(2, Math.min(4000, num(v))));
       out.push({tool: 'add', id: o.id.slice(0, 60), shape: o.shape, size: [sz[0] || 400, sz[1] || 40, sz[2] || 400], mat: typeof o.mat === 'string' ? o.mat.slice(0, 30) : 'wood', pos: v3(o.pos, 5000), radius: Math.max(0, Math.min(200, num(o.radius ?? 3)))});
+    }
+    else if (o.tool === 'sweep' && (typeof o.id === 'string' || typeof o.role === 'string')) {
+      out.push({tool: 'sweep', ...(typeof o.id === 'string' ? {id: o.id.slice(0, 60)} : {role: o.role.slice(0, 40)}), mode: ['straight', 'arc', 'sabre'].includes(o.mode) ? o.mode : 'arc',
+        shape: o.shape === 'round' ? 'round' : 'square', bow: Math.max(-400, Math.min(400, num(o.bow))), dir: ['out', 'in', '+x', '-x', '+z', '-z'].includes(o.dir) ? o.dir : 'out',
+        taper0: Math.max(0.2, Math.min(2, num(o.taper0) || 1)), taper1: Math.max(0.2, Math.min(2, num(o.taper1) || 1))});
     }
     else if (o.tool === 'edge' && typeof o.id === 'string' && o.sides && typeof o.sides === 'object') {
       const sides = {}; for (const k of ['front', 'back', 'left', 'right']) { const e = o.sides[k]; if (Array.isArray(e) && EDGE_TYPES.includes(e[0])) sides[k] = [e[0], Math.max(1, Math.min(80, num(e[1]) || 6))]; }
@@ -143,6 +168,12 @@ export function applyOverrides(compiled, overrides) {
     if (o.tool === 'duplicate') { const q = out.find(x => x.id === o.id); if (q && !out.some(x => x.id === o.as)) out.push({...q, id: o.as, pos: o.mirror ? [-q.pos[0], q.pos[1], q.pos[2]] : [q.pos[0] + 60, q.pos[1], q.pos[2] + 60], rot: o.mirror ? [q.rot[0], -q.rot[1], -q.rot[2]] : q.rot.slice(), added: true}); }
     if (o.tool === 'add' && !out.some(x => x.id === o.id)) { const [w, h, d] = o.size; out.push({id: o.id, role: 'added-' + o.shape, mat: o.mat, geom: addedGeom(o), pos: o.pos.slice(), rot: [0, 0, 0], added: true, cut: ['round', 'square'].includes(o.shape) ? [Math.round(h), Math.round(w), Math.round(w)] : [Math.round(w), Math.round(d), Math.round(h)].sort((a, b) => b - a)}); }
   }
+  // Swept members: by id, or every part of a role (all legs at once).
+  out = out.map(q => {
+    const sw = list.filter(o => o.tool === 'sweep' && (o.id === q.id || (o.role && o.role === q.role))).at(-1); if (!sw) return q;
+    if (q.geom.fn === 'clipped' && q.geom.inner) { const gi = sweepGeom({...q, geom: q.geom.inner}, sw); return gi ? {...q, geom: {...q.geom, inner: gi}, shaped: true} : q; } // splayed: bend inside the tilt
+    const g = sweepGeom(q, sw); return g ? {...q, geom: g, shaped: true} : q;
+  });
   // Edge profiles per side. Box-like parts become slabs (plan outline × thickness) so every side can take a profile.
   out = out.map(q => {
     const e = list.filter(o => o.tool === 'edge' && o.id === q.id).at(-1); if (!e) return q;
