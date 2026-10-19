@@ -3,14 +3,19 @@ import hashlib,json,subprocess,sys
 from pathlib import Path
 from PIL import Image,ImageStat
 root=Path(__file__).resolve().parents[3];frames=root/'knowledge/atmosfer/kareler'
+def source_matches(file,expected):
+ # Git may convert textual LF/CRLF on checkout. Only source text permits that
+ # equivalence; GLB and JPEG hashes below always identify exact bytes.
+ raw=file.read_bytes();lf=raw.replace(b'\r\n',b'\n')
+ return expected in {hashlib.sha256(data).hexdigest() for data in [raw,lf,lf.replace(b'\n',b'\r\n')]}
 fixtures=json.loads((root/'tests/visual/atmosfer-01/designs.json').read_text(encoding='utf-8'));by_id={f['id']:f for f in fixtures};ids=set(by_id)
 assert len(ids)==12 and all(f['design']['family']!='bedroom' for f in fixtures)
 exports=json.loads((root/'knowledge/atmosfer/gltf-export-report.json').read_text());export_by_id={r['id']:r for r in exports['fixtures']};assert set(export_by_id)==ids
-for name,digest in exports['sourceFilesSha256'].items():assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest,(name,'source changed since export')
+for name,digest in exports['sourceFilesSha256'].items():assert source_matches(root/name,digest),(name,'source changed since export')
 partial='--partial' in sys.argv
 cycles=json.loads((frames/'cycles-report.json').read_text(encoding='utf-8'));delivered={r['id'] for r in cycles};assert delivered and delivered<=ids
 if not partial:assert delivered==ids,'Cycles batch incomplete'
-script_hash=hashlib.sha256((root/'tests/visual/atmosfer-01/cycles.py').read_bytes()).hexdigest()
+script_hash=cycles[0]['renderScriptSha256'];assert source_matches(root/'tests/visual/atmosfer-01/cycles.py',script_hash)
 for row in cycles:
  assert not row['probeOnly'] and row['generalRendered'] and row['cameraFovMatchesGltf']
  assert (row['engine'],row['device'],row['denoiser'])==('Cycles','CPU','OPENIMAGEDENOISE')
