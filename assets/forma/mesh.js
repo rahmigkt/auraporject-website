@@ -495,3 +495,45 @@ export function profiledSlab(outline, t, inset = () => 0, {steps = 12} = {}) {
   if (vol < 0) for (let k = 0; k < I.length; k += 3) { const tmp = I[k + 1]; I[k + 1] = I[k + 2]; I[k + 2] = tmp; }
   return finish(b, {smooth: false});
 }
+
+/**
+ * Swept member (sabre/curved legs, bowed rails and arms): a square or round section carried along a bent axis.
+ * axis: 0|1|2 (x|y|z) — the member's length direction; bend: unit vector ⟂ axis; length L from `start` (0 = base at
+ * origin, -L/2 = centred). bow: offset in mm; mode 'arc' (most in the middle) or 'sabre' (grows towards t=0, the foot).
+ * Section w (along bend) × d, scaled linearly from taper0 (t=0) to taper1 (t=1).
+ */
+export function sweep({axis = 1, bend = [1, 0, 0], L, start = 0, w, d, shape = 'square', bow = 0, mode = 'arc', taper0 = 1, taper1 = 1, steps = 28}) {
+  const A = [0, 0, 0]; A[axis] = 1;
+  const B = bend, C = [A[1] * B[2] - A[2] * B[1], A[2] * B[0] - A[0] * B[2], A[0] * B[1] - A[1] * B[0]];
+  const off = t => mode === 'sabre' ? bow * (1 - t) ** 2 : bow * 4 * t * (1 - t);
+  const doff = t => mode === 'sabre' ? -2 * bow * (1 - t) : bow * 4 * (1 - 2 * t);
+  const sec = shape === 'round'
+    ? Array.from({length: 20}, (_, i) => { const a = i / 20 * Math.PI * 2; return [Math.cos(a) / 2, Math.sin(a) / 2]; })
+    : [[0.5, -0.5], [0.5, 0.5], [-0.5, 0.5], [-0.5, -0.5]];
+  const frames = [];
+  for (let k = 0; k <= steps; k++) {
+    const t = k / steps, o = off(t), c = [0, 1, 2].map(i => A[i] * (start + t * L) + B[i] * o);
+    const T0 = [0, 1, 2].map(i => A[i] * L + B[i] * doff(t)), tl = Math.hypot(...T0), T = T0.map(v => v / tl);
+    const bt = B[0] * T[0] + B[1] * T[1] + B[2] * T[2], N0 = B.map((v, i) => v - bt * T[i]), nl = Math.hypot(...N0) || 1, N = N0.map(v => v / nl);
+    const sc = taper0 + (taper1 - taper0) * t;
+    frames.push(sec.map(([x, y]) => [0, 1, 2].map(i => c[i] + N[i] * x * w * sc + C[i] * y * d * sc)));
+  }
+  const b = new Builder(), n = sec.length;
+  if (shape === 'round') {
+    const rings = frames.map(f => f.map(p => b.v(...p)));
+    for (let k = 0; k < steps; k++) for (let i = 0; i < n; i++) { const j = (i + 1) % n; b.quad(rings[k][i], rings[k][j], rings[k + 1][j], rings[k + 1][i]); }
+  } else for (let i = 0; i < n; i++) { // flat faces: own vertices per side so the arrises stay crisp
+    const j = (i + 1) % n, col = frames.map(f => [b.v(...f[i]), b.v(...f[j])]);
+    for (let k = 0; k < steps; k++) b.quad(col[k][0], col[k][1], col[k + 1][1], col[k + 1][0]);
+  }
+  for (const [f, flip] of [[frames[0], true], [frames.at(-1), false]]) { // end caps
+    const own = f.map(p => b.v(...p));
+    for (let i = 1; i < n - 1; i++) flip ? b.tri(own[0], own[i + 1], own[i]) : b.tri(own[0], own[i], own[i + 1]);
+  }
+  // Orientation check: the first side face must point away from the axis.
+  const P = b.p, I = b.i, v = k => [P[k * 3], P[k * 3 + 1], P[k * 3 + 2]], [a, c, e] = [v(I[0]), v(I[1]), v(I[2])];
+  const nrm = [(c[1] - a[1]) * (e[2] - a[2]) - (c[2] - a[2]) * (e[1] - a[1]), (c[2] - a[2]) * (e[0] - a[0]) - (c[0] - a[0]) * (e[2] - a[2]), (c[0] - a[0]) * (e[1] - a[1]) - (c[1] - a[1]) * (e[0] - a[0])];
+  const mid = frames[0].reduce((m, p) => m.map((s2, i) => s2 + p[i] / n), [0, 0, 0]), out = a.map((x, i) => x - mid[i]);
+  if (nrm[0] * out[0] + nrm[1] * out[1] + nrm[2] * out[2] < 0) for (let k = 0; k < I.length; k += 3) { const tmp = I[k + 1]; I[k + 1] = I[k + 2]; I[k + 2] = tmp; }
+  return finish(b, {smooth: false});
+}

@@ -230,6 +230,19 @@ const SIDE_TR = {front: 'Ön', back: 'Arka', left: 'Sol', right: 'Sağ'};
 const edgeable = q => q && (q.geom.fn === 'slab' || (q.geom.fn === 'cushion' && !q.geom.crownTop && !q.geom.crownFront));
 const edgeOf = id => ovs().filter(o => o.tool === 'edge' && o.id === id).at(-1)?.sides || {};
 function setEdge(id, sides) { const cur = {...edgeOf(id), ...sides}; commit([...ovs().filter(o => !(o.tool === 'edge' && o.id === id)), {tool: 'edge', id, sides: cur}]); }
+const sweepable = q => q && (q.geom.fn === 'lathe' || (q.geom.fn === 'clipped' && q.geom.inner?.fn === 'lathe') || q.geom.fn === 'sweep' || (q.geom.fn === 'clipped' && q.geom.inner?.fn === 'sweep') || ((q.geom.fn === 'cushion' || q.geom.fn === 'box') && !q.geom.crownTop && !q.geom.crownFront));
+const sweepOf = q => ovs().filter(o => o.tool === 'sweep' && (o.id === q.id || (o.role && o.role === q.role))).at(-1);
+function setSweep(q, v, all) { const list = ovs().filter(o => !(o.tool === 'sweep' && (o.id === q.id || (o.role && o.role === q.role)))); commit(v ? [...list, {tool: 'sweep', ...(all ? {role: q.role} : {id: q.id}), ...v}] : list); }
+function sweepPanel(q) {
+  if (!sweepable(q)) return '';
+  const o = sweepOf(q) || {mode: 'straight', bow: 40, dir: 'out', taper0: 1, taper1: 1, shape: q.geom.square || q.geom.inner?.square || q.geom.fn === 'cushion' ? 'square' : 'round'};
+  const opt = (k, map) => `<select data-sw="${k}">${Object.entries(map).map(([v, t]) => `<option value="${v}" ${String(o[k]) === v ? 'selected' : ''}>${t}</option>`).join('')}</select>`;
+  return `<h2>Eğri ve incelme</h2><div class="a-grid"><span>Biçim</span>${opt('mode', {straight: 'Düz', arc: 'Kavis', sabre: 'Kılıç'})}${opt('shape', {square: 'Kare kesit', round: 'Yuvarlak kesit'})}${opt('dir', {out: 'Dışa', in: 'İçe', '+x': '+X', '-x': '−X', '+z': 'Öne', '-z': 'Arkaya'})}
+  <span>Kavis mm</span><input type="number" data-sw="bow" value="${o.bow}" inputmode="numeric"><span>Uç / dip %</span><input type="number" data-sw="taper0" value="${Math.round(o.taper0 * 100)}" inputmode="numeric">
+  <span>Üst / baş %</span><input type="number" data-sw="taper1" value="${Math.round(o.taper1 * 100)}" inputmode="numeric"><label class="a-note"><input type="checkbox" data-swall ${o.role ? 'checked' : ''}> Aynı türdeki tüm parçalar</label><span></span></div>
+  ${sweepOf(q) ? '<div class="a-tools"><button data-swoff>Eğriyi kaldır</button></div>' : ''}<p class="a-note">Kılıç: dipte açılan kavis. Uç %: alt ya da baş ucundaki kesit oranı (incelme).</p>`;
+}
+function readSweep() { const g = k => $(`[data-sw=${k}]`).value; return {mode: g('mode'), shape: g('shape'), dir: g('dir'), bow: +g('bow') || 0, taper0: (+g('taper0') || 100) / 100, taper1: (+g('taper1') || 100) / 100}; }
 function edgePanel(q) {
   if (!edgeable(q)) return '';
   const cur = edgeOf(q.id), def = q.geom.fn === 'slab' ? [q.geom.profile[0], q.geom.profile[2] ?? 6] : ['square', 0];
@@ -248,7 +261,7 @@ function structurePanel() {
   <div class="a-grid"><span>Kaydır mm</span>${num('m0', round1(t.move[0]), 5)}${num('m1', round1(t.move[1]), 5)}${num('m2', round1(t.move[2]), 5)}
   <span>Döndür °</span>${num('r0', round1(t.rot[0] * R2D), 1)}${num('r1', round1(t.rot[1] * R2D), 1)}${num('r2', round1(t.rot[2] * R2D), 1)}
   <span>Ölçek %</span>${num('s0', round1(t.scale[0] * 100), 1)}${num('s1', round1(t.scale[1] * 100), 1)}${num('s2', round1(t.scale[2] * 100), 1)}</div>
-  ${edgePanel(q)}
+  ${edgePanel(q)}${sweepPanel(q)}
   <div class="a-tools"><button data-dup>Çoğalt</button><button data-mirror>Aynala (karşı taraf)</button><button data-tfreset>Konumu sıfırla</button><button data-delpart>Sil</button></div>`
   : '<p class="a-note">3D görünümde bir parçaya dokunun. Seçilen parçayı tutamaçlarla taşıyın, döndürün ya da ölçekleyin; sayıyla da girebilirsiniz.</p>'}
   <div class="a-tools"><button data-sundo ${S.hist.length ? '' : 'disabled'}>↶ Yapı geri</button><button data-sredo ${S.fut.length ? '' : 'disabled'}>↷ Yapı ileri</button></div>
@@ -295,6 +308,7 @@ $('#panel').addEventListener('click', async e => {
   if (b.hasAttribute('data-delpart')) return deletePart();
   if (b.hasAttribute('data-tfreset')) return commit(ovs().filter(o => !(o.tool === 'transform' && o.id === S.part)));
   if (b.hasAttribute('data-add')) return addPart();
+  if (b.hasAttribute('data-swoff')) return setSweep(partOf(S.part), null);
   if (b.hasAttribute('data-sundo')) return undoStructure();
   if (b.hasAttribute('data-sredo')) return redoStructure();
   if (b.dataset.part) { const t = editableParts(S.compiled).find(x => x.key === b.dataset.part); S.view = null; pickTarget(t); return; }
@@ -314,6 +328,7 @@ $('#panel').addEventListener('click', async e => {
   if (act === 'json') download(`AURA-${design().kind}-design.json`, JSON.stringify(design(), null, 2), 'application/json');
 });
 $('#panel').addEventListener('change', e => {
+  if (S.part && (e.target.dataset?.sw || e.target.hasAttribute?.('data-swall'))) { const q = partOf(S.part); return setSweep(q, readSweep(), $('[data-swall]').checked); }
   const ed = e.target.dataset?.edge, es = e.target.dataset?.edgesize;
   if (S.part && (ed || es)) {
     if (ed === 'all') { if (!e.target.value) return; const sz = +($('[data-edgesize=front]')?.value) || 6; return setEdge(S.part, Object.fromEntries(['front', 'back', 'left', 'right'].map(k => [k, [e.target.value, sz]]))); }
