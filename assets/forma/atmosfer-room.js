@@ -44,12 +44,13 @@ export function createAtmosphereStage(THREE,product,{family='seating',preset='no
   // Wall-mounted objects retain their actual mounting height. Only a below-floor origin is corrected.
   product.position.y-=Math.min(0,initial.min.y);product.updateMatrixWorld(true);scene.add(product);
   const bounds=new THREE.Box3().setFromObject(product),size=bounds.getSize(new THREE.Vector3()),target=bounds.getCenter(new THREE.Vector3());
-  const stone=['bath','kitchen'].includes(family),width=Math.max(7,size.x+4),height=Math.max(3.6,bounds.max.y+1,size.x*.8+2);
-  const wallGap=['bath','kitchen'].includes(family)?0.035:family==='bedroom'?0.15:0.85;
+  const stone=['bath','kitchen'].includes(family),width=Math.max(3.2,size.x+2.2),height=Math.max(3,bounds.max.y+.65);
+  const depth=Math.max(3,size.z+2.2);
+  const wallGap=['bath','kitchen','storage'].includes(family)?0.035:0.65;
   const rear=bounds.min.z-wallGap,left=-width/2;
   const maps=surfaceMaps(THREE,stone);textures.push(maps.map,maps.roughnessMap);
   const floor=new THREE.MeshStandardMaterial({color:'#ffffff',roughness:0.84,...maps});
-  const plaster=new THREE.MeshStandardMaterial({color:stone?'#deddd4':'#e5dfd2',roughness:0.94,side:THREE.DoubleSide});
+  const plaster=new THREE.MeshStandardMaterial({color:'#f4f1e9',roughness:0.94,side:THREE.DoubleSide});
   const trim=new THREE.MeshStandardMaterial({color:stone?'#c5c2b7':'#ddd4c4',roughness:0.72});
   owned.push(floor,plaster,trim);
   function box(w,h,d,x,y,z,material){const geometry=new THREE.BoxGeometry(w,h,d),mesh=new THREE.Mesh(geometry,material);
@@ -88,7 +89,8 @@ export function createAtmosphereStage(THREE,product,{family='seating',preset='no
   const camera=new THREE.PerspectiveCamera(35,aspect,.03,100);camera.setFocalLength(55);
   // A complete bedroom set is much wider than one piece. Keep its long-lens
   // camera below the ceiling instead of lifting the viewpoint above the room.
-  const yaw=.5,pitch=family==='bedroom'?0.06:light.pitch,direction=new THREE.Vector3(Math.sin(yaw)*Math.cos(pitch),Math.sin(pitch),Math.cos(yaw)*Math.cos(pitch));
+  // An upright camera: level horizon alone does not prevent converging verticals.
+  const yaw=.38,direction=new THREE.Vector3(Math.sin(yaw),0,Math.cos(yaw));
   const right=new THREE.Vector3().crossVectors(new THREE.Vector3(0,1,0),direction).normalize(),up=new THREE.Vector3().crossVectors(direction,right).normalize();
   const tanV=Math.tan(camera.fov*Math.PI/360),tanH=tanV*aspect;
   let distance=0;
@@ -96,11 +98,23 @@ export function createAtmosphereStage(THREE,product,{family='seating',preset='no
     const v=new THREE.Vector3(x,y,z).sub(target);
     distance=Math.max(distance,v.dot(direction)+Math.max(Math.abs(v.dot(right))/(tanH*.82),Math.abs(v.dot(up))/(tanV*.82)));
   }
-  camera.position.copy(target).addScaledVector(direction,Math.max(distance,.8));camera.lookAt(target);camera.up.set(0,1,0);camera.updateProjectionMatrix();
-  camera.userData={focalLengthMm:55,target:target.toArray(),family,preset};
+  let cameraDistance=Math.max(distance,.8),shiftY;
+  const lift=.65,aim=target.clone().add(new THREE.Vector3(0,lift,0));
+  // Architectural lens shift keeps verticals parallel while exposing the table top.
+  for(let attempt=0;attempt<40;attempt++){
+   camera.position.copy(aim).addScaledVector(direction,cameraDistance);camera.lookAt(aim);camera.up.set(0,1,0);
+   shiftY=-lift/(cameraDistance*2*tanH);
+   camera.setViewOffset(1500,1500/aspect,0,-shiftY*1500,1500,1500/aspect);camera.updateProjectionMatrix();camera.updateMatrixWorld(true);
+   let fits=true;
+   for(const x of [bounds.min.x,bounds.max.x])for(const y of [bounds.min.y,bounds.max.y])for(const z of [bounds.min.z,bounds.max.z]){
+    const p=new THREE.Vector3(x,y,z).project(camera);if(Math.abs(p.x)>.82||Math.abs(p.y)>.82)fits=false;
+   }
+   if(fits)break;cameraDistance*=1.08;
+  }
+  camera.userData={focalLengthMm:55,target:aim.toArray(),productCentre:target.toArray(),shiftY,family,preset};
   scene.updateMatrixWorld(true);camera.updateMatrixWorld(true);
   const stagedSize=bounds.getSize(new THREE.Vector3());
   if(stagedSize.distanceTo(before)>1e-8)throw new Error('Staging changed product dimensions');
-  return {scene,camera,bounds,preset,room:{width,height,rear,floor:stone?'stone':'wood',window:{position:area.position.toArray(),width:windowW,height:openingH}},
+  return {scene,camera,bounds,preset,room:{width,height,depth,rear,floor:'wood',window:{position:area.position.toArray(),width:windowW,height:openingH}},
     dispose(){scene.remove(product);shadow.shadow.map?.dispose();shadow.shadow.mapPass?.dispose();for(const asset of owned)asset.dispose();for(const texture of textures)texture.dispose();}};
 }

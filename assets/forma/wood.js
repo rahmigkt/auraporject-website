@@ -16,14 +16,15 @@ export function woodMaps(species, finish, {w = 512, h = 1024, stain = 'natural'}
   for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
     const u = x / w, v = y / h;
     // Board seen on the face: distorted ring position across u, long slow wander along v.
-    const warp = (fbm(u * 3, v * 1.5, seed, 4, 3) - 0.5) * S.figure * 1.6 + (fbm(u * 1, v * 0.5, seed + 9, 3, 1) - 0.5) * 0.8;
-    const ringPos = (u * 300 / S.ring) + warp * 12;
-    const fr = ringPos - Math.floor(ringPos);
-    const late = Math.pow(Math.max(0, Math.sin(fr * Math.PI)), 6);
-    const pores = valueNoise(x * 0.9, y * 0.12, seed + 4, 0) > 0.82 ? 0.08 : 0;
+    // Continuous anisotropic fibres, without a repeated sine-ring / zigzag pattern.
+    // The species palette remains authoritative; relief is microscopic, not fluting.
+    const warp = (fbm(u * 2, v * 1.2, seed, 3) - .5) * S.figure * 2;
+    const late = fbm(u * 48 + warp, v * 2.4, seed + 9, 4);
+    const fibre = fbm(u * 210 + warp * 2, v * 9, seed + 13, 2);
+    const pores = Math.max(0,valueNoise(x * .7,y * .09,seed+4)-.78)*.12;
     let ray = 0;
-    if (S.rays > 0.2) { const rx = Math.floor(u * 160), rn = valueNoise(rx, Math.floor(v * 40), seed + 2, 0); if (rn > 1 - S.rays * 0.12) ray = 0.18; }
-    const t = clamp(late * 0.7 + pores + (fbm(u * 8, v * 2, seed + 5, 3, 8) - 0.5) * 0.25, 0, 1);
+    if (S.rays > .2) ray=Math.max(0,fbm(u*8,v*90,seed+2,2)-.68)*S.rays*.15;
+    const t = clamp(.12 + late * .38 + fibre * .12 + pores, 0, 1);
     const k = (y * w + x) * 4;
     for (let c = 0; c < 3; c++) albedo[k + c] = clamp(base[c] + (grain[c] - base[c]) * t + ray * 40, 0, 255);
     if (stainRgb) { // stain or paint over the timber: colour changes, grain still reads through
@@ -31,7 +32,7 @@ export function woodMaps(species, finish, {w = 512, h = 1024, stain = 'natural'}
       for (let c = 0; c < 3; c++) albedo[k + c] = clamp(albedo[k + c] + (stainRgb[c] * g - albedo[k + c]) * St.k, 0, 255);
     }
     albedo[k + 3] = 255;
-    height[y * w + x] = 1 - late * 0.6 - pores * 2;
+    height[y * w + x] = 1 - late * .035 - fibre * .018 - pores * .15;
     rough[k] = rough[k + 1] = rough[k + 2] = clamp(Fi.rough + pores * 1.2 + late * 0.05, 0.04, 1) * 255; rough[k + 3] = 255;
   }
   const normal = new Uint8ClampedArray(w * h * 4);

@@ -29,6 +29,6 @@ export async function exportAtmosphere({compiled,materials,family,preset='north'
    }
   });
   const glb=await new GLTFExporter().parseAsync(scene,{binary:true,onlyVisible:true,maxTextureSize:2048});
-  return {glb,metadata:{family,preset,lights,camera:{position:stage.camera.position.toArray(),quaternion:stage.camera.quaternion.toArray(),focalLength:55},room:stage.room,productBounds:{min:stage.bounds.min.toArray(),max:stage.bounds.max.toArray()}}};
+  return {glb,metadata:{family,preset,lights,camera:{position:stage.camera.position.toArray(),quaternion:stage.camera.quaternion.toArray(),focalLength:55,shiftY:stage.camera.userData.shiftY},room:stage.room,productBounds:{min:stage.bounds.min.toArray(),max:stage.bounds.max.toArray()}}};
  }finally{for(const resource of converted)resource.dispose();stage?.dispose();asset.dispose();}
 }
