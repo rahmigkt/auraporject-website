@@ -165,7 +165,7 @@ export function compile(raw) {
     if (edge === 'knife') return {...base, r: 6, crownTop: crown + 10, crownBottom: crown * 0.6, crownFront: 6};
     if (edge === 'bullnose') return {...base, r: cT * 0.45, crownTop: crown, crownFront: 10};
     if (edge === 'soft') return {...base, r: cT * 0.32, crownTop: crown + 6, crownFront: 12};
-    return {...base, r: 14, crownTop: crown, crownFront: 4};
+    return {...base, r: Math.max(20, cT * 0.16), crownTop: Math.max(crown, 8), crownBottom: 3, crownFront: 8}; // filled cover: soft arrises, a little crown
   };
   // Topstitch on the seat tops: dashed thread loops inset from the edge, following the crowned surface.
   const bump = u => Math.max(0, 1 - u * u);

@@ -177,7 +177,7 @@ function shell() {
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261019e').then(mod => { sceneModule = mod; const {createViewer} = mod;
+  import('./scene.js?v=20261019f').then(mod => { sceneModule = mod; const {createViewer} = mod;
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(shown(), state.design.materials); if (state.room) showRoom(); }
@@ -1108,7 +1108,12 @@ function setSketch(on) {
   document.body.dataset.mode = on ? 'sketch' : 'render'; renderCaption();
 }
 function toggleStructure() { state.structure = !state.structure; viewer?.structure(state.structure); $('#structureBtn').setAttribute('aria-pressed', String(state.structure)); }
-async function savePhoto() { if (!viewer) return; download(`${projectId()}.jpg`, (await dataUrlJpeg(await viewer.photo(2))).data, 'image/jpeg'); }
+async function savePhoto() {
+  if (!viewer || savePhoto.busy) return; savePhoto.busy = true;
+  const btn = $('#photoBtn'), label = btn?.textContent; if (btn) { btn.disabled = true; btn.textContent = '…'; }
+  try { const url = await viewer.photo(2); if (url) download(`${projectId()}.jpg`, (await dataUrlJpeg(url)).data, 'image/jpeg'); }
+  finally { savePhoto.busy = false; if (btn) { btn.disabled = false; btn.textContent = label; } }
+}
 
 // ---- Voice -----------------------------------------------------------------------------------
 function listen() {
