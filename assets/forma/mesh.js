@@ -392,6 +392,37 @@ export function offsetOutline(pts, d) {
     const cos = Math.max(0.35, (nb[0] / lb) * n1[0] + (nb[1] / lb) * n1[1]);
     out.push([c[0] + nb[0] / lb * d / cos, c[1] + nb[1] / lb * d / cos]);
   }
+  // An inset larger than a corner's radius folds the corner into a small loop. Points that fall outside the true
+  // inset region (the intersection of every edge moved inward by d) are moved onto its boundary; the point count stays
+  // the same for the ring quads.
+  const convex = (() => { let sg = 0; for (let i = 0; i < n; i++) { const a = pts[i], c = pts[(i + 1) % n], e = pts[(i + 2) % n], z = (c[0] - a[0]) * (e[1] - c[1]) - (c[1] - a[1]) * (e[0] - c[0]); if (Math.abs(z) < 1e-9) continue; if (sg && Math.sign(z) !== sg) return false; sg = Math.sign(z); } return true; })();
+  if (d > 0 && convex) {
+    const hp = [];
+    for (let i = 0; i < n; i++) { const a = pts[i], c = pts[(i + 1) % n], l = Math.hypot(c[0] - a[0], c[1] - a[1]); if (l < 1e-9) continue; const nx = -(c[1] - a[1]) / l, ny = (c[0] - a[0]) / l; hp.push([nx, ny, nx * a[0] + ny * a[1] + d]); }
+    const inside = p => hp.every(([nx, ny, k]) => nx * p[0] + ny * p[1] >= k - 1e-6);
+    if (!out.every(inside)) {
+      let poly = pts.map(p => p.slice());
+      for (const [nx, ny, k] of hp) {
+        const next = [];
+        for (let i = 0; i < poly.length; i++) {
+          const a = poly[i], c = poly[(i + 1) % poly.length], fa = nx * a[0] + ny * a[1] - k, fc = nx * c[0] + ny * c[1] - k;
+          if (fa >= 0) next.push(a);
+          if ((fa >= 0) !== (fc >= 0)) { const t = fa / (fa - fc); next.push([a[0] + (c[0] - a[0]) * t, a[1] + (c[1] - a[1]) * t]); }
+        }
+        poly = next; if (poly.length < 3) break;
+      }
+      if (poly.length >= 3) for (let i = 0; i < n; i++) {
+        if (inside(out[i])) continue;
+        let best = null, bd = Infinity;
+        for (let k = 0; k < poly.length; k++) {
+          const a = poly[k], c = poly[(k + 1) % poly.length], ex = c[0] - a[0], ey = c[1] - a[1], L = ex * ex + ey * ey || 1;
+          const t = Math.max(0, Math.min(1, ((out[i][0] - a[0]) * ex + (out[i][1] - a[1]) * ey) / L)), q = [a[0] + ex * t, a[1] + ey * t];
+          const dd = (q[0] - out[i][0]) ** 2 + (q[1] - out[i][1]) ** 2; if (dd < bd) { bd = dd; best = q; }
+        }
+        out[i] = best;
+      }
+    }
+  }
   return out;
 }
 
@@ -410,10 +441,47 @@ export function profiledSlab(outline, t, inset = () => 0, {steps = 12} = {}) {
     rings.push(ring.map(([x, z]) => b.v(x, y, z)));
   }
   for (let r = 0; r < rings.length - 1; r++) for (let i = 0; i < n; i++) { const j = (i + 1) % n; b.quad(rings[r][i], rings[r + 1][i], rings[r + 1][j], rings[r][j]); }
+  // Caps: ear-clipped in plan (no fan to a centre point, whose long slivers showed as false lines or an "X" on tops
+  // in shading and shadows; also correct for concave outlines). Repeated points are dropped first.
+  const X = v => b.p[v * 3], Z = v => b.p[v * 3 + 2];
+  const cross = (a, c, d) => (X(c) - X(a)) * (Z(d) - Z(a)) - (Z(c) - Z(a)) * (X(d) - X(a));
   for (const [ring, top] of [[rings[0], true], [rings.at(-1), false]]) {
-    let x = 0, y = 0, z = 0; for (const v of ring) { x += b.p[v * 3]; y += b.p[v * 3 + 1]; z += b.p[v * 3 + 2]; }
-    const c = b.v(x / n, y / n, z / n);
-    for (let i = 0; i < n; i++) top ? b.tri(c, ring[i], ring[(i + 1) % n]) : b.tri(c, ring[(i + 1) % n], ring[i]);
+    // Own vertices for the cap, so its normals are not averaged with the rim (that bent the shading across big
+    // triangles and showed as a diagonal "cut" on table tops).
+    const own = ring.map(v => b.v(b.p[v * 3], b.p[v * 3 + 1], b.p[v * 3 + 2]));
+    const poly = own.filter((v, i) => Math.hypot(X(v) - X(own[(i + 1) % n]), Z(v) - Z(own[(i + 1) % n])) > 1e-4);
+    // Drop near-duplicate and almost collinear points (tight corner arcs): ear clipping them made needle triangles whose
+    // float normals were noisy and drew false creases across the top.
+    for (let changed = true; changed && poly.length > 3;) {
+      changed = false;
+      for (let i = 0; i < poly.length && poly.length > 3; i++) {
+        const a = poly[(i + poly.length - 1) % poly.length], v = poly[i], w = poly[(i + 1) % poly.length];
+        const lav = Math.hypot(X(v) - X(a), Z(v) - Z(a)), lvw = Math.hypot(X(w) - X(v), Z(w) - Z(v));
+        if (Math.min(lav, lvw) < 0.8 || Math.abs(cross(a, v, w)) < 2) { poly.splice(i, 1); changed = true; i--; }
+      }
+    }
+    let sgn = 0; for (let i = 0; i < poly.length; i++) sgn += cross(poly[0], poly[i], poly[(i + 1) % poly.length]);
+    const s0 = Math.sign(sgn) || 1, tris = [], idx = poly.slice();
+    let guard = idx.length * idx.length;
+    while (idx.length > 3 && guard-- > 0) {
+      let cut = false;
+      for (let i = 0; i < idx.length; i++) {
+        const a = idx[(i + idx.length - 1) % idx.length], c = idx[i], d = idx[(i + 1) % idx.length], k = cross(a, c, d) * s0;
+        if (k <= 1e-9) continue;
+        let inside = false;
+        for (const v of idx) { if (v === a || v === c || v === d) continue; if (cross(a, c, v) * s0 >= 0 && cross(c, d, v) * s0 >= 0 && cross(d, a, v) * s0 >= 0) { inside = true; break; } }
+        if (inside) continue;
+        tris.push([a, c, d]); idx.splice(i, 1); cut = true; break;
+      }
+      if (!cut) { // numerically stuck: drop the flattest vertex
+        let best = 0, bv = Infinity; for (let i = 0; i < idx.length; i++) { const v = Math.abs(cross(idx[(i + idx.length - 1) % idx.length], idx[i], idx[(i + 1) % idx.length])); if (v < bv) { bv = v; best = i; } }
+        idx.splice(best, 1);
+      }
+    }
+    if (idx.length === 3) tris.push(idx);
+    // Caps are flat: face every triangle straight up (top) or down (bottom). An offset ring can fold at tight corners,
+    // and a folded triangle facing the wrong way showed as a hole and a drawn crease across the top.
+    for (const [a, c, d] of tris) { const k = cross(a, c, d); if (Math.abs(k) < 1e-6) continue; (top ? k > 0 : k < 0) ? b.tri(a, c, d) : b.tri(a, d, c); }
   }
   // Make the winding outward (positive signed volume) whatever the outline orientation was.
   let vol = 0; const P = b.p, I = b.i;
