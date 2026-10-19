@@ -288,7 +288,7 @@ export function compile(raw) {
   const nStretch = Math.max(1, Math.round(innerW / 600));
   for (let i = 1; i <= nStretch; i++) {
     const x = -hw + 20 + (W - 40) * i / (nStretch + 1);
-    if (Math.abs(x) < hw - 60) parts.push(part(`frame-stretcher-${i}`, 'frame-stretcher', 'frame', {fn: 'box', w: 22, h: 60, d: D - 120}, [x, fy + 10, 0], [0, 0, 0], {internal: true}));
+    if (Math.abs(x) < hw - 60) parts.push(part(`frame-stretcher-${i}`, 'frame-stretcher', 'frame', {fn: 'box', w: 22, h: 60, d: p.baseType === 'frame' ? D - 56 : D - 120}, [x, fy + 10, 0], [0, 0, 0], {internal: true}));
   }
 
   const meta = derive(p, {deckTop, seatD, seatBackZ, innerW});
