@@ -103,9 +103,12 @@ export function compile(raw) {
   const bodyW = W - 2 * overhang; // width of deck and back below an overhanging arm
 
   // ---- Base / seat deck --------------------------------------------------
+  const postW = clamp(Math.max(aw * 0.5, p.legSize * 1.3), 30, 46);
+  const throughPosts = timberArms && legH > 0 && (p.baseType === 'legs' || p.baseType === 'frame');
+  const legBottomJoin = p.baseType === 'frame' ? deckTop - clamp((deckTop - y0) * 0.55, 50, 110) : legH;
   const deckH = deckTop - y0;
   if (p.baseType !== 'frame') {
-    parts.push(part('base', 'seat-deck', 'fabric', {fn: 'cushion', w: timberArms ? innerW + 2 : bodyW, h: deckH, d: D - 10, r: Math.min(18, deckH / 3), crownFront: 4}, [0, y0 + deckH / 2, 5]));
+    parts.push(part('base', 'seat-deck', 'fabric', {fn: 'cushion', w: throughPosts ? W - 2 * postW + 2 : timberArms ? innerW + 2 : bodyW, h: deckH, d: D - 10, r: Math.min(18, deckH / 3), crownFront: 4}, [0, y0 + deckH / 2, 5]));
   } else {
     const railH = clamp(deckH * 0.55, 50, 110), railT = 28;
     parts.push(part('rail-front', 'base-rail', 'wood', {fn: 'cushion', w: W, h: railH, d: railT, r: 3}, [0, deckTop - railH / 2, hd - railT / 2]));
@@ -187,7 +190,16 @@ export function compile(raw) {
   if (hasArms) for (const s of [-1, 1]) {
     const side = s < 0 ? 'l' : 'r', ax = s * (hw - aw / 2);
     if (timberArms) {
-      const postH = p.armHeight - legH, postW = clamp(aw * 0.55, 30, 50);
+      if (throughPosts) {
+        // Timber frame: each arm post runs in one piece from the floor to the arm, at the corner of the frame;
+        // the rails are tenoned into it, so leg, post and arm read as one continuous member.
+        const px = s * (hw - postW / 2), zf = hd - postW / 2, zb = -hd + postW / 2, top = p.armHeight;
+        const prof = [[0, postW / 2 * Math.max(0.62, p.legTaper)], [legBottomJoin, postW / 2], [top, postW / 2]];
+        for (const z of [zf, zb]) parts.push(part(`arm-post-${side}-${z > 0 ? 'f' : 'b'}`, 'arm-post', 'wood', {fn: 'lathe', profile: prof, square: true}, [px, 0, z]));
+        parts.push(part(`arm-top-${side}`, 'arm-top', 'wood', {fn: 'cushion', w: Math.max(aw, postW + 16), h: 28, d: zf - zb + postW + 20, r: 6}, [px - s * Math.max(0, Math.max(aw, postW + 16) - postW) / 2, top + 14, (zf + zb) / 2]));
+        continue;
+      }
+      const postH = p.armHeight - legH;
       for (const z of [hd - 40 - p.armSet, -hd + 60]) parts.push(part(`arm-post-${side}-${z > 0 ? 'f' : 'b'}`, 'arm-post', 'wood', {fn: 'lathe', profile: legProfile('squareTaper', postH, postW / 2, 0.8), square: true}, [ax, legH, z]));
       parts.push(part(`arm-top-${side}`, 'arm-top', 'wood', {fn: 'cushion', w: aw, h: 28, d: D - p.armSet + 10, r: 6}, [ax, p.armHeight + 14, -p.armSet / 2 + 5]));
       continue;
@@ -204,7 +216,7 @@ export function compile(raw) {
   const legGeom = (h) => ({fn: 'lathe', profile: legProfile(p.legType, h, p.legSize, p.legTaper), square: isSquareLeg(p.legType)});
   const legSpots = () => {
     const ix = bodyW / 2 - p.legInset - p.legSize, iz = hd - Math.min(p.legInset, 90) - p.legSize, spots = [];
-    for (const sx of [-1, 1]) for (const sz of [-1, 1]) spots.push([sx * ix, sz * iz, sx, sz]);
+    if (!throughPosts) for (const sx of [-1, 1]) for (const sz of [-1, 1]) spots.push([sx * ix, sz * iz, sx, sz]); // through posts are the corner legs
     if (W > 1900) for (const sz of [-1, 1]) spots.push([0, sz * iz, 0, sz]);
     return spots;
   };
