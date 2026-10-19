@@ -15,6 +15,13 @@
   "learning_rate_initial_candidate": 0.0001,
   "gradient_checkpointing": true,
   "packing": false,
+  "curriculum_priority": {
+    "primary": "existing AURA Forma design schema, vocabulary and actions; compiled studio edits and atelier overrides",
+    "auxiliary_only": "geometry-v1 rounded-plate exercises",
+    "before_gpu_pilot": "Build and replay real Forma edit examples through runtime validation; geometry-v1 alone is not an AURA training readiness gate",
+    "contract": "outputs/qwen-local/studio-contract.json",
+    "units": "Forma mm; legacy design-tools cm schema kept separate"
+  },
   "vision_encoder_training_in_first_text_pilot": false,
   "benchmark": {
     "warmup_optimizer_steps": 10,

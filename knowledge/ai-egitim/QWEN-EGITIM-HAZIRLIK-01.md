@@ -4,6 +4,10 @@
 sonrası model yerelde kullanılacak. Sürekli sunucu ya da uzaktan servis planlanmıyor.
 Bu hazırlık yerel işlemciye model yüklemez, GPU kiralamaz ve eğitim başlatmaz.
 
+**Öncelik düzeltmesi:** [QWEN-STUDYO-BAGLANTISI](QWEN-STUDYO-BAGLANTISI.md).
+Asıl veri mevcut stüdyonun şema/işlem/derleme akışından gelecek. geometry-v1
+yardımcı alıştırmadır; gerçek stüdyo geri oynatma denetimi GPU pilotundan önce gelir.
+
 ## Eğitim seçimi
 
 Qwen/Qwen3.5-9B üzerinde BF16 LoRA, rank 16, alpha 16. İlk metin pilotunda görsel
