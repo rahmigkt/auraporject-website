@@ -54,3 +54,44 @@ GPU pilotundan önce gerçek stüdyo düzenleme örneklerinin geri oynatılması
 doğrulanması tamamlanacak. Önceki 1000 basit şekil kaydı ana veri olarak sunulmaz.
 `assets/` bu PR'da değişmez; sonraki entegrasyon için gerekirse ayrıca kapsamı
 açık bir stüdyo PR'ı hazırlanır.
+
+## Stüdyo da gelişecek — sabit bir araç listesine kilitlenmeyecek
+
+Karar sahibi ek kararı: Qwen mevcut stüdyoyu öğrenirken stüdyo da yeni geometri,
+düzenleme araçları ve ürün aileleriyle geliştirilecek. Bugünkü yapı buna kısmen
+uygun: `FAMILIES` aile modüllerini bir araya getiriyor; geometri tanımları,
+malzemeler ve `overrides` ayrı katmanlar. Fakat yeni geometri türleri `build.js`,
+yeni düzenleme araçları `overrides.js` içinde açık dallar gerektiriyor; tarayıcı
+işlem uygulaması da `studio.js` içinde bağlı. Dolayısıyla modüler bir temel var,
+tam bir eklenti sistemi veya her yeni aracı otomatik öğrenen model henüz yok.
+
+Geliştirme sözleşmesi:
+
+1. **Ortak araç tanımı:** her aracın sabit kimliği, sürümü, desteklenen parça/aile,
+   parametreleri, birimi, kısıtları, uygulama ve doğrulama işlevleri tanımlanır.
+   Arayüz, Qwen'e verilen yetenek listesi ve veri üreticisi aynı tanımdan beslenir.
+   İlk öncelik, tarayıcı işlem uygulamasını test edilebilir ortak çekirdeğe ayırmaktır.
+2. **Sürümlü belgeler ve yetenekler:** kayıtlı tasarım şeması, işlem sözleşmesi ve
+   model uyumluluğu ayrı sürümlenir. Eski projeler için açık göç işlemleri ve
+   yeniden açma testleri gerekir. Bilinmeyen işlem sessizce başka işleme dönüşmez.
+3. **Yeni araç önce stüdyoda:** yeni eğri, kenar profili, sweep, birleşim veya ürün
+   ailesi önce motor, önizleme, geri al/yinele ve kaydet/aç ile çalışır; yalnız
+   planlanan araç modelin kullanılabilir sözlüğüne eklenmez. Üretim çıktısını
+   etkiliyorsa çizim, DXF/BOM ve parça kimliği bağlantıları da sınanır.
+4. **Birlikte güncellenen eğitim:** çalışan yeni aracın doğru/hatalı/düzeltilmiş
+   örnekleri ve görüntüleri üretilir; veri kaydı motor/araç sürümünü taşır. Önce
+   mevcut Qwen'in güncel sözlükle aracı kullanması ölçülür. Yetmiyorsa yalnız bu
+   beceri için kısa adaptasyon ve eski becerileri koruyan karışım yapılır.
+   Her stüdyo değişikliği yeniden eğitim gerektirmez; renk seçeneği ile yepyeni
+   geometri işlemi aynı büyüklükte iş sayılmaz.
+5. **Model önerir, kodu onaylı geliştirme süreci değiştirir:** Qwen'in çalışma
+   anında sitenin JavaScript'ini değiştirmesi veya serbest kod çalıştırması yoktur.
+   Desteklenmeyen istekler kişisel veri içermeyen yetenek açığı örnekleri olarak
+   incelenebilir; gerçek müşteri/tasarımcı kayıtları ancak ayrıca açık rızayla alınır.
+
+İlk uygulama sırası: ortak işlem çekirdeği ve tarayıcı geri oynatma → sürümlü araç
+tanımları/uyumluluk testi → mevcut stüdyodan veri → küçük Qwen pilotu. Yeni araçlar
+ihtiyaca göre ayrı, denetlenebilir PR'larla eklenir. Stüdyo geliştirme işi veri
+üretiminin tamamlanmasını veya uzun bir model eğitimini beklemek zorunda değildir.
+Bu bölüm mimari plandır; eklenti sistemi, sürüm göçleri ve yeni araçlar bu hazırlık
+PR'ında uygulanmış değildir. `assets/` değişmedi.

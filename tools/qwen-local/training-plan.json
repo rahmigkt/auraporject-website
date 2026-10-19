@@ -15,6 +15,16 @@
   "learning_rate_initial_candidate": 0.0001,
   "gradient_checkpointing": true,
   "packing": false,
+  "studio_evolution": {
+    "status": "planned_not_implemented",
+    "principle": "Evolve the studio and local model together; existing tools are a starting point, not a permanent capability ceiling",
+    "first_implementation": "Extract shared testable action application and browser replay before introducing a tool registry",
+    "shared_tool_descriptor": ["id", "version", "supported_parts_and_families", "parameter_schema", "units", "constraints", "apply", "validate"],
+    "compatibility": ["Version design documents and tools separately", "Explicit migrations for saved projects", "Record motor and tool versions in datasets", "Reject unsupported operations"],
+    "new_tool_gate": ["Runtime implementation", "Preview and undo/redo", "Save/load compatibility", "Geometry checks", "Production export checks when affected", "Synthetic edit and repair examples", "Base model evaluation before any new training"],
+    "retraining": "Only if measured capability gap remains; short adaptation with old-skill regression checks",
+    "runtime_code_modification_by_model": false
+  },
   "curriculum_priority": {
     "primary": "existing AURA Forma design schema, vocabulary and actions; compiled studio edits and atelier overrides",
     "auxiliary_only": "geometry-v1 rounded-plate exercises",
