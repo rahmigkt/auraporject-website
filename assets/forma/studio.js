@@ -185,7 +185,7 @@ function shell() {
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261019t').then(mod => { sceneModule = mod; const {createViewer} = mod;
+  import('./scene.js?v=20261020a').then(mod => { sceneModule = mod; const {createViewer} = mod;
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(shown(), state.design.materials); if (state.room) showRoom(); }
@@ -571,7 +571,7 @@ function fabricSection(f) {
   <h3>2 · ${L('color')}</h3>${swatches('data-color="fabric.color" data-value', f.color)}
   ${canPattern ? `<h3>3 · ${L('pattern')}</h3><div class="f-chips">${Object.keys(PATTERNS).map(k => chip(`data-mat="fabric.pattern" data-value="${k}"`, N(PATTERNS[k]), f.pattern === k)).join('')}</div>` : ''}
   ${motifs ? `<h3>${L('motif')}</h3><div class="f-chips">${motifs.map(k => chip(`data-mat="fabric.motif" data-value="${k}"`, N(MOTIF_NAMES[k]), f.motif === k)).join('')}</div>` : ''}
-  ${canPattern && f.pattern !== 'none' ? `<h3>4 · ${L('density')}</h3><div class="f-slider"><label for="r-density">${L('sparse')} ↔ ${L('dense')}</label><input type="range" id="r-density" data-fabric-density min="1" max="6" step="1" value="${f.density}"><span class="f-num">${f.density} / 6</span></div>
+  ${canPattern && f.pattern !== 'none' ? `<h3>4 · ${L('density')}</h3><div class="f-slider"><label for="r-density">${L('sparse')} ↔ ${L('dense')}</label><input type="range" id="r-density" data-fabric-density min="1" max="12" step="1" value="${f.density}"><span class="f-num">${f.density} / 12</span></div>
   <h3>${L('color2')}</h3>${swatches('data-color="fabric.color2" data-value', f.color2)}` : ''}`;
 }
 const fabricPreview = (f, label) => `<div class="f-fabric-preview"><div class="f-swatchpair"><figure><canvas id="fabricMacro" width="320" height="320" aria-label="${esc(label)}"></canvas><figcaption>${L('macro')}</figcaption></figure><figure><canvas id="fabricPreview" width="320" height="320" aria-label="${esc(label)}"></canvas><figcaption id="tileNote"></figcaption></figure></div><div><p class="f-eyebrow">${esc(label)}</p><p class="f-fabric-name">${esc(N(FIBERS[f.fiber]))}${FIBERS[f.fiber].weave ? ' · ' + esc(N(WEAVE_NAMES[f.weave])) : ''}<br>${esc(N(COLORS[f.color]))}${f.pattern !== 'none' ? ' · ' + esc(N(PATTERNS[f.pattern])) + (f.motif ? ' (' + esc(N(MOTIF_NAMES[f.motif])) + ')' : '') : ''}</p></div></div>`;
@@ -600,7 +600,7 @@ function seatingMaterialPanel() {
   <h3>2 · ${L('color')}</h3>${swatches('data-color="fabric.color" data-value', f.color)}
   ${canPattern ? `<h3>3 · ${L('pattern')}</h3><div class="f-chips">${Object.keys(PATTERNS).map(k => chip(`data-mat="fabric.pattern" data-value="${k}"`, N(PATTERNS[k]), f.pattern === k)).join('')}</div>` : ''}
   ${motifs ? `<h3>${L('motif')}</h3><div class="f-chips">${motifs.map(k => chip(`data-mat="fabric.motif" data-value="${k}"`, N(MOTIF_NAMES[k]), f.motif === k)).join('')}</div>` : ''}
-  ${canPattern && f.pattern !== 'none' ? `<h3>4 · ${L('density')}</h3><div class="f-slider"><label for="r-density">${L('sparse')} ↔ ${L('dense')}</label><input type="range" id="r-density" data-fabric-density min="1" max="6" step="1" value="${f.density}"><span class="f-num">${f.density} / 6</span></div>
+  ${canPattern && f.pattern !== 'none' ? `<h3>4 · ${L('density')}</h3><div class="f-slider"><label for="r-density">${L('sparse')} ↔ ${L('dense')}</label><input type="range" id="r-density" data-fabric-density min="1" max="12" step="1" value="${f.density}"><span class="f-num">${f.density} / 12</span></div>
   <h3>${L('color2')}</h3>${swatches('data-color="fabric.color2" data-value', f.color2)}` : ''}
   ${state.design.params.welt !== 'none' || state.design.params.pillows ? `<h3>${L('weltColor')}</h3>${swatches('data-color="welt.color" data-value', m.welt.color, {includeNone: true, groups: false})}` : ''}
   <h3>${L('wood')} · ${esc(N(WOODS[m.wood.species]))}</h3><p class="f-note">${L('woodNote')}</p>

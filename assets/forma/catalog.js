@@ -35,17 +35,22 @@ export const WEAVE_NAMES = {
 
 export const PATTERNS = {
   none: {tr: 'Düz', en: 'Solid', de: 'Uni', fr: 'Uni', nl: 'Effen', da: 'Ensfarvet', es: 'Liso', it: 'Tinta unita'},
-  floral: {tr: 'Çiçekli', en: 'Floral', de: 'Blumen', fr: 'Fleuri', nl: 'Bloemen', da: 'Blomstret', es: 'Floral', it: 'Floreale', motif: true},
-  polka: {tr: 'Puantiyeli', en: 'Polka dot', de: 'Punkte', fr: 'Pois', nl: 'Stippen', da: 'Prikket', es: 'Lunares', it: 'Pois'},
-  leaf: {tr: 'Yaprak', en: 'Leaf', de: 'Blätter', fr: 'Feuillage', nl: 'Bladeren', da: 'Blade', es: 'Hojas', it: 'Foglie', motif: true},
-  geometric: {tr: 'Geometrik', en: 'Geometric', de: 'Geometrisch', fr: 'Géométrique', nl: 'Geometrisch', da: 'Geometrisk', es: 'Geométrico', it: 'Geometrico'},
   stripe: {tr: 'Çizgili', en: 'Stripe', de: 'Streifen', fr: 'Rayé', nl: 'Streep', da: 'Stribet', es: 'Rayas', it: 'Righe'},
+  pinstripe: {tr: 'İnce çizgi (pinstripe)', en: 'Pinstripe', de: 'Nadelstreifen', fr: 'Rayure tennis', nl: 'Krijtstreep', da: 'Nålestribe', es: 'Raya diplomática', it: 'Gessato'},
   check: {tr: 'Pötikare', en: 'Gingham check', de: 'Vichy-Karo', fr: 'Vichy', nl: 'Boerenbont ruit', da: 'Tern', es: 'Vichy', it: 'Quadretto vichy'},
+  buffalo: {tr: 'Büyük kare (oduncu)', en: 'Buffalo check', de: 'Büffelkaro', fr: 'Carreaux bûcheron', nl: 'Buffalo-ruit', da: 'Buffalo-tern', es: 'Cuadro búfalo', it: 'Quadro buffalo'},
+  windowpane: {tr: 'Pencere kare', en: 'Windowpane check', de: 'Fensterkaro', fr: 'Carreau fenêtre', nl: 'Windowpane-ruit', da: 'Vinduestern', es: 'Cuadro ventana', it: 'Quadro finestra'},
   plaid: {tr: 'Ekose', en: 'Plaid', de: 'Schottenkaro', fr: 'Écossais', nl: 'Schotse ruit', da: 'Skotskternet', es: 'Escocés', it: 'Scozzese'},
   houndstooth: {tr: 'Kazayağı', en: 'Houndstooth', de: 'Hahnentritt', fr: 'Pied-de-poule', nl: 'Pied-de-poule', da: 'Hanefod', es: 'Pata de gallo', it: 'Pied de poule'},
   chevron: {tr: 'Zikzak', en: 'Chevron', de: 'Zickzack', fr: 'Zigzag', nl: 'Zigzag', da: 'Zigzag', es: 'Zigzag', it: 'Zigzag'},
-  damask: {tr: 'Damask', en: 'Damask', de: 'Damast', fr: 'Damassé', nl: 'Damast', da: 'Damask', es: 'Damasco', it: 'Damasco', motif: true}
+  argyle: {tr: 'Baklava (argyle)', en: 'Argyle', de: 'Argyle-Raute', fr: 'Losanges argyle', nl: 'Argyle', da: 'Argyle', es: 'Rombos argyle', it: 'Argyle'},
+  trellis: {tr: 'Kafes (trellis)', en: 'Trellis', de: 'Gitter', fr: 'Treillage', nl: 'Latwerk', da: 'Espalier', es: 'Celosía', it: 'Traliccio'},
+  polka: {tr: 'Puantiyeli', en: 'Polka dot', de: 'Punkte', fr: 'Pois', nl: 'Stippen', da: 'Prikket', es: 'Lunares', it: 'Pois'},
+  geometric: {tr: 'Geometrik', en: 'Geometric', de: 'Geometrisch', fr: 'Géométrique', nl: 'Geometrisch', da: 'Geometrisk', es: 'Geométrico', it: 'Geometrico'},
+  tweed: {tr: 'Tüvit (benekli)', en: 'Tweed fleck', de: 'Tweed', fr: 'Tweed moucheté', nl: 'Tweed', da: 'Tweed', es: 'Tweed', it: 'Tweed'}
 };
+/** Old pattern ids (project-specific ornament motifs, withdrawn) open as the nearest market pattern. */
+const PATTERN_ALIASES = {floral: 'trellis', leaf: 'trellis', damask: 'trellis'};
 
 /** Ornament motifs for floral / leaf / damask patterns, taken from the NAKIŞ motif library. */
 export const MOTIF_CHOICES = {
@@ -207,9 +212,10 @@ export function normalizeMaterials(m = {}) {
   if (!WEAVES[f.weave]) f.weave = 'plain';
   if (!COLORS[f.color]) f.color = 'cream';
   if (!COLORS[f.color2]) f.color2 = 'charcoal';
+  if (PATTERN_ALIASES[f.pattern]) f.pattern = PATTERN_ALIASES[f.pattern];
   if (!PATTERNS[f.pattern] || HIDES.includes(f.fiber)) f.pattern = 'none'; // hides take no printed pattern
   f.scale = Math.min(3, Math.max(0.5, Number(f.scale) || 1));
-  f.density = Math.min(6, Math.max(1, Math.round(Number(f.density) || 3)));
+  f.density = Math.min(12, Math.max(1, Math.round(Number(f.density) || 3))); // 1 very sparse … 12 very dense
   const motifs = MOTIF_CHOICES[f.pattern];
   f.motif = motifs ? (motifs.includes(f.motif) ? f.motif : motifs[0]) : null;
   const w = {...DEFAULT_MATERIALS.wood, ...(m.wood || {})};

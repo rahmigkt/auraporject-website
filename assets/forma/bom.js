@@ -46,7 +46,7 @@ function meshArea(m) {
 
 function materialText(mat, materials, lang) {
   const f = materials.fabric, tr = lang === 'tr', n = e => (tr ? e.tr : e.en);
-  if (mat === 'fabric') return `${n(FIBERS[f.fiber])} · ${FIBERS[f.fiber].weave ? n(WEAVE_NAMES[f.weave]) + ' · ' : ''}${n(COLORS[f.color])}${f.pattern !== 'none' ? ' · ' + n(PATTERNS[f.pattern]) + (f.motif ? ' (' + n(MOTIF_NAMES[f.motif]) + ')' : '') + ' / ' + n(COLORS[f.color2]) + ' · ' + (tr ? 'sıklık ' : 'density ') + f.density + '/6' : ''}`;
+  if (mat === 'fabric') return `${n(FIBERS[f.fiber])} · ${FIBERS[f.fiber].weave ? n(WEAVE_NAMES[f.weave]) + ' · ' : ''}${n(COLORS[f.color])}${f.pattern !== 'none' ? ' · ' + n(PATTERNS[f.pattern]) + (f.motif ? ' (' + n(MOTIF_NAMES[f.motif]) + ')' : '') + ' / ' + n(COLORS[f.color2]) + ' · ' + (tr ? 'sıklık ' : 'density ') + f.density + '/12' : ''}`;
   if (mat === 'welt') return `${n(FIBERS[f.fiber])} · ${n(COLORS[materials.welt.color || f.color2])}`;
   if (mat === 'wood') return woodText(materials.wood, lang);
   if (mat === 'metal') return n(METALS[materials.metal.finish]);

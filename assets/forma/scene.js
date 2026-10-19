@@ -198,7 +198,7 @@ function bedroomMaterialSet(materials, {detail = true, onReady} = {}) {
   const L = COLORS[materials.linen?.color] || COLORS.white;
   set.linen = new THREE.MeshPhysicalMaterial({color: hexColor(L.hex), roughness: 0.92, sheen: 0.5, sheenRoughness: 0.85, sheenColor: hexColor(L.hex).lerp(new THREE.Color('#fff'), 0.4)});
   set.leather = new THREE.MeshPhysicalMaterial({color: '#6b4428', roughness: 0.55, clearcoat: 0.2});
-  set.mirror = new THREE.MeshPhysicalMaterial({color: '#e6ecee', metalness: 0.9, roughness: 0.03, envMapIntensity: 1.4});
+  set.mirror = new THREE.MeshPhysicalMaterial({color: '#dfe6e8', metalness: 0.5, roughness: 0.06, clearcoat: 1, clearcoatRoughness: 0.02, envMapIntensity: 1.6});
   set.shadow = new THREE.MeshStandardMaterial({color: '#191714', roughness: 1});
   set.cane = new THREE.MeshStandardMaterial({color: '#d6b880', roughness: 0.6, side: THREE.DoubleSide});
   roomMaterials(set, materials, detail, jobs);
@@ -226,7 +226,7 @@ function storageMaterialSet(materials, {detail = true, onReady} = {}) {
   set.metal = new THREE.MeshPhysicalMaterial({color: hexColor(M.hex), metalness: 1, roughness: M.rough});
   set.dark = new THREE.MeshStandardMaterial({color: '#1d1c1a', roughness: 0.8});
   set.frame = new THREE.MeshStandardMaterial({color: '#e2cfa9', roughness: 0.8});
-  set.mirror = new THREE.MeshPhysicalMaterial({color: '#e6ecee', metalness: 0.9, roughness: 0.03, envMapIntensity: 1.4});
+  set.mirror = new THREE.MeshPhysicalMaterial({color: '#dfe6e8', metalness: 0.5, roughness: 0.06, clearcoat: 1, clearcoatRoughness: 0.02, envMapIntensity: 1.6});
   const G = GLASS[materials.glass?.glass] || GLASS.clear;
   set.glass = new THREE.MeshPhysicalMaterial({color: hexColor(G.hex), roughness: materials.glass?.glass === 'frosted' ? 0.55 : 0.04, transparent: true, opacity: 0.22 + G.opacity * 0.8, clearcoat: 1, clearcoatRoughness: 0.03, depthWrite: false});
   set.leather = new THREE.MeshPhysicalMaterial({color: '#6b4428', roughness: 0.55, clearcoat: 0.2});
