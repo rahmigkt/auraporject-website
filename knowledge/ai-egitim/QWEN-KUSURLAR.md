@@ -9,7 +9,7 @@ Altyapı düzeltmesi, modelin aynı kusuru kapattığı anlamına gelmez.
 | Q02-002 | Pilot 01: sayısal örneği kopyalayan yanlış delta | Açık | Yeni tur ve kapalı test kanıtı yok |
 | Q02-003 | Eski veri, değişmiş stüdyo kaynaklarına bağlı | Açık | Yeni kaynak parmak izi ve bayat işareti var; eski adaptör yeniden kullanılabilir sayılmıyor |
 | Q02-004 | İç parametre adları doğal dil sayılıyor | Açık | Yeni havuzda gerçek TR/EN etiketli çekirdek ve ayrıca açıkça işaretli teknik örnekler var; çoğu parametrenin insan dilinde karşılığı eksik |
-| Q02-005 | İnsan onaylı etiket ve estetik veri yok | Açık | 40 aday inceleme paketi; onay gelmeden reviewed yapılmaz |
+| Q02-005 | İnsan onaylı etiket ve estetik veri yok | Kısmen giderildi | Karar sahibi 19 Ekim'de okuma.html'deki 40 adayın tamamını onayladı; kimlikler ve paket hash'i human-approval.json'da, ayrı reviewed-40.jsonl ihracı var. Kalan havuz onaysız; estetik veri onayı iddiası yok |
 | Q02-006 | Gerçek tarayıcı yolu yerine VM tekrarına dayanılıyordu | Açık | Yerel HTTP yanıtına yalnız test kancası ekleyen tarayıcı tekrarı hazır; bütün havuzda kanıt bekleniyor |
 | Q02-007 | İş emri ≈24 GB GPU varsayıyor; bu makinede GPU yok | Engelli | Karar sahibi doğruladı: GPU yok, 36 GB RAM var. Iris Xe görüntü bağdaştırıcısı CUDA eğitim GPU'su değildir. Yerel model eğitimi başlamadı; kiralık GPU kullanılmayacak |
 | Q02-008 | Aynı kapalı sınav / dayanıklılık / TR / netleştirme / ret / gerileme ölçümü yok | Açık | Aday havuzu sınav değildir; insan denetimli sürümlü sınav dondurulmalı, önceki turlar aynı sınavda yeniden ölçülmeli |

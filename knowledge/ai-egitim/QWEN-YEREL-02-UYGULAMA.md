@@ -38,6 +38,12 @@ aynı kaynaklardan yeniden üretilir, manifest hash'i ve 40'lık kanıt paketi s
 
 ## Eğitim engeli ve kalanlar
 
+19 Ekim güncellemesi: Karar sahibi okuma.html'deki 40 adayın tamamını
+"hepsi doğru onaylıyorum" diyerek onayladı. İlk paket değiştirilmeden korundu;
+`human-approval.json` özgün paket/görüntü hash'lerini ve 40 kimliği bağlar.
+`reviewed-40.jsonl` yalnız bu onaylı örneklerin ayrı ihracıdır. Kalan 1.430 aday
+onaysızdır. Bu kayıt eğitim, sunucu kiralama veya estetik model başarısı onayı değildir.
+
 Yerel donanım sorgusunda yalnız Intel Iris Xe göründü; NVIDIA/CUDA aracı yok.
 Karar sahibi ayrıca doğruladı: **GPU yok, 36 GB RAM var.** İş emrindeki yaklaşık
 24 GB CUDA GPU varsayımı geçersizdir. 9B LoRA'yı CPU'da birkaç saatlik tur diye
