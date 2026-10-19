@@ -40,7 +40,7 @@ for file in sorted(Path(args.input).resolve().glob('*.glb')):
      if obj.get('materialKey') in ['fabric','welt','stitch','mattress','bedding']:continue
      bsdf=next((n for n in mat.node_tree.nodes if n.type=='BSDF_PRINCIPLED'),None)
      if bsdf:
-      bevel=mat.node_tree.nodes.new('ShaderNodeBevel');bevel.inputs['Radius'].default_value=.0007;bevel.samples=4
+      bevel=mat.node_tree.nodes.new('ShaderNodeBevel');bevel.inputs['Radius'].default_value=.0007;bevel.samples=2
       # Preserve material normal-map input by feeding it into the bevel node.
       links=list(bsdf.inputs['Normal'].links)
       if links:mat.node_tree.links.new(links[0].from_socket,bevel.inputs['Normal'])

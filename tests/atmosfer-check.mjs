@@ -22,6 +22,13 @@ for(const {id,design:d} of fixtures){
   assert.equal(stage.camera.userData.focalLengthMm,55);assert(stage.scene.environment.isTexture);
   assert(Math.abs(stage.camera.position.y-stage.camera.userData.target[1])<1e-8,'Upright camera prevents converging verticals');
   assert.equal(stage.room.floor,'wood');
+  const verticalBottom=new THREE.Vector3(stage.bounds.max.x,stage.bounds.min.y,stage.bounds.max.z).project(stage.camera);
+  const verticalTop=new THREE.Vector3(stage.bounds.max.x,stage.bounds.max.y,stage.bounds.max.z).project(stage.camera);
+  assert(Math.abs(verticalBottom.x-verticalTop.x)<1e-8,`${id}: verticals converge`);
+  const rayDirection=new THREE.Vector3(1,0,.5).unproject(stage.camera).sub(stage.camera.position).normalize();
+  const rearHit=stage.camera.position.clone().addScaledVector(rayDirection,(stage.room.rear-stage.camera.position.z)/rayDirection.z);
+  const backdropBounds=new THREE.Box3().setFromObject(stage.scene.getObjectByName('catalog-backdrop'));
+  assert(rearHit.x<backdropBounds.max.x,`${id}: backdrop ends inside frame`);
   assert(stage.camera.position.y<stage.room.height,`${id}: camera above ceiling`);
   let area=0,directional=0;stage.scene.traverse(o=>{if(o.isRectAreaLight)area++;if(o.isDirectionalLight&&o.castShadow)directional++;});
   assert.equal(area,2);assert.equal(directional,1);

@@ -60,8 +60,10 @@ export function createAtmosphereStage(THREE,product,{family='seating',preset='no
   const groundPosition=ground.geometry.getAttribute('position'),groundUv=ground.geometry.getAttribute('uv');
   for(let i=0;i<groundPosition.count;i++)groundUv.setXY(i,groundPosition.getX(i),groundPosition.getZ(i));
   groundUv.needsUpdate=true;
-  box(width,height,.12,0,height/2,rear-.06,plaster);
-  box(width,.09,.018,0,.045,rear+.009,trim);
+  // Extend the photographic backdrop beyond the open right edge of the room.
+  // Nominal room/window dimensions still follow the product, not this overscan.
+  const backdrop=box(width+4,height,.12,2,height/2,rear-.06,plaster);backdrop.name='catalog-backdrop';
+  box(width+4,.09,.018,2,.045,rear+.009,trim);
   box(.018,.09,12,left+.009,.045,rear+6,trim);
   // A real opening in the side wall, not an image composited over a closed wall.
   const windowZ=rear+2.0,windowW=2.2,sill=1.0,openingH=Math.min(2.2,height-1.25),front=rear+12;
