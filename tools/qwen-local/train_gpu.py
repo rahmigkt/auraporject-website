@@ -3,12 +3,29 @@ Unsloth/TRL integration is a candidate: real CUDA execution has not been verifie
 """
 import argparse
 import hashlib
-import inspect
 import json
 import os
 from pathlib import Path
 import statistics
 import time
+import math
+
+
+def response_features(processor, tokenizer, rows, max_length):
+    result = []
+    for row in rows:
+        if row['messages'][-1]['role'] != 'assistant':
+            raise ValueError('Training example must end with the target assistant answer')
+        prompt = processor.apply_chat_template(row['messages'][:-1], tokenize=False,
+            add_generation_prompt=True, enable_thinking=False)
+        prompt_ids = tokenizer(prompt, add_special_tokens=False)['input_ids']
+        target_ids = tokenizer(row['messages'][-1]['content'] + tokenizer.eos_token, add_special_tokens=False)['input_ids']
+        ids = prompt_ids + target_ids
+        if len(ids) > max_length:
+            raise ValueError('Context exceeded; split/review long examples instead of silently truncating')
+        result.append({'input_ids': ids, 'attention_mask': [1] * len(ids),
+                       'labels': [-100] * len(prompt_ids) + target_ids})
+    return result
 
 
 def main():
@@ -26,12 +43,14 @@ def main():
             parser.error(f'Frozen data hash mismatch: {name}')
     rows = [json.loads(line) for line in (args.data_dir / 'sft-unreviewed.jsonl').read_text(encoding='utf-8').splitlines() if line.strip()]
     training_ids = {json.loads(line)['id'] for line in (args.data_dir / 'train.jsonl').read_text(encoding='utf-8').splitlines() if line.strip()}
-    if len(rows) != 1000 or len({r['id'] for r in rows}) != 1000 or any(r['id'] not in training_ids for r in rows):
-        parser.error('Expected exactly 1000 unique training-only exercise rows')
+    expected_count = manifest['counts']['train']
+    if not rows or len(rows) != expected_count or len({r['id'] for r in rows}) != expected_count or any(r['id'] not in training_ids for r in rows):
+        parser.error('Expected unique training-only rows matching the frozen manifest')
+    pilot_steps = min(250, math.ceil(len(rows) / 8) * 2)
     if not args.execute:
         print(json.dumps({'status': 'prepared_not_executed', 'rows': len(rows), 'model': plan['model'],
-                          'benchmark_steps': 30, 'pilot_max_steps': 250, 'epochs': 2,
-                          'method': plan['method'], 'gpu_required': True, 'cuda_integration_verified': False}, indent=2))
+                          'benchmark_steps': 30, 'pilot_max_steps': pilot_steps, 'epochs': 2,
+                          'method': plan['method'], 'gpu_required': True, 'preparation_does_not_test_cuda': True}, indent=2))
         return
     if not args.experimental_unreviewed:
         parser.error('Exercise labels are unreviewed; experimental execution requires --experimental-unreviewed')
@@ -43,25 +62,28 @@ def main():
     os.environ['HF_HUB_OFFLINE'] = '1'
     os.environ['TRANSFORMERS_OFFLINE'] = '1'
     os.environ['WANDB_DISABLED'] = 'true'
+    os.environ['UNSLOTH_DISABLE_STATISTICS'] = '1'
+    # Avoid the initial region-compile cost for short numeric pilots; caller can opt back in.
+    os.environ.setdefault('UNSLOTH_COMPILE_DISABLE', '1')
     from unsloth import FastVisionModel
     import torch
     from datasets import Dataset
-    from transformers import TrainerCallback
-    from trl import SFTTrainer, SFTConfig
+    from transformers import TrainerCallback, Trainer, TrainingArguments, DataCollatorForSeq2Seq
     if not torch.cuda.is_available() or not torch.cuda.is_bf16_supported():
         parser.error('A BF16-capable CUDA GPU is required; CPU execution is refused')
     if torch.cuda.device_count() != 1 or torch.cuda.get_device_properties(0).total_memory < 40 * 1024**3:
         parser.error('This experiment requires one visible GPU with at least 40 GiB VRAM')
     model, processor = FastVisionModel.from_pretrained(str(args.model_dir), dtype=torch.bfloat16,
-        load_in_4bit=False, use_gradient_checkpointing='unsloth', local_files_only=True)
+        load_in_4bit=False, max_seq_length=plan['max_sequence_length'], use_gradient_checkpointing='unsloth', local_files_only=True)
     model = FastVisionModel.get_peft_model(model, finetune_vision_layers=False,
         finetune_language_layers=True, finetune_attention_modules=True, finetune_mlp_modules=True,
         r=16, lora_alpha=16, lora_dropout=0, bias='none', random_state=3407)
     FastVisionModel.for_training(model)
     tokenizer = processor.tokenizer if hasattr(processor, 'tokenizer') else processor
-    texts = [processor.apply_chat_template(r['messages'], tokenize=False, add_generation_prompt=False,
-                                          enable_thinking=False) for r in rows]
-    lengths = [len(tokenizer(t, add_special_tokens=False)['input_ids']) for t in texts]
+    if tokenizer.pad_token_id is None:
+        tokenizer.pad_token = tokenizer.eos_token
+    features = response_features(processor, tokenizer, rows, plan['max_sequence_length'])
+    lengths = [len(f['input_ids']) for f in features]
     if max(lengths) > plan['max_sequence_length']:
         parser.error('Context exceeded; split/review long examples instead of silently truncating')
     args.output.mkdir(parents=True)
@@ -97,18 +119,13 @@ def main():
             return control
 
     config = dict(output_dir=str(args.output / 'checkpoints'), per_device_train_batch_size=1,
-        gradient_accumulation_steps=8, num_train_epochs=2, max_steps=30 if args.execute == 'benchmark' else 250,
+        gradient_accumulation_steps=8, num_train_epochs=2, max_steps=30 if args.execute == 'benchmark' else pilot_steps,
         learning_rate=1e-4, warmup_steps=10, logging_steps=1, save_steps=50, save_total_limit=2,
-        bf16=True, fp16=False, optim='adamw_8bit', seed=3407, packing=False,
-        dataset_text_field='text', dataset_num_proc=1, report_to='none')
-    # TRL versions differ in the name of this argument. Fail rather than drop the cap.
-    fields = inspect.signature(SFTConfig).parameters
-    length_key = 'max_length' if 'max_length' in fields else 'max_seq_length' if 'max_seq_length' in fields else None
-    if length_key is None:
-        parser.error('Unsupported TRL sequence-length API; verify GPU environment')
-    config[length_key] = plan['max_sequence_length']
-    trainer = SFTTrainer(model=model, processing_class=tokenizer, train_dataset=Dataset.from_dict({'text': texts}),
-        args=SFTConfig(**config), callbacks=[Timing()])
+        bf16=True, fp16=False, optim='adamw_8bit', seed=3407, report_to='none')
+    # Plain Trainer avoids treating text-only records as image batches; only assistant tokens carry loss.
+    trainer = Trainer(model=model, processing_class=tokenizer, train_dataset=Dataset.from_list(features),
+        data_collator=DataCollatorForSeq2Seq(tokenizer=tokenizer, padding=True, label_pad_token_id=-100, pad_to_multiple_of=8),
+        args=TrainingArguments(**config), callbacks=[Timing()])
     trainer.train()
     model.save_pretrained(str(args.output / 'adapter'))
     processor.save_pretrained(str(args.output / 'adapter'))

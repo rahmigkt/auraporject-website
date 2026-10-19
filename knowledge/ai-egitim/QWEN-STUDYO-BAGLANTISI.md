@@ -95,3 +95,24 @@ ihtiyaca göre ayrı, denetlenebilir PR'larla eklenir. Stüdyo geliştirme işi 
 üretiminin tamamlanmasını veya uzun bir model eğitimini beklemek zorunda değildir.
 Bu bölüm mimari plandır; eklenti sistemi, sürüm göçleri ve yeni araçlar bu hazırlık
 PR'ında uygulanmış değildir. `assets/` değişmedi.
+
+## İlk gerçek motor pilotu (2026-10-19)
+
+`studio_data.mjs`, sabitlenmiş `studio.js` dosyasındaki gerçek `applyActions`
+işlevini VM içinde, arayüz yan etkilerini taklit ederek yürütür. Çıktı yine gerçek
+`normalizeDesign`, `compileDesign` ve ağ üretiminden geçer. Bu tarayıcı tıklama
+testi veya ortak işlem çekirdeğinin çıkarılmış hali değildir; kaynak işlevini
+yeniden elle yazmadan ilk sayısal eğitim örneklerini doğrulamak içindir.
+
+İlk küme 196 train / 40 dev / 40 test içerir; beş ailede set/delta örnekleri.
+Başka ölçüleri de değiştiren dört tabla örneği reddedilmiştir. Kaynak sürümü ve
+hash'leri `studio-source-lock.json` içinde sabittir; canlı sitenin eşzamanlı
+geliştirmeleri bu koşuya taşınmaz. Genel geometri alıştırmaları ana eğitim değildir.
+
+Pilot en çok 50 adım ve yalnız yanıt tokenlarında kayıp kullanır. Ham taban
+cevaplarında beklenen `type/key/value` yerine `action/params` biçimi görüldüğü
+için dev üstünde ayrıca açık şema istem kontrolü hazırlanmıştır. Bu kontrol ilk
+dev sonucu görüldükten sonra hazırlanmış keşiftir; önkayıtlı bağımsız sınav sonucu
+olarak sunulmaz. Test bölümü model değerlendirmesi için açılmaz. Böylece basit
+istem düzeltmesiyle elde edilebilecek kazanım, modelin tasarım yeteneği kazanımı
+gibi raporlanmaz. Gerçek GPU sonuçları ayrıca kayıt altına alınacaktır.

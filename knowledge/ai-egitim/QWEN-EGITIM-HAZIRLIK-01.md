@@ -109,6 +109,14 @@ yerel diske alınır. Adaptör birleştirme ve GGUF çıktısı yerelde kullanı
 korunur. Kuantize çıktının komut/görsel becerileri tekrar sınanır. Kalıcı GPU
 hizmeti bu teslimin parçası değildir.
 
+## Tamamlanan ilk GPU denemesi
+
+19 Ekim'de gerçek stüdyo kaynaklarından hazırlanan 196 eğitim örneğiyle 50 adımlık
+BF16 LoRA denemesi tamamlandı. Sonuç, sınırlamalar ve kaynakların silinme kaydı:
+[QWEN-PILOT-01-RAPOR.md](QWEN-PILOT-01-RAPOR.md).
+Aşağıdaki genel geometri hazırlığı farklı bir veri kümesidir; tamamlanan GPU
+koşusu için `outputs/qwen-local/studio-v1/` ve `run-01/` esas alınmalıdır.
+
 ## Kısa deneme uygulaması
 
 ```sh
