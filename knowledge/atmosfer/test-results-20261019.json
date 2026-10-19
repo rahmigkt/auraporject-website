@@ -1,0 +1,233 @@
+{
+  "mainSha": "49be4f839508bab1d9791f0816e31a4bf450ece5",
+  "branchSourceSha": "6f110da939b923fa66f2e1be9cd3077cc3a22b35",
+  "rows": [
+    {
+      "test": "ai-workspace-check.mjs",
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 7.9,
+        "output": "PASS 3 imported home templates Ã— 14 furniture families: proposals do not mutate rooms, bounds, occupancy, edit exclusion, sliding-door clearance and sanitised restore.\n"
+      }
+    },
+    {
+      "test": "assistant-contract-check.mjs",
+      "branch": {
+        "status": "FAIL",
+        "exitCode": 1,
+        "seconds": 2.35,
+        "output": "node:internal/modules/esm/resolve:271\n    throw new ERR_MODULE_NOT_FOUND(\n          ^\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\services\\design\\style-training.mjs' imported from C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\atmosfer-01\\tests\\assistant-contract-check.mjs\n    at finalizeResolution (node:internal/modules/esm/resolve:271:11)\n    at moduleResolve (node:internal/modules/esm/resolve:865:10)\n    at defaultResolve (node:internal/modules/esm/resolve:992:11)\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)\n    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)\n    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)\n    at #resolve (node:internal/modules/esm/loader:683:17)\n    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)\n    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)\n    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {\n  code: 'ERR_MODULE_NOT_FOUND',\n  url: 'file:///C:/Users/User/Documents/Codex/2026-10-18/rahmigkt-auraporject-website-deposunda-main-i/work/services/design/style-training.mjs'\n}\n\nNode.js v24.18.0\n"
+      },
+      "main": {
+        "status": "FAIL",
+        "exitCode": 1,
+        "seconds": 1.56,
+        "output": "node:internal/modules/esm/resolve:271\n    throw new ERR_MODULE_NOT_FOUND(\n          ^\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\services\\design\\style-training.mjs' imported from C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\main61-baseline\\tests\\assistant-contract-check.mjs\n    at finalizeResolution (node:internal/modules/esm/resolve:271:11)\n    at moduleResolve (node:internal/modules/esm/resolve:865:10)\n    at defaultResolve (node:internal/modules/esm/resolve:992:11)\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)\n    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)\n    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)\n    at #resolve (node:internal/modules/esm/loader:683:17)\n    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)\n    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)\n    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {\n  code: 'ERR_MODULE_NOT_FOUND',\n  url: 'file:///C:/Users/User/Documents/Codex/2026-10-18/rahmigkt-auraporject-website-deposunda-main-i/work/services/design/style-training.mjs'\n}\n\nNode.js v24.18.0\n"
+      }
+    },
+    {
+      "test": "atmosfer-check.mjs",
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 2.15,
+        "output": "PASS atmosphere: 12 real designs, five active families, preserved dimensions/mount heights, 55 mm framing, room/window/lights, pre-abort, input validation, lazy studio boundary.\n",
+        "note": "Rerun after final backdrop and upright-camera checks."
+      }
+    },
+    {
+      "test": "brief-pdf-check.mjs",
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 2.58,
+        "output": "PASS brief PDF accepts no design and paginates long requests without invoking furniture drawing (mock canvas).\n"
+      }
+    },
+    {
+      "test": "camera-framing-check.mjs",
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.42,
+        "output": "PASS 243 perspective fits: all 3D envelope corners stay in frame.\n"
+      }
+    },
+    {
+      "test": "catalogue-check.mjs",
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.85,
+        "output": "PASS 11 spaces, 14 groups, 88 product types, 62 valid paths; no misleading drawing for unsupported products; saved-state migration and invalid cross-room choices.\n"
+      }
+    },
+    {
+      "test": "catalogue-graph-check.mjs",
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 1.0,
+        "output": "PASS 62 allowed and 13490 rejected space/group/product triples, migrations and context resets.\n"
+      }
+    },
+    {
+      "test": "choice-flow-check.mjs",
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.86,
+        "output": "PASS 463 option variants across 14 complete family flows; fixed seats, rounded/sloped arms, back variants, chaise, round tops, project hand-off.\nPASS continuous back support for 9 armless seating variants\n"
+      }
+    },
+    {
+      "test": "codesign-check.mjs",
+      "branch": {
+        "status": "FAIL",
+        "exitCode": 1,
+        "seconds": 0.65,
+        "output": "node:internal/modules/esm/resolve:271\n    throw new ERR_MODULE_NOT_FOUND(\n          ^\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\services\\design\\server.mjs' imported from C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\atmosfer-01\\tests\\codesign-check.mjs\n    at finalizeResolution (node:internal/modules/esm/resolve:271:11)\n    at moduleResolve (node:internal/modules/esm/resolve:865:10)\n    at defaultResolve (node:internal/modules/esm/resolve:992:11)\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)\n    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)\n    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)\n    at #resolve (node:internal/modules/esm/loader:683:17)\n    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)\n    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)\n    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {\n  code: 'ERR_MODULE_NOT_FOUND',\n  url: 'file:///C:/Users/User/Documents/Codex/2026-10-18/rahmigkt-auraporject-website-deposunda-main-i/work/services/design/server.mjs'\n}\n\nNode.js v24.18.0\n"
+      },
+      "main": {
+        "status": "FAIL",
+        "exitCode": 1,
+        "seconds": 1.03,
+        "output": "node:internal/modules/esm/resolve:271\n    throw new ERR_MODULE_NOT_FOUND(\n          ^\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\services\\design\\server.mjs' imported from C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\main61-baseline\\tests\\codesign-check.mjs\n    at finalizeResolution (node:internal/modules/esm/resolve:271:11)\n    at moduleResolve (node:internal/modules/esm/resolve:865:10)\n    at defaultResolve (node:internal/modules/esm/resolve:992:11)\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)\n    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)\n    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)\n    at #resolve (node:internal/modules/esm/loader:683:17)\n    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)\n    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)\n    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {\n  code: 'ERR_MODULE_NOT_FOUND',\n  url: 'file:///C:/Users/User/Documents/Codex/2026-10-18/rahmigkt-auraporject-website-deposunda-main-i/work/services/design/server.mjs'\n}\n\nNode.js v24.18.0\n"
+      }
+    },
+    {
+      "test": "forma-check.mjs",
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "note": "Completed full earlier run on these same engine sources; output retained here.",
+        "output": "PASS forma: 37 bathroom pieces (vanity units with top and basin, columns, mirrors, mirror cabinets) valid;\nPASS forma: production â€” 99 cut sheets (guillotine, kerf, grain, banding) and assembly booklets;\nPASS forma: 30 kitchens (runs and islands) valid: modules, worktop, sink, hob, hood, appliances, open view, cut list, drawings;\nPASS forma: 222 RÄ°TMO case goods valid (13385 parts; 18 mm MDF / solid panels, 8 mm back, 2 mm reveals, modules â‰¤ 1200, cut list, drawings, commands, design link);\nPASS forma: 15 room layouts (living, dining, bedroom Ã— 3) without overlaps;\nPASS forma: 240 curated starting models (10 styles incl. AURA) valid;\nPASS forma: 213 line-detail parts (stitch, inlay, groove) on seating, tables and the bedroom set;\nPASS forma: 200 table designs valid; patterns, stain and stone maps;\nPASS forma: 360 style/kind/seed designs valid; 4 styles Ã— 12 diverse proposals; 7 weave drafts; 8-language commands; drawings, DXF, BOM, ZIP, PDF; AI output sanitised.\n"
+      }
+    },
+    {
+      "test": "kitchen-studies-check.mjs",
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 1.4,
+        "output": "PASS 9 kitchen studies, finite parts, 27 drawings, sink openings, fluting and waterfall ends.\n"
+      }
+    },
+    {
+      "test": "model-check.mjs",
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.5,
+        "output": "PASS: 192 boundary configurations, positive geometry, overall bounds, share/JSON round trips and invalid inputs.\n"
+      }
+    },
+    {
+      "test": "panel-engine-check.mjs",
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.77,
+        "output": "PASS 48 panel constructions, clearances, internal drawer components and BOM consistency.\n"
+      }
+    },
+    {
+      "test": "preference-evidence-check.mjs",
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.61,
+        "output": "PASS exact named-style evidence in TR/EN/FR/DA and source-grounded correction of a semantically wrong model result.\n"
+      }
+    },
+    {
+      "test": "reference-studies-check.mjs",
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 3.83,
+        "output": "PASS 528 reference study variants, positive parts, rotated bounds, source-specific features, SVG views and camera fit.\n"
+      }
+    },
+    {
+      "test": "ritmo-check.mjs",
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 3.01,
+        "output": "PASS 324 cabinet assemblies: part bounds, positive dimensions, stable identities, 2â€“5 bays, BOM, save/restore and independent compartment changes.\n"
+      }
+    },
+    {
+      "test": "room-family-check.mjs",
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.63,
+        "output": "PASS room-specific family lists, incompatible restored/changed selection reset, compatible selection and direct product room inference.\n"
+      }
+    },
+    {
+      "test": "sectional-check.mjs",
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 2.24,
+        "output": "PASS 216 sectional bounds/support variants, mirrored layouts, real tool contract and seat/back variants.\n"
+      }
+    },
+    {
+      "test": "sketch-check.mjs",
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 40.75,
+        "output": "PASS sketch: overlap/reversal/collinearity, genuine gaps/reveals, detail classes, six-family finite/non-mutating geometry.\nseating: 1644 â†’ 1045\ntable: 1665 â†’ 380\nstorage: 24204 â†’ 3072\nkitchen: 34882 â†’ 12482\nbath: 8484 â†’ 2938\nbedroom: 1676 â†’ 920\n"
+      }
+    },
+    {
+      "test": "space-check.mjs",
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.77,
+        "output": "PASS home room counts, retained dimensions, rotation, bounds, overlaps, door swing, obstacles, JSON round trip, size limits and SVG sanitisation.\n"
+      }
+    },
+    {
+      "test": "studio-agent-check.mjs",
+      "branch": {
+        "status": "FAIL",
+        "exitCode": 1,
+        "seconds": 0.58,
+        "output": "node:internal/modules/esm/resolve:271\n    throw new ERR_MODULE_NOT_FOUND(\n          ^\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\services\\design\\studio-agent.mjs' imported from C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\atmosfer-01\\tests\\studio-agent-check.mjs\n    at finalizeResolution (node:internal/modules/esm/resolve:271:11)\n    at moduleResolve (node:internal/modules/esm/resolve:865:10)\n    at defaultResolve (node:internal/modules/esm/resolve:992:11)\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)\n    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)\n    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)\n    at #resolve (node:internal/modules/esm/loader:683:17)\n    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)\n    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)\n    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {\n  code: 'ERR_MODULE_NOT_FOUND',\n  url: 'file:///C:/Users/User/Documents/Codex/2026-10-18/rahmigkt-auraporject-website-deposunda-main-i/work/services/design/studio-agent.mjs'\n}\n\nNode.js v24.18.0\n"
+      },
+      "main": {
+        "status": "FAIL",
+        "exitCode": 1,
+        "seconds": 0.55,
+        "output": "node:internal/modules/esm/resolve:271\n    throw new ERR_MODULE_NOT_FOUND(\n          ^\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\services\\design\\studio-agent.mjs' imported from C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\main61-baseline\\tests\\studio-agent-check.mjs\n    at finalizeResolution (node:internal/modules/esm/resolve:271:11)\n    at moduleResolve (node:internal/modules/esm/resolve:865:10)\n    at defaultResolve (node:internal/modules/esm/resolve:992:11)\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)\n    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)\n    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)\n    at #resolve (node:internal/modules/esm/loader:683:17)\n    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)\n    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)\n    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {\n  code: 'ERR_MODULE_NOT_FOUND',\n  url: 'file:///C:/Users/User/Documents/Codex/2026-10-18/rahmigkt-auraporject-website-deposunda-main-i/work/services/design/studio-agent.mjs'\n}\n\nNode.js v24.18.0\n"
+      }
+    },
+    {
+      "test": "studio-tools-check.mjs",
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 0.61,
+        "output": "PASS all 14 families, option enums, drawing geometry, action allowlist, invalid calls, prototype keys and dimension adjustments.\n"
+      }
+    },
+    {
+      "test": "upholstery-engine-check.mjs",
+      "branch": {
+        "status": "PASS",
+        "exitCode": 0,
+        "seconds": 1.34,
+        "output": "PASS 72 independent upholstery assemblies, part bounds, BOM totals, distinct topology, actual tuft mesh and style constraints.\n"
+      }
+    }
+  ],
+  "lastAtmosphereSourceSha": "85059a16344695dae00cd61757494416de4765e6"
+}

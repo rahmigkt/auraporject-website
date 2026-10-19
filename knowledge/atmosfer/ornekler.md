@@ -1,39 +1,43 @@
-# ATMOSFER-01 · dört yolun karşılaştırması
+# ATMOSFER-01 · main #61 sonrası yeniden çekim
 
-Eski raster byte olarak korunmuştur. Yeni raster **2400×1600**; yol izleme **deneysel Vulkan, 800×534 / 16 örnek**, denoiser yok; Cycles **CPU + OIDN, 1200×800 / 24 örnek** prototipidir. Aynı satır aynı tasarım JSON/seed kullanır. Çözünürlük, gürültü giderme ve ton eşleme farkları nedeniyle eşit piksel kalitesi iddia edilmez. Karar sahibi görsel onayı beklenir.
+Yeni sahneler güncel çizim motoruyla yeniden üretildi: dama zemin yok, açık kireç sıva, ürüne göre oda, dikeyleri paralel tutan 55 mm kaydırmalı kamera. Yatak odası takımı kaldırıldı; son iki örnek Dolap (`storage/wardrobe`) ailesidir. Bu iki satırın önceki karesi eski takımı gösterir, aynı ürün karşılaştırması değildir.
 
-| Tasarım | Eski raster | Yeni raster | Yol izleme · deneysel | Cycles · CPU/OIDN |
+Yeni raster **2400×1600**; deneysel Vulkan **800×534 / 16 örnek**; CPU Cycles/OIDN genel ve yakın planlar **2400×1600**. Önceki 18 Ekim rasterları sabit commit bağlantısıyla korunur. Ton eşleme ve örnek farkları açıkça etiketlenir; görsel onay karar sahibinindir.
+
+| Tasarım | Önceki raster · 18 Ekim | Yeni raster | Yol izleme · deneysel | Cycles · CPU/OIDN |
 |---|---|---|---|---|
-| seating-01 | ![Eski](kareler/eski-raster/seating-01-final.jpg) | ![Yeni raster](kareler/seating-01-final.jpg) | ![Deneysel path](kareler/seating-01-path.jpg) | ![Cycles](kareler/seating-01-cycles.jpg) |
-| seating-02 | ![Eski](kareler/eski-raster/seating-02-final.jpg) | ![Yeni raster](kareler/seating-02-final.jpg) | ![Deneysel path](kareler/seating-02-path.jpg) | ![Cycles](kareler/seating-02-cycles.jpg) |
-| table-01 | ![Eski](kareler/eski-raster/table-01-final.jpg) | ![Yeni raster](kareler/table-01-final.jpg) | ![Deneysel path](kareler/table-01-path.jpg) | ![Cycles](kareler/table-01-cycles.jpg) |
-| table-02 | ![Eski](kareler/eski-raster/table-02-final.jpg) | ![Yeni raster](kareler/table-02-final.jpg) | ![Deneysel path](kareler/table-02-path.jpg) | ![Cycles](kareler/table-02-cycles.jpg) |
-| storage-01 | ![Eski](kareler/eski-raster/storage-01-final.jpg) | ![Yeni raster](kareler/storage-01-final.jpg) | ![Deneysel path](kareler/storage-01-path.jpg) | ![Cycles](kareler/storage-01-cycles.jpg) |
-| storage-02 | ![Eski](kareler/eski-raster/storage-02-final.jpg) | ![Yeni raster](kareler/storage-02-final.jpg) | ![Deneysel path](kareler/storage-02-path.jpg) | ![Cycles](kareler/storage-02-cycles.jpg) |
-| kitchen-01 | ![Eski](kareler/eski-raster/kitchen-01-final.jpg) | ![Yeni raster](kareler/kitchen-01-final.jpg) | ![Deneysel path](kareler/kitchen-01-path.jpg) | ![Cycles](kareler/kitchen-01-cycles.jpg) |
-| kitchen-02 | ![Eski](kareler/eski-raster/kitchen-02-final.jpg) | ![Yeni raster](kareler/kitchen-02-final.jpg) | ![Deneysel path](kareler/kitchen-02-path.jpg) | ![Cycles](kareler/kitchen-02-cycles.jpg) |
-| bath-01 | ![Eski](kareler/eski-raster/bath-01-final.jpg) | ![Yeni raster](kareler/bath-01-final.jpg) | ![Deneysel path](kareler/bath-01-path.jpg) | ![Cycles](kareler/bath-01-cycles.jpg) |
-| bath-02 | ![Eski](kareler/eski-raster/bath-02-final.jpg) | ![Yeni raster](kareler/bath-02-final.jpg) | ![Deneysel path](kareler/bath-02-path.jpg) | ![Cycles](kareler/bath-02-cycles.jpg) |
-| bedroom-01 | ![Eski](kareler/eski-raster/bedroom-01-final.jpg) | ![Yeni raster](kareler/bedroom-01-final.jpg) | ![Deneysel path](kareler/bedroom-01-path.jpg) | ![Cycles](kareler/bedroom-01-cycles.jpg) |
-| bedroom-02 | ![Eski](kareler/eski-raster/bedroom-02-final.jpg) | ![Yeni raster](kareler/bedroom-02-final.jpg) | ![Deneysel path](kareler/bedroom-02-path.jpg) | ![Cycles](kareler/bedroom-02-cycles.jpg) |
+| seating-01 | ![Önceki seating-01](https://github.com/rahmigkt/auraporject-website/blob/f2fe9dc672ae4ffae6cc2da07d9863e0c3eabd9b/knowledge/atmosfer/kareler/seating-01-final.jpg?raw=true) | ![seating-01](kareler/seating-01-final.jpg) | ![seating-01](kareler/seating-01-path.jpg) | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. |
+| seating-02 | ![Önceki seating-02](https://github.com/rahmigkt/auraporject-website/blob/f2fe9dc672ae4ffae6cc2da07d9863e0c3eabd9b/knowledge/atmosfer/kareler/seating-02-final.jpg?raw=true) | ![seating-02](kareler/seating-02-final.jpg) | ![seating-02](kareler/seating-02-path.jpg) | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. |
+| table-01 | ![Önceki table-01](https://github.com/rahmigkt/auraporject-website/blob/f2fe9dc672ae4ffae6cc2da07d9863e0c3eabd9b/knowledge/atmosfer/kareler/table-01-final.jpg?raw=true) | ![table-01](kareler/table-01-final.jpg) | ![table-01](kareler/table-01-path.jpg) | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. |
+| table-02 | ![Önceki table-02](https://github.com/rahmigkt/auraporject-website/blob/f2fe9dc672ae4ffae6cc2da07d9863e0c3eabd9b/knowledge/atmosfer/kareler/table-02-final.jpg?raw=true) | ![table-02](kareler/table-02-final.jpg) | ![table-02](kareler/table-02-path.jpg) | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. |
+| storage-01 | ![Önceki storage-01](https://github.com/rahmigkt/auraporject-website/blob/f2fe9dc672ae4ffae6cc2da07d9863e0c3eabd9b/knowledge/atmosfer/kareler/storage-01-final.jpg?raw=true) | ![storage-01](kareler/storage-01-final.jpg) | ![storage-01](kareler/storage-01-path.jpg) | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. |
+| storage-02 | ![Önceki storage-02](https://github.com/rahmigkt/auraporject-website/blob/f2fe9dc672ae4ffae6cc2da07d9863e0c3eabd9b/knowledge/atmosfer/kareler/storage-02-final.jpg?raw=true) | ![storage-02](kareler/storage-02-final.jpg) | ![storage-02](kareler/storage-02-path.jpg) | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. |
+| kitchen-01 | ![Önceki kitchen-01](https://github.com/rahmigkt/auraporject-website/blob/f2fe9dc672ae4ffae6cc2da07d9863e0c3eabd9b/knowledge/atmosfer/kareler/kitchen-01-final.jpg?raw=true) | ![kitchen-01](kareler/kitchen-01-final.jpg) | ![kitchen-01](kareler/kitchen-01-path.jpg) | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. |
+| kitchen-02 | ![Önceki kitchen-02](https://github.com/rahmigkt/auraporject-website/blob/f2fe9dc672ae4ffae6cc2da07d9863e0c3eabd9b/knowledge/atmosfer/kareler/kitchen-02-final.jpg?raw=true) | ![kitchen-02](kareler/kitchen-02-final.jpg) | ![kitchen-02](kareler/kitchen-02-path.jpg) | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. |
+| bath-01 | ![Önceki bath-01](https://github.com/rahmigkt/auraporject-website/blob/f2fe9dc672ae4ffae6cc2da07d9863e0c3eabd9b/knowledge/atmosfer/kareler/bath-01-final.jpg?raw=true) | ![bath-01](kareler/bath-01-final.jpg) | ![bath-01](kareler/bath-01-path.jpg) | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. |
+| bath-02 | ![Önceki bath-02](https://github.com/rahmigkt/auraporject-website/blob/f2fe9dc672ae4ffae6cc2da07d9863e0c3eabd9b/knowledge/atmosfer/kareler/bath-02-final.jpg?raw=true) | ![bath-02](kareler/bath-02-final.jpg) | ![bath-02](kareler/bath-02-path.jpg) | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. |
+| wardrobe-01 · yeni Dolap tasarımı | ![Önceki bedroom-01](https://github.com/rahmigkt/auraporject-website/blob/f2fe9dc672ae4ffae6cc2da07d9863e0c3eabd9b/knowledge/atmosfer/kareler/bedroom-01-final.jpg?raw=true) | ![wardrobe-01 · yeni Dolap tasarımı](kareler/wardrobe-01-final.jpg) | ![wardrobe-01 · yeni Dolap tasarımı](kareler/wardrobe-01-path.jpg) | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. |
+| wardrobe-02 · yeni Dolap tasarımı | ![Önceki bedroom-02](https://github.com/rahmigkt/auraporject-website/blob/f2fe9dc672ae4ffae6cc2da07d9863e0c3eabd9b/knowledge/atmosfer/kareler/bedroom-02-final.jpg?raw=true) | ![wardrobe-02 · yeni Dolap tasarımı](kareler/wardrobe-02-final.jpg) | ![wardrobe-02 · yeni Dolap tasarımı](kareler/wardrobe-02-path.jpg) | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. |
 
-## Gerçek parçalardan yakın planlar
+## Ürüne göre seçilmiş yakın planlar
 
-85 mm, f/5.6; CPU Cycles/OIDN. Üründe bulunmayan kumaş/dikiş veya ahşap eklenmez. Böyle bir sütunda ürünün gerçek yüzey alternatifi gösterilir ve raporda malzeme anahtarı belirtilir. Dosya adı istenen ayrıntı sınıfını taşır; gerçek malzemeyi rapordan okuyun.
+85 mm, f/5.6, 2400×1600; gerçek parça rolü ve dışarıdan görünür yüzey raycast ile doğrulanır. Kumaş olmayan ürüne kumaş, taş olmayan ürüne taş eklenmez. Genel lens kaydırması makro kameralarda sıfırlanır.
 
-| Tasarım | Yüzey / varsa kumaş ve dikiş | Lif / varsa ahşap ve kesit | Kenar / birleşim |
+| Tasarım | Ayrıntı 1 | Ayrıntı 2 | Ayrıntı 3 |
 |---|---|---|---|
-| seating-01 | ![fabric](kareler/seating-01-detail-fabric.jpg) | ![wood](kareler/seating-01-detail-wood.jpg) | ![joint](kareler/seating-01-detail-joint.jpg) <br> Ahşap yok; gerçek fabric gösterilir. |
-| seating-02 | ![fabric](kareler/seating-02-detail-fabric.jpg) | ![wood](kareler/seating-02-detail-wood.jpg) | ![joint](kareler/seating-02-detail-joint.jpg) <br> Ahşap yok; gerçek ahşap gösterilir. |
-| table-01 | ![fabric](kareler/table-01-detail-fabric.jpg) <br> Kumaş yok; gerçek tabla gösterilir. | ![wood](kareler/table-01-detail-wood.jpg) | ![joint](kareler/table-01-detail-joint.jpg) |
-| table-02 | ![fabric](kareler/table-02-detail-fabric.jpg) <br> Kumaş yok; gerçek tabla gösterilir. | ![wood](kareler/table-02-detail-wood.jpg) | ![joint](kareler/table-02-detail-joint.jpg) |
-| storage-01 | ![fabric](kareler/storage-01-detail-fabric.jpg) <br> Kumaş yok; gerçek kapak / ön yüz gösterilir. | ![wood](kareler/storage-01-detail-wood.jpg) | ![joint](kareler/storage-01-detail-joint.jpg) |
-| storage-02 | ![fabric](kareler/storage-02-detail-fabric.jpg) <br> Kumaş yok; gerçek kapak / ön yüz gösterilir. | ![wood](kareler/storage-02-detail-wood.jpg) | ![joint](kareler/storage-02-detail-joint.jpg) |
-| kitchen-01 | ![fabric](kareler/kitchen-01-detail-fabric.jpg) <br> Kumaş yok; gerçek kapak / ön yüz gösterilir. | ![wood](kareler/kitchen-01-detail-wood.jpg) | ![joint](kareler/kitchen-01-detail-joint.jpg) |
-| kitchen-02 | ![fabric](kareler/kitchen-02-detail-fabric.jpg) <br> Kumaş yok; gerçek kapak / ön yüz gösterilir. | ![wood](kareler/kitchen-02-detail-wood.jpg) | ![joint](kareler/kitchen-02-detail-joint.jpg) |
-| bath-01 | ![fabric](kareler/bath-01-detail-fabric.jpg) <br> Kumaş yok; gerçek kapak / ön yüz gösterilir. | ![wood](kareler/bath-01-detail-wood.jpg) | ![joint](kareler/bath-01-detail-joint.jpg) |
-| bath-02 | ![fabric](kareler/bath-02-detail-fabric.jpg) <br> Kumaş yok; gerçek kapak / ön yüz gösterilir. | ![wood](kareler/bath-02-detail-wood.jpg) <br> Ahşap yok; gerçek kapak / ön yüz gösterilir. | ![joint](kareler/bath-02-detail-joint.jpg) |
-| bedroom-01 | ![fabric](kareler/bedroom-01-detail-fabric.jpg) | ![wood](kareler/bedroom-01-detail-wood.jpg) | ![joint](kareler/bedroom-01-detail-joint.jpg) |
-| bedroom-02 | ![fabric](kareler/bedroom-02-detail-fabric.jpg) | ![wood](kareler/bedroom-02-detail-wood.jpg) | ![joint](kareler/bedroom-02-detail-joint.jpg) |
+| seating-01 | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Döşeme örgüsü ve varsa biye | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Ahşap kol veya ayak yüzeyi | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Ayak–gövde / kol birleşimi |
+| seating-02 | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Döşeme örgüsü ve varsa biye | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Ahşap kol veya ayak yüzeyi | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Ayak–gövde / kol birleşimi |
+| table-01 | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Tabla yüzeyi ve gerçek damar | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Tabla kenar profili ve kesit | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Ayak / taşıyıcı birleşimi |
+| table-02 | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Tabla yüzeyi ve gerçek damar | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Tabla kenar profili ve kesit | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Ayak / taşıyıcı birleşimi |
+| storage-01 | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Kapak yüzeyi ve kenar | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Kulp / kapak birleşimi | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Kapak derzi / gövde birleşimi |
+| storage-02 | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Kapak yüzeyi ve kenar | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Kulp / kapak birleşimi | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Kapak derzi / gövde birleşimi |
+| kitchen-01 | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Tezgâh yüzeyi | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Kapak / çekmece derzi | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Kulp ve ön yüz birleşimi |
+| kitchen-02 | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Tezgâh yüzeyi | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Kapak / çekmece derzi | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Kulp ve ön yüz birleşimi |
+| bath-01 | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Lavabo tablası yüzeyi ve kenarı | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Çekmece derzi ve kapak yüzeyi | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Kulp veya ayak birleşimi |
+| bath-02 | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Lavabo tablası yüzeyi ve kenarı | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Çekmece derzi ve kapak yüzeyi | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Kulp veya ayak birleşimi |
+| wardrobe-01 | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Kapak yüzeyi ve kenar | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Kulp / kapak birleşimi | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Kapak derzi / gövde birleşimi |
+| wardrobe-02 | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Kapak yüzeyi ve kenar | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Kulp / kapak birleşimi | 2400 px CPU üretimi sürüyor; henüz teslim edilmedi. <br> Kapak derzi / gövde birleşimi |
 
-[Render mimarisi ve tekrar üretim](README.md) · [Cycles prototipi ve sunucu notu](CYCLES.md) · [CC0 kaynakları](cc0/README.md) · [Backend tanısı](path-diagnostics.json)
+**Üretim sürüyor:** bu sayfa ara durumdur. CPU kareleri bitmeden tam teslim veya görsel kabul sayılmaz.
+
+[Mimari ve tekrar üretim](README.md) · [Cycles ve süre/maliyet notu](CYCLES.md)

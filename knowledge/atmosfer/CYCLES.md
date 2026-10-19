@@ -1,34 +1,27 @@
-# Çevrimdışı Cycles prototipi
+# Çevrimdışı Cycles · main #61 revizyonu
 
-`export.mjs`, GLTFExporter ile gerçek ürün ve mekân geometrisini, PBR malzemelerini ve doku haritalarını GLB içinde gömer. Prosedürel DataTexture'lar CanvasTexture'a çevrilirken wrap, renk uzayı ve UV dönüşümleri korunur. Alan ışığı/HDRI glTF'de taşınmadığından yan JSON'da konum/boyut/renk kaydedilir; `cycles.py` bunları kurar. Kamera görüş açısı GLB’nin gerçek `yfov` değeriyle denetlenir; yatay 35 mm sensör kullanılır. Kamera ve mekân aynıdır: 55 mm genel, 85 mm yakın plan, sıfır roll, tavan geometrisi yok. Cycles gerçek alan ışığı ve sekiz sıçrama kullanır; raster gölge vekili Cycles'a taşınmaz. Işık güçleri render motorlarının farklı birimleri için kalibre edilmiştir; ACES (raster) ve AgX (Cycles) aynı piksel sonucunu iddia etmez.
+GLTFExporter güncel motorun geometri, PBR malzeme ve haritalarını GLB'ye gömer. Procedural DataTexture'lar CanvasTexture'a çevrilirken wrap, repeat/offset/center/rotation ve renk uzayı korunur. Kaydırmalı kamera ve alan ışığı/HDRI standard glTF'de tam temsil edilmediğinden yan JSON'dan kurulur. 55 mm, yatay 35 mm sensör ve gerçek `yfov` eşleşmesi denetlenir; `shiftY` Cycles'a uygulanır. 85 mm/f5.6 yakın planda lens kaydırması sıfırlanır. Kamera quaternion kipindedir; gerçek yüzey optik merkezde doğrulanır.
+
+Blender 4.5.3 LTS, CPU Cycles ve OpenImageDenoise kullanılır. Genel ve yakın plan dosyaları **2400×1600**; genel en çok **32**, yakın plan en çok **24** örnek kullanır. Adaptif alt sınır açıkça **4**, gürültü eşiği **0,035** olarak sabittir. Blender'ın otomatik alt sınırı bu üst sınırların üstünde kaldığından açık değer gereklidir ([4.5.3 kaynak kodu](https://github.com/blender/blender/blob/v4.5.3/intern/cycles/scene/integrator.cpp#L377-L387)); çözünürlük ve gürültü hedefi düşürülmez. 18 Ekim'in 1200/1000 px Cycles dosyaları yeni teslim sayılmaz; güncel 48 CPU karesi tek kaynak geçişinde yeniden üretilir. Süreler ve kaynak betik SHA256'sı `kareler/cycles-report.json` içindedir. Büyük ara GLB'ler, Blender ve Python ortamı depoya eklenmez.
 
 ## Tekrar üretim
-
-Blender 4.5.3 LTS taşınabilir sürüm kullanıldı (resmi https://download.blender.org/release/Blender4.5/). Depoya Blender veya Python ortamı eklenmez.
 
 ```powershell
 $env:PLAYWRIGHT_MODULE='<kurulu-playwright-dizini>'
 $env:ATMOSFER_EXPORT_DIR='<mutlak-glb-cikti-dizini>'
 node tests/visual/atmosfer-01/run-local.mjs tests/visual/atmosfer-01/export.mjs
-blender --background --python-exit-code 1 --threads 0 --python tests/visual/atmosfer-01/cycles.py -- --input '<mutlak-glb-cikti-dizini>' --output '<mutlak-kare-dizini>' --width 1200 --samples 24 --detail-width 1000 --detail-samples 16 --closeups
+python tests/visual/atmosfer-01/verify-gltf.py --input '<mutlak-glb-cikti-dizini>'
+blender --background --python-exit-code 1 --threads 0 --python tests/visual/atmosfer-01/cycles.py -- --input '<mutlak-glb-cikti-dizini>' --output '<depo>/knowledge/atmosfer/kareler' --width 2400 --samples 32 --detail-width 2400 --detail-samples 24 --closeups
+python tests/visual/atmosfer-01/verify-artifacts.py
+python tests/visual/atmosfer-01/build-gallery.py
 ```
 
-Girdi/çıktı yolları Blender sahne sıfırlamasından önce mutlaklaştırılır. CPU Cycles ve OpenImageDenoise (OIDN) seçilir; özel GPU gerekmez. Bu tur prototip genel kareleri 1200×800, yakın planlar 1000×667; 2400 px rasterdan ayrı etiketlenir. Örnek sayıları düşük prototip bütçesidir; dokuma ayrıntısını OIDN yumuşatabilir. Üretim çözünürlüğü/örnek sayısı sonraki sunucu ölçümünde artırılır. Gerçek süreler `kareler/cycles-report.json` içindedir.
+Yollar Blender sahne sıfırlamasından önce mutlaklaştırılır. `--probe --closeups` görüntü üretmeden gerçek rol/odak denetimini çalıştırır; `--id` belirli tasarımı seçer. Ayrıntı kuralları tasarım fixture'ında kayıtlıdır. Yanlış role isabet, geometri içindeki kamera, boş/karanlık JPEG ve ortak malzemede yinelenen bevel düğümü hata verir. Normal haritası korunur; kumaşa bevel eklenmez. Cycles AgX, raster ACES kullanır; iki motorda aynı piksel tonu beklenmez. Işık gücü birimleri farklı olduğu için Cycles pencere 500 W ve zayıf dolgu 45 W ile kalibre edilir.
 
-Yakın plan, gerçek parça `materialKey`/`role` bilgisinden seçilir; ürünün olmayan kumaşını veya ahşabını üretmez. Alternatif gerçek yüzey gösterilmişse rapor bunu açıkça belirtir. Alan derinliği Cycles kamerada f/5.6 ile fiziksel hesaplanır. Odak gerçek sahne raycast kesişimine bağlanır; istenen malzeme başka parça tarafından örtülüyorsa alternatif bakış denenir ve doğrulanamayan kare hata verir. Yalnız son render asset'inde eğri yüzeyler daha yüksek bölümlemeyle kurulur; stüdyo ve üretim parça boyutları aynı kalır. Cycles bevel normal düğümü mevcut normal haritasını koruyarak alt milimetrelik kenar vurgusunu yumuşatır.
+## Canlı site için sunucu notu
 
-## Canlı site için kısa sunucu notu
+Canlı siteye bu PR ile dağıtım yapılmaz. Sonraki render sunucusu için iş kuyruğu, sabit Blender/CC0 sürümlü CPU worker, süre/bellek sınırları ve sonuçlar için nesne depolama gerekir. İş tasarım JSON'u, motor/malzeme sürümü, kamera/ışık ve örnek sayısı hash'iyle önbelleklenebilir. GLB'yi bir kez yükleyip dört kamerayı aynı süreçte işlemek veya aynı sahneyi tasarım JSON'undan sunucuda kurmak yükleme maliyetini azaltır. Bu PR proje sonu akışını veya tasarımcı paketini açmaz.
 
-Tarayıcı dışa aktarımını alan bir iş kuyruğu, sabit Blender/CC0 paketli CPU worker, süre/bellek sınırı ve sonuçlar için nesne depolama gerekir. İş; tasarım JSON'u, motor/malzeme sürümü, kamera, ışık ve örnek sayısı hash'iyle önbelleklenebilir. İstek başına Blender başlatma ve büyük GLB yükleme yerine tasarım JSON'undan sunucuda aynı sahneyi kurmak veya GLB'yi bir kez yükleyip dört kamerayı tek süreçte işlemek daha uygundur. Bu PR sunucu dağıtmaz ve proje sonu kullanıcı akışını açmaz.
+Maliyet formülü: **worker saat fiyatı × ölçülen saniye / 3600**, ayrıca boşta kalma, depolama ve trafik. Örneğin yalnız varsayımsal 0,50 USD/saat ve 180 sn/kare için 0,025 USD/kare çıkar; bu bir sağlayıcı fiyatı veya bu 2400 px koşunun ölçümü değildir. Gerçek güncel dizüstü süreleri render raporundadır. Sunucu süresi seçilecek makinede aynı sahnelerle ölçülmelidir; daha önceki düşük çözünürlüklü koşudan süre tahmini yapılmaz.
 
-Maliyet hesabı: **kare maliyeti = worker saat fiyatı × ölçülen saniye / 3600**, buna boşta kalma, depolama ve trafik eklenir. Yalnız örnek hesap olarak saat ücreti 0,50 USD ve kare süresi 180 sn ise kare 0,025 USD, 12 genel kare 0,30 USD eder; bunlar sağlayıcı teklifi değildir. Bir worker'da süreler toplanır; 12 genel + 36 yakın plan için kuyruk gecikmesi ayrıca gösterilmelidir. Gerçek sunucu süresi bu dizüstü ölçümünden çıkarılamaz; seçilecek makinede aynı 12 sahneyle ölçülmelidir.
-
-Kaynaklar: [Blender komut satırı](https://docs.blender.org/manual/en/latest/advanced/command_line/arguments.html), [Cycles örnekleme ve denoise](https://docs.blender.org/manual/en/latest/render/cycles/render_settings/sampling.html), [CC0 kaynakları](cc0/README.md).
-
-Makro kamera dönüşü quaternion kipinde uygulanır; seçilen gerçek yüzeyin görüntü merkezinde olduğu `world_to_camera_view` ile doğrulanır. Kamera, genel bakıştan ilk görülen yüzeyin önüne alınarak dolabın içine yerleşmesi önlenir. Her yazılmış JPEG boş/karanlık kare denetiminden geçer. Ortak malzemeye bevel normal düğümü yalnız bir kez eklenir; kumaşa eklenmez.
-
-Genel kareler ilk geçerli CPU geçişinden korunur; kaynak commit ve dosya hashleri `kareler/cycles-general-report.json` içindedir. Makrolar ayrı kamera geçişiyle yenilenir; aynı geometri ve malzeme GLB hashleri korunur.
-
-## Bu cihazdaki gerçek CPU süreleri
-
-12 genel kare toplam 1080 sn (kare başına 78–115 sn); 36 yakın planın ayrı geçişi toplam 1668 sn sürdü. İki geçişin toplamı 45.8 dakika. Yakın plan süresi sahne kurulumunu da içerir. Bu ölçümler bu dizüstü ve yukarıdaki prototip çözünürlükleri içindir; sunucu kapasitesi veya üretim kalitesi için süre garantisi değildir. Ayrıntılı sahne bazlı kayıtlar `kareler/cycles-report.json` ve ham makro geçişi `kareler/cycles-detail-run.json` içindedir.
+Kaynaklar: [resmî Blender 4.5 indirmesi](https://download.blender.org/release/Blender4.5/), [komut satırı](https://docs.blender.org/manual/en/latest/advanced/command_line/arguments.html), [Cycles örnekleme/denoise](https://docs.blender.org/manual/en/latest/render/cycles/render_settings/sampling.html), [CC0 kayıtları](cc0/README.md).

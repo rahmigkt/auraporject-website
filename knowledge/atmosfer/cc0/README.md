@@ -9,6 +9,6 @@
 | WoodFloor051 · 1K JPG | https://ambientcg.com/view?id=WoodFloor051 | CC0 | Color, NormalGL, Roughness |
 | Tiles074 · 1K JPG | https://ambientcg.com/view?id=Tiles074 | CC0 | Color, NormalGL, Roughness |
 
-Haritaların piksel verisi değiştirilmedi; dosya adları kısaltıldı. Ürün malzemeleri aynı motorun gerçek haritalarıdır; bu kaynaklar yalnız mimari mekânda kullanılır. `manifest.json` byte boyutu ve SHA256 içerir.
+Kaydedilen kaynak haritaların piksel verisi değiştirilmedi; dosya adları kısaltıldı. 19 Ekim revizyonunda Plaster004 albedosu çalışma anında açık, nötr kireç sıvaya dönüştürülür; kaynak normal/pürüz haritaları korunur. Türetilmiş albedo GLB'ye gömülür. Zemin bütün ailelerde WoodFloor051'dir; dama Tiles074 dosyaları eski kaynağın kaydı olarak durur, yeni sahnede yüklenmez. Ürün malzemeleri çizim motorunun gerçek haritalarıdır; CC0 kaynakları yalnız mimari mekândadır. `manifest.json` indirilen kaynakların byte boyutu ve SHA256 değerlerini içerir.
 
 Three r186 HDRLoader ve RectAreaLight yardımcıları resmi `mrdoob/three.js` r186 kaynaklarından alındı; yalnız import yolu mevcut yerel Three çekirdeğine uyarlandı. Depodaki Three MIT lisansı geçerlidir.
