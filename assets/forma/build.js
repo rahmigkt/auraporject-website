@@ -25,6 +25,15 @@ export function buildMesh(q) {
     }
     mesh = {positions, normals, uvs: inner.uvs, indices: inner.indices};
   }
+  else if (g.fn === 'scaled') {
+    // Designer scale: stretch the inner part along its own axes; normals take the inverse scale.
+    const inner = buildMesh({geom: g.inner}), [sx, sy, sz] = g.s, positions = new Float32Array(inner.positions), normals = new Float32Array(inner.normals);
+    for (let v = 0; v < positions.length; v += 3) {
+      positions[v] *= sx; positions[v + 1] *= sy; positions[v + 2] *= sz;
+      const nx = normals[v] / sx, ny = normals[v + 1] / sy, nz = normals[v + 2] / sz, l = Math.hypot(nx, ny, nz) || 1; normals[v] = nx / l; normals[v + 1] = ny / l; normals[v + 2] = nz / l;
+    }
+    mesh = {positions, normals, uvs: inner.uvs, indices: inner.indices};
+  }
   else if (g.fn === 'ribbed') mesh = ribbed(g);
   else if (g.fn === 'quad') {
     // One-sided rectangle in the x–y plane facing +z (room walls seen only from inside).

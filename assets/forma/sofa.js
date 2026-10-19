@@ -14,7 +14,7 @@ export const RANGES = {
   armWidth: [40, 320, 5], armHeight: [480, 780, 5], armTop: [0, 1, 0.05], armFlare: [0, 1, 0.05], armSlope: [0, 0.4, 0.02], armSet: [0, 90, 5],
   backRake: [4, 22, 1], backThickness: [120, 300, 5], camel: [0, 140, 5], channelCount: [3, 12, 1], tuftSpacing: [110, 240, 5],
   cushionThickness: [80, 230, 5], cushionCrown: [0, 45, 1], seatCount: [1, 4, 1],
-  legHeight: [0, 340, 5], legSize: [10, 48, 1], legTaper: [0.3, 1, 0.05], legSplay: [0, 14, 1], legInset: [0, 140, 5], bodyDrop: [0, 200, 5], bodyInset: [-30, 120, 5], bodyRadius: [0, 60, 1], pillows: [0, 4, 1], pillowSize: [300, 600, 10]
+  legHeight: [0, 340, 5], legSize: [10, 48, 1], legTaper: [0.3, 1, 0.05], legSplay: [0, 14, 1], legInset: [0, 140, 5], bodyDrop: [-200, 200, 5], bodyInset: [-30, 600, 5], bodyInsetZ: [-30, 300, 5], bodyRadius: [0, 60, 1], pillows: [0, 4, 1], pillowSize: [300, 600, 10]
 };
 
 export const ENUMS = {
@@ -34,7 +34,7 @@ export const DEFAULTS = {
   armType: 'track', armWidth: 160, armHeight: 600, armTop: 0.4, armFlare: 0.3, armSlope: 0.15, armSet: 0,
   backType: 'loose', backRake: 12, backThickness: 190, camel: 60, channelCount: 6, tuftSpacing: 170,
   seatType: 'split', seatCount: 3, cushionThickness: 150, cushionCrown: 14, cushionEdge: 'boxed',
-  baseType: 'legs', legType: 'tapered', legHeight: 140, legSize: 22, legTaper: 0.6, legSplay: 0, legInset: 60, bodyDrop: 0, bodyInset: 0, bodyRadius: 18,
+  baseType: 'legs', legType: 'tapered', legHeight: 140, legSize: 22, legTaper: 0.6, legSplay: 0, legInset: 60, bodyDrop: 0, bodyInset: 0, bodyInsetZ: 0, bodyRadius: 18,
   welt: 'none', stitch: 'none', pillows: 0, pillowType: 'square', pillowSize: 450
 };
 
@@ -105,17 +105,19 @@ export function compile(raw) {
   // ---- Base / seat deck --------------------------------------------------
   const postW = clamp(Math.max(aw * 0.5, p.legSize * 1.3), 30, 46);
   const throughPosts = timberArms && legH > 0 && (p.baseType === 'legs' || p.baseType === 'frame');
-  const legBottomJoin = p.baseType === 'frame' ? deckTop - clamp((deckTop - y0) * 0.55 + Math.min(p.bodyDrop, Math.max(0, legH - 20)), 50, deckTop - y0 + Math.min(p.bodyDrop, Math.max(0, legH - 20)) - 10) : legH - Math.min(p.bodyDrop, Math.max(0, legH - 20));
+  // Case (kasa) under the cushions: thinner or deeper than the structural deck, narrower or shorter in plan.
+  const dropEff = ['legs', 'frame'].includes(p.baseType) ? clamp(p.bodyDrop, -Math.max(0, deckTop - y0 - 30), Math.max(0, legH - 20)) : 0;
+  const legBottomJoin = p.baseType === 'frame' ? deckTop - clamp((deckTop - y0) * 0.55 + dropEff, 30, deckTop - y0 + dropEff - 5) : legH - dropEff;
   // Visible body between cushions and legs: its form scales freely (drop, setback, rounding) while the
   // structural seat height and leg/rail standards stay as computed.
-  const drop = ['legs', 'frame'].includes(p.baseType) ? Math.min(p.bodyDrop, Math.max(0, legH - 20)) : 0;
-  const inset = p.baseType === 'frame' ? 0 : p.bodyInset;
+  const drop = dropEff;
+  const inset = p.baseType === 'frame' ? 0 : p.bodyInset, insetZ = p.baseType === 'frame' ? 0 : p.bodyInsetZ;
   const deckH = deckTop - y0 + drop, bodyBottom = y0 - drop;
   if (p.baseType !== 'frame') {
-    const bw = (throughPosts ? W - 2 * postW + 2 : timberArms ? innerW + 2 : bodyW) - (throughPosts || timberArms ? 0 : 2 * inset);
-    parts.push(part('base', 'seat-deck', 'fabric', {fn: 'cushion', w: bw, h: deckH, d: D - 10 - Math.max(0, inset) - Math.min(0, inset), r: Math.min(p.bodyRadius, deckH / 2 - 1, bw / 2 - 1), crownFront: 4}, [0, bodyBottom + deckH / 2, 5 - inset / 2]));
+    const bw = Math.max(200, (throughPosts ? W - 2 * postW + 2 : timberArms ? innerW + 2 : bodyW) - 2 * inset), bd = Math.max(200, D - 10 - 2 * insetZ);
+    parts.push(part('base', 'seat-deck', 'fabric', {fn: 'cushion', w: bw, h: deckH, d: bd, r: Math.min(p.bodyRadius, deckH / 2 - 1, bw / 2 - 1, bd / 2 - 1), crownFront: Math.min(4, deckH / 6)}, [0, bodyBottom + deckH / 2, 5]));
   } else {
-    const railH = clamp((deckTop - y0) * 0.55 + drop, 50, deckH - 10), railT = 28;
+    const railH = clamp((deckTop - y0) * 0.55 + drop, 30, deckH - 5), railT = 28;
     parts.push(part('rail-front', 'base-rail', 'wood', {fn: 'cushion', w: W, h: railH, d: railT, r: Math.min(3 + p.bodyRadius * 0.15, 12)}, [0, deckTop - railH / 2, hd - railT / 2]));
     parts.push(part('rail-back', 'base-rail', 'wood', {fn: 'cushion', w: W, h: railH, d: railT, r: 3}, [0, deckTop - railH / 2, -hd + railT / 2]));
     for (const s of [-1, 1]) parts.push(part(`rail-side-${s < 0 ? 'l' : 'r'}`, 'base-rail', 'wood', {fn: 'cushion', w: railT, h: railH, d: D - 2 * railT, r: 3}, [s * (hw - railT / 2), deckTop - railH / 2, 0]));
@@ -209,7 +211,7 @@ export function compile(raw) {
       parts.push(part(`arm-top-${side}`, 'arm-top', 'wood', {fn: 'cushion', w: aw, h: 28, d: D - p.armSet + 10, r: 6}, [ax, p.armHeight + 14, -p.armSet / 2 + 5]));
       continue;
     }
-    const armBottom = p.baseType === 'frame' ? deckTop : y0 - (p.baseType === 'legs' ? Math.min(p.bodyDrop, Math.max(0, legH - 20)) : 0); // on a timber frame the arm sits on the side rail (no coplanar faces)
+    const armBottom = p.baseType === 'frame' ? deckTop : y0 - (p.baseType === 'legs' ? dropEff : 0); // on a timber frame the arm sits on the side rail (no coplanar faces)
     const h = p.armHeight - armBottom, len = D - p.armSet;
     let sec = armSection(p.armType, aw, h, {topRadius: p.armTop, flare: p.armFlare});
     if (s < 0) sec = sec.map(([x, y]) => [-x, y]).reverse();
@@ -220,13 +222,13 @@ export function compile(raw) {
   // ---- Support: legs, plinth, skirt, sled, frame --------------------------
   const legGeom = (h) => ({fn: 'lathe', profile: legProfile(p.legType, h, p.legSize, p.legTaper), square: isSquareLeg(p.legType)});
   const legSpots = () => {
-    const ix = bodyW / 2 - Math.max(0, p.bodyInset) * (p.baseType === 'frame' ? 0 : 1) - p.legInset - p.legSize, iz = hd - Math.min(p.legInset, 90) - p.legSize, spots = [];
+    const fr = p.baseType === 'frame' ? 0 : 1, ix = Math.max(60, bodyW / 2 - Math.max(0, p.bodyInset) * fr - p.legInset - p.legSize), iz = Math.max(60, hd - Math.max(0, p.bodyInsetZ) * fr - Math.min(p.legInset, 90) - p.legSize), spots = [];
     if (!throughPosts) for (const sx of [-1, 1]) for (const sz of [-1, 1]) spots.push([sx * ix, sz * iz, sx, sz]); // through posts are the corner legs
     if (W > 1900) for (const sz of [-1, 1]) spots.push([0, sz * iz, 0, sz]);
     return spots;
   };
   if ((p.baseType === 'legs' || p.baseType === 'frame') && legH > 0) {
-    const h = p.baseType === 'frame' ? deckTop : legH - Math.min(p.bodyDrop, Math.max(0, legH - 20));
+    const h = p.baseType === 'frame' ? deckTop : legH - dropEff;
     legSpots().forEach(([x, z, sx, sz], i) => {
       const splay = p.legSplay * Math.PI / 180;
       const leg = part(`leg-${i + 1}`, 'leg', 'wood', legGeom(h), [x, 0, z], [sz * -splay * 0.7, 0, sx * splay], {mountTop: true});

@@ -3,15 +3,16 @@
 // No AI: the designer gives the form, the engine builds it and checks it.
 import {normalizeDesign, compileDesign} from './generate.js';
 import {readLink, designLink, projectLink} from './link.js';
-import {editableParts, currentShape, sampleCurve, bbox, silhouetteDxf} from './overrides.js';
+import {editableParts, currentShape, sampleCurve, bbox, silhouetteDxf, ADD_SHAPES} from './overrides.js';
 import {analyse} from './physics.js';
 import {download} from './package.js';
 
 const $ = s => document.querySelector(s);
 const NAMES = {top: 'Tabla', leg: 'Ayak', 'case-top': 'Üst tabla', 'vanity-top': 'Lavabo tezgahı', 'mirror-frame': 'Ayna arkalığı', mirror: 'Ayna camı', 'arm-post': 'Kol dikmesi',
-  column: 'Sütun', foot: 'Taban', 'top-plate': 'Tabla altı tablası', shelf: 'Raf', worktop: 'Tezgah', led: 'Işık', headboard: 'Başlık'};
+  column: 'Sütun', foot: 'Taban', 'top-plate': 'Tabla altı tablası', shelf: 'Raf', worktop: 'Tezgah', led: 'Işık', headboard: 'Başlık', 'added-box': 'Eklenen kutu', 'added-softbox': 'Eklenen yuvarlatılmış kutu', 'added-round': 'Eklenen yuvarlak çubuk', 'added-square': 'Eklenen kare çubuk', 'added-panel': 'Eklenen panel',
+  rail: 'Kayıt', apron: 'Kayıt', stretcher: 'Germe', 'arm-top': 'Kol', 'base-rail': 'Çerçeve rayı', 'seat-deck': 'Oturma gövdesi', 'seat-cushion': 'Oturma minderi', 'back-cushion': 'Sırt minderi', arm: 'Kol', side: 'Yan', door: 'Kapak', drawer: 'Çekmece', back: 'Arkalık'};
 const nameOf = t => `${NAMES[t.role] || t.role}${t.tool === 'profile' ? ' · profil' : ' · siluet'}`;
-const S = {items: [], cur: 0, target: null, pts: null, sel: -1, sym: true, undo: [], redo: [], view: null, compiled: null};
+const S = {items: [], cur: 0, target: null, pts: null, sel: -1, sym: true, undo: [], redo: [], view: null, compiled: null, part: null, mode: 'translate', hist: [], fut: []};
 let viewer = null, checkTimer = 0;
 
 // ---- Loading ---------------------------------------------------------------------------------------------------
@@ -29,7 +30,7 @@ function renderItems() {
   $('#items').innerHTML = S.items.map((it, i) => `<button data-item="${i}" aria-pressed="${i === S.cur}">${String(i + 1).padStart(2, '0')} · ${it.design.kind}${it.design.overrides?.length ? ' ✎' : ''}</button>`).join('');
 }
 function select(i) {
-  S.cur = i; S.target = null; S.pts = null; S.undo = []; S.redo = [];
+  S.cur = i; S.target = null; S.part = null; S.hist = []; S.fut = []; viewer?.select(null); viewer?.gizmo(null); S.pts = null; S.undo = []; S.redo = [];
   rebuild(); renderItems(); renderPanel();
 }
 const design = () => S.items[S.cur]?.design;
@@ -189,12 +190,67 @@ function applyPreset(k) {
   S.sel = -1; writeOverride(); drawEditor(); renderToolState();
 }
 
+
+// ---- Structure: pick in 3D, move / rotate / scale, duplicate, mirror, delete, add ------------------------------
+const R2D = 180 / Math.PI, round1 = v => Math.round(v * 10) / 10;
+const partOf = id => S.compiled?.parts.find(q => q.id === id);
+const ovs = () => (design().overrides || []).slice();
+function commit(list, keepPart = true) {
+  S.hist.push(JSON.stringify(design().overrides || [])); if (S.hist.length > 100) S.hist.shift(); S.fut = [];
+  S.items[S.cur].design = normalizeDesign({...design(), overrides: list});
+  if (!keepPart || (S.part && !partOf(S.part) && !compileDesign(design()).parts.some(q => q.id === S.part))) S.part = null;
+  rebuild(); renderItems(); renderPanel(); syncViewerSel();
+}
+function syncViewerSel() { viewer?.select(S.part); viewer?.gizmo(S.part, S.mode, onGizmoEnd); }
+const transformOf = id => ovs().filter(o => o.tool === 'transform' && o.id === id).at(-1) || {tool: 'transform', id, move: [0, 0, 0], rot: [0, 0, 0], scale: [1, 1, 1]};
+function setTransform(id, f) { const t = structuredClone(transformOf(id)); f(t); commit([...ovs().filter(o => !(o.tool === 'transform' && o.id === id)), t]); }
+function onGizmoEnd({pos, rot, scale}) {
+  const q = partOf(S.part); if (!q) return;
+  setTransform(S.part, t => { t.move = t.move.map((v, i) => round1(v + pos[i] - q.pos[i])); t.rot = t.rot.map((v, i) => v + rot[i] - q.rot[i]); t.scale = t.scale.map((v, i) => Math.round(v * scale[i] * 1000) / 1000); });
+}
+function pickPart(id) { S.part = id; renderPanel(); syncViewerSel(); }
+function uniqueId(base) { const ids = new Set(S.compiled.parts.map(q => q.id)); let k = 2; while (ids.has(`${base}-${k}`)) k++; return `${base}-${k}`; }
+function duplicatePart(mirror) { const id = S.part; if (!id) return; const as = uniqueId(id); commit([...ovs(), {tool: 'duplicate', id, as, mirror}]); pickPart(as); }
+function deletePart() {
+  const id = S.part; if (!id) return; const list = ovs();
+  const own = list.filter(o => (o.tool === 'add' && o.id === id) || (o.tool === 'duplicate' && o.as === id));
+  const rest = list.filter(o => !own.includes(o) && !(o.tool === 'transform' && o.id === id));
+  S.part = null; commit(own.length ? rest : [...rest, {tool: 'remove', id}], false); syncViewerSel();
+}
+function addPart() {
+  const shape = $('#addShape').value, size = ['#addW', '#addH', '#addD'].map(k => +$(k).value || 0), mat = $('#addMat').value;
+  const b = S.compiled.meta?.overall || {}, id = uniqueId('ek');
+  const y = ['round', 'square'].includes(shape) ? 0 : Math.max(size[1] / 2, (b.height || 400) / 2);
+  commit([...ovs(), {tool: 'add', id, shape, size, mat, pos: [0, y, 0], radius: shape === 'softbox' ? 20 : 2}]); pickPart(id);
+}
+function undoStructure() { if (!S.hist.length) return; S.fut.push(JSON.stringify(design().overrides || [])); S.items[S.cur].design = normalizeDesign({...design(), overrides: JSON.parse(S.hist.pop())}); if (S.part && !compileDesign(design()).parts.some(q => q.id === S.part)) S.part = null; rebuild(); renderItems(); renderPanel(); syncViewerSel(); }
+function redoStructure() { if (!S.fut.length) return; S.hist.push(JSON.stringify(design().overrides || [])); S.items[S.cur].design = normalizeDesign({...design(), overrides: JSON.parse(S.fut.pop())}); rebuild(); renderItems(); renderPanel(); syncViewerSel(); }
+const SHAPE_TR = {box: 'Kutu', softbox: 'Yuvarlatılmış kutu', round: 'Yuvarlak çubuk', square: 'Kare çubuk', panel: 'Panel'};
+const MAT_TR = {wood: 'Ahşap', metal: 'Metal', fabric: 'Kumaş', dark: 'Koyu', case: 'Gövde', front: 'Kapak', top: 'Tabla', base: 'Alt yapı', steel: 'Çelik', frame: 'Çerçeve', welt: 'Biye'};
+function structurePanel() {
+  const q = S.part && partOf(S.part), t = q && transformOf(q.id), mats = [...new Set(S.compiled.parts.filter(p => !p.line && typeof p.mat === 'string' && !p.mat.startsWith('lac:')).map(p => p.mat))];
+  const num = (k, v, step) => `<input type="number" data-tf="${k}" value="${v}" step="${step}" inputmode="decimal">`;
+  const editable = q && editableParts(S.compiled).find(e => e.id === q.id || (e.tool === 'profile' && e.role === q.role));
+  return `<h2>Seçili parça</h2>${q ? `<p class="a-note"><b>${NAMES[q.role] || q.role}</b> · ${q.id}${q.added ? ' · eklenen' : ''}</p>
+  <div class="a-tools">${['translate', 'rotate', 'scale'].map(m => `<button data-mode="${m}" aria-pressed="${S.mode === m}">${{translate: 'Taşı', rotate: 'Döndür', scale: 'Ölçekle'}[m]}</button>`).join('')}${editable ? `<button data-shape="${editable.key}">Biçimi düzenle</button>` : ''}</div>
+  <div class="a-grid"><span>Kaydır mm</span>${num('m0', round1(t.move[0]), 5)}${num('m1', round1(t.move[1]), 5)}${num('m2', round1(t.move[2]), 5)}
+  <span>Döndür °</span>${num('r0', round1(t.rot[0] * R2D), 1)}${num('r1', round1(t.rot[1] * R2D), 1)}${num('r2', round1(t.rot[2] * R2D), 1)}
+  <span>Ölçek %</span>${num('s0', round1(t.scale[0] * 100), 1)}${num('s1', round1(t.scale[1] * 100), 1)}${num('s2', round1(t.scale[2] * 100), 1)}</div>
+  <div class="a-tools"><button data-dup>Çoğalt</button><button data-mirror>Aynala (karşı taraf)</button><button data-tfreset>Konumu sıfırla</button><button data-delpart>Sil</button></div>`
+  : '<p class="a-note">3D görünümde bir parçaya dokunun. Seçilen parçayı tutamaçlarla taşıyın, döndürün ya da ölçekleyin; sayıyla da girebilirsiniz.</p>'}
+  <div class="a-tools"><button data-sundo ${S.hist.length ? '' : 'disabled'}>↶ Yapı geri</button><button data-sredo ${S.fut.length ? '' : 'disabled'}>↷ Yapı ileri</button></div>
+  <h2>Parça ekle</h2><div class="a-grid"><span>Biçim</span><select id="addShape">${ADD_SHAPES.map(k => `<option value="${k}">${SHAPE_TR[k]}</option>`).join('')}</select>
+  <select id="addMat">${mats.sort((a, b) => (b === 'wood') - (a === 'wood')).map(m => `<option value="${m}">${MAT_TR[m] || m}</option>`).join('')}</select><span></span>
+  <span>G × Y × D mm</span><input id="addW" type="number" value="400" inputmode="numeric"><input id="addH" type="number" value="30" inputmode="numeric"><input id="addD" type="number" value="300" inputmode="numeric"></div>
+  <div class="a-tools"><button data-add>+ Ekle</button></div><p class="a-note">Çubuklarda G çaptır, Y boydur.</p>`;
+}
+
 // ---- Panel ------------------------------------------------------------------------------------------------------
 function renderPanel() {
   const d = design(), p = $('#panel');
   if (!d) { p.innerHTML = '<p class="a-note">Tasarım bulunamadı. Müşterinin bağlantısını yapıştırın.</p>'; return; }
   const parts = editableParts(S.compiled);
-  p.innerHTML = `<h2>Parça</h2><div class="a-parts">${parts.map(t => `<button data-part="${t.key}" aria-pressed="${S.target?.key === t.key}">${nameOf(t)}${(d.overrides || []).some(o => (o.id && 'id:' + o.id === t.key) || (o.role && 'role:' + o.role === t.key && o.tool === 'profile')) ? ' ✎' : ''}</button>`).join('') || '<span class="a-note">Bu üründe biçimlendirilebilir parça yok.</span>'}</div>
+  p.innerHTML = structurePanel() + `<h2>Parça biçimi</h2><div class="a-parts">${parts.map(t => `<button data-part="${t.key}" aria-pressed="${S.target?.key === t.key}">${nameOf(t)}${(d.overrides || []).some(o => (o.id && 'id:' + o.id === t.key) || (o.role && 'role:' + o.role === t.key && o.tool === 'profile')) ? ' ✎' : ''}</button>`).join('') || '<span class="a-note">Bu üründe biçimlendirilebilir parça yok.</span>'}</div>
   ${S.target ? `<h2>${nameOf(S.target)}</h2>
   <div class="a-tools">${S.target.tool === 'silhouette' ? `<button data-sym aria-pressed="${S.sym}">Simetri</button><button data-preset="soft">Yumuşak köşe</button><button data-preset="oval">Oval</button><button data-preset="boat">Tekne</button><button data-preset="bow">İçbükey kenar</button>`
     : `<button data-preset="taper">Konik</button><button data-preset="swell">Şişkin</button><button data-preset="spindle">Torna halkalı</button>`}</div>
@@ -219,6 +275,15 @@ function renderChecks() {
 
 $('#panel').addEventListener('click', async e => {
   const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.mode) { S.mode = b.dataset.mode; renderPanel(); syncViewerSel(); return; }
+  if (b.dataset.shape) { const t = editableParts(S.compiled).find(x => x.key === b.dataset.shape); S.view = null; pickTarget(t); return; }
+  if (b.hasAttribute('data-dup')) return duplicatePart(false);
+  if (b.hasAttribute('data-mirror')) return duplicatePart(true);
+  if (b.hasAttribute('data-delpart')) return deletePart();
+  if (b.hasAttribute('data-tfreset')) return commit(ovs().filter(o => !(o.tool === 'transform' && o.id === S.part)));
+  if (b.hasAttribute('data-add')) return addPart();
+  if (b.hasAttribute('data-sundo')) return undoStructure();
+  if (b.hasAttribute('data-sredo')) return redoStructure();
   if (b.dataset.part) { const t = editableParts(S.compiled).find(x => x.key === b.dataset.part); S.view = null; pickTarget(t); return; }
   if (b.hasAttribute('data-sym')) { S.sym = !S.sym; b.setAttribute('aria-pressed', S.sym); return; }
   if (b.dataset.preset) return applyPreset(b.dataset.preset);
@@ -235,11 +300,21 @@ $('#panel').addEventListener('click', async e => {
   if (act === 'dxf') download(`AURA-${design().kind}-siluet.dxf`, silhouetteDxf(S.compiled), 'application/dxf');
   if (act === 'json') download(`AURA-${design().kind}-design.json`, JSON.stringify(design(), null, 2), 'application/json');
 });
+$('#panel').addEventListener('change', e => {
+  const k = e.target.dataset?.tf; if (!k || !S.part) return; const v = +e.target.value, i = +k[1];
+  setTransform(S.part, t => { if (k[0] === 'm') t.move[i] = v; else if (k[0] === 'r') t.rot[i] = v / R2D; else t.scale[i] = Math.max(5, v) / 100; });
+});
 $('#items').addEventListener('click', e => { const b = e.target.closest('[data-item]'); if (b) select(+b.dataset.item); });
 $('#loadBtn').onclick = () => { const v = $('#link').value.trim(); const h = v.slice(v.indexOf('#')); if (h.startsWith('#')) load(h); };
 
 import('./scene.js').then(({createViewer}) => {
   viewer = createViewer($('#stage'));
-  if (viewer) { viewer.mode('render'); if (S.compiled) viewer.setDesign(S.compiled, design().materials); }
+  if (viewer) {
+    viewer.mode('render'); if (S.compiled) viewer.setDesign(S.compiled, design().materials);
+    // A tap (not an orbit drag) selects the part under the finger.
+    const cv = $('#stage canvas'); let down = null;
+    cv.addEventListener('pointerdown', e => { down = [e.clientX, e.clientY]; });
+    cv.addEventListener('pointerup', e => { if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6) return; down = null; const id = viewer.pick(e.clientX, e.clientY); if (id !== S.part) pickPart(id); });
+  }
 }).catch(() => {});
 load(location.hash);

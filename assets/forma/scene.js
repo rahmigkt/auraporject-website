@@ -431,8 +431,8 @@ export function createViewer(host, {onRotate} = {}) {
   ao.blendIntensity = 0.85; ao.updateGtaoMaterial({radius: 0.35, distanceExponent: 1.4, thickness: 1.2, scale: 1.0, samples: 16});
   composer.addPass(renderPass); composer.addPass(ao); composer.addPass(smaa); composer.addPass(out);
   let raf = 0;
-  let shooting = false; // while a photo accumulates, nothing else may touch camera, size or scene
-  const draw = () => { if (shooting) return; cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { place(); sketchResolution(); renderPass.camera = camera; ao.camera = camera; composer.render(); }); };
+  let shooting = false, gizmo = null, gizmoId = null, gizmoCb = null, selBox = null, selId = null; // while a photo accumulates, nothing else may touch camera, size or scene
+  const draw = () => { if (shooting) return; cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { place(); if (gizmo) gizmo.camera = camera; sketchResolution(); renderPass.camera = camera; ao.camera = camera; composer.render(); }); };
   function sketchResolution() { const r = host.getBoundingClientRect(); SKETCH.hull.uniforms.resolution.value.set(Math.max(1, r.width), Math.max(1, r.height)); }
   function place() {
     const rect = host.getBoundingClientRect(), aspect = Math.max(0.2, rect.width / Math.max(1, rect.height));
@@ -456,7 +456,7 @@ export function createViewer(host, {onRotate} = {}) {
   // Orbit with pointer; wheel zoom; arrow keys.
   let drag = null;
   canvas.addEventListener('pointerdown', e => { drag = {x: e.clientX, y: e.clientY, yaw, pitch}; canvas.setPointerCapture(e.pointerId); });
-  canvas.addEventListener('pointermove', e => { if (!drag) return; userMoved = true; view = 'angle'; yaw = drag.yaw - (e.clientX - drag.x) * 0.008; pitch = Math.max(-0.05, Math.min(1.2, drag.pitch + (e.clientY - drag.y) * 0.005)); draw(); onRotate?.(); });
+  canvas.addEventListener('pointermove', e => { if (gizmo?.dragging || gizmo?.axis) { drag = null; return; } if (!drag) return; userMoved = true; view = 'angle'; yaw = drag.yaw - (e.clientX - drag.x) * 0.008; pitch = Math.max(-0.05, Math.min(1.2, drag.pitch + (e.clientY - drag.y) * 0.005)); draw(); onRotate?.(); });
   for (const ev of ['pointerup', 'pointercancel']) canvas.addEventListener(ev, () => { drag = null; });
   canvas.addEventListener('wheel', e => { e.preventDefault(); zoom = Math.min(2.5, Math.max(0.6, zoom * (e.deltaY > 0 ? 0.93 : 1.07))); draw(); }, {passive: false});
   canvas.addEventListener('keydown', e => { const k = {ArrowLeft: [0.12, 0], ArrowRight: [-0.12, 0], ArrowUp: [0, 0.08], ArrowDown: [0, -0.08]}[e.key]; if (k) { e.preventDefault(); view = 'angle'; yaw += k[0]; pitch = Math.max(-0.05, Math.min(1.2, pitch + k[1])); draw(); } });
@@ -473,6 +473,16 @@ export function createViewer(host, {onRotate} = {}) {
       w.position.set(it.x / 1000, 0, it.z / 1000); w.rotation.y = it.rot; g.add(w);
     }
     return g;
+  }
+
+  // ---- Designer: pick a part, outline it, move/rotate/scale it with a gizmo ----------------------------------
+  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+  const meshOf = id => { let m = null; group?.traverse(o => { if (!m && o.isMesh && o.userData.part === id) m = o; }); return m; };
+  function reattach() {
+    if (selBox) { scene.remove(selBox); selBox.geometry.dispose(); selBox = null; }
+    const m = selId && meshOf(selId);
+    if (m) { selBox = new THREE.BoxHelper(m, '#a24a2a'); selBox.material.depthTest = false; selBox.renderOrder = 20; scene.add(selBox); }
+    if (gizmo) { const g = gizmoId && meshOf(gizmoId); if (g) gizmo.attach(g); else gizmo.detach(); }
   }
   let pendingRebuild = false;
   function rebuild() {
@@ -495,6 +505,7 @@ export function createViewer(host, {onRotate} = {}) {
     if (isRoom) sun.position.set(-4.6, 3.6, 1.2); else sun.position.set(-1.6, 4.2, 3.2);
     Object.assign(sun.shadow.camera, {left: -e, right: e, top: e, bottom: -e}); sun.shadow.camera.updateProjectionMatrix();
     if (isRoom && !userMoved) { yaw = meta.cameraYaw; pitch = 0.32; }
+    reattach();
     draw();
   }
   /** Catalogue photograph of one product: a seamless warm backdrop, a large soft key light (many shadow samples from
@@ -564,6 +575,27 @@ export function createViewer(host, {onRotate} = {}) {
     view(kind) { view = kind; zoom = 1; if (kind === 'angle') { yaw = room ? room.shell.meta.cameraYaw : compiled?.meta?.room ? compiled.meta.cameraYaw : 0.62; pitch = 0.2; userMoved = false; } draw(); },
     zoom(f) { zoom = Math.min(2.5, Math.max(0.6, zoom * f)); draw(); },
     structure(on) { structure = on; rebuild(); },
+    /** Part id under a screen point (render or sketch mode), or null. */
+    pick(cx, cy) {
+      if (!group) return null; if (gizmo?.axis) return selId; place(); const r = canvas.getBoundingClientRect();
+      ndc.set((cx - r.left) / r.width * 2 - 1, -(cy - r.top) / r.height * 2 + 1); ray.setFromCamera(ndc, camera);
+      for (const h of ray.intersectObject(group, true)) { let o = h.object; while (o && !o.userData.part) o = o.parent; if (o) return o.userData.part; }
+      return null;
+    },
+    /** Outline one part (null clears). */
+    select(id) { selId = id; reattach(); draw(); },
+    /** Gizmo on a part: mode 'translate' | 'rotate' | 'scale'; onEnd({pos, rot, scale}) in mm / rad / factors. Null id removes it. */
+    async gizmo(id, mode = 'translate', onEnd = null) {
+      gizmoId = id; gizmoCb = onEnd;
+      if (!id) { gizmo?.detach(); draw(); return; }
+      if (!gizmo) {
+        const {TransformControls} = await import('../vendor/addons/controls/TransformControls.js');
+        gizmo = new TransformControls(camera, canvas); gizmo.setSize(0.9); scene.add(gizmo.getHelper());
+        gizmo.addEventListener('objectChange', () => { selBox?.update(); draw(); });
+        gizmo.addEventListener('dragging-changed', e => { if (e.value || !gizmo.object) return; const o = gizmo.object; gizmoCb?.({pos: o.position.toArray(), rot: [o.rotation.x, o.rotation.y, o.rotation.z], scale: o.scale.toArray()}); });
+      }
+      gizmo.camera = camera; gizmo.setMode(mode); reattach(); draw();
+    },
     /** 'sketch' (line drawing on paper) or 'render' (materials and colour). */
     mode(m) { const next = m === 'sketch'; if (next !== sketch) { sketch = next; rebuild(); } },
     /** High-resolution still. A single product in render mode gets the studio photograph (see studioPhoto). */
