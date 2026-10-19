@@ -470,10 +470,22 @@ export function createViewer(host, {onRotate} = {}) {
   const offCsg = onCsgReady(() => { if (JSON.stringify(compiled?.parts.map(q => q.geom.fn === 'cut' ? 1 : 0) || []).includes('1')) rebuild(); });
   // Orbit with pointer; wheel zoom; arrow keys.
   let drag = null;
-  canvas.addEventListener('pointerdown', e => { drag = {x: e.clientX, y: e.clientY, yaw, pitch}; canvas.setPointerCapture(e.pointerId); });
+  // Touch: one finger orbits, two fingers pinch to zoom (tablets).
+  const fingers = new Map(); let pinch0 = null;
+  canvas.addEventListener('pointerdown', e => {
+    fingers.set(e.pointerId, [e.clientX, e.clientY]);
+    if (fingers.size === 2) { const [a, b] = [...fingers.values()]; pinch0 = {d: Math.hypot(a[0] - b[0], a[1] - b[1]), zoom}; drag = null; return; }
+    drag = {x: e.clientX, y: e.clientY, yaw, pitch}; canvas.setPointerCapture(e.pointerId);
+  });
+  canvas.addEventListener('pointermove', e => {
+    if (!fingers.has(e.pointerId)) return; fingers.set(e.pointerId, [e.clientX, e.clientY]);
+    if (pinch0 && fingers.size === 2) { const [a, b] = [...fingers.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]); zoom = Math.min(4, Math.max(0.5, pinch0.zoom * d / Math.max(10, pinch0.d))); draw(); }
+  });
+  for (const ev of ['pointerup', 'pointercancel']) canvas.addEventListener(ev, e => { fingers.delete(e.pointerId); if (fingers.size < 2) pinch0 = null; });
+  canvas.style.touchAction = 'none';
   canvas.addEventListener('pointermove', e => { if (gizmo?.dragging || gizmo?.axis) { drag = null; return; } if (!drag) return; userMoved = true; view = 'angle'; yaw = drag.yaw - (e.clientX - drag.x) * 0.008; pitch = Math.max(-0.05, Math.min(1.2, drag.pitch + (e.clientY - drag.y) * 0.005)); draw(); onRotate?.(); });
   for (const ev of ['pointerup', 'pointercancel']) canvas.addEventListener(ev, () => { drag = null; });
-  canvas.addEventListener('wheel', e => { e.preventDefault(); zoom = Math.min(2.5, Math.max(0.6, zoom * (e.deltaY > 0 ? 0.93 : 1.07))); draw(); }, {passive: false});
+  canvas.addEventListener('wheel', e => { e.preventDefault(); zoom = Math.min(4, Math.max(0.5, zoom * (e.deltaY > 0 ? 0.93 : 1.07))); draw(); }, {passive: false});
   canvas.addEventListener('keydown', e => { const k = {ArrowLeft: [0.12, 0], ArrowRight: [-0.12, 0], ArrowUp: [0, 0.08], ArrowDown: [0, -0.08]}[e.key]; if (k) { e.preventDefault(); view = 'angle'; yaw += k[0]; pitch = Math.max(-0.05, Math.min(1.2, pitch + k[1])); draw(); } });
 
   // Project room: one material set per product (cached by its materials), the shell, and a warm light under the cove.
@@ -617,7 +629,7 @@ export function createViewer(host, {onRotate} = {}) {
       if (!id) { gizmo?.detach(); draw(); return; }
       if (!gizmo) {
         const {TransformControls} = await import('../vendor/addons/controls/TransformControls.js');
-        gizmo = new TransformControls(camera, canvas); gizmo.setSize(0.9); gizmo.setTranslationSnap(snapCfg[0] || null); gizmo.setRotationSnap(snapCfg[1] ? snapCfg[1] * Math.PI / 180 : null); scene.add(gizmo.getHelper());
+        gizmo = new TransformControls(camera, canvas); gizmo.setSize(matchMedia('(pointer: coarse)').matches ? 1.35 : 0.9); gizmo.setTranslationSnap(snapCfg[0] || null); gizmo.setRotationSnap(snapCfg[1] ? snapCfg[1] * Math.PI / 180 : null); scene.add(gizmo.getHelper());
         gizmo.addEventListener('objectChange', () => { selBox?.forEach(b => b.update()); draw(); });
         gizmo.addEventListener('dragging-changed', e => { if (e.value || !gizmo.object) return; const o = gizmo.object; gizmoCb?.({pos: o.position.toArray(), rot: [o.rotation.x, o.rotation.y, o.rotation.z], scale: o.scale.toArray()}); });
       }
