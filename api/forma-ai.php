@@ -7,7 +7,8 @@ declare(strict_types=1);
 $config = require __DIR__.'/forma-config.php';
 header('Content-Type: application/json; charset=utf-8'); header('Cache-Control: no-store'); header('X-Content-Type-Options: nosniff');
 function out(int $status, array $body): void { http_response_code($status); echo json_encode($body, JSON_UNESCAPED_UNICODE); exit; }
-$ready = $config['ai_enabled'] && $config['ai_api_key'] !== '' && function_exists('curl_init');
+$qwen = ($config['ai_provider'] ?? 'anthropic') === 'qwen';
+$ready = $config['ai_enabled'] && function_exists('curl_init') && ($qwen ? $config['qwen_url'] !== '' : $config['ai_api_key'] !== '');
 $action = $_GET['action'] ?? '';
 if ($action === 'health') out(200, ['available' => $ready, 'vision' => $ready && !empty($config['ai_vision'])]);
 if (!$ready) out(503, ['error' => 'AI service is not configured']);
@@ -31,7 +32,7 @@ $in = json_decode(file_get_contents('php://input') ?: '', true);
 if (!is_array($in)) out(400, ['error' => 'Invalid JSON']);
 $vocab = json_encode($in['vocabulary'] ?? [], JSON_UNESCAPED_UNICODE);
 $lang = preg_replace('/[^a-z]/', '', (string)($in['lang'] ?? 'en'));
-$model = $config['ai_model'];
+$model = $qwen ? $config['qwen_model'] : $config['ai_model'];
 
 if ($action === 'command') {
   $text = mb_substr((string)($in['text'] ?? ''), 0, 600);
@@ -49,7 +50,7 @@ if ($action === 'command') {
   $maxTokens = 600;
 } elseif ($action === 'vision') {
   if (empty($config['ai_vision'])) out(503, ['error' => 'Image reading is off']);
-  $model = $config['ai_model_vision'];
+  $model = $qwen ? $config['qwen_model'] : $config['ai_model_vision'];
   $img = (string)($in['image'] ?? '');
   if (!preg_match('#^data:(image/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$#', $img, $m)) out(400, ['error' => 'Unsupported image']);
   if (strlen($m[2]) > 5_500_000) out(413, ['error' => 'Image too large']);
@@ -64,15 +65,34 @@ if ($action === 'command') {
   $maxTokens = 1600;
 } else out(400, ['error' => 'Unknown action']);
 
-$ch = curl_init('https://api.anthropic.com/v1/messages');
-curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_TIMEOUT => 45,
-  CURLOPT_HTTPHEADER => ['content-type: application/json', 'x-api-key: '.$config['ai_api_key'], 'anthropic-version: 2023-06-01'],
-  CURLOPT_POSTFIELDS => json_encode(['model' => $model, 'max_tokens' => $maxTokens, 'system' => $system, 'messages' => $messages])]);
-$res = curl_exec($ch); $code = curl_getinfo($ch, CURLINFO_HTTP_CODE); curl_close($ch);
-if ($res === false || $code >= 400) out(502, ['error' => 'AI provider error']);
-$j = json_decode($res, true);
-$text = '';
-foreach (($j['content'] ?? []) as $c) if (($c['type'] ?? '') === 'text') $text .= $c['text'];
+if ($qwen) {
+  // Own server: Qwen behind an OpenAI-compatible endpoint (vLLM), reached over HTTPS with a bearer token.
+  $omsg = [['role' => 'system', 'content' => $system]];
+  foreach ($messages as $mm0) {
+    if (is_string($mm0['content'])) { $omsg[] = ['role' => 'user', 'content' => $mm0['content']]; continue; }
+    $parts = [];
+    foreach ($mm0['content'] as $c) $parts[] = $c['type'] === 'image' ? ['type' => 'image_url', 'image_url' => ['url' => 'data:'.$c['source']['media_type'].';base64,'.$c['source']['data']]] : ['type' => 'text', 'text' => $c['text']];
+    $omsg[] = ['role' => 'user', 'content' => $parts];
+  }
+  $ch = curl_init(rtrim($config['qwen_url'], '/').'/v1/chat/completions');
+  curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_TIMEOUT => 45,
+    CURLOPT_HTTPHEADER => ['content-type: application/json', 'authorization: Bearer '.$config['qwen_token']],
+    CURLOPT_POSTFIELDS => json_encode(['model' => $model, 'max_tokens' => $maxTokens, 'temperature' => 0.2, 'messages' => $omsg, 'response_format' => ['type' => 'json_object'], 'chat_template_kwargs' => ['enable_thinking' => false]])]);
+  $res = curl_exec($ch); $code = curl_getinfo($ch, CURLINFO_HTTP_CODE); curl_close($ch);
+  if ($res === false || $code >= 400) out(502, ['error' => 'AI server error']);
+  $j = json_decode($res, true);
+  $text = (string)($j['choices'][0]['message']['content'] ?? '');
+} else {
+  $ch = curl_init('https://api.anthropic.com/v1/messages');
+  curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_TIMEOUT => 45,
+    CURLOPT_HTTPHEADER => ['content-type: application/json', 'x-api-key: '.$config['ai_api_key'], 'anthropic-version: 2023-06-01'],
+    CURLOPT_POSTFIELDS => json_encode(['model' => $model, 'max_tokens' => $maxTokens, 'system' => $system, 'messages' => $messages])]);
+  $res = curl_exec($ch); $code = curl_getinfo($ch, CURLINFO_HTTP_CODE); curl_close($ch);
+  if ($res === false || $code >= 400) out(502, ['error' => 'AI provider error']);
+  $j = json_decode($res, true);
+  $text = '';
+  foreach (($j['content'] ?? []) as $c) if (($c['type'] ?? '') === 'text') $text .= $c['text'];
+}
 if (!preg_match('/\{[\s\S]*\}/', $text, $mm)) out(502, ['error' => 'No JSON in answer']);
 $data = json_decode($mm[0], true);
 if (!is_array($data)) out(502, ['error' => 'Invalid JSON in answer']);

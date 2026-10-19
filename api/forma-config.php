@@ -3,8 +3,12 @@
 // gitignored, uploaded by hand) or in environment variables. Everything stays off until configured.
 $secrets = is_file(__DIR__.'/forma-secrets.php') ? require __DIR__.'/forma-secrets.php' : [];
 return array_merge([
- // AI (text commands + image reading). Provider: Anthropic Messages API.
+ // AI (text commands + image reading). Provider: 'qwen' (own GPU server, OpenAI-compatible vLLM) or 'anthropic'.
  'ai_enabled' => false,
+ 'ai_provider' => 'qwen',
+ 'qwen_url' => getenv('AURA_QWEN_URL') ?: '',      // e.g. https://ai.auraproject.com.tr
+ 'qwen_token' => getenv('AURA_QWEN_TOKEN') ?: '',  // bearer token set on the server
+ 'qwen_model' => 'aura-qwen',                      // served model name (Qwen3.5-9B, later the AURA fine-tune)
  'ai_api_key' => getenv('AURA_AI_KEY') ?: '',
  'ai_model' => 'claude-haiku-5-5',          // commands: fast and low cost
  'ai_model_vision' => 'claude-sonnet-5-5',   // photo / sketch reading: stronger model, used rarely
