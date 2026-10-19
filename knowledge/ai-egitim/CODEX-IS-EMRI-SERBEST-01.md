@@ -47,3 +47,11 @@ Dokunmatik bir dizüstünde ve tablette: bir yemek masasının tablasını serbe
 değiştirip üretime gönderebilmek; fizik denetimi anında; mevcut testler + yeni fizik testleri geçer.
 Dal `codex/aura-serbest-01`; PR 1: sayfa, katman modeli, siluet + torna araçları, fizik çekirdeği. PR 2: kenar profili,
 eğim, DXF. PR 3: kıvrım (sweep). PR açılır, birleştirilmez.
+
+## Durum (2026-10-19, Claude uyguladı — PR 1)
+`tasarimci.html` + `assets/forma/atelier.js`: bağlantıdan açma, parça seçimi, siluet (simetri, hazır biçimler,
+nokta ekle/sil/sürükle, geri al, iki parmakla yakınlaştırma) ve torna profili (yatay 3× büyütülmüş), 3D anlık.
+`overrides.js`: katman modeli (biçim kutuya/boya göre göreli; ölçü değişse de korunur), bağlantıda taşınır, CNC DXF.
+`physics.js`: devrilme (kenar yükü), sehim ve çıkma, en ince kesit, narinlik, CNC iç yarıçap ve dar yarık/boğaz.
+Üretim sayfası katmanı kullanır ve `cnc-siluetler.dxf` ekler. Testler: forma-check bölüm 16.
+Sırada: kenar profili aracı, eğim/konik, kıvrım (sweep), parça seçimi 3D'de dokunarak.

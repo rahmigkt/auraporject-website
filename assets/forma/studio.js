@@ -4,7 +4,7 @@
 // Families: seating (sofa, loveseat, armchair), tables (dining, coffee, side, console, desk) and RİTMO case goods
 // (wardrobe, bedside table, chest of drawers, vanity) built from panels with fixed production rules. The earlier
 // bedroom set (bed-led) is kept only so older saved designs still open.
-import {sample, normalizeDesign, SCHEMA} from './generate.js';
+import {sample, normalizeDesign, compileDesign, SCHEMA} from './generate.js';
 import {FAMILIES, familyOf} from './families.js';
 import {buildMesh} from './build.js';
 import {styleName} from './styles.js';
@@ -43,9 +43,9 @@ const L = k => t(k, state.lang);
 const N = entry => nm(entry, state.lang);
 let viewer = null, sceneModule = null;
 
-const compileOf = d => familyOf(d).mod.compile({...d.params, kind: d.kind});
+const compileOf = d => compileDesign(d);
 /** What the viewer shows: case goods may be shown with doors and drawers open (drawings and files stay closed). */
-const shown = (d = state.design) => ['storage', 'kitchen', 'bath'].includes(d.family) && state.openFronts ? familyOf(d).mod.compile({...d.params, kind: d.kind, openFronts: true}) : (d === state.design ? state.compiled : compileOf(d));
+const shown = (d = state.design) => ['storage', 'kitchen', 'bath'].includes(d.family) && state.openFronts ? compileDesign(d, {openFronts: true}) : (d === state.design ? state.compiled : compileOf(d));
 const issuesOf = (d, c) => d.family !== 'seating' ? familyOf(d).mod.validate(c, d.materials, buildMesh) : familyOf(d).mod.validate(c);
 const isTable = () => state.design.family === 'table';
 const isBedroom = () => state.design.family === 'bedroom';
@@ -177,7 +177,7 @@ function shell() {
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261019b').then(mod => { sceneModule = mod; const {createViewer} = mod;
+  import('./scene.js?v=20261019c').then(mod => { sceneModule = mod; const {createViewer} = mod;
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(shown(), state.design.materials); if (state.room) showRoom(); }

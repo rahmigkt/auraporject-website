@@ -1,6 +1,7 @@
 // Design generation for every family: sample a style, propose diverse variants, explore neighbours, blend.
 import {rng, hash, clamp, lerp} from './rng.js';
 import {FAMILIES, familyOf} from './families.js';
+import {applyOverrides, normalizeOverrides} from './overrides.js';
 
 export const SCHEMA = 'aura.forma.design/1';
 
@@ -11,8 +12,12 @@ export function normalizeDesign(d = {}) {
   const fam = familyOf(d), style = fam.byId[d.style] ? d.style : 'japandi';
   const kind = fam.kinds[d.kind] ? d.kind : fam.defaultKind;
   const out = {schema: SCHEMA, family: fam.id, kind, style, seed: (d.seed >>> 0) || 1, params: fam.mod.normalize({...(d.params || {}), kind}), materials: fam.normalizeMaterials(d.materials || {})};
+  const ov = normalizeOverrides(d.overrides); if (ov.length) out.overrides = ov;
   return fam.couple ? fam.couple(out) : out;
 }
+
+/** Compile a design with its designer layer (free-form silhouettes and profiles). extra: e.g. {openFronts: true}. */
+export const compileDesign = (d, extra = {}) => applyOverrides(familyOf(d).mod.compile({...d.params, kind: d.kind, ...extra}), d.overrides);
 
 /** Sample one design. locks: {params:{…}, materials:{…}} keeps customer-fixed choices. */
 export function sample({family = 'seating', style = 'japandi', kind, seed = 1, locks = {}} = {}) {
