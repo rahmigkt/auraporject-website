@@ -1,0 +1,942 @@
+{
+  "schema": "aura.material.reference/1",
+  "date": "2026-10-19",
+  "source_commit": "5fc4251",
+  "units": {
+    "density": "kg/m3",
+    "E": "MPa = N/mm2",
+    "bending_strength": "MPa",
+    "withdrawal": "N per specified connector/test",
+    "safety_factor": "dimensionless"
+  },
+  "null_policy": "Unknown is null; forbid zero/default substitution and automatic pass",
+  "sources": {
+    "wood-elastic": {
+      "url": "https://research.fs.usda.gov/download/treesearch/62244.pdf",
+      "locator": "Wood Handbook2021 ch5 printed p5-2, Table5-1 at approx12% moisture; E axial approximation=1.1*E bending; ER/EL and ET/EL ratios"
+    },
+    "wood-teak": {
+      "url": "https://research.fs.usda.gov/download/treesearch/62244.pdf",
+      "locator": "Table5-5a continuation PDFp21, teak Tectona grandis,12% MC: MOR100700kPa,E10700MPa; compilation of world literature, not a graded stock certificate"
+    },
+    "ahec-oak": {
+      "url": "https://www.americanhardwood.org/en/american-hardwood/american-white-oak",
+      "locator": "Mechanical Properties, 12% moisture; Quercus species mainly Q. alba"
+    },
+    "ahec-ash": {
+      "url": "https://www.americanhardwood.org/en/american-hardwood/american-ash",
+      "locator": "Mechanical Properties, 12% moisture; Fraxinus species incl. F. americana; live page E=11977 (not 11997 in one comparative table)"
+    },
+    "ahec-beech": {
+      "url": "https://www.americanhardwood.org/en/american-hardwood/american-beech",
+      "locator": "Mechanical Properties, 12% moisture; Fagus grandifolia, NOT European beech/hornbeam"
+    },
+    "ahec-walnut": {
+      "url": "https://www.americanhardwood.org/en/american-hardwood/american-walnut",
+      "locator": "Mechanical Properties, 12% moisture; Juglans nigra, NOT generic European walnut"
+    },
+    "ahec-cherry": {
+      "url": "https://www.americanhardwood.org/en/american-hardwood/american-cherry",
+      "locator": "Mechanical Properties, 12% moisture; Prunus serotina, NOT all cherries"
+    },
+    "wood-handbook": {
+      "url": "https://research.fs.usda.gov/fpl/wood-handbook",
+      "locator": "2021 edition ch.5 orthotropic clear wood; ch.7 graded design; ch.8 fastenings; ch.12 composites"
+    },
+    "mdf-egger": {
+      "url": "https://www.egger.com/get_download/b4232f52-2994-46f1-965a-84dd9413f7a6/Technical_datasheet_MDF_Light_E1_Euca_TD-522_English.pdf",
+      "locator": "2025-07-24, MDF Light E1 ELS recipe 522; thickness >12–19 mm; density specific to plant; EN310"
+    },
+    "p2-egger": {
+      "url": "https://www.egger.com/get_download/1979eb12-4ecc-4c0a-bb2f-8e7efdf27d34/Technical_datasheet_E1_P2_TD-001_English.pdf?country=GB",
+      "locator": "2025-07-14, P2 EN312 recipe001; thickness >13–20 mm; EN310; density plant-specific"
+    },
+    "plywood-metsa": {
+      "url": "https://www.metsagroup.com/metsawood/products-and-services/products/birch-plywood/metsa-wood-birch/",
+      "locator": "Birch plywood; exact thickness/layup/direction-specific technical declaration required"
+    },
+    "al-hydro": {
+      "url": "https://www.hydro.com/Document/Index?id=7824&name=Hydro+EN+AW+6082.PDF",
+      "locator": "6082 extruded products Rev2 01/2019; density 2.71 g/cm3, E70GPa"
+    },
+    "steel-bssa": {
+      "url": "https://bssa.org.uk/bssa_articles/ambient-temperature-physical-properties-of-stainless-steels-to-bs-en-10088-1/",
+      "locator": "304 row, room temperature: density7900, E200GPa"
+    },
+    "brass-cda": {
+      "url": "https://alloys.copper.org/alloy/C26000",
+      "locator": "C26000: specific gravity8.53, tensile E16000ksi; unit conversion 1ksi=6.894757293MPa"
+    },
+    "stone-nsi": {
+      "url": "https://www.naturalstoneinstitute.org/resources/natural-stone-testing-services/",
+      "locator": "ASTM C97 density; C880 flexural strength; C99 MOR; C1352 flexural E; C1354 anchorage. Values require quarry/batch/test direction, not a generic stone constant"
+    }
+  },
+  "current_physics": {
+    "source_commit": "5fc4251",
+    "density_kg_m3": {
+      "wood": 680,
+      "mdf": 750,
+      "metal": 7850,
+      "stone": 2700
+    },
+    "E_MPa": {
+      "wood": 11000,
+      "mdf": 3500,
+      "metal": 200000,
+      "stone": 50000
+    },
+    "notes": [
+      "physics.js imports WOODS but uses class-level DENSITY/E_MOD in mass/deflection",
+      "No species transverse modulus, connector pull-out or general frame connection stiffness model",
+      "These baseline values are source observations, not sourced material certificates"
+    ]
+  },
+  "materials": [
+    {
+      "id": "gurgen",
+      "category": "wood",
+      "reference_identity": "Unresolved Carpinus (Turkish gürgen) vs Fagus (catalog English beech)",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": null,
+      "E_longitudinal_or_inplane_MPa": null,
+      "E_transverse_MPa": {
+        "radial_or_cross": null,
+        "tangential_or_through_thickness": null
+      },
+      "bending_strength_MPa": null,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "wood-handbook"
+      ],
+      "conditions": "Catalog translation is inconsistent; no American beech properties assigned silently",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "current_physics_class": "wood",
+      "reference_minus_current": {
+        "density_kg_m3": null,
+        "E_MPa": null,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "oak",
+      "category": "wood",
+      "reference_identity": "American white oak, Quercus spp. mainly Q.alba",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": 769,
+      "E_longitudinal_or_inplane_MPa": 12273,
+      "E_transverse_MPa": {
+        "radial_or_cross": 2200.549,
+        "tangential_or_through_thickness": 972.022
+      },
+      "bending_strength_MPa": 104.804,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "ahec-oak",
+        "wood-elastic"
+      ],
+      "conditions": "Published average reference at 12% moisture; not characteristic design values; verify supplied species before assignment",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "Conditional derived estimate, not independently measured; exact species and moisture must match",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "moisture_percent": 12,
+      "transverse_estimate": {
+        "status": "derived_approximation_not_measured_for_supplied_stock",
+        "formula": "E_axial=1.1*E_bending; ER=ratioR*E_axial; ET=ratioT*E_axial",
+        "ratioR": 0.163,
+        "ratioT": 0.072,
+        "species_limit": "FPL white oak / white ash / black walnut / black cherry respectively; AHEC ash group must be narrowed to white ash before use"
+      },
+      "current_physics_class": "wood",
+      "reference_minus_current": {
+        "density_kg_m3": 89,
+        "E_MPa": 1273,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "ash",
+      "category": "wood",
+      "reference_identity": "American ash, Fraxinus spp. incl.F.americana",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": 673,
+      "E_longitudinal_or_inplane_MPa": 11977,
+      "E_transverse_MPa": {
+        "radial_or_cross": 1646.838,
+        "tangential_or_through_thickness": 1053.976
+      },
+      "bending_strength_MPa": 103.425,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "ahec-ash",
+        "wood-elastic"
+      ],
+      "conditions": "Published average reference at 12% moisture; not characteristic design values; verify supplied species before assignment",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "Conditional derived estimate, not independently measured; exact species and moisture must match",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "moisture_percent": 12,
+      "transverse_estimate": {
+        "status": "derived_approximation_not_measured_for_supplied_stock",
+        "formula": "E_axial=1.1*E_bending; ER=ratioR*E_axial; ET=ratioT*E_axial",
+        "ratioR": 0.125,
+        "ratioT": 0.08,
+        "species_limit": "FPL white oak / white ash / black walnut / black cherry respectively; AHEC ash group must be narrowed to white ash before use"
+      },
+      "current_physics_class": "wood",
+      "reference_minus_current": {
+        "density_kg_m3": -7,
+        "E_MPa": 977,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "beech",
+      "category": "wood",
+      "reference_identity": "American beech, Fagus grandifolia",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": 721,
+      "E_longitudinal_or_inplane_MPa": 11859,
+      "E_transverse_MPa": {
+        "radial_or_cross": null,
+        "tangential_or_through_thickness": null
+      },
+      "bending_strength_MPa": 102.736,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "ahec-beech"
+      ],
+      "conditions": "Published average reference at 12% moisture; not characteristic design values; verify supplied species before assignment",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "moisture_percent": 12,
+      "current_physics_class": "wood",
+      "reference_minus_current": {
+        "density_kg_m3": 41,
+        "E_MPa": 859,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "walnut",
+      "category": "wood",
+      "reference_identity": "American black walnut, Juglans nigra",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": 609,
+      "E_longitudinal_or_inplane_MPa": 11584,
+      "E_transverse_MPa": {
+        "radial_or_cross": 1350.694,
+        "tangential_or_through_thickness": 713.574
+      },
+      "bending_strength_MPa": 100.677,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "ahec-walnut",
+        "wood-elastic"
+      ],
+      "conditions": "Published average reference at 12% moisture; not characteristic design values; verify supplied species before assignment",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "Conditional derived estimate, not independently measured; exact species and moisture must match",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "moisture_percent": 12,
+      "transverse_estimate": {
+        "status": "derived_approximation_not_measured_for_supplied_stock",
+        "formula": "E_axial=1.1*E_bending; ER=ratioR*E_axial; ET=ratioT*E_axial",
+        "ratioR": 0.106,
+        "ratioT": 0.056,
+        "species_limit": "FPL white oak / white ash / black walnut / black cherry respectively; AHEC ash group must be narrowed to white ash before use"
+      },
+      "current_physics_class": "wood",
+      "reference_minus_current": {
+        "density_kg_m3": -71,
+        "E_MPa": 584,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "cherry",
+      "category": "wood",
+      "reference_identity": "American cherry, Prunus serotina",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": 561,
+      "E_longitudinal_or_inplane_MPa": 10274,
+      "E_transverse_MPa": {
+        "radial_or_cross": 2226.376,
+        "tangential_or_through_thickness": 971.92
+      },
+      "bending_strength_MPa": 84.809,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "ahec-cherry",
+        "wood-elastic"
+      ],
+      "conditions": "Published average reference at 12% moisture; not characteristic design values; verify supplied species before assignment",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "Conditional derived estimate, not independently measured; exact species and moisture must match",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "moisture_percent": 12,
+      "transverse_estimate": {
+        "status": "derived_approximation_not_measured_for_supplied_stock",
+        "formula": "E_axial=1.1*E_bending; ER=ratioR*E_axial; ET=ratioT*E_axial",
+        "ratioR": 0.197,
+        "ratioT": 0.086,
+        "species_limit": "FPL white oak / white ash / black walnut / black cherry respectively; AHEC ash group must be narrowed to white ash before use"
+      },
+      "current_physics_class": "wood",
+      "reference_minus_current": {
+        "density_kg_m3": -119,
+        "E_MPa": -726,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "teak",
+      "category": "wood",
+      "reference_identity": "Tectona grandis reference at12%MC",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": null,
+      "E_longitudinal_or_inplane_MPa": 10700,
+      "E_transverse_MPa": {
+        "radial_or_cross": null,
+        "tangential_or_through_thickness": null
+      },
+      "bending_strength_MPa": 100.7,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "wood-teak"
+      ],
+      "conditions": "Density not inferred from green specific gravity0.55; table is a literature compilation, not a graded supplied-stock certificate",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "current_physics_class": "wood",
+      "reference_minus_current": {
+        "density_kg_m3": null,
+        "E_MPa": -300,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "smoked",
+      "category": "wood_finish_variant",
+      "reference_identity": "Oak substrate species and treatment unresolved",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": null,
+      "E_longitudinal_or_inplane_MPa": null,
+      "E_transverse_MPa": {
+        "radial_or_cross": null,
+        "tangential_or_through_thickness": null
+      },
+      "bending_strength_MPa": null,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "wood-handbook"
+      ],
+      "conditions": "Finish colour is not a new species. Treatment may affect properties; inherit only a verified substrate/treatment dataset",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "substrate_candidate": "oak",
+      "inherit_automatically": false,
+      "current_physics_class": "wood",
+      "reference_minus_current": {
+        "density_kg_m3": null,
+        "E_MPa": null,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "ebonized",
+      "category": "wood_finish_variant",
+      "reference_identity": "Oak substrate species and treatment unresolved",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": null,
+      "E_longitudinal_or_inplane_MPa": null,
+      "E_transverse_MPa": {
+        "radial_or_cross": null,
+        "tangential_or_through_thickness": null
+      },
+      "bending_strength_MPa": null,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "wood-handbook"
+      ],
+      "conditions": "Finish colour is not a new species. Treatment may affect properties; inherit only a verified substrate/treatment dataset",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "substrate_candidate": "oak",
+      "inherit_automatically": false,
+      "current_physics_class": "wood",
+      "reference_minus_current": {
+        "density_kg_m3": null,
+        "E_MPa": null,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "mdf",
+      "category": "panel",
+      "reference_identity": "EGGER MDF Light E1 ELS recipe522, >12–19mm",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": null,
+      "E_longitudinal_or_inplane_MPa": 2200,
+      "E_transverse_MPa": {
+        "radial_or_cross": null,
+        "tangential_or_through_thickness": null
+      },
+      "bending_strength_MPa": 20,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "mdf-egger"
+      ],
+      "conditions": "Product-specific EN310 sheet mean reference, not all MDF. Density is plant-specific, not750 by default",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "thickness_mm": {
+        "min_exclusive": 12,
+        "max_inclusive": 19
+      },
+      "current_physics_class": "mdf",
+      "reference_minus_current": {
+        "density_kg_m3": null,
+        "E_MPa": -1300,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "plywood",
+      "category": "panel",
+      "reference_identity": "Birch plywood product/layup/thickness unresolved",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": null,
+      "E_longitudinal_or_inplane_MPa": null,
+      "E_transverse_MPa": {
+        "radial_or_cross": null,
+        "tangential_or_through_thickness": null
+      },
+      "bending_strength_MPa": null,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "plywood-metsa"
+      ],
+      "conditions": "Do not transfer a single face-grain modulus across layups or through thickness; current engine has no plywood-specific class",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "current_physics_class": "mdf",
+      "reference_minus_current": {
+        "density_kg_m3": null,
+        "E_MPa": null,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "particleboard",
+      "category": "panel",
+      "reference_identity": "EGGER raw P2 recipe001, >13–20mm",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": null,
+      "E_longitudinal_or_inplane_MPa": 1600,
+      "E_transverse_MPa": {
+        "radial_or_cross": null,
+        "tangential_or_through_thickness": null
+      },
+      "bending_strength_MPa": 11,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "p2-egger"
+      ],
+      "conditions": "Product-specific EN310 reference; density plant-specific; screw resistance not established by internal bond test",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "thickness_mm": {
+        "min_exclusive": 13,
+        "max_inclusive": 20
+      },
+      "current_physics_class": "mdf",
+      "reference_minus_current": {
+        "density_kg_m3": null,
+        "E_MPa": -1900,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "steel",
+      "category": "metal",
+      "reference_identity": "Stainless steel AISI304 room-temperature reference; not all steels",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": 7900,
+      "E_longitudinal_or_inplane_MPa": 200000,
+      "E_transverse_MPa": {
+        "radial_or_cross": 200000,
+        "tangential_or_through_thickness": 200000
+      },
+      "bending_strength_MPa": null,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "steel-bssa"
+      ],
+      "conditions": "Isotropic E approximation; bending allowable comes from grade/temper/yield/section/local-buckling design, not wood MOR",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "Isotropic approximation explicitly used for this reference only",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "current_physics_class": "metal",
+      "reference_minus_current": {
+        "density_kg_m3": 50,
+        "E_MPa": 0,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "aluminium",
+      "category": "metal",
+      "reference_identity": "EN AW6082 extruded aluminium room-temperature reference",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": 2710,
+      "E_longitudinal_or_inplane_MPa": 70000,
+      "E_transverse_MPa": {
+        "radial_or_cross": 70000,
+        "tangential_or_through_thickness": 70000
+      },
+      "bending_strength_MPa": null,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "al-hydro"
+      ],
+      "conditions": "Isotropic E approximation; bending allowable comes from grade/temper/yield/section/local-buckling design, not wood MOR",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "Isotropic approximation explicitly used for this reference only",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "current_physics_class": "metal",
+      "reference_minus_current": {
+        "density_kg_m3": -5140,
+        "E_MPa": -130000,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "brass",
+      "category": "metal",
+      "reference_identity": "UNS C26000 cartridge brass reference",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": 8530,
+      "E_longitudinal_or_inplane_MPa": 110316.117,
+      "E_transverse_MPa": {
+        "radial_or_cross": 110316.117,
+        "tangential_or_through_thickness": 110316.117
+      },
+      "bending_strength_MPa": null,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "brass-cda"
+      ],
+      "conditions": "Isotropic E approximation; bending allowable comes from grade/temper/yield/section/local-buckling design, not wood MOR",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "Isotropic approximation explicitly used for this reference only",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "current_physics_class": "metal",
+      "reference_minus_current": {
+        "density_kg_m3": 680,
+        "E_MPa": -89683.883,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "carrara",
+      "category": "stone_or_surface",
+      "reference_identity": "Quarry/batch/finish/reinforcement not specified",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": null,
+      "E_longitudinal_or_inplane_MPa": null,
+      "E_transverse_MPa": {
+        "radial_or_cross": null,
+        "tangential_or_through_thickness": null
+      },
+      "bending_strength_MPa": null,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "stone-nsi"
+      ],
+      "conditions": "Catalog colour/product name does not identify mechanical test certificate. concrete is concrete-look CERAMIC, not structural concrete; terrazzo is composite",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "catalog_density_kg_m3": 2700,
+      "catalog_density_status": "visual catalog baseline, not independently validated",
+      "catalog_member": true,
+      "current_physics_class": "stone",
+      "reference_minus_current": {
+        "density_kg_m3": null,
+        "E_MPa": null,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "calacatta",
+      "category": "stone_or_surface",
+      "reference_identity": "Quarry/batch/finish/reinforcement not specified",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": null,
+      "E_longitudinal_or_inplane_MPa": null,
+      "E_transverse_MPa": {
+        "radial_or_cross": null,
+        "tangential_or_through_thickness": null
+      },
+      "bending_strength_MPa": null,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "stone-nsi"
+      ],
+      "conditions": "Catalog colour/product name does not identify mechanical test certificate. concrete is concrete-look CERAMIC, not structural concrete; terrazzo is composite",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "catalog_density_kg_m3": 2700,
+      "catalog_density_status": "visual catalog baseline, not independently validated",
+      "catalog_member": true,
+      "current_physics_class": "stone",
+      "reference_minus_current": {
+        "density_kg_m3": null,
+        "E_MPa": null,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "nero",
+      "category": "stone_or_surface",
+      "reference_identity": "Quarry/batch/finish/reinforcement not specified",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": null,
+      "E_longitudinal_or_inplane_MPa": null,
+      "E_transverse_MPa": {
+        "radial_or_cross": null,
+        "tangential_or_through_thickness": null
+      },
+      "bending_strength_MPa": null,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "stone-nsi"
+      ],
+      "conditions": "Catalog colour/product name does not identify mechanical test certificate. concrete is concrete-look CERAMIC, not structural concrete; terrazzo is composite",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "catalog_density_kg_m3": 2700,
+      "catalog_density_status": "visual catalog baseline, not independently validated",
+      "catalog_member": true,
+      "current_physics_class": "stone",
+      "reference_minus_current": {
+        "density_kg_m3": null,
+        "E_MPa": null,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "emperador",
+      "category": "stone_or_surface",
+      "reference_identity": "Quarry/batch/finish/reinforcement not specified",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": null,
+      "E_longitudinal_or_inplane_MPa": null,
+      "E_transverse_MPa": {
+        "radial_or_cross": null,
+        "tangential_or_through_thickness": null
+      },
+      "bending_strength_MPa": null,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "stone-nsi"
+      ],
+      "conditions": "Catalog colour/product name does not identify mechanical test certificate. concrete is concrete-look CERAMIC, not structural concrete; terrazzo is composite",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "catalog_density_kg_m3": 2700,
+      "catalog_density_status": "visual catalog baseline, not independently validated",
+      "catalog_member": true,
+      "current_physics_class": "stone",
+      "reference_minus_current": {
+        "density_kg_m3": null,
+        "E_MPa": null,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "verde",
+      "category": "stone_or_surface",
+      "reference_identity": "Quarry/batch/finish/reinforcement not specified",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": null,
+      "E_longitudinal_or_inplane_MPa": null,
+      "E_transverse_MPa": {
+        "radial_or_cross": null,
+        "tangential_or_through_thickness": null
+      },
+      "bending_strength_MPa": null,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "stone-nsi"
+      ],
+      "conditions": "Catalog colour/product name does not identify mechanical test certificate. concrete is concrete-look CERAMIC, not structural concrete; terrazzo is composite",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "catalog_density_kg_m3": 2750,
+      "catalog_density_status": "visual catalog baseline, not independently validated",
+      "catalog_member": true,
+      "current_physics_class": "stone",
+      "reference_minus_current": {
+        "density_kg_m3": null,
+        "E_MPa": null,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "travertine",
+      "category": "stone_or_surface",
+      "reference_identity": "Quarry/batch/finish/reinforcement not specified",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": null,
+      "E_longitudinal_or_inplane_MPa": null,
+      "E_transverse_MPa": {
+        "radial_or_cross": null,
+        "tangential_or_through_thickness": null
+      },
+      "bending_strength_MPa": null,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "stone-nsi"
+      ],
+      "conditions": "Catalog colour/product name does not identify mechanical test certificate. concrete is concrete-look CERAMIC, not structural concrete; terrazzo is composite",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "catalog_density_kg_m3": 2500,
+      "catalog_density_status": "visual catalog baseline, not independently validated",
+      "catalog_member": true,
+      "current_physics_class": "stone",
+      "reference_minus_current": {
+        "density_kg_m3": null,
+        "E_MPa": null,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "terrazzo",
+      "category": "stone_or_surface",
+      "reference_identity": "Quarry/batch/finish/reinforcement not specified",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": null,
+      "E_longitudinal_or_inplane_MPa": null,
+      "E_transverse_MPa": {
+        "radial_or_cross": null,
+        "tangential_or_through_thickness": null
+      },
+      "bending_strength_MPa": null,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "stone-nsi"
+      ],
+      "conditions": "Catalog colour/product name does not identify mechanical test certificate. concrete is concrete-look CERAMIC, not structural concrete; terrazzo is composite",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "catalog_density_kg_m3": 2400,
+      "catalog_density_status": "visual catalog baseline, not independently validated",
+      "catalog_member": true,
+      "current_physics_class": "stone",
+      "reference_minus_current": {
+        "density_kg_m3": null,
+        "E_MPa": null,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "concrete",
+      "category": "stone_or_surface",
+      "reference_identity": "Quarry/batch/finish/reinforcement not specified",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": null,
+      "E_longitudinal_or_inplane_MPa": null,
+      "E_transverse_MPa": {
+        "radial_or_cross": null,
+        "tangential_or_through_thickness": null
+      },
+      "bending_strength_MPa": null,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "stone-nsi"
+      ],
+      "conditions": "Catalog colour/product name does not identify mechanical test certificate. concrete is concrete-look CERAMIC, not structural concrete; terrazzo is composite",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "catalog_density_kg_m3": 2400,
+      "catalog_density_status": "visual catalog baseline, not independently validated",
+      "catalog_member": true,
+      "current_physics_class": "stone",
+      "reference_minus_current": {
+        "density_kg_m3": null,
+        "E_MPa": null,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    },
+    {
+      "id": "granite",
+      "category": "stone_or_surface",
+      "reference_identity": "Quarry/batch/finish/reinforcement not specified",
+      "assignment_status": "requires_grade_or_species_confirmation",
+      "density_kg_m3": null,
+      "E_longitudinal_or_inplane_MPa": null,
+      "E_transverse_MPa": {
+        "radial_or_cross": null,
+        "tangential_or_through_thickness": null
+      },
+      "bending_strength_MPa": null,
+      "screw_withdrawal_N": null,
+      "dowel_withdrawal_N": null,
+      "recommended_safety_factor": null,
+      "sources": [
+        "stone-nsi"
+      ],
+      "conditions": "Catalog colour/product name does not identify mechanical test certificate. concrete is concrete-look CERAMIC, not structural concrete; terrazzo is composite",
+      "automatic_strength_approval": false,
+      "unknown_reasons": {
+        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
+        "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
+      },
+      "catalog_density_kg_m3": null,
+      "catalog_density_status": "visual catalog baseline, not independently validated",
+      "catalog_member": false,
+      "current_physics_class": "stone",
+      "reference_minus_current": {
+        "density_kg_m3": null,
+        "E_MPa": null,
+        "meaning": "Reference comparison only; not an instruction to change physics.js"
+      }
+    }
+  ],
+  "scope": "Source-conditioned reference and explicit research gaps; no engineering or machine approval"
+}
