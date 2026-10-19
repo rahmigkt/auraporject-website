@@ -21,7 +21,8 @@ canlı türe ait sayfa seçildi ve bu fark kaydedildi.
 `gurgen` Türkçe gürgen, İngilizce “Beech” olarak sunuluyor. Carpinus ve Fagus
 ayrılmadan kayın verisi gürgene atanmadı. Füme/siyah meşe birer yüzey/işlem varyantı;
 bağımsız ağaç türü değil. İşlem ve alt tür belirsizken otomatik miras yok.
-Tik için uygun sayısal birincil tablo doğrulanamadığından alanlar null.
+Tik için Wood Handbook tablo5-5a'da %12 nemde E10700 MPa, MOR100,7 MPa doğrulandı;
+yoğunluk yeşil haldeki özgül ağırlıktan türetilmedi ve null bırakıldı.
 
 ## Mevcut physics.js ile farklar
 
@@ -60,6 +61,10 @@ Katalogdaki `concrete` beton değil beton görünümlü seramik, terrazzo ise ko
 
 - Lif enine E: radyal ve teğet ayrı. Kaynağı doğrulanmış eş tür/nem oranı yoksa
   lif boyu E kopyalanmaz. Kontrplakta yüz düzlemi/enine/kalınlık yönü farklıdır.
+  Meşe, beyaz dişbudak, siyah ceviz ve siyah kiraz için [Wood Handbook tablo5-1](https://research.fs.usda.gov/download/treesearch/62244.pdf)
+  oranlarından yaklaşık enine değerler ayrıca türetildi: E_axial≈1,1×E_bending,
+  ardından ER/EL ve ET/EL. Bunlar ölçülmüş stok değerleri değildir; dişbudak
+  referans grubu beyaz dişbudağa daraltılmadan uygulanamaz. Kayında tablo karşılığı yok.
 - Vida ve kavela çekme: çap, gömülme, diş, lif yönü, kenar mesafesi, nem, yapıştırıcı,
   malzeme sınıfı ve deney düzeni olmadan tek N değeri yoktur. Ahşap Janka sertliği
   bu kuvvetin yerine geçmez. [Wood Handbook](https://research.fs.usda.gov/fpl/wood-handbook)

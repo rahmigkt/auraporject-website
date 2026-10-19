@@ -11,6 +11,14 @@
   },
   "null_policy": "Unknown is null; forbid zero/default substitution and automatic pass",
   "sources": {
+    "wood-elastic": {
+      "url": "https://research.fs.usda.gov/download/treesearch/62244.pdf",
+      "locator": "Wood Handbook2021 ch5 printed p5-2, Table5-1 at approx12% moisture; E axial approximation=1.1*E bending; ER/EL and ET/EL ratios"
+    },
+    "wood-teak": {
+      "url": "https://research.fs.usda.gov/download/treesearch/62244.pdf",
+      "locator": "Table5-5a continuation PDFp21, teak Tectona grandis,12% MC: MOR100700kPa,E10700MPa; compilation of world literature, not a graded stock certificate"
+    },
     "ahec-oak": {
       "url": "https://www.americanhardwood.org/en/american-hardwood/american-white-oak",
       "locator": "Mechanical Properties, 12% moisture; Quercus species mainly Q. alba"
@@ -125,24 +133,32 @@
       "density_kg_m3": 769,
       "E_longitudinal_or_inplane_MPa": 12273,
       "E_transverse_MPa": {
-        "radial_or_cross": null,
-        "tangential_or_through_thickness": null
+        "radial_or_cross": 2200.549,
+        "tangential_or_through_thickness": 972.022
       },
       "bending_strength_MPa": 104.804,
       "screw_withdrawal_N": null,
       "dowel_withdrawal_N": null,
       "recommended_safety_factor": null,
       "sources": [
-        "ahec-oak"
+        "ahec-oak",
+        "wood-elastic"
       ],
       "conditions": "Published average reference at 12% moisture; not characteristic design values; verify supplied species before assignment",
       "automatic_strength_approval": false,
       "unknown_reasons": {
-        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "transverse_modulus": "Conditional derived estimate, not independently measured; exact species and moisture must match",
         "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
         "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
       },
       "moisture_percent": 12,
+      "transverse_estimate": {
+        "status": "derived_approximation_not_measured_for_supplied_stock",
+        "formula": "E_axial=1.1*E_bending; ER=ratioR*E_axial; ET=ratioT*E_axial",
+        "ratioR": 0.163,
+        "ratioT": 0.072,
+        "species_limit": "FPL white oak / white ash / black walnut / black cherry respectively; AHEC ash group must be narrowed to white ash before use"
+      },
       "current_physics_class": "wood",
       "reference_minus_current": {
         "density_kg_m3": 89,
@@ -158,24 +174,32 @@
       "density_kg_m3": 673,
       "E_longitudinal_or_inplane_MPa": 11977,
       "E_transverse_MPa": {
-        "radial_or_cross": null,
-        "tangential_or_through_thickness": null
+        "radial_or_cross": 1646.838,
+        "tangential_or_through_thickness": 1053.976
       },
       "bending_strength_MPa": 103.425,
       "screw_withdrawal_N": null,
       "dowel_withdrawal_N": null,
       "recommended_safety_factor": null,
       "sources": [
-        "ahec-ash"
+        "ahec-ash",
+        "wood-elastic"
       ],
       "conditions": "Published average reference at 12% moisture; not characteristic design values; verify supplied species before assignment",
       "automatic_strength_approval": false,
       "unknown_reasons": {
-        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "transverse_modulus": "Conditional derived estimate, not independently measured; exact species and moisture must match",
         "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
         "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
       },
       "moisture_percent": 12,
+      "transverse_estimate": {
+        "status": "derived_approximation_not_measured_for_supplied_stock",
+        "formula": "E_axial=1.1*E_bending; ER=ratioR*E_axial; ET=ratioT*E_axial",
+        "ratioR": 0.125,
+        "ratioT": 0.08,
+        "species_limit": "FPL white oak / white ash / black walnut / black cherry respectively; AHEC ash group must be narrowed to white ash before use"
+      },
       "current_physics_class": "wood",
       "reference_minus_current": {
         "density_kg_m3": -7,
@@ -224,24 +248,32 @@
       "density_kg_m3": 609,
       "E_longitudinal_or_inplane_MPa": 11584,
       "E_transverse_MPa": {
-        "radial_or_cross": null,
-        "tangential_or_through_thickness": null
+        "radial_or_cross": 1350.694,
+        "tangential_or_through_thickness": 713.574
       },
       "bending_strength_MPa": 100.677,
       "screw_withdrawal_N": null,
       "dowel_withdrawal_N": null,
       "recommended_safety_factor": null,
       "sources": [
-        "ahec-walnut"
+        "ahec-walnut",
+        "wood-elastic"
       ],
       "conditions": "Published average reference at 12% moisture; not characteristic design values; verify supplied species before assignment",
       "automatic_strength_approval": false,
       "unknown_reasons": {
-        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "transverse_modulus": "Conditional derived estimate, not independently measured; exact species and moisture must match",
         "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
         "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
       },
       "moisture_percent": 12,
+      "transverse_estimate": {
+        "status": "derived_approximation_not_measured_for_supplied_stock",
+        "formula": "E_axial=1.1*E_bending; ER=ratioR*E_axial; ET=ratioT*E_axial",
+        "ratioR": 0.106,
+        "ratioT": 0.056,
+        "species_limit": "FPL white oak / white ash / black walnut / black cherry respectively; AHEC ash group must be narrowed to white ash before use"
+      },
       "current_physics_class": "wood",
       "reference_minus_current": {
         "density_kg_m3": -71,
@@ -257,24 +289,32 @@
       "density_kg_m3": 561,
       "E_longitudinal_or_inplane_MPa": 10274,
       "E_transverse_MPa": {
-        "radial_or_cross": null,
-        "tangential_or_through_thickness": null
+        "radial_or_cross": 2226.376,
+        "tangential_or_through_thickness": 971.92
       },
       "bending_strength_MPa": 84.809,
       "screw_withdrawal_N": null,
       "dowel_withdrawal_N": null,
       "recommended_safety_factor": null,
       "sources": [
-        "ahec-cherry"
+        "ahec-cherry",
+        "wood-elastic"
       ],
       "conditions": "Published average reference at 12% moisture; not characteristic design values; verify supplied species before assignment",
       "automatic_strength_approval": false,
       "unknown_reasons": {
-        "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
+        "transverse_modulus": "Conditional derived estimate, not independently measured; exact species and moisture must match",
         "withdrawal": "Connection-specific: diameter, penetration, grain, substrate, moisture, edge distance, thread and adhesive/test method required",
         "safety_factor": "Must select design standard, grade, load duration and limit state; a generic factor on clear-wood MOR is not a design strength"
       },
       "moisture_percent": 12,
+      "transverse_estimate": {
+        "status": "derived_approximation_not_measured_for_supplied_stock",
+        "formula": "E_axial=1.1*E_bending; ER=ratioR*E_axial; ET=ratioT*E_axial",
+        "ratioR": 0.197,
+        "ratioT": 0.086,
+        "species_limit": "FPL white oak / white ash / black walnut / black cherry respectively; AHEC ash group must be narrowed to white ash before use"
+      },
       "current_physics_class": "wood",
       "reference_minus_current": {
         "density_kg_m3": -119,
@@ -285,22 +325,22 @@
     {
       "id": "teak",
       "category": "wood",
-      "reference_identity": "Tectona grandis intended; matching numeric source not verified",
+      "reference_identity": "Tectona grandis reference at12%MC",
       "assignment_status": "requires_grade_or_species_confirmation",
       "density_kg_m3": null,
-      "E_longitudinal_or_inplane_MPa": null,
+      "E_longitudinal_or_inplane_MPa": 10700,
       "E_transverse_MPa": {
         "radial_or_cross": null,
         "tangential_or_through_thickness": null
       },
-      "bending_strength_MPa": null,
+      "bending_strength_MPa": 100.7,
       "screw_withdrawal_N": null,
       "dowel_withdrawal_N": null,
       "recommended_safety_factor": null,
       "sources": [
-        "wood-handbook"
+        "wood-teak"
       ],
-      "conditions": "Do not reuse generic wood E=11000 or an unsourced internet average as certified teak data",
+      "conditions": "Density not inferred from green specific gravity0.55; table is a literature compilation, not a graded supplied-stock certificate",
       "automatic_strength_approval": false,
       "unknown_reasons": {
         "transverse_modulus": "No verified matching species/layup/direction dataset; do not infer as E_longitudinal",
@@ -310,7 +350,7 @@
       "current_physics_class": "wood",
       "reference_minus_current": {
         "density_kg_m3": null,
-        "E_MPa": null,
+        "E_MPa": -300,
         "meaning": "Reference comparison only; not an instruction to change physics.js"
       }
     },
