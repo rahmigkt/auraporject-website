@@ -177,7 +177,7 @@ function shell() {
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261019a').then(mod => { sceneModule = mod; const {createViewer} = mod;
+  import('./scene.js?v=20261019b').then(mod => { sceneModule = mod; const {createViewer} = mod;
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(shown(), state.design.materials); if (state.room) showRoom(); }
@@ -1088,9 +1088,12 @@ function materialLabel(a) {
 
 async function runCommand(text) {
   if (!text.trim()) return;
-  const local = parse(text, {family: state.design.family});
+  // A refusal ("olmasın", "istemiyorum", "not", "kein"…) must never be applied as a wish: the local word matcher
+  // cannot read negation, so such sentences go to the AI, or are not applied at all.
+  const negated = /(olmas[ıi]n|istemiyorum|istemem|hari[çc]|yerine|de[ğg]il|\bno\b|\bnot\b|n't\b|without|\bkein|\bnicht|\bsans\b|\bpas\b|\bsin\b|\bsenza\b|\bniet\b|\bgeen\b|\bingen\b|\bikke\b)/i.test(text);
+  const local = negated ? {understood: false, actions: []} : parse(text, {family: state.design.family});
   if (local.understood && local.actions.some(a => !(a.type === 'command' && ['variants', 'similar'].includes(a.name)))) { const notes = applyActions(local.actions); feedback(`${L('applied')}: ${notes.join(' · ')}`); return; }
-  if (state.ai.available && state.design.family === 'seating') {
+  if (state.ai.available) {
     feedback(L('working'));
     try { const actions = await interpret(text, state.design, state.lang); if (actions.length) { feedback(`${L('applied')}: ${applyActions(actions).join(' · ')}`); return; } } catch {}
   }
@@ -1192,7 +1195,7 @@ function bindShell() {
       if (!state.project.items.length) { ss.textContent = L('addFirst'); return; }
       const body = new FormData(), {files, summary} = await projectPackage(), key = projectKey();
       body.append('package', new Blob([zip(files)], {type: 'application/zip'}), `AURA-project-${state.project.items.length}.zip`);
-      body.append('meta', JSON.stringify({name: fd.get('name'), email: fd.get('email'), phone: fd.get('phone'), city: fd.get('city'), note: fd.get('note'), consent: !!fd.get('consent'), lang: state.lang, summary}));
+      body.append('meta', JSON.stringify({name: fd.get('name'), email: fd.get('email'), phone: fd.get('phone'), city: fd.get('city'), note: fd.get('note'), consent: !!fd.get('consent'), lang: state.lang, summary, link: await projectLink(state.project.items, state.room, state.lang).catch(() => '')}));
       const r = await fetch('api/forma-submit.php', {method: 'POST', body}), j = await r.json();
       if (!j.ok) { ss.textContent = j.error || 'Error'; return; }
       state.sent = {id: j.id, key, pdf: files.find(f => f.name === 'drawings.pdf').data};

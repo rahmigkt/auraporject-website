@@ -6,13 +6,18 @@ return array_merge([
  // AI (text commands + image reading). Provider: Anthropic Messages API.
  'ai_enabled' => false,
  'ai_api_key' => getenv('AURA_AI_KEY') ?: '',
- 'ai_model' => 'claude-sonnet-5-5',
- 'ai_max_tokens' => 1600,
- 'ai_rate_per_10min' => 30,
+ 'ai_model' => 'claude-haiku-5-5',          // commands: fast and low cost
+ 'ai_model_vision' => 'claude-sonnet-5-5',   // photo / sketch reading: stronger model, used rarely
+ 'ai_vision' => true,
+ 'ai_rate_per_10min' => 30,                   // per visitor address
+ 'ai_daily_limit' => 1500,                    // whole site per day (cost ceiling)
  // Designer hand-off. Leave disabled until privacy notice, recipient and mail delivery are verified.
  'submit_enabled' => false,
  'submit_recipient' => '',
  'submit_sender' => '',
  'submit_store_dir' => '',   // absolute path OUTSIDE public_html, e.g. /home/user/aura-projects
  'submit_max_mb' => 25,
+ 'submit_secret' => getenv('AURA_SUBMIT_SECRET') ?: '',  // long random text; signs the designer's download links
+ 'submit_link_days' => 60,
+ 'submit_customer_copy' => true,  // short confirmation to the customer (link to the design, no attachment)
 ], is_array($secrets) ? $secrets : []);

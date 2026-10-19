@@ -1,31 +1,57 @@
 <?php
 declare(strict_types=1);
-// Designer hand-off for Forma packages. Off by default (fail closed): when disabled the browser offers
-// the package as a download instead. When enabled, the ZIP is stored outside the web root and mailed.
+// Designer hand-off for Forma packages. Off until configured (fail closed): when disabled the browser offers the
+// package as a download. When enabled, the ZIP is stored OUTSIDE the web root and only small mails are sent:
+// the designer gets a signed download link, the customer a short confirmation with the design link. No attachments.
 $config = require __DIR__.'/forma-config.php';
 header('Content-Type: application/json; charset=utf-8'); header('Cache-Control: no-store'); header('X-Content-Type-Options: nosniff');
 function out(int $status, array $body): void { http_response_code($status); echo json_encode($body, JSON_UNESCAPED_UNICODE); exit; }
-$ready = $config['submit_enabled'] && filter_var($config['submit_recipient'], FILTER_VALIDATE_EMAIL) && $config['submit_store_dir'] !== '' && is_dir($config['submit_store_dir']) && is_writable($config['submit_store_dir']);
+$dir = rtrim((string)$config['submit_store_dir'], '/');
+$ready = $config['submit_enabled'] && filter_var($config['submit_recipient'], FILTER_VALIDATE_EMAIL) && filter_var($config['submit_sender'], FILTER_VALIDATE_EMAIL)
+  && strlen((string)$config['submit_secret']) >= 24 && $dir !== '' && is_dir($dir) && is_writable($dir);
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET') out(200, ['available' => (bool)$ready]);
 if (!$ready) out(503, ['available' => false, 'error' => 'Direct sending is not configured']);
 $origin = $_SERVER['HTTP_ORIGIN'] ?? ''; $host = $_SERVER['HTTP_HOST'] ?? '';
 if ($origin === '' || parse_url($origin, PHP_URL_HOST) !== explode(':', $host)[0]) out(403, ['error' => 'Origin not allowed']);
+// At most 5 submissions per address per hour.
+$bucket = sys_get_temp_dir().'/aura-submit-'.hash('sha256', ($_SERVER['REMOTE_ADDR'] ?? '').date('YmdH'));
+$count = is_file($bucket) ? (int)file_get_contents($bucket) : 0;
+if ($count >= 5) out(429, ['error' => 'Too many submissions']);
+file_put_contents($bucket, (string)($count + 1));
+
 $file = $_FILES['package'] ?? null;
 if (!$file || $file['error'] !== UPLOAD_ERR_OK || $file['size'] > $config['submit_max_mb'] * 1048576) out(400, ['error' => 'Missing or oversized package']);
-$head = file_get_contents($file['tmp_name'], false, null, 0, 4);
-if ($head !== "PK\x03\x04") out(400, ['error' => 'Package must be a ZIP']);
+if (file_get_contents($file['tmp_name'], false, null, 0, 4) !== "PK\x03\x04") out(400, ['error' => 'Package must be a ZIP']);
 $meta = json_decode((string)($_POST['meta'] ?? ''), true);
 if (!is_array($meta) || empty($meta['consent']) || trim((string)($meta['name'] ?? '')) === '') out(400, ['error' => 'Name and consent are required']);
 $clean = fn($v, $n = 200) => mb_substr(trim(preg_replace('/[\r\n\t]+/', ' ', (string)$v)), 0, $n);
 $id = 'F'.date('ymd-His').'-'.bin2hex(random_bytes(3));
-$dest = rtrim($config['submit_store_dir'], '/').'/'.$id.'.zip';
-if (!move_uploaded_file($file['tmp_name'], $dest)) out(500, ['error' => 'Could not store package']);
-file_put_contents(rtrim($config['submit_store_dir'], '/').'/'.$id.'.json', json_encode(['id' => $id, 'received' => date('c'), 'name' => $clean($meta['name']), 'email' => $clean($meta['email'] ?? ''), 'phone' => $clean($meta['phone'] ?? ''), 'city' => $clean($meta['city'] ?? ''), 'note' => $clean($meta['note'] ?? '', 1500), 'lang' => $clean($meta['lang'] ?? '', 5), 'summary' => $clean($meta['summary'] ?? '', 800)], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
-// Mail with the package attached (MIME). Hosting mail delivery must be verified before enabling.
-$boundary = 'aura'.bin2hex(random_bytes(8));
-$body = "--$boundary\r\nContent-Type: text/plain; charset=utf-8\r\n\r\nAURA Forma $id\r\n".$clean($meta['name'])." · ".$clean($meta['email'] ?? '')." · ".$clean($meta['phone'] ?? '')."\r\n".$clean($meta['summary'] ?? '', 800)."\r\n\r\n".$clean($meta['note'] ?? '', 1500)."\r\n";
-if (filesize($dest) < 9 * 1048576) $body .= "--$boundary\r\nContent-Type: application/zip; name=\"$id.zip\"\r\nContent-Transfer-Encoding: base64\r\nContent-Disposition: attachment; filename=\"$id.zip\"\r\n\r\n".chunk_split(base64_encode((string)file_get_contents($dest)))."\r\n";
-$body .= "--$boundary--";
-$headers = "MIME-Version: 1.0\r\nContent-Type: multipart/mixed; boundary=\"$boundary\"\r\n".($config['submit_sender'] ? 'From: '.$config['submit_sender']."\r\n" : '');
-$sent = @mail($config['submit_recipient'], "AURA Forma $id", $body, $headers);
-out(200, ['ok' => true, 'id' => $id, 'mailed' => $sent]);
+if (!move_uploaded_file($file['tmp_name'], "$dir/$id.zip")) out(500, ['error' => 'Could not store package']);
+$email = filter_var($clean($meta['email'] ?? ''), FILTER_VALIDATE_EMAIL) ?: '';
+$record = ['id' => $id, 'received' => date('c'), 'name' => $clean($meta['name']), 'email' => $email, 'phone' => $clean($meta['phone'] ?? ''),
+  'summary' => $clean($meta['summary'] ?? '', 2000), 'link' => $clean($meta['link'] ?? '', 4000), 'lang' => preg_replace('/[^a-z]/', '', (string)($meta['lang'] ?? 'tr'))];
+file_put_contents("$dir/$id.json", json_encode($record, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+
+// Signed, expiring download link for the designer (api/forma-file.php).
+$exp = time() + 86400 * (int)$config['submit_link_days'];
+$sig = hash_hmac('sha256', "$id|$exp", (string)$config['submit_secret']);
+$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$base = "$scheme://$host".rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? '/api/x'), '/');
+$download = "$base/forma-file.php?id=$id&exp=$exp&sig=$sig";
+
+$from = $config['submit_sender'];
+$mailTo = function (string $to, string $subject, string $text, string $replyTo = '') use ($from): bool {
+  $headers = "MIME-Version: 1.0\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Transfer-Encoding: 8bit\r\nFrom: AURA <$from>\r\n".($replyTo ? "Reply-To: $replyTo\r\n" : '');
+  return @mail($to, '=?UTF-8?B?'.base64_encode($subject).'?=', $text, $headers, "-f$from");
+};
+$designer = "Yeni AURA projesi: $id\r\n\r\nMüşteri: {$record['name']}\r\nE-posta: $email\r\nTelefon: {$record['phone']}\r\n\r\n{$record['summary']}\r\n\r\n"
+  ."Paket (ZIP, {$config['submit_link_days']} gün geçerli):\r\n$download\r\n\r\nTasarımı açmak için:\r\n{$record['link']}\r\n";
+$sent = $mailTo($config['submit_recipient'], "AURA proje $id — {$record['name']}", $designer, $email);
+$copy = false;
+if ($config['submit_customer_copy'] && $email) {
+  $tr = $record['lang'] === 'tr';
+  $text = $tr ? "Merhaba {$record['name']},\r\n\r\nProjeniz AURA tasarımcısına ulaştı (no: $id). Tasarımcımız sizinle iletişime geçecek.\r\n\r\nTasarımınızı istediğiniz zaman açmak için:\r\n{$record['link']}\r\n\r\nAURA"
+              : "Hello {$record['name']},\r\n\r\nYour project has reached an AURA designer (no. $id). We will be in touch.\r\n\r\nOpen your design at any time:\r\n{$record['link']}\r\n\r\nAURA";
+  $copy = $mailTo($email, $tr ? "AURA — projeniz alındı ($id)" : "AURA — your project was received ($id)", $text);
+}
+out(200, ['ok' => true, 'id' => $id, 'mailed' => $sent, 'copy' => $copy]);
