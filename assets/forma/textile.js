@@ -20,7 +20,7 @@ export function draft(weave, size = 0) {
 
 /** Colour sequence (in threads) for warp and weft, giving stripes, gingham and plaid. */
 /** Density 1 (sparse/large) … 6 (dense/small) → size factor for stripes, checks and motif repeats. */
-export const densityFactor = spec => 3 / (spec.density || 3) * (spec.scale || 1);
+export const densityFactor = spec => 2 ** ((3 - (spec.density || 3)) * 0.55) * (spec.scale || 1); // 1 → ×2.1 larger … 12 → ×0.03
 const MOTIF_REPEAT = 150; // mm at density 3
 
 function sequences(spec, pitch, base, second) {
@@ -40,7 +40,7 @@ function sequences(spec, pitch, base, second) {
 
 /** Damask figure mask: a NAKIŞ motif rasterised in a half-drop repeat (tile coordinates). */
 const maskCache = new Map();
-const MOTIF_PATTERNS = {floral: 'cancicegi', leaf: 'kalpyaprak', damask: 'damask'};
+const MOTIF_PATTERNS = {}; // ornament motifs withdrawn (project-specific); market patterns are drawn by PATTERN_MASK
 function motifMask(id, size) {
   const key = id + ':' + size;
   if (maskCache.has(key)) return maskCache.get(key);
@@ -61,7 +61,15 @@ function motifMask(id, size) {
 }
 
 /** Figure masks for printed / jacquard patterns in tile coordinates u,v ∈ [0,1). */
+const fr = x => x - Math.floor(x);
+const fleck = (u, v, n, seed) => { const i = ((Math.floor(u * n) % n) + n) % n, j = ((Math.floor(v * n) % n) + n) % n; let h = Math.imul(i, 374761393) ^ Math.imul(j, 668265263) ^ seed; h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
 const PATTERN_MASK = {
+  pinstripe: u => fr(u * 4) < 0.05 ? 1 : 0,
+  windowpane: (u, v) => fr(u) < 0.035 || fr(v) < 0.035 ? 1 : 0,
+  buffalo: (u, v) => (fr(u * 2) < 0.5 ? 1 : 0) * 0.5 + (fr(v * 2) < 0.5 ? 1 : 0) * 0.5, // three tones: ground, half, full
+  argyle: (u, v) => { const x = u * 2, y = v * 2; if (fr(x + y) < 0.025 || fr(x - y) < 0.025) return 0.45; return (((Math.floor(x + y) + Math.floor(x - y)) % 2) + 2) % 2 ? 1 : 0; },
+  trellis: (u, v) => Math.abs(Math.abs(Math.sin(Math.PI * 2 * u)) - Math.abs(Math.cos(Math.PI * 2 * v))) < 0.09 ? 1 : 0,
+  tweed: (u, v) => { const a = fleck(u, v, 96, 7), b = fleck(u + 0.37, v + 0.11, 48, 3); return a > 0.975 ? 0.85 : b > 0.985 ? 0.5 : 0; },
   polka: (u, v) => { for (const [cx, cy] of [[0.25, 0.25], [0.75, 0.75], [0.25, 1.25], [1.25, 0.25], [-0.25, 0.75], [0.75, -0.25]]) if (Math.hypot(u - cx, v - cy) < 0.085) return 1; return 0; },
   geometric: (u, v) => { const d = Math.abs(u - 0.5) + Math.abs(v - 0.5), e = Math.min(u + v, 2 - u - v, Math.abs(u - v) + 1); return (Math.abs(d - 0.5) < 0.035 || d < 0.09 || e < 0.04) ? 1 : 0; },
   chevron: (u, v) => { const w = v * 3 + Math.abs(((u * 6) % 2) - 1) * 0.5; return (w - Math.floor(w)) < 0.38 ? 1 : 0; },
@@ -83,7 +91,7 @@ export function fabricMaps(spec, {maxPx = 1024} = {}) {
   const seq = sequences(spec, pitch, base, second);
   let n = lcm(lcm(W.P, Wfig.P), lcm(seq.warp.length, seq.weft.length));
   const motifPattern = !!MOTIF_PATTERNS[spec.pattern], printed = PATTERN_MASK[spec.pattern];
-  const repeatMm = (motifPattern || printed) ? MOTIF_REPEAT * densityFactor(spec) * (spec.pattern === 'houndstooth' ? 0.12 : spec.pattern === 'polka' ? 0.45 : spec.pattern === 'chevron' ? 0.7 : 1) : 0;
+  const repeatMm = (motifPattern || printed) ? MOTIF_REPEAT * densityFactor(spec) * ({houndstooth: 0.12, polka: 0.45, chevron: 0.7, pinstripe: 0.35, windowpane: 0.5, buffalo: 0.7, argyle: 0.6, trellis: 0.5, tweed: 0.3}[spec.pattern] ?? 1) : 0;
   const target = repeatMm ? Math.round(repeatMm / pitch) : Math.round(96 / pitch);
   n = Math.max(n, Math.ceil(target / n) * n);
   const ppt = clamp(Math.floor(maxPx / n), n > 400 ? 2 : 3, 10), size = n * ppt; // ≥3 px per thread keeps the interlacing readable
@@ -110,7 +118,7 @@ export function fabricMaps(spec, {maxPx = 1024} = {}) {
       const h = clamp(prof * arch * (run > 2 ? 0.8 : 1) + fuzz, 0, 1);
       height[y * size + x] = h;
       // Damask shows the figure through the weave change; other figures are jacquard/print colour.
-      const c = fig && !damask ? (warpUp ? second : shade(second, 0.94)) : warpUp ? seq.warp[i % seq.warp.length] : seq.weft[j % seq.weft.length];
+      const c0 = warpUp ? seq.warp[i % seq.warp.length] : seq.weft[j % seq.weft.length], c = fig && !damask ? mix(c0, warpUp ? second : shade(second, 0.94), Math.min(1, fig)) : c0;
       const tone = 0.7 + 0.36 * h + (run > 2 ? 0.06 : 0) + fuzz * 0.35;
       const k = (y * size + x) * 4;
       albedo[k] = clamp(c[0] * tone, 0, 255); albedo[k + 1] = clamp(c[1] * tone, 0, 255); albedo[k + 2] = clamp(c[2] * tone, 0, 255); albedo[k + 3] = 255;
@@ -129,7 +137,7 @@ function pileMaps(spec, F, base, maxPx) {
   const df = densityFactor(spec);
   const stripeMask = pat === 'stripe' ? (u => (u % 1) < 0.24 ? 1 : 0) : null, checkMask = pat === 'check' || pat === 'plaid' ? ((u, v) => ((Math.floor(u * 2) + Math.floor(v * 2)) % 2) || (pat === 'plaid' && (Math.abs(u - 0.5) < 0.03 || Math.abs(v - 0.5) < 0.03)) ? 1 : 0) : null;
   const patterned = motifId || printed || stripeMask || checkMask;
-  const size = Math.min(patterned ? 768 : 512, maxPx), tileMm = patterned ? MOTIF_REPEAT * df * (pat === 'polka' ? 0.45 : pat === 'houndstooth' ? 0.12 : pat === 'stripe' ? 0.25 : pat === 'check' ? 0.1 : 1) : spec.fiber === 'leather' ? 90 : spec.fiber === 'suede' ? 120 : spec.fiber === 'nubuck' ? 80 : spec.fiber === 'boucle' ? 40 : 60;
+  const size = Math.min(patterned ? 768 : 512, maxPx), tileMm = patterned ? MOTIF_REPEAT * df * ({polka: 0.45, houndstooth: 0.12, stripe: 0.25, check: 0.1, pinstripe: 0.35, windowpane: 0.5, buffalo: 0.7, argyle: 0.6, trellis: 0.5, tweed: 0.3, chevron: 0.7}[pat] ?? 1) : spec.fiber === 'leather' ? 90 : spec.fiber === 'suede' ? 120 : spec.fiber === 'nubuck' ? 80 : spec.fiber === 'boucle' ? 40 : 60;
   const mask = motifId ? motifMask(motifId, size) : null;
   const albedo = new Uint8ClampedArray(size * size * 4), rough = new Uint8ClampedArray(size * size * 4), height = new Float32Array(size * size);
   const per = 8;
@@ -158,7 +166,7 @@ function pileMaps(spec, F, base, maxPx) {
     }
     const k = (y * size + x) * 4; height[y * size + x] = h;
     const fig = mask ? mask[y * size + x] : printed ? printed(x / size, y / size) : stripeMask ? stripeMask(x / size * 2) : checkMask ? checkMask(x / size, y / size) : 0;
-    const col = fig ? second : base;
+    const col = fig ? mix(base, second, Math.min(1, fig)) : base;
     albedo[k] = clamp(col[0] * tone, 0, 255); albedo[k + 1] = clamp(col[1] * tone, 0, 255); albedo[k + 2] = clamp(col[2] * tone, 0, 255); albedo[k + 3] = 255;
     rough[k] = rough[k + 1] = rough[k + 2] = clamp(r, 0.05, 1) * 255; rough[k + 3] = 255;
   }
