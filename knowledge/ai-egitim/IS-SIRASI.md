@@ -2,6 +2,7 @@
 
 | Sıra | İş | Durum |
 |---|---|---|
+| 0 | **SERBEST-01 — Tasarımcı Atölyesi (dokunmatik serbest biçim + fizik denetimi)** | **Acil; ATMOSFER ile paralel** |
 | 1 | GÖRSEL-01 PR 1 — eskiz temizliği (#58) | Karar sahibi bakıp birleştirir |
 | 2 | **ATMOSFER-01** — proje sonu son görüntüleri (genel + yakın plan) | **En önemli; şimdi** |
 | 3 | METİN-01 — 2–3 cümlelik tanık metni, yalnız son görüntünün altında | ATMOSFER-01'den sonra |
