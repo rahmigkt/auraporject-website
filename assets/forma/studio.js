@@ -90,7 +90,15 @@ function designForKind(d, kind) {
   if (e) return {...startDesign(e, d.family, kind), materials: d.materials};
   return sample({family: d.family, style: d.style, kind, seed: d.seed, locks: {materials: d.materials}});
 }
-const withParams = patch => ({...state.design, params: {...state.design.params, ...patch}});
+const withParams = patch => {
+  const cur = state.design.params, next = {...cur, ...patch};
+  // Seating: leg height is its own control — the seat (and the case on it) moves with the legs instead of the case shrinking.
+  if (state.design.family === 'seating' && !('seatHeight' in patch)) {
+    const d = 'legHeight' in patch ? patch.legHeight - cur.legHeight : 'caseHeight' in patch ? patch.caseHeight - cur.caseHeight : 0; // case: legs stay, seat moves
+    if (d) { next.seatHeight = cur.seatHeight + d; next.height = cur.height + d; next.armHeight = cur.armHeight + d; }
+  }
+  return {...state.design, params: next};
+};
 const withMaterial = (slot, patch) => ({...state.design, materials: {...state.design.materials, [slot]: {...state.design.materials[slot], ...patch}}});
 
 // ---- Family-specific presentation ------------------------------------------------------
@@ -177,7 +185,7 @@ function shell() {
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261019j').then(mod => { sceneModule = mod; const {createViewer} = mod;
+  import('./scene.js?v=20261019k').then(mod => { sceneModule = mod; const {createViewer} = mod;
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(shown(), state.design.materials); if (state.room) showRoom(); }
@@ -498,7 +506,7 @@ function sizeGroups() {
     g.push(['back', ['backRake', 'backThickness', ...(p.backType === 'camel' ? ['camel'] : []), ...(p.backType === 'channel' ? ['channelCount'] : []), ...(p.backType === 'tufted' ? ['tuftSpacing'] : [])]]);
     g.push(['cushions', ['cushionThickness', 'cushionCrown', ...(p.pillows ? ['pillowSize'] : [])]]);
     g.push(['base', ['legHeight', ...(['legs', 'frame', 'sled'].includes(p.baseType) ? ['legSize'] : []), ...(['legs', 'frame'].includes(p.baseType) ? ['legTaper', 'legSplay', 'legInset'] : [])]]);
-    g.push(['body', [...(['legs', 'frame'].includes(p.baseType) ? ['bodyDrop'] : []), ...(p.baseType !== 'frame' ? ['bodyInset', 'bodyInsetZ'] : []), 'bodyRadius']]);
+    g.push(['body', ['caseHeight', ...(p.baseType !== 'frame' ? ['bodyInset', 'bodyInsetZ'] : []), 'bodyRadius']]);
     return g;
   }
   const bt = p.baseType, g = [['general', ['length', ...(p.topShape === 'round' ? [] : ['width']), 'height'].filter(Boolean)]];

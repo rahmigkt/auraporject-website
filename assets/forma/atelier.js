@@ -5,6 +5,7 @@ import {normalizeDesign, compileDesign} from './generate.js';
 import {readLink, designLink, projectLink} from './link.js';
 import {editableParts, currentShape, sampleCurve, bbox, silhouetteDxf, ADD_SHAPES, EDGE_TYPES} from './overrides.js';
 import {analyse} from './physics.js';
+import {loadCsg} from './csg.js';
 import {download} from './package.js';
 
 const $ = s => document.querySelector(s);
@@ -208,7 +209,7 @@ function onGizmoEnd({pos, rot, scale}) {
   const q = partOf(S.part); if (!q) return;
   setTransform(S.part, t => { t.move = t.move.map((v, i) => round1(v + pos[i] - q.pos[i])); t.rot = t.rot.map((v, i) => v + rot[i] - q.rot[i]); t.scale = t.scale.map((v, i) => Math.round(v * scale[i] * 1000) / 1000); });
 }
-function pickPart(id) { S.part = id; renderPanel(); syncViewerSel(); }
+function pickPart(id) { S.part = id; S.placing = false; renderPanel(); syncViewerSel(); }
 function uniqueId(base) { const ids = new Set(S.compiled.parts.map(q => q.id)); let k = 2; while (ids.has(`${base}-${k}`)) k++; return `${base}-${k}`; }
 function duplicatePart(mirror) { const id = S.part; if (!id) return; const as = uniqueId(id); commit([...ovs(), {tool: 'duplicate', id, as, mirror}]); pickPart(as); }
 function deletePart() {
@@ -227,10 +228,11 @@ function undoStructure() { if (!S.hist.length) return; S.fut.push(JSON.stringify
 function redoStructure() { if (!S.fut.length) return; S.hist.push(JSON.stringify(design().overrides || [])); S.items[S.cur].design = normalizeDesign({...design(), overrides: JSON.parse(S.fut.pop())}); rebuild(); renderItems(); renderPanel(); syncViewerSel(); }
 const EDGE_TR = {square: 'Düz', eased: 'Kırık (yumuşak)', chamfer: 'Pah', underbevel: 'Alt pah', bullnose: 'Yarım yuvarlak', ogee: 'Ogee'};
 const SIDE_TR = {front: 'Ön', back: 'Arka', left: 'Sol', right: 'Sağ'};
-const edgeable = q => q && (q.geom.fn === 'slab' || (q.geom.fn === 'cushion' && !q.geom.crownTop && !q.geom.crownFront));
+const g0 = q => q.geom.fn === 'cut' ? q.geom.inner : q.geom;
+const edgeable = q => { if (!q) return false; const g = g0(q); return g.fn === 'slab' || (g.fn === 'cushion' && !g.crownTop && !g.crownFront); };
 const edgeOf = id => ovs().filter(o => o.tool === 'edge' && o.id === id).at(-1)?.sides || {};
 function setEdge(id, sides) { const cur = {...edgeOf(id), ...sides}; commit([...ovs().filter(o => !(o.tool === 'edge' && o.id === id)), {tool: 'edge', id, sides: cur}]); }
-const sweepable = q => q && (q.geom.fn === 'lathe' || (q.geom.fn === 'clipped' && q.geom.inner?.fn === 'lathe') || q.geom.fn === 'sweep' || (q.geom.fn === 'clipped' && q.geom.inner?.fn === 'sweep') || ((q.geom.fn === 'cushion' || q.geom.fn === 'box') && !q.geom.crownTop && !q.geom.crownFront));
+const sweepable = q => q && (q = {...q, geom: g0(q)}) && (q.geom.fn === 'lathe' || (q.geom.fn === 'clipped' && q.geom.inner?.fn === 'lathe') || q.geom.fn === 'sweep' || (q.geom.fn === 'clipped' && q.geom.inner?.fn === 'sweep') || ((q.geom.fn === 'cushion' || q.geom.fn === 'box') && !q.geom.crownTop && !q.geom.crownFront));
 const sweepOf = q => ovs().filter(o => o.tool === 'sweep' && (o.id === q.id || (o.role && o.role === q.role))).at(-1);
 function setSweep(q, v, all) { const list = ovs().filter(o => !(o.tool === 'sweep' && (o.id === q.id || (o.role && o.role === q.role)))); commit(v ? [...list, {tool: 'sweep', ...(all ? {role: q.role} : {id: q.id}), ...v}] : list); }
 function sweepPanel(q) {
@@ -243,9 +245,31 @@ function sweepPanel(q) {
   ${sweepOf(q) ? '<div class="a-tools"><button data-swoff>Eğriyi kaldır</button></div>' : ''}<p class="a-note">Kılıç: dipte açılan kavis. Uç %: alt ya da baş ucundaki kesit oranı (incelme).</p>`;
 }
 function readSweep() { const g = k => $(`[data-sw=${k}]`).value; return {mode: g('mode'), shape: g('shape'), dir: g('dir'), bow: +g('bow') || 0, taper0: (+g('taper0') || 100) / 100, taper1: (+g('taper1') || 100) / 100}; }
+const CUT_TR = {hole: 'Delik', pocket: 'Cep', slot: 'Uzun delik (yarık)', groove: 'Kanal', flutes: 'Yiv dizisi (fluting)'};
+const cutsOf = id => ovs().filter(o => o.tool === 'cut' && o.id === id).at(-1)?.ops || [];
+function setCuts(id, ops) { commit([...ovs().filter(o => !(o.tool === 'cut' && o.id === id)), ...(ops.length ? [{tool: 'cut', id, ops}] : [])]); }
+function readCut() { const g = k => +($(`[data-cut=${k}]`)?.value) || 0; const t = $('[data-cut=type]').value; return {type: t, dia: g('dia'), a: g('a'), b: g('b'), depth: g('depth'), count: g('count') || 1, pitch: g('pitch'), dir: g('dir')}; }
+function cutPanel(q) {
+  if (!q || q.line) return '';
+  const t = S.cutType || 'hole', f = (k, label, v) => `<span>${label}</span><input type="number" data-cut="${k}" value="${v}" inputmode="decimal">`;
+  const fields = t === 'hole' ? f('dia', 'Çap mm', 8) + f('depth', 'Derinlik mm (0 = boydan boya)', 12)
+    : t === 'flutes' ? f('a', 'Uzunluk mm', 400) + f('b', 'Genişlik mm', 12) + f('depth', 'Derinlik mm', 5) + f('count', 'Adet', 7) + f('pitch', 'Aralık mm', 24) + f('dir', 'Yön °', 0)
+    : t === 'groove' ? f('a', 'Uzunluk mm', 400) + f('b', 'Genişlik mm', 8) + f('depth', 'Derinlik mm', 6) + f('dir', 'Yön °', 0)
+    : f('a', 'En mm', t === 'slot' ? 120 : 120) + f('b', 'Boy mm', t === 'slot' ? 25 : 80) + f('depth', 'Derinlik mm (0 = boydan boya)', t === 'slot' ? 0 : 10);
+  const list = cutsOf(q.id);
+  return `<h2>İşleme (CNC)</h2><div class="a-grid a-grid2"><span>Tür</span><select data-cut="type">${Object.entries(CUT_TR).map(([k, v]) => `<option value="${k}" ${k === t ? 'selected' : ''}>${v}</option>`).join('')}</select>${fields}</div>
+  <div class="a-tools"><button data-place aria-pressed="${!!S.placing}">${S.placing ? 'Yüzeye dokunun…' : 'Yüzeye dokunarak yerleştir'}</button></div>
+  ${list.length ? `<ul class="a-checks">${list.map((c, i) => `<li>${CUT_TR[c.type]} · ${c.type === 'hole' ? 'Ø' + c.dia : c.a + '×' + c.b}${c.depth ? ' · ' + c.depth + ' mm' : ' · boydan'}${c.type === 'flutes' ? ' · ' + c.count + ' adet' : ''} <button data-cutdel="${i}">Sil</button></li>`).join('')}</ul>` : ''}`;
+}
+function placeCut(hit) {
+  const q = partOf(S.part); if (!q || hit.id !== q.id) return false;
+  const n = hit.normal, ax = [0, 1, 2].reduce((m, i) => Math.abs(n[i]) > Math.abs(n[m]) ? i : m, 0);
+  const op = {...readCut(), at: hit.local.map(v => Math.round(v * 10) / 10), axis: ax, sign: n[ax] < 0 ? -1 : 1};
+  S.placing = false; setCuts(q.id, [...cutsOf(q.id), op]); return true;
+}
 function edgePanel(q) {
   if (!edgeable(q)) return '';
-  const cur = edgeOf(q.id), def = q.geom.fn === 'slab' ? [q.geom.profile[0], q.geom.profile[2] ?? 6] : ['square', 0];
+  const cur = edgeOf(q.id), gq = g0(q), def = gq.fn === 'slab' ? [gq.profile[0], gq.profile[2] ?? 6] : ['square', 0];
   const row = k => { const [t, v] = cur[k] || def; return `<span>${SIDE_TR[k]}</span><select data-edge="${k}">${EDGE_TYPES.map(e => `<option value="${e}" ${e === t ? 'selected' : ''}>${EDGE_TR[e]}</option>`).join('')}</select><input type="number" data-edgesize="${k}" value="${Math.round(v)}" min="1" max="80" inputmode="numeric"><span>mm</span>`; };
   return `<h2>Kenar profili</h2><div class="a-grid a-grid4">${['front', 'back', 'left', 'right'].map(row).join('')}
   <span>Tümü</span><select data-edge="all"><option value="">—</option>${EDGE_TYPES.map(e => `<option value="${e}">${EDGE_TR[e]}</option>`).join('')}</select><span></span><span></span></div>`;
@@ -261,7 +285,7 @@ function structurePanel() {
   <div class="a-grid"><span>Kaydır mm</span>${num('m0', round1(t.move[0]), 5)}${num('m1', round1(t.move[1]), 5)}${num('m2', round1(t.move[2]), 5)}
   <span>Döndür °</span>${num('r0', round1(t.rot[0] * R2D), 1)}${num('r1', round1(t.rot[1] * R2D), 1)}${num('r2', round1(t.rot[2] * R2D), 1)}
   <span>Ölçek %</span>${num('s0', round1(t.scale[0] * 100), 1)}${num('s1', round1(t.scale[1] * 100), 1)}${num('s2', round1(t.scale[2] * 100), 1)}</div>
-  ${edgePanel(q)}${sweepPanel(q)}
+  ${edgePanel(q)}${sweepPanel(q)}${cutPanel(q)}
   <div class="a-tools"><button data-dup>Çoğalt</button><button data-mirror>Aynala (karşı taraf)</button><button data-tfreset>Konumu sıfırla</button><button data-delpart>Sil</button></div>`
   : '<p class="a-note">3D görünümde bir parçaya dokunun. Seçilen parçayı tutamaçlarla taşıyın, döndürün ya da ölçekleyin; sayıyla da girebilirsiniz.</p>'}
   <div class="a-tools"><button data-sundo ${S.hist.length ? '' : 'disabled'}>↶ Yapı geri</button><button data-sredo ${S.fut.length ? '' : 'disabled'}>↷ Yapı ileri</button></div>
@@ -308,6 +332,8 @@ $('#panel').addEventListener('click', async e => {
   if (b.hasAttribute('data-delpart')) return deletePart();
   if (b.hasAttribute('data-tfreset')) return commit(ovs().filter(o => !(o.tool === 'transform' && o.id === S.part)));
   if (b.hasAttribute('data-add')) return addPart();
+  if (b.hasAttribute('data-place')) { S.placing = !S.placing; renderPanel(); return; }
+  if (b.dataset.cutdel !== undefined) { const l = cutsOf(S.part).slice(); l.splice(+b.dataset.cutdel, 1); return setCuts(S.part, l); }
   if (b.hasAttribute('data-swoff')) return setSweep(partOf(S.part), null);
   if (b.hasAttribute('data-sundo')) return undoStructure();
   if (b.hasAttribute('data-sredo')) return redoStructure();
@@ -328,6 +354,7 @@ $('#panel').addEventListener('click', async e => {
   if (act === 'json') download(`AURA-${design().kind}-design.json`, JSON.stringify(design(), null, 2), 'application/json');
 });
 $('#panel').addEventListener('change', e => {
+  if (e.target.dataset?.cut === 'type') { S.cutType = e.target.value; renderPanel(); return; }
   if (S.part && (e.target.dataset?.sw || e.target.hasAttribute?.('data-swall'))) { const q = partOf(S.part); return setSweep(q, readSweep(), $('[data-swall]').checked); }
   const ed = e.target.dataset?.edge, es = e.target.dataset?.edgesize;
   if (S.part && (ed || es)) {
@@ -347,7 +374,8 @@ import('./scene.js').then(({createViewer}) => {
     // A tap (not an orbit drag) selects the part under the finger.
     const cv = $('#stage canvas'); let down = null;
     cv.addEventListener('pointerdown', e => { down = [e.clientX, e.clientY]; });
-    cv.addEventListener('pointerup', e => { if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6) return; down = null; const id = viewer.pick(e.clientX, e.clientY); if (id !== S.part) pickPart(id); });
+    cv.addEventListener('pointerup', e => { if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6) return; down = null; if (S.placing) { const hit = viewer.pickPoint(e.clientX, e.clientY); if (!hit || placeCut(hit) || hit.id !== S.part) return; } const id = viewer.pick(e.clientX, e.clientY); if (id !== S.part) pickPart(id); });
   }
 }).catch(() => {});
+loadCsg().then(() => rebuild());
 load(location.hash);

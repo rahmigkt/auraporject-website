@@ -436,7 +436,7 @@ export function offsetOutline(pts, d) {
  * Slab with an edge profile: outline (x,z) extruded from y=0 (bottom) to y=t (top); inset(s) gives the inward
  * offset at s ∈ [0,1] measured from the TOP face down. Used for table tops, shelves and drum bodies.
  */
-export function profiledSlab(outline, t, inset = () => 0, {steps = 12} = {}) {
+export function profiledSlab(outline, t, inset = () => 0, {steps = 12, exact = false} = {}) {
   const b = new Builder(), n = outline.length;
   // Ensure CCW (positive area in x–z seen from +y means z axis points to the viewer's bottom; we test signed area).
   let area = 0; for (let i = 0; i < n; i++) { const p = outline[i], q = outline[(i + 1) % n]; area += p[0] * q[1] - q[0] * p[1]; }
@@ -458,7 +458,7 @@ export function profiledSlab(outline, t, inset = () => 0, {steps = 12} = {}) {
     const poly = own.filter((v, i) => Math.hypot(X(v) - X(own[(i + 1) % n]), Z(v) - Z(own[(i + 1) % n])) > 1e-4);
     // Drop near-duplicate and almost collinear points (tight corner arcs): ear clipping them made needle triangles whose
     // float normals were noisy and drew false creases across the top.
-    for (let changed = true; changed && poly.length > 3;) {
+    for (let changed = !exact; changed && poly.length > 3;) { // exact: keep every rim point (watertight for CSG)
       changed = false;
       for (let i = 0; i < poly.length && poly.length > 3; i++) {
         const a = poly[(i + poly.length - 1) % poly.length], v = poly[i], w = poly[(i + 1) % poly.length];
@@ -468,6 +468,12 @@ export function profiledSlab(outline, t, inset = () => 0, {steps = 12} = {}) {
     }
     let sgn = 0; for (let i = 0; i < poly.length; i++) sgn += cross(poly[0], poly[i], poly[(i + 1) % poly.length]);
     const s0 = Math.sign(sgn) || 1, tris = [], idx = poly.slice();
+    if (exact) { // watertight cap for CSG: fan from the centroid through every rim point (outlines are star-shaped)
+      let cx = 0, cz = 0; for (const v of poly) { cx += X(v); cz += Z(v); } cx /= poly.length; cz /= poly.length;
+      const cv = b.v(cx, b.p[poly[0] * 3 + 1], cz);
+      for (let i = 0; i < poly.length; i++) { const a = poly[i], c = poly[(i + 1) % poly.length], k = cross(cv, a, c); (top ? k > 0 : k < 0) ? b.tri(cv, a, c) : b.tri(cv, c, a); }
+      continue;
+    }
     let guard = idx.length * idx.length;
     while (idx.length > 3 && guard-- > 0) {
       let cut = false;

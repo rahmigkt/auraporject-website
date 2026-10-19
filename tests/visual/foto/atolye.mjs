@@ -14,6 +14,10 @@ const sel=await p.evaluate(()=>document.querySelector('#panel .a-note b')?.textC
 await p.screenshot({path:`${out}/atolye-1.png`});
 if(await p.$('[data-edge=front]')){ await p.selectOption('[data-edge=all]','ogee'); await p.waitForTimeout(2000); await p.selectOption('[data-edge=back]','chamfer'); await p.waitForTimeout(2000); await p.screenshot({path:`${out}/atolye-kenar.png`}); console.log('edge ok'); }
 if(sel!=='none'){
+  await p.click('[data-place]'); await p.waitForTimeout(500); await p.mouse.click(bx.x+bx.width*0.42, bx.y+bx.height*0.31); await p.waitForTimeout(3000);
+  console.log('cuts:', await p.evaluate(()=>[...document.querySelectorAll('[data-cutdel]')].length));
+  await p.selectOption('[data-cut=type]','flutes'); await p.waitForTimeout(800); await p.click('[data-place]'); await p.waitForTimeout(500); await p.mouse.click(bx.x+bx.width*0.6, bx.y+bx.height*0.32); await p.waitForTimeout(4000);
+  await p.screenshot({path:`${out}/atolye-cut.png`});
   await p.fill('[data-tf=m1]','120'); await p.dispatchEvent('[data-tf=m1]','change'); await p.waitForTimeout(1500);
   await p.click('[data-mirror]'); await p.waitForTimeout(1500);
 }

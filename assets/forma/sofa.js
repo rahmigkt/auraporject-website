@@ -10,11 +10,11 @@ export const FAMILY = 'seating';
 
 /** Continuous parameters: [min, max, step]. Ranges are concept limits, not structural approval. */
 export const RANGES = {
-  width: [700, 3200, 10], depth: [720, 1200, 10], height: [580, 1100, 10], seatHeight: [360, 500, 5],
+  width: [700, 3200, 10], depth: [720, 1200, 10], height: [580, 1100, 10], seatHeight: [360, 560, 5],
   armWidth: [40, 320, 5], armHeight: [480, 780, 5], armTop: [0, 1, 0.05], armFlare: [0, 1, 0.05], armSlope: [0, 0.4, 0.02], armSet: [0, 90, 5],
   backRake: [4, 22, 1], backThickness: [120, 300, 5], camel: [0, 140, 5], channelCount: [3, 12, 1], tuftSpacing: [110, 240, 5],
   cushionThickness: [80, 230, 5], cushionCrown: [0, 45, 1], seatCount: [1, 4, 1],
-  legHeight: [0, 340, 5], legSize: [10, 48, 1], legTaper: [0.3, 1, 0.05], legSplay: [0, 14, 1], legInset: [0, 140, 5], bodyDrop: [-200, 200, 5], bodyInset: [-30, 600, 5], bodyInsetZ: [-30, 300, 5], bodyRadius: [0, 60, 1], pillows: [0, 4, 1], pillowSize: [300, 600, 10]
+  legHeight: [0, 340, 5], legSize: [10, 48, 1], legTaper: [0.3, 1, 0.05], legSplay: [0, 14, 1], legInset: [0, 140, 5], caseHeight: [30, 400, 5], bodyInset: [-30, 600, 5], bodyInsetZ: [-30, 300, 5], bodyRadius: [0, 60, 1], pillows: [0, 4, 1], pillowSize: [300, 600, 10]
 };
 
 export const ENUMS = {
@@ -34,7 +34,7 @@ export const DEFAULTS = {
   armType: 'track', armWidth: 160, armHeight: 600, armTop: 0.4, armFlare: 0.3, armSlope: 0.15, armSet: 0,
   backType: 'loose', backRake: 12, backThickness: 190, camel: 60, channelCount: 6, tuftSpacing: 170,
   seatType: 'split', seatCount: 3, cushionThickness: 150, cushionCrown: 14, cushionEdge: 'boxed',
-  baseType: 'legs', legType: 'tapered', legHeight: 140, legSize: 22, legTaper: 0.6, legSplay: 0, legInset: 60, bodyDrop: 0, bodyInset: 0, bodyInsetZ: 0, bodyRadius: 18,
+  baseType: 'legs', legType: 'tapered', legHeight: 140, legSize: 22, legTaper: 0.6, legSplay: 0, legInset: 60, caseHeight: 150, bodyInset: 0, bodyInsetZ: 0, bodyRadius: 18,
   welt: 'none', stitch: 'none', pillows: 0, pillowType: 'square', pillowSize: 450
 };
 
@@ -66,7 +66,8 @@ export function normalize(input = {}) {
   if (p.baseType === 'sled' || p.baseType === 'frame') p.legHeight = Math.max(p.legHeight, 60);
   // Seat deck needs room under the cushion.
   const deckTop = p.seatHeight - p.cushionThickness * 0.88;
-  if (deckTop - p.legHeight < 70) p.legHeight = Math.max(0, Math.round((deckTop - 70) / 5) * 5);
+  if (deckTop - p.legHeight < 30) p.legHeight = Math.max(0, Math.round((deckTop - 30) / 5) * 5);
+  p.caseHeight = Math.round(deckTop - p.legHeight); // derived: shown as its own control, set through the seat height (studio)
   p.height = Math.max(p.height, p.seatHeight + (p.backType === 'low' ? 200 : 260));
   if (p.backType === 'low') p.height = Math.min(p.height, p.seatHeight + 340);
   return p;
@@ -106,7 +107,7 @@ export function compile(raw) {
   const postW = clamp(Math.max(aw * 0.5, p.legSize * 1.3), 30, 46);
   const throughPosts = timberArms && legH > 0 && (p.baseType === 'legs' || p.baseType === 'frame');
   // Case (kasa) under the cushions: thinner or deeper than the structural deck, narrower or shorter in plan.
-  const dropEff = ['legs', 'frame'].includes(p.baseType) ? clamp(p.bodyDrop, -Math.max(0, deckTop - y0 - 30), Math.max(0, legH - 20)) : 0;
+  const dropEff = 0; // the case height is applied through the seat height in normalize()
   const legBottomJoin = p.baseType === 'frame' ? deckTop - clamp((deckTop - y0) * 0.55 + dropEff, 30, deckTop - y0 + dropEff - 5) : legH - dropEff;
   // Visible body between cushions and legs: its form scales freely (drop, setback, rounding) while the
   // structural seat height and leg/rail standards stay as computed.
