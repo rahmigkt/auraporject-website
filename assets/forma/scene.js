@@ -449,6 +449,43 @@ export function createViewer(host, {onRotate} = {}) {
     if (isRoom && !userMoved) { yaw = meta.cameraYaw; pitch = 0.32; }
     draw();
   }
+  /** Catalogue photograph of one product: a seamless warm backdrop, a large soft key light (many shadow samples from
+   *  an area, averaged), sub-pixel jitter for clean edges, a longer lens and a gentle vignette. Runs in the browser. */
+  async function studioPhoto({width = 2400, height = 1600, samples = 48, yaw: y = yaw, pitch: pt = 0.16, lens = 24} = {}) {
+    const keep = {bg: scene.background, env: scene.environmentIntensity, tm: renderer.toneMapping, exp: renderer.toneMappingExposure, sun: sun.position.clone(), si: sun.intensity, fov: persp.fov, yaw, pitch, view, zoom, pr: renderer.getPixelRatio()};
+    const floor = scene.children.find(o => o.material?.isShadowMaterial), fo = floor?.material.opacity;
+    scene.background = new THREE.Color('#f4f0e8'); renderer.toneMapping = THREE.NeutralToneMapping; renderer.toneMappingExposure = 1.0;
+    scene.environmentIntensity = 0.75; sun.intensity = 2.6; if (floor) floor.material.opacity = 0.34; contact.material.opacity = 0.75;
+    persp.fov = lens; yaw = y; pitch = pt; view = 'angle'; zoom = 1.04;
+    renderer.setPixelRatio(1); renderer.setSize(width, height, false); composer.setPixelRatio(1); composer.setSize(width, height);
+    const hostRect = host.getBoundingClientRect, fake = {width, height}; host.getBoundingClientRect = () => fake; // frame for the photo, not the panel
+    place(); host.getBoundingClientRect = hostRect;
+    ao.updateGtaoMaterial({samples: 24});
+    const c2 = document.createElement('canvas'); c2.width = width; c2.height = height; const g = c2.getContext('2d', {willReadFrequently: true});
+    const acc = new Float32Array(width * height * 4), base = keep.sun.clone().setLength(6), side = new THREE.Vector3().crossVectors(base, new THREE.Vector3(0, 1, 0)).normalize(), up = new THREE.Vector3().crossVectors(side, base).normalize();
+    let rnd = 7; const rand = () => (rnd = (rnd * 16807) % 2147483647) / 2147483647;
+    for (let i = 0; i < samples; i++) {
+      // key light: points on a disk ~1.6 m across (a softbox), golden-angle spread
+      const r = 0.8 * Math.sqrt((i + 0.5) / samples), a = i * 2.39996;
+      sun.position.copy(base).addScaledVector(side, r * Math.cos(a)).addScaledVector(up, r * Math.sin(a));
+      persp.setViewOffset(width, height, rand() - 0.5, rand() - 0.5, width, height); persp.updateProjectionMatrix();
+      renderPass.camera = persp; ao.camera = persp; composer.render();
+      g.drawImage(canvas, 0, 0); const px = g.getImageData(0, 0, width, height).data;
+      for (let k = 0; k < px.length; k++) acc[k] += px[k];
+      if (i % 6 === 5) await new Promise(res => setTimeout(res));
+    }
+    persp.clearViewOffset();
+    const img = g.createImageData(width, height), cx = width / 2, cy = height * 0.48, R = Math.hypot(cx, cy);
+    for (let yy = 0, k = 0; yy < height; yy++) for (let xx = 0; xx < width; xx++, k += 4) {
+      const v = 1 - 0.13 * Math.pow(Math.hypot(xx - cx, yy - cy) / R, 2.2);
+      for (let j = 0; j < 3; j++) img.data[k + j] = acc[k + j] / samples * v; img.data[k + 3] = 255;
+    }
+    g.putImageData(img, 0, 0);
+    Object.assign(scene, {background: keep.bg, environmentIntensity: keep.env}); renderer.toneMapping = keep.tm; renderer.toneMappingExposure = keep.exp;
+    sun.position.copy(keep.sun); sun.intensity = keep.si; if (floor) floor.material.opacity = fo; contact.material.opacity = 1;
+    persp.fov = keep.fov; ({yaw, pitch, view, zoom} = keep); ao.updateGtaoMaterial({samples: 16}); renderer.setPixelRatio(keep.pr); resize();
+    return c2.toDataURL('image/jpeg', 0.92);
+  }
   return {
     setDesign(next, nextMaterials) {
       const matKey = JSON.stringify(nextMaterials);
@@ -470,8 +507,9 @@ export function createViewer(host, {onRotate} = {}) {
     structure(on) { structure = on; rebuild(); },
     /** 'sketch' (line drawing on paper) or 'render' (materials and colour). */
     mode(m) { const next = m === 'sketch'; if (next !== sketch) { sketch = next; rebuild(); } },
-    /** High-resolution still (longer AO sampling). */
-    async photo(scale = 2) {
+    /** High-resolution still. A single product in render mode gets the studio photograph (see studioPhoto). */
+    async photo(scale = 2, opts = {}) {
+      if (!room && !sketch && compiled && !compiled.meta?.room && opts.studio !== false) return studioPhoto(opts);
       const r = host.getBoundingClientRect(), w = Math.round(r.width * scale), h = Math.round(r.height * scale);
       const pr = renderer.getPixelRatio(); renderer.setPixelRatio(1); renderer.setSize(w, h, false); composer.setPixelRatio(1); composer.setSize(w, h);
       ao.updateGtaoMaterial({samples: 32}); place(); sketchResolution(); renderPass.camera = camera; ao.camera = camera; composer.render();

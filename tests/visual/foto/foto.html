@@ -1,0 +1,11 @@
+<!doctype html><meta charset="utf-8"><style>body{margin:0}#v{width:900px;height:600px}</style><div id="v"></div>
+<script type="module">
+import {createViewer} from '../../../assets/forma/scene.js';
+import {sample, compileDesign} from '../../../assets/forma/generate.js';
+const q=new URLSearchParams(location.search), fam=q.get('family')||'seating', seed=+(q.get('seed')||1), style=q.get('style')||undefined;
+const d=sample({family:fam,seed,style});
+const v=createViewer(document.getElementById('v')); v.mode('render'); v.setDesign(compileDesign(d), d.materials);
+const t0=performance.now(); while(!v.texturesReady() && performance.now()-t0<20000) await new Promise(r=>setTimeout(r,200));
+await new Promise(r=>setTimeout(r,800));
+window.shot=await v.photo(2,{width:+(q.get('w')||1200),height:+(q.get('h')||800),samples:+(q.get('n')||12)}); window.ready=true;
+</script>
