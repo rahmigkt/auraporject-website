@@ -1,5 +1,11 @@
 # İş sırası (2026-10-18, güncel)
 
+**2026-10-19 karar sahibi güncellemesi:** Şimdiki AI işi, sürekli sunucu/API
+yerine tek yerel Qwen3.5-9B için mimari ve doğrulanabilir veri/ölçüm hazırlığıdır.
+[QWEN-YEREL-01](QWEN-YEREL-01.md) bu dar pilotun sırasını belirler. Eski
+TASARIM-01 ve ARAŞTIRMA-01 iş emirlerinin geniş kapsamı beklemede kalır.
+Aşağıdaki tablo önceki ürün işleri sırasını korur; bu PR onları başlatmaz.
+
 | Sıra | İş | Durum |
 |---|---|---|
 | 0 | **SERBEST-01 — Tasarımcı Atölyesi (dokunmatik serbest biçim + fizik denetimi)** | **Acil; ATMOSFER ile paralel** |

@@ -3,6 +3,11 @@
 Başlangıç: 2026-10-18. Bu klasör, AURA stüdyosunun yapay zekâ işlerinin (komut anlama, görselden tasarım, tarz) nasıl
 yürütüleceğini ve denetleneceğini tanımlar.
 
+Güncel karar (2026-10-19): kiralık sunucu yerine yerel Qwen3.5-9B hazırlığı.
+Mimari, veri pilotu ve sıradaki ölçümler: [QWEN-YEREL-01.md](QWEN-YEREL-01.md).
+SUNUCU-01'in sunucu kiralama önerisi uygulanmayacak. Aşağıdaki eski aşama özeti
+tarihsel bağlamdır; yeni yerel hazırlığın sırası QWEN-YEREL-01'de tanımlıdır.
+
 ## Roller
 
 | Rol | Kim | İş |
