@@ -1,5 +1,5 @@
 """Verify main #61 batch, source fingerprints and real product detail targets."""
-import hashlib,json,subprocess
+import hashlib,json,subprocess,sys
 from pathlib import Path
 from PIL import Image,ImageStat
 root=Path(__file__).resolve().parents[3];frames=root/'knowledge/atmosfer/kareler'
@@ -7,7 +7,9 @@ fixtures=json.loads((root/'tests/visual/atmosfer-01/designs.json').read_text(enc
 assert len(ids)==12 and all(f['design']['family']!='bedroom' for f in fixtures)
 exports=json.loads((root/'knowledge/atmosfer/gltf-export-report.json').read_text());export_by_id={r['id']:r for r in exports['fixtures']};assert set(export_by_id)==ids
 for name,digest in exports['sourceFilesSha256'].items():assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest,(name,'source changed since export')
-cycles=json.loads((frames/'cycles-report.json').read_text(encoding='utf-8'));assert {r['id'] for r in cycles}==ids,'Cycles batch incomplete'
+partial='--partial' in sys.argv
+cycles=json.loads((frames/'cycles-report.json').read_text(encoding='utf-8'));delivered={r['id'] for r in cycles};assert delivered and delivered<=ids
+if not partial:assert delivered==ids,'Cycles batch incomplete'
 script_hash=hashlib.sha256((root/'tests/visual/atmosfer-01/cycles.py').read_bytes()).hexdigest()
 for row in cycles:
  assert not row['probeOnly'] and row['generalRendered'] and row['cameraFovMatchesGltf']
@@ -27,13 +29,17 @@ for file,mode in [('capture-report.json','raster'),('path-capture-report.json','
  report=json.loads((frames/file).read_text());assert {r['id'] for r in report['captures']}==ids
  for r in report['captures']:assert r['mode']==mode and not r['errors'] and r['lazyLoadVerified']
 verified=[]
-for id in sorted(ids):
+for id in sorted(delivered if partial else ids):
  for suffix,dimensions in [('final',(2400,1600)),('path',(800,534)),('cycles',(2400,1600)),('detail-1',(2400,1600)),('detail-2',(2400,1600)),('detail-3',(2400,1600))]:
   p=frames/f'{id}-{suffix}.jpg'
   with Image.open(p) as image:
    assert image.size==dimensions,(p,image.size)
    assert max(ImageStat.Stat(image.convert('RGB').resize((64,64))).stddev)>2,(p,'blank/uniform frame')
   verified.append({'file':p.name,'width':dimensions[0],'height':dimensions[1],'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
+if partial:
+ (root/'knowledge/atmosfer/artifact-progress-verification.json').write_text(json.dumps({'status':'IN_PROGRESS','verifiedCompleteDesigns':len(delivered),'expectedDesigns':12,'completedSubsetInvariantChecks':'PASS','images':verified},indent=2),encoding='utf-8')
+ print(f'PASS completed subset: {len(delivered)}/12 designs; source/role/camera/dimensions checked. Full batch still IN_PROGRESS.')
+ raise SystemExit(0)
 general={'renderSourceCommit':subprocess.check_output(['git','log','-1','--format=%H','--','tests/visual/atmosfer-01/cycles.py'],cwd=root).decode().strip(),'renderScriptSha256':script_hash,'note':'All 48 CPU frames regenerated in one source pass at 2400 px; general lens shift retained, macro shift reset.','frames':[]}
 for row in cycles:
  general['frames'].append({k:row[k] for k in ['id','sourceGlbSha256','engine','device','denoiser','samples','width','height','generalLensMm','generalShiftY','generalSeconds']})
