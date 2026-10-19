@@ -34,6 +34,18 @@
     {"id": "rastex-15-reference", "name_tr": "Rastex 15 karşılaştırma", "type": "sku_specific", "variants": [{"stock_thickness": 15, "sku": "0079462"}, {"stock_thickness": 18, "sku": "0013962"}], "cam_diameter": 15, "depth_mm": null, "min_edge_distance_mm": null, "tolerance_mm": null, "source_ids": ["hettich-rastex"], "cnc": {"possible": "conditional", "tool_diameter_mm": 15}, "typical_use": "Demountable carcasses", "note": "Not interchangeable with Minifix; use Hettich matching dowel drawing", "ready_for_autodesign": false},
     {"id": "confirmat-7-system", "name_tr": "Konfirmat 7 mm sistemi", "type": "tool_specific", "reference_tool_skus": ["001.22.485", "001.24.989"], "connector_length_options": [38, 50], "pilot_diameter": 5, "through_shank_diameter": 7, "countersink_diameter": 10, "stock_thickness_mm": null, "depth_mm": null, "min_edge_distance_mm": null, "tolerance_mm": null, "source_ids": ["hafele-confirmat"], "cnc": {"possible": "conditional", "tool_diameter_mm": [5, 7, 10], "note": "Step-drill geometry; final connector SKU and joint drawing required"}, "typical_use": "Panel carcass assembly", "ready_for_autodesign": false}
   ],
+  "current_manufacturer_supplement": {
+    "joint": "lamello-biscuit",
+    "variant": "20",
+    "sku": "144020",
+    "source": "https://lamello.com/uk/products?cHash=e8e09894aeed381dc99eee16d4b83092&tx_smediapim_productdetail%5Baction%5D=show&tx_smediapim_productdetail%5Bcontroller%5D=Product&tx_smediapim_productdetail%5BproductGroup%5D=733",
+    "locator": "Technical Specifications for displayed size20 SKU144020",
+    "connector_mm": [56, 23, 4],
+    "minimum_workpiece_width_mm": 71,
+    "minimum_material_thickness_mm": {"edge_cuts": 6, "surface_cuts": 13, "centre_wall_machining": 26, "angle_bisector": 12},
+    "installation_positioning_tolerance_plus_minus_mm": {"longitudinal": 1, "radial": 1},
+    "note": "Verified current product page; minima are machining-layout-specific, not load capacities and NOT inherited by size0/10 or H9"
+  },
   "derived_geometry": {"centered_connector_wall_reserve": "(stock_thickness - connector_thickness)/2; geometric remainder, NOT minimum safe edge distance", "endmill_internal_radius": "tool_diameter/2; tool runout, material and required clearance not included"},
   "release_gate": "No machining or strength approval until missing SKU, material, edge/end distances, depth, fit and tool access have been verified"
 }

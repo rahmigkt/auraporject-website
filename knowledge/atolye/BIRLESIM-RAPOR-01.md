@@ -17,8 +17,11 @@ kırlangıç eğimlerini destekler; otomatik kuyruk sayısı/derinliği türetil
 5 mm pilot / 7 mm geçiş / 10 mm havşa ayrımını destekler. Minifix B=24/34 bir
 yerleşim ölçüsüdür; kenara güvenli minimum değildir. Rastex ile Minifix karıştırılmaz.
 Lamello tarihsel katalog özeti indeks üzerinden okunabildi; doğrudan PDF doğrulaması
-404 verdiği için kayıtta yeniden doğrulama şartı var. Konum toleransı ±1 mm, tutkal
-geçme toleransı olarak kullanılmaz.
+404 verdiği için tarihsel kayıtta yeniden doğrulama şartı var. Sonraki araştırmada
+güncel Lamello ürün sayfasındaki **20 /144020** varyantı ayrıca doğrulandı:
+minimum iş parçası genişliği71 mm; malzeme kalınlığı kenar kesiminde6, yüzeyde13,
+orta duvar işleminde26, açıortayda12 mm. Bunlar JSON'da kaynaklı ek kayıttadır;
+0/10/H9'a taşınmaz. Konum toleransı ±1 mm, tutkal geçme toleransı olarak kullanılmaz.
 
 Kaynağı doğrulanmayan minimum kenar mesafesi, delik derinliği ve geçme toleransı
 **null** bırakıldı; sıfırla doldurulamaz. Farklı malzeme/tutkal/vida ve yük şartları
