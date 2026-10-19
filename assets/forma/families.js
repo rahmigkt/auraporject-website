@@ -163,63 +163,8 @@ export const FAMILIES = {
       return {...structuredClone(r.pick(list.length ? list : BATH_STARTS[kind]).p), ...(locks.params || {})};
     },
     sampleMaterials(st, r) { const m = FAMILIES.storage.sampleMaterials(st, r); return normalizeKitchenMaterials({...m, top: {surface: 'stone', stone: r.pick(['travertine', 'carrara', 'terrazzo', 'concrete']), polish: 'honed'}, sink: {finish: 'white'}}); }
-  },
-  bedroom: {
-    // Bedroom furniture is delivered as a set: the piece in focus (kind) is designed, the rest is proposed to match.
-    id: 'bedroom', mod: set, styles: BEDROOM_STYLES, byId: BEDROOM_STYLE_BY_ID, kinds: set.KINDS, defaultKind: 'bed',
-    featureWeights: {headType: 1.6, headShape: 1.2, bedBase: 1, wdDoorStyle: 1.4, wdHandle: 0.6, frontStyle: 0.8, wdNiche: 0.8},
-    similarEnums: ['headType', 'headShape', 'bedBase', 'wdDoorStyle', 'frontStyle'], fixedKeys: ['mattressWidth', 'mattressLength'],
-    normalizeMaterials: normalizeBedroomMaterials,
-    sampleParams(st, kind, r, locks) {
-      const {RANGES, ENUMS} = set, p = {kind}, rs = ROOM_STYLE[st.id] || {};
-      const fromStyle = key => st.enums[key] ? r.weighted(st.enums[key]) : null;
-      for (const key of Object.keys(ENUMS)) p[key] = LINE_KEYS.includes(key) ? 'none' : rs[key] ? r.weighted(rs[key]) : fromStyle(key) ?? r.pick(ENUMS[key]);
-      for (const key of Object.keys(RANGES)) { const [lo, hi] = st.ranges[key] || ROOM_SAMPLE_RANGES[key] || BEDROOM_SAMPLE_RANGES[key] || RANGES[key]; p[key] = r.range(lo, hi); }
-      const lay = fromStyle('caseLayout'); p.nsLayout = lay === 'niche' ? 'niche' : 'stack'; p.drLayout = ['split', 'topSplit'].includes(lay) ? lay : 'stack';
-      const cb = fromStyle('caseBase'); p.drBase = cb === 'wall' || cb === 'sled' ? 'plinth' : cb || 'plinth';
-      if (p.nsBase !== 'wall' && cb && cb !== 'sled' && cb !== 'wall') p.nsBase = cb;
-      p.wdBase = p.drBase === 'legs' ? 'legs' : 'recessed';
-      p.mirror = fromStyle('mirror') || 'none';
-      if (st.ranges.nightWidth) p.nsWidth = r.range(...st.ranges.nightWidth);
-      if (st.ranges.slatWidth) p.battenWidth = Math.min(80, r.range(...st.ranges.slatWidth));
-      p.storage = r.next() < 0.3 ? (p.bedBase === 'baza' || p.bedBase === 'platform' ? 'lift' : 'drawers') : 'none';
-      p.bedding = 'made'; p.headExtend = 0; p.view = 'set'; p.setMatch = 'on';
-      const size = r.weighted({'160x200': 5, '180x200': 3, '150x200': 2, '140x190': 1});
-      [p.mattressWidth, p.mattressLength] = bedroom.MATTRESS[size];
-      p.mattressThickness = r.range(220, 280);
-      if (p.bedBase === 'baza') { p.railHeight = r.range(260, 320); p.legHeight = p.legType === 'hidden' ? r.range(20, 50) : r.range(50, 90); }
-      p.wdWidth = Math.round(r.range(1600, 2600) / 10) * 10;
-      const framed = ['frame', 'upholsteredFrame', 'fourPoster'].includes(p.bedBase);
-      const top = () => p.legHeight + p.railHeight + p.mattressThickness - (framed ? Math.min(p.railHeight - 60, 120) : 0);
-      const lo = ['japandi', 'wabi_sabi', 'muji_modern'].includes(st.id) ? 400 : 450;
-      for (let i = 0; i < 20 && top() > 600; i++) { if (p.railHeight > 160) p.railHeight -= 20; else p.legHeight = Math.max(0, p.legHeight - 20); }
-      for (let i = 0; i < 20 && top() < lo; i++) p.railHeight += 20;
-      Object.assign(p, locks.params || {});
-      // The other pieces follow the one in focus.
-      const q = set.harmonize(set.normalize(p), kind);
-      // Final check of the mattress top on the proposed set (450–600 mm; lower for floor-level styles).
-      for (let i = 0; i < 30; i++) {
-        const t = bedroom.compileBed(bedroom.normalize({...q, kind: 'bed', integratedNight: 'none'})).meta;
-        if (t.mattressTop > 600) { if (q.railHeight > 140) q.railHeight -= 20; else if (q.legHeight > 0) q.legHeight = Math.max(0, q.legHeight - 20); else q.mattressThickness = Math.max(180, q.mattressThickness - 20); }
-        else if (t.headAbove < 300) q.headHeight += 50;
-        else break;
-      }
-      return q;
-    },
-    sampleMaterials(st, r) {
-      const m = st.mats, fiber = r.weighted(m.fiber);
-      let color = r.weighted(m.color), color2 = r.pick(['white', 'cream', 'anthracite', 'navy', 'mustard', 'camel']);
-      if (color2 === color) color2 = 'white';
-      const pattern = HIDES.includes(fiber) ? 'none' : r.weighted(m.pattern);
-      const wood = {species: r.weighted(m.species), stain: r.weighted(m.stain), finish: r.weighted(m.finish)};
-      return normalizeBedroomMaterials({
-        fabric: {fiber, weave: 'plain', color, pattern, color2, scale: 1, density: r.int(2, 4)},
-        welt: {color: null}, wood, metal: {finish: r.weighted(m.metal)},
-        case: {surface: r.weighted(m.case), ...wood, color: r.weighted(m.lacquer)},
-        linen: {color: r.pick(['white', 'white', 'cream', 'sand', 'greige'])}
-      });
-    }
   }
+
 };
 
 /** Room-level sampling ranges. */

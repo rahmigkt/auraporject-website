@@ -6,6 +6,8 @@ export const SCHEMA = 'aura.forma.design/1';
 
 /** Clean an incoming design object (from file, AI or storage). */
 export function normalizeDesign(d = {}) {
+  // The old bed-led bedroom set is no longer offered: its pieces open as RİTMO case goods.
+  if (d?.family === 'bedroom') d = {family: 'storage', kind: {wardrobe: 'wardrobe', dresser: 'dresser', nightstand: 'nightstand'}[d.kind] || 'wardrobe', style: d.style, seed: d.seed};
   const fam = familyOf(d), style = fam.byId[d.style] ? d.style : 'japandi';
   const kind = fam.kinds[d.kind] ? d.kind : fam.defaultKind;
   const out = {schema: SCHEMA, family: fam.id, kind, style, seed: (d.seed >>> 0) || 1, params: fam.mod.normalize({...(d.params || {}), kind}), materials: fam.normalizeMaterials(d.materials || {})};
