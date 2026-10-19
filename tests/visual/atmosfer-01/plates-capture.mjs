@@ -13,6 +13,10 @@ try{
  const fixtures=await page.evaluate(()=>window.plateExamples);await fs.writeFile(new URL('examples.json',output),JSON.stringify(fixtures,null,2));
  for(const fixture of fixtures){
   if(process.env.PLATE_FAMILY&&fixture.design.family!==process.env.PLATE_FAMILY)continue;
+  if(process.env.PLATE_WAIT==='1'){
+   const deadline=Date.now()+1800000;
+   for(;;){const manifest=JSON.parse(await fs.readFile(new URL('../../../knowledge/atmosfer/sahneler/manifest.json',import.meta.url)));const count=manifest.rooms.filter(r=>r.family===fixture.design.family).length;if(count===6)break;if(Date.now()>deadline)throw Error('Plate production deadline: '+fixture.design.family);console.log(fixture.design.family+': waiting for Blender '+count+'/6');await new Promise(resolve=>setTimeout(resolve,15000));}
+  }
   for(const texture of ['KIREC','TAS','TOPRAK'])for(const light of ['SABAH','AKSAM'])for(const camera of ['A','B']){
    if(process.env.PLATE_SMOKE&&(texture!=='KIREC'||light!=='SABAH'))continue;
    const result=await page.evaluate(options=>window.renderPlateExample(options),{id:fixture.id,texture,light,camera});

@@ -39,7 +39,7 @@ function merge(remote, local, keyOf) {
     const items = [...(rp?.items || [])], seen = new Set(items.map(i => keyOf(i.design)));
     let n = Math.max(0, ...items.map(i => +String(i.id).slice(1) || 0));
     for (const it of lp?.items || []) if (!seen.has(keyOf(it.design))) { items.push({...it, id: 'U' + (++n)}); seen.add(keyOf(it.design)); }
-    out['aura-forma-project'] = JSON.stringify({items});
+    out['aura-forma-project'] = JSON.stringify({...lp, ...rp, items});
   }
   return out;
 }

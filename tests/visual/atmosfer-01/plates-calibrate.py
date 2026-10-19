@@ -4,6 +4,16 @@ from pathlib import Path
 from mathutils import Vector
 from bpy_extras.object_utils import world_to_camera_view
 root=Path(sys.argv[sys.argv.index('--')+1]).resolve();rows=[]
+# Correct the initial annotation from the actual primary light's horizontal vector.
+# This is metadata only; rendered pixels and the recorded bake source hash stay intact.
+manifest=json.loads((root/'manifest.json').read_text())
+for room in manifest['rooms']:
+ room['environmentRotationY']=math.pi/2
+ direction=list(Vector((-1.3,0,-1) if room['light']=='AKSAM' else (room['roomMetres'][0]/2,0,-.7)).normalized())
+ for camera in room['cameras'].values():camera['shadowDirection']=direction
+ (root/(room['id']+'.json')).write_text(json.dumps(room,indent=2))
+manifest['metadataCalibration']='Camera UV references and primary-light horizontal shadow vectors; no pixel changes'
+(root/'manifest.json').write_text(json.dumps(manifest,indent=2))
 for file in sorted(root.glob('*-medium-*.json')):
  row=json.loads(file.read_text());
  for name,c in row['cameras'].items():

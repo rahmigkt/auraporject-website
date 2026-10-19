@@ -10,7 +10,7 @@ for(const family of ['seating','table','storage','kitchen','bath'])for(let i=0;i
  const p=f.design.params;
  if(family==='seating'||family==='storage')p.width=i?1800:1700;
  if(family==='seating'&&i)p.width=1700;
- if(family==='storage'&&!i)p.height=1100;
+ if(family==='storage'&&!i){f.design.kind='bookcase';p.kind='bookcase';p.height=1100;p.depth=350;}
  if(family==='table'){p.length=i?1800:1700;p.width=850;}
  if(family==='bath')p.width=i?1800:1700;
  if(family==='kitchen'){p.modules=p.modules.slice(0,3).map(m=>({...m,w:600,wall:'none'}));p.hood='none';f.design.kind='run';p.kind='run';p.topDepth=600;}

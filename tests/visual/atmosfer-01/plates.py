@@ -27,6 +27,12 @@ def area(name,pos,target,power,color,size):
     d=bpy.data.lights.new(name,'AREA');d.energy=power;d.shape='DISK';d.size=size;d.color=color;o=bpy.data.objects.new(name,d);bpy.context.collection.objects.link(o);o.location=pos;o.rotation_euler=(Vector(target)-o.location).to_track_quat('-Z','Y').to_euler()
 def three(v):return [v[0],v[2],-v[1]]
 manifest={'schema':'aura.scene-plates/1','cohort':'medium-approval','sizesProduced':['medium'],'rooms':[],'generatorSHA256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
+if a.family and (out/'manifest.json').exists():
+ previous=json.loads((out/'manifest.json').read_text())
+ for row in previous['rooms']:
+  if row['family']!=a.family:
+   row.setdefault('renderGeneratorSHA256',previous['generatorSHA256']);manifest['rooms'].append(row)
+ (out/'manifest.json').write_text(json.dumps(manifest,indent=2))
 for family,(w,d,product_width) in rooms.items():
  if a.family and family!=a.family:continue
  for texture,(wallcolor,floorcolor) in textures.items():
@@ -66,14 +72,14 @@ for family,(w,d,product_width) in rooms.items():
    right.visible_camera=front.visible_camera=True;right.visible_shadow=True
    s.render.resolution_x=256;s.render.resolution_y=128;s.render.image_settings.file_format='HDR';s.render.filepath=str(out/(key+'.hdr'));bpy.ops.render.render(write_still=True)
    right.visible_camera=front.visible_camera=False;right.visible_shadow=False
-   row={'id':key,'family':family,'size':'medium','texture':texture,'light':light,'roomMetres':[w,2.8,d],'environment':key+'.hdr','environmentPoint':[0,.8,0],'plateEngine':a.plate_engine,'environmentEngine':'CYCLES','cameras':{}}
+   row={'id':key,'family':family,'size':'medium','texture':texture,'light':light,'roomMetres':[w,2.8,d],'environment':key+'.hdr','environmentPoint':[0,.8,0],'environmentRotationY':math.pi/2,'plateEngine':a.plate_engine,'environmentEngine':'CYCLES','renderGeneratorSHA256':manifest['generatorSHA256'],'cameras':{}}
    s.render.engine=a.plate_engine
    if a.plate_engine=='BLENDER_EEVEE_NEXT':
     s.eevee.taa_render_samples=32;s.eevee.use_raytracing=True
    cam.data.type='PERSP';cam.data.sensor_width=36;cam.data.sensor_fit='HORIZONTAL';cam.data.clip_start=.01;cam.data.clip_end=100
    for name,lens,height,angle in [('A',50,1.2,32),('B',70,1.05,5)]:
     distance=product_width/.68*lens/36;theta=math.radians(angle);cam.location=(math.sin(theta)*distance,-math.cos(theta)*distance,height);cam.rotation_euler=(Vector((0,0,height))-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.lens=lens
-    centre={'seating':.45,'table':.42,'storage':.6,'kitchen':.7,'bath':.8}[family];cam.data.shift_y=(centre-height)*lens/(distance*36)
+    centre={'seating':.45,'table':.42,'storage':.6,'kitchen':.7,'bath':.6}[family];cam.data.shift_y=(centre-height)*lens/(distance*36)
     s.render.resolution_x=2400;s.render.resolution_y=1600;s.render.image_settings.file_format='JPEG';s.render.filepath=str(out/(key+'-'+name+'.jpg'));bpy.ops.render.render(write_still=True)
-    row['cameras'][name]={'plate':key+'-'+name+'.jpg','position':three(cam.location),'target':[0,height,0],'lensMM':lens,'sensorWidthMM':36,'shiftY':cam.data.shift_y,'width':2400,'height':1600,'floor':{'normal':[0,1,0],'constant':0},'productOrigin':[0,0,0],'shadowDirection':[1,0,.3]}
+    row['cameras'][name]={'plate':key+'-'+name+'.jpg','position':three(cam.location),'target':[0,height,0],'lensMM':lens,'sensorWidthMM':36,'shiftY':cam.data.shift_y,'width':2400,'height':1600,'floor':{'normal':[0,1,0],'constant':0},'productOrigin':[0,0,0],'shadowDirection':list(Vector((-1.3,0,-1) if light=='AKSAM' else (w/2,0,-.7)).normalized())}
    row['seconds']=round(time.monotonic()-start,2);(out/(key+'.json')).write_text(json.dumps(row,indent=2));manifest['rooms'].append(row);(out/'manifest.json').write_text(json.dumps(manifest,indent=2));print('PLATE_COMPLETE '+key,flush=True)

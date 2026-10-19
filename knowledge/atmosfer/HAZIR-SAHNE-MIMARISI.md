@@ -6,7 +6,7 @@ Tanım: [SAHNELER.md](SAHNELER.md). Main `6ed6eed` atmosfer dalına birleştiril
 
 ## Üretim
 
-`tests/visual/atmosfer-01/plates.py`, oda kabuğunu Blender'da kurar. Dört duvar, solda gerçek pencere açıklığı, 2,8 m yükseklik, mat prosedürel mineral sıva/ahşap/taş yüzey, süpürgelik bulunur. Ön duvar yalnız fotoğraf ışınlarına görünmez; tavan geometrisi yoktur. Sessiz nesne eklenmemiştir. Taş derzleri ince ve aynı renkte; dama veya parlak zemin kullanılmaz. Doku üretimi prosedüreldir, dış hizmete veri gönderilmez.
+`tests/visual/atmosfer-01/plates.py`, oda kabuğunu Blender'da kurar. Dört duvar, solda gerçek pencere açıklığı, 2,8 m yükseklik, mat prosedürel mineral sıva/ahşap/taş yüzey, süpürgelik bulunur. HDR ölçümünde bütün duvarlar kapalıdır. Fotoğrafta ön/sağ duvar kesiti kameraya görünmez; sağ duvarın dış yüzünü görmemek için zemin ve arka fotoğraf fonu oda sınırının ötesine uzanır. Bu, JSON'daki nominal oda ölçülerini değiştirmez. Tavan geometrisi yoktur. Sessiz nesne eklenmemiştir. Taş derzleri ince ve aynı renkte; dama veya parlak zemin kullanılmaz. Doku üretimi prosedüreldir, dış hizmete veri gönderilmez.
 
 Plakalar **Blender EEVEE Next, 32 örnek, ray tracing açık**; ürün noktasındaki panoramik HDR haritaları **Cycles CPU, 16 örnek, OIDN** ile üretilir. Bu JPEG'ler Cycles ürün renderı olarak adlandırılmaz. JSON'daki `plateEngine`, `environmentEngine` alanları gerçek motorları belirtir. İstenirse aynı betiğin `--plate-engine CYCLES` seçeneği plakaları da Cycles'ta üretir; bu daha yavaştır. Bu ilk grup için motor seçimi ve görüntü kalitesi karar sahibinin incelemesine açıktır.
 
