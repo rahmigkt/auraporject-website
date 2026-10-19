@@ -102,6 +102,17 @@ export function compile(raw) {
       box(parts, 'top-end', 'vanity-top', 'top', [a, p.width / 2], [body, top], [zB, zF], {}, 2);
     }
     xs.forEach((x, i) => basin(parts, `basin${i + 1}`, p, x, zc, bw, bd, body, top));
+    // Undermount / integrated bowls go through the cabinet's own top: open it with the same cut-outs as the vanity top
+    // (a solid case top showed as wood inside the basin opening).
+    if (p.basinType !== 'vessel') for (let k = parts.length - 1; k >= 0; k--) {
+      const q = parts[k]; if (q.role !== 'top' || q.geom.fn !== 'cushion' || !/-top$/.test(q.id)) continue;
+      const {w, h, d} = q.geom, [cx, cy, cz] = q.pos, x0 = cx - w / 2, z0 = cz - d / 2, z1 = cz + d / 2, y = [cy - h / 2, cy + h / 2], pieces = []; let a = x0;
+      xs.forEach((x, i) => { const h0 = x - bw / 2 - 4, h1 = x + bw / 2 + 4;
+        if (h0 > a + 1) pieces.push([`${q.id}-${i}a`, [a, h0], [z0, z1]]);
+        pieces.push([`${q.id}-${i}f`, [h0, h1], [zc + bd / 2 + 4, z1]], [`${q.id}-${i}b`, [h0, h1], [z0, zc - bd / 2 - 4]]); a = h1; });
+      if (cx + w / 2 > a + 1) pieces.push([`${q.id}-end`, [a, cx + w / 2], [z0, z1]]);
+      parts.splice(k, 1, ...pieces.filter(([, , zz]) => zz[1] - zz[0] > 2).map(([id, xx, zz]) => ({...q, id, geom: {...q.geom, w: xx[1] - xx[0], d: zz[1] - zz[0]}, pos: [(xx[0] + xx[1]) / 2, cy, (zz[0] + zz[1]) / 2], cut: undefined})));
+    }
     extras.push({kind: 'basin', n: xs.length, type: p.basinType, shape: p.basinShape});
     overallH = top + (p.basinType === 'vessel' ? 140 : 0) + (p.tap === 'deck' ? 260 : 0);
   } else if (k === 'column') {

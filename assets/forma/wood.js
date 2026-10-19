@@ -17,7 +17,7 @@ function pn(x, y, s, px, py) {
 const pfbm = (u, v, s, px, py, oct) => { let t = 0, a = 0.5, n = 0; for (let o = 0; o < oct; o++) { t += a * pn(u * px, v * py, s + o * 31, px, py); n += a; a *= 0.5; px *= 2; py *= 2; } return t / n; };
 
 /**
- * Flat-sawn board face, 300 × 600 mm per tile (grain along v), seamless in both directions:
+ * Flat-sawn board face, 600 × 1200 mm per tile (grain along v), seamless in both directions:
  * growth rings cut by the board plane give cathedral arches; earlywood/latewood with a sharp latewood edge;
  * long pores (ring-porous species in the earlywood), fine fibre streaks, ray flecks, slow colour drift.
  */
@@ -26,7 +26,7 @@ export function woodMaps(species, finish, {w = 1024, h = 2048, stain = 'natural'
   const stainRgb = St.hex ? hex(St.hex) : null, base = hex(S.base), grain = hex(S.grain), baseLum = (base[0] + base[1] + base[2]) / 3;
   const ringPorous = ['oak', 'ash', 'smoked', 'ebonized', 'teak'].includes(species), seed = species.length * 13 + 5;
   const albedo = new Uint8ClampedArray(w * h * 4), rough = new Uint8ClampedArray(w * h * 4), height = new Float32Array(w * h);
-  const rings = 300 / S.ring; // rings across the tile width at the board's flattest point
+  const rings = 600 / S.ring; // rings across the tile width at the board's flattest point
   for (let y = 0; y < h; y++) {
     const v = y / h;
     // where along the log this slice sits: the pith line wanders and the arches rise and fall (period = tile)
@@ -36,17 +36,17 @@ export function woodMaps(species, finish, {w = 1024, h = 2048, stain = 'natural'
       const u = x / w, k = (y * w + x) * 4;
       const warp = (pfbm(u, v, seed, 1, 2, 4) - 0.5) * (0.35 + S.figure * 0.9) + (pfbm(u, v, seed + 7, 5, 2, 3) - 0.5) * 0.35;
       // periodic distance from the pith across the face plus the arch gives the year number at this point
-      const across = Math.abs(Math.sin(Math.PI * (u - c0)));
-      let R = (across * 0.85 + 0.15) * rings * 0.38 + arch * rings * 0.22 * (0.5 + S.figure) + warp * 1.4;
+      const across = Math.abs(Math.sin(Math.PI * (u - c0 + warp * 0.08))); // grain meanders sideways (no closed loops)
+      let R = (across * 0.85 + 0.15) * rings * 0.38 + arch * rings * 0.07 * (0.6 + S.figure * 0.5) + warp * 0.25; // long cathedrals, no bull's-eyes
       R += 0.35 * Math.sin(R * 0.9 + seed) + (pn(R * 0.6, 0.5, seed + 13, 997, 1) - 0.5) * 0.5; // uneven years
       const f = R - Math.floor(R);
       // growth year: earlywood eases into latewood, a soft-but-clear edge into next year's earlywood
       const late = Math.pow(f, 2.2), edge = f > 0.9 ? Math.pow((1 - f) / 0.1, 0.7) : 1;
       const tone = late * edge * (0.55 + 0.45 * pfbm(u, v, seed + 17, 3, 6, 2));
-      const fib = (pn(u * 340, v * 9, seed + 3, 340, 9) - 0.5) * 0.26 + (pn(u * 900, v * 22, seed + 4, 900, 22) - 0.5) * 0.16 + (pn(u * 60, v * 3, seed + 9, 60, 3) - 0.5) * 0.18;
+      const fib = (pn(u * 600, v * 18, seed + 3, 600, 18) - 0.5) * 0.26 + (pn(u * 1000, v * 44, seed + 4, 1000, 44) - 0.5) * 0.16 + (pn(u * 120, v * 6, seed + 9, 120, 6) - 0.5) * 0.18;
       const sub = Math.pow(Math.abs(Math.sin(Math.PI * R * 3)), 18) * 0.18 * (1 - late);
-      const poreN = pn(u * 420, v * 18, seed + 11, 420, 18), pore = poreN > (ringPorous ? 0.8 - (1 - late) * 0.12 : 0.9) ? (ringPorous ? 1 : 0.5) : 0;
-      let ray = 0; if (S.rays > 0.2) { const rn = pn(u * 160, v * 30, seed + 2, 160, 30); if (rn > 1 - S.rays * 0.1) ray = (rn - (1 - S.rays * 0.1)) / (S.rays * 0.1); }
+      const poreN = pn(u * 800, v * 36, seed + 11, 800, 36), pore = poreN > (ringPorous ? 0.8 - (1 - late) * 0.12 : 0.9) ? (ringPorous ? 1 : 0.5) : 0;
+      let ray = 0; if (S.rays > 0.2) { const rn = pn(u * 320, v * 60, seed + 2, 320, 60); if (rn > 1 - S.rays * 0.1) ray = (rn - (1 - S.rays * 0.1)) / (S.rays * 0.1); }
       const drift = (pfbm(u, v, seed + 21, 2, 1, 3) - 0.5) * 0.16;
       const t = Math.max(0, Math.min(1, tone * 0.62 + sub + fib * 0.5 + pore * 0.3));
       for (let c = 0; c < 3; c++) albedo[k + c] = clamp((base[c] + (grain[c] - base[c]) * t) * (1 + drift) + ray * 26 * (1 - t), 0, 255);
@@ -65,5 +65,5 @@ export function woodMaps(species, finish, {w = 1024, h = 2048, stain = 'natural'
     const nx = (l - r) * 0.6, ny = (d - u) * 0.6, len = Math.hypot(nx, ny, 1), k = (y * w + x) * 4;
     normal[k] = (nx / len * 0.5 + 0.5) * 255; normal[k + 1] = (ny / len * 0.5 + 0.5) * 255; normal[k + 2] = (1 / len * 0.5 + 0.5) * 255; normal[k + 3] = 255;
   }
-  return {w, h, tileMm: [300, 600], albedo, normal, rough, clearcoat: Fi.clearcoat};
+  return {w, h, tileMm: [600, 1200], albedo, normal, rough, clearcoat: Fi.clearcoat};
 }
