@@ -4,6 +4,11 @@ from pathlib import Path
 from PIL import Image,ImageStat,ImageChops
 root=Path(__file__).resolve().parents[3];folder=root/'knowledge/atmosfer/sahneler';examples=folder/'ornekler'
 manifest=json.loads((folder/'manifest.json').read_text());assert len(manifest['rooms'])==30
+assert json.loads((folder/'ui-check.json').read_text())['passed']
+assert json.loads((folder/'environment-axis-check.json').read_text())['passed']
+assert json.loads((folder/'render-source-check.json').read_text())['passed']
+assert json.loads((folder/'module-check.json').read_text())['passed']
+assert json.loads((folder/'framing-check.json').read_text())['passed']
 report=json.loads((examples/'capture.json').read_text());assert report['passed'] and not report['errors'];assert len(report['frames'])==120
 assert len({r['file'] for r in report['frames']})==120
 for file,digest in report['sources'].items():
@@ -37,6 +42,6 @@ for family,title in names.items():
  lines.append('')
 gallery=root/'knowledge/atmosfer/ornekler.md';archive=gallery.with_name('ornekler-urun-render-arsivi.md')
 if not archive.exists():archive.write_text('> Arşiv: önceki ürün başına tam oda denemeleri. Güncel hazır sahne teslimi [ornekler.md](ornekler.md) içindedir.\n\n'+gallery.read_text(encoding='utf-8'),encoding='utf-8')
-gallery.write_text('\n'.join(lines)+'\n',encoding='utf-8')
+gallery.write_text('\n'.join(lines).rstrip()+'\n',encoding='utf-8')
 verification={'status':'PASS','scope':'medium-approval-cohort','rooms':30,'plates':60,'hdr':30,'productFrames':120,'packageBytes':package,'smallLargeProduced':False,'visualApproval':'PENDING','files':proof}
 (folder/'verification.json').write_text(json.dumps(verification,indent=2));print(json.dumps({k:v for k,v in verification.items() if k!='files'}))

@@ -2,7 +2,7 @@
 
 Tanım: [SAHNELER.md](SAHNELER.md). Main `6ed6eed` atmosfer dalına birleştirildi. Bu teslim, ürün başına tam oda render kuyruğunun yerine geçen ortak plaka prototipidir. Önceki ürün render denemeleri ve kısmi Cycles raporları geçmiş çalışmadır; hazır sahne grubunun tamamlandığının kanıtı değildir.
 
-İlk grup yalnız **beş aile × orta oda × üç doku × iki ışık** içerir. Her seçeneğin iki kamerası vardır: toplam 60 adet 2400 × 1600 JPEG (kalite 88), 30 adet 256 × 128 Radiance HDR ve 30 JSON. Küçük/büyük oda üretimi karar sahibinin altı seçenek için görsel onayından sonra yapılacaktır.
+İlk grup yalnız **beş aile × orta oda × üç doku × iki ışık** içerir. Her seçeneğin iki kamerası vardır: toplam 60 adet 2400 × 1600 JPEG (kalite 88), 30 adet 256 × 128 Radiance HDR ve 30 JSON. İki kamera aynı ürün noktasının HDR'ını paylaşır; JSON her iki kameranın bilgisini içerir. Plaka + HDR + JSON toplamı **9,96 MB**'dır. Küçük/büyük oda üretimi karar sahibinin altı seçenek için görsel onayından sonra yapılacaktır.
 
 ## Üretim
 
@@ -20,8 +20,10 @@ Proje panelinde ürün, **Mekân: Kireç · Taş · Toprak**, **Işık: Sabah ·
 
 ## İnceleme ve doğrulama
 
-[ornekler.md](ornekler.md), her aile için altı seçenek ve iki gerçek, orta boy örnek tasarımı gösterir; her hücrede A görüntüsü ve B bağlantısı bulunur. Örneklerin tam parametre/malzeme kayıtları `sahneler/ornekler/examples.json` içindedir. Önceki 12 tasarımın aynısı oldukları iddia edilmez: bu grupta orta boy ölçüler, alçak kitaplık ve iki düz mutfak örneği açıkça kaydedilir.
+[ornekler.md](ornekler.md), her aile için altı seçenek ve iki gerçek, orta boy örnek tasarımı gösterir; her hücrede A görüntüsü ve B bağlantısı bulunur. Örneklerin tam parametre/malzeme kayıtları `sahneler/ornekler/examples.json` içindedir. Önceki 12 tasarımın aynısı oldukları iddia edilmez: bu grupta orta boy ölçüler, alçak dolap ve iki düz mutfak örneği açıkça kaydedilir.
 
 `plates-calibrate.py`, Blender'ın bağımsız `world_to_camera_view` sonucunu dört referans noktası için çıkarır. `tests/scene-plates-check.mjs` bunu Three.js izdüşümüyle karşılaştırır; 30 seçenek / 60 plaka / boyut / toplam 120 MB sınırını da denetler. `plates-capture.mjs`, gerçek Playwright ürün yerleşimlerini, ürünün kesilmemesini ve kadrajdaki genişliğini kaydeder. Görsel beğeni ve katalog fotoğrafı ölçütü otomatik testin sonucu değil, karar sahibinin onayıdır.
+
+Son doğrulama geçti: 120/120 ürünlü görüntü, 60/60 plaka; en büyük Blender/Three kamera UV farkı `7,73 × 10⁻⁷`. HDR eksen testi, panorama için Three ortam dönüşünün `π/2` olduğunu gerçek renkli eksenlerle doğrular. Karelerin gerçek üretim betikleri oda başına SHA256 ile kayıtlıdır; `plates-source-check.py` bu hash'leri Git commitleriyle eşler. Banyo kameralarının ayak ucunu da kapsayan son düzeltmesi ayrı kaynak snapshot'ıdır. Proje UI testi gerçek CSS ve fare etkileşimiyle seçim/kayıt/yenileme akışını doğrular. Yerel test sunucusuna CSS MIME türü de eklenmiştir.
 
 Yerel üretim: `blender --background --python tests/visual/atmosfer-01/plates.py -- --output ABSOLUTE_DIR`. Ardından `plates-calibrate.py` betiğine aynı mutlak klasör verilir. Tarayıcı incelemesi `tests/visual/atmosfer-01/plates-review.html` sayfasındadır; yalnız yerel sunucu ve Playwright kullanılır.

@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-19",
+  "results": {
+    "forma-check": "PASS",
+    "atmosfer-check": "PASS",
+    "scene-plates-check": "PASS",
+    "scene-plates-framing-check": "PASS",
+    "plates-ui-check": "PASS",
+    "HDR-axis-check": "PASS",
+    "render-source-check": "PASS",
+    "plates-delivery": "PASS"
+  },
+  "module": {
+    "passed": true,
+    "rooms": 30,
+    "plates": 60,
+    "hdr": 30,
+    "bytes": 9957914,
+    "maxCameraUVError": 7.725501288691206e-07
+  },
+  "uiChecks": [
+    "Real studio stylesheet loaded with correct MIME type",
+    "Project tab reached with native pointer activation",
+    "No plate/HDR loaded before a scene is requested",
+    "Only selected JSON/JPEG/HDR loaded; actual product rendered",
+    "Selection persisted with project",
+    "Selection restored when returning to project",
+    "Selection survives full page reload"
+  ],
+  "knownBaselineFailures": {
+    "reference": "../test-results-20261019.json",
+    "tests": [
+      "assistant-contract-check.mjs",
+      "codesign-check.mjs",
+      "studio-agent-check.mjs"
+    ],
+    "reason": "Previously reproduced on main: missing services/design modules. No general claim that every repository test passes."
+  },
+  "visualApproval": "PENDING"
+}
