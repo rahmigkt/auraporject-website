@@ -1,0 +1,14 @@
+import {createRequire} from 'node:module';
+const {chromium}=createRequire(import.meta.url)('/opt/npm-tools/node_modules/playwright');
+const b=await chromium.launch({args:['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+const ctx=await b.newContext({viewport:{width:1300,height:850}});
+await ctx.addInitScript(()=>{localStorage.setItem('aura-forma-account-skip','1');localStorage.setItem('aura-forma-guide-seen','1');});
+const p=await ctx.newPage(); const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+await p.goto('http://127.0.0.1:8812/tasarla.html'); await p.waitForSelector('#families button'); await p.waitForTimeout(2000);
+await p.evaluate(()=>{document.querySelector('[data-tab=size]').click();}); await p.waitForTimeout(800);
+const read=()=>p.evaluate(()=>['legHeight','caseHeight','seatHeight'].map(k=>document.querySelector('#r-'+k)?.value));
+console.log('start', await read());
+const set=(k,v)=>p.evaluate(([k,v])=>{const el=document.querySelector('#r-'+k); el.value=v; el.dispatchEvent(new Event('input',{bubbles:true})); el.dispatchEvent(new Event('change',{bubbles:true}));},[k,v]);
+await set('legHeight', 200); await p.waitForTimeout(800); console.log('legs 200', await read());
+await set('caseHeight', 90); await p.waitForTimeout(800); console.log('case 90', await read());
+console.log(errs.join('|')||'no errors'); await b.close();

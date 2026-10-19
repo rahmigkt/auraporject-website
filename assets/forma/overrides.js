@@ -28,30 +28,33 @@ export function fullSilhouette(o) {
 
 export const bbox = pts => { let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity; for (const [x, y] of pts) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); } return {x0, x1, y0, y1, w: x1 - x0, h: y1 - y0, cx: (x0 + x1) / 2, cy: (y0 + y1) / 2}; };
 
+/** Geometry before machining cuts (shape editing works on the uncut part). */
+const G = q => q.geom.fn === 'cut' ? q.geom.inner : q.geom;
+
 /** Parts a designer can shape: flat slabs (by id) and turned parts (by role, so all legs change together). */
 export function editableParts(compiled) {
   const out = [], seen = new Set();
   for (const q of compiled.parts) {
     if (q.line || q.internal) continue;
-    if (q.geom.fn === 'slab' && q.geom.outline?.length >= 3 && !q.nocut) out.push({key: `id:${q.id}`, tool: 'silhouette', id: q.id, role: q.role, label: q.role});
-    const lathe = q.geom.fn === 'lathe' ? q.geom : q.geom.fn === 'clipped' && q.geom.inner?.fn === 'lathe' ? q.geom.inner : null;
+    if (G(q).fn === 'slab' && G(q).outline?.length >= 3 && !q.nocut) out.push({key: `id:${q.id}`, tool: 'silhouette', id: q.id, role: q.role, label: q.role});
+    const lathe = G(q).fn === 'lathe' ? G(q) : G(q).fn === 'clipped' && G(q).inner?.fn === 'lathe' ? G(q).inner : null;
     if (lathe && !seen.has(q.role) && !['pull', 'drain', 'basin', 'hob', 'grommet'].includes(q.role)) { seen.add(q.role); out.push({key: `role:${q.role}`, tool: 'profile', role: q.role, label: q.role}); }
   }
   return out;
 }
 
-const latheOf = q => q.geom.fn === 'lathe' ? q.geom : q.geom.fn === 'clipped' && q.geom.inner?.fn === 'lathe' ? q.geom.inner : null;
+const latheOf = q => G(q).fn === 'lathe' ? G(q) : G(q).fn === 'clipped' && G(q).inner?.fn === 'lathe' ? G(q).inner : null;
 
 /** Current shape of an editable part as editor control points (silhouette: normalised in its box; profile: [t, r mm]). */
 export function currentShape(compiled, target, n = 14) {
   const q = target.tool === 'silhouette' ? compiled.parts.find(p => p.id === target.id) : compiled.parts.find(p => p.role === target.role && latheOf(p));
   if (!q) return null;
   if (target.tool === 'silhouette') {
-    const pts = q.geom.outline, b = bbox(pts);
+    const pts = G(q).outline, b = bbox(pts);
     const norm = resample(pts, n * 2, true).map(([x, y]) => [round3((x - b.cx) / b.w), round3((y - b.cy) / b.h)]);
     return {size: [b.w, b.h], points: norm, outline: pts};
   }
-  const prof = latheOf(q).profile, H = Math.max(...prof.map(p => p[0])) || 1;
+  const prof = latheOf({geom: G(q)}).profile, H = Math.max(...prof.map(p => p[0])) || 1;
   const pts = resample(prof.map(([y, r]) => [y, r]), Math.min(n, prof.length > 12 ? n : prof.length), false).map(([y, r]) => [round3(y / H), Math.round(r * 10) / 10]);
   return {height: H, points: pts};
 }
@@ -125,6 +128,11 @@ export function normalizeOverrides(list) {
         shape: o.shape === 'round' ? 'round' : 'square', bow: Math.max(-400, Math.min(400, num(o.bow))), dir: ['out', 'in', '+x', '-x', '+z', '-z'].includes(o.dir) ? o.dir : 'out',
         taper0: Math.max(0.2, Math.min(2, num(o.taper0) || 1)), taper1: Math.max(0.2, Math.min(2, num(o.taper1) || 1))});
     }
+    else if (o.tool === 'cut' && typeof o.id === 'string' && Array.isArray(o.ops)) {
+      const ops = o.ops.slice(0, 60).filter(c => c && ['hole', 'pocket', 'slot', 'groove', 'flutes'].includes(c.type)).map(c => ({type: c.type, at: v3(c.at, 4000), axis: [0, 1, 2].includes(+c.axis) ? +c.axis : 1, sign: +c.sign < 0 ? -1 : 1,
+        dia: Math.max(1, Math.min(300, num(c.dia) || 8)), a: Math.max(1, Math.min(4000, num(c.a) || 40)), b: Math.max(1, Math.min(1000, num(c.b) || 10)), depth: Math.max(0, Math.min(1000, num(c.depth))), count: Math.max(1, Math.min(60, num(c.count) || 1)), pitch: Math.max(0, Math.min(500, num(c.pitch))), dir: num(c.dir) % 360}));
+      if (ops.length) out.push({tool: 'cut', id: o.id.slice(0, 60), ops});
+    }
     else if (o.tool === 'edge' && typeof o.id === 'string' && o.sides && typeof o.sides === 'object') {
       const sides = {}; for (const k of ['front', 'back', 'left', 'right']) { const e = o.sides[k]; if (Array.isArray(e) && EDGE_TYPES.includes(e[0])) sides[k] = [e[0], Math.max(1, Math.min(80, num(e[1]) || 6))]; }
       if (Object.keys(sides).length) out.push({tool: 'edge', id: o.id.slice(0, 60), sides});
@@ -184,6 +192,8 @@ export function applyOverrides(compiled, overrides) {
     }
     return q;
   });
+  // Machining: holes, pockets, slots, grooves and flutes cut from the finished part shape (part-local mm).
+  out = out.map(q => { const c = list.filter(o => o.tool === 'cut' && o.id === q.id).at(-1); return c ? {...q, geom: {fn: 'cut', inner: q.geom, ops: c.ops}, shaped: true, cuts: c.ops} : q; });
   out = out.map(q => {
     const t = list.filter(o => o.tool === 'transform' && o.id === q.id).at(-1); if (!t) return q;
     const s3 = t.scale, scaled = s3.some(v => Math.abs(v - 1) > 1e-6);

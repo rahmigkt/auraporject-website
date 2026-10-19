@@ -1,6 +1,7 @@
 // Builds meshes from part geometry descriptors (shared by every family). Cached by descriptor.
 import {sweep, cushion, loft, lathe, tube, lineMesh, pillow, weltLoop, sphere, profiledSlab, transformPositions, computeNormals} from './mesh.js';
 import {edgeProfile} from './table.js';
+import {cutMesh} from './csg.js';
 
 const cache = new Map();
 export function buildMesh(q) {
@@ -19,9 +20,9 @@ export function buildMesh(q) {
     // Per-side edge profiles: each side's inset curve, blended by the outward normal at corners (x = sides, z = front/back).
     const f = {}; for (const k of ['front', 'back', 'left', 'right']) { const e = g.edges[k] || g.profile; f[k] = edgeProfile(e[0], g.t, e[1] ?? e[2] ?? 6); }
     const inset = (s, [ox, oz]) => ox * ox * (ox > 0 ? f.right(s) : f.left(s)) + oz * oz * (oz > 0 ? f.front(s) : f.back(s));
-    mesh = profiledSlab(g.outline, g.t, inset, {steps: 14});
+    mesh = profiledSlab(g.outline, g.t, inset, {steps: 14, exact: !!g.exact});
   }
-  else if (g.fn === 'slab') mesh = profiledSlab(g.outline, g.t, edgeProfile(...g.profile), {steps: g.profile[0] === 'square' ? 2 : 14});
+  else if (g.fn === 'slab') mesh = profiledSlab(g.outline, g.t, edgeProfile(...g.profile), {steps: g.profile[0] === 'square' ? 2 : 14, exact: !!g.exact});
   else if (g.fn === 'clipped') {
     // A part tilted in place and cut flat at y0 / y1 (splayed legs, X bars): ends sit on the floor and under the top.
     const inner = buildMesh({geom: g.inner}), positions = transformPositions(inner.positions, g.offset, g.rot), normals = transformPositions(inner.normals, [0, 0, 0], g.rot);
@@ -30,6 +31,11 @@ export function buildMesh(q) {
       if (positions[v] < g.y0) positions[v] = g.y0; else if (positions[v] > g.y1) positions[v] = g.y1;
     }
     mesh = {positions, normals, uvs: inner.uvs, indices: inner.indices};
+  }
+  else if (g.fn === 'cut') {
+    const inner = buildMesh({geom: g.inner.fn === 'slab' ? {...g.inner, exact: true} : g.inner}), r = cutMesh(inner, g.ops);
+    if (!r || r.failed) { if (!r) return inner; mesh = inner; } // not loaded yet: show uncut and do not cache
+    else mesh = r;
   }
   else if (g.fn === 'sweep') mesh = sweep(g);
   else if (g.fn === 'scaled') {

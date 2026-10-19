@@ -8,6 +8,7 @@ import {GTAOPass} from '../vendor/addons/postprocessing/GTAOPass.js';
 import {SMAAPass} from '../vendor/addons/postprocessing/SMAAPass.js';
 import {OutputPass} from '../vendor/addons/postprocessing/OutputPass.js';
 import {buildMesh} from './build.js';
+import {csgReady, onCsgReady} from './csg.js';
 import {COLORS, FIBERS, METALS, WOODS, FINISHES, STAINS, STONES, GLASS} from './catalog.js';
 import {fabricMaps} from './textile.js';
 import {woodMaps} from './wood.js';
@@ -267,8 +268,9 @@ function geometryFor(part, timber = false) {
     g.setAttribute('normal', new THREE.BufferAttribute(m.normals, 3));
     g.setAttribute('uv', new THREE.BufferAttribute(m.uvs, 2));
     g.setIndex(new THREE.BufferAttribute(m.indices, 1));
-    g.userData.cached = true;
     hit = {g, edges: new Map()};
+    if (!csgReady() && key.includes('"fn":"cut"')) return hit; // uncut stand-in until the CSG module loads
+    g.userData.cached = true;
     geoCache.set(key, hit);
     if (geoCache.size > 500) { const [k, old] = geoCache.entries().next().value; old.g.dispose(); for (const edge of old.edges.values()) edge.dispose(); geoCache.delete(k); }
   }
@@ -453,6 +455,7 @@ export function createViewer(host, {onRotate} = {}) {
   }
   const resize = () => { if (shooting) return; const r = host.getBoundingClientRect(), pr = Math.min(2, window.devicePixelRatio || 1); renderer.setPixelRatio(pr); renderer.setSize(Math.max(1, r.width), Math.max(1, r.height), false); composer.setPixelRatio(pr); composer.setSize(Math.max(1, r.width), Math.max(1, r.height)); draw(); };
   const ro = new ResizeObserver(resize); ro.observe(host);
+  const offCsg = onCsgReady(() => { if (JSON.stringify(compiled?.parts.map(q => q.geom.fn === 'cut' ? 1 : 0) || []).includes('1')) rebuild(); });
   // Orbit with pointer; wheel zoom; arrow keys.
   let drag = null;
   canvas.addEventListener('pointerdown', e => { drag = {x: e.clientX, y: e.clientY, yaw, pitch}; canvas.setPointerCapture(e.pointerId); });
@@ -580,6 +583,16 @@ export function createViewer(host, {onRotate} = {}) {
       if (!group) return null; if (gizmo?.axis) return selId; place(); const r = canvas.getBoundingClientRect();
       ndc.set((cx - r.left) / r.width * 2 - 1, -(cy - r.top) / r.height * 2 + 1); ray.setFromCamera(ndc, camera);
       for (const h of ray.intersectObject(group, true)) { let o = h.object; while (o && !o.userData.part) o = o.parent; if (o) return o.userData.part; }
+      return null;
+    },
+    /** Surface point under the screen point: part id, point and normal in the part's own axes (mm). */
+    pickPoint(cx, cy) {
+      if (!group) return null; place(); const r = canvas.getBoundingClientRect();
+      ndc.set((cx - r.left) / r.width * 2 - 1, -(cy - r.top) / r.height * 2 + 1); ray.setFromCamera(ndc, camera);
+      for (const h of ray.intersectObject(group, true)) {
+        let o = h.object; while (o && !o.userData.part) o = o.parent; if (!o || !h.face) continue;
+        const local = o.worldToLocal(h.point.clone()); return {id: o.userData.part, local: local.toArray(), normal: h.face.normal.toArray()};
+      }
       return null;
     },
     /** Outline one part (null clears). */
