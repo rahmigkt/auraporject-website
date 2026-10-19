@@ -42,7 +42,7 @@ const design = () => S.items[S.cur]?.design;
 function rebuild() {
   const d = design(); if (!d) return;
   S.compiled = compileDesign(d);
-  viewer?.setDesign(S.compiled, d.materials);
+  viewer?.setDesign(S.compare ? compileDesign({...d, overrides: []}) : S.compiled, d.materials);
   clearTimeout(checkTimer); checkTimer = setTimeout(renderChecks, 120);
 }
 function writeOverride() {
@@ -198,11 +198,22 @@ function applyPreset(k) {
 const R2D = 180 / Math.PI, round1 = v => Math.round(v * 10) / 10;
 const partOf = id => S.compiled?.parts.find(q => q.id === id);
 const ovs = () => (design().overrides || []).slice();
+// ---- Versions: every structural change is kept (last 60) per design in this browser; restore or compare ------
+const histKey = () => { const d = design(); return `aura-atelier-v-${d.family}-${d.kind}-${d.style}-${d.seed}`; };
+function versions() { try { return JSON.parse(localStorage.getItem(histKey()) || '[]'); } catch { return []; } }
+function saveVersion(label) { try { const v = versions(), ov = design().overrides || []; if (JSON.stringify(v.at(-1)?.ov) === JSON.stringify(ov)) return; v.push({t: Date.now(), label, ov}); localStorage.setItem(histKey(), JSON.stringify(v.slice(-60))); } catch {} }
+async function contentHash(d) { const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(JSON.stringify(d))); return [...new Uint8Array(buf)].slice(0, 6).map(b => b.toString(16).padStart(2, '0')).join(''); }
+function versionPanel() {
+  const v = versions().slice().reverse();
+  return sec('ver', `Sürümler (${v.length})`, `<div class="a-tools"><button data-compare aria-pressed="${!!S.compare}">${S.compare ? 'Benim tasarımım' : 'Özgün tasarımla karşılaştır'}</button><button data-share>Müşteriye onaya gönder</button></div>
+    <p class="a-note" id="shareOut"></p>
+    ${v.length ? `<ul class="a-checks">${v.slice(0, 20).map((x, i) => `<li>${new Date(x.t).toLocaleString('tr-TR', {day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'})} · ${x.label || 'değişiklik'} · ${x.ov.length} işlem <button data-restore="${v.length - 1 - i}">Geri yükle</button></li>`).join('')}</ul>` : '<p class="a-note">Henüz kayıtlı sürüm yok; her değişiklik otomatik saklanır.</p>'}`);
+}
 function commit(list, keepPart = true) {
   S.hist.push(JSON.stringify(design().overrides || [])); if (S.hist.length > 100) S.hist.shift(); S.fut = [];
   S.items[S.cur].design = normalizeDesign({...design(), overrides: list});
   if (!keepPart || (S.part && !partOf(S.part) && !compileDesign(design()).parts.some(q => q.id === S.part))) S.part = null;
-  rebuild(); renderItems(); renderPanel(); syncViewerSel();
+  saveVersion(list.at(-1)?.tool); rebuild(); renderItems(); renderPanel(); syncViewerSel();
 }
 function syncViewerSel() { viewer?.select(S.multiOn && S.multi.length ? S.multi : S.part); viewer?.gizmo(S.part, S.mode, onGizmoEnd); }
 const transformOf = id => ovs().filter(o => o.tool === 'transform' && o.id === id).at(-1) || {tool: 'transform', id, move: [0, 0, 0], rot: [0, 0, 0], scale: [1, 1, 1]};
@@ -401,6 +412,7 @@ function renderPanel() {
   <svg id="editor"></svg>
   <div class="a-tools"><button data-undo>↶ Geri</button><button data-redo>↷ İleri</button><button data-del>Noktayı sil</button><button data-zoom="0.85">+</button><button data-zoom="1.18">−</button><button data-fit>Sığdır</button><button data-reset>Özgün biçim</button></div>
   <p class="a-note">Noktayı sürükleyin; eğriye dokunarak nokta ekleyin; noktaya uzun basarak silin. İki parmakla yakınlaştırın. Kesik çizgi özgün biçimdir.</p>` : '<p class="a-note">Biçimlendirmek için bir parça seçin.</p>'}
+  ${versionPanel()}
   <h2>Fizik ve üretim</h2><ul class="a-checks" id="checks"></ul>
   <h2>Teslim</h2><div class="a-acts"><button class="f-primary" data-act="prod">Üretime gönder →</button><button data-act="link">Bağlantıyı kopyala</button><button data-act="dxf">CNC (DXF) ↓</button><button data-act="stl">STL ↓</button><button data-act="cut">Kesim listesi ↓</button><button data-act="json">design.json ↓</button></div>
   <input id="linkOut" readonly hidden>`;
@@ -426,6 +438,12 @@ $('#panel').addEventListener('click', async e => {
   if (b.hasAttribute('data-delpart')) return deletePart();
   if (b.hasAttribute('data-tfreset')) return commit(ovs().filter(o => !(o.tool === 'transform' && o.id === S.part)));
   if (b.hasAttribute('data-add')) return addPart();
+  if (b.hasAttribute('data-compare')) { S.compare = !S.compare; rebuild(); renderPanel(); return; }
+  if (b.dataset.restore !== undefined) { const v = versions()[+b.dataset.restore]; if (v) commit(v.ov.slice(), false); return; }
+  if (b.hasAttribute('data-share')) {
+    const d = design(), h = await contentHash(d), link = await designLink(d, 'tr'), url = link.replace(/tasarla\.html/, 'tasarla.html') + `&onay=${h}`;
+    $('#shareOut').innerHTML = `Bağlantı kopyalandı. Onay kodu <b>${h}</b> — müşteri bu tasarımı açınca aynı kodu görür; onay bu koda bağlıdır.`; try { await navigator.clipboard.writeText(url); } catch {} saveVersion('müşteriye gönderildi ' + h); return;
+  }
   if (b.hasAttribute('data-matoff')) return commit(ovs().filter(o => !(o.tool === 'material' && o.id === S.part)));
   if (b.hasAttribute('data-multi')) { S.multiOn = !S.multiOn; S.multi = S.multiOn && S.part ? [S.part] : []; renderPanel(); syncViewerSel(); return; }
   if (b.hasAttribute('data-snap')) { S.snap = !S.snap; viewer?.snap(S.snap ? 5 : 0, S.snap ? 5 : 0); renderPanel(); return; }

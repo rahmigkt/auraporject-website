@@ -185,7 +185,7 @@ function shell() {
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261019p').then(mod => { sceneModule = mod; const {createViewer} = mod;
+  import('./scene.js?v=20261019q').then(mod => { sceneModule = mod; const {createViewer} = mod;
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(shown(), state.design.materials); if (state.room) showRoom(); }
@@ -1209,7 +1209,7 @@ function bindShell() {
       if (!state.project.items.length) { ss.textContent = L('addFirst'); return; }
       const body = new FormData(), {files, summary} = await projectPackage(), key = projectKey();
       body.append('package', new Blob([zip(files)], {type: 'application/zip'}), `AURA-project-${state.project.items.length}.zip`);
-      body.append('meta', JSON.stringify({name: fd.get('name'), email: fd.get('email'), phone: fd.get('phone'), city: fd.get('city'), note: fd.get('note'), consent: !!fd.get('consent'), lang: state.lang, summary, link: await projectLink(state.project.items, state.room, state.lang).catch(() => '')}));
+      body.append('meta', JSON.stringify({name: fd.get('name'), email: fd.get('email'), phone: fd.get('phone'), city: fd.get('city'), note: `${fd.get('note') || ''}${state.approval ? ` [Tasarımcı önerisi onaylandı · kod ${state.approval}]` : ''}`, consent: !!fd.get('consent'), lang: state.lang, summary, link: await projectLink(state.project.items, state.room, state.lang).catch(() => '')}));
       const r = await fetch('api/forma-submit.php', {method: 'POST', body}), j = await r.json();
       if (!j.ok) { ss.textContent = j.error || 'Error'; return; }
       state.sent = {id: j.id, key, pdf: files.find(f => f.name === 'drawings.pdf').data};
@@ -1316,6 +1316,8 @@ if (guideDue() && !location.hash.includes('access_token')) openGuide();
 window.addEventListener('pagehide', () => { account.flush(); });
 if (start.note) { feedback(start.note); state.tab = 'parts'; renderPanel(); }
 // A link from a PDF or package (#d= one design, #p= a whole project) opens that work.
+// Designer proposal opened by the customer (#d=…&onay=<code>): show the code; sending the project approves it.
+{ const m = location.hash.match(/[&#]onay=([0-9a-f]{6,16})/); if (m) { state.approval = m[1]; const b = document.createElement('div'); b.className = 'f-approval'; b.innerHTML = `<b>Tasarımcınızın önerisi</b> · onay kodu <code>${m[1]}</code> — inceleyin; uygunsa “Proje” sekmesinden gönderin, onayınız bu koda bağlanır.`; b.style.cssText = 'background:#f6efe2;border-bottom:1px solid #ddd8cc;padding:10px 18px;font-size:14px'; document.body.prepend(b); } }
 const openFromLink = () => readLink().then(r => {
   if (!r) return;
   history.replaceState(null, '', location.pathname + location.search);
