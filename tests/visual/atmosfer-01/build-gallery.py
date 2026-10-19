@@ -1,13 +1,17 @@
 """Build the review page from actual fixtures and completed render artifacts."""
-import json,sys
+import json,sys,hashlib
 from pathlib import Path
 root=Path(__file__).resolve().parents[3];page=root/'knowledge/atmosfer/ornekler.md';frames=page.parent/'kareler'
 fixtures=json.loads((root/'tests/visual/atmosfer-01/designs.json').read_text(encoding='utf-8'))
 partial='--partial' in sys.argv
+progress=frames/'cycles-progress.json'
+published={r['file']:r['sha256'] for r in json.loads(progress.read_text(encoding='utf-8'))['images']} if partial and progress.exists() else {}
 previous='https://github.com/rahmigkt/auraporject-website/blob/f2fe9dc672ae4ffae6cc2da07d9863e0c3eabd9b/knowledge/atmosfer/kareler/'
 lines=['# ATMOSFER-01 · main #61 sonrası yeniden çekim','','Yeni sahneler güncel çizim motoruyla yeniden üretildi: dama zemin yok, açık kireç sıva, ürüne göre oda, dikeyleri paralel tutan 55 mm kaydırmalı kamera. Yatak odası takımı kaldırıldı; son iki örnek Dolap (`storage/wardrobe`) ailesidir. Bu iki satırın önceki karesi eski takımı gösterir, aynı ürün karşılaştırması değildir.','','Yeni raster **2400×1600**; deneysel Vulkan **800×534 / 16 örnek**; CPU Cycles/OIDN genel ve yakın planlar **2400×1600**. Önceki 18 Ekim rasterları sabit commit bağlantısıyla korunur. Ton eşleme ve örnek farkları açıkça etiketlenir; görsel onay karar sahibinindir.','','| Tasarım | Önceki raster · 18 Ekim | Yeni raster | Yol izleme · deneysel | Cycles · CPU/OIDN |','|---|---|---|---|---|']
 def local(name,label):
- if partial and ('-cycles.jpg' in name or '-detail-' in name):return '2400 px CPU üretimi sürüyor; henüz teslim edilmedi.'
+ if partial and ('-cycles.jpg' in name or '-detail-' in name):
+  if name not in published:return '2400 px CPU üretimi sürüyor; henüz teslim edilmedi.'
+  assert hashlib.sha256((frames/name).read_bytes()).hexdigest()==published[name]
  if partial and not (frames/name).is_file():return '2400 px CPU üretimi sürüyor; henüz teslim edilmedi.'
  assert (frames/name).is_file(),name
  return f'![{label}](kareler/{name})'

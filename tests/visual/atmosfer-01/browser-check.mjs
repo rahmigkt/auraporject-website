@@ -3,9 +3,12 @@ const origin=process.env.ATMOSFER_ORIGIN||'http://127.0.0.1:8772';
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import fs from 'node:fs/promises';
+import {spawnSync} from 'node:child_process';
 const require=createRequire(import.meta.url),{chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
-const browser=await chromium.launch({channel:'chrome',headless:true,args:['--no-proxy-server']});
+const server=await chromium.launchServer({channel:'chrome',headless:true,args:['--no-proxy-server']});
+const browser=await chromium.connect(server.wsEndpoint());
 const context=await browser.newContext(),report={browser:browser.version(),checks:[]};
+let passed=false;
 await context.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());
 try{
   const page=await context.newPage(),errors=[];
@@ -33,5 +36,20 @@ try{
   report.fallbackReason=result.fallbackReason;
   assert.deepEqual(errors,[]);report.pageErrors=errors;
   await fs.writeFile(new URL('./browser-check-report.json',import.meta.url),JSON.stringify(report,null,2)+'\n');
-  console.log('PASS '+report.checks.join('; '));
-}finally{await browser.close();}
+  passed=true;console.log('PASS '+report.checks.join('; '));
+}catch(error){report.failure=error.message;console.error(error);throw error;
+}finally{
+ let timer;report.cleanup={forced:false,scope:'Only the isolated Playwright browser server'};
+ const bounded=(promise,ms)=>Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('Isolated browser cleanup deadline')),ms);})]);
+ try{await bounded(browser.close(),15000);clearTimeout(timer);await bounded(server.close(),10000);}
+ catch(error){report.cleanup.forced=true;report.cleanup.reason=error.message;clearTimeout(timer);
+  try{await bounded(server.kill(),10000);}catch{
+   const child=server.process();if(child.exitCode===null&&Number.isSafeInteger(child.pid)){
+    if(process.platform==='win32')spawnSync('taskkill',['/PID',String(child.pid),'/T','/F'],{stdio:'ignore'});else child.kill('SIGKILL');
+   }
+  }
+ }finally{clearTimeout(timer);await fs.writeFile(new URL('./browser-check-report.json',import.meta.url),JSON.stringify(report,null,2)+'\n');}
+ // This is a one-shot CLI, and a stuck transport must not retain it after the
+ // isolated browser has been closed/killed and the result has been saved.
+ process.exit(passed?0:1);
+}
