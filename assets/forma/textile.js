@@ -28,7 +28,7 @@ function sequences(spec, pitch, base, second) {
   const dark = shade(base, 0.62), light = mix(base, [245, 240, 228], 0.55);
   switch (spec.pattern) {
     case 'stripe': { const a = t(22), b = t(7); return {warp: [...Array(a).fill(base), ...Array(b).fill(second)], weft: [base]}; }
-    case 'check': { const a = t(6); const s = [...Array(a).fill(base), ...Array(a).fill(light)]; return {warp: s, weft: s}; }
+    case 'check': { const a = t(6); const s = [...Array(a).fill(base), ...Array(a).fill(mix(base, second, 0.7))]; return {warp: s, weft: s}; } // gingham: ground, half-tone, full tone
     case 'plaid': {
       const s = [...Array(t(26)).fill(base), ...Array(t(3)).fill(second), ...Array(t(9)).fill(dark), ...Array(t(2)).fill(light), ...Array(t(9)).fill(dark), ...Array(t(3)).fill(second)];
       return {warp: s, weft: s};
@@ -106,7 +106,7 @@ export function fabricMaps(spec, {maxPx = 1024} = {}) {
       const w = warpUp ? slubWarp[i] : slubWeft;
       const prof = Math.sqrt(Math.max(0, 1 - ((across - 0.5) / (0.5 * w)) ** 2));
       const arch = 0.82 + 0.18 * Math.sin(Math.PI * clamp(along, 0, 1));
-      const fuzz = F.fuzz * (fbm(x / ppt * 1.7, y / ppt * 1.7, seed, 3, n * 1.7) - 0.5);
+      const fuzz = F.fuzz * (fbm(x / ppt * 2, y / ppt * 2, seed, 3, n * 2) - 0.5);
       const h = clamp(prof * arch * (run > 2 ? 0.8 : 1) + fuzz, 0, 1);
       height[y * size + x] = h;
       // Damask shows the figure through the weave change; other figures are jacquard/print colour.
@@ -136,16 +136,16 @@ function pileMaps(spec, F, base, maxPx) {
   for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
     const u = x / size * per, v = y / size * per; let h, tone, r;
     if (spec.fiber === 'leather') {
-      const pebble = fbm(u * 26, v * 26, 11, 2, per * 26), crease = Math.abs(fbm(u * 2.2, v * 2.2, 5, 3, per * 2.2) - 0.5), patina = fbm(u * 0.8, v * 0.8, 2, 3, per * 0.8);
+      const pebble = fbm(u * 26, v * 26, 11, 2, per * 26), crease = Math.abs(fbm(u * 2.25, v * 2.25, 5, 3, per * 2.25) - 0.5), patina = fbm(u * 0.75, v * 0.75, 2, 3, per * 0.75);
       h = clamp(0.55 + (pebble - 0.5) * 0.7 - (crease < 0.02 ? 0.25 : 0), 0, 1); tone = 0.88 + 0.16 * (patina - 0.5) + (pebble - 0.5) * 0.08 - (crease < 0.02 ? 0.04 : 0); r = F.rough + (pebble - 0.5) * 0.2;
     } else if (spec.fiber === 'suede') {
       // Napped split leather: fibrous fine noise, soft cloudy tone, and brushed streaks where the nap was stroked.
-      const fibre = fbm(u * 60, v * 60, 31, 2, per * 60), cloud = fbm(u * 1.1, v * 1.1, 13, 3, per * 1.1);
-      const stroke = fbm(u * 0.6 + v * 2.4, v * 0.25, 17, 3, per * 0.6), brushed = Math.max(0, stroke - 0.55) * 2.2;
+      const fibre = fbm(u * 60, v * 60, 31, 2, per * 60), cloud = fbm(u, v, 13, 3, per);
+      const stroke = fbm(u * 0.625 + v * 2.5, v * 0.625, 17, 3, per * 0.625), brushed = Math.max(0, stroke - 0.55) * 2.2;
       h = clamp(0.5 + (fibre - 0.5) * 0.16, 0, 1); tone = 0.88 + (cloud - 0.5) * 0.16 + (fibre - 0.5) * 0.05 + brushed * 0.1; r = F.rough;
     } else if (spec.fiber === 'nubuck') {
       // Sanded grain: a very fine even nap with faint pores; a little more uniform than suede.
-      const nap = fbm(u * 90, v * 90, 41, 2, per * 90), pores = fbm(u * 22, v * 22, 43, 2, per * 22), cloud = fbm(u * 1.4, v * 1.4, 47, 3, per * 1.4);
+      const nap = fbm(u * 90, v * 90, 41, 2, per * 90), pores = fbm(u * 22, v * 22, 43, 2, per * 22), cloud = fbm(u * 1.5, v * 1.5, 47, 3, per * 1.5);
       h = clamp(0.55 + (nap - 0.5) * 0.22 - (pores < 0.3 ? 0.08 : 0), 0, 1); tone = 0.9 + (cloud - 0.5) * 0.1 + (nap - 0.5) * 0.06 - (pores < 0.3 ? 0.03 : 0); r = F.rough;
     } else if (spec.fiber === 'boucle') {
       const wu = u * 4.5 + (fbm(u * 3, v * 3, 8, 2, per * 3) - 0.5) * 1.2, wv = v * 4.5 + (fbm(u * 3, v * 3, 9, 2, per * 3) - 0.5) * 1.2;
@@ -153,8 +153,8 @@ function pileMaps(spec, F, base, maxPx) {
       const loop = Math.abs(Math.hypot(fx - 0.5 + (jitter - 0.5) * 0.2, fy - 0.5) - (0.22 + jitter * 0.16));
       h = clamp(1 - loop * 4 + (fbm(u * 9, v * 9, 3, 3, per * 9) - 0.5) * 0.6, 0, 1); tone = 0.9 + 0.14 * h; r = F.rough;
     } else {
-      const crush = fbm(u * 0.9, v * 0.9, 21, 3, per * 0.9), fine = fbm(u * 20, v * 20, 4, 2, per * 20);
-      h = clamp(crush * 0.4 + fine * 0.3, 0, 1); tone = 0.84 + 0.22 * crush; r = F.rough + (crush - 0.5) * 0.12;
+      const crush = fbm(u, v, 21, 3, per), fine = fbm(u * 20, v * 20, 4, 2, per * 20);
+      h = clamp(crush * 0.3 + fine * 0.3, 0, 1); tone = 0.9 + 0.1 * crush + (fine - 0.5) * 0.04; r = F.rough + (crush - 0.5) * 0.12;
     }
     const k = (y * size + x) * 4; height[y * size + x] = h;
     const fig = mask ? mask[y * size + x] : printed ? printed(x / size, y / size) : stripeMask ? stripeMask(x / size * 2) : checkMask ? checkMask(x / size, y / size) : 0;
