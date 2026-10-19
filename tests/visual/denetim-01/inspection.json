@@ -1,0 +1,445 @@
+{
+  "source": "5fc42511eddefc31987d4caa6311e4698e4ca36f",
+  "reviewer": "Codex visual inspection; not owner approval",
+  "count": 24,
+  "findings": [
+    {
+      "id": "G01",
+      "priority": 2,
+      "category": "texture",
+      "cases": [
+        "table-1",
+        "table-2",
+        "table-3",
+        "table-6",
+        "storage-2",
+        "kitchen-3",
+        "bath-1",
+        "bath-4"
+      ],
+      "observation": "Ahşapta üst üste çaprazlanan ve parça ölçeğine göre fazla geniş dalgalanan damarlar; yakın karelerde görünür. Estetik doku değerlendirmesi, anatomik ölçüm değil."
+    },
+    {
+      "id": "G02",
+      "priority": 1,
+      "category": "geometry",
+      "cases": [
+        "kitchen-4"
+      ],
+      "observation": "Üç dik kulp tezgahın üst düzlemini aşıyor; mesh sınırında kulp üstü967.5mm, tezgah900mm, fark67.5mm."
+    },
+    {
+      "id": "G03",
+      "priority": 1,
+      "category": "occlusion_or_material",
+      "cases": [
+        "bath-4"
+      ],
+      "observation": "Undermount ve sink.finish=white girdisine rağmen lavabo açıklığında beyaz derin hazne yerine ahşap yüzey görülüyor. Kök neden malzeme veya kabin parçası örtüşmesi olabilir; çözülmedi."
+    },
+    {
+      "id": "G04",
+      "priority": 2,
+      "category": "photo_context",
+      "cases": [
+        "storage-5",
+        "bath-3",
+        "bath-6"
+      ],
+      "observation": "Duvara asılı ürün fotoğrafında taşıyıcı duvar okunmuyor; zeminden kopuk gölgeyle ürün havada görünüyor. Ürünün ayaklı olması gerektiği iddiası değil; fotoğraf bağlamı eksik."
+    },
+    {
+      "id": "G05",
+      "priority": 2,
+      "category": "contrast",
+      "cases": [
+        "table-5",
+        "kitchen-5"
+      ],
+      "observation": "Açık lake/tezgah ile açık arka plan arasındaki sınırlar zayıf; profil ve birleşim okunurluğu düşük. Kalibre renk veya kesin kanal clipping ölçümü değil."
+    },
+    {
+      "id": "G06",
+      "priority": 3,
+      "category": "edge_review_limit",
+      "cases": [
+        "bath-6"
+      ],
+      "observation": "İnce ayna çevresinde noktalı/dişli kenar izi var; düşük örnekleme aliası mı geometri mi, daha yüksek örneklemli kontrolle ayrılmalı."
+    }
+  ],
+  "measurements": {
+    "kitchen4": [
+      {
+        "id": "m1-b1c1-door1-pull",
+        "role": "pull",
+        "boundsMm": {
+          "min": [
+            -754,
+            630.5,
+            270
+          ],
+          "max": [
+            -750,
+            967.5,
+            306
+          ]
+        }
+      },
+      {
+        "id": "m2-b1c1-door1-pull",
+        "role": "pull",
+        "boundsMm": {
+          "min": [
+            -304,
+            630.5,
+            270
+          ],
+          "max": [
+            -300,
+            967.5,
+            306
+          ]
+        }
+      },
+      {
+        "id": "m2-b1c1-door2-pull",
+        "role": "pull",
+        "boundsMm": {
+          "min": [
+            -300,
+            630.5,
+            270
+          ],
+          "max": [
+            -296,
+            967.5,
+            306
+          ]
+        }
+      },
+      {
+        "id": "m3-dw-pull",
+        "role": "pull",
+        "boundsMm": {
+          "min": [
+            300,
+            845,
+            276
+          ],
+          "max": [
+            600,
+            867,
+            291
+          ]
+        }
+      },
+      {
+        "id": "m4-b1c1-drawer1-pull",
+        "role": "pull",
+        "boundsMm": {
+          "min": [
+            900.5,
+            397,
+            270
+          ],
+          "max": [
+            1199.5,
+            401,
+            306
+          ]
+        }
+      },
+      {
+        "id": "m4-b1c1-drawer2-pull",
+        "role": "pull",
+        "boundsMm": {
+          "min": [
+            900.5,
+            679,
+            270
+          ],
+          "max": [
+            1199.5,
+            683,
+            306
+          ]
+        }
+      },
+      {
+        "id": "m4-b1c2-drawer1-pull",
+        "role": "pull",
+        "boundsMm": {
+          "min": [
+            900.5,
+            866,
+            270
+          ],
+          "max": [
+            1199.5,
+            870,
+            306
+          ]
+        }
+      },
+      {
+        "id": "top1-1a",
+        "role": "worktop",
+        "boundsMm": {
+          "min": [
+            -1350,
+            870,
+            -690
+          ],
+          "max": [
+            -690,
+            900,
+            310
+          ]
+        }
+      },
+      {
+        "id": "top1-1f",
+        "role": "worktop",
+        "boundsMm": {
+          "min": [
+            -690,
+            870,
+            250
+          ],
+          "max": [
+            90,
+            900,
+            310
+          ]
+        }
+      },
+      {
+        "id": "top1-1b",
+        "role": "worktop",
+        "boundsMm": {
+          "min": [
+            -690,
+            870,
+            -690
+          ],
+          "max": [
+            90,
+            900,
+            -170
+          ]
+        }
+      },
+      {
+        "id": "top1-end",
+        "role": "worktop",
+        "boundsMm": {
+          "min": [
+            90,
+            870,
+            -690
+          ],
+          "max": [
+            1350,
+            900,
+            310
+          ]
+        }
+      }
+    ]
+  },
+  "records": [
+    {
+      "id": "table-1",
+      "observation": "G01; ön tabla kenarı ile üst yüzeyin damar ölçeği geçişi sert.",
+      "imageSha256": {
+        "general": "42a9456ef7868109f21be303729e3d59908c35fa445dab836f6cf7b1505b9fdb",
+        "close": "39c912bf1fea88e1ffae77661844430eb8bbbc2c2b15f6b1dcc5357b5a01490e"
+      }
+    },
+    {
+      "id": "table-2",
+      "observation": "G01; tabla ve alt raf üzerinde çapraz tekrar çok belirgin.",
+      "imageSha256": {
+        "general": "fc4994a679b3b0a3ee5ea96cab7e412faf238087cdbaa1dbe2ab0240cd9d2457",
+        "close": "b633e83e8c7ba5c9bba81f2c1e2a0da6849ae75eeab0dd2425f283093a4cd853"
+      }
+    },
+    {
+      "id": "table-3",
+      "observation": "G01; tabla/çekmece önünde dalga ve çapraz lif izi.",
+      "imageSha256": {
+        "general": "8cb431e3e5adc9f6da14dc3bef77f8a548ca975087a226f3e312f8faae8ffb0a",
+        "close": "43bfdc74d7e1a950018c2767fc4b1a4f0c8c00585789b8201b8edf31a9290433"
+      }
+    },
+    {
+      "id": "table-4",
+      "observation": "Bu iki karede belirgin yeni çakışma veya havada parça saptanmadı; metal ayak ankrajı ayrıca görünmüyor.",
+      "imageSha256": {
+        "general": "0ca9f50f4249b3c498f862b63d3dafc3594c1296748fb7209bf2e240e79cd673",
+        "close": "9e2744ea42ed3898c14a8664a09c9fe22cb4fb1939b6414b79bf8140ede0d0ff"
+      }
+    },
+    {
+      "id": "table-5",
+      "observation": "G05; beyaz tabla/kayıt sınırı fonla karışıyor.",
+      "imageSha256": {
+        "general": "d1dd0db82d338b56f7ad9babccd23d9a3ef31a5fad5bf58c7ef6185e54376200",
+        "close": "030d86bda8ae7c23b3a8a558beb44e91f4569394fb2456e0bb1154410fe5ee7c"
+      }
+    },
+    {
+      "id": "table-6",
+      "observation": "G01; yan panelde yatay lif görülüyor, grain kararıyla karşılaştırılmalı; otomatik yanlış yön hükmü yok.",
+      "imageSha256": {
+        "general": "5af66d0a8bdb2bff03ae2c76894cdbb0b10415e483d8808e8dacdb6e5a86957f",
+        "close": "dbc34c52f4ac9ba7fb1f9690bc4fefd41f97d1b01f8bac0a33017021191ed4d2"
+      }
+    },
+    {
+      "id": "storage-1",
+      "observation": "Kapak bölünmesi/kulplar görünür; bu iki karede belirgin yeni geometri hatası saptanmadı.",
+      "imageSha256": {
+        "general": "d2182159cd16ef157c4fc59e232584a4fec3ad6dd6b587f88a3b622be448657e",
+        "close": "d107c134ed10d2c11e7ae467c8c4a9c50450ae3e28d275901fe5a07190f47fa0"
+      }
+    },
+    {
+      "id": "storage-2",
+      "observation": "G01; slat ön yüzde yatay/çapraz lif; lif yönü kararı ve kenar eşlemesi ayrıca incelenmeli.",
+      "imageSha256": {
+        "general": "8a7cd92e544d67025897750d2d0c4eb57d1d9c0c0109c4fc34c5e1610fe32bac",
+        "close": "df96af8072ce003728d7ae10e5a196c1b654623a2d6424483af6889dea311cb5"
+      }
+    },
+    {
+      "id": "storage-3",
+      "observation": "Mavi lake tutarlı görünüyor; fiziksel/kalibre renk referansı yok.",
+      "imageSha256": {
+        "general": "4fdf16e9b9de5b99a95e919f549586cd48c7e8d0af36e3f6513ec7bc23692cb8",
+        "close": "46370b8b0cd4a4d3c3e49f6351b65fd95bcb4fce6cc44453697c01e38bf12ba9"
+      }
+    },
+    {
+      "id": "storage-4",
+      "observation": "Çekmece yüzü ve yan yüz arasında damar ölçeği belirgin farklı; malzeme yön/ölçek kuralıyla karşılaştırılmalı.",
+      "imageSha256": {
+        "general": "3a81bf2143702739b12a27b3dcf2e9f5eaf401e2849dea12cfe6a1738d8db276",
+        "close": "922715a4a6e72f8eb8a052ca370da0214d06d7557fca8a0a3c220ab14f6f71c9"
+      }
+    },
+    {
+      "id": "storage-5",
+      "observation": "G04; askılı gövde için duvar/ankraj bağlamı eksik.",
+      "imageSha256": {
+        "general": "528d6db84a848b014a7bb7cd3a9e61dec8575e4f13e8588d3b616105dd174225",
+        "close": "b7b2811df1ce65932af3695197c4645da60c441c0bf5176d3aec9b06238f748d"
+      }
+    },
+    {
+      "id": "storage-6",
+      "observation": "Raf-gövde birleşimleri görünür; bu açılarda belirgin yeni boşluk/çakışma saptanmadı.",
+      "imageSha256": {
+        "general": "53cfa5e6dfeabb6c759ae0e81b0b9ee9a1acb8f2f6c64278649728a55a8a8046",
+        "close": "ea76074f3fc496834816a23e946ffee7801464b77e996b96869f76df36e9fcdd"
+      }
+    },
+    {
+      "id": "kitchen-1",
+      "observation": "Evye, ocak ve dolap yerleşimi okunuyor; içteki geçmeler bu iki görünüşle denetlenemez.",
+      "imageSha256": {
+        "general": "1ff15bf5ec88e3f0d46e970a356c74724a3bca80f0e0d7f300d24edc15658e76",
+        "close": "6ff57592972ac34b9980095d4c3e0fd2516256a625ee22d68dbb47182d1df579"
+      }
+    },
+    {
+      "id": "kitchen-2",
+      "observation": "Yivli cephe/tezgah birleşimi görünür; açık evye içinin derinlik okunurluğu sınırlı.",
+      "imageSha256": {
+        "general": "2e55ee1b3c43c929058111791c307d715832ddb23703cd0f1b4ee8294f64796b",
+        "close": "df25c05a59226c18dd84119016a3e1f7b27d63c975cc4c07da93fb3800e8c0bc"
+      }
+    },
+    {
+      "id": "kitchen-3",
+      "observation": "G01; ön cephe ahşapta geniş dalga/çapraz izler.",
+      "imageSha256": {
+        "general": "775bf3bc9142522702a430557c26c971e7cdbe7c1ad09067f296961c8b22a731",
+        "close": "8284c75f25a9cd3e69108cc7b06d874850c450180e7dffb4eb02849e6c40b0b4"
+      }
+    },
+    {
+      "id": "kitchen-4",
+      "observation": "G02; kulplar tezgah üstüne çıkıyor, nicel mesh sınırı kanıtı var.",
+      "imageSha256": {
+        "general": "0fdc88d22624e8753cc66c4c76c27925a01cadf28831d23b73b3c927b32ea1b8",
+        "close": "d86e9fe39f82615dd743b5bc07756cc531e781751eff9a1ca9fa01e4d959b1fb"
+      }
+    },
+    {
+      "id": "kitchen-5",
+      "observation": "G05; açık lake/duvar/tezgah ayrımı düşük; küçük açıklıklar zor okunuyor.",
+      "imageSha256": {
+        "general": "a6a2a5236b81617cee15ff4367dcd3dc19fc1452365aae5179fc211507cb3e8c",
+        "close": "95ff4f4f988168bba8b1cfe56e3fe63565062084dc4bf5212cad9c03e8db046f"
+      }
+    },
+    {
+      "id": "kitchen-6",
+      "observation": "Yiv/tezgah birleşimi görünür; bu karelerde belirgin yeni geometri hatası saptanmadı.",
+      "imageSha256": {
+        "general": "6c2d5f9070986e3af10794e9aa1efe0a6286dfb4c6f778ab6e5c232afb294ece",
+        "close": "1080a364346a21f14fadc6a0196871cf686db97eb63d873d9d92acb934581c08"
+      }
+    },
+    {
+      "id": "bath-1",
+      "observation": "G01; yivli cephede çapraz doku. Çanak yakın karede kesiliyor; haznenin tamamı genel karede.",
+      "imageSha256": {
+        "general": "05ee809e4da482e776c1be7ef225dec5392f06be0cd0d88d7fb2812abe088ab5",
+        "close": "4e5e26fe379aebc6187d059585a4aa32c2fd5c7fa244a71743e07c7dfd6b911f"
+      }
+    },
+    {
+      "id": "bath-2",
+      "observation": "Kolonun ön ve yan yüzleri okunuyor; bu karelerde belirgin havada/çakışan parça saptanmadı.",
+      "imageSha256": {
+        "general": "328400a536df045d40b0654b50bdd2ae5aefe28f85519bf11e989197f51eecee",
+        "close": "d9c152e8d632e3b3b1b17eb2c220ba14f6c233dce045015507a0c8149c2bd154"
+      }
+    },
+    {
+      "id": "bath-3",
+      "observation": "G04; ayna duvar yerine boşlukta ve zemin gölgesiyle sunuluyor.",
+      "imageSha256": {
+        "general": "136f30db3720a7f755178c186da31a03ecfde5610f9ee20e69af0ad353e97a67",
+        "close": "c56364a138a94f0f0097f0471fa5ba50c130961df1319d45dc1d384157692a4c"
+      }
+    },
+    {
+      "id": "bath-4",
+      "observation": "G01 + G03; beyaz tezgah altı haznesi yerine ahşap yüzey görülüyor.",
+      "imageSha256": {
+        "general": "64a0b137c46840bfb6b8b7bfef96771b0ca824582ad40c4e0b014d7e06930346",
+        "close": "9db060548a23c7b3a53af178261a830f84dfadcb3b056acfd1dc824382a12786"
+      }
+    },
+    {
+      "id": "bath-5",
+      "observation": "Askılı kolon duvarla ilişkili okunuyor; montaj taşıma hesabı görüntüyle doğrulanmaz.",
+      "imageSha256": {
+        "general": "9a1c3905043edf108fa46216db133fa66e06e3c6239f5b27701b523f697506d1",
+        "close": "33f76dae314ccaeef982150b8b0a4b9952eaf977403addbcc44dcc24123b6e11"
+      }
+    },
+    {
+      "id": "bath-6",
+      "observation": "G04 + G06; duvarsız ayna ve çevrede noktalı kenar; düz mavi/gri ayna ortam yansımasını da zayıf gösteriyor.",
+      "imageSha256": {
+        "general": "5d0efae3ebdad5534a8b8e06a61690a66cc63b46ea6a93040c83fc95569d9531",
+        "close": "e7e8273217ec3e5ef1245d4519c688aecc3a89a42a2ee328608343d3f65183cf"
+      }
+    }
+  ]
+}
