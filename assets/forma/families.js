@@ -33,7 +33,7 @@ export const FAMILIES = {
     sampleParams(st, kind, r, locks) {
       const {RANGES, ENUMS} = seating, k = SEAT_KINDS[kind] || SEAT_KINDS.sofa, p = {};
       for (const key of Object.keys(ENUMS)) p[key] = LINE_KEYS.includes(key) ? 'none' : st.enums[key] ? r.weighted(st.enums[key]) : r.pick(ENUMS[key]);
-      for (const key of Object.keys(RANGES)) { const [lo, hi] = st.ranges[key] || RANGES[key]; p[key] = r.range(lo, hi); }
+      for (const key of Object.keys(RANGES)) { if (key.startsWith('body')) { p[key] = seating.DEFAULTS[key]; continue; } const [lo, hi] = st.ranges[key] || RANGES[key]; p[key] = r.range(lo, hi); } // body form: designer choice, not sampled
       p.width = r.range(...k.width); p.depth += k.depthAdd; p.seatCount = r.int(...k.seats);
       if (kind !== 'armchair' && p.seatType === 'split' && p.width > 2300 && r.next() < 0.5) p.seatCount = 3;
       if (p.armType === 'wood' && !['frame', 'legs'].includes(p.baseType)) p.baseType = 'frame';

@@ -3,7 +3,7 @@
 import {createViewer} from '../../../assets/forma/scene.js';
 import {sample, compileDesign} from '../../../assets/forma/generate.js';
 const q=new URLSearchParams(location.search), fam=q.get('family')||'seating', seed=+(q.get('seed')||1), style=q.get('style')||undefined;
-const d=sample({family:fam,seed,style});
+const d=sample({family:fam,seed,style}); if(q.get('pp')) Object.assign(d.params, JSON.parse(q.get('pp')));
 const v=createViewer(document.getElementById('v')); v.mode('render'); v.setDesign(compileDesign(d), d.materials);
 const t0=performance.now(); while(!v.texturesReady() && performance.now()-t0<20000) await new Promise(r=>setTimeout(r,200));
 await new Promise(r=>setTimeout(r,800));
