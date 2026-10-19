@@ -1,0 +1,30 @@
+<!doctype html><html lang="tr"><meta charset="utf-8"><title>AURA · Hazır sahneler</title><link rel="icon" href="data:,"><style>body{margin:0;background:#e9e5db;font:16px system-ui}header{padding:16px}canvas{width:100%;height:auto}select,button{padding:8px;margin:6px}</style><header><h1>Mekân ve ışık incelemesi</h1><select id="product" aria-label="Ürün"></select><select id="texture" aria-label="Mekân"><option value="KIREC">Kireç</option><option value="TAS">Taş</option><option value="TOPRAK">Toprak</option></select><select id="light" aria-label="Işık"><option value="SABAH">Sabah</option><option value="AKSAM">Akşam</option></select><select id="camera" aria-label="Kamera"><option>A</option><option>B</option></select><button id="render">Göster</button><span id="status" role="status"></span></header><canvas id="frame"></canvas>
+<script type="module">
+import {familyOf} from '../../../assets/forma/families.js';
+import {normalizeDesign} from '../../../assets/forma/generate.js';
+import {renderPlate} from '../../../assets/forma/scene-plates.js';
+const fixtures=await(await fetch('./designs.json')).json();
+const examples=[];
+for(const family of ['seating','table','storage','kitchen','bath'])for(let i=0;i<2;i++){
+ const f=structuredClone(fixtures.filter(f=>f.design.family===family)[i]);f.id=family+'-medium-example-'+(i+1);
+ const p=f.design.params;
+ if(family==='seating'||family==='storage')p.width=i?1800:1700;
+ if(family==='seating'&&i)p.width=1700;
+ if(family==='storage'&&!i)p.height=1100;
+ if(family==='table'){p.length=i?1800:1700;p.width=850;}
+ if(family==='bath')p.width=i?1800:1700;
+ if(family==='kitchen'){p.modules=p.modules.slice(0,3).map(m=>({...m,w:600,wall:'none'}));p.hood='none';f.design.kind='run';p.kind='run';p.topDepth=600;}
+ f.design=normalizeDesign(f.design);examples.push(f);
+ const o=document.createElement('option');o.value=f.id;o.textContent=f.id;document.querySelector('#product').append(o);
+}
+window.plateExamples=examples;
+let controller;const session={};
+window.renderPlateExample=async({id=document.querySelector('#product').value,texture=document.querySelector('#texture').value,light=document.querySelector('#light').value,camera=document.querySelector('#camera').value,width=2400}={})=>{
+ controller?.abort();controller=new AbortController();const f=examples.find(f=>f.id===id);document.querySelector('#status').textContent='Hazırlanıyor…';
+ const result=await renderPlate({compiled:familyOf(f.design).mod.compile({...f.design.params,kind:f.design.kind}),materials:f.design.materials,family:f.design.family,texture,light,camera,width,canvas:document.querySelector('#frame'),signal:controller.signal,session});
+ document.querySelector('#status').textContent='';return {...result,jpeg:result.jpeg()};
+};
+document.querySelector('#render').onclick=()=>window.renderPlateExample().catch(e=>document.querySelector('#status').textContent=e.message);
+for(const select of document.querySelectorAll('select'))select.onchange=document.querySelector('#render').onclick;
+window.platesReady=true;
+</script></html>

@@ -740,6 +740,7 @@ function deliverables() {
 const projectId = () => `F-${String(state.design.seed % 100000).padStart(5, '0')}`;
 
 function drawDeliverables() {
+  mountPlateControls();
   fetch('api/forma-submit.php', {cache: 'no-store'}).then(r => r.json()).catch(() => ({available: false})).then(s => {
     state.canSend = !!s.available;
     const ss = $('#sendState'); if (ss) ss.textContent = state.canSend ? '' : L('sendOff');
@@ -823,7 +824,28 @@ function projectPanel() {
   return `<h2>${L('tabProject')}</h2><p class="f-lead">${L('projectIntro')}</p>
   <div class="f-current"><div><b>${esc(itemName(d))}</b><small>${esc(styleName(d.style, state.lang))} · ${esc(fam === 'bedroom' ? L('setPiecesList') : itemDims(d))}</small></div>
   <button class="f-primary" data-act="add" ${editing && !changed ? 'disabled' : ''}>${editing ? (changed ? L('saveChanges') : L('inProject')) : L('addContinue')} ${editing && !changed ? '✓' : '+'}</button></div>
-  ${next}${list}${room}${send}`;
+  ${next}${list}${room}<div id="projectPlateHost"></div>${send}`;
+}
+
+let plateController;
+async function mountPlateControls(){
+  plateController?.abort();
+  const host=$('#projectPlateHost');if(!host)return;
+  const {plateControls,renderPlate}=await import('./scene-plates.js');
+  if(!host.isConnected)return;
+  const choices=state.project.items.length?state.project.items:[{id:'current',design:state.design}];
+  host.innerHTML=`<label>Ürün <select id="plateProduct">${choices.map(it=>`<option value="${it.id}">${esc(itemName(it.design))} · ${esc(itemDims(it.design))}</option>`).join('')}</select></label>`+plateControls(choices[0].design.style);
+  const selection=state.project.atmosphere||{};
+  for(const [id,key] of [['plateTexture','texture'],['plateLight','light'],['plateCamera','camera']])if(selection[key]&&[...$('#'+id,host).options].some(o=>o.value===selection[key]))$('#'+id,host).value=selection[key];
+  const render=async()=>{
+    plateController?.abort();const controller=new AbortController();plateController=controller;
+    const status=$('#plateStatus',host),canvas=$('#plateCanvas',host),design=choices.find(it=>it.id===$('#plateProduct',host).value).design;
+    status.textContent='Görüntü hazırlanıyor…';canvas.hidden=true;
+    try{await renderPlate({compiled:compileOf(design),materials:design.materials,family:design.family,texture:$('#plateTexture',host).value,light:$('#plateLight',host).value,camera:$('#plateCamera',host).value,canvas,signal:controller.signal});if(!controller.signal.aborted){canvas.hidden=false;status.textContent='';}}
+    catch(error){if(error.name!=='AbortError')status.textContent=error.message;}
+  };
+  $('#plateRender',host).onclick=render;
+  for(const select of host.querySelectorAll('select'))select.onchange=()=>{state.project.atmosphere={texture:$('#plateTexture',host).value,light:$('#plateLight',host).value,camera:$('#plateCamera',host).value};saveProject();render();};
 }
 
 // ---- Room: the whole project placed in a lit room ---------------------------------------------------
@@ -1284,7 +1306,7 @@ state.design = start.design; state.compiled = compileOf(state.design);
 store.set('aura-forma-design-' + state.design.family, state.design); store.set('aura-forma-family', state.design.family);
 store.set('aura-forma-lang', state.lang);
 { // The project (products added so far) and which of them is being edited.
-  const pr = store.get('aura-forma-project'); if (pr?.items?.length) state.project = {items: pr.items.filter(i => i?.design?.schema === SCHEMA).map(i => ({...i, design: normalizeDesign(i.design)}))};
+  const pr = store.get('aura-forma-project'); if (pr?.items?.length) state.project = {atmosphere:pr.atmosphere,items: pr.items.filter(i => i?.design?.schema === SCHEMA).map(i => ({...i, design: normalizeDesign(i.design)}))};
   const ed = store.get('aura-forma-editing'); state.editing = state.project.items.some(i => i.id === ed) ? ed : null;
   const prev = store.get('aura-forma-sent-project'); if (prev?.key && prev.key === projectKey()) state.sent = prev; }
 shell();
