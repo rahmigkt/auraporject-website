@@ -442,7 +442,14 @@ function cutList() {
     const turned = L && [Math.round(Math.max(...L.profile.map(r => r[0])) / (g.fn === 'clipped' ? Math.cos(Math.max(...(g.rot || [0]).map(Math.abs))) : 1)), Math.round(2 * Math.max(...L.profile.map(r => r[1]))), Math.round(2 * Math.max(...L.profile.map(r => r[1])))];
     const dims = (turned || (Array.isArray(q.cut) ? q.cut.slice() : hi.map((v, k) => Math.round(v - lo[k])))).sort((a, b) => b - a);
     const ops = (q.cuts || []).map(c => c.label ? `${c.label}` : c.type === 'hole' ? `delik Ø${c.dia}${c.depth ? ' d' + c.depth : ''}` : `${c.type} ${c.a}×${c.b}${c.depth ? ' d' + c.depth : ''}${c.count > 1 ? ' ×' + c.count : ''}`).join('; ');
-    rows.push([NAMES[q.role] || q.role, q.id, matName(q), ...dims.slice(0, 3), q.grain || 'boyuna', ops, [q.added ? 'eklenen' : '', q.shaped ? 'biçimli (CNC)' : ''].filter(Boolean).join(' ')]);
+    const sw = g.fn === 'sweep' ? g : g.fn === 'clipped' && g.inner?.fn === 'sweep' ? g.inner : null;
+    let bent = '';
+    if (sw && sw.bow) { // bent member: blank length along the curve (arc ≈ L(1 + 8/3·(f/L)²); sabre ≈ same with f the foot offset)
+      const L0 = sw.L, f0 = Math.abs(sw.bow), arc = Math.round(L0 * (1 + 8 / 3 * (f0 / L0) ** 2) + 30), R = Math.round((L0 * L0 / 4 + f0 * f0) / (2 * f0));
+      bent = `bükülmüş: ham boy ~${arc} mm, yarıçap ~${R} mm — ${/wood|veneer/.test(q.matSpec?.surface || 'wood') ? (R < 600 ? 'lamine (ince katman) ya da masiften CNC kesim' : 'buharla bükme ya da lamine') : 'metal bükme'}`;
+      dims[0] = Math.max(dims[0], arc);
+    }
+    rows.push([NAMES[q.role] || q.role, q.id, matName(q), ...dims.slice(0, 3), q.grain || 'boyuna', ops, [q.added ? 'eklenen' : '', q.shaped ? 'biçimli (CNC)' : '', bent].filter(Boolean).join(' · ')]);
   }
   return '\ufeff' + rows.map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(';')).join('\n');
 }
