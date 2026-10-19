@@ -15,6 +15,12 @@ export function buildMesh(q) {
   else if (g.fn === 'welt') mesh = weltLoop(g.w, g.d, g.r, g.cord);
   else if (g.fn === 'line') mesh = lineMesh(g);
   else if (g.fn === 'pillow') mesh = pillow(g);
+  else if (g.fn === 'slab' && g.edges) {
+    // Per-side edge profiles: each side's inset curve, blended by the outward normal at corners (x = sides, z = front/back).
+    const f = {}; for (const k of ['front', 'back', 'left', 'right']) { const e = g.edges[k] || g.profile; f[k] = edgeProfile(e[0], g.t, e[1] ?? e[2] ?? 6); }
+    const inset = (s, [ox, oz]) => ox * ox * (ox > 0 ? f.right(s) : f.left(s)) + oz * oz * (oz > 0 ? f.front(s) : f.back(s));
+    mesh = profiledSlab(g.outline, g.t, inset, {steps: 14});
+  }
   else if (g.fn === 'slab') mesh = profiledSlab(g.outline, g.t, edgeProfile(...g.profile), {steps: g.profile[0] === 'square' ? 2 : 14});
   else if (g.fn === 'clipped') {
     // A part tilted in place and cut flat at y0 / y1 (splayed legs, X bars): ends sit on the floor and under the top.
