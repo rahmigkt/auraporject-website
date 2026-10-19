@@ -6,13 +6,14 @@
 <meta name="robots" content="noindex,nofollow">
 <title>AURA · Tasarımcı Atölyesi</title>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/forma/studio.css?v=20261019k">
+<link rel="stylesheet" href="assets/forma/studio.css?v=20261019l">
 <style>
 body{background:var(--paper,#f1eee6);color:var(--ink,#1f2420);margin:0;font-family:Inter,Helvetica,Arial,sans-serif;touch-action:manipulation}
 .a-head{display:flex;align-items:center;gap:16px;padding:10px 18px;border-bottom:1px solid var(--hair,#ddd8cc);flex-wrap:wrap}
 .a-head b{font-family:Georgia,serif;font-weight:400;font-size:20px;letter-spacing:.06em}.a-head .f-eyebrow{margin:0}
 .a-load{display:flex;gap:8px;flex:1;min-width:260px}.a-load input{flex:1;font:inherit;padding:8px;border:1px solid var(--hair,#ddd8cc);background:#fff}
-.a-main{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(360px,1fr);min-height:calc(100vh - 58px)}
+.a-main{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(360px,1fr);height:calc(100vh - 58px)}
+.a-right details{border-top:1px solid var(--hair,#ddd8cc);padding:6px 0}.a-right summary{font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:#5c625a;cursor:pointer;padding:8px 0;min-height:32px}
 .a-left{border-right:1px solid var(--hair,#ddd8cc);display:flex;flex-direction:column}
 #stage{height:calc(100vh - 130px);min-height:360px;position:relative;overflow:hidden}
 .a-items{display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px;border-top:1px solid var(--hair,#ddd8cc)}
@@ -42,7 +43,7 @@ body{background:var(--paper,#f1eee6);color:var(--ink,#1f2420);margin:0;font-fami
 .a-checks li button{float:right;font-size:11px;padding:2px 8px;min-height:0}
 .a-grid4{grid-template-columns:auto minmax(0,1.6fr) minmax(0,0.8fr) auto}
 #linkOut{width:100%;font:12px ui-monospace,Menlo,monospace;padding:6px;margin-top:8px;border:1px solid var(--hair,#ddd8cc)}
-@media (max-width:900px){.a-main{grid-template-columns:1fr}.a-left{border-right:0;border-bottom:1px solid var(--hair,#ddd8cc)}#stage{min-height:300px;height:42vh}}
+@media (max-width:900px){.a-main{grid-template-columns:1fr;height:auto}.a-left{border-right:0;border-bottom:1px solid var(--hair,#ddd8cc)}#stage{min-height:300px;height:42vh}}
 </style>
 </head>
 <body>
@@ -54,6 +55,6 @@ body{background:var(--paper,#f1eee6);color:var(--ink,#1f2420);margin:0;font-fami
   <section class="a-left"><div id="stage"></div><div class="a-items" id="items"></div></section>
   <section class="a-right" id="panel"><p class="a-note">Bir bağlantı açın ya da stüdyoda son çalışılan tasarım yüklenir.</p></section>
 </main>
-<script type="module" src="assets/forma/atelier.js?v=20261019k"></script>
+<script type="module" src="assets/forma/atelier.js?v=20261019l"></script>
 </body>
 </html>

@@ -433,7 +433,7 @@ export function createViewer(host, {onRotate} = {}) {
   ao.blendIntensity = 0.85; ao.updateGtaoMaterial({radius: 0.35, distanceExponent: 1.4, thickness: 1.2, scale: 1.0, samples: 16});
   composer.addPass(renderPass); composer.addPass(ao); composer.addPass(smaa); composer.addPass(out);
   let raf = 0;
-  let shooting = false, gizmo = null, gizmoId = null, gizmoCb = null, selBox = null, selId = null; // while a photo accumulates, nothing else may touch camera, size or scene
+  let snapCfg = [5, 5], shooting = false, gizmo = null, gizmoId = null, gizmoCb = null, selBox = null, selId = null; // while a photo accumulates, nothing else may touch camera, size or scene
   const draw = () => { if (shooting) return; cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { place(); if (gizmo) gizmo.camera = camera; sketchResolution(); renderPass.camera = camera; ao.camera = camera; composer.render(); }); };
   function sketchResolution() { const r = host.getBoundingClientRect(); SKETCH.hull.uniforms.resolution.value.set(Math.max(1, r.width), Math.max(1, r.height)); }
   function place() {
@@ -482,9 +482,9 @@ export function createViewer(host, {onRotate} = {}) {
   const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
   const meshOf = id => { let m = null; group?.traverse(o => { if (!m && o.isMesh && o.userData.part === id) m = o; }); return m; };
   function reattach() {
-    if (selBox) { scene.remove(selBox); selBox.geometry.dispose(); selBox = null; }
-    const m = selId && meshOf(selId);
-    if (m) { selBox = new THREE.BoxHelper(m, '#a24a2a'); selBox.material.depthTest = false; selBox.renderOrder = 20; scene.add(selBox); }
+    if (selBox) { for (const b of selBox) { scene.remove(b); b.geometry.dispose(); } selBox = null; }
+    const ids = Array.isArray(selId) ? selId : selId ? [selId] : [];
+    selBox = ids.map(id => meshOf(id)).filter(Boolean).map((m, i) => { const b = new THREE.BoxHelper(m, i === ids.length - 1 ? '#a24a2a' : '#c98a5a'); b.material.depthTest = false; b.renderOrder = 20; scene.add(b); return b; });
     if (gizmo) { const g = gizmoId && meshOf(gizmoId); if (g) gizmo.attach(g); else gizmo.detach(); }
   }
   let pendingRebuild = false;
@@ -595,7 +595,9 @@ export function createViewer(host, {onRotate} = {}) {
       }
       return null;
     },
-    /** Outline one part (null clears). */
+    /** Snap the gizmo: mm and degrees (0 turns off). */
+    snap(mm, deg) { gizmo?.setTranslationSnap(mm || null); gizmo?.setRotationSnap(deg ? deg * Math.PI / 180 : null); gizmo?.setScaleSnap(mm ? 0.05 : null); snapCfg = [mm, deg]; },
+    /** Outline one part or several (array of ids; null clears). */
     select(id) { selId = id; reattach(); draw(); },
     /** Gizmo on a part: mode 'translate' | 'rotate' | 'scale'; onEnd({pos, rot, scale}) in mm / rad / factors. Null id removes it. */
     async gizmo(id, mode = 'translate', onEnd = null) {
@@ -603,8 +605,8 @@ export function createViewer(host, {onRotate} = {}) {
       if (!id) { gizmo?.detach(); draw(); return; }
       if (!gizmo) {
         const {TransformControls} = await import('../vendor/addons/controls/TransformControls.js');
-        gizmo = new TransformControls(camera, canvas); gizmo.setSize(0.9); scene.add(gizmo.getHelper());
-        gizmo.addEventListener('objectChange', () => { selBox?.update(); draw(); });
+        gizmo = new TransformControls(camera, canvas); gizmo.setSize(0.9); gizmo.setTranslationSnap(snapCfg[0] || null); gizmo.setRotationSnap(snapCfg[1] ? snapCfg[1] * Math.PI / 180 : null); scene.add(gizmo.getHelper());
+        gizmo.addEventListener('objectChange', () => { selBox?.forEach(b => b.update()); draw(); });
         gizmo.addEventListener('dragging-changed', e => { if (e.value || !gizmo.object) return; const o = gizmo.object; gizmoCb?.({pos: o.position.toArray(), rot: [o.rotation.x, o.rotation.y, o.rotation.z], scale: o.scale.toArray()}); });
       }
       gizmo.camera = camera; gizmo.setMode(mode); reattach(); draw();
