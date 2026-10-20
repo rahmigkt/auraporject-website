@@ -1,0 +1,182 @@
+{
+  "schema_version": "0.1",
+  "status": "design_proposal_not_standard",
+  "numeric_values": "Aşağıdaki tüm çizim/etkileşim/performans sayıları AURA tasarım hedefidir; yapı standardı veya ölçülmüş cihaz sonucu değildir.",
+  "units": {
+    "geometry": "mm",
+    "stroke": "CSS px at editor view; exported paper_mm separately",
+    "font": "CSS px; print pt separately"
+  },
+  "palette": {
+    "paper": "#F7F3E8",
+    "ink": "#292722",
+    "muted": "#746D63",
+    "wall_poche": "#45413B",
+    "terracotta": "#AD503E",
+    "floor": "#EAE3D6",
+    "uncertain": "#8B6B3F",
+    "error": "#A63030"
+  },
+  "palette_origin": "İş emrindeki krem kâğıt, koyu mürekkep, kiremit kırmızı yönünün önerilen karşılığı; mevcut CSS değerleriyle birebir eşleştirme iddiası yok.",
+  "strokes": {
+    "cut_wall": {
+      "screen_px": 2.4,
+      "paper_mm": 0.5
+    },
+    "wall_detail": {
+      "screen_px": 1.2,
+      "paper_mm": 0.25
+    },
+    "opening": {
+      "screen_px": 1.2,
+      "paper_mm": 0.25
+    },
+    "door_arc": {
+      "screen_px": 0.9,
+      "paper_mm": 0.18
+    },
+    "furniture": {
+      "screen_px": 1.0,
+      "paper_mm": 0.2
+    },
+    "dimension": {
+      "screen_px": 0.8,
+      "paper_mm": 0.15
+    },
+    "hatch": {
+      "screen_px": 0.5,
+      "paper_mm": 0.1
+    },
+    "selection": {
+      "screen_px": 2.5,
+      "paper_mm": null
+    },
+    "uncertain_dash": {
+      "screen_px": [
+        5,
+        4
+      ],
+      "paper_mm": [
+        1.0,
+        0.8
+      ]
+    }
+  },
+  "symbols": {
+    "wall": "Fiziksel kalınlığı geometri belirler; koyu poşe çizim kalınlığıyla karıştırılmaz.",
+    "door": "Duvar açıklığında boşluk, menteşeden kanat çizgisi ve gerçek açılım açısında yay; bilinmeyen menteşe yönü uydurulmaz.",
+    "window": "Açıklıkta sade paralel kasa/cam çizgileri; açılır kanat yalnız dayanağı varsa.",
+    "furniture": "Gerçek footprintten türeyen üstten sade kontur; fotoğraf veya gölgeli ikon değil.",
+    "material": "Seyrek yönlü tarama; kaplama yönü gerçek projeye bağlı; ekran ve basılı görünümde ayrı seyreltme.",
+    "unknown": "Kesikli kontur + soru etiketi; yalnız renkle anlatılmaz."
+  },
+  "typography": {
+    "family": "system-ui, sans-serif",
+    "room_name": {
+      "screen_px": 15,
+      "paper_pt": 10,
+      "weight": 600
+    },
+    "area": {
+      "screen_px": 12,
+      "paper_pt": 8,
+      "weight": 400
+    },
+    "dimension": {
+      "screen_px": 12,
+      "paper_pt": 8,
+      "weight": 400
+    },
+    "min_screen_px": 12,
+    "area_decimal_places": 2,
+    "area_basis": "İç bitmiş yüzlerden kapalı net poligon; brüt/duvar alanı değil.",
+    "geometry_storage": "Yuvarlanmamış mm; görünen metin yuvarlaması kaydı değiştirmez."
+  },
+  "dimensions": {
+    "display_unit": "m",
+    "locale": "tr-TR",
+    "decimal_places": 2,
+    "chains": [
+      "openings_and_segments",
+      "room_net",
+      "overall_external"
+    ],
+    "outside_offset_screen_px": [
+      24,
+      44,
+      64
+    ],
+    "collision_policy": "Dar ekranda çakışan ölçüyü gizle/ayrı panelde göster; hiçbir zaman geometriyi değiştirerek metne yer açma.",
+    "axis_or_face_label_required": true
+  },
+  "interaction": {
+    "primary_wall_gesture": "tap_tap",
+    "secondary_wall_gesture": "drag_after_explicit_tool_selection",
+    "target_min_css_px": 44,
+    "snap_radius_css_px": 10,
+    "orthogonal_angle_tolerance_deg": 4,
+    "grid_step_mm": 10,
+    "numeric_entry_overrides_snap": true,
+    "pan": "two_finger_drag",
+    "zoom": "pinch",
+    "fallback": "visible pan/zoom buttons and exact numeric controls",
+    "commit": "preview_then_confirm_with_undo",
+    "locked_geometry": "unlock_explicitly_then_validate_neighbours_and_openings"
+  },
+  "views": {
+    "plan": "orthographic; active level",
+    "dollhouse": "ceiling hidden; temporary cut plane affects display only",
+    "room_camera": "user-selected verified room position; target inside room",
+    "walk": "collision-aware; no camera passage through walls"
+  },
+  "provisional_performance_budget": {
+    "visible_triangles_mobile": 150000,
+    "visible_draw_calls_mobile": 150,
+    "interactive_target_fps": 30,
+    "note": "Başlangıç test hedefleri; cihaz garantisi değil. Ölçümler olmadan kabul edilmiş sayılmaz."
+  },
+  "references": [
+    {
+      "id": "roomsketcher",
+      "url": "https://www.roomsketcher.com/features/2D-floor-plans/",
+      "supports": [
+        "line_hierarchy",
+        "room_labels",
+        "areas",
+        "furniture_contours"
+      ]
+    },
+    {
+      "id": "floorplanner",
+      "url": "https://cdn.floorplanner.com/static/brochures/FloorplannerManualEN.pdf",
+      "supports": [
+        "dimension_chains",
+        "door_window_editing"
+      ]
+    },
+    {
+      "id": "planner5d",
+      "url": "https://planner5d.com/use/2d-floor-plan",
+      "supports": [
+        "room_templates",
+        "2d_3d_transition"
+      ]
+    },
+    {
+      "id": "magicplan",
+      "url": "https://help.magicplan.app/import-and-digitalize-an-existing-floor-plan",
+      "supports": [
+        "image_calibration",
+        "tracing"
+      ]
+    },
+    {
+      "id": "apple",
+      "url": "https://developer.apple.com/roomplan/",
+      "supports": [
+        "simplified_architecture_and_object_volumes"
+      ]
+    }
+  ],
+  "reference_policy": "Bağlantılar görsel/etkileşim referansıdır; görsel veya kod kopyalanmadı. Kesin renk, çizgi, yazı, eşik ve bütçe değerleri özgün öneridir."
+}
