@@ -4,6 +4,7 @@
 import * as THREE from '../vendor/three.module.js?v=20261016b';
 import {PAINTS, FLOORS, SCHEMES, paintHex, floorTexture} from './finishes.js?v=20261020r';
 import {compileItem, footprint, itemName} from './items.js?v=20261020u';
+import {curtains, STATES as PSTATES} from './perde.js?v=20261021a';
 
 const $ = s => document.querySelector(s), NS = 'http://www.w3.org/2000/svg';
 const val = q => (q && typeof q === 'object' ? q.value : q) ?? 0;
@@ -114,7 +115,7 @@ sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); sun.shadow.bias = -0.
 const CITIES = {bruksel: ['Brüksel', 50.85], amsterdam: ['Amsterdam', 52.37], berlin: ['Berlin', 52.52], paris: ['Paris', 48.86], londra: ['Londra', 51.51], kopenhag: ['Kopenhag', 55.68], madrid: ['Madrid', 40.42], roma: ['Roma', 41.9], istanbul: ['İstanbul', 41.01]};
 const SEASONS = {kis: ['Kış', 355], ilkbahar: ['İlkbahar', 80], yaz: ['Yaz', 172], sonbahar: ['Sonbahar', 266]};
 const MOMENTS = {gun: ['Gün ışığı', 13, 0], sabah: ['Sabah kahvesi', 8, 0], aksam: ['Akşam okuması', 20, 1], misafir: ['Misafir yemeği', 21, 1.5]};
-const A = {wallH: 1100, city: 'bruksel', season: 'sonbahar', hour: 13, moment: 'gun', lamps: 0, human: true};
+const A = {perde: 'acik', wallH: 1100, city: 'bruksel', season: 'sonbahar', hour: 13, moment: 'gun', lamps: 0, human: true};
 function sunPos() {
   const lat = CITIES[A.city][1] * Math.PI / 180, N = SEASONS[A.season][1], dec = 23.44 * Math.PI / 180 * Math.sin(2 * Math.PI * (284 + N) / 365), Ha = (A.hour - 12) * 15 * Math.PI / 180;
   const alt = Math.asin(Math.sin(lat) * Math.sin(dec) + Math.cos(lat) * Math.cos(dec) * Math.cos(Ha));
@@ -165,6 +166,7 @@ function build(cut) {
     if (S.view === 'room') { const c = new THREE.Mesh(new THREE.ShapeGeometry(sh), ceilMat); c.rotation.x = -Math.PI / 2; c.position.y = H / 1000; c.castShadow = true; house.add(c);
       const cap = new THREE.Mesh(new THREE.ShapeGeometry(sh), new THREE.MeshBasicMaterial({colorWrite: false})); cap.rotation.x = -Math.PI / 2; cap.position.y = H / 1000 + 0.15; cap.castShadow = true; house.add(cap); }
   }
+  if (S.view !== 'maket') house.add(curtains(walls, ops, spaceAt, H, A.perde));
   for (const w of walls) for (const [a, b, lo, hi0] of pieces(w)) {
     const hi = Math.min(hi0, cut); if (hi <= lo) continue;
     const mid = (a + b) / 2, mx = w.x0 + w.ux * mid, my = w.y0 + w.uy * mid, o = w.t / 2 + 150; // each face takes the paint of the room it faces
@@ -266,6 +268,7 @@ function atmosUI() {
   <select data-a="season">${Object.entries(SEASONS).map(([k, v]) => `<option value="${k}" ${A.season === k ? 'selected' : ''}>${v[0]}</option>`).join('')}</select>
   <select data-a="city">${Object.entries(CITIES).map(([k, v]) => `<option value="${k}" ${A.city === k ? 'selected' : ''}>${v[0]}</option>`).join('')}</select>
   ${S.view === 'maket' ? `<label>Duvar <b>${A.wallH >= H ? 'tam' : (A.wallH / 1000).toFixed(1) + ' m'}</b><input type="range" data-a="wallH" min="300" max="${H}" step="100" value="${Math.min(A.wallH, H)}"></label>` : ''}
+  ${S.view !== 'maket' ? `<select data-a="perde" title="Perdeler">${Object.entries(PSTATES).map(([k, v]) => `<option value="${k}" ${A.perde === k ? 'selected' : ''}>${v}</option>`).join('')}</select>` : ''}
   <label class="chk"><input type="checkbox" data-a="human" ${A.human ? 'checked' : ''}> İnsan ölçeği</label>`;
 }
 $('#atmos').addEventListener('input', e => { const k = e.target.dataset.a; if (!k) return;
@@ -273,6 +276,7 @@ $('#atmos').addEventListener('input', e => { const k = e.target.dataset.a; if (!
   else if (k === 'hour') { A.hour = +e.target.value; A.lamps = A.hour >= 19 || A.hour < 7 ? Math.max(A.lamps, 1) : A.lamps; e.target.previousElementSibling.textContent = `${String(Math.floor(A.hour)).padStart(2, '0')}:${A.hour % 1 ? '30' : '00'}`; }
   else if (k === 'human') { A.human = e.target.checked; show(S.view); return; }
   else if (k === 'wallH') { A.wallH = +e.target.value; e.target.previousElementSibling.textContent = A.wallH >= H ? 'tam' : (A.wallH / 1000).toFixed(1) + ' m'; build(Math.min(A.wallH, H)); }
+  else if (k === 'perde') { A.perde = e.target.value; build(S.view === 'maket' ? Math.min(A.wallH, H) : H); }
   else A[k] = e.target.value;
   render(); });
 // ---- furniture layout (solver: assets/ev/yerlesim.js) -----------------------------------------------------
