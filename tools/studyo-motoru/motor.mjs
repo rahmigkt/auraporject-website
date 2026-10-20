@@ -91,7 +91,7 @@ const CONS = {
   uzak: (P, c) => { const a = P[c.a], b = P[c.b]; if (!a || !b) return null; return Math.hypot(a.pos_xy_mm[0] - b.pos_xy_mm[0], a.pos_xy_mm[1] - b.pos_xy_mm[1]) >= (c.mm || 1500); }
 };
 const KINDS = {kanepe: 'sofa', sofa: 'sofa', tv: 'tvunit', tvunit: 'tvunit', sehpa: 'coffee', coffee: 'coffee', masa: 'dining', dining: 'dining', yatak: 'bed', bed: 'bed', gardirop: 'wardrobe', wardrobe: 'wardrobe',
-  komodin: 'nightstand', nightstand: 'nightstand', calisma: 'desk', desk: 'desk', berjer: 'armchair', armchair: 'armchair', kitaplik: 'bookcase', bookcase: 'bookcase', sifonyer: 'dresser', dresser: 'dresser', mutfak: 'run', run: 'run', lavabo: 'basin', basin: 'basin'};
+  ikili: 'loveseat', loveseat: 'loveseat', tekli: 'armchair', kahve_kosesi: 'reading', reading: 'reading', yan_sehpa: 'side', side: 'side', bufe: 'sideboard', sideboard: 'sideboard', ayakkabilik: 'shoe', shoe: 'shoe', portmanto: 'coatrack', coatrack: 'coatrack', komodin: 'nightstand', nightstand: 'nightstand', calisma: 'desk', desk: 'desk', berjer: 'armchair', armchair: 'armchair', kitaplik: 'bookcase', bookcase: 'bookcase', sifonyer: 'dresser', dresser: 'dresser', mutfak: 'run', run: 'run', lavabo: 'basin', basin: 'basin'};
 function yerlesim(state, ops, rep) {
   const P = state.plan;
   for (const op of ops) {
