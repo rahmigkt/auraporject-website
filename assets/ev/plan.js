@@ -275,6 +275,23 @@ $('#atmos').addEventListener('input', e => { const k = e.target.dataset.a; if (!
   else if (k === 'wallH') { A.wallH = +e.target.value; e.target.previousElementSibling.textContent = A.wallH >= H ? 'tam' : (A.wallH / 1000).toFixed(1) + ' m'; build(Math.min(A.wallH, H)); }
   else A[k] = e.target.value;
   render(); });
+// ---- furniture layout (solver: assets/ev/yerlesim.js) -----------------------------------------------------
+const LAY = {room: null, res: null, pick: 0};
+function layoutPanel() {
+  const r = D.spaces.find(x => x.id === S.room), its = (D.items || []).filter(i => i.design && i.space_id === S.room); if (!r || !its.length) return '';
+  const res = LAY.room === r.id ? LAY.res : null;
+  return `<h2>Mobilya yerleşimi</h2><p class="note">${its.length} ürün · kurallar: kapı açılışı, pencere, geçiş payları, TV–kanepe, masa–mutfak.</p>
+  <div class="ev-row" style="display:flex;gap:6px;flex-wrap:wrap"><button data-lay="solve">Yerleşim önerileri</button></div>
+  ${res ? (res.ok ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">${res.alternatives.map((a, i) => `<button data-lay="alt" data-i="${i}" aria-pressed="${LAY.pick === i}">Seçenek ${i + 1}</button>`).join('')}</div><p class="note">${res.alternatives[LAY.pick].notes.join(' · ')}</p>` : `<p class="note" style="color:#a63030">${res.reason}. Ürünü küçültün ya da başka odaya alın.</p>`) : ''}`;
+}
+async function layoutAction(b) { try { await layoutRun(b); } catch (err) { console.error('layout', err); LAY.res = {ok: false, reason: 'Yerleşim hesaplanamadı: ' + err.message}; side(); } }
+async function layoutRun(b) {
+  const {solveRoom} = await import('./yerlesim.js?v=20261020w');
+  if (b.dataset.lay === 'solve') { const r = D.spaces.find(x => x.id === S.room); LAY.room = r.id; LAY.pick = 0; LAY.res = solveRoom(r, D.items.filter(i => i.design && i.space_id === r.id), {walls, ops}, {beam: 60}); }
+  if (b.dataset.lay === 'alt') LAY.pick = +b.dataset.i;
+  if (LAY.res?.ok) for (const pl of LAY.res.alternatives[LAY.pick].placements) Object.assign(D.items.find(i => i.id === pl.id), {pos_xy_mm: pl.pos_xy_mm, rot_deg: pl.rot_deg});
+  side(); if (S.view === 'plan') drawPlan(); else show(S.view);
+}
 function finishPanel() {
   const r = D.spaces.find(x => x.id === S.room), f = r && finishOf(r);
   return `<h2>Renk ve zemin · öneri</h2><select id="scheme">${Object.entries(SCHEMES).map(([k, v]) => `<option value="${k}" ${(D.scheme || 'iskandinav') === k ? 'selected' : ''}>${v.name}</option>`).join('')}</select>
@@ -289,11 +306,12 @@ function side() {
   <label class="note" style="display:block;margin-top:8px">Plan dosyası aç (EV JSON) <input type="file" id="openFile" accept=".json,application/json"></label>
   <p class="note">${real ? 'Gerçek konut planı: Swiss Dwellings (Archilyse AG), CC BY 4.0. Ölçüye uyarlanmış; tasarımcı onayı gerekir.' : 'Sentetik örnek (gerçek ev değil).'} Ölçüler mm, alanlar net iç ölçüden. Kuzey yukarı.</p>
   <h2>Odalar · ${tot.toFixed(1)} m²</h2>${D.spaces.map(s => `<div class="room ${S.room === s.id ? 'on' : ''}" data-pick="${s.id}"><b><i style="display:inline-block;width:10px;height:10px;background:${COLORS[s.kind] || '#ddd'};margin-right:6px;border:1px solid #b7bab8"></i>${(s.name || NAMES[s.kind] || 'Oda').replace(/\s+\d+$/, '')}</b><span>${area(s.boundary_xy_mm).toFixed(1)} m²</span></div>`).join('')}
+  ${layoutPanel()}
   ${finishPanel()}
   ${hooks.panel?.() || ''}
   <h2>Kayıt</h2><p class="note">${walls.length} duvar · ${ops.filter(o => o.kind === 'door').length} kapı · ${ops.filter(o => o.kind === 'window').length} pencere · tavan ${Math.round(H)} mm</p>`;
 }
-$('#side').addEventListener('click', e => { const pb = e.target.closest('[data-paint]'); if (pb) { const r = D.spaces.find(x => x.id === S.room); if (r) { r.finish = {...(r.finish || {}), wall: pb.dataset.paint}; side(); if (S.view !== 'plan') show(S.view); } return; }
+$('#side').addEventListener('click', e => { const lb = e.target.closest('[data-lay]'); if (lb) { layoutAction(lb); return; } const pb = e.target.closest('[data-paint]'); if (pb) { const r = D.spaces.find(x => x.id === S.room); if (r) { r.finish = {...(r.finish || {}), wall: pb.dataset.paint}; side(); if (S.view !== 'plan') show(S.view); } return; }
   if (hooks.click?.(e)) return; const t = e.target.closest('[data-pick]'); if (t) pick(t.dataset.pick); });
 $('#side').addEventListener('change', async e => {
   if (e.target.id === 'scheme') { D.scheme = e.target.value; for (const r of D.spaces) delete r.finish; side(); if (S.view !== 'plan') show(S.view); return; }

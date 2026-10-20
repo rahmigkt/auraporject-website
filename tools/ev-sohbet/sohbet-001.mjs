@@ -40,17 +40,25 @@ op('calisma-hol', 'ic-6', 'door', 5650, 800, 2100, 0, ['calisma', 'hol']);
 const pick = (family, kind, seed, params = {}, style = 'japandi') => { const d = sample({family, kind, style, seed}); return {...d, params: {...d.params, ...params}}; };
 const items = [], put = (id, space_id, design, at, rot, name) => items.push({id, space_id, decision: 'new', design, pos_xy_mm: at, rot_deg: rot, name});
 const size = des => compileItem({design: des}).size;
-const kit = pick('kitchen', 'run', 3), sz = size(kit); put('mutfak', 'salon', kit, [150 + sz.w / 2, 4740 - sz.d / 2], 0, 'Mutfak');
+const kit = pick('kitchen', 'run', 3, {width: 3000}), sz = size(kit); put('mutfak', 'salon', kit, [150 + sz.w / 2, 4740 - sz.d / 2], 0, 'Mutfak');
 const sofa = pick('seating', 'sofa', 4, {width: 2300}); put('kanepe', 'salon', sofa, [2350, 1700], 90, 'Kanepe');
 const tv = pick('storage', 'tvunit', 2, {width: 1800}); const tvs = size(tv); put('tv', 'salon', tv, [5940 - tvs.d / 2, 1700], 270, 'TV ünitesi');
 const cof = pick('table', 'coffee', 5, {length: 1100, width: 650}); put('orta-sehpa', 'salon', cof, [3650, 1700], 90, 'Orta sehpa');
-const din = pick('table', 'dining', 2, {length: 1600, width: 900}); put('yemek', 'salon', din, [1500, 3150], 0, 'Yemek masası');
-const bed1 = {schema: 'aura.forma.design/1', family: 'bedroom', kind: 'bed', style: 'japandi', params: {width: 1600}}; const b1 = size(bed1); put('yatak1', 'yatak1', bed1, [9450 - b1.d / 2, 2400], 90, 'Çift kişilik yatak');
+const din = pick('table', 'dining', 2, {length: 1400, width: 850}); put('yemek', 'salon', din, [1500, 3150], 0, 'Yemek masası');
+const bed1 = {schema: 'aura.forma.design/1', family: 'bedroom', kind: 'bed', style: 'japandi', params: {mattressWidth: 1600}}; const b1 = size(bed1); put('yatak1', 'yatak1', bed1, [9450 - b1.d / 2, 2400], 90, 'Çift kişilik yatak');
 const ward = pick('storage', 'wardrobe', 3, {width: 2000}); const ws = size(ward); put('gardirop', 'yatak1', ward, [6060 + ws.d / 2, 2400], 90, 'Gardırop');
-const bed2 = {schema: 'aura.forma.design/1', family: 'bedroom', kind: 'bed', style: 'japandi', params: {width: 1200}}; const b2 = size(bed2); put('yatak2', 'yatak2', bed2, [1300, 8850 - b2.d / 2], 180, 'Tek kişilik yatak');
+const bed2 = {schema: 'aura.forma.design/1', family: 'bedroom', kind: 'bed', style: 'japandi', params: {mattressWidth: 900}}; const b2 = size(bed2); put('yatak2', 'yatak2', bed2, [1300, 8850 - b2.d / 2], 180, 'Tek kişilik yatak');
+// positions above are a first guess; the layout solver decides (assets/ev/yerlesim.js)
 const desk = pick('table', 'desk', 2, {length: 1200, width: 600}); const ds = size(desk); put('calisma-masasi', 'calisma', desk, [8700, 8850 - ds.d / 2], 180, 'Çalışma masası');
 const basin = pick('bath', 'basin', 2, {width: 900}); const bs = size(basin); put('lavabo', 'banyo', basin, [3600, 8850 - bs.d / 2], 180, 'Lavabo dolabı');
 
+const {solveRoom} = await import('../../assets/ev/yerlesim.js');
+const val = q => (q && typeof q === 'object' ? q.value : q) ?? 0;
+const evw = walls.map(w => { const [x0, y0] = w.from_xy_mm, [x1, y1] = w.to_xy_mm, L = Math.hypot(x1 - x0, y1 - y0); return {...w, x0, y0, x1, y1, L, ux: (x1 - x0) / L, uy: (y1 - y0) / L, t: val(w.thickness)}; });
+const evo = openings.map(o => ({...o, a: val(o.offset_from_wall_start), w: val(o.width), h: val(o.height), sill: val(o.sill_height)}));
+const solved = {};
+for (const sp of spaces) { const its = items.filter(i => i.space_id === sp.id); if (!its.length) continue; const r = solveRoom(sp, its, {walls: evw, ops: evo}, {beam: 60});
+  if (!r.ok) throw new Error(sp.id + ': ' + r.reason); solved[sp.id] = r; for (const pl of r.alternatives[0].placements) Object.assign(items.find(i => i.id === pl.id), {pos_xy_mm: pl.pos_xy_mm, rot_deg: pl.rot_deg}); }
 const plan = {schema_version: '0.1', project_id: 'sohbet-001', revision: 4, status: 'concept', coordinate_system: 'mm; x east, y north; z up', language: {customer: 'tr', designer: 'tr'},
   brief: {whole_home: true, city: 'Brüksel', goals: ['Aydınlık salon, açık mutfak', 'İki yatak odası ve küçük çalışma odası', 'Sıcak, doğal malzemeler']},
   scheme: 'toprak', levels: [{id: 'kat-0', name: 'Daire', elevation: M(0)}], spaces, walls, openings, items, finishes: [], connections: [], notes: ['Simüle edilmiş eğitim sohbeti; gerçek müşteri değildir.'], issues: [], evidence: [{id: 'sohbet-001', kind: 'conversation'}], example_only: true};
@@ -74,14 +82,16 @@ const turns = [
   {role: 'user', lang: 'tr', text: 'Evet, aşağı yukarı böyle. Sıcak, doğal bir ev istiyoruz; çok beyaz olmasın. Ahşap seviyoruz.'},
   {role: 'assistant', text: 'O zaman "Toprak tonları" önerisiyle başlayalım: duvarlarda kum ve kil tonları, yatak odasında greige; salon, yatak odaları ve holde doğal meşe parke, banyo ve WC\'de terrazzo, mutfakta çimento karo. Boya ve kaplamayı biz yapmıyoruz, öneri olarak paketinize ekliyoruz. Oda içi görünümde günün saatini ve mevsimi değiştirip ışığı görebilirsiniz.',
     proposed_changes: [call('propose_finish', {scheme: 'toprak'})]},
-  {role: 'user', lang: 'tr', text: 'Güzel. Şimdi mobilyalar: salonda 3 kişilik bir kanepe, karşısında televizyon, ortada sehpa. Mutfağın önünde 4-6 kişilik yemek masası. Yatak odasına 160\'lık yatak ve gardırop, çocuğa tek kişilik yatak, çalışma odasına bir masa. Banyoya da lavabo dolabı.'},
-  {role: 'assistant', text: 'Hepsini evin ölçüsüne göre yerleştirdim. Mutfak kuzey duvar boyunca 3,9 m; yemek masası 160×90 cm, mutfakla salonun arasında. Kanepe 230 cm, batıda pencereye yakın, doğu duvarındaki 180 cm TV ünitesine bakıyor; arada 110 cm\'lik sehpa. Yatak odasında yatağın başı doğu duvarında, gardırop karşı duvarda; aralarında rahat geçiş var. Çocuk odasında tek kişilik yatak kuzey duvarında, çalışma odasında masa pencerenin önünde, banyoda 90 cm lavabo dolabı. Bunların hepsi AURA stüdyosunda özel ölçüyle üretilebilen tasarımlar; renk ve malzemeyi birlikte seçebiliriz.',
+  {role: 'user', lang: 'tr', text: 'Güzel. Şimdi mobilyalar: salonda 3 kişilik bir kanepe, karşısında televizyon, ortada sehpa. Mutfağın önünde 4 kişilik yemek masası. Yatak odasına 160\'lık yatak ve gardırop, çocuğa tek kişilik yatak, çalışma odasına bir masa. Banyoya da lavabo dolabı.'},
+  {role: 'assistant', text: 'Hepsini evin ölçüsüne göre yerleştirdim. Mutfak 3 m; yemek masası 140×85 cm, dört kişilik, mutfakla salonun arasında. Kanepe 230 cm, batıda pencereye yakın, doğu duvarındaki 180 cm TV ünitesine bakıyor; arada 110 cm\'lik sehpa. Yatak odasında yatağın başı penceresiz, dolu bir duvarda; iki yanında ve ayak ucunda 60 cm geçiş var; gardırop kapının açılışına girmeyen duvarda. Çocuk odasında tek kişilik yatak kuzey duvarında, çalışma odasında masa pencerenin önünde, banyoda 90 cm lavabo dolabı. Bunların hepsi AURA stüdyosunda özel ölçüyle üretilebilen tasarımlar; renk ve malzemeyi birlikte seçebiliriz.',
+    intent: ['TV penceresiz duvarda, ekrana ışık vurmasın', 'kanepe TV\'ye baksın, 1,8–3,6 m', 'yemek masası mutfağa yakın', 'yatağın iki yanından geçilsin', 'çalışma masası gün ışığında'],
     proposed_changes: items.map(i => call('propose_item_placement', it(i.id))).concat([call('request_studio_render', {views: ['maket', 'kesit:salon', 'oda:salon']})])},
   {role: 'user', lang: 'tr', text: 'Çok güzel olmuş. Tasarımcıya gönderebilir miyiz?'},
   {role: 'assistant', text: 'Tabii. Plan, maket görüntüleri, renk ve zemin önerileri ve mobilyaların ölçülü çizimleriyle bir proje paketi hazırlıyorum. Tasarımcımız ölçüleri yerinde doğruladıktan sonra size dönecek; son karar ve fiyat onda.',
     proposed_changes: [call('prepare_designer_handoff', {include: ['plan', 'maket', 'finishes', 'items', 'drawings'], open_questions: ['Duvar kalınlıkları ve tavan yüksekliği yerinde ölçülecek', 'Kapı açılış yönleri']})]}
 ];
-const record = {schema: 'aura.ev.sohbet/1', id: 'sohbet-001', synthetic: true, note: 'Simüle edilmiş eğitim sohbeti; gerçek müşteri değildir. Asistan sözleşmesi: knowledge/ev-projesi/veri/asistan-sozlesme.json.',
+const layout = Object.fromEntries(Object.entries(solved).map(([k, r]) => [k, {alternatives: r.alternatives.length, chosen_score: r.alternatives[0].score, notes: r.alternatives[0].notes}]));
+const record = {schema: 'aura.ev.sohbet/1', layout_solver: 'assets/ev/yerlesim.js', layout, id: 'sohbet-001', synthetic: true, note: 'Simüle edilmiş eğitim sohbeti; gerçek müşteri değildir. Asistan sözleşmesi: knowledge/ev-projesi/veri/asistan-sozlesme.json.',
   customer_language: 'tr', city: 'Brüksel', result_plan: 'assets/ev/ornekler/sohbet-1.json',
   designer_summary_tr: 'Brüksel, 2+1, ~85 m², çift + bir çocuk. Güneyde açık mutfaklı salon ve balkon, doğudan girişli hol, kuzeyde ıslak hacimler ve çalışma odası. Sıcak, doğal, ahşap ağırlıklı (Toprak tonları). 10 özel ölçü ürün yerleştirildi. Ölçüler müşteri beyanı; yerinde doğrulanacak.',
   turns};
