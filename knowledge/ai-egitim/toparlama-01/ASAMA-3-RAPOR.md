@@ -18,7 +18,7 @@ Katalogda inceleme bekleyen 12 kümenin 11'inde mevcut **2.566** birincil kayıt
 
 `python tools/egitim-donustur/donustur.py` → 2.566 aday, 0 yeterli, 230 bileşen, kaynak sızıntısı [].
 
-`python tests/toparlama-bicim-check.py` → **PASS 2566 schema-valid quarantined rows, 40 motor reports, empty exports, source/building split mutations, review-target hash binding**. Şemadan onaysız gecti=true geçirmek reddedildi; farklı kimlikli aynı bina zorla ayrılınca sızıntı yakalandı; inceleme sonrası mesaj değişince onay geçersizleşti. Testteki yapay onay yalnız bellek içi birim fikstürüdür; veri veya gerçek insan kararı değildir. `node --check tools/egitim-donustur/motor.mjs` ve `git diff --check` geçti. Katalog, yeni türev/destek dosyaları için ayrıca güncellenecek; sayım kaynağı yine birincil korpuslar olacak.
+`python tests/toparlama-bicim-check.py` → **PASS 2566 schema-valid quarantined rows, 40 motor reports, empty exports, source/building split mutations, review-target hash binding**. Şemadan onaysız gecti=true geçirmek reddedildi; farklı kimlikli aynı bina zorla ayrılınca sızıntı yakalandı; inceleme sonrası mesaj değişince onay geçersizleşti. Testteki yapay onay yalnız bellek içi birim fikstürüdür; veri veya gerçek insan kararı değildir. `node --check tools/egitim-donustur/motor.mjs` ve `git diff --check` geçti. Katalog yeni şema/sözlük ve türev kanıt dosyalarıyla güncellendi: 35 küme / 1.002 yapılandırılmış dosya. Yeni türevler destek olarak tutuldu; birincil 2.566 aday yeniden sayılmadı. Katalog bütünlük/mutasyon testi de geçti.
 
 ## Açık kusurlar / yapılamayanlar
 

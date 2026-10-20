@@ -1,7 +1,7 @@
 {
   "version": "aura-catalog/1",
   "date": "2026-10-21",
-  "snapshot_base": "ec5090f27ca2dbf00fcac2cbd283d151a77ba73d",
+  "snapshot_base": "13ae8179232319b383c698bdbb4ccf3d341da1a2",
   "hash_policy": "Exact tracked Git blob bytes; checkout CRLF does not change catalogue hashes. Aggregate hash includes file paths, sizes and primary/support roles.",
   "counts_policy": "Counts cover tracked primary rows only; sets may overlap, so totals are NOT unique projects. Null is unknown/not applicable, never zero.",
   "datasets": [
@@ -7244,6 +7244,62 @@
       "coverage": []
     },
     {
+      "id": "support-knowledge-ai-egitim-aura-egitim-1-schema-json",
+      "path": "knowledge/ai-egitim/AURA-EGITIM-1.schema.json",
+      "summary": "Structured research/support/derived artifacts; primary candidate counts not inferred.",
+      "sha256": "c0ea6f6b940fa1af576fa31e6baf1285c6a5b75b440a71dd337fcb0706b48738",
+      "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
+      "sources": [],
+      "license": null,
+      "record_count": null,
+      "record_count_scope": "research/support material; no candidate records asserted",
+      "languages": {},
+      "countries": {},
+      "layer": "genel-sohbet",
+      "status": "yalnizca-arastirma",
+      "known_defects": [
+        "Per-file reuse rights/semantic role must be verified before training"
+      ],
+      "primary_files": [],
+      "files": [
+        {
+          "path": "knowledge/ai-egitim/AURA-EGITIM-1.schema.json",
+          "sha256": "8bd75806fb50f1b8c9339cb63a6ed28dab8384b689223cf6d293368236561aa4",
+          "bytes": 5528,
+          "role": "support"
+        }
+      ],
+      "coverage": []
+    },
+    {
+      "id": "support-knowledge-ai-egitim-islem-sozlugu-1-json",
+      "path": "knowledge/ai-egitim/ISLEM-SOZLUGU-1.json",
+      "summary": "Structured research/support/derived artifacts; primary candidate counts not inferred.",
+      "sha256": "506bfa69ca0a46dbb47351ad833f6b2868e7a9b88071ef918c9ddba124df79ae",
+      "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
+      "sources": [],
+      "license": null,
+      "record_count": null,
+      "record_count_scope": "research/support material; no candidate records asserted",
+      "languages": {},
+      "countries": {},
+      "layer": "genel-sohbet",
+      "status": "yalnizca-arastirma",
+      "known_defects": [
+        "Per-file reuse rights/semantic role must be verified before training"
+      ],
+      "primary_files": [],
+      "files": [
+        {
+          "path": "knowledge/ai-egitim/ISLEM-SOZLUGU-1.json",
+          "sha256": "1493a3b5c19c52cb2eccda69496935bade1bb7b6174c1ca292d1347f36b5c701",
+          "bytes": 1480,
+          "role": "support"
+        }
+      ],
+      "coverage": []
+    },
+    {
       "id": "support-knowledge-ai-egitim-toparlama-01",
       "path": "knowledge/ai-egitim/toparlama-01",
       "summary": "Structured research/support/derived artifacts; primary candidate counts not inferred.",
@@ -7272,6 +7328,58 @@
           "path": "knowledge/ai-egitim/toparlama-01/test-results.json",
           "sha256": "444f11e91f74d7c09a251ed23b7e707c23e7c9e7c1b23d3fd6975ef8729cb436",
           "bytes": 34174,
+          "role": "support"
+        }
+      ],
+      "coverage": []
+    },
+    {
+      "id": "support-knowledge-ai-egitim-veri",
+      "path": "knowledge/ai-egitim/veri/birlesik",
+      "summary": "Structured research/support/derived artifacts; primary candidate counts not inferred.",
+      "sha256": "91cf224975b00be9f65a05982f95580684acbaa2d63eb977e9d1e6d354356049",
+      "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
+      "sources": [],
+      "license": null,
+      "record_count": null,
+      "record_count_scope": "research/support material; no candidate records asserted",
+      "languages": {},
+      "countries": {},
+      "layer": "genel-sohbet",
+      "status": "yalnizca-arastirma",
+      "known_defects": [
+        "Per-file reuse rights/semantic role must be verified before training"
+      ],
+      "primary_files": [],
+      "files": [
+        {
+          "path": "knowledge/ai-egitim/veri/birlesik/adaylar.jsonl",
+          "sha256": "1757cdf467ca2af42e9a7aae886f77359e7e23e3b4e9d32fa8b04a99305d4720",
+          "bytes": 11830879,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/birlesik/dev.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/birlesik/sayim-raporu.json",
+          "sha256": "eed8b5bd566ededa5799a05e0a32bc01c1031647053d4ef1ea0958da25ec81f6",
+          "bytes": 112806,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/birlesik/test.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/birlesik/train.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0,
           "role": "support"
         }
       ],
@@ -7792,9 +7900,9 @@
         "unknown_count_datasets": 1
       },
       "yalnizca-arastirma": {
-        "datasets": 13,
+        "datasets": 16,
         "records": 1000,
-        "unknown_count_datasets": 12
+        "unknown_count_datasets": 15
       }
     },
     "licenses": {
@@ -7803,7 +7911,7 @@
       "AURA original synthetic research": 2,
       "AURA original": 5,
       "AURA authored text; references keep own rights": 1,
-      "unknown": 15,
+      "unknown": 18,
       "AURA authored": 2
     },
     "language_country_layer": [
@@ -8590,8 +8698,8 @@
     ]
   },
   "coverage": {
-    "structured_files": 995,
-    "inventoried_files": 995,
+    "structured_files": 1002,
+    "inventoried_files": 1002,
     "unassigned": []
   }
 }
