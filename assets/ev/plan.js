@@ -4,6 +4,7 @@
 import * as THREE from '../vendor/three.module.js?v=20261016b';
 import {PAINTS, FLOORS, SCHEMES, paintHex, floorTexture} from './finishes.js?v=20261020r';
 import {compileItem, footprint, itemName} from './items.js?v=20261020u';
+import {accessories} from './aksesuar.js?v=20261021b';
 import {curtains, STATES as PSTATES} from './perde.js?v=20261021a';
 
 const $ = s => document.querySelector(s), NS = 'http://www.w3.org/2000/svg';
@@ -67,10 +68,14 @@ function drawPlan() {
   const g = el('g', {fill: INK.wall});
   for (const w of walls) for (const [a, b, lo] of pieces(w)) if (lo === 0) el('polygon', {points: pts(band(w, a, b)), 'data-wall': w.id}, g);
   for (const o of ops) { const w = W[o.wall_id]; if (!w) continue; el('polygon', {points: pts(band(w, o.a, o.a + o.w)), fill: o.kind === 'window' ? INK.window : INK.door, 'data-op': o.id, 'data-wall': w.id}); }
+  const ACC = accessories(D);
+  for (const r of ACC.rugs) el('polygon', {points: pts(r.poly), fill: r.color, 'fill-opacity': 0.35, stroke: r.color, 'stroke-width': 14, 'stroke-dasharray': '60 40', style: 'pointer-events:none'});
   for (const it of D.items || []) { if (!it.design) continue; const f = footprint(it), k = Math.max(vb[2], vb[3]) / 900;
     el('polygon', {points: pts(f), fill: 'rgba(255,253,248,.78)', stroke: '#6b645a', 'stroke-width': 14, 'data-item': it.id});
     const fr = [(f[2][0] + f[3][0]) / 2, (f[2][1] + f[3][1]) / 2], c = centroid(f); el('line', {x1: c[0], y1: -c[1], x2: fr[0], y2: -fr[1], stroke: '#b9b1a3', 'stroke-width': 10});
     const t = el('text', {x: c[0], y: -c[1] + 50, 'text-anchor': 'middle', 'font-size': 120, fill: '#5d574e', style: 'pointer-events:none'}); t.textContent = itemName(it); }
+  for (const l of ACC.lights) { const [x, y] = l.pos, r = l.kind === 'ceiling' ? 110 : 80, g2 = el('g', {stroke: '#b08a3e', 'stroke-width': 14, fill: 'none', style: 'pointer-events:none'});
+    el('circle', {cx: x, cy: -y, r}, g2); el('line', {x1: x - r * .7, y1: -y - r * .7, x2: x + r * .7, y2: -y + r * .7}, g2); el('line', {x1: x - r * .7, y1: -y + r * .7, x2: x + r * .7, y2: -y - r * .7}, g2); }
   for (const s of D.spaces) {
     const b = bbox(s.boundary_xy_mm), [cx, cy] = centroid(s.boundary_xy_mm), fs = Math.min(260, Math.max(130, Math.min(b.x1 - b.x0, b.y1 - b.y0) / 6));
     const t = el('text', {x: cx, y: -cy, 'text-anchor': 'middle', 'font-size': fs, fill: INK.text, style: 'pointer-events:none'});
@@ -130,7 +135,8 @@ function applyAtmos() {
   Object.assign(sun.shadow.camera, {left: -R, right: R, top: R, bottom: -R, near: 1, far: 120}); sun.shadow.camera.updateProjectionMatrix();
   sun.intensity = alt > 0 ? 0.6 + 2.6 * Math.sqrt(up) : 0; sun.color = mix('#ff9a52', '#fff4e2', up / 0.45);
   hemi.intensity = 0.25 + 1.25 * day; hemi.color = mix('#2c3c5c', '#f3f1ea', day); hemi.groundColor = mix('#1d1f24', '#b9ae9a', day);
-  const lamp = A.lamps; roomLight.color.set('#ffcf9a'); roomLight.intensity = S.view === 'room' ? 0.4 + lamp * 3.2 : lamp * 1.5;
+  const lamp = A.lamps, own = lampLights.length > 0; roomLight.color.set('#ffcf9a'); roomLight.intensity = (S.view === 'room' ? 0.4 + lamp * 3.2 : lamp * 1.5) * (own ? 0.35 : 1);
+  for (const pl of lampLights) pl.intensity = lamp * (pl.userData.k === 'ceiling' ? 1.4 : pl.userData.k === 'desk' ? 0.8 : 1.8); shadeMat.emissiveIntensity = lamp ? 0.9 : 0;
   ceilMat.emissiveIntensity = 0.06 + 0.12 * day + lamp * 0.12; ceilMat.emissive.set(lamp ? '#ffe2bf' : '#fbf9f4');
   scene.background = S.view === 'room' ? mix('#141b2b', mix('#f4c49a', '#d7e3ea', up / 0.4), day) : new THREE.Color(INK.paper);
 }
@@ -148,6 +154,18 @@ const finishOf = s => { const sc = SCHEMES[D.scheme] || SCHEMES.iskandinav, f = 
 const paintMats = {}, paintMat = id => paintMats[id] ??= new THREE.MeshStandardMaterial({color: paintHex(id), roughness: 0.92});
 const floorMats2 = {}, floorFinish = id => floorMats2[id] ??= new THREE.MeshStandardMaterial({map: floorTexture(id), roughness: 0.72, side: THREE.DoubleSide});
 const spaceAt = p => D.spaces.find(s => inside(p, s.boundary_xy_mm));
+const rugMats = {}, rugMat = c => rugMats[c] ??= (() => { const cv = document.createElement('canvas'); cv.width = cv.height = 256; const g = cv.getContext('2d');
+  g.fillStyle = c; g.fillRect(0, 0, 256, 256); g.strokeStyle = 'rgba(70,55,40,.35)'; g.lineWidth = 6; g.strokeRect(14, 14, 228, 228); g.lineWidth = 2; g.strokeRect(26, 26, 204, 204);
+  for (let i = 0; i < 3000; i++) { g.fillStyle = `rgba(${Math.random() < .5 ? '255,255,255' : '40,30,20'},.05)`; g.fillRect(Math.random() * 256, Math.random() * 256, 2, 2); }
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; const top = new THREE.MeshStandardMaterial({map: t, roughness: 1}), side = new THREE.MeshStandardMaterial({color: c, roughness: 1});
+  return [side, side, top, side, side, side]; })();
+const lampLights = [], shadeMat = new THREE.MeshStandardMaterial({color: '#f3ead8', emissive: '#ffd9a8', emissiveIntensity: 0, roughness: 0.8, side: THREE.DoubleSide}), metalMat = new THREE.MeshStandardMaterial({color: '#3c3a36', roughness: 0.5, metalness: 0.4});
+function lampObject(l) { const g = new THREE.Group(), add = (geo, m, y) => { const o = new THREE.Mesh(geo, m); o.position.y = y; g.add(o); return o; };
+  if (l.kind === 'ceiling') add(new THREE.CylinderGeometry(0.17, 0.2, 0.07, 32), shadeMat, H / 1000 - 0.04);
+  else if (l.kind === 'pendant') { const y = l.h / 1000; add(new THREE.CylinderGeometry(0.004, 0.004, H / 1000 - y - 0.2, 6), metalMat, (H / 1000 + y + 0.2) / 2); add(new THREE.CylinderGeometry(0.05, 0.24, 0.22, 32, 1, true), shadeMat, y + 0.11); }
+  else if (l.kind === 'floor') { const y = l.h / 1000; add(new THREE.CylinderGeometry(0.15, 0.15, 0.02, 24), metalMat, 0.01); add(new THREE.CylinderGeometry(0.011, 0.011, y - 0.3, 8), metalMat, (y - 0.3) / 2); add(new THREE.CylinderGeometry(0.19, 0.21, 0.3, 32, 1, true), shadeMat, y - 0.15); }
+  else { const y = l.h / 1000; add(new THREE.CylinderGeometry(0.06, 0.07, 0.02, 16), metalMat, y + 0.01); add(new THREE.CylinderGeometry(0.008, 0.008, 0.34, 6), metalMat, y + 0.18); add(new THREE.CylinderGeometry(0.05, 0.09, 0.12, 24, 1, true), shadeMat, y + 0.38); }
+  g.traverse(o => { o.castShadow = o.material !== shadeMat; }); return g; }
 let house = null, productObject = null; const products = new Map();
 function build(cut) {
   if (house) { scene.remove(house); house.traverse(o => { if (o.geometry && !o.userData.keep) o.geometry.dispose(); }); }
@@ -166,6 +184,13 @@ function build(cut) {
     if (S.view === 'room') { const c = new THREE.Mesh(new THREE.ShapeGeometry(sh), ceilMat); c.rotation.x = -Math.PI / 2; c.position.y = H / 1000; c.castShadow = true; house.add(c);
       const cap = new THREE.Mesh(new THREE.ShapeGeometry(sh), new THREE.MeshBasicMaterial({colorWrite: false})); cap.rotation.x = -Math.PI / 2; cap.position.y = H / 1000 + 0.15; cap.castShadow = true; house.add(cap); }
   }
+  { const ACC = accessories(D); lampLights.length = 0;
+    for (const r of ACC.rugs) { const c = r.poly.reduce((m, p) => [m[0] + p[0] / 4, m[1] + p[1] / 4], [0, 0]), a = Math.hypot(r.poly[1][0] - r.poly[0][0], r.poly[1][1] - r.poly[0][1]), f = Math.hypot(r.poly[2][0] - r.poly[1][0], r.poly[2][1] - r.poly[1][1]);
+      const m = new THREE.Mesh(new THREE.BoxGeometry(a / 1000, 0.008, f / 1000), rugMat(r.color)); m.position.set(c[0] / 1000, 0.006, -c[1] / 1000); m.rotation.y = Math.atan2(r.poly[1][1] - r.poly[0][1], r.poly[1][0] - r.poly[0][0]); m.receiveShadow = true; house.add(m); }
+    for (const l of ACC.lights) { if (S.view === 'maket' && (l.kind === 'ceiling' || l.kind === 'pendant')) continue;
+      const g3 = lampObject(l), y = l.kind === 'ceiling' ? H / 1000 - 0.12 : l.kind === 'desk' ? l.h / 1000 + 0.3 : l.h / 1000 - 0.15;
+      g3.position.set(l.pos[0] / 1000, 0, -l.pos[1] / 1000); if (!(S.view === 'kesit' && l.kind === 'ceiling')) house.add(g3);
+      const pl = new THREE.PointLight('#ffcf9a', 0, l.kind === 'ceiling' ? 7 : 5, 2); pl.position.set(l.pos[0] / 1000, y, -l.pos[1] / 1000); pl.userData.k = l.kind; house.add(pl); lampLights.push(pl); } }
   if (S.view !== 'maket') house.add(curtains(walls, ops, spaceAt, H, A.perde));
   for (const w of walls) for (const [a, b, lo, hi0] of pieces(w)) {
     const hi = Math.min(hi0, cut); if (hi <= lo) continue;
@@ -284,9 +309,11 @@ const LAY = {room: null, res: null, pick: 0};
 function layoutPanel() {
   const r = D.spaces.find(x => x.id === S.room), its = (D.items || []).filter(i => i.design && i.space_id === S.room); if (!r || !its.length) return '';
   const res = LAY.room === r.id ? LAY.res : null;
+  const acc = accessories(D), rr = acc.rugs.filter(x => x.space === r.id), ll = acc.lights.filter(x => x.space === r.id), LN = {ceiling: 'tavan', pendant: 'sarkıt', floor: 'lambader', desk: 'masa lambası'};
   return `<h2>Mobilya yerleşimi</h2><p class="note">${its.length} ürün · kurallar: kapı açılışı, pencere, geçiş payları, TV–kanepe, masa–mutfak.</p>
   <div class="ev-row" style="display:flex;gap:6px;flex-wrap:wrap"><button data-lay="solve">Yerleşim önerileri</button></div>
-  ${res ? (res.ok ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">${res.alternatives.map((a, i) => `<button data-lay="alt" data-i="${i}" aria-pressed="${LAY.pick === i}">Seçenek ${i + 1}</button>`).join('')}</div><p class="note">${res.alternatives[LAY.pick].notes.join(' · ')}</p>` : `<p class="note" style="color:#a63030">${res.reason}. Ürünü küçültün ya da başka odaya alın.</p>`) : ''}`;
+  <p class="note">Proje katmanı: ${rr.length ? rr.map(x => `halı ${x.size[0] / 10}×${x.size[1] / 10}`).join(', ') : 'halı yok'} · ${ll.map(x => LN[x.kind]).join(', ') || 'ışık yok'}</p>
+  ${res ? (res.ok ? `${''}<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">${res.alternatives.map((a, i) => `<button data-lay="alt" data-i="${i}" aria-pressed="${LAY.pick === i}">Seçenek ${i + 1}</button>`).join('')}</div><p class="note">${res.alternatives[LAY.pick].notes.join(' · ')}</p>` : `<p class="note" style="color:#a63030">${res.reason}. Ürünü küçültün ya da başka odaya alın.</p>`) : ''}`;
 }
 async function layoutAction(b) { try { await layoutRun(b); } catch (err) { console.error('layout', err); LAY.res = {ok: false, reason: 'Yerleşim hesaplanamadı: ' + err.message}; side(); } }
 async function layoutRun(b) {
