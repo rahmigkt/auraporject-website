@@ -99,8 +99,39 @@ const canvas = $('#three'), renderer = new THREE.WebGLRenderer({canvas, antialia
 renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
 const scene = new THREE.Scene(); scene.background = new THREE.Color(INK.paper);
 const cam = new THREE.PerspectiveCamera(50, 1, 0.05, 300);
-scene.add(new THREE.HemisphereLight('#fffaf0', '#b9ae9a', 1.6));
-const sun = new THREE.DirectionalLight('#ffffff', 1.4); sun.position.set(6, 12, -4); scene.add(sun);
+const hemi = new THREE.HemisphereLight('#fffaf0', '#b9ae9a', 1.6); scene.add(hemi);
+const sun = new THREE.DirectionalLight('#ffffff', 1.4); sun.position.set(6, 12, -4); scene.add(sun); scene.add(sun.target);
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.02;
+// ---- atmosphere: the aura of the room through the day ------------------------------------------------------
+// Sun from latitude, season and hour (solar position, north up on the plan); daylight enters only through the
+// window openings when the ceiling is on. Moments combine daylight with warm lamp light.
+const CITIES = {bruksel: ['Brüksel', 50.85], amsterdam: ['Amsterdam', 52.37], berlin: ['Berlin', 52.52], paris: ['Paris', 48.86], londra: ['Londra', 51.51], kopenhag: ['Kopenhag', 55.68], madrid: ['Madrid', 40.42], roma: ['Roma', 41.9], istanbul: ['İstanbul', 41.01]};
+const SEASONS = {kis: ['Kış', 355], ilkbahar: ['İlkbahar', 80], yaz: ['Yaz', 172], sonbahar: ['Sonbahar', 266]};
+const MOMENTS = {gun: ['Gün ışığı', 13, 0], sabah: ['Sabah kahvesi', 8, 0], aksam: ['Akşam okuması', 20, 1], misafir: ['Misafir yemeği', 21, 1.5]};
+const A = {city: 'bruksel', season: 'sonbahar', hour: 13, moment: 'gun', lamps: 0, human: true};
+function sunPos() {
+  const lat = CITIES[A.city][1] * Math.PI / 180, N = SEASONS[A.season][1], dec = 23.44 * Math.PI / 180 * Math.sin(2 * Math.PI * (284 + N) / 365), Ha = (A.hour - 12) * 15 * Math.PI / 180;
+  const alt = Math.asin(Math.sin(lat) * Math.sin(dec) + Math.cos(lat) * Math.cos(dec) * Math.cos(Ha));
+  const az = Math.atan2(Math.sin(Ha), Math.cos(Ha) * Math.sin(lat) - Math.tan(dec) * Math.cos(lat)) + Math.PI; // from north, clockwise
+  return {alt, az};
+}
+const mix = (a, b, t) => new THREE.Color(a).lerp(new THREE.Color(b), Math.max(0, Math.min(1, t)));
+function applyAtmos() {
+  const {alt, az} = sunPos(), up = Math.sin(alt), day = Math.max(0, Math.min(1, (alt + 0.05) / 0.25));
+  const cx = (all.x0 + all.x1) / 2000, cz = -(all.y0 + all.y1) / 2000, R = Math.max(all.x1 - all.x0, all.y1 - all.y0) / 1000 + 4;
+  sun.target.position.set(cx, 0, cz); sun.position.set(cx + Math.sin(az) * Math.cos(alt) * 40, Math.max(0.5, up * 40), cz - Math.cos(az) * Math.cos(alt) * 40);
+  Object.assign(sun.shadow.camera, {left: -R, right: R, top: R, bottom: -R, near: 1, far: 120}); sun.shadow.camera.updateProjectionMatrix();
+  sun.intensity = alt > 0 ? 0.6 + 2.6 * Math.sqrt(up) : 0; sun.color = mix('#ff9a52', '#fff4e2', up / 0.45);
+  hemi.intensity = 0.25 + 1.25 * day; hemi.color = mix('#2c3c5c', '#f3f1ea', day); hemi.groundColor = mix('#1d1f24', '#b9ae9a', day);
+  const lamp = A.lamps; roomLight.color.set('#ffcf9a'); roomLight.intensity = S.view === 'room' ? 0.4 + lamp * 3.2 : lamp * 1.5;
+  ceilMat.emissiveIntensity = 0.06 + 0.12 * day + lamp * 0.12; ceilMat.emissive.set(lamp ? '#ffe2bf' : '#fbf9f4');
+  scene.background = S.view === 'room' ? mix('#141b2b', mix('#f4c49a', '#d7e3ea', up / 0.4), day) : new THREE.Color(INK.paper);
+}
+const human = new THREE.Group(); { const m = new THREE.MeshStandardMaterial({color: '#d8d2c6', roughness: 0.9});
+  const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.17, 1.12, 6, 16), m); body.position.y = 0.73; body.scale.set(1, 1, 0.62);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.115, 20, 14), m); head.position.y = 1.58; human.add(body, head); human.traverse(o => { o.castShadow = true; }); }
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), new THREE.MeshStandardMaterial({color: '#b7b29f', roughness: 1})); ground.rotation.x = -Math.PI / 2; ground.position.y = -0.02; ground.receiveShadow = true;
 const wallMat = new THREE.MeshStandardMaterial({color: '#f2ede3', roughness: 0.9}), capMat = new THREE.MeshStandardMaterial({color: INK.wall, roughness: 0.9});
 const ceilMat = new THREE.MeshStandardMaterial({color: '#fbf9f4', emissive: '#fbf9f4', emissiveIntensity: 0.35, roughness: 1, side: THREE.DoubleSide});
 const roomLight = new THREE.PointLight('#fff6e8', 0, 0, 1.2); scene.add(roomLight);
@@ -113,19 +144,21 @@ const floorMats2 = {}, floorFinish = id => floorMats2[id] ??= new THREE.MeshStan
 const spaceAt = p => D.spaces.find(s => inside(p, s.boundary_xy_mm));
 let house = null;
 function build(cut) {
-  if (house) { scene.remove(house); house.traverse(o => o.geometry?.dispose()); }
-  house = new THREE.Group(); scene.add(house);
+  if (house) { scene.remove(house); house.traverse(o => { if (o.geometry && !o.userData.keep) o.geometry.dispose(); }); }
+  house = new THREE.Group(); scene.add(house); if (S.view === 'room') house.add(ground); ground.userData.keep = true;
+  const hs = D.spaces.find(x => x.id === S.room); if (A.human && hs && S.view !== 'maket') { const [hx, hy] = centroid(hs.boundary_xy_mm); human.position.set(hx / 1000 + 0.4, 0, -hy / 1000 + 0.3); human.traverse(o => { o.userData.keep = true; }); house.add(human); }
   for (const s of D.spaces) {
     const sh = new THREE.Shape(s.boundary_xy_mm.map(([x, y]) => new THREE.Vector2(x / 1000, y / 1000)));
-    const m = new THREE.Mesh(new THREE.ShapeGeometry(sh), S.room === s.id && S.view === 'maket' ? selMat : floorFinish(finishOf(s).floor)); m.rotation.x = -Math.PI / 2; m.position.y = 0.001; house.add(m);
-    if (S.view === 'room') { const c = new THREE.Mesh(new THREE.ShapeGeometry(sh), ceilMat); c.rotation.x = -Math.PI / 2; c.position.y = H / 1000; house.add(c); }
+    const m = new THREE.Mesh(new THREE.ShapeGeometry(sh), S.room === s.id && S.view === 'maket' ? selMat : floorFinish(finishOf(s).floor)); m.rotation.x = -Math.PI / 2; m.position.y = 0.001; m.receiveShadow = true; m.userData = {floor: s.id}; house.add(m);
+    if (S.view === 'room') { const c = new THREE.Mesh(new THREE.ShapeGeometry(sh), ceilMat); c.rotation.x = -Math.PI / 2; c.position.y = H / 1000; c.castShadow = true; house.add(c);
+      const cap = new THREE.Mesh(new THREE.ShapeGeometry(sh), new THREE.MeshBasicMaterial({colorWrite: false})); cap.rotation.x = -Math.PI / 2; cap.position.y = H / 1000 + 0.15; cap.castShadow = true; house.add(cap); }
   }
   for (const w of walls) for (const [a, b, lo, hi0] of pieces(w)) {
     const hi = Math.min(hi0, cut); if (hi <= lo) continue;
     const mid = (a + b) / 2, mx = w.x0 + w.ux * mid, my = w.y0 + w.uy * mid, o = w.t / 2 + 150; // each face takes the paint of the room it faces
     const side = k => { const sp = spaceAt([mx + w.uy * o * k, my - w.ux * o * k]); return sp ? paintMat(finishOf(sp).wall) : wallMat; };
     const m = new THREE.Mesh(new THREE.BoxGeometry((b - a) / 1000, (hi - lo) / 1000, w.t / 1000), [wallMat, wallMat, hi < hi0 ? capMat : wallMat, wallMat, side(1), side(-1)]); m.position.set((w.x0 + w.ux * mid) / 1000, (lo + hi) / 2000, -(w.y0 + w.uy * mid) / 1000);
-    m.rotation.y = Math.atan2(w.uy, w.ux); m.userData = {wall: true, mx: mx / 1000, mz: -my / 1000, lo, hi, y: (lo + hi) / 2000}; house.add(m);
+    m.rotation.y = Math.atan2(w.uy, w.ux); m.userData = {wall: true, id: w.id, L: w.L, mx: mx / 1000, mz: -my / 1000, lo, hi, y: (lo + hi) / 2000}; m.castShadow = m.receiveShadow = true; house.add(m);
   }
 }
 const orbit = {target: null, yaw: 0.7, pitch: 0.75, dist: 16, eye: null, fov: 52, corner: 0};
@@ -158,7 +191,7 @@ function step(dir) {
   const tick = now => { const t = Math.min(1, (now - t0) / 320), k = t * t * (3 - 2 * t); orbit.eye = from.map((v, i) => v + (to[i] - v) * k); render(); if (t < 1) requestAnimationFrame(tick); else walking = 0; };
   requestAnimationFrame(tick); $('#hint').textContent = HINT.room;
 }
-function render() { const r = canvas.getBoundingClientRect(); renderer.setSize(r.width, r.height, false); cam.aspect = r.width / Math.max(1, r.height); cam.fov = orbit.eye ? orbit.fov : 45; cam.updateProjectionMatrix(); place(); if (S.view === 'kesit') cutaway(); renderer.render(scene, cam); }
+function render() { const r = canvas.getBoundingClientRect(); renderer.setSize(r.width, r.height, false); cam.aspect = r.width / Math.max(1, r.height); cam.fov = orbit.eye ? orbit.fov : 45; cam.updateProjectionMatrix(); place(); applyAtmos(); if (S.view === 'kesit') cutaway(); renderer.render(scene, cam); }
 // Dollhouse: walls between the camera and the chosen room drop to 30 cm, so the room is seen whole from above
 // while the rest of the home stays standing around it. Recomputed as the camera turns.
 function cutaway() {
@@ -179,6 +212,12 @@ function cutaway() {
   const up = e => { P.delete(e.pointerId); last = null; };
   canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', up);
   canvas.addEventListener('wheel', e => { e.preventDefault(); if (orbit.eye) orbit.fov = Math.max(38, Math.min(62, orbit.fov * (e.deltaY > 0 ? 1.06 : 0.94))); else orbit.dist = Math.max(3, Math.min(60, orbit.dist * (e.deltaY > 0 ? 1.1 : 0.9))); render(); }, {passive: false});
+  let downAt = null; canvas.addEventListener('pointerdown', e => { downAt = [e.clientX, e.clientY]; });
+  canvas.addEventListener('pointerup', e => { if (!downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 6 || !house) return;
+    const r = canvas.getBoundingClientRect(), ray = new THREE.Raycaster(); ray.setFromCamera(new THREE.Vector2((e.clientX - r.left) / r.width * 2 - 1, -(e.clientY - r.top) / r.height * 2 + 1), cam);
+    const hit = ray.intersectObjects(house.children.filter(o => o.visible && (o.userData.wall || o.userData.floor)))[0]; if (!hit) return; const u = hit.object.userData;
+    if (u.wall) { const w = W[u.id]; $('#hint').textContent = `Duvar ${Math.round(w.L).toLocaleString('tr-TR')} mm · kalınlık ${Math.round(w.t)} mm · tavan ${Math.round(H).toLocaleString('tr-TR')} mm · dokunduğunuz nokta yerden ${Math.round(hit.point.y * 1000).toLocaleString('tr-TR')} mm`; }
+    else { const sp = D.spaces.find(x => x.id === u.floor), b = bbox(sp.boundary_xy_mm); $('#hint').textContent = `${(sp.name || NAMES[sp.kind] || 'Oda').replace(/\s+\d+$/, '')} · ${area(sp.boundary_xy_mm).toFixed(1)} m² · ${Math.round(b.x1 - b.x0).toLocaleString('tr-TR')} × ${Math.round(b.y1 - b.y0).toLocaleString('tr-TR')} mm · hacim ${(area(sp.boundary_xy_mm) * H / 1000).toFixed(0)} m³`; } });
   canvas.addEventListener('dblclick', () => { if (orbit.eye) { orbit.corner++; show('room'); } });
   addEventListener('keydown', e => { if (!orbit.eye || /INPUT|SELECT|TEXTAREA/.test(document.activeElement?.tagName)) return;
     const k = e.key.toLowerCase(); if (k === 'arrowup' || k === 'w') step(1); else if (k === 'arrowdown' || k === 's') step(-1);
@@ -192,7 +231,7 @@ function cutaway() {
 const HINT = {plan: 'Sürükleyin: kaydır · tekerlek / iki parmak: yakınlaştır · odaya dokunun: seç', maket: 'Duvarlar 1,1 m\'den kesilmiş ev maketi · sürükleyin: çevir', '3d': 'Tam yükseklik · sürükleyin: çevir · iki parmak: yakınlaştır', kesit: 'Tavansız kesit · seçili oda önde açık · sürükleyin: etrafında dönün · iki parmak: yakınlaştır · listeden oda seçin', room: 'Göz hizası 1,5 m · oklar ya da W/S: yürü · sürükleyin: dönün · iki parmak: görüş açısı · çift dokunun: başka köşe'};
 function show(v) {
   S.view = v; document.querySelectorAll('[data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
-  svg.hidden = v !== 'plan'; canvas.hidden = v === 'plan'; $('#walk').hidden = v !== 'room'; $('#hint').textContent = HINT[v];
+  svg.hidden = v !== 'plan'; canvas.hidden = v === 'plan'; $('#walk').hidden = v !== 'room'; $('#atmos').hidden = !['room', 'kesit', '3d'].includes(v); atmosUI(); $('#hint').textContent = HINT[v];
   if (v === 'plan') return drawPlan();
   const sp = D.spaces.find(s => s.id === S.room) || D.spaces.find(s => s.kind === 'living') || D.spaces[0]; S.room = sp.id;
   build(v === 'maket' ? 1100 : H);
@@ -202,12 +241,26 @@ function show(v) {
     const b = sp.boundary_xy_mm, [cx, cy] = centroid(b), far = b.map((p, i) => [i, Math.hypot(p[0] - cx, p[1] - cy)]).sort((p, q) => q[1] - p[1]);
     const c = b[far[orbit.corner % Math.min(4, far.length)][0]], dx = cx - c[0], dy = cy - c[1], L = Math.hypot(dx, dy) || 1, step = Math.min(650, L * 0.35);
     orbit.eye = [(c[0] + dx / L * step) / 1000, 1.5, -(c[1] + dy / L * step) / 1000]; orbit.yaw = Math.atan2(dx, -dy); orbit.fov = 52;
-    roomLight.position.set(cx / 1000, H / 1000 - 0.3, -cy / 1000); roomLight.intensity = 2.2; }
+    roomLight.position.set(cx / 1000, H / 1000 - 0.35, -cy / 1000); }
   else if (v === 'kesit') { roomLight.intensity = 0; orbit.eye = null; const b = bbox(sp.boundary_xy_mm), [cx, cy] = centroid(sp.boundary_xy_mm);
     orbit.target = [cx / 1000, -cy / 1000]; orbit.radius = Math.hypot(b.x1 - b.x0, b.y1 - b.y0) / 2000; orbit.pitch = 0.82; orbit.dist = Math.max(6, orbit.radius * 4.2); }
   else { roomLight.intensity = 0; orbit.eye = null; orbit.pitch = v === 'maket' ? 1.0 : 0.6; orbit.dist = span * (v === 'maket' ? 1.5 : 1.6); }
   side(); render();
 }
+function atmosUI() {
+  const el = $('#atmos'); if (el.hidden) return;
+  el.innerHTML = `<select data-a="moment">${Object.entries(MOMENTS).map(([k, v]) => `<option value="${k}" ${A.moment === k ? 'selected' : ''}>${v[0]}</option>`).join('')}</select>
+  <label>Saat <b>${String(Math.floor(A.hour)).padStart(2, '0')}:${A.hour % 1 ? '30' : '00'}</b><input type="range" data-a="hour" min="5" max="23" step="0.5" value="${A.hour}"></label>
+  <select data-a="season">${Object.entries(SEASONS).map(([k, v]) => `<option value="${k}" ${A.season === k ? 'selected' : ''}>${v[0]}</option>`).join('')}</select>
+  <select data-a="city">${Object.entries(CITIES).map(([k, v]) => `<option value="${k}" ${A.city === k ? 'selected' : ''}>${v[0]}</option>`).join('')}</select>
+  <label class="chk"><input type="checkbox" data-a="human" ${A.human ? 'checked' : ''}> İnsan ölçeği</label>`;
+}
+$('#atmos').addEventListener('input', e => { const k = e.target.dataset.a; if (!k) return;
+  if (k === 'moment') { const m = MOMENTS[e.target.value]; A.moment = e.target.value; A.hour = m[1]; A.lamps = m[2]; atmosUI(); }
+  else if (k === 'hour') { A.hour = +e.target.value; A.lamps = A.hour >= 19 || A.hour < 7 ? Math.max(A.lamps, 1) : A.lamps; e.target.previousElementSibling.textContent = `${String(Math.floor(A.hour)).padStart(2, '0')}:${A.hour % 1 ? '30' : '00'}`; }
+  else if (k === 'human') { A.human = e.target.checked; show(S.view); return; }
+  else A[k] = e.target.value;
+  render(); });
 function finishPanel() {
   const r = D.spaces.find(x => x.id === S.room), f = r && finishOf(r);
   return `<h2>Renk ve zemin · öneri</h2><select id="scheme">${Object.entries(SCHEMES).map(([k, v]) => `<option value="${k}" ${(D.scheme || 'iskandinav') === k ? 'selected' : ''}>${v.name}</option>`).join('')}</select>
