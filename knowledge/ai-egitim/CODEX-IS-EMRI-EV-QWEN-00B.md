@@ -1,7 +1,7 @@
 # CODEX-IS-EMRI-EV-QWEN-00B — Gerçekçi ev planı: mimari kurgu, kalite ölçüsü ve doğru eğitim biçimi
 
 Tarih: 2026-10-20 · Karar: kullanıcı · Hazırlayan: Claude · Uygulayan: Codex
-**Sıra:** EV-QWEN-00'ın devamı. EV-QWEN-01 hâlâ bekler. `assets/` yasak; `tools/` ve `knowledge/` serbest.
+**Sıra:** EV-QWEN-00ın devamı. Bu tur Türkiye kurgularını ayrıntılı çıkarır; ardından **EV-QWEN-00C (Avrupa)** gelir. EV-QWEN-01 bekler. `assets/` yasak; `tools/` ve `knowledge/` serbest.
 
 ## 1. Neden ikinci tur
 
