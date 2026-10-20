@@ -20,6 +20,7 @@ import {draft, fabricMaps} from './textile.js';
 import {stoneMaps} from './stone.js';
 import {woodMaps} from './wood.js';
 import {parse} from './commands.js';
+import {applyDesignActions} from './actions.js?v=20261021a';
 import {startVoice} from './voice.js';
 import {aiStatus, interpret, designFromImage} from './ai.js';
 import {drawingSheet, drawingDxf} from './drawing.js';
@@ -976,120 +977,30 @@ async function downloadAs(kind) {
 }
 
 // ---- Actions (shared by UI, commands and AI) ------------------------------------------------
-const SPECIES_TO_STAIN = {oak: 'oak', ash: 'lightOak', beech: 'natural', walnut: 'walnut', cherry: 'cherry', teak: 'teak', smoked: 'darkWalnut', ebonized: 'black'};
-function switchFamily(family, kind) {
+function familyStart(family, kind) {
   const prev = store.get('aura-forma-design-' + family);
   const k = FAMILIES[family].kinds[kind] ? kind : FAMILIES[family].defaultKind, list = startList(family, k), e = list.find(x => x.style === state.design.style) || list[0];
-  const next = prev?.schema === SCHEMA && (!kind || prev.kind === kind) ? prev : e ? startDesign(e, family, k) : sample({family, style: state.design.style, kind, seed: state.design.seed});
-  setDesign(next);
+  return prev?.schema === SCHEMA && (!kind || prev.kind === kind) ? prev : e ? startDesign(e, family, k) : sample({family, style: state.design.style, kind, seed: state.design.seed});
 }
-function seatsToSize(d, n) {
-  // Grow the top until the capacity rule (600 mm per person, 650 mm on curved perimeters) seats n people.
-  const p = {...d.params, kind: 'dining'}, round = p.topShape === 'round', mod = FAMILIES.table.mod;
-  if (n >= 6 && round) p.topShape = 'oval';
-  if (!round || n >= 6) { p.width = Math.max(p.width, n >= 6 ? 900 : 800); p.length = Math.max(800, Math.ceil(n / 2) * 600 - 200); }
-  else p.length = p.width = 800;
-  for (let i = 0; i < 40; i++) {
-    const c = mod.compile({...normalizeDesign({...d, params: p}).params, kind: 'dining'});
-    if (c.meta.seats >= n) break;
-    if (p.topShape === 'round') { p.length += 50; p.width = p.length; } else p.length += 50;
-  }
-  return p;
-}
+function switchFamily(family, kind) { setDesign(familyStart(family, kind)); }
+const studioEnv = () => ({L, part: (g, k) => partName(g, k, state.lang), material: materialLabel, style: v => styleName(v, state.lang),
+  startFamily: familyStart, forKind: designForKind, selCell, mattressTop: () => state.compiled.meta.mattressTop});
 function applyActions(actions) {
-  let d = structuredClone(state.design), changed = false, fam = familyOf(d); const notes = [];
-  for (const a of actions) {
-    if (a.type === 'command') {
-      const v = {viewFront: 'front', viewSide: 'side', viewTop: 'top', viewAngle: 'angle'}[a.name];
-      if (v) { viewer?.view(v); markView(v); notes.push(L(v === 'angle' ? 'perspective' : v)); }
-      else if (a.name === 'undo') { undo(); return notes.concat(L('undo')); }
-      else if (a.name === 'redo') { redo(); return notes.concat(L('redo')); }
-      else if (a.name === 'structure') toggleStructure();
-      else if (a.name === 'photo') savePhoto();
-      else if (a.name === 'addProject') { addToProject(); notes.push(L('projectAdded')); }
-      else if (a.name === 'roomView') { if (state.project.items.length) { state.tab = 'deliver'; state.room = {type: suggestRoom(state.project.items), layout: 0, allow: []}; setSketch(false); showRoom(); renderPanel(); notes.push(L('placeInRoom')); } else notes.push(L('addFirst')); }
-      else if (a.name === 'drawings' || a.name === 'send' || a.name === 'package') { state.tab = 'deliver'; renderPanel(); notes.push(L('tabDeliver')); }
-      continue;
-    }
-    if (a.type === 'family') {
-      if (a.value !== d.family) { const k = actions.find(x => x.type === 'kind' && FAMILIES[a.value].kinds[x.value])?.value; switchFamily(a.value, k); d = structuredClone(state.design); fam = familyOf(d); notes.push(L({table: 'famTable', bedroom: 'famBedroom', seating: 'famSeating', storage: 'famStorage', kitchen: 'famKitchen'}[a.value])); }
-      continue;
-    }
-    changed = true;
-    let key = a.key;
-    if (d.family === 'seating' && key === 'length') key = 'width';
-    if (d.family === 'bedroom') key = setKey(d, key, a, actions);
-    if (a.type === 'drawers' && d.family === 'storage') {
-      // "3 drawers": the selected drawer cell, else the first one, else the selected cell becomes drawers.
-      const {b, c} = selCell(), all = d.params.bays.flatMap((bay, i) => bay.cells.map((cell, j) => ({cell, i, j}))), sel = d.params.bays[b]?.cells[c];
-      const target = sel?.type === 'drawers' ? sel : all.find(x => x.cell.type === 'drawers')?.cell || sel;
-      if (target) { target.type = 'drawers'; target.n = Math.max(1, Math.min(6, a.value)); notes.push(`${a.value} ${L('drawersN')}`); }
-      continue;
-    }
-    if (a.type === 'mattress') { if (d.family === 'bedroom') { d.kind = 'bed'; [d.params.mattressWidth, d.params.mattressLength] = a.value; notes.push(`${L('mattress')} ${a.value[0] / 10}×${a.value[1] / 10}`); } continue; }
-    if (d.family === 'bedroom' && a.type === 'kind') { if (fam.kinds[a.value]) { d.kind = a.value; notes.push(L(a.value)); } else { const owner = Object.values(FAMILIES).find(f => f.kinds[a.value]); if (owner) { switchFamily(owner.id, a.value); d = structuredClone(state.design); fam = familyOf(d); notes.push(L(a.value)); } } continue; }
-    if (d.family === 'table' && key === 'leaves' && a.value > 0) {
-      if (['pedestal', 'drum', 'tripod'].includes(d.params.baseType)) d.params.baseType = 'doublePedestal';
-      if (['round', 'boat'].includes(d.params.topShape)) d.params.topShape = 'oval';
-    }
-    if (a.type === 'set') { d.params[key] = a.value; notes.push(`${partName('params', key, state.lang)} ${Math.round(a.value)}`); }
-    else if (a.type === 'delta') { const before = d.params[key]; d.params[key] = before + a.value; notes.push(`${partName('params', key, state.lang)} ${Math.round(before)} → ${Math.round(before + a.value)}`); }
-    else if (a.type === 'enum') {
-      // Bed-only and chest-only choices move the design to the right piece first.
-      // Bedroom set: the edited piece becomes the one in focus, so the others follow it.
-      if (d.family === 'bedroom' && !actions.some(x => x.type === 'kind')) { const owner = PIECE_OF[key]; if (owner && owner !== d.kind && !(owner === 'case' && ['dresser', 'nightstand'].includes(d.kind))) d.kind = owner === 'case' ? 'dresser' : owner; }
-      d.params[key] = a.value; notes.push(partName(d.family === 'storage' ? ({base: 'sBase', legType: 'sLegType'}[key] || key) : d.family === 'table' && key === 'baseType' ? 'tBaseType' : d.family === 'table' && key === 'legType' ? 'legTypeT' : d.family === 'bedroom' && key === 'legType' ? 'bLegType' : ({nsBase: 'caseBase', drBase: 'caseBase', nsLayout: 'caseLayout', drLayout: 'caseLayout'}[key] || key), a.value, state.lang)); }
-    else if (a.type === 'seats') { if (d.family === 'table') { d.params = FAMILIES.table.repair({...seatsToSize(d, a.value), kind: 'dining'}, d.materials); d.kind = 'dining'; notes.push(`${a.value} ${L('persons')}`); } }
-    else if (a.type === 'style') { d = sample({family: d.family, style: a.value, kind: d.kind, seed: d.seed}); notes.push(styleName(a.value, state.lang)); }
-    else if (a.type === 'kind') {
-      if (!fam.kinds[a.value]) { const owner = Object.values(FAMILIES).find(f => f.kinds[a.value]); if (owner) { switchFamily(owner.id, a.value); d = structuredClone(state.design); fam = familyOf(d); notes.push(L(a.value)); } continue; }
-      if (a.value !== d.kind) { d = designForKind(d, a.value); notes.push(L(a.value)); }
-    }
-    else if (a.type === 'material') {
-      let {slot, key: mk, value} = a;
-      if (d.family === 'seating' && slot === 'wood' && mk === 'species' && value !== 'gurgen') { mk = 'stain'; value = SPECIES_TO_STAIN[value] || 'natural'; }
-      if (d.family === 'seating' && (slot === 'top' || slot === 'base')) continue;
-      if (d.family === 'table' && (slot === 'wood' || slot === 'fabric')) slot = 'top';
-      if (['storage', 'kitchen', 'bath'].includes(d.family)) {
-        // Case goods: wood words go to the carcass (and to the fronts when they match it); a colour means lacquer.
-        if ((d.family === 'kitchen' || d.family === 'bath') && slot === 'top') { const patch = {[mk]: value}; if (mk === 'stone') patch.surface = 'stone'; if (mk === 'species') patch.surface = 'wood'; d.materials.top = {...d.materials.top, ...patch}; notes.push(materialLabel({slot, key: mk, value})); if (state.sketch) setSketch(false); continue; }
-        if (['top', 'base', 'fabric'].includes(slot) || (slot === 'wood' && mk !== 'finish')) slot = 'case';
-        if (slot === 'case' || slot === 'front') {
-          const same = sameFront(d.materials), patch = {[mk]: value};
-          if (mk === 'species' && d.materials[slot].surface === 'lacquer') patch.surface = 'veneer';
-          if (mk === 'color') patch.surface = 'lacquer';
-          d.materials[slot] = {...d.materials[slot], ...patch}; if (slot === 'case' && same) d.materials.front = {...d.materials.case};
-        } else d.materials[slot] = {...d.materials[slot], [mk]: value};
-        notes.push(materialLabel({slot, key: mk, value})); if (state.sketch) setSketch(false);
-        continue;
-      }
-      if (d.family === 'bedroom') {
-        if (slot === 'top' || slot === 'base') slot = 'case';
-        // A wood species applies to the case (unless lacquered) and to the solid parts.
-        if (mk === 'species') { d.materials.wood = {...d.materials.wood, species: value}; if (slot === 'wood') slot = 'case'; if (d.materials.case.surface === 'lacquer') d.materials.case.surface = 'veneer'; }
-        if (slot === 'case' && mk === 'color') d.materials.case.surface = 'lacquer';
-      }
-      d.materials[slot] = {...d.materials[slot], [mk]: value};
-      if (d.family === 'table' && mk === 'species' && !['wood', 'veneer'].includes(d.materials[slot].surface)) d.materials[slot].surface = 'wood';
-      if (d.family === 'table' && mk === 'color' && !['lacquer'].includes(d.materials[slot].surface)) d.materials[slot].surface = 'lacquer';
-      notes.push(materialLabel({slot, key: mk, value}));
-      if (state.sketch) setSketch(false);
-    }
+  const notes = [];
+  for (const a of actions) if (a.type === 'command' && (a.name === 'undo' || a.name === 'redo')) { (a.name === 'undo' ? undo : redo)(); return [L(a.name)]; }
+  const r = applyDesignActions(state.design, actions, studioEnv());
+  if (r.changed) setDesign(r.design);
+  for (const a of r.effects) {
+    const v = {viewFront: 'front', viewSide: 'side', viewTop: 'top', viewAngle: 'angle'}[a.name];
+    if (v) { viewer?.view(v); markView(v); notes.push(L(v === 'angle' ? 'perspective' : v)); }
+    else if (a.name === 'colour') { if (state.sketch) setSketch(false); }
+    else if (a.name === 'structure') toggleStructure();
+    else if (a.name === 'photo') savePhoto();
+    else if (a.name === 'addProject') { addToProject(); notes.push(L('projectAdded')); }
+    else if (a.name === 'roomView') { if (state.project.items.length) { state.tab = 'deliver'; state.room = {type: suggestRoom(state.project.items), layout: 0, allow: []}; setSketch(false); showRoom(); renderPanel(); notes.push(L('placeInRoom')); } else notes.push(L('addFirst')); }
+    else if (a.name === 'drawings' || a.name === 'send' || a.name === 'package') { state.tab = 'deliver'; renderPanel(); notes.push(L('tabDeliver')); }
   }
-  if (changed) setDesign(d);
-  return notes;
-}
-/** Bedroom set: which piece a parameter belongs to, and generic command keys mapped to the piece in focus. */
-const PIECE_OF = {headType: 'bed', headShape: 'bed', bedBase: 'bed', footboard: 'bed', storage: 'bed', bedding: 'bed', wdDoorType: 'wardrobe', wdDoorStyle: 'wardrobe', wdHandle: 'wardrobe', wdNiche: 'wardrobe', wdBase: 'wardrobe', mirror: 'dresser', drLayout: 'dresser', drBase: 'dresser', drRows: 'dresser', drColumns: 'dresser', nsLayout: 'nightstand', nsBase: 'nightstand', nsRows: 'nightstand', frontStyle: 'case', pull: 'case'};
-function setKey(d, key, a, actions) {
-  const k = actions.find(x => x.type === 'kind' && ['bed', 'wardrobe', 'dresser', 'nightstand'].includes(x.value))?.value || d.kind;
-  const pre = k === 'nightstand' ? 'ns' : 'dr';
-  if (k === 'wardrobe') { if (key === 'frontStyle') return 'wdDoorStyle'; if (key === 'pull') { a.value = {bar: 'bar', edge: 'edge', knob: 'knob', leather: 'leather', none: 'push', ring: 'knob'}[a.value] || 'bar'; return 'wdHandle'; } if (key === 'caseBase') { a.value = a.value === 'legs' ? 'legs' : 'recessed'; return 'wdBase'; } }
-  const map = {bed: {width: 'mattressWidth', length: 'mattressLength', height: 'headHeight'}, wardrobe: {width: 'wdWidth', height: 'wdHeight', depth: 'wdDepth'}, dresser: {width: 'drWidth', height: 'drHeight', depth: 'drDepth', rows: 'drRows', columns: 'drColumns', caseBase: 'drBase', caseLayout: 'drLayout', baseHeight: 'caseBaseHeight'}, nightstand: {width: 'nsWidth', depth: 'nsDepth', rows: 'nsRows', caseBase: 'nsBase', caseLayout: 'nsLayout', baseHeight: 'caseBaseHeight'}}[k] || {};
-  if (k === 'nightstand' && key === 'height') { if (a.type === 'set') a.value -= state.compiled.meta.mattressTop; return 'nsHeightOffset'; }
-  if (k !== 'nightstand' && key === 'caseBase' && a.value === 'wall') a.value = 'recessed';
-  void pre;
-  return map[key] || key;
+  return [...r.notes, ...notes];
 }
 function materialLabel(a) {
   const tables = {fiber: FIBERS, weave: WEAVE_NAMES, pattern: PATTERNS, color: COLORS, color2: COLORS, species: WOODS, stain: STAINS, stone: STONES, glass: GLASS, surface: SURFACES, metal: METALS, motif: MOTIF_NAMES, finish: a.slot === 'metal' ? METALS : FINISHES};
