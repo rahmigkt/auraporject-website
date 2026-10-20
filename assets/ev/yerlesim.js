@@ -15,14 +15,16 @@ export const RULES = {
   deskBack: 900,       // chair behind a desk
   tvMin: 1800, tvMax: 3600, // viewing distance band for a living-room TV
   coffeeGap: [350, 500],    // sofa front to coffee table
+  groupGap: [350, 600],     // loveseat / armchair front to the coffee table (Ballard Designs 14–18 in; Midwest Design 16–18 in)
+  groupMax: 3000,           // furthest seat of a conversation group from its centre (8–10 ft between seats, Ballard Designs)
   wall: 20             // gap to the wall finish
 };
 const KIND = {
   run: 'kitchen', island: 'kitchen', bed: 'bed', wardrobe: 'wardrobe', dresser: 'storage', bookcase: 'storage', sideboard: 'storage', vitrine: 'storage',
-  tvunit: 'tv', sofa: 'sofa', armchair: 'chair', coffee: 'coffee', side: 'side', dining: 'dining', desk: 'desk', console: 'storage', basin: 'basin', column: 'storage', nightstand: 'night', vanity: 'desk'
+  tvunit: 'tv', sofa: 'sofa', loveseat: 'second', armchair: 'chair', reading: 'corner', shoe: 'storage', coatrack: 'storage', coffee: 'coffee', side: 'side', dining: 'dining', desk: 'desk', console: 'storage', basin: 'basin', column: 'storage', nightstand: 'night', vanity: 'desk'
 };
-const ORDER = ['kitchen', 'bed', 'wardrobe', 'basin', 'tv', 'sofa', 'coffee', 'dining', 'desk', 'storage', 'night', 'chair', 'side'];
-const FRONT = {kitchen: RULES.kitchenFront, bed: RULES.bedSide, wardrobe: RULES.wardrobeFront, storage: RULES.passage, basin: RULES.passage, tv: 0, sofa: RULES.passage, desk: RULES.deskBack, dining: RULES.diningAround, coffee: 300, chair: 400, side: 0, night: 300};
+const ORDER = ['kitchen', 'bed', 'wardrobe', 'basin', 'tv', 'sofa', 'coffee', 'second', 'chair', 'dining', 'desk', 'storage', 'corner', 'night', 'side'];
+const FRONT = {kitchen: RULES.kitchenFront, bed: RULES.bedSide, wardrobe: RULES.wardrobeFront, storage: RULES.passage, basin: RULES.passage, tv: 0, sofa: RULES.passage, desk: RULES.deskBack, dining: RULES.diningAround, coffee: 300, chair: 400, second: 400, corner: 450, side: 0, night: 300};
 
 // ---- geometry ------------------------------------------------------------------------------------------
 const sub = (a, b) => [a[0] - b[0], a[1] - b[1]], add = (a, b) => [a[0] + b[0], a[1] + b[1]], mul = (a, k) => [a[0] * k, a[1] * k], dot = (a, b) => a[0] * b[0] + a[1] * b[1];
@@ -81,14 +83,19 @@ function scoreItem(kind, p, run, size, ctx) {
   if (kind === 'basin') { sc += run.door ? -1 : 1; sc += centred; }
   if (kind === 'tv') { const opp = ctx.runs.find(r => dot(r.n, run.n) < -0.9); sc += run.window ? -3 : 2; sc += opp?.window ? -1 : 1; sc += 2 * centred; notes.push('TV pencereye karşı değil'); }
   if (kind === 'sofa' && ctx.tv) { const v = sub(ctx.tv.c, p.c), d = len(v), facing = dot(unit(v), p.az);
-    if (facing < 0.92 || d < RULES.tvMin || d > RULES.tvMax) return null; sc += 4 - Math.abs(d - 2600) / 600 + facing; notes.push(`TV'ye ${(d / 1000).toFixed(1)} m`); 
+    if (facing < 0.92 || d < RULES.tvMin || d > RULES.tvMax) return null; sc += 4 - Math.abs(d - 2600) / 600 + facing - Math.abs(dot(v, p.ax)) / 800; notes.push(`TV'ye ${(d / 1000).toFixed(1)} m`); 
     // balance: in a large room the sitting group takes the middle (or the side away from the kitchen), not one end
     if (ctx.roomA > 20) { const mid = mul(add(p.c, ctx.tv.c), 0.5); sc += ctx.kitchen ? Math.min(2, len(sub(mid, ctx.kitchen.c)) / 2000) : 1.5 * (1 - len(sub(mid, ctx.roomC)) / ctx.roomR); } }
   if (kind === 'sofa' && !ctx.tv) { sc += run ? 1 + centred : 0; if (ctx.windowRuns.some(r => dot(r.n, p.az) > 0.9)) sc += 1; }
   if (kind === 'sofa' && run && run.window && blocksWindow(run, p.s, size, size.h)) sc -= 1.5; // back to the window: glare and draught
   if (kind === 'coffee') { const so = ctx.sofa; if (!so) return null; const ext = Math.abs(dot(p.az, so.az)) > 0.7 ? size.d : size.w, gap = dot(sub(p.c, so.c), so.az) - so.size.d / 2 - ext / 2, lat = Math.abs(dot(sub(p.c, so.c), so.ax));
-    if (gap < RULES.coffeeGap[0] - 5 || gap > RULES.coffeeGap[1] + 5 || lat > 150) return null; sc += 3; }
-  if (kind === 'dining') { if (p.endWall) sc -= 0.8; if (ctx.kitchen) { const d = len(sub(p.c, ctx.kitchen.c)); sc += 3 - d / 1500; } sc += ctx.windowDist(p.c) < 2500 ? 1 : 0; }
+    if (gap < RULES.coffeeGap[0] - 5 || gap > RULES.coffeeGap[1] + 5 || lat > 150) return null; sc += 3 + (Math.abs(dot(p.az, so.az)) > 0.7 ? 1.5 : 0); }
+  if (kind === 'second' || kind === 'chair') { const co = ctx.coffee, so = ctx.sofa;
+    if (co && so && p.group) { const gap = len(sub(p.c, co.c)); if (gap > RULES.groupMax) return null; sc += (kind === 'second' ? 4 : 3) - gap / 2000; if (ctx.tv && dot(sub(ctx.tv.c, p.c), p.az) > 0 && Math.abs(dot(unit(sub(ctx.tv.c, p.c)), p.az)) > 0.95) sc -= 2; notes.push(kind === 'second' ? 'ikili sehpaya bakar' : 'tekli sehpaya bakar'); }
+    else if (co && so) return null; else sc += run ? 1 : 0; }
+  if (kind === 'corner') { const wd = ctx.windowDist(p.c); if (wd > 1800) return null; sc += 3 - wd / 900; if (ctx.coffee && len(sub(p.c, ctx.coffee.c)) < 1500) sc -= 2; notes.push('kahve köşesi pencere yanında'); }
+  if (kind === 'side') { if (!p.by) return null; sc += p.by === 'corner' ? 3 : p.by === 'sofa' ? 2 : 1.5; }
+  if (kind === 'dining') { if (p.endWall) { if (inside(add(p.c, mul(p.ax, p.endWall * (size.w / 2 + 60))), ctx.room)) return null; sc -= 0.8; } if (ctx.kitchen) { const d = len(sub(p.c, ctx.kitchen.c)); sc += 3 - d / 1500; } sc += ctx.windowDist(p.c) < 2500 ? 1 : 0; }
   if (kind === 'desk') { const wd = ctx.windowDist(p.c); sc += 3 - wd / 1200; sc += run && run.window ? 1 : 0; notes.push('masa gün ışığında'); }
   if (kind === 'night') { const b = ctx.bed; if (!b) return null; const lat = Math.abs(dot(sub(p.c, b.c), b.ax)) - b.size.w / 2 - size.w / 2, back = dot(sub(p.c, b.c), b.az) + b.size.d / 2 - size.d / 2; if (lat < 0 || lat > 80 || Math.abs(back) > 80) return null; sc += 2; }
   return {sc, notes};
@@ -106,7 +113,7 @@ export function solveRoom(space, roomItems, ev, {count = 3, beam = 60} = {}) {
   for (const L of list) {
     const next = [];
     for (const st of states) {
-      const ctx = {runs, windowDist, windowRuns: runs.filter(r => r.window), roomA, roomC, roomR}; for (const q of st.placed) { if (q.kind === 'tv') ctx.tv = q; if (q.kind === 'sofa') ctx.sofa = q; if (q.kind === 'kitchen') ctx.kitchen = q; if (q.kind === 'bed') ctx.bed = q; }
+      const ctx = {runs, windowDist, windowRuns: runs.filter(r => r.window), roomA, roomC, roomR, room}; for (const q of st.placed) { if (q.kind === 'tv') ctx.tv = q; if (q.kind === 'sofa') ctx.sofa = q; if (q.kind === 'kitchen') ctx.kitchen = q; if (q.kind === 'bed') ctx.bed = q; if (q.kind === 'coffee') ctx.coffee = q; if (q.kind === 'second') ctx.second = q; if (q.kind === 'corner') ctx.corner = q; if (q.kind === 'chair') ctx.chair = q; }
       const cands = [];
       const floating = ['sofa', 'coffee', 'dining', 'chair', 'side', 'night'].includes(L.kind) || (L.kind === 'desk');
       for (const run of runs) { if (run.L < L.size.w + 2 * RULES.wall) continue;
@@ -114,6 +121,13 @@ export function solveRoom(space, roomItems, ev, {count = 3, beam = 60} = {}) {
       if (floating) { const bb = room.reduce((m, [x, y]) => [Math.min(m[0], x), Math.min(m[1], y), Math.max(m[2], x), Math.max(m[3], y)], [1e9, 1e9, -1e9, -1e9]);
         for (let x = bb[0] + 300; x < bb[2]; x += 150) for (let y = bb[1] + 300; y < bb[3]; y += 150) for (const rot of [0, 90, 180, 270]) cands.push({c: [x, y], rot, ...frame(rot), run: null}); }
       if (L.kind === 'coffee' && ctx.sofa) { const so = ctx.sofa; for (const g of [380, 430, 480]) for (const turn of [0, 90]) { const rot = so.rot + turn, f = frame(rot); cands.push({c: add(so.c, mul(so.az, so.size.d / 2 + g + (turn ? L.size.w : L.size.d) / 2)), rot, ...f, run: null}); } }
+      if ((L.kind === 'second' || L.kind === 'chair') && ctx.coffee && ctx.sofa) { // conversation group: around the coffee table, facing it
+        const co = ctx.coffee, so = ctx.sofa, ext = v => Math.abs(dot(v, co.ax)) * co.size.w / 2 + Math.abs(dot(v, co.az)) * co.size.d / 2;
+        for (const dir of [so.ax, mul(so.ax, -1), so.az]) for (const g of [400, 480, 560]) { const az = mul(dir, -1), rot = Math.atan2(az[0], -az[1]) * 180 / Math.PI;
+          cands.push({c: add(co.c, mul(dir, ext(dir) + g + L.size.d / 2)), rot, ...frame(rot), run: null, group: true}); } }
+      if (L.kind === 'corner') for (const run of runs.filter(r => r.window)) for (const o of run.openings.filter(o => o.kind === 'window')) for (const s0 of [o.s0 - L.size.w / 2 - 100, o.s1 + L.size.w / 2 + 100, (o.s0 + o.s1) / 2]) {
+        if (s0 < L.size.w / 2 || s0 > run.L - L.size.w / 2) continue; for (const turn of [0, 30, -30]) { const base = placeOnRun(run, s0, L.size, 80), rot = base.rot + turn; cands.push({...base, ...frame(rot), rot, run: turn ? null : run, s: s0}); } }
+      if (L.kind === 'side') for (const q of [ctx.sofa, ctx.second, ctx.corner, ctx.chair].filter(Boolean)) for (const k of [-1, 1]) cands.push({c: add(add(q.c, mul(q.ax, k * (q.size.w / 2 + 40 + L.size.w / 2))), mul(q.az, -(q.size.d - L.size.d) / 2 + 60)), rot: q.rot, ax: q.ax, az: q.az, run: null, by: q.kind});
       if (L.kind === 'night' && ctx.bed) { const b = ctx.bed; for (const k of [-1, 1]) cands.push({c: add(add(b.c, mul(b.ax, k * (b.size.w / 2 + L.size.w / 2 + 30))), mul(b.az, -(b.size.d / 2 - L.size.d / 2))), rot: b.rot, ax: b.ax, az: b.az, run: null}); }
       if (L.kind === 'bed' && L.size.w <= 1400) for (const c of [...cands]) for (const side of [-1, 1]) cands.push({...c, side});
       if (L.kind === 'dining') for (const c of [...cands]) for (const endWall of [-1, 1]) cands.push({...c, endWall}); // small homes: one end of the table may touch a wall
@@ -121,8 +135,8 @@ export function solveRoom(space, roomItems, ev, {count = 3, beam = 60} = {}) {
         const sh = shapes(L.kind, c, L.size); if (!within(sh.body, room)) continue;
         if (L.kind !== 'coffee' && L.kind !== 'night' && sh.zones.some(z => !within(z, room) && z.some(p => !inside(p, room)))) continue;
         if (swings.some(z => sat(z, sh.body))) continue;
-        const friends = q => (L.kind === 'coffee' && q.kind === 'sofa') || (L.kind === 'night' && q.kind === 'bed') || (L.kind === 'chair' && q.kind === 'sofa'); // pieces that belong inside another's zone
-        if (st.placed.some(q => sat(q.body, sh.body) || (!friends(q) && q.zones.some(z => sat(z, sh.body))) || sh.zones.some(z => sat(z, q.body)))) continue;
+        const GROUP = ['sofa', 'coffee', 'second', 'chair'], friends = q => (L.kind === 'coffee' && q.kind === 'sofa') || (L.kind === 'night' && q.kind === 'bed') || (GROUP.includes(L.kind) && GROUP.includes(q.kind)) || (L.kind === 'side' && ['sofa', 'second', 'chair', 'corner'].includes(q.kind)); // pieces that belong inside another's zone
+        if (st.placed.some(q => sat(q.body, sh.body) || (!friends(q) && (q.zones.some(z => sat(z, sh.body)) || sh.zones.some(z => sat(z, q.body)))))) continue;
         const r = scoreItem(L.kind, c, c.run, L.size, ctx); if (!r) continue;
         next.push({placed: [...st.placed, {id: L.it.id, kind: L.kind, c: c.c, ax: c.ax, az: c.az, rot: c.rot, size: L.size, body: sh.body, zones: sh.zones, run: c.run?.i ?? null}], score: st.score + r.sc, notes: [...st.notes, ...r.notes]});
       }

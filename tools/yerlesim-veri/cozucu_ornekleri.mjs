@@ -7,15 +7,26 @@ const {solveRoom} = await import('../../assets/ev/yerlesim.js');
 const [src, dst, lim, part] = process.argv.slice(2), LIMIT = +lim || Infinity, [PI, PN] = (part || '0/1').split('/').map(Number);
 let seed = 7; const R = () => (seed = (seed * 16807) % 2147483647) / 2147483647, pick = a => a[Math.floor(R() * a.length)];
 const AREA = {bedroom: [7, 25], living: [12, 45]};
-const NAME = {sofa: 'kanepe', tvunit: 'TV ünitesi', coffee: 'orta sehpa', armchair: 'berjer', dining: 'yemek masası', bed: 'yatak', wardrobe: 'gardırop', nightstand: 'komodin', desk: 'çalışma masası', dresser: 'şifonyer', bookcase: 'kitaplık'};
+const NAME = {loveseat: 'ikili koltuk', side: 'yan sehpa', reading: 'kahve köşesi berjeri', sideboard: 'büfe', sofa: 'kanepe', tvunit: 'TV ünitesi', coffee: 'orta sehpa', armchair: 'tekli koltuk (berjer)', dining: 'yemek masası', bed: 'yatak', wardrobe: 'gardırop', nightstand: 'komodin', desk: 'çalışma masası', dresser: 'şifonyer', bookcase: 'kitaplık'};
 const it = (id, kind, w, d, h) => ({id, name: NAME[kind], design: {kind}, size: {w, d, h}});
+// Furniture sets as homes really have them (Turkish "oturma grubu" 3+3+1 / 3+2+1; European 3+2 or sofa + armchairs),
+// sizes from common retail ranges; a reading/coffee corner by the window in larger rooms.
 function set(kind, area) {
-  if (kind === 'living') { const s = [it('kanepe', 'sofa', pick([1800, 2100, 2300]), pick([850, 900, 950]), 800), it('tv', 'tvunit', pick([1400, 1600, 1800]), 420, 500), it('sehpa', 'coffee', pick([900, 1100, 1200]), pick([550, 600, 650]), 400)];
-    if (area > 18 && R() < 0.6) s.push(it('berjer', 'armchair', 800, 800, 800)); if (area > 22 && R() < 0.6) s.push(it('masa', 'dining', pick([1200, 1400, 1600]), pick([800, 850, 900]), 750));
-    if (R() < 0.4) s.push(it('kitaplik', 'bookcase', pick([800, 1000]), 350, 1900)); return s; }
-  const dbl = area >= 10 && R() < 0.8, s = [it('yatak', 'bed', dbl ? pick([1400, 1600, 1800]) + 100 : 1000, 2100, 1000)];
-  if (area >= 9) s.push(it('gardirop', 'wardrobe', pick([1000, 1500, 2000]), 600, 2200)); if (dbl) s.push(it('komodin1', 'nightstand', 450, 400, 500), it('komodin2', 'nightstand', 450, 400, 500));
-  if (area > 14 && R() < 0.5) s.push(it('masa', 'desk', 1200, 600, 750)); else if (area > 13 && R() < 0.4) s.push(it('sifonyer', 'dresser', 1000, 450, 850)); return s;
+  if (kind === 'living') {
+    const s = [it('tv', 'tvunit', pick([1600, 1800, 2000]), 450, 500), it('kanepe', 'sofa', pick([2100, 2200, 2300]), pick([900, 950]), 820), it('sehpa', 'coffee', pick([1000, 1100, 1200]), pick([550, 600]), 420)];
+    if (area >= 16) s.push(it('ikili', 'loveseat', pick([1600, 1700, 1800]), pick([900, 950]), 820));
+    if (area >= 20) s.push(it('berjer', 'armchair', pick([800, 850]), pick([850, 900]), 850));
+    if (area >= 14) s.push(it('yan1', 'side', 500, 500, 550));
+    if (area >= 24) s.push(it('kahve', 'reading', 800, 850, 950), it('yan2', 'side', 450, 450, 550));
+    if (area >= 26) s.push(it('masa', 'dining', pick([1400, 1600, 1800]), pick([850, 900]), 750));
+    if (area >= 22 && R() < 0.6) s.push(it('bufe', 'sideboard', pick([1600, 1800]), 450, 800));
+    return s; }
+  const dbl = area >= 10, s = [it('yatak', 'bed', dbl ? pick([1600, 1800]) + 100 : 1000, 2100, 1000)];
+  if (dbl) s.push(it('komodin1', 'nightstand', 500, 420, 520), it('komodin2', 'nightstand', 500, 420, 520));
+  if (area >= 9) s.push(it('gardirop', 'wardrobe', dbl ? pick([1800, 2200, 2700]) : pick([1000, 1500]), 600, 2300));
+  if (area >= 13) s.push(it('sifonyer', 'dresser', pick([1000, 1200]), 450, 850));
+  if (!dbl && area >= 8) s.push(it('masa', 'desk', 1100, 550, 750));
+  return s;
 }
 function ev(rec) { // each boundary edge becomes a wall; openings map to the edge they lie on
   const b = rec.room.boundary_xy_mm, walls = b.map((P, i) => { const Q = b[(i + 1) % b.length], L = Math.hypot(Q[0] - P[0], Q[1] - P[1]) || 1; return {id: 'w' + i, x0: P[0], y0: P[1], ux: (Q[0] - P[0]) / L, uy: (Q[1] - P[1]) / L, L, t: 100}; });
