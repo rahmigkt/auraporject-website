@@ -295,7 +295,7 @@ function structurePanel() {
   const q = S.part && partOf(S.part), t = q && transformOf(q.id), mats = [...new Set(S.compiled.parts.filter(p => !p.line && typeof p.mat === 'string' && !p.mat.startsWith('lac:')).map(p => p.mat))];
   const num = (k, v, step) => `<input type="number" data-tf="${k}" value="${v}" step="${step}" inputmode="decimal">`;
   const editable = q && editableParts(S.compiled).find(e => e.id === q.id || (e.tool === 'profile' && e.role === q.role));
-  return `<div class="a-tools"><button data-multi aria-pressed="${S.multiOn}">Çoklu seçim</button><button data-snap aria-pressed="${S.snap}">Yakalama 5 mm / 5°</button></div>${S.multiOn ? arrangePanel(null) + jointPanel() : ''}<h2>Seçili parça</h2>${q ? `<p class="a-note"><b>${NAMES[q.role] || q.role}</b> · ${q.id}${q.added ? ' · eklenen' : ''}</p>
+  return `<div class="a-tools"><button data-multi aria-pressed="${S.multiOn}">Çoklu seçim</button><button data-snap aria-pressed="${S.snap}">Yakalama 5 mm / 5°</button></div>${S.multiOn ? arrangePanel(null) : ''}${jointPanel()}<h2>Seçili parça</h2>${q ? `<p class="a-note"><b>${NAMES[q.role] || q.role}</b> · ${q.id}${q.added ? ' · eklenen' : ''}</p>
   <div class="a-tools">${['translate', 'rotate', 'scale'].map(m => `<button data-mode="${m}" aria-pressed="${S.mode === m}">${{translate: 'Taşı', rotate: 'Döndür', scale: 'Ölçekle'}[m]}</button>`).join('')}${editable ? `<button data-shape="${editable.key}">Biçimi düzenle</button>` : ''}</div>
   <div class="a-grid"><span>Kaydır mm</span>${num('m0', round1(t.move[0]), 5)}${num('m1', round1(t.move[1]), 5)}${num('m2', round1(t.move[2]), 5)}
   <span>Döndür °</span>${num('r0', round1(t.rot[0] * R2D), 1)}${num('r1', round1(t.rot[1] * R2D), 1)}${num('r2', round1(t.rot[2] * R2D), 1)}
@@ -411,7 +411,7 @@ function addJoint(key, count, depthIn) {
   next.push(add(B, -sgnA, mkB)); commit(next); return `${J.tr}: ${pts.length} adet eklendi.`;
 }
 function jointPanel() {
-  if (!S.multiOn || S.multi.length < 2) return '';
+  if (!S.multiOn || S.multi.length < 2) return `<h2>Birleşim · zıvana, kavela, DOMINO</h2><p class="a-note">1) ${S.multiOn ? '<b>Çoklu seçim açık.</b>' : '<button data-multi aria-pressed="false">Çoklu seçimi aç</button>'} 2) Modelde birbirine değen iki parçaya sırayla tıklayın (${S.multi.length}/2 seçili). 3) Burada türü seçip “Birleşimi ekle”ye basın. Zıvana ikinci parçaya açılır.</p>`;
   return `<h2>Birleşim (son iki parça)</h2><div class="a-grid a-grid2"><span>Tür</span><select id="jType">${Object.entries(JOINTS).map(([k, j]) => `<option value="${k}">${j.tr}</option>`).join('')}</select>
     <span>Adet (0 = otomatik)</span><input id="jCount" type="number" value="0" inputmode="numeric"><span>Zıvana derinliği mm</span><input id="jDepth" type="number" value="" placeholder="yalnız zıvana" inputmode="numeric"></div>
     <div class="a-tools"><button data-joint>Birleşimi ekle</button></div><p class="a-note" id="jOut">${S.jmsg ? `<b>${S.jmsg}</b><br>` : ''}Ölçüler: Hettich kavela, Festool DOMINO, Häfele konfirmat kayıtları (birlesim.json). Mukavemet onayı değildir.</p>`;

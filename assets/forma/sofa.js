@@ -11,7 +11,7 @@ export const FAMILY = 'seating';
 /** Continuous parameters: [min, max, step]. Ranges are concept limits, not structural approval. */
 export const RANGES = {
   width: [700, 3200, 10], depth: [720, 1200, 10], height: [580, 1100, 10], seatHeight: [360, 560, 5],
-  armWidth: [40, 320, 5], armHeight: [480, 780, 5], armTop: [0, 1, 0.05], armFlare: [0, 1, 0.05], armSlope: [0, 0.4, 0.02], armSet: [0, 90, 5],
+  armWidth: [40, 320, 5], armHeight: [480, 780, 5], armTop: [0, 1, 0.05], armFlare: [0, 1, 0.05], armSlope: [0, 0.4, 0.02], armSet: [0, 260, 5],
   backRake: [4, 22, 1], backThickness: [120, 300, 5], camel: [0, 140, 5], channelCount: [3, 12, 1], tuftSpacing: [110, 240, 5],
   cushionThickness: [80, 230, 5], cushionCrown: [0, 45, 1], seatCount: [1, 4, 1],
   legHeight: [0, 340, 5], legSize: [10, 48, 1], legTaper: [0.3, 1, 0.05], legSplay: [0, 14, 1], legInset: [0, 140, 5], caseHeight: [30, 400, 5], bodyInset: [-30, 600, 5], bodyInsetZ: [-30, 300, 5], bodyRadius: [0, 60, 1], pillows: [0, 4, 1], pillowSize: [300, 600, 10]
@@ -22,6 +22,7 @@ export const ENUMS = {
   backType: ['tight', 'loose', 'channel', 'tufted', 'camel', 'low'],
   seatType: ['split', 'bench', 'tight'],
   cushionEdge: ['boxed', 'knife', 'bullnose', 'soft'],
+  seatFront: ['inside', 'wrap'], // wrap = T-cushion: the seat front runs out to the arm's outer line
   baseType: ['legs', 'plinth', 'floating', 'skirt', 'sled', 'frame'],
   legType: LEG_TYPES,
   welt: ['none', 'self', 'contrast'],
@@ -33,7 +34,7 @@ export const DEFAULTS = {
   width: 2100, depth: 920, height: 820, seatHeight: 430,
   armType: 'track', armWidth: 160, armHeight: 600, armTop: 0.4, armFlare: 0.3, armSlope: 0.15, armSet: 0,
   backType: 'loose', backRake: 12, backThickness: 190, camel: 60, channelCount: 6, tuftSpacing: 170,
-  seatType: 'split', seatCount: 3, cushionThickness: 150, cushionCrown: 14, cushionEdge: 'boxed',
+  seatType: 'split', seatCount: 3, cushionThickness: 150, cushionCrown: 14, cushionEdge: 'boxed', seatFront: 'inside',
   baseType: 'legs', legType: 'tapered', legHeight: 140, legSize: 22, legTaper: 0.6, legSplay: 0, legInset: 60, caseHeight: 150, bodyInset: 0, bodyInsetZ: 0, bodyRadius: 18,
   welt: 'none', stitch: 'none', pillows: 0, pillowType: 'square', pillowSize: 450
 };
@@ -54,6 +55,7 @@ export function normalize(input = {}) {
   else if (p.armType === 'slim') p.armWidth = clamp(p.armWidth, 40, 120);
   else p.armWidth = Math.max(p.armWidth, 70);
   p.armHeight = Math.max(p.armHeight, p.seatHeight + 110);
+  if (p.seatFront === 'wrap' && p.armType !== 'none') p.armSet = Math.max(p.armSet, 120); // arms step back so the cushion ear can sit in front
   // Seats must fit between the arms.
   const inner = p.width - 2 * p.armWidth;
   const maxSeats = Math.max(1, Math.floor(inner / MIN_SEAT_WIDTH));
@@ -194,6 +196,10 @@ export function compile(raw) {
     }
   }
 
+  if (p.seatFront === 'wrap' && hasArms) for (const s of [-1, 1]) { // T-cushion ears in front of the arms, flush with the seat
+    const g = {...cg(aw + 6), d: p.armSet, crownFront: cg(aw).crownFront}, side = s < 0 ? 'l' : 'r';
+    parts.push(part(`seat-ear-${side}`, 'seat-cushion', 'fabric', g, [s * (innerW / 2 + aw / 2 - 3), deckTop + cT / 2 - (p.seatType === 'tight' ? 4 : 0), front - p.armSet / 2]));
+  }
   // ---- Arms -------------------------------------------------------------
   if (hasArms) for (const s of [-1, 1]) {
     const side = s < 0 ? 'l' : 'r', ax = s * (hw - aw / 2);
