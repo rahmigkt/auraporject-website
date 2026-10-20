@@ -1,0 +1,343 @@
+{
+  "schema_version": 1,
+  "scope": "research_handoff_not_training_or_national_compliance",
+  "base_main": "80b540e",
+  "sources": [
+    {
+      "id": "SA-TX",
+      "country_code": "SA",
+      "url": "https://github.com/civillizard/Saudi-Real-Estate-Data",
+      "kind": "transaction_records",
+      "license_status": "repository_claim_only",
+      "decision": "not_floorplans",
+      "checked_on": "2026-10-21",
+      "downloaded": false
+    },
+    {
+      "id": "SA-LIC",
+      "country_code": "SA",
+      "url": "https://www.alriyadh.gov.sa/en/content/government-open-data",
+      "kind": "license_policy",
+      "license_status": "official_policy",
+      "decision": "context_only",
+      "checked_on": "2026-10-21",
+      "downloaded": false
+    },
+    {
+      "id": "SA-CODE",
+      "country_code": "SA",
+      "url": "https://sbc.gov.sa/ar/BC/Pages/BuildingCode/BCDetails.aspx?codeId=1101&year=2024",
+      "kind": "building_code_catalog",
+      "license_status": "official_catalog",
+      "decision": "clause_verification_pending",
+      "checked_on": "2026-10-21",
+      "downloaded": false
+    },
+    {
+      "id": "AE-DLD",
+      "country_code": "AE",
+      "url": "https://dubailand.gov.ae/en/open-data/real-estate-data",
+      "kind": "property_register",
+      "license_status": "dataset_terms_pending",
+      "decision": "not_floorplans",
+      "checked_on": "2026-10-21",
+      "downloaded": false
+    },
+    {
+      "id": "AE-CODE",
+      "country_code": "AE",
+      "url": "https://u.ae/-/media/Documents-2023/Dubai-Building-Code_English_2021-Edition_compressed-%281%29.pdf",
+      "kind": "building_code",
+      "license_status": "official_pdf_discovered",
+      "decision": "clause_verification_pending",
+      "checked_on": "2026-10-21",
+      "downloaded": false
+    },
+    {
+      "id": "QA-CENSUS",
+      "country_code": "QA",
+      "url": "https://www.data.gov.qa/explore/dataset/housing-units-by-type-of-units-and-municipality-in-census-2010-2020/information/",
+      "kind": "housing_statistics",
+      "license_status": "CC-BY_version_not_verified",
+      "decision": "not_floorplans",
+      "checked_on": "2026-10-21",
+      "downloaded": false
+    },
+    {
+      "id": "KW-PAHW",
+      "country_code": "KW",
+      "url": "https://www.pahw.gov.kw/Distribution_Charts",
+      "kind": "site_distribution_maps",
+      "license_status": "reuse_permission_pending",
+      "decision": "not_verified_interior_plans",
+      "checked_on": "2026-10-21",
+      "downloaded": false
+    },
+    {
+      "id": "BH-DESIGNS",
+      "country_code": "BH",
+      "url": "https://www.housing.gov.bh/unit-design",
+      "kind": "housing_design_catalog",
+      "license_status": "reuse_permission_pending",
+      "decision": "index_only_direct_fetch_403",
+      "checked_on": "2026-10-21",
+      "downloaded": false
+    },
+    {
+      "id": "BH-T8",
+      "country_code": "BH",
+      "url": "https://housing.gov.bh/UnitDesign/HousingSite-637171065199721301.pdf",
+      "kind": "house_plan_pdf",
+      "license_status": "reuse_permission_pending",
+      "decision": "index_only_direct_fetch_403",
+      "checked_on": "2026-10-21",
+      "downloaded": false
+    },
+    {
+      "id": "OM-STATS",
+      "country_code": "OM",
+      "url": "https://data.gov.om/OMHSNG2016/housing?lang=en&region=1000620-wilayat-ibra",
+      "kind": "housing_statistics",
+      "license_status": "dataset_terms_pending",
+      "decision": "not_floorplans",
+      "checked_on": "2026-10-21",
+      "downloaded": false
+    },
+    {
+      "id": "EG-STATS",
+      "country_code": "EG",
+      "url": "https://mediadr.sis.gov.eg/bitstream/handle/123456789/33497/CAPMAS20230300_0100.pdf%3Fsequence%3D1%26isAllowed%3Dy",
+      "kind": "housing_statistics",
+      "license_status": "dataset_terms_pending",
+      "decision": "discovery_only",
+      "checked_on": "2026-10-21",
+      "downloaded": false
+    },
+    {
+      "id": "JO-HUDC",
+      "country_code": "JO",
+      "url": "https://www.hudc.gov.jo/EN/List/Projects_in_Progress",
+      "kind": "housing_projects_catalog",
+      "license_status": "reuse_permission_pending",
+      "decision": "not_verified_interior_plans",
+      "checked_on": "2026-10-21",
+      "downloaded": false
+    },
+    {
+      "id": "MA-HCP",
+      "country_code": "MA",
+      "url": "https://www.hcp.ma/downloads/RGPH-2024_t22752.html",
+      "kind": "housing_statistics",
+      "license_status": "dataset_terms_pending",
+      "decision": "not_floorplans",
+      "checked_on": "2026-10-21",
+      "downloaded": false
+    },
+    {
+      "id": "GCC-MAJLIS",
+      "country_code": null,
+      "url": "https://ich.unesco.org/en/RL/majlis-a-cultural-and-social-space-01076",
+      "kind": "cultural_reference",
+      "license_status": "reference_only",
+      "decision": "country_scope_AE_SA_OM_QA",
+      "checked_on": "2026-10-21",
+      "downloaded": false
+    },
+    {
+      "id": "FPQA-CODE",
+      "country_code": null,
+      "url": "https://github.com/OldDeLorean/FloorplanQA",
+      "kind": "spatial_benchmark_code",
+      "license_status": "MIT",
+      "decision": "candidate_no_install",
+      "checked_on": "2026-10-21",
+      "downloaded": false
+    },
+    {
+      "id": "FPQA-DATA",
+      "country_code": null,
+      "url": "https://huggingface.co/datasets/OldDelorean/FloorplanQA-Layouts/blob/main/README.md",
+      "kind": "spatial_benchmark_layouts",
+      "license_status": "CC-BY-4.0_publisher_statement",
+      "decision": "candidate_upstream_subset_review_pending",
+      "checked_on": "2026-10-21",
+      "downloaded": false
+    },
+    {
+      "id": "RESPLAN",
+      "country_code": null,
+      "url": "https://github.com/m-agour/ResPlan",
+      "kind": "single_floor_vector_plans",
+      "license_status": "CC-BY-4.0_data_MIT_code_publisher_statement",
+      "decision": "adapted_reference_only_provenance_review_pending",
+      "checked_on": "2026-10-21",
+      "downloaded": false
+    },
+    {
+      "id": "CUBICASA",
+      "country_code": null,
+      "url": "https://github.com/CubiCasa/CubiCasa5k/blob/master/LICENSE",
+      "kind": "floorplan_dataset",
+      "license_status": "CC-BY-NC-4.0",
+      "decision": "excluded_commercial_pipeline",
+      "checked_on": "2026-10-21",
+      "downloaded": false
+    }
+  ],
+  "countries": [
+    {
+      "code": "AE",
+      "name_tr": "Birleşik Arap Emirlikleri",
+      "priority": 1,
+      "source_ids": [
+        "AE-DLD",
+        "AE-CODE",
+        "GCC-MAJLIS"
+      ],
+      "typical_net_area_m2": null,
+      "door_clear_width_m": null,
+      "corridor_clear_width_m": null,
+      "stair_width_m": null,
+      "verified_licensed_local_interior_plan_count": 0,
+      "status": "partial_research",
+      "majlis_cultural_evidence": true,
+      "mandatory_features": []
+    },
+    {
+      "code": "SA",
+      "name_tr": "Suudi Arabistan",
+      "priority": 1,
+      "source_ids": [
+        "SA-TX",
+        "SA-LIC",
+        "SA-CODE",
+        "GCC-MAJLIS"
+      ],
+      "typical_net_area_m2": null,
+      "door_clear_width_m": null,
+      "corridor_clear_width_m": null,
+      "stair_width_m": null,
+      "verified_licensed_local_interior_plan_count": 0,
+      "status": "partial_research",
+      "majlis_cultural_evidence": true,
+      "mandatory_features": []
+    },
+    {
+      "code": "QA",
+      "name_tr": "Katar",
+      "priority": 1,
+      "source_ids": [
+        "QA-CENSUS",
+        "GCC-MAJLIS"
+      ],
+      "typical_net_area_m2": null,
+      "door_clear_width_m": null,
+      "corridor_clear_width_m": null,
+      "stair_width_m": null,
+      "verified_licensed_local_interior_plan_count": 0,
+      "status": "partial_research",
+      "majlis_cultural_evidence": true,
+      "mandatory_features": []
+    },
+    {
+      "code": "KW",
+      "name_tr": "Kuveyt",
+      "priority": 1,
+      "source_ids": [
+        "KW-PAHW"
+      ],
+      "typical_net_area_m2": null,
+      "door_clear_width_m": null,
+      "corridor_clear_width_m": null,
+      "stair_width_m": null,
+      "verified_licensed_local_interior_plan_count": 0,
+      "status": "partial_research",
+      "majlis_cultural_evidence": false,
+      "mandatory_features": []
+    },
+    {
+      "code": "BH",
+      "name_tr": "Bahreyn",
+      "priority": 2,
+      "source_ids": [
+        "BH-DESIGNS",
+        "BH-T8"
+      ],
+      "typical_net_area_m2": null,
+      "door_clear_width_m": null,
+      "corridor_clear_width_m": null,
+      "stair_width_m": null,
+      "verified_licensed_local_interior_plan_count": 0,
+      "status": "partial_research",
+      "majlis_cultural_evidence": false,
+      "mandatory_features": []
+    },
+    {
+      "code": "OM",
+      "name_tr": "Umman",
+      "priority": 2,
+      "source_ids": [
+        "OM-STATS",
+        "GCC-MAJLIS"
+      ],
+      "typical_net_area_m2": null,
+      "door_clear_width_m": null,
+      "corridor_clear_width_m": null,
+      "stair_width_m": null,
+      "verified_licensed_local_interior_plan_count": 0,
+      "status": "partial_research",
+      "majlis_cultural_evidence": true,
+      "mandatory_features": []
+    },
+    {
+      "code": "EG",
+      "name_tr": "Mısır",
+      "priority": 2,
+      "source_ids": [
+        "EG-STATS"
+      ],
+      "typical_net_area_m2": null,
+      "door_clear_width_m": null,
+      "corridor_clear_width_m": null,
+      "stair_width_m": null,
+      "verified_licensed_local_interior_plan_count": 0,
+      "status": "partial_research",
+      "majlis_cultural_evidence": false,
+      "mandatory_features": []
+    },
+    {
+      "code": "JO",
+      "name_tr": "Ürdün",
+      "priority": 2,
+      "source_ids": [
+        "JO-HUDC"
+      ],
+      "typical_net_area_m2": null,
+      "door_clear_width_m": null,
+      "corridor_clear_width_m": null,
+      "stair_width_m": null,
+      "verified_licensed_local_interior_plan_count": 0,
+      "status": "partial_research",
+      "majlis_cultural_evidence": false,
+      "mandatory_features": []
+    },
+    {
+      "code": "MA",
+      "name_tr": "Fas",
+      "priority": 2,
+      "source_ids": [
+        "MA-HCP"
+      ],
+      "typical_net_area_m2": null,
+      "door_clear_width_m": null,
+      "corridor_clear_width_m": null,
+      "stair_width_m": null,
+      "verified_licensed_local_interior_plan_count": 0,
+      "status": "partial_research",
+      "majlis_cultural_evidence": false,
+      "mandatory_features": []
+    }
+  ],
+  "production_import_enabled": false,
+  "training_started": false
+}
