@@ -81,7 +81,9 @@ function scoreItem(kind, p, run, size, ctx) {
   if (kind === 'basin') { sc += run.door ? -1 : 1; sc += centred; }
   if (kind === 'tv') { const opp = ctx.runs.find(r => dot(r.n, run.n) < -0.9); sc += run.window ? -3 : 2; sc += opp?.window ? -1 : 1; sc += 2 * centred; notes.push('TV pencereye karşı değil'); }
   if (kind === 'sofa' && ctx.tv) { const v = sub(ctx.tv.c, p.c), d = len(v), facing = dot(unit(v), p.az);
-    if (facing < 0.92 || d < RULES.tvMin || d > RULES.tvMax) return null; sc += 4 - Math.abs(d - 2600) / 600 + facing; notes.push(`TV'ye ${(d / 1000).toFixed(1)} m`); }
+    if (facing < 0.92 || d < RULES.tvMin || d > RULES.tvMax) return null; sc += 4 - Math.abs(d - 2600) / 600 + facing; notes.push(`TV'ye ${(d / 1000).toFixed(1)} m`); 
+    // balance: in a large room the sitting group takes the middle (or the side away from the kitchen), not one end
+    if (ctx.roomA > 20) { const mid = mul(add(p.c, ctx.tv.c), 0.5); sc += ctx.kitchen ? Math.min(2, len(sub(mid, ctx.kitchen.c)) / 2000) : 1.5 * (1 - len(sub(mid, ctx.roomC)) / ctx.roomR); } }
   if (kind === 'sofa' && !ctx.tv) { sc += run ? 1 + centred : 0; if (ctx.windowRuns.some(r => dot(r.n, p.az) > 0.9)) sc += 1; }
   if (kind === 'sofa' && run && run.window && blocksWindow(run, p.s, size, size.h)) sc -= 1.5; // back to the window: glare and draught
   if (kind === 'coffee') { const so = ctx.sofa; if (!so) return null; const ext = Math.abs(dot(p.az, so.az)) > 0.7 ? size.d : size.w, gap = dot(sub(p.c, so.c), so.az) - so.size.d / 2 - ext / 2, lat = Math.abs(dot(sub(p.c, so.c), so.ax));
@@ -95,6 +97,7 @@ function scoreItem(kind, p, run, size, ctx) {
 // ---- search ------------------------------------------------------------------------------------------------
 export function solveRoom(space, roomItems, ev, {count = 3, beam = 60} = {}) {
   const runs = roomRuns(space, ev), room = space.boundary_xy_mm, swings = doorSwings(runs);
+  const roomA = Math.abs(area2(room)) / 2e6, roomR = Math.sqrt(roomA) * 1000 / 2, roomC = room.reduce((m, q) => [m[0] + q[0] / room.length, m[1] + q[1] / room.length], [0, 0]);
   const winCentres = runs.flatMap(r => r.openings.filter(o => o.kind === 'window').map(o => add(add(r.P, mul(r.u, (o.s0 + o.s1) / 2)), mul(r.n, 50))));
   const windowDist = c => winCentres.length ? Math.min(...winCentres.map(w => len(sub(c, w)))) : 9e9;
   const list = roomItems.map(it => ({it, kind: KIND[it.design.kind] || 'storage', size: it.size || compileItem(it).size}))
@@ -103,7 +106,7 @@ export function solveRoom(space, roomItems, ev, {count = 3, beam = 60} = {}) {
   for (const L of list) {
     const next = [];
     for (const st of states) {
-      const ctx = {runs, windowDist, windowRuns: runs.filter(r => r.window)}; for (const q of st.placed) { if (q.kind === 'tv') ctx.tv = q; if (q.kind === 'sofa') ctx.sofa = q; if (q.kind === 'kitchen') ctx.kitchen = q; if (q.kind === 'bed') ctx.bed = q; }
+      const ctx = {runs, windowDist, windowRuns: runs.filter(r => r.window), roomA, roomC, roomR}; for (const q of st.placed) { if (q.kind === 'tv') ctx.tv = q; if (q.kind === 'sofa') ctx.sofa = q; if (q.kind === 'kitchen') ctx.kitchen = q; if (q.kind === 'bed') ctx.bed = q; }
       const cands = [];
       const floating = ['sofa', 'coffee', 'dining', 'chair', 'side', 'night'].includes(L.kind) || (L.kind === 'desk');
       for (const run of runs) { if (run.L < L.size.w + 2 * RULES.wall) continue;
