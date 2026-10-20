@@ -1,0 +1,479 @@
+{
+  "schema_version": "proposal-1",
+  "not_runtime_schema": true,
+  "not_product_catalogue": true,
+  "checked_on": "2026-10-21",
+  "color_policy": {
+    "status": "AURA_editorial_sRGB_starting_colours",
+    "manufacturer_match": false,
+    "physical_sample_required": true,
+    "colors": [
+      {
+        "id": "kirik-beyaz",
+        "label": "Kırık beyaz",
+        "srgb_hex": "#eee9df"
+      },
+      {
+        "id": "sicak-tas",
+        "label": "Sıcak taş",
+        "srgb_hex": "#c9bfb0"
+      },
+      {
+        "id": "yulaf",
+        "label": "Yulaf",
+        "srgb_hex": "#c6b89d"
+      },
+      {
+        "id": "kum",
+        "label": "Kum",
+        "srgb_hex": "#bda586"
+      },
+      {
+        "id": "grej",
+        "label": "Mantar / grej",
+        "srgb_hex": "#a99e91"
+      },
+      {
+        "id": "soguk-tas",
+        "label": "Soğuk taş",
+        "srgb_hex": "#a4a8a5"
+      },
+      {
+        "id": "adacayi",
+        "label": "Adaçayı",
+        "srgb_hex": "#a0aa96"
+      },
+      {
+        "id": "zeytin",
+        "label": "Zeytin",
+        "srgb_hex": "#737c62"
+      },
+      {
+        "id": "kil",
+        "label": "Kil / terrakota",
+        "srgb_hex": "#b0755c"
+      },
+      {
+        "id": "soluk-gul",
+        "label": "Soluk gül",
+        "srgb_hex": "#bd9991"
+      },
+      {
+        "id": "murekkep",
+        "label": "Mürekkep mavisi",
+        "srgb_hex": "#384857"
+      },
+      {
+        "id": "komur",
+        "label": "Kömür",
+        "srgb_hex": "#4b4c49"
+      }
+    ]
+  },
+  "curtain_families": [
+    {
+      "id": "acik-keten",
+      "label": "Açık keten görünümü",
+      "status": "AURA_visual_family_proposal_not_measured_SKU",
+      "construction": "slub_plain",
+      "light_control_intent": "sheer",
+      "fiber_composition": null,
+      "weight": null,
+      "thickness_mm": null,
+      "transmittance": null,
+      "roughness": null,
+      "sheen": null,
+      "source_ids": [
+        "kv-senja"
+      ],
+      "render_note": "Uneven yarn thickness; transmitted light; not generic clear glass",
+      "production_ready": false
+    },
+    {
+      "id": "leno-yun",
+      "label": "Yün / keten açık yapı görünümü",
+      "status": "AURA_visual_family_proposal_not_measured_SKU",
+      "construction": "open_leno",
+      "light_control_intent": "semi_transparent",
+      "fiber_composition": null,
+      "weight": null,
+      "thickness_mm": null,
+      "transmittance": null,
+      "roughness": null,
+      "sheen": null,
+      "source_ids": [
+        "kv-tetra"
+      ],
+      "render_note": "Thick yarn and visible openings can coexist",
+      "production_ready": false
+    },
+    {
+      "id": "mat-dokuma",
+      "label": "Mat yoğun dokuma",
+      "status": "AURA_visual_family_proposal_not_measured_SKU",
+      "construction": "plain",
+      "light_control_intent": "dense",
+      "fiber_composition": null,
+      "weight": null,
+      "thickness_mm": null,
+      "transmittance": null,
+      "roughness": null,
+      "sheen": null,
+      "source_ids": [
+        "kv-asia"
+      ],
+      "render_note": "Dense fabric does not automatically mean certified blackout",
+      "production_ready": false
+    },
+    {
+      "id": "keten-gorunumlu",
+      "label": "Keten görünümlü sentetik",
+      "status": "AURA_visual_family_proposal_not_measured_SKU",
+      "construction": "slub_plain",
+      "light_control_intent": "dense",
+      "fiber_composition": null,
+      "weight": null,
+      "thickness_mm": null,
+      "transmittance": null,
+      "roughness": null,
+      "sheen": null,
+      "source_ids": [
+        "kv-asia"
+      ],
+      "render_note": "Appearance name is not fibre composition",
+      "production_ready": false
+    },
+    {
+      "id": "lyocell-pamuk",
+      "label": "Lyocell / pamuk görünümü",
+      "status": "AURA_visual_family_proposal_not_measured_SKU",
+      "construction": "taffeta_like",
+      "light_control_intent": "dense",
+      "fiber_composition": null,
+      "weight": null,
+      "thickness_mm": null,
+      "transmittance": null,
+      "roughness": null,
+      "sheen": null,
+      "source_ids": [
+        "kv-value"
+      ],
+      "render_note": "Contrast lustrous and matte yarn appearance",
+      "production_ready": false
+    },
+    {
+      "id": "ipek-keten",
+      "label": "İpek / keten görünümü",
+      "status": "AURA_visual_family_proposal_not_measured_SKU",
+      "construction": "plain",
+      "light_control_intent": "dense",
+      "fiber_composition": null,
+      "weight": null,
+      "thickness_mm": null,
+      "transmittance": null,
+      "roughness": null,
+      "sheen": null,
+      "source_ids": [
+        "dedar-forest"
+      ],
+      "render_note": "Keep lustre subtle; source weight unit differs from g/m2",
+      "production_ready": false
+    },
+    {
+      "id": "pamuk-kadife",
+      "label": "Pamuk kadife görünümü",
+      "status": "AURA_visual_family_proposal_not_measured_SKU",
+      "construction": "cut_pile",
+      "light_control_intent": "dense",
+      "fiber_composition": null,
+      "weight": null,
+      "thickness_mm": null,
+      "transmittance": null,
+      "roughness": null,
+      "sheen": null,
+      "source_ids": [
+        "dedar-velvet"
+      ],
+      "render_note": "View-dependent pile direction; not metallic foil",
+      "production_ready": false
+    },
+    {
+      "id": "dimout",
+      "label": "Işık azaltan fon",
+      "status": "AURA_visual_family_proposal_not_measured_SKU",
+      "construction": "dense_woven",
+      "light_control_intent": "dimout",
+      "fiber_composition": null,
+      "weight": null,
+      "thickness_mm": null,
+      "transmittance": null,
+      "roughness": null,
+      "sheen": null,
+      "source_ids": [
+        "kv-asia"
+      ],
+      "render_note": "Room darkness and textile performance are distinct",
+      "production_ready": false
+    },
+    {
+      "id": "blackout",
+      "label": "Karartma katmanı",
+      "status": "AURA_visual_family_proposal_not_measured_SKU",
+      "construction": "product_specific_unknown",
+      "light_control_intent": "blackout",
+      "fiber_composition": null,
+      "weight": null,
+      "thickness_mm": null,
+      "transmittance": null,
+      "roughness": null,
+      "sheen": null,
+      "source_ids": [],
+      "render_note": "Separate lining or panel; source SKU required for claim",
+      "production_ready": false
+    },
+    {
+      "id": "jakar",
+      "label": "Jakar görünümü",
+      "status": "AURA_visual_family_proposal_not_measured_SKU",
+      "construction": "jacquard",
+      "light_control_intent": "product_specific_unknown",
+      "fiber_composition": null,
+      "weight": null,
+      "thickness_mm": null,
+      "transmittance": null,
+      "roughness": null,
+      "sheen": null,
+      "source_ids": [],
+      "render_note": "Original pattern and relief proposal; no copied brand motif",
+      "production_ready": false
+    }
+  ],
+  "rug_families": [
+    {
+      "id": "duz-dokuma",
+      "label": "Düz dokuma kilim / dhurrie",
+      "construction": "flatweave",
+      "fiber_composition": null,
+      "pile_height_mm": null,
+      "total_thickness_mm": null,
+      "pattern": "independent_choice",
+      "edge": "independent_choice",
+      "status": "AURA_visual_family_proposal_not_measured_SKU",
+      "source_ids": [
+        "nani-tech"
+      ],
+      "production_ready": false
+    },
+    {
+      "id": "jut",
+      "label": "Jüt görünümü",
+      "construction": "flatweave_coarse",
+      "fiber_composition": null,
+      "pile_height_mm": null,
+      "total_thickness_mm": null,
+      "pattern": "independent_choice",
+      "edge": "independent_choice",
+      "status": "AURA_visual_family_proposal_not_measured_SKU",
+      "source_ids": [
+        "nani-jute"
+      ],
+      "production_ready": false
+    },
+    {
+      "id": "kisa-hav",
+      "label": "Kısa kesik hav",
+      "construction": "cut_pile",
+      "fiber_composition": null,
+      "pile_height_mm": null,
+      "total_thickness_mm": null,
+      "pattern": "independent_choice",
+      "edge": "independent_choice",
+      "status": "AURA_visual_family_proposal_not_measured_SKU",
+      "source_ids": [
+        "nani-tech"
+      ],
+      "production_ready": false
+    },
+    {
+      "id": "bukle",
+      "label": "Bukle / ilmek",
+      "construction": "loop_pile",
+      "fiber_composition": null,
+      "pile_height_mm": null,
+      "total_thickness_mm": null,
+      "pattern": "independent_choice",
+      "edge": "independent_choice",
+      "status": "AURA_visual_family_proposal_not_measured_SKU",
+      "source_ids": [
+        "nani-tech"
+      ],
+      "production_ready": false
+    },
+    {
+      "id": "rolyef",
+      "label": "Kesik + ilmek rölyef",
+      "construction": "cut_and_loop",
+      "fiber_composition": null,
+      "pile_height_mm": null,
+      "total_thickness_mm": null,
+      "pattern": "independent_choice",
+      "edge": "independent_choice",
+      "status": "AURA_visual_family_proposal_not_measured_SKU",
+      "source_ids": [
+        "nani-tech"
+      ],
+      "production_ready": false
+    },
+    {
+      "id": "uzun-hav",
+      "label": "Uzun hav",
+      "construction": "long_pile",
+      "fiber_composition": null,
+      "pile_height_mm": null,
+      "total_thickness_mm": null,
+      "pattern": "independent_choice",
+      "edge": "independent_choice",
+      "status": "AURA_visual_family_proposal_not_measured_SKU",
+      "source_ids": [
+        "nani-tech"
+      ],
+      "production_ready": false
+    }
+  ],
+  "headings": [
+    {
+      "id": "wave",
+      "status": "visual_geometry_family",
+      "fullness_ratio": null,
+      "hardware_profile_id": null
+    },
+    {
+      "id": "pencil",
+      "status": "visual_geometry_family",
+      "fullness_ratio": null,
+      "hardware_profile_id": null
+    },
+    {
+      "id": "single_pinch",
+      "status": "visual_geometry_family",
+      "fullness_ratio": null,
+      "hardware_profile_id": null
+    },
+    {
+      "id": "double_pinch",
+      "status": "visual_geometry_family",
+      "fullness_ratio": null,
+      "hardware_profile_id": null
+    },
+    {
+      "id": "triple_pinch",
+      "status": "visual_geometry_family",
+      "fullness_ratio": null,
+      "hardware_profile_id": null
+    },
+    {
+      "id": "eyelet",
+      "status": "visual_geometry_family",
+      "fullness_ratio": null,
+      "hardware_profile_id": null
+    }
+  ],
+  "layers_policy": {
+    "order": "glass_to_room",
+    "independent_fabric_color_and_open_fraction": true,
+    "open_fraction": {
+      "closed": 0,
+      "open": 1
+    },
+    "warning": "Existing closed_fraction uses inverse convention; migration required.",
+    "default_spacing_mm": null
+  },
+  "source_hardware_examples": [
+    {
+      "id": "sg80-7-reference",
+      "source_id": "sg-wave",
+      "edition": "2019-08",
+      "status": "manufacturer_historical_example_not_universal",
+      "glider_spacing_mm": 80,
+      "pocket_factor": 7,
+      "finished_fullness_ratio": 2.3,
+      "standard_stack_width_mm_per_m": 180,
+      "roller_glider_stack_width_mm_per_m": 210,
+      "endpiece_mm": null,
+      "current_SKU_required": true
+    }
+  ],
+  "performance": {
+    "status": "unmeasured_proposed_gate",
+    "minimum_low_quality_fps_target": 30,
+    "actual_device_results": null
+  },
+  "asset_candidates": [
+    {
+      "source_id": "acg-fabric061",
+      "physical_tile_mm": [
+        400,
+        400
+      ],
+      "physical_scale_status": "manufacturer_asset_approximate",
+      "fiber_composition": null,
+      "selected_for_use": false
+    },
+    {
+      "source_id": "acg-carpet004",
+      "physical_tile_mm": null,
+      "physical_scale_status": "unknown",
+      "selected_for_use": false
+    }
+  ],
+  "legacy_migration": {
+    "old_keten_color": "legacy_keten_tone_only",
+    "composition_after_migration": null,
+    "preserve_original_record": true
+  },
+  "source_unit_example": {
+    "source_id": "dedar-forest",
+    "raw_weight": {
+      "value": 295,
+      "unit": "g/linear_m"
+    },
+    "raw_width": {
+      "value": 1950,
+      "unit": "mm"
+    },
+    "derived_weight": {
+      "value": 151.28,
+      "unit": "g/m2",
+      "status": "derived_not_source_quote"
+    }
+  },
+  "geometry_probe": {
+    "base_main": "47457ed",
+    "function": "assets/ev/perde.js panel",
+    "window_width_mm": 1800,
+    "rail_width_mm": 2100,
+    "flat_panel_mm": 2415,
+    "closed": {
+      "display_width_mm": 1050,
+      "mesh_arc_mm": 2258.2,
+      "loss_percent": 6.5
+    },
+    "open": {
+      "display_width_mm": 189,
+      "mesh_arc_mm": 497.4,
+      "loss_percent": 79.4
+    },
+    "method": "Sum distances along current 8 segments per sine wave; not cloth simulation"
+  },
+  "acceptance": {
+    "arc_length_max_error_percent": 2,
+    "status": "proposed_project_gate_not_measured_result",
+    "no_self_intersection": true,
+    "no_layer_collision": true,
+    "reference_scenes": [
+      "sheer_plus_matte_drape",
+      "velvet_drape",
+      "flatweave_vs_short_pile"
+    ]
+  }
+}
