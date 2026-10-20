@@ -14,11 +14,8 @@ export const TREAT = { // default suggestion per room function; a starting point
   bath: {shade: 'pleated'}, wc: {shade: 'pleated'}
 };
 // customer choices: model and colour (per room, falling back to the whole home)
-export const MODELS = {'tul-fon': ['Tül + fon', {sheer: true, drape: 'dimout', heading: 'wave'}], 'tul': ['Yalnız tül', {sheer: true, heading: 'wave'}],
-  'fon': ['Yalnız fon', {drape: 'dimout', heading: 'wave'}], 'karartma': ['Tül + karartma', {sheer: true, drape: 'blackout', heading: 'wave'}],
-  'stor': ['Stor', {shade: 'roller'}], 'plise': ['Plise', {shade: 'pleated'}]};
-export const FABRICS = [['keten', 'Keten', '#d8cdbb'], ['kirik-beyaz', 'Kırık beyaz', '#efe9de'], ['kum', 'Kum', '#cdb99a'], ['adacayi', 'Adaçayı', '#a8b09a'],
-  ['terrakota', 'Terrakota', '#b9775c'], ['hardal', 'Hardal', '#c49a45'], ['gece-mavisi', 'Gece mavisi', '#4c5a66'], ['antrasit', 'Antrasit', '#55534f']];
+import {MODELS, FABRICS} from './tekstil.js?v=20261021d';
+export {MODELS, FABRICS};
 export const TREAT_NAME = {sheer: 'tül', dimout: 'fon (ışık kesen)', blackout: 'karartma fon', roller: 'stor', pleated: 'plise'};
 const FULL = {wave: 2.3}, OVER = 150, FLOOR_GAP = 10, PITCH = 120, STACK_PER_M = 180;
 const OPACITY = {sheer: 0.25, dimout: 0.8, blackout: 1};
