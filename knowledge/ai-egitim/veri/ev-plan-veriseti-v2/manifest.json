@@ -1,0 +1,247 @@
+{
+  "contract": "aura-plan-program/0.3",
+  "sources": {
+    "assets/ev/plan.js": "92ecdd8b11c4567ebcc60e160ffe28b87fba469e92db9552d566d4d3f72f17e0",
+    "assets/ev/ornek-plan.json": "368fb188db511611fa604495f057021b49d11e5663638a3995ab2da79a41298a",
+    "knowledge/ev-projesi/veri/ev-projesi.schema.json": "f202c6c3fc01961be11093a26edb579249eb1ab7babe09200be7c65bac2001ae",
+    "knowledge/ev-projesi/veri/ev-projesi.schema.v0.2.json": "d1f6de161f66d7404572e29512deced3d3bac2617f116f636136c4ec38887511",
+    "knowledge/ev-projesi/veri/plan-kurallari.v2.json": "02c3e6187e679371ff9f921fc2e7bd61fa9bd1f272f829cb3fa9a5f85a09cb08",
+    "tools/ev-plan/baseline_v2.py": "fdae16d339b496c729fed98642b59de778d400650cfe7d790a8a12e4e0e1f558",
+    "tools/ev-plan/build_v2.py": "717523a354cc8d5be1e3167c4fbfa53d97737eb582c8d68934e983a0e0006b51",
+    "tools/ev-plan/common.py": "0d41e69f2849aea7ca088e0c472b44344b0f175ea23773a796dbe344c00a8e7d",
+    "tools/ev-plan/compat.py": "c8bf518759646ef0c06b8f6c440f49051d88fa22fd8372c9f2c0e7a5196dcd71",
+    "tools/ev-plan/dataset.py": "e4f90c9102ba4160a240c748de8d26de515406d78c3359e5ac3ee142162f50a5",
+    "tools/ev-plan/evaluate.py": "aca116a46757b2cf77f25c75f19b5b4e5e432a6e6e8c8c4c63f49381c9d47603",
+    "tools/ev-plan/generator.py": "e4b019eba748abbe1ad2d891de69c5080cc157be808f0e1fc4dae1d9ea6b5bc4",
+    "tools/ev-plan/metrics.py": "ee587704351396b3d60c38949bd103b31ca52ac40f0419cf42379416da997971",
+    "tools/ev-plan/review_v2.py": "3db1301f03f5a1a6652cee05749daab4901623ab7be97f8fc455850034f77c1a",
+    "tools/ev-plan/test_pipeline.py": "c81e0adcf50f308676f5113734cdc3962c74d21bf3ac1520d2f1cbdd739e6d9e",
+    "tools/ev-plan/test_v2.py": "ad3ae9d563e0a4e4bf162604865437552ef7dcf81f2d5426ec2579d1191c0506",
+    "tools/ev-plan/validate.py": "eeb7d90e36576f3b9a421fbfec68e1d4c52855bcd06f9b5c03d9ae6d408ad9c0",
+    "origin/main:assets/ev/plan.js": "2510e861be04029981cc426408ececc4a1d5ad867660858c039a5b19605ee217",
+    "origin/main:assets/ev/ornek-plan.json": "692fb129ca52e6e4636e18fa75050536b6841c8c5d694fc184cbd2ef1e6d9043",
+    "tools/ev-plan/solver/__init__.py": "530b5b1b2fb689b19dd491aa035ead530cedaac585ad4c0b8f0328f12d020bf4",
+    "tools/ev-plan/solver/catalog.py": "7b93b6168defd2acbe6254fc7959c0c278850cc6bdfffff4d0b48cd73cf63106",
+    "tools/ev-plan/solver/layout.py": "a40e9e3646d3d904034e41e1563746e3eec368cb592c8d872ac237e8c3c2b44b",
+    "tools/ev-plan/solver/program.py": "6abdd89a633e7ed6c3ef91fcd3e378794a400ded965777772b0fa9783d471036",
+    "knowledge/ev-projesi/veri/aksesuar.json": "a634746432c538b37cae882a17e5225aea311628addcd292fa2eadfef9642a70",
+    "knowledge/ev-projesi/veri/asistan-sozlesme.json": "2636442818e4827f99376d17e13957eb50da57a0a151f8955c919fa22f97d428",
+    "knowledge/ev-projesi/veri/aydinlatma.json": "fe26e6122a3c0b77a8cc794a3be055e7752031886a7c2fc799224e4b3a1b9f38",
+    "knowledge/ev-projesi/veri/hali.json": "de41e50bad3d94303ee9b21bd3b2e190d5efed2c3f80a297dcaee30235ed3c62",
+    "knowledge/ev-projesi/veri/infinigen-envanter.json": "fc57981e71b861ff550b2f12d5df5d0a35577d40cf3b422c0e82834a4c508936",
+    "knowledge/ev-projesi/veri/kalite-kriterleri.json": "c21da43caf5340a2da793d6ad118c289c29a70df938ea66e7e9fe151f217c23f",
+    "knowledge/ev-projesi/veri/kaplama.json": "6595bf619003ee11a91cfb57770323f3cb01c2018f743b378fd9d87a3f994fd5",
+    "knowledge/ev-projesi/veri/kategori.schema.json": "37076b1d2a1fcfee0ae65ec3178aa9a48f488988f45433ebfd681a5b3e5af707",
+    "knowledge/ev-projesi/veri/kaynaklar.json": "96190b6c39caf6810474bbff925d974b6e812f16dec240d6d733bcc2a26d40fa",
+    "knowledge/ev-projesi/veri/kurgu-tipleri.json": "15637b019e5dc15fe20c7131e6ff604ec93408c722f1d9f927626614c8bebf88",
+    "knowledge/ev-projesi/veri/mimari.json": "61a38737b230f93517ad0298bf2a7531b5c0b07c67f8f797a002e1e1447cfa2c",
+    "knowledge/ev-projesi/veri/ornek-ev-projesi.json": "ee6ca695bca5a2a8a2da1d27c334ecf6a891862572d306bcdeb7a15c8b56cc3c",
+    "knowledge/ev-projesi/veri/ornek-plan-3oda.json": "368fb188db511611fa604495f057021b49d11e5663638a3995ab2da79a41298a",
+    "knowledge/ev-projesi/veri/perde.json": "588b97da68e4fcd7364f7db695879325ac4745d03d5a58340fa1b6f631d93595",
+    "knowledge/ev-projesi/veri/plan-kaynak-inceleme.json": "dcd846ff90fa26fcad63cf80fd535ca9d174f247a5a2e49d1c5bf67e006d56d5",
+    "knowledge/ev-projesi/veri/plan-kurallari.json": "6661b5562677a86231e5e2fca5cf1151f0d80d2f1a5d7191489b0561005ea4da",
+    "knowledge/ev-projesi/veri/plan-program.schema.json": "96ae8d9d5ae272286d4896c214b59229dfc75faa228b8ee9d4ebcd865ed1f2f1",
+    "knowledge/ev-projesi/veri/plan-stili.json": "5c1f4794f5d9379bf2c6562ea2c57e843bf0da7eb7d9c6d3286d7a4dd2fed543"
+  },
+  "source_fingerprint": "de4020df1c5838af4995e86c286cdb2a03370a2b178931901e48e75da5e99f42",
+  "counts": {
+    "train": 945,
+    "validation": 297,
+    "test": 384
+  },
+  "unique_requests": 1626,
+  "creation_requests": 1500,
+  "edits": 120,
+  "safety": 6,
+  "review_plans": 60,
+  "topology_classes": 20,
+  "splits": "exact kind-labelled realized-graph isomorphism groups; type labels may overlap",
+  "files": {
+    "train.jsonl": "a1b2054baffef22462b8e46aaf26cb3a7047e5b322a5747c11a4afaba24a77dd",
+    "validation.jsonl": "99c914d0eb155324561d6004ee4ce6dd0deda45788161076f4f5256710ce4bb2",
+    "test.jsonl": "a3110928ee847e4e161301b5b7cdae667dcc5657cf28d3d9a910eebdf3ea2787"
+  },
+  "comparison": {
+    "kapali": {
+      "v1": {
+        "plans": 6,
+        "topology_isomorphism_classes": 3,
+        "footprint_descriptors": 2,
+        "normalized_arrangement_signatures": 6
+      },
+      "v2": {
+        "plans": 6,
+        "topology_isomorphism_classes": 6,
+        "footprint_descriptors": 4,
+        "normalized_arrangement_signatures": 6
+      },
+      "score_scope": "same seven checks, area-target check excluded in both",
+      "v1_mean_score": 80.95166666666667,
+      "v2_mean_score": 100.0
+    },
+    "acik": {
+      "v1": {
+        "plans": 6,
+        "topology_isomorphism_classes": 3,
+        "footprint_descriptors": 2,
+        "normalized_arrangement_signatures": 6
+      },
+      "v2": {
+        "plans": 6,
+        "topology_isomorphism_classes": 6,
+        "footprint_descriptors": 4,
+        "normalized_arrangement_signatures": 6
+      },
+      "score_scope": "same seven checks, area-target check excluded in both",
+      "v1_mean_score": 73.81,
+      "v2_mean_score": 100.0
+    },
+    "yari_acik": {
+      "v1": {
+        "plans": 6,
+        "topology_isomorphism_classes": 3,
+        "footprint_descriptors": 2,
+        "normalized_arrangement_signatures": 6
+      },
+      "v2": {
+        "plans": 6,
+        "topology_isomorphism_classes": 6,
+        "footprint_descriptors": 4,
+        "normalized_arrangement_signatures": 6
+      },
+      "score_scope": "same seven checks, area-target check excluded in both",
+      "v1_mean_score": 80.95166666666667,
+      "v2_mean_score": 100.0
+    },
+    "hol": {
+      "v1": {
+        "plans": 6,
+        "topology_isomorphism_classes": 1,
+        "footprint_descriptors": 1,
+        "normalized_arrangement_signatures": 3
+      },
+      "v2": {
+        "plans": 6,
+        "topology_isomorphism_classes": 2,
+        "footprint_descriptors": 2,
+        "normalized_arrangement_signatures": 5
+      },
+      "score_scope": "same seven checks, area-target check excluded in both",
+      "v1_mean_score": 85.71,
+      "v2_mean_score": 100.0
+    },
+    "kose": {
+      "v1": {
+        "plans": 6,
+        "topology_isomorphism_classes": 3,
+        "footprint_descriptors": 2,
+        "normalized_arrangement_signatures": 6
+      },
+      "v2": {
+        "plans": 6,
+        "topology_isomorphism_classes": 6,
+        "footprint_descriptors": 4,
+        "normalized_arrangement_signatures": 6
+      },
+      "score_scope": "same seven checks, area-target check excluded in both",
+      "v1_mean_score": 80.95,
+      "v2_mean_score": 100.0
+    },
+    "cift_cephe": {
+      "v1": {
+        "plans": 6,
+        "topology_isomorphism_classes": 3,
+        "footprint_descriptors": 2,
+        "normalized_arrangement_signatures": 6
+      },
+      "v2": {
+        "plans": 6,
+        "topology_isomorphism_classes": 6,
+        "footprint_descriptors": 4,
+        "normalized_arrangement_signatures": 6
+      },
+      "score_scope": "same seven checks, area-target check excluded in both",
+      "v1_mean_score": 80.95166666666667,
+      "v2_mean_score": 100.0
+    },
+    "derin": {
+      "v1": {
+        "plans": 6,
+        "topology_isomorphism_classes": 3,
+        "footprint_descriptors": 2,
+        "normalized_arrangement_signatures": 6
+      },
+      "v2": {
+        "plans": 6,
+        "topology_isomorphism_classes": 6,
+        "footprint_descriptors": 4,
+        "normalized_arrangement_signatures": 6
+      },
+      "score_scope": "same seven checks, area-target check excluded in both",
+      "v1_mean_score": 80.95166666666667,
+      "v2_mean_score": 100.0
+    },
+    "dubleks": {
+      "v1": {
+        "plans": 6,
+        "topology_isomorphism_classes": 3,
+        "footprint_descriptors": 1,
+        "normalized_arrangement_signatures": 6
+      },
+      "v2": {
+        "plans": 6,
+        "topology_isomorphism_classes": 6,
+        "footprint_descriptors": 6,
+        "normalized_arrangement_signatures": 12
+      },
+      "score_scope": "same seven checks, area-target check excluded in both",
+      "v1_mean_score": 59.52166666666667,
+      "v2_mean_score": 100.0
+    },
+    "mustakil": {
+      "v1": {
+        "plans": 6,
+        "topology_isomorphism_classes": 3,
+        "footprint_descriptors": 1,
+        "normalized_arrangement_signatures": 6
+      },
+      "v2": {
+        "plans": 6,
+        "topology_isomorphism_classes": 6,
+        "footprint_descriptors": 6,
+        "normalized_arrangement_signatures": 12
+      },
+      "score_scope": "same seven checks, area-target check excluded in both",
+      "v1_mean_score": 59.52166666666667,
+      "v2_mean_score": 100.0
+    },
+    "avlulu": {
+      "v1": {
+        "plans": 6,
+        "topology_isomorphism_classes": 3,
+        "footprint_descriptors": 3,
+        "normalized_arrangement_signatures": 6
+      },
+      "v2": {
+        "plans": 6,
+        "topology_isomorphism_classes": 6,
+        "footprint_descriptors": 4,
+        "normalized_arrangement_signatures": 6
+      },
+      "score_scope": "same seven checks, area-target check excluded in both",
+      "v1_mean_score": 80.95,
+      "v2_mean_score": 100.0
+    }
+  },
+  "elapsed_seconds": 38.47,
+  "training_started": false,
+  "human_approved": 0,
+  "gold_set": [],
+  "gpu_gate": "closed",
+  "limitations": [
+    "1500 requests are compositional brief variants, not 1500 human-authored freeform requests",
+    "6 plans per type are insufficient to establish dozens of topologies per type",
+    "program targets are soft; room area error is reported, not hidden",
+    "unsupported program constraints remain in rejections; see report"
+  ]
+}
