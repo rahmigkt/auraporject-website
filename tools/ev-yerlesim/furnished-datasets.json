@@ -1,0 +1,11 @@
+{
+  "accessed":"2026-10-20",
+  "calibration_performed":false,
+  "records_downloaded":0,
+  "datasets":[
+    {"name":"3D-FRONT","url":"https://gw.alicdn.com/bao/uploaded/TB1ZJUfK.z1gK0jSZLeXXb9kVXa.pdf","license":"3D-FRONT Data Sets Use License Agreement, 18 June 2020","locator":"p.1 sections 3.2 and 3.3.1–3.3.3","commercial_use":false,"decision":"excluded: research-only; commercial datasets, derivatives and resulting external services restricted","measured_real_homes":false},
+    {"name":"Hypersim","url":"https://github.com/apple-aiml-research/ml-hypersim","license":"dataset CC-BY-SA-3.0; repository software has separate Apple license; original scene assets separate rights","locator":"README introduction; mesh annotations paragraph: original scene assets must be purchased","commercial_use":"CC-BY-SA data permits commercial reuse subject to attribution/share-alike; does not grant rights to all original assets","decision":"candidate not ingested; synthetic artist scenes, not measured homes; original scene acquisition/room geometry and instance-envelope pipeline unresolved","measured_real_homes":false},
+    {"name":"ProcTHOR","url":"https://github.com/allenai/procthor","license":"repository Apache-2.0; engine/assets and exported data require separate scope verification","locator":"repository license; https://procthor.allenai.org/ describes procedural generation and object placement","commercial_use":"code is permissive; not treated as blanket proof for all asset/data rights","decision":"candidate not ingested; procedurally sampled homes are not measured human furnishing distributions; no real-data calibration claim","measured_real_homes":false}
+  ],
+  "result":"No verified commercially reusable MEASURED furnished-home corpus was ingested. No learned layout distribution, calibrated distance, or real-data aesthetic success is claimed. The solver uses source-labelled recommendations and explicit AURA proposals. Hypersim is a potential separate data-engineering task, not dismissed as noncommercial."
+}

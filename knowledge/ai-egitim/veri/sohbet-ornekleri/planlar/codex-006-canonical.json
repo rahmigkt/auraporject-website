@@ -1,0 +1,2723 @@
+{
+  "schema_version": "0.1",
+  "project_id": "codex-006",
+  "revision": 1,
+  "status": "designer_review",
+  "coordinate_system": "mm; right-handed; x/y floor plane, z up; local origin; glTF adapter converts units and up-axis",
+  "language": {
+    "customer": "en",
+    "designer": "tr"
+  },
+  "brief": {
+    "whole_home": true,
+    "goals": [
+      "Simulated measured survey; furniture concept only"
+    ],
+    "budget": {
+      "amount": 35000,
+      "currency": "GBP",
+      "includes": [
+        "furniture concept; quotation pending"
+      ],
+      "estimate_status": "customer_target"
+    },
+    "household_needs": [
+      "older_parent; feet_and_inches; ground_floor_sleeping"
+    ],
+    "style": [
+      "japandi",
+      "toprak"
+    ],
+    "preserve": []
+  },
+  "levels": [
+    {
+      "id": "level-0",
+      "name": "Level 0",
+      "elevation": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      }
+    },
+    {
+      "id": "level-1",
+      "name": "Level 1",
+      "elevation": {
+        "value": 3000,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      }
+    }
+  ],
+  "spaces": [
+    {
+      "id": "level-0-living-0",
+      "level_id": "level-0",
+      "name": "Living room",
+      "kind": "living",
+      "boundary_xy_mm": [
+        [
+          100,
+          100
+        ],
+        [
+          5900,
+          100
+        ],
+        [
+          5900,
+          5300
+        ],
+        [
+          100,
+          5300
+        ]
+      ],
+      "wall_ids": [
+        "level-0-living-0-wall-0",
+        "level-0-living-0-wall-1",
+        "level-0-living-0-wall-2",
+        "level-0-living-0-wall-3"
+      ],
+      "ceiling_height": {
+        "value": 2700,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    },
+    {
+      "id": "level-0-kitchen-1",
+      "level_id": "level-0",
+      "name": "Kitchen",
+      "kind": "kitchen",
+      "boundary_xy_mm": [
+        [
+          100,
+          5500
+        ],
+        [
+          5900,
+          5500
+        ],
+        [
+          5900,
+          10500
+        ],
+        [
+          100,
+          10500
+        ]
+      ],
+      "wall_ids": [
+        "level-0-kitchen-1-wall-0",
+        "level-0-kitchen-1-wall-1",
+        "level-0-kitchen-1-wall-2",
+        "level-0-kitchen-1-wall-3"
+      ],
+      "ceiling_height": {
+        "value": 2700,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    },
+    {
+      "id": "level-0-bedroom-2",
+      "level_id": "level-0",
+      "name": "Bedroom",
+      "kind": "bedroom",
+      "boundary_xy_mm": [
+        [
+          100,
+          10700
+        ],
+        [
+          5900,
+          10700
+        ],
+        [
+          5900,
+          15300
+        ],
+        [
+          100,
+          15300
+        ]
+      ],
+      "wall_ids": [
+        "level-0-bedroom-2-wall-0",
+        "level-0-bedroom-2-wall-1",
+        "level-0-bedroom-2-wall-2",
+        "level-0-bedroom-2-wall-3"
+      ],
+      "ceiling_height": {
+        "value": 2700,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    },
+    {
+      "id": "level-0-bath-3",
+      "level_id": "level-0",
+      "name": "Bathroom",
+      "kind": "bath",
+      "boundary_xy_mm": [
+        [
+          100,
+          15500
+        ],
+        [
+          5900,
+          15500
+        ],
+        [
+          5900,
+          18700
+        ],
+        [
+          100,
+          18700
+        ]
+      ],
+      "wall_ids": [
+        "level-0-bath-3-wall-0",
+        "level-0-bath-3-wall-1",
+        "level-0-bath-3-wall-2",
+        "level-0-bath-3-wall-3"
+      ],
+      "ceiling_height": {
+        "value": 2700,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    },
+    {
+      "id": "level-0-hall",
+      "level_id": "level-0",
+      "name": "Hall",
+      "kind": "hall",
+      "boundary_xy_mm": [
+        [
+          6100,
+          100
+        ],
+        [
+          7500,
+          100
+        ],
+        [
+          7500,
+          18700
+        ],
+        [
+          6100,
+          18700
+        ]
+      ],
+      "wall_ids": [
+        "level-0-hall-wall-0",
+        "level-0-hall-wall-1",
+        "level-0-hall-wall-2"
+      ],
+      "ceiling_height": {
+        "value": 2700,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    },
+    {
+      "id": "level-1-child-0",
+      "level_id": "level-1",
+      "name": "Child room",
+      "kind": "child",
+      "boundary_xy_mm": [
+        [
+          100,
+          100
+        ],
+        [
+          5900,
+          100
+        ],
+        [
+          5900,
+          4900
+        ],
+        [
+          100,
+          4900
+        ]
+      ],
+      "wall_ids": [
+        "level-1-child-0-wall-0",
+        "level-1-child-0-wall-1",
+        "level-1-child-0-wall-2",
+        "level-1-child-0-wall-3"
+      ],
+      "ceiling_height": {
+        "value": 2700,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    },
+    {
+      "id": "level-1-study-1",
+      "level_id": "level-1",
+      "name": "Study",
+      "kind": "study",
+      "boundary_xy_mm": [
+        [
+          100,
+          5100
+        ],
+        [
+          5900,
+          5100
+        ],
+        [
+          5900,
+          8900
+        ],
+        [
+          100,
+          8900
+        ]
+      ],
+      "wall_ids": [
+        "level-1-study-1-wall-0",
+        "level-1-study-1-wall-1",
+        "level-1-study-1-wall-2",
+        "level-1-study-1-wall-3"
+      ],
+      "ceiling_height": {
+        "value": 2700,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    },
+    {
+      "id": "level-1-hall",
+      "level_id": "level-1",
+      "name": "Hall",
+      "kind": "hall",
+      "boundary_xy_mm": [
+        [
+          6100,
+          100
+        ],
+        [
+          7500,
+          100
+        ],
+        [
+          7500,
+          8900
+        ],
+        [
+          6100,
+          8900
+        ]
+      ],
+      "wall_ids": [
+        "level-1-hall-wall-0",
+        "level-1-hall-wall-1",
+        "level-1-hall-wall-2"
+      ],
+      "ceiling_height": {
+        "value": 2700,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    }
+  ],
+  "walls": [
+    {
+      "id": "level-0-living-0-wall-0",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        0,
+        0
+      ],
+      "to_xy_mm": [
+        6000,
+        0
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-living-0"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-living-0-wall-1",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        6000,
+        0
+      ],
+      "to_xy_mm": [
+        6000,
+        5400
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-living-0",
+        "level-0-hall"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-living-0-wall-2",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        6000,
+        5400
+      ],
+      "to_xy_mm": [
+        0,
+        5400
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-living-0"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-living-0-wall-3",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        0,
+        5400
+      ],
+      "to_xy_mm": [
+        0,
+        0
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-living-0"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-kitchen-1-wall-0",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        0,
+        5400
+      ],
+      "to_xy_mm": [
+        6000,
+        5400
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-kitchen-1"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-kitchen-1-wall-1",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        6000,
+        5400
+      ],
+      "to_xy_mm": [
+        6000,
+        10600
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-kitchen-1",
+        "level-0-hall"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-kitchen-1-wall-2",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        6000,
+        10600
+      ],
+      "to_xy_mm": [
+        0,
+        10600
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-kitchen-1"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-kitchen-1-wall-3",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        0,
+        10600
+      ],
+      "to_xy_mm": [
+        0,
+        5400
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-kitchen-1"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-bedroom-2-wall-0",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        0,
+        10600
+      ],
+      "to_xy_mm": [
+        6000,
+        10600
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-bedroom-2"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-bedroom-2-wall-1",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        6000,
+        10600
+      ],
+      "to_xy_mm": [
+        6000,
+        15400
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-bedroom-2",
+        "level-0-hall"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-bedroom-2-wall-2",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        6000,
+        15400
+      ],
+      "to_xy_mm": [
+        0,
+        15400
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-bedroom-2"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-bedroom-2-wall-3",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        0,
+        15400
+      ],
+      "to_xy_mm": [
+        0,
+        10600
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-bedroom-2"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-bath-3-wall-0",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        0,
+        15400
+      ],
+      "to_xy_mm": [
+        6000,
+        15400
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-bath-3"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-bath-3-wall-1",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        6000,
+        15400
+      ],
+      "to_xy_mm": [
+        6000,
+        18800
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-bath-3",
+        "level-0-hall"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-bath-3-wall-2",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        6000,
+        18800
+      ],
+      "to_xy_mm": [
+        0,
+        18800
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-bath-3"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-bath-3-wall-3",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        0,
+        18800
+      ],
+      "to_xy_mm": [
+        0,
+        15400
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-bath-3"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-hall-wall-0",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        6100,
+        100
+      ],
+      "to_xy_mm": [
+        7500,
+        100
+      ],
+      "thickness": {
+        "value": 100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-hall"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-hall-wall-1",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        7500,
+        100
+      ],
+      "to_xy_mm": [
+        7500,
+        18700
+      ],
+      "thickness": {
+        "value": 100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-hall"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-hall-wall-2",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        7500,
+        18700
+      ],
+      "to_xy_mm": [
+        6100,
+        18700
+      ],
+      "thickness": {
+        "value": 100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-hall"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-child-0-wall-0",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        0,
+        0
+      ],
+      "to_xy_mm": [
+        6000,
+        0
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-child-0"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-child-0-wall-1",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        6000,
+        0
+      ],
+      "to_xy_mm": [
+        6000,
+        5000
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-child-0",
+        "level-1-hall"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-child-0-wall-2",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        6000,
+        5000
+      ],
+      "to_xy_mm": [
+        0,
+        5000
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-child-0"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-child-0-wall-3",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        0,
+        5000
+      ],
+      "to_xy_mm": [
+        0,
+        0
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-child-0"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-study-1-wall-0",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        0,
+        5000
+      ],
+      "to_xy_mm": [
+        6000,
+        5000
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-study-1"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-study-1-wall-1",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        6000,
+        5000
+      ],
+      "to_xy_mm": [
+        6000,
+        9000
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-study-1",
+        "level-1-hall"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-study-1-wall-2",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        6000,
+        9000
+      ],
+      "to_xy_mm": [
+        0,
+        9000
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-study-1"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-study-1-wall-3",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        0,
+        9000
+      ],
+      "to_xy_mm": [
+        0,
+        5000
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-study-1"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-hall-wall-0",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        6100,
+        100
+      ],
+      "to_xy_mm": [
+        7500,
+        100
+      ],
+      "thickness": {
+        "value": 100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-hall"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-hall-wall-1",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        7500,
+        100
+      ],
+      "to_xy_mm": [
+        7500,
+        8900
+      ],
+      "thickness": {
+        "value": 100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-hall"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-hall-wall-2",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        7500,
+        8900
+      ],
+      "to_xy_mm": [
+        6100,
+        8900
+      ],
+      "thickness": {
+        "value": 100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-hall"
+      ],
+      "structural_status": "synthetic_fixture"
+    }
+  ],
+  "openings": [
+    {
+      "id": "level-0-living-0-door",
+      "wall_id": "level-0-living-0-wall-1",
+      "kind": "door",
+      "space_ids": [
+        "level-0-living-0",
+        "level-0-hall"
+      ],
+      "offset_from_wall_start": {
+        "value": 550,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1000,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "swing": "in"
+    },
+    {
+      "id": "level-0-living-0-window",
+      "wall_id": "level-0-living-0-wall-3",
+      "kind": "window",
+      "space_ids": [
+        "level-0-living-0"
+      ],
+      "offset_from_wall_start": {
+        "value": 2000.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "swing": "fixed"
+    },
+    {
+      "id": "level-0-kitchen-1-door",
+      "wall_id": "level-0-kitchen-1-wall-1",
+      "kind": "door",
+      "space_ids": [
+        "level-0-kitchen-1",
+        "level-0-hall"
+      ],
+      "offset_from_wall_start": {
+        "value": 550,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1000,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "swing": "in"
+    },
+    {
+      "id": "level-0-kitchen-1-window",
+      "wall_id": "level-0-kitchen-1-wall-3",
+      "kind": "window",
+      "space_ids": [
+        "level-0-kitchen-1"
+      ],
+      "offset_from_wall_start": {
+        "value": 1900.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "swing": "fixed"
+    },
+    {
+      "id": "level-0-bedroom-2-door",
+      "wall_id": "level-0-bedroom-2-wall-1",
+      "kind": "door",
+      "space_ids": [
+        "level-0-bedroom-2",
+        "level-0-hall"
+      ],
+      "offset_from_wall_start": {
+        "value": 550,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1000,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "swing": "in"
+    },
+    {
+      "id": "level-0-bedroom-2-window",
+      "wall_id": "level-0-bedroom-2-wall-3",
+      "kind": "window",
+      "space_ids": [
+        "level-0-bedroom-2"
+      ],
+      "offset_from_wall_start": {
+        "value": 1700.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "swing": "fixed"
+    },
+    {
+      "id": "level-0-bath-3-door",
+      "wall_id": "level-0-bath-3-wall-1",
+      "kind": "door",
+      "space_ids": [
+        "level-0-bath-3",
+        "level-0-hall"
+      ],
+      "offset_from_wall_start": {
+        "value": 550,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1000,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "swing": "in"
+    },
+    {
+      "id": "level-0-bath-3-window",
+      "wall_id": "level-0-bath-3-wall-3",
+      "kind": "window",
+      "space_ids": [
+        "level-0-bath-3"
+      ],
+      "offset_from_wall_start": {
+        "value": 1000.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "swing": "fixed"
+    },
+    {
+      "id": "level-0-hall-entry",
+      "wall_id": "level-0-hall-wall-0",
+      "kind": "door",
+      "space_ids": [
+        "level-0-hall"
+      ],
+      "offset_from_wall_start": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1000,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "swing": "out"
+    },
+    {
+      "id": "level-1-child-0-door",
+      "wall_id": "level-1-child-0-wall-1",
+      "kind": "door",
+      "space_ids": [
+        "level-1-child-0",
+        "level-1-hall"
+      ],
+      "offset_from_wall_start": {
+        "value": 550,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1000,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "swing": "in"
+    },
+    {
+      "id": "level-1-child-0-window",
+      "wall_id": "level-1-child-0-wall-3",
+      "kind": "window",
+      "space_ids": [
+        "level-1-child-0"
+      ],
+      "offset_from_wall_start": {
+        "value": 1800.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "swing": "fixed"
+    },
+    {
+      "id": "level-1-study-1-door",
+      "wall_id": "level-1-study-1-wall-1",
+      "kind": "door",
+      "space_ids": [
+        "level-1-study-1",
+        "level-1-hall"
+      ],
+      "offset_from_wall_start": {
+        "value": 550,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1000,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "swing": "in"
+    },
+    {
+      "id": "level-1-study-1-window",
+      "wall_id": "level-1-study-1-wall-3",
+      "kind": "window",
+      "space_ids": [
+        "level-1-study-1"
+      ],
+      "offset_from_wall_start": {
+        "value": 1300.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "swing": "fixed"
+    },
+    {
+      "id": "level-1-hall-entry",
+      "wall_id": "level-1-hall-wall-0",
+      "kind": "door",
+      "space_ids": [
+        "level-1-hall"
+      ],
+      "offset_from_wall_start": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1000,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "swing": "out"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "simulated-survey",
+      "kind": "measurement",
+      "space_ids": [],
+      "private_object_id": null,
+      "caption": "Authored simulated room/door survey, not a real customer photo or measured national reference",
+      "language": "en",
+      "training_consent": false,
+      "synthetic": true
+    }
+  ],
+  "items": [
+    {
+      "id": "level-0-living-0-sofa",
+      "space_id": "level-0-living-0",
+      "category": "furniture",
+      "label": "sofa",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "simulated-survey"
+      ],
+      "dimensions": {
+        "width": {
+          "value": 2400,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": 850,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 820,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        5455,
+        3080,
+        0
+      ],
+      "rotation_z_deg": 270,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": "level-0-living-0-sofa"
+    },
+    {
+      "id": "level-0-living-0-tv",
+      "space_id": "level-0-living-0",
+      "category": "furniture",
+      "label": "tv",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "simulated-survey"
+      ],
+      "dimensions": {
+        "width": {
+          "value": 1200,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": 350,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 500,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        305.0,
+        730.0,
+        0
+      ],
+      "rotation_z_deg": 90,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": "level-0-living-0-tv"
+    },
+    {
+      "id": "level-0-kitchen-1-kitchen",
+      "space_id": "level-0-kitchen-1",
+      "category": "furniture",
+      "label": "kitchen",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "simulated-survey"
+      ],
+      "dimensions": {
+        "width": {
+          "value": 2400,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": 600,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2420,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        1330.0,
+        5830.0,
+        0
+      ],
+      "rotation_z_deg": 180,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": "level-0-kitchen-1-kitchen"
+    },
+    {
+      "id": "level-0-kitchen-1-dining",
+      "space_id": "level-0-kitchen-1",
+      "category": "furniture",
+      "label": "dining",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "simulated-survey"
+      ],
+      "dimensions": {
+        "width": {
+          "value": 1600,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": 800,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 750,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        1980,
+        9080,
+        0
+      ],
+      "rotation_z_deg": 0,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": "level-0-kitchen-1-dining"
+    },
+    {
+      "id": "level-0-bedroom-2-bed",
+      "space_id": "level-0-bedroom-2",
+      "category": "furniture",
+      "label": "bed",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "simulated-survey"
+      ],
+      "dimensions": {
+        "width": {
+          "value": 1600,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": 2080,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 1150,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        1980,
+        14230.0,
+        0
+      ],
+      "rotation_z_deg": 0,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": "level-0-bedroom-2-bed"
+    },
+    {
+      "id": "level-0-bedroom-2-wardrobe",
+      "space_id": "level-0-bedroom-2",
+      "category": "furniture",
+      "label": "wardrobe",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "simulated-survey"
+      ],
+      "dimensions": {
+        "width": {
+          "value": 1200,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": 580,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2100,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        4580,
+        14980.0,
+        0
+      ],
+      "rotation_z_deg": 0,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": "level-0-bedroom-2-wardrobe"
+    },
+    {
+      "id": "level-0-bath-3-basin",
+      "space_id": "level-0-bath-3",
+      "category": "furniture",
+      "label": "basin",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "simulated-survey"
+      ],
+      "dimensions": {
+        "width": {
+          "value": 800,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": 510,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 870,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        5635,
+        17680,
+        0
+      ],
+      "rotation_z_deg": 270,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": "level-0-bath-3-basin"
+    },
+    {
+      "id": "level-1-child-0-bed",
+      "space_id": "level-1-child-0",
+      "category": "furniture",
+      "label": "bed",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "simulated-survey"
+      ],
+      "dimensions": {
+        "width": {
+          "value": 900,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": 2080,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 1150,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        1630,
+        3830.0,
+        3000
+      ],
+      "rotation_z_deg": 0,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": "level-1-child-0-bed"
+    },
+    {
+      "id": "level-1-child-0-wardrobe",
+      "space_id": "level-1-child-0",
+      "category": "furniture",
+      "label": "wardrobe",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "simulated-survey"
+      ],
+      "dimensions": {
+        "width": {
+          "value": 1200,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": 580,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2100,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        3880,
+        4580.0,
+        3000
+      ],
+      "rotation_z_deg": 0,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": "level-1-child-0-wardrobe"
+    },
+    {
+      "id": "level-1-child-0-desk",
+      "space_id": "level-1-child-0",
+      "category": "furniture",
+      "label": "desk",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "simulated-survey"
+      ],
+      "dimensions": {
+        "width": {
+          "value": 1000,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": 600,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 740,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        5180,
+        4570.0,
+        3000
+      ],
+      "rotation_z_deg": 0,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": "level-1-child-0-desk"
+    },
+    {
+      "id": "level-1-study-1-desk",
+      "space_id": "level-1-study-1",
+      "category": "furniture",
+      "label": "desk",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "simulated-survey"
+      ],
+      "dimensions": {
+        "width": {
+          "value": 1200,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": 600,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 740,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        2830,
+        8580,
+        3000
+      ],
+      "rotation_z_deg": 0,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": "level-1-study-1-desk"
+    },
+    {
+      "id": "level-1-study-1-bookcase",
+      "space_id": "level-1-study-1",
+      "category": "furniture",
+      "label": "bookcase",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "simulated-survey"
+      ],
+      "dimensions": {
+        "width": {
+          "value": 900,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": 300,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 1800,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        580.0,
+        8720.0,
+        3000
+      ],
+      "rotation_z_deg": 0,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": "level-1-study-1-bookcase"
+    }
+  ],
+  "finishes": [
+    {
+      "id": "level-0-living-0-wall",
+      "space_id": "level-0-living-0",
+      "surface_ref": "wall",
+      "material_category": "paint",
+      "asset_ref": "assets/ev/finishes.js#kil",
+      "net_area": {
+        "value": null,
+        "unit": "m2",
+        "status": "unknown",
+        "evidence_ids": [],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    },
+    {
+      "id": "level-0-living-0-floor",
+      "space_id": "level-0-living-0",
+      "surface_ref": "floor",
+      "material_category": "floor",
+      "asset_ref": "assets/ev/finishes.js#mese-dogal",
+      "net_area": {
+        "value": 30.16,
+        "unit": "m2",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    },
+    {
+      "id": "level-0-kitchen-1-wall",
+      "space_id": "level-0-kitchen-1",
+      "surface_ref": "wall",
+      "material_category": "paint",
+      "asset_ref": "assets/ev/finishes.js#kum",
+      "net_area": {
+        "value": null,
+        "unit": "m2",
+        "status": "unknown",
+        "evidence_ids": [],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    },
+    {
+      "id": "level-0-kitchen-1-floor",
+      "space_id": "level-0-kitchen-1",
+      "surface_ref": "floor",
+      "material_category": "floor",
+      "asset_ref": "assets/ev/finishes.js#karo-desen",
+      "net_area": {
+        "value": 29.0,
+        "unit": "m2",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    },
+    {
+      "id": "level-0-bedroom-2-wall",
+      "space_id": "level-0-bedroom-2",
+      "surface_ref": "wall",
+      "material_category": "paint",
+      "asset_ref": "assets/ev/finishes.js#greige",
+      "net_area": {
+        "value": null,
+        "unit": "m2",
+        "status": "unknown",
+        "evidence_ids": [],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    },
+    {
+      "id": "level-0-bedroom-2-floor",
+      "space_id": "level-0-bedroom-2",
+      "surface_ref": "floor",
+      "material_category": "floor",
+      "asset_ref": "assets/ev/finishes.js#mese-dogal",
+      "net_area": {
+        "value": 26.68,
+        "unit": "m2",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    },
+    {
+      "id": "level-0-bath-3-wall",
+      "space_id": "level-0-bath-3",
+      "surface_ref": "wall",
+      "material_category": "paint",
+      "asset_ref": "assets/ev/finishes.js#kum",
+      "net_area": {
+        "value": null,
+        "unit": "m2",
+        "status": "unknown",
+        "evidence_ids": [],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    },
+    {
+      "id": "level-0-bath-3-floor",
+      "space_id": "level-0-bath-3",
+      "surface_ref": "floor",
+      "material_category": "floor",
+      "asset_ref": "assets/ev/finishes.js#terrazzo",
+      "net_area": {
+        "value": 18.56,
+        "unit": "m2",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    },
+    {
+      "id": "level-0-hall-wall",
+      "space_id": "level-0-hall",
+      "surface_ref": "wall",
+      "material_category": "paint",
+      "asset_ref": "assets/ev/finishes.js#kum",
+      "net_area": {
+        "value": null,
+        "unit": "m2",
+        "status": "unknown",
+        "evidence_ids": [],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    },
+    {
+      "id": "level-0-hall-floor",
+      "space_id": "level-0-hall",
+      "surface_ref": "floor",
+      "material_category": "floor",
+      "asset_ref": "assets/ev/finishes.js#mese-dogal",
+      "net_area": {
+        "value": 26.04,
+        "unit": "m2",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    },
+    {
+      "id": "level-1-child-0-wall",
+      "space_id": "level-1-child-0",
+      "surface_ref": "wall",
+      "material_category": "paint",
+      "asset_ref": "assets/ev/finishes.js#kum",
+      "net_area": {
+        "value": null,
+        "unit": "m2",
+        "status": "unknown",
+        "evidence_ids": [],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    },
+    {
+      "id": "level-1-child-0-floor",
+      "space_id": "level-1-child-0",
+      "surface_ref": "floor",
+      "material_category": "floor",
+      "asset_ref": "assets/ev/finishes.js#mese-dogal",
+      "net_area": {
+        "value": 27.84,
+        "unit": "m2",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    },
+    {
+      "id": "level-1-study-1-wall",
+      "space_id": "level-1-study-1",
+      "surface_ref": "wall",
+      "material_category": "paint",
+      "asset_ref": "assets/ev/finishes.js#kum",
+      "net_area": {
+        "value": null,
+        "unit": "m2",
+        "status": "unknown",
+        "evidence_ids": [],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    },
+    {
+      "id": "level-1-study-1-floor",
+      "space_id": "level-1-study-1",
+      "surface_ref": "floor",
+      "material_category": "floor",
+      "asset_ref": "assets/ev/finishes.js#mese-dogal",
+      "net_area": {
+        "value": 22.04,
+        "unit": "m2",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    },
+    {
+      "id": "level-1-hall-wall",
+      "space_id": "level-1-hall",
+      "surface_ref": "wall",
+      "material_category": "paint",
+      "asset_ref": "assets/ev/finishes.js#kum",
+      "net_area": {
+        "value": null,
+        "unit": "m2",
+        "status": "unknown",
+        "evidence_ids": [],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    },
+    {
+      "id": "level-1-hall-floor",
+      "space_id": "level-1-hall",
+      "surface_ref": "floor",
+      "material_category": "floor",
+      "asset_ref": "assets/ev/finishes.js#mese-dogal",
+      "net_area": {
+        "value": 12.32,
+        "unit": "m2",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    }
+  ],
+  "connections": [
+    {
+      "id": "level-0-living-0-connect",
+      "from_space_id": "level-0-hall",
+      "to_space_id": "level-0-living-0",
+      "opening_id": "level-0-living-0-door",
+      "status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-kitchen-1-connect",
+      "from_space_id": "level-0-hall",
+      "to_space_id": "level-0-kitchen-1",
+      "opening_id": "level-0-kitchen-1-door",
+      "status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-bedroom-2-connect",
+      "from_space_id": "level-0-hall",
+      "to_space_id": "level-0-bedroom-2",
+      "opening_id": "level-0-bedroom-2-door",
+      "status": "synthetic_fixture"
+    },
+    {
+      "id": "level-0-bath-3-connect",
+      "from_space_id": "level-0-hall",
+      "to_space_id": "level-0-bath-3",
+      "opening_id": "level-0-bath-3-door",
+      "status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-child-0-connect",
+      "from_space_id": "level-1-hall",
+      "to_space_id": "level-1-child-0",
+      "opening_id": "level-1-child-0-door",
+      "status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-study-1-connect",
+      "from_space_id": "level-1-hall",
+      "to_space_id": "level-1-study-1",
+      "opening_id": "level-1-study-1-door",
+      "status": "synthetic_fixture"
+    }
+  ],
+  "notes": [
+    {
+      "id": "stairs-pending",
+      "original": "Both surveyed floor room layouts are supplied separately. Stairwell dimensions and inter-floor passage are NOT validated; reserve designer review, do not infer a staircase from a photo.",
+      "original_language": "en",
+      "turkish_translation": "Her iki katın oda krokisi ayrı verildi; merdiven bağlantısı doğrulanmadı.",
+      "translation_status": "machine_unverified"
+    }
+  ],
+  "issues": [
+    {
+      "id": "designer-final",
+      "space_ids": [],
+      "kind": "design",
+      "message": "Designer must verify survey, services, stairs, safety, installation and final project. Synthetic furniture screening is not construction approval.",
+      "blocking": true,
+      "status": "open"
+    }
+  ],
+  "review": {
+    "id": "review",
+    "state": "awaiting_designer",
+    "revision": 1,
+    "designer_id": null,
+    "designer_approval_revision": null,
+    "blocking_issue_ids": [
+      "designer-final"
+    ]
+  },
+  "example_only": true
+}

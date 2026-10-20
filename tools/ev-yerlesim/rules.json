@@ -1,0 +1,35 @@
+{
+  "version": "aura-placement-rules/1",
+  "accessed": "2026-10-20",
+  "scope": "Furniture design screening, not national building/accessibility certification",
+  "search_parameters": {"grid_mm":350,"near_wall_anchor_mm":30,"beam_width":100,"alternative_separation_mm":500,"door_sector_segments":32,"status":"algorithm settings, not ergonomic standards"},
+  "sources": {
+    "ada": {"url":"https://www.access-board.gov/files/ada/ADA-Standards.pdf","locator":"403.5.1, PDF p.116 / printed p.90; 404 starts PDF p.118 / printed p.92","license":"US federal government standard; public domain federal text; no third-party figures copied","kind":"US scoped standard, reference only outside covered US facilities"},
+    "ikea-dining": {"url":"https://www.ikea.com/sg/en/rooms/dining/dining-room-guide-pub21ad8080/","locator":"HTML sections Distance from a wall or a cabinet; Distance to a kitchen unit (no page number)","license":"copyright IKEA; factual dimensions paraphrased, no images/text reproduced","kind":"manufacturer recommendation"},
+    "ikea-kitchen": {"url":"https://www.ikea.com/gb/en/files/pdf/ce/ad/ceadf09a/your-ikea-kitchen-planning-guide.pdf","locator":"printed p.11, Kitchen with island","license":"copyright IKEA; factual clearance paraphrased only","kind":"manufacturer recommendation"},
+    "sony": {"url":"https://www.sony.co.uk/electronics/support/televisions-projectors-lcd-tvs/kdl-55w905a/articles/00008601","locator":"article 00097951, 09/09/2026, Recommended viewing distance (HTML, no page)","license":"copyright Sony; numeric relationship paraphrased only","kind":"minimum viewing recommendation, not maximum or eye safety threshold"},
+    "ccohs": {"url":"https://www.ccohs.ca/oshanswers/ergonomics/office/working_space.pdf","locator":"PDF pp.1–2: anthropometry and room for chair; no universal home desk clearance","license":"copyright CCOHS; concepts paraphrased; no tables/images reproduced","kind":"ergonomics guidance"},
+    "ccohs-glare": {"url":"https://www.ccohs.ca/oshanswers/ergonomics/office/eye_discomfort.html","locator":"HTML glare recommendations (no page)","license":"copyright CCOHS; concept paraphrased","kind":"ergonomics guidance"},
+    "cpsc": {"url":"https://www.cpsc.gov/s3fs-public/252ChildproofingYourHome32123.pdf","locator":"four-page guidance, numbered sections Window Guards, Anchors and Window Coverings","license":"US federal guidance; no third-party graphics copied","kind":"child safety guidance; anchoring requires installation review"}
+  },
+  "rules": [
+    {"id":"route","value_mm":600,"status":"proposal","scope":"AURA normal household furniture route, NOT accessible route standard"},
+    {"id":"elder-route","value_mm":900,"status":"proposal","scope":"AURA older adult screening target; NOT wheelchair compliance; compare US reference 915 mm only in its legal scope","source":"ada"},
+    {"id":"bed-sides-foot","value_mm":600,"status":"proposal","scope":"three access sides; increase to route target for older adult scenario"},
+    {"id":"wardrobe-front","value_mm":900,"status":"proposal","scope":"front use envelope; actual leaf/drawer sweep needs manufacturer check"},
+    {"id":"dining-around","value_mm":800,"status":"manufacturer_recommendation","source":"ikea-dining"},
+    {"id":"kitchen-front","value_mm":1200,"status":"manufacturer_recommendation","source":"ikea-kitchen","scope":"adopted conservatively for single run too; appliance opening not simulated"},
+    {"id":"desk-front","value_mm":900,"status":"proposal","source":"ccohs","scope":"chair use envelope; individual ergonomics unresolved"},
+    {"id":"sofa-front","value_mm":800,"status":"proposal"},
+    {"id":"basin-front","value_mm":800,"status":"proposal","scope":"vanity only, not accessible bathroom certification"},
+    {"id":"window-service","value_mm":450,"status":"proposal","scope":"conservative full-height service strip; no claim of real sash reach"},
+    {"id":"radiator-front","value_mm":500,"status":"proposal","scope":"mock radiator envelope only; actual radiator manufacturer clearance must be supplied"},
+    {"id":"door-swing","status":"geometry","scope":"90-degree leaf sector from measured hinge/width/opening side; unknown swing requires clarification"},
+    {"id":"tv-minimum","value_4k_height_factor":1.5,"value_hd_height_factor":3,"status":"manufacturer_recommendation","source":"sony"},
+    {"id":"conversation-angle","value_deg":35,"status":"proposal","scope":"sofa faces screen; no medical/industry standard claimed"},
+    {"id":"desk-window","status":"qualitative_guidance","source":"ccohs-glare","axial_cosine_max_proposal":0.55,"scope":"prefer side light, avoid window directly behind screen; numerical proxy is AURA proposal, no photometric claim"},
+    {"id":"eye-proxy","front_depth_fraction":0.3,"status":"proposal","scope":"approximate seated eye position in sofa footprint; not a measured body posture"},
+    {"id":"child-anchor","status":"designer_task","source":"cpsc","scope":"anchor storage/TV, cord and window safety checked by designer; never auto-certified"}
+  ],
+  "calibrated_from_furnished_corpus": false
+}

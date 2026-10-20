@@ -1,0 +1,1627 @@
+{
+  "schema_version": "0.1",
+  "project_id": "codex-011",
+  "revision": 1,
+  "status": "designer_review",
+  "coordinate_system": "mm; right-handed; x/y floor plane, z up; local origin; glTF adapter converts units and up-axis",
+  "language": {
+    "customer": "nl",
+    "designer": "tr"
+  },
+  "brief": {
+    "whole_home": true,
+    "goals": [
+      "Simulated measured survey; furniture concept only"
+    ],
+    "budget": {
+      "amount": 17000,
+      "currency": "EUR",
+      "includes": [
+        "furniture concept; quotation pending"
+      ],
+      "estimate_status": "customer_target"
+    },
+    "household_needs": [
+      "moves_home_office; no_stair_measurements; changed_budget"
+    ],
+    "style": [
+      "japandi",
+      "modern"
+    ],
+    "preserve": []
+  },
+  "levels": [
+    {
+      "id": "level-1",
+      "name": "Level 1",
+      "elevation": {
+        "value": 3000,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      }
+    }
+  ],
+  "spaces": [
+    {
+      "id": "level-1-bedroom-0",
+      "level_id": "level-1",
+      "name": "Slaapkamer",
+      "kind": "bedroom",
+      "boundary_xy_mm": [
+        [
+          100,
+          100
+        ],
+        [
+          5500,
+          100
+        ],
+        [
+          5500,
+          4700
+        ],
+        [
+          100,
+          4700
+        ]
+      ],
+      "wall_ids": [
+        "level-1-bedroom-0-wall-0",
+        "level-1-bedroom-0-wall-1",
+        "level-1-bedroom-0-wall-2",
+        "level-1-bedroom-0-wall-3"
+      ],
+      "ceiling_height": {
+        "value": 2700,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true,
+      "finish": {
+        "wall": "antrasit",
+        "floor": "ceviz"
+      }
+    },
+    {
+      "id": "level-1-child-1",
+      "level_id": "level-1",
+      "name": "Kinderkamer",
+      "kind": "child",
+      "boundary_xy_mm": [
+        [
+          100,
+          4900
+        ],
+        [
+          5500,
+          4900
+        ],
+        [
+          5500,
+          9700
+        ],
+        [
+          100,
+          9700
+        ]
+      ],
+      "wall_ids": [
+        "level-1-child-1-wall-0",
+        "level-1-child-1-wall-1",
+        "level-1-child-1-wall-2",
+        "level-1-child-1-wall-3"
+      ],
+      "ceiling_height": {
+        "value": 2700,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true,
+      "finish": {
+        "wall": "tas-gri",
+        "floor": "mikro-beton"
+      }
+    },
+    {
+      "id": "level-1-hall",
+      "level_id": "level-1",
+      "name": "Hal",
+      "kind": "hall",
+      "boundary_xy_mm": [
+        [
+          5700,
+          100
+        ],
+        [
+          7100,
+          100
+        ],
+        [
+          7100,
+          9700
+        ],
+        [
+          5700,
+          9700
+        ]
+      ],
+      "wall_ids": [
+        "level-1-hall-wall-0",
+        "level-1-hall-wall-1",
+        "level-1-hall-wall-2"
+      ],
+      "ceiling_height": {
+        "value": 2700,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true,
+      "finish": {
+        "wall": "tas-gri",
+        "floor": "mikro-beton"
+      }
+    }
+  ],
+  "walls": [
+    {
+      "id": "level-1-bedroom-0-wall-0",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        0,
+        0
+      ],
+      "to_xy_mm": [
+        5600,
+        0
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-bedroom-0"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-bedroom-0-wall-1",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        5600,
+        0
+      ],
+      "to_xy_mm": [
+        5600,
+        4800
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-bedroom-0",
+        "level-1-hall"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-bedroom-0-wall-2",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        5600,
+        4800
+      ],
+      "to_xy_mm": [
+        0,
+        4800
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-bedroom-0"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-bedroom-0-wall-3",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        0,
+        4800
+      ],
+      "to_xy_mm": [
+        0,
+        0
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-bedroom-0"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-child-1-wall-0",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        0,
+        4800
+      ],
+      "to_xy_mm": [
+        5600,
+        4800
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-child-1"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-child-1-wall-1",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        5600,
+        4800
+      ],
+      "to_xy_mm": [
+        5600,
+        9800
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-child-1",
+        "level-1-hall"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-child-1-wall-2",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        5600,
+        9800
+      ],
+      "to_xy_mm": [
+        0,
+        9800
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-child-1"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-child-1-wall-3",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        0,
+        9800
+      ],
+      "to_xy_mm": [
+        0,
+        4800
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-child-1"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-hall-wall-0",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        5700,
+        100
+      ],
+      "to_xy_mm": [
+        7100,
+        100
+      ],
+      "thickness": {
+        "value": 100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-hall"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-hall-wall-1",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        7100,
+        100
+      ],
+      "to_xy_mm": [
+        7100,
+        9700
+      ],
+      "thickness": {
+        "value": 100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-hall"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-hall-wall-2",
+      "level_id": "level-1",
+      "from_xy_mm": [
+        7100,
+        9700
+      ],
+      "to_xy_mm": [
+        5700,
+        9700
+      ],
+      "thickness": {
+        "value": 100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-1-hall"
+      ],
+      "structural_status": "synthetic_fixture"
+    }
+  ],
+  "openings": [
+    {
+      "id": "level-1-bedroom-0-door",
+      "wall_id": "level-1-bedroom-0-wall-1",
+      "kind": "door",
+      "space_ids": [
+        "level-1-bedroom-0",
+        "level-1-hall"
+      ],
+      "offset_from_wall_start": {
+        "value": 550,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1000,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "swing": "in"
+    },
+    {
+      "id": "level-1-bedroom-0-window",
+      "wall_id": "level-1-bedroom-0-wall-3",
+      "kind": "window",
+      "space_ids": [
+        "level-1-bedroom-0"
+      ],
+      "offset_from_wall_start": {
+        "value": 1700.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "swing": "fixed"
+    },
+    {
+      "id": "level-1-child-1-door",
+      "wall_id": "level-1-child-1-wall-1",
+      "kind": "door",
+      "space_ids": [
+        "level-1-child-1",
+        "level-1-hall"
+      ],
+      "offset_from_wall_start": {
+        "value": 550,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1000,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "swing": "in"
+    },
+    {
+      "id": "level-1-child-1-window",
+      "wall_id": "level-1-child-1-wall-3",
+      "kind": "window",
+      "space_ids": [
+        "level-1-child-1"
+      ],
+      "offset_from_wall_start": {
+        "value": 1800.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "swing": "fixed"
+    },
+    {
+      "id": "level-1-hall-entry",
+      "wall_id": "level-1-hall-wall-0",
+      "kind": "door",
+      "space_ids": [
+        "level-1-hall"
+      ],
+      "offset_from_wall_start": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1000,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "swing": "out"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "simulated-survey",
+      "kind": "measurement",
+      "space_ids": [],
+      "private_object_id": null,
+      "caption": "Authored simulated room/door survey, not a real customer photo or measured national reference",
+      "language": "en",
+      "training_consent": false,
+      "synthetic": true
+    }
+  ],
+  "items": [
+    {
+      "id": "level-1-bedroom-0-bed",
+      "space_id": "level-1-bedroom-0",
+      "category": "furniture",
+      "label": "bed",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "simulated-survey"
+      ],
+      "dimensions": {
+        "width": {
+          "value": 1600,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": 2080,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 1150,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        1630,
+        3630.0,
+        3000
+      ],
+      "rotation_z_deg": 0,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": "level-1-bedroom-0-bed",
+      "name": "bed",
+      "design": {
+        "family": "bedroom",
+        "kind": "bed",
+        "style": "japandi",
+        "seed": 1,
+        "params": {
+          "mattressWidth": 1600,
+          "mattressLength": 2000,
+          "mattressThickness": 260,
+          "legHeight": 80,
+          "railHeight": 300,
+          "border": 0,
+          "plinthInset": 120,
+          "headHeight": 1150,
+          "headThickness": 80,
+          "headExtend": 0,
+          "headRadius": 120,
+          "scallops": 3,
+          "channelCount": 10,
+          "tuftSpacing": 180,
+          "slatWidth": 60,
+          "slatGap": 20,
+          "wingDepth": 220,
+          "frameWidth": 60,
+          "footHeight": 740,
+          "postSize": 60,
+          "postHeight": 2000,
+          "legSize": 50,
+          "legTaper": 0.7,
+          "nightWidth": 480,
+          "width": 520,
+          "depth": 400,
+          "height": 560,
+          "topThickness": 25,
+          "topOverhang": 10,
+          "cornerRadius": 0,
+          "baseHeight": 120,
+          "rows": 2,
+          "columns": 1,
+          "graduation": 0.4,
+          "fluteWidth": 24,
+          "mirrorHeight": 800,
+          "mirrorWidth": 0.7,
+          "headType": "upholstered",
+          "headShape": "rounded",
+          "bedBase": "baza",
+          "legType": "block",
+          "footboard": "none",
+          "storage": "none",
+          "bedding": "made",
+          "integratedNight": "none",
+          "frontStyle": "flat",
+          "pull": "knob",
+          "caseBase": "legs",
+          "caseLayout": "stack",
+          "caseEdge": "eased",
+          "mirror": "none",
+          "stitch": "none",
+          "caseLine": "none",
+          "kind": "bed"
+        },
+        "materials": {
+          "fabric": {
+            "fiber": "linen",
+            "weave": "plain",
+            "color": "navy",
+            "pattern": "none",
+            "color2": "charcoal",
+            "scale": 1,
+            "motif": null,
+            "density": 3
+          },
+          "welt": {
+            "color": null
+          },
+          "wood": {
+            "species": "gurgen",
+            "stain": "walnut",
+            "finish": "matte"
+          },
+          "metal": {
+            "finish": "black"
+          },
+          "case": {
+            "surface": "veneer",
+            "species": "oak",
+            "stain": "natural",
+            "finish": "matte",
+            "color": "cream"
+          },
+          "linen": {
+            "color": "white"
+          }
+        }
+      },
+      "pos_xy_mm": [
+        1630,
+        3630.0
+      ],
+      "rot_deg": 0
+    },
+    {
+      "id": "level-1-bedroom-0-wardrobe",
+      "space_id": "level-1-bedroom-0",
+      "category": "furniture",
+      "label": "wardrobe",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "simulated-survey"
+      ],
+      "dimensions": {
+        "width": {
+          "value": 1200,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": 580,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2100,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        3880,
+        4380.0,
+        3000
+      ],
+      "rotation_z_deg": 0,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": "level-1-bedroom-0-wardrobe",
+      "name": "wardrobe",
+      "design": {
+        "schema": "aura.forma.design/1",
+        "family": "storage",
+        "kind": "wardrobe",
+        "style": "japandi",
+        "seed": 1,
+        "params": {
+          "solidThickness": 22,
+          "plinthHeight": 80,
+          "legHeight": 150,
+          "legSize": 40,
+          "topThickness": 22,
+          "topOverhang": 0,
+          "fluteWidth": 30,
+          "mirrorHeight": 800,
+          "mirrorWidth": 0.7,
+          "frontFit": "overlay",
+          "doorType": "hinged",
+          "frontStyle": "flat",
+          "pull": "bar",
+          "base": "plinth",
+          "legType": "taper",
+          "topType": "flush",
+          "caseEdge": "eased",
+          "caseLine": "none",
+          "mirror": "none",
+          "backPanel": "on",
+          "led": "off",
+          "board": "mdf",
+          "frontBoard": "mdf",
+          "width": 1200,
+          "height": 2100,
+          "depth": 580,
+          "bays": [
+            {
+              "id": "b1",
+              "w": 1,
+              "mm": 0,
+              "cells": [
+                {
+                  "id": "b1c1",
+                  "joined": false,
+                  "color": null,
+                  "type": "door",
+                  "h": 1,
+                  "mm": 0,
+                  "n": 1,
+                  "inside": "hang",
+                  "k": 0
+                }
+              ]
+            },
+            {
+              "id": "b2",
+              "w": 1,
+              "mm": 0,
+              "cells": [
+                {
+                  "id": "b2c1",
+                  "joined": false,
+                  "color": null,
+                  "type": "door",
+                  "h": 1,
+                  "mm": 0,
+                  "n": 1,
+                  "inside": "shelves",
+                  "k": 5
+                }
+              ]
+            },
+            {
+              "id": "b3",
+              "w": 1,
+              "mm": 0,
+              "cells": [
+                {
+                  "id": "b3c1",
+                  "joined": false,
+                  "color": null,
+                  "type": "door",
+                  "h": 1,
+                  "mm": 0,
+                  "n": 1,
+                  "inside": "hangDrawers",
+                  "k": 0
+                }
+              ]
+            }
+          ],
+          "kind": "wardrobe"
+        },
+        "materials": {
+          "case": {
+            "surface": "veneer",
+            "species": "oak",
+            "stain": "natural",
+            "finish": "matte",
+            "color": "white"
+          },
+          "front": {
+            "surface": "veneer",
+            "species": "oak",
+            "stain": "natural",
+            "finish": "matte",
+            "color": "white"
+          },
+          "wood": {
+            "species": "gurgen",
+            "stain": "walnut",
+            "finish": "matte"
+          },
+          "metal": {
+            "finish": "black"
+          },
+          "glass": {
+            "glass": "clear"
+          }
+        }
+      },
+      "pos_xy_mm": [
+        3880,
+        4380.0
+      ],
+      "rot_deg": 0
+    },
+    {
+      "id": "level-1-child-1-bed",
+      "space_id": "level-1-child-1",
+      "category": "furniture",
+      "label": "bed",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "simulated-survey"
+      ],
+      "dimensions": {
+        "width": {
+          "value": 900,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": 2080,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 1150,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        1280,
+        8630.0,
+        3000
+      ],
+      "rotation_z_deg": 0,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": "level-1-child-1-bed",
+      "name": "bed",
+      "design": {
+        "family": "bedroom",
+        "kind": "bed",
+        "style": "japandi",
+        "seed": 1,
+        "params": {
+          "mattressWidth": 900,
+          "mattressLength": 2000,
+          "mattressThickness": 260,
+          "legHeight": 80,
+          "railHeight": 300,
+          "border": 0,
+          "plinthInset": 120,
+          "headHeight": 1150,
+          "headThickness": 80,
+          "headExtend": 0,
+          "headRadius": 120,
+          "scallops": 3,
+          "channelCount": 10,
+          "tuftSpacing": 180,
+          "slatWidth": 60,
+          "slatGap": 20,
+          "wingDepth": 220,
+          "frameWidth": 60,
+          "footHeight": 740,
+          "postSize": 60,
+          "postHeight": 2000,
+          "legSize": 50,
+          "legTaper": 0.7,
+          "nightWidth": 480,
+          "width": 520,
+          "depth": 400,
+          "height": 560,
+          "topThickness": 25,
+          "topOverhang": 10,
+          "cornerRadius": 0,
+          "baseHeight": 120,
+          "rows": 2,
+          "columns": 1,
+          "graduation": 0.4,
+          "fluteWidth": 24,
+          "mirrorHeight": 800,
+          "mirrorWidth": 0.7,
+          "headType": "upholstered",
+          "headShape": "rounded",
+          "bedBase": "baza",
+          "legType": "block",
+          "footboard": "none",
+          "storage": "none",
+          "bedding": "made",
+          "integratedNight": "none",
+          "frontStyle": "flat",
+          "pull": "knob",
+          "caseBase": "legs",
+          "caseLayout": "stack",
+          "caseEdge": "eased",
+          "mirror": "none",
+          "stitch": "none",
+          "caseLine": "none",
+          "kind": "bed"
+        },
+        "materials": {
+          "fabric": {
+            "fiber": "linen",
+            "weave": "plain",
+            "color": "navy",
+            "pattern": "none",
+            "color2": "charcoal",
+            "scale": 1,
+            "motif": null,
+            "density": 3
+          },
+          "welt": {
+            "color": null
+          },
+          "wood": {
+            "species": "gurgen",
+            "stain": "walnut",
+            "finish": "matte"
+          },
+          "metal": {
+            "finish": "black"
+          },
+          "case": {
+            "surface": "veneer",
+            "species": "oak",
+            "stain": "natural",
+            "finish": "matte",
+            "color": "cream"
+          },
+          "linen": {
+            "color": "white"
+          }
+        }
+      },
+      "pos_xy_mm": [
+        1280,
+        8630.0
+      ],
+      "rot_deg": 0
+    },
+    {
+      "id": "level-1-child-1-wardrobe",
+      "space_id": "level-1-child-1",
+      "category": "furniture",
+      "label": "wardrobe",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "simulated-survey"
+      ],
+      "dimensions": {
+        "width": {
+          "value": 1200,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": 580,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2100,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        3180,
+        9380.0,
+        3000
+      ],
+      "rotation_z_deg": 0,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": "level-1-child-1-wardrobe",
+      "name": "wardrobe",
+      "design": {
+        "schema": "aura.forma.design/1",
+        "family": "storage",
+        "kind": "wardrobe",
+        "style": "japandi",
+        "seed": 1,
+        "params": {
+          "solidThickness": 22,
+          "plinthHeight": 80,
+          "legHeight": 150,
+          "legSize": 40,
+          "topThickness": 22,
+          "topOverhang": 0,
+          "fluteWidth": 30,
+          "mirrorHeight": 800,
+          "mirrorWidth": 0.7,
+          "frontFit": "overlay",
+          "doorType": "hinged",
+          "frontStyle": "flat",
+          "pull": "bar",
+          "base": "plinth",
+          "legType": "taper",
+          "topType": "flush",
+          "caseEdge": "eased",
+          "caseLine": "none",
+          "mirror": "none",
+          "backPanel": "on",
+          "led": "off",
+          "board": "mdf",
+          "frontBoard": "mdf",
+          "width": 1200,
+          "height": 2100,
+          "depth": 580,
+          "bays": [
+            {
+              "id": "b1",
+              "w": 1,
+              "mm": 0,
+              "cells": [
+                {
+                  "id": "b1c1",
+                  "joined": false,
+                  "color": null,
+                  "type": "door",
+                  "h": 1,
+                  "mm": 0,
+                  "n": 1,
+                  "inside": "hang",
+                  "k": 0
+                }
+              ]
+            },
+            {
+              "id": "b2",
+              "w": 1,
+              "mm": 0,
+              "cells": [
+                {
+                  "id": "b2c1",
+                  "joined": false,
+                  "color": null,
+                  "type": "door",
+                  "h": 1,
+                  "mm": 0,
+                  "n": 1,
+                  "inside": "shelves",
+                  "k": 5
+                }
+              ]
+            },
+            {
+              "id": "b3",
+              "w": 1,
+              "mm": 0,
+              "cells": [
+                {
+                  "id": "b3c1",
+                  "joined": false,
+                  "color": null,
+                  "type": "door",
+                  "h": 1,
+                  "mm": 0,
+                  "n": 1,
+                  "inside": "hangDrawers",
+                  "k": 0
+                }
+              ]
+            }
+          ],
+          "kind": "wardrobe"
+        },
+        "materials": {
+          "case": {
+            "surface": "veneer",
+            "species": "oak",
+            "stain": "natural",
+            "finish": "matte",
+            "color": "white"
+          },
+          "front": {
+            "surface": "veneer",
+            "species": "oak",
+            "stain": "natural",
+            "finish": "matte",
+            "color": "white"
+          },
+          "wood": {
+            "species": "gurgen",
+            "stain": "walnut",
+            "finish": "matte"
+          },
+          "metal": {
+            "finish": "black"
+          },
+          "glass": {
+            "glass": "clear"
+          }
+        }
+      },
+      "pos_xy_mm": [
+        3180,
+        9380.0
+      ],
+      "rot_deg": 0
+    },
+    {
+      "id": "level-1-child-1-desk",
+      "space_id": "level-1-child-1",
+      "category": "furniture",
+      "label": "desk",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "simulated-survey"
+      ],
+      "dimensions": {
+        "width": {
+          "value": 1000,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": 600,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 740,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "simulated-survey"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        4480,
+        9370.0,
+        3000
+      ],
+      "rotation_z_deg": 0,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": "level-1-child-1-desk",
+      "name": "desk",
+      "design": {
+        "schema": "aura.forma.design/1",
+        "family": "table",
+        "kind": "desk",
+        "style": "japandi",
+        "seed": 1,
+        "params": {
+          "length": 1000,
+          "width": 600,
+          "height": 740,
+          "topThickness": 30,
+          "cornerRadius": 20,
+          "shapeN": 4,
+          "boatBow": 0.08,
+          "edgeSize": 10,
+          "overhang": 120,
+          "sideOverhang": 60,
+          "legSize": 60,
+          "legTaper": 0.7,
+          "legSplay": 0,
+          "apronHeight": 75,
+          "apronThickness": 22,
+          "apronSetback": 8,
+          "stretcherHeight": 150,
+          "columnSize": 160,
+          "footSpread": 0.6,
+          "panelThickness": 40,
+          "panelArch": 0,
+          "panelFoot": 90,
+          "tubeSize": 30,
+          "shelfHeight": 150,
+          "shelfThickness": 20,
+          "drawers": 0,
+          "leaves": 0,
+          "leafLength": 450,
+          "topShape": "rect",
+          "edge": "eased",
+          "baseType": "legsApron",
+          "legType": "squareTaper",
+          "pedestalType": "column",
+          "stretcher": "none",
+          "shelf": "none",
+          "drawerPull": "none",
+          "backPanel": "none",
+          "extended": "closed",
+          "inlay": "none",
+          "kind": "desk"
+        },
+        "materials": {
+          "top": {
+            "surface": "wood",
+            "species": "walnut",
+            "stain": "natural",
+            "finish": "matte",
+            "stone": "carrara",
+            "glass": "clear",
+            "color": "white",
+            "polish": "honed"
+          },
+          "base": {
+            "surface": "wood",
+            "species": "walnut",
+            "stain": "natural",
+            "finish": "matte",
+            "metal": "black",
+            "color": "black"
+          },
+          "hardware": {
+            "metal": "brass"
+          }
+        }
+      },
+      "pos_xy_mm": [
+        4480,
+        9370.0
+      ],
+      "rot_deg": 0
+    }
+  ],
+  "finishes": [
+    {
+      "id": "level-1-bedroom-0-wall",
+      "space_id": "level-1-bedroom-0",
+      "surface_ref": "wall",
+      "material_category": "paint",
+      "asset_ref": "assets/ev/finishes.js#antrasit",
+      "net_area": {
+        "value": null,
+        "unit": "m2",
+        "status": "unknown",
+        "evidence_ids": [],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    },
+    {
+      "id": "level-1-bedroom-0-floor",
+      "space_id": "level-1-bedroom-0",
+      "surface_ref": "floor",
+      "material_category": "floor",
+      "asset_ref": "assets/ev/finishes.js#ceviz",
+      "net_area": {
+        "value": 24.84,
+        "unit": "m2",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    },
+    {
+      "id": "level-1-child-1-wall",
+      "space_id": "level-1-child-1",
+      "surface_ref": "wall",
+      "material_category": "paint",
+      "asset_ref": "assets/ev/finishes.js#tas-gri",
+      "net_area": {
+        "value": null,
+        "unit": "m2",
+        "status": "unknown",
+        "evidence_ids": [],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    },
+    {
+      "id": "level-1-child-1-floor",
+      "space_id": "level-1-child-1",
+      "surface_ref": "floor",
+      "material_category": "floor",
+      "asset_ref": "assets/ev/finishes.js#mikro-beton",
+      "net_area": {
+        "value": 25.92,
+        "unit": "m2",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    },
+    {
+      "id": "level-1-hall-wall",
+      "space_id": "level-1-hall",
+      "surface_ref": "wall",
+      "material_category": "paint",
+      "asset_ref": "assets/ev/finishes.js#tas-gri",
+      "net_area": {
+        "value": null,
+        "unit": "m2",
+        "status": "unknown",
+        "evidence_ids": [],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    },
+    {
+      "id": "level-1-hall-floor",
+      "space_id": "level-1-hall",
+      "surface_ref": "floor",
+      "material_category": "floor",
+      "asset_ref": "assets/ev/finishes.js#mikro-beton",
+      "net_area": {
+        "value": 13.44,
+        "unit": "m2",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "simulated-survey"
+        ],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "provisional"
+    }
+  ],
+  "connections": [
+    {
+      "id": "level-1-bedroom-0-connect",
+      "from_space_id": "level-1-hall",
+      "to_space_id": "level-1-bedroom-0",
+      "opening_id": "level-1-bedroom-0-door",
+      "status": "synthetic_fixture"
+    },
+    {
+      "id": "level-1-child-1-connect",
+      "from_space_id": "level-1-hall",
+      "to_space_id": "level-1-child-1",
+      "opening_id": "level-1-child-1-door",
+      "status": "synthetic_fixture"
+    }
+  ],
+  "notes": [
+    {
+      "id": "stairs-pending",
+      "original": "Both surveyed floor room layouts are supplied separately. Stairwell dimensions and inter-floor passage are NOT validated; reserve designer review, do not infer a staircase from a photo.",
+      "original_language": "en",
+      "turkish_translation": "Her iki katın oda krokisi ayrı verildi; merdiven bağlantısı doğrulanmadı.",
+      "translation_status": "machine_unverified"
+    }
+  ],
+  "issues": [
+    {
+      "id": "designer-final",
+      "space_ids": [],
+      "kind": "design",
+      "message": "Designer must verify survey, services, stairs, safety, installation and final project. Synthetic furniture screening is not construction approval.",
+      "blocking": true,
+      "status": "open"
+    }
+  ],
+  "review": {
+    "id": "review",
+    "state": "awaiting_designer",
+    "revision": 1,
+    "designer_id": null,
+    "designer_approval_revision": null,
+    "blocking_issue_ids": [
+      "designer-final"
+    ]
+  },
+  "example_only": true,
+  "scheme": "modern"
+}
