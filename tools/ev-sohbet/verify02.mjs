@@ -4,9 +4,10 @@ import {fileURLToPath} from 'node:url';
 import {solveRoom} from '../../assets/ev/yerlesim.js';
 import {compileItem,footprint} from '../../assets/ev/items.js';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
-const dir=path.join(root,'knowledge/ai-egitim/veri/ev-sohbet-02');
-let tested=0,failed=0;
-for(const file of fs.readdirSync(dir).filter(f=>/^ev-sohbet-02-\d+\.json$/.test(f)).sort()){
+const dir=process.argv[2]?path.resolve(process.argv[2]):path.join(root,'knowledge/ai-egitim/veri/ev-sohbet-02');
+let tested=0,failed=0,records=0;
+for(const file of fs.readdirSync(dir).filter(f=>/^ev-sohbet-(?:02|uk-ie)-\d+\.json$/.test(f)).sort()){
+ records++;
  const r=JSON.parse(fs.readFileSync(path.join(dir,file),'utf8')),p=r.plan;
  const hash=crypto.createHash('sha256').update(fs.readFileSync(path.join(root,r.solver.module))).digest('hex');
  if(hash!==r.solver.sha256)throw Error('Studio solver changed: regenerate data');
@@ -19,6 +20,6 @@ for(const file of fs.readdirSync(dir).filter(f=>/^ev-sohbet-02-\d+\.json$/.test(
  for(const it of p.items){if(JSON.stringify(compileItem(it).size)!==JSON.stringify(it.compiled_size_mm))throw Error('Compiled size drift');if(JSON.stringify(footprint(it))!==JSON.stringify(it.footprint_xy_mm))throw Error('Footprint drift');}
  console.log(file,'replayed');
 }
-const summary={attempts_replayed:tested,honest_no_fit_results:failed,records:20,passed:true};
+const summary={attempts_replayed:tested,honest_no_fit_results:failed,records,passed:true};
 fs.writeFileSync(path.join(dir,'solver-tekrar-sonucu.json'),JSON.stringify(summary,null,2)+'\n');
 console.log(JSON.stringify(summary));
