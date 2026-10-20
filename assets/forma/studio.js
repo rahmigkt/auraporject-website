@@ -26,7 +26,8 @@ import {drawingSheet, drawingDxf} from './drawing.js';
 import {bom, bomCsv} from './bom.js';
 import {zip, jpegPdf, svgToJpeg, dataUrlJpeg, download} from './package.js';
 const designKey = d => JSON.stringify({p: d.params, m: d.materials, k: d.kind, f: d.family});
-import {t, partName, UI_LANGS} from './i18n.js';
+import {t, partName, UI_LANGS} from './i18n.js?v=20261021d';
+import {MODELS as CURTAINS, FABRICS, RUG_MODELS, RUG_COLORS, TEXTILE_KEY} from '../ev/tekstil.js?v=20261021d';
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
@@ -156,7 +157,7 @@ function shell() {
   <header class="f-header">
     <a class="f-brand" href="index.html?lang=${state.lang}">AURA</a>
     <nav class="f-families" id="families" aria-label="${esc(L('title'))}"></nav>
-    <button class="f-guide-btn" id="guideBtn" type="button">${L('guide')}</button>
+    <button class="f-guide-btn" id="textileBtn" type="button">${L('textile')}</button>
     <button class="f-account" id="accountBtn" type="button"></button>
     <label class="f-lang"><span class="sr">Language</span><select id="lang">${Object.entries(UI_LANGS).map(([k, v]) => `<option value="${k}" ${k === state.lang ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
   </header>
@@ -1143,7 +1144,7 @@ function listen() {
 // ---- Events ----------------------------------------------------------------------------------
 function bindShell() {
   $('#accountBtn').onclick = () => openAccount();
-  $('#guideBtn').onclick = () => openGuide();
+  $('#textileBtn').onclick = () => openTextile();
   renderAccountBtn();
   $('#lang').onchange = e => { state.lang = e.target.value; store.set('aura-forma-lang', state.lang); state.drawingCache = null; shell(); };
   $('#families').onclick = e => { const b = e.target.closest('[data-family]'); if (b && b.dataset.family !== state.design.family) switchFamily(b.dataset.family); };
@@ -1253,6 +1254,34 @@ const GUIDE_ICONS = [
   // 6 send: a sheet and an arrow
   '<path d="M12 6h22l8 8v28H12z"/><path d="M34 6v8h8M17 20h18M17 26h18M17 32h10"/><path d="M40 34h16M50 28l6 6-6 6" class="r"/>'
 ];
+// ---- Home textiles: curtains and rugs chosen by model and colour; ev.html uses the same choice ------------------
+function textilePreview(c, r) {
+  const fab = (FABRICS.find(f => f[0] === c.color) || FABRICS[0])[2], rc = (RUG_COLORS.find(f => f[0] === r.color) || RUG_COLORS[0])[2], m = CURTAINS[c.model]?.[1] || {};
+  const folds = (x0, w, col, op) => { let d = ''; const n = Math.max(3, Math.round(w / 9)); for (let i = 0; i < n; i++) { const x = x0 + i * w / n; d += `<rect x="${x.toFixed(1)}" y="22" width="${(w / n).toFixed(1)}" height="168" fill="${col}" opacity="${op}"/><line x1="${(x + w / n / 2).toFixed(1)}" y1="22" x2="${(x + w / n / 2).toFixed(1)}" y2="190" stroke="rgba(0,0,0,${op * .12})" stroke-width="2"/>`; } return d; };
+  let cur = '';
+  if (c.model !== 'yok') {
+    if (m.shade) cur = `<rect x="92" y="40" width="136" height="70" fill="${fab}"/>${m.shade === 'pleated' ? Array.from({length: 9}, (_, i) => `<line x1="92" x2="228" y1="${44 + i * 7.5}" y2="${44 + i * 7.5}" stroke="rgba(0,0,0,.12)"/>`).join('') : ''}<rect x="88" y="36" width="144" height="6" fill="#8b857a"/>`;
+    else { if (m.sheer) cur += folds(72, 176, '#fbf8f1', .55); if (m.drape) cur += folds(58, 36, fab, 1) + folds(226, 36, fab, 1); cur += `<rect x="54" y="18" width="212" height="4" fill="#8b857a"/>`; }
+  }
+  const rug = r.model === 'yok' ? '' : `<rect x="70" y="200" width="180" height="34" fill="${rc}"/>${r.model === 'cizgili' ? Array.from({length: 8}, (_, i) => `<rect x="${82 + i * 21}" y="203" width="7" height="28" fill="rgba(255,250,240,.35)"/>`).join('') : r.model === 'geometrik' ? Array.from({length: 7}, (_, i) => `<path d="M${88 + i * 24} 205l10 12-10 12-10-12z" fill="none" stroke="rgba(255,250,240,.45)" stroke-width="1.6"/>`).join('') : r.model === 'kilim' ? Array.from({length: 7}, (_, i) => `<path d="M${88 + i * 24} 207l8 10-8 10-8-10z" fill="rgba(40,30,20,${i % 2 ? .3 : .15})"/>`).join('') : ''}<rect x="74" y="203" width="172" height="28" fill="none" stroke="rgba(40,30,20,.3)" stroke-width="2"/>`;
+  return `<svg viewBox="0 0 320 244" class="f-tx-view" aria-hidden="true"><rect width="320" height="244" fill="#efeae0"/><rect x="0" y="196" width="320" height="48" fill="#cdb592"/><rect x="92" y="36" width="136" height="150" fill="#cfe0e6" stroke="#fff" stroke-width="6"/><line x1="160" y1="36" x2="160" y2="186" stroke="#fff" stroke-width="4"/>${cur}${rug}</svg>`;
+}
+function openTextile() {
+  document.querySelector('.f-modal')?.remove();
+  const tx = store.get(TEXTILE_KEY) || {curtain: {model: 'tul-fon', color: 'keten'}, rug: {model: 'duz', color: 'yulaf'}};
+  const m = document.createElement('div'); m.className = 'f-modal f-textile'; m.setAttribute('role', 'dialog'); m.setAttribute('aria-modal', 'true');
+  const row = (grp, list, cur) => `<div class="f-tx-models">${list.map(([k, v]) => `<button data-g="${grp}" data-m="${k}" aria-pressed="${cur === k}">${esc(v)}</button>`).join('')}</div>`;
+  const sw = (grp, list, cur) => `<div class="f-tx-sw">${list.map(([k, n, h]) => `<button data-g="${grp}" data-c="${k}" title="${esc(n)}" aria-label="${esc(n)}" aria-pressed="${cur === k}" style="background:${h}"></button>`).join('')}</div>`;
+  const draw = () => { m.innerHTML = `<div class="f-modal-box"><button class="f-modal-x" data-x="1" aria-label="×">×</button><p class="f-eyebrow">AURA · ${esc(L('textile'))}</p><h2>${esc(L('textileTitle'))}</h2>
+    ${textilePreview(tx.curtain, tx.rug)}
+    <h3>Perde</h3>${row('curtain', Object.entries(CURTAINS).map(([k, v]) => [k, v[0]]).concat([['yok', 'Perdesiz']]), tx.curtain.model)}${sw('curtain', FABRICS, tx.curtain.color)}
+    <h3>Halı</h3>${row('rug', Object.entries(RUG_MODELS), tx.rug.model)}${sw('rug', RUG_COLORS, tx.rug.color)}
+    <p class="f-note">${esc(L('textileNote'))}</p><div class="f-actions"><a class="f-primary" href="ev.html">${esc(L('textileHome'))} →</a></div></div>`; };
+  m.addEventListener('click', e => { if (e.target === m || e.target.closest('[data-x]')) return m.remove(); const b = e.target.closest('button[data-g]'); if (!b) return;
+    const o = tx[b.dataset.g]; if (b.dataset.m) o.model = b.dataset.m; if (b.dataset.c) o.color = b.dataset.c; store.set(TEXTILE_KEY, tx); draw(); });
+  m.addEventListener('keydown', e => { if (e.key === 'Escape') m.remove(); });
+  draw(); document.body.append(m);
+}
 let guideThen = null;
 const guideDue = () => !store.get('aura-forma-guide-seen');
 function openGuide() {
@@ -1312,7 +1341,7 @@ account.init().then(async u => {
   if (u) { try { if (await account.pull(designKey)) location.reload(); } catch {} }
   else if (!store.get('aura-forma-account-skip') && !location.hash.includes('access_token')) { if (!guideDue() && !document.querySelector('.f-modal')) openAccount(true); } // not on top of the first-visit guide
 }).catch(() => {});
-if (guideDue() && !location.hash.includes('access_token')) openGuide();
+
 window.addEventListener('pagehide', () => { account.flush(); });
 if (start.note) { feedback(start.note); state.tab = 'parts'; renderPanel(); }
 // A link from a PDF or package (#d= one design, #p= a whole project) opens that work.

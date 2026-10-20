@@ -4,8 +4,8 @@
 import * as THREE from '../vendor/three.module.js?v=20261016b';
 import {PAINTS, FLOORS, SCHEMES, paintHex, floorTexture} from './finishes.js?v=20261020r';
 import {compileItem, footprint, itemName} from './items.js?v=20261020u';
-import {accessories, RUG_MODELS, RUG_COLORS} from './aksesuar.js?v=20261021c';
-import {curtains, STATES as PSTATES, MODELS as CMODELS, FABRICS} from './perde.js?v=20261021c';
+import {accessories, RUG_MODELS, RUG_COLORS} from './aksesuar.js?v=20261021d';
+import {curtains, STATES as PSTATES, MODELS as CMODELS, FABRICS} from './perde.js?v=20261021d';
 
 const $ = s => document.querySelector(s), NS = 'http://www.w3.org/2000/svg';
 const val = q => (q && typeof q === 'object' ? q.value : q) ?? 0;
@@ -30,7 +30,7 @@ const opsOf = id => { if (opsCache.has(id)) return opsCache.get(id); const w = W
     a = Math.max(0, a); b = Math.min(w.L, b); if (b - a > 50) out.push({...o, a, w: b - a, ghost: true}); }
   out.sort((p, q) => p.a - q.a); opsCache.set(id, out); return out; };
 function load(rec, name, keep = false) {
-  D = rec; S.name = name; if (!keep) { S.room = null; vb = null; }
+  D = rec; if (!D.decor) try { const t = JSON.parse(localStorage.getItem('aura-tekstil')); if (t) D.decor = {curtain: t.curtain, rug: t.rug}; } catch {} S.name = name; if (!keep) { S.room = null; vb = null; }
   walls = D.walls.map(w => { const [x0, y0] = w.from_xy_mm, [x1, y1] = w.to_xy_mm, L = Math.hypot(x1 - x0, y1 - y0) || 1;
     return {...w, x0, y0, x1, y1, L, ux: (x1 - x0) / L, uy: (y1 - y0) / L, t: val(w.thickness) || 120}; });
   W = Object.fromEntries(walls.map(w => [w.id, w]));

@@ -7,9 +7,8 @@
 // (≈750–800 above the top), a floor lamp at the sofa end, a desk lamp on the desk, one ceiling light per room.
 import {compileItem} from './items.js?v=20261020u';
 
-export const RUG_MODELS = {duz: 'Düz · bordürlü', cizgili: 'Çizgili', geometrik: 'Geometrik', kilim: 'Kilim', yok: 'Halısız'};
-export const RUG_COLORS = [['yulaf', 'Yulaf', '#cdbb9c'], ['kum', 'Kum', '#b8a184'], ['krem', 'Krem', '#e3d9c6'], ['gri', 'Taş gri', '#a9a59c'],
-  ['adacayi', 'Adaçayı', '#9ea58e'], ['terrakota', 'Terrakota', '#b06f55'], ['lacivert', 'Lacivert', '#3f4b5c'], ['bordo', 'Bordo', '#7a3b3b']];
+import {RUG_MODELS, RUG_COLORS} from './tekstil.js?v=20261021d';
+export {RUG_MODELS, RUG_COLORS};
 export const RUG_SIZES = [[1200, 1800], [1400, 2000], [1600, 2300], [1700, 2400], [2000, 2000], [2000, 2500], [2000, 3000], [2400, 3400], [800, 2500]];
 const frame = it => { const t = (it.rot_deg || 0) * Math.PI / 180, {size} = compileItem(it);
   return {c: it.pos_xy_mm, X: [Math.cos(t), Math.sin(t)], F: [Math.sin(t), -Math.cos(t)], w: size.w, d: size.d, h: size.h}; };
