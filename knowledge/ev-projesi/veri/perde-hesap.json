@@ -1,0 +1,405 @@
+{
+  "schema_version": "1.0",
+  "unit": "mm",
+  "headings": {
+    "single": {
+      "estimation_range": [
+        1.5,
+        2
+      ],
+      "status": "source_range",
+      "source_ids": [
+        "HEMA",
+        "IKEA-NL"
+      ],
+      "production_fullness": "selected_hardware_and_workroom_required"
+    },
+    "double": {
+      "estimation_range": [
+        2,
+        2.5
+      ],
+      "status": "source_range",
+      "source_ids": [
+        "HEMA",
+        "IKEA-NL"
+      ],
+      "production_fullness": "selected_hardware_and_workroom_required"
+    },
+    "triple": {
+      "estimation_range": [
+        2.5,
+        3
+      ],
+      "status": "source_range",
+      "source_ids": [
+        "HEMA"
+      ],
+      "production_fullness": "selected_hardware_and_workroom_required"
+    },
+    "wave": {
+      "estimation_range": [
+        2.1,
+        2.3
+      ],
+      "status": "AURA_estimation_envelope_confirm_workroom",
+      "source_ids": [
+        "SG"
+      ],
+      "production_fullness": "selected_hardware_and_workroom_required"
+    },
+    "pencil": {
+      "estimation_range": [
+        1.5,
+        2.5
+      ],
+      "status": "AURA_estimation_envelope_confirm_workroom",
+      "source_ids": [
+        "JL",
+        "DUNELM"
+      ],
+      "production_fullness": "selected_hardware_and_workroom_required"
+    },
+    "eyelet": {
+      "estimation_range": [
+        1.5,
+        2.5
+      ],
+      "status": "AURA_estimation_envelope_confirm_workroom",
+      "source_ids": [
+        "JL",
+        "DUNELM"
+      ],
+      "production_fullness": "selected_hardware_and_workroom_required"
+    },
+    "rings": {
+      "estimation_range": [
+        1.5,
+        2.5
+      ],
+      "status": "AURA_estimation_envelope_confirm_workroom",
+      "source_ids": [
+        "IKEA-CH",
+        "IKEA-AT"
+      ],
+      "production_fullness": "selected_hardware_and_workroom_required"
+    },
+    "rod_pocket": {
+      "estimation_range": [
+        1.5,
+        2.5
+      ],
+      "status": "AURA_estimation_envelope_confirm_workroom",
+      "source_ids": [
+        "IKEA-AT"
+      ],
+      "production_fullness": "selected_hardware_and_workroom_required"
+    },
+    "velcro": {
+      "estimation_range": [
+        1,
+        1
+      ],
+      "status": "AURA_estimation_envelope_confirm_workroom",
+      "source_ids": [
+        "LEROY-IT"
+      ],
+      "production_fullness": "selected_hardware_and_workroom_required"
+    }
+  },
+  "sewing_profiles": {
+    "mondial": {
+      "top_mm": 100,
+      "bottom_mm": 200,
+      "side_each_mm": 40,
+      "join_each_edge_mm": 20,
+      "status": "mixed_source_and_proposal",
+      "source_ids": [
+        "MONDIAL"
+      ],
+      "note": "Üst/alt/yan kaynaklı; birleşimde her kenar 20 mm AURA önerisi, atölye onayı ister."
+    },
+    "hema": {
+      "top_mm": 100,
+      "bottom_mm": 100,
+      "side_each_mm": 40,
+      "join_each_edge_mm": 20,
+      "status": "mixed_source_and_proposal",
+      "source_ids": [
+        "HEMA",
+        "MONDIAL"
+      ],
+      "note": "Üst/alt HEMA; yan Mondial; birleşim 20 mm öneri. Karma ön tahmin profili."
+    }
+  },
+  "mount_profiles": {
+    "ikea_150": {
+      "side_extension_mm": 150,
+      "above_window_mm": 150,
+      "status": "manufacturer_guidance_not_country_rule",
+      "source_ids": [
+        "IKEA-NL",
+        "IKEA-NO"
+      ]
+    },
+    "lutz_200": {
+      "side_extension_mm": 200,
+      "above_window_mm": null,
+      "status": "manufacturer_guidance_not_country_rule",
+      "source_ids": [
+        "LUTZ"
+      ]
+    },
+    "pfister_200": {
+      "side_extension_mm": 200,
+      "above_window_mm": null,
+      "status": "manufacturer_guidance_not_country_rule",
+      "source_ids": [
+        "PFISTER"
+      ]
+    }
+  },
+  "floor_gaps": [
+    {
+      "value_mm": 10,
+      "source_ids": [
+        "HEMA"
+      ]
+    },
+    {
+      "value_mm": 15,
+      "source_ids": [
+        "PFISTER"
+      ]
+    },
+    {
+      "value_mm": 20,
+      "source_ids": [
+        "MONDIAL",
+        "HEMTEX"
+      ]
+    }
+  ],
+  "blind_profiles": {
+    "jysk_recess_roller": {
+      "mount": "recess",
+      "deduct_width_mm": 10,
+      "deduct_height_mm": 0,
+      "status": "raw_opening_to_order_then_no_factory_deduction",
+      "source_ids": [
+        "JYSK"
+      ]
+    },
+    "jysk_outside_roller": {
+      "mount": "outside",
+      "deduct_width_mm": -100,
+      "deduct_height_mm": -80,
+      "status": "manufacturer_max_opening_plus_overlap",
+      "source_ids": [
+        "JYSK"
+      ]
+    },
+    "leroy_es_recess_width": {
+      "mount": "recess",
+      "deduct_width_mm": 10,
+      "deduct_height_mm": 0,
+      "status": "width_guidance_height_no_extra_deduction_proposal",
+      "source_ids": [
+        "LEROY-ES"
+      ],
+      "note": "Yalnız genel en ön tahmini; son boy ve mekanizma üretici onayı ister."
+    }
+  },
+  "exterior_blind": {
+    "side_extension_mm": 100,
+    "status": "manufacturer_minimum_not_universal",
+    "source_ids": [
+      "LEROY-ES"
+    ],
+    "order_dimensions": "selected_product_required"
+  },
+  "puddle": {
+    "extra_drop_range_mm": [
+      100,
+      200
+    ],
+    "status": "manufacturer_style_option_not_floor_clearance",
+    "source_ids": [
+      "PFISTER"
+    ],
+    "calculator_support": false,
+    "note": "Çocuk, robot süpürge, dolaşım yolu ve nemli hacimde ayrıca değerlendirilir."
+  },
+  "fabric_rolls": [
+    {
+      "width_mm": 1400,
+      "source_ids": [
+        "DIRECT-WIDTH"
+      ]
+    },
+    {
+      "width_mm": 2800,
+      "source_ids": [
+        "DIRECT-WIDTH"
+      ]
+    },
+    {
+      "width_mm": 3000,
+      "source_ids": [
+        "DAYBREAK"
+      ]
+    }
+  ],
+  "fabric_samples": [
+    {
+      "id": "daybreak2",
+      "composition": "100% polyester FR",
+      "opacity": "sheer",
+      "width_mm": 3000,
+      "rotatable": true,
+      "weight": {
+        "value": 270,
+        "unit": "g/linear_m"
+      },
+      "derived_weight": {
+        "value": 90,
+        "unit": "g/m2",
+        "formula": "270 / 3"
+      },
+      "shrink_warp": 0.03,
+      "shrink_weft": 0.01,
+      "care": "60°C nazik; ağartma/kurutma makinesi yok; ütü azami 150°C; güncel renk/SKU etiketini kontrol et.",
+      "lightfastness": null,
+      "visible_transmission": null,
+      "acoustic_numeric_result": null,
+      "source_ids": [
+        "DAYBREAK"
+      ],
+      "fire": "Üretici sertifika bağlantıları ayrı kapsamları temsil eder; B1, M1, EN13773 sınıf1 ve BS5867-2 typeB birbirinin yerine geçmez."
+    },
+    {
+      "id": "dawn2",
+      "composition": "100% polyester FR",
+      "opacity": "dimout",
+      "width_mm": 3000,
+      "rotatable": null,
+      "weight": {
+        "value": 780,
+        "unit": "g/linear_m"
+      },
+      "derived_weight": {
+        "value": 260,
+        "unit": "g/m2",
+        "formula": "780 / 3"
+      },
+      "shrink_warp": 0.02,
+      "shrink_weft": 0,
+      "lightfastness": {
+        "range": [
+          5,
+          7
+        ],
+        "test": "ISO 105-B02"
+      },
+      "visible_transmission": {
+        "percent_range": [
+          0,
+          0.37
+        ],
+        "test": "DIN EN 410",
+        "condition": "flat_state_colour_range_not_installed_room"
+      },
+      "sound_absorption": {
+        "airgap_mm": 100,
+        "flat": {
+          "value": 0.45,
+          "classification": "D"
+        },
+        "waved": {
+          "value": 0.65,
+          "classification": "C"
+        },
+        "test": "EN ISO 354",
+        "note": "Ses geçiş kaybı/dB yalıtımı değildir."
+      },
+      "care": "60°C azami yıkama; asarak kurutma; güncel etiket esas.",
+      "source_ids": [
+        "DAWN"
+      ]
+    }
+  ],
+  "fabric_taxonomy": [
+    {
+      "family": "linen",
+      "grammage_g_m2": null,
+      "shrink": null,
+      "care": "SKU etiketinden alınır; lif adına göre sıcaklık veya çekme atanmaz.",
+      "opacity": "construction_and_lining_dependent",
+      "status": "qualitative_material_option",
+      "source_ids": [
+        "MONDIAL-FABRIC"
+      ]
+    },
+    {
+      "family": "cotton",
+      "grammage_g_m2": null,
+      "shrink": null,
+      "care": "SKU etiketinden alınır; lif adına göre sıcaklık veya çekme atanmaz.",
+      "opacity": "construction_and_lining_dependent",
+      "status": "qualitative_material_option",
+      "source_ids": [
+        "MONDIAL-FABRIC"
+      ]
+    },
+    {
+      "family": "polyester",
+      "grammage_g_m2": null,
+      "shrink": null,
+      "care": "SKU etiketinden alınır; lif adına göre sıcaklık veya çekme atanmaz.",
+      "opacity": "construction_and_lining_dependent",
+      "status": "qualitative_material_option",
+      "source_ids": [
+        "MONDIAL-FABRIC"
+      ]
+    },
+    {
+      "family": "velvet",
+      "grammage_g_m2": null,
+      "shrink": null,
+      "care": "SKU etiketinden alınır; lif adına göre sıcaklık veya çekme atanmaz.",
+      "opacity": "construction_and_lining_dependent",
+      "status": "qualitative_material_option",
+      "source_ids": [
+        "MONDIAL-FABRIC"
+      ]
+    }
+  ],
+  "performance_policy": {
+    "thermal_saving_percent": null,
+    "sound_isolation_db": null,
+    "blackout": "Kumaşın karartması odada sıfır ışık garantisi değil; yan/üst/alt kaçak ve ray-mekanizma birlikte değerlendirilir.",
+    "lightfastness": "ISO105-B02 sayısı yoksa unknown; renk/SKU ve test standardı birlikte saklanır.",
+    "source_ids": [
+      "DAWN",
+      "DUNELM",
+      "DAYBREAK"
+    ]
+  },
+  "safety": {
+    "default": "cordless_preferred_not_automatically_certified",
+    "source_ids": [
+      "BSI-13120",
+      "BBSA",
+      "DIN-16434"
+    ],
+    "mounting_load_kg": null,
+    "fixing_spacing_mm": null,
+    "cord_safe_length_mm": null,
+    "missing": "Ürün test belgesi, mekanizma, duvar/tavan malzemesi, dübel taşıması ve çocuk erişimi bilinmeden güvenli kurulum onayı üretilmez."
+  },
+  "formulas": {
+    "normal": "n=max(1,ceil((rail*fullness/panels+2*side-2*join)/(usable_width*(1-shrink_weft)-2*join))); drops=n*panels; cut=ceil_to_repeat((drop+top+bottom)/(1-shrink_warp)); metres=drops*cut/1000",
+    "railroad": "cut_drop=(drop+top+bottom)/(1-shrink_weft) <= usable_width; metres=(rail*fullness+2*panels*side)/(1-shrink_warp)/1000",
+    "limitation": "Payların tamamı da çekme telafisine dahil edilir; ön yıkama yapıldıysa yalnız belgelendirilmiş kalan çekme girilir. Kesim boyu mm, toplam sipariş doğrusal m olarak yukarı yuvarlanır; desen faz başlangıcı ayrı rezerve edilir."
+  }
+}
