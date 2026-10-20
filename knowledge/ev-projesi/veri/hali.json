@@ -1,0 +1,99 @@
+{
+  "schema_version": "0.1",
+  "category": "hali",
+  "types": [
+    "yün",
+    "pamuk",
+    "jut",
+    "sentetik",
+    "duz_dokuma",
+    "havli"
+  ],
+  "asset_candidates": [
+    {
+      "source_id": "ambientcg",
+      "status": "license_cleared_asset_not_selected"
+    },
+    {
+      "source_id": "polyhaven",
+      "status": "license_cleared_asset_not_selected"
+    },
+    {
+      "source_id": "infinigen",
+      "status": "paths_verified_runtime_export_dimensions_pending",
+      "inventory_file": "infinigen-envanter.json"
+    }
+  ],
+  "entries": [
+    {
+      "id": "market-sizes",
+      "dimensions": {
+        "value": [
+          [
+            800,
+            1500
+          ],
+          [
+            1330,
+            1950
+          ],
+          [
+            1700,
+            2400
+          ],
+          [
+            2000,
+            3000
+          ]
+        ],
+        "unit": "mm",
+        "source_ids": [
+          "rug-guide"
+        ],
+        "status": "verified_reference",
+        "note": ""
+      }
+    },
+    {
+      "id": "tr-example",
+      "dimensions": {
+        "value": [
+          1600,
+          2300
+        ],
+        "unit": "mm",
+        "source_ids": [
+          "rug-tr"
+        ],
+        "status": "verified_reference",
+        "note": ""
+      }
+    },
+    {
+      "id": "materials-and-weaves",
+      "values": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Bu teslimde malzeme/dokuma türlerine bağlı ürün föyü ve hav kalınlığı doğrulanmadı; türler tasnif önerisidir."
+      }
+    }
+  ],
+  "rules": [
+    {
+      "id": "front-legs",
+      "source_ids": [
+        "rug-placement"
+      ],
+      "rule": "Oturma grubunda ön ayaklar veya bütün ayaklar halıda olacak alternatifler değerlendirilebilir; zorunlu yapı kuralı değildir."
+    },
+    {
+      "id": "safety",
+      "rule": "Kapı açılımı, robot süpürge, kaymaz altlık, takılma riski ve sandalyenin çekilme alanı ürün bazında kontrol edilsin.",
+      "status": "design_proposal",
+      "source_ids": []
+    }
+  ],
+  "integration_status": "research_only_not_imported"
+}

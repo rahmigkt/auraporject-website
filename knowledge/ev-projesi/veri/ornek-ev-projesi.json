@@ -1,0 +1,743 @@
+{
+  "schema_version": "0.1",
+  "project_id": "synthetic-home-example",
+  "revision": 1,
+  "status": "survey",
+  "coordinate_system": "mm; right-handed; x/y floor plane, z up; local origin; glTF adapter converts units and up-axis",
+  "language": {
+    "customer": "en",
+    "designer": "tr"
+  },
+  "brief": {
+    "whole_home": true,
+    "goals": [
+      "Bütün evde ortak malzeme dili",
+      "Mevcut koltuğu koru",
+      "Perde, halı, ışık ve aksesuarları birlikte değerlendir"
+    ],
+    "budget": {
+      "amount": null,
+      "currency": "TRY",
+      "includes": [
+        "mobilya",
+        "tekstil",
+        "aydinlatma",
+        "aksesuar",
+        "uygulama"
+      ],
+      "estimate_status": "unknown"
+    },
+    "household_needs": [
+      "Geçişi açık tut"
+    ],
+    "style": [
+      "sakin",
+      "dogal"
+    ],
+    "preserve": [
+      "sofa-existing"
+    ]
+  },
+  "levels": [
+    {
+      "id": "ground",
+      "name": "Zemin kat",
+      "elevation": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "fixture-note"
+        ],
+        "uncertainty": null
+      }
+    }
+  ],
+  "spaces": [
+    {
+      "id": "living",
+      "level_id": "ground",
+      "name": "Salon",
+      "kind": "living",
+      "boundary_xy_mm": [
+        [
+          0,
+          0
+        ],
+        [
+          4000,
+          0
+        ],
+        [
+          4000,
+          4000
+        ],
+        [
+          0,
+          4000
+        ]
+      ],
+      "wall_ids": [
+        "south",
+        "north",
+        "west",
+        "shared"
+      ],
+      "ceiling_height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "fixture-note"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    },
+    {
+      "id": "bedroom",
+      "level_id": "ground",
+      "name": "Yatak odası",
+      "kind": "bedroom",
+      "boundary_xy_mm": [
+        [
+          4000,
+          0
+        ],
+        [
+          8000,
+          0
+        ],
+        [
+          8000,
+          4000
+        ],
+        [
+          4000,
+          4000
+        ]
+      ],
+      "wall_ids": [
+        "south",
+        "north",
+        "east",
+        "shared"
+      ],
+      "ceiling_height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "fixture-note"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    }
+  ],
+  "walls": [
+    {
+      "id": "south",
+      "level_id": "ground",
+      "from_xy_mm": [
+        0,
+        0
+      ],
+      "to_xy_mm": [
+        8000,
+        0
+      ],
+      "thickness": {
+        "value": 150,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "fixture-note"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "living",
+        "bedroom"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "north",
+      "level_id": "ground",
+      "from_xy_mm": [
+        0,
+        4000
+      ],
+      "to_xy_mm": [
+        8000,
+        4000
+      ],
+      "thickness": {
+        "value": 150,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "fixture-note"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "living",
+        "bedroom"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "west",
+      "level_id": "ground",
+      "from_xy_mm": [
+        0,
+        0
+      ],
+      "to_xy_mm": [
+        0,
+        4000
+      ],
+      "thickness": {
+        "value": 150,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "fixture-note"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "living"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "east",
+      "level_id": "ground",
+      "from_xy_mm": [
+        8000,
+        0
+      ],
+      "to_xy_mm": [
+        8000,
+        4000
+      ],
+      "thickness": {
+        "value": 150,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "fixture-note"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "bedroom"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "shared",
+      "level_id": "ground",
+      "from_xy_mm": [
+        4000,
+        0
+      ],
+      "to_xy_mm": [
+        4000,
+        4000
+      ],
+      "thickness": {
+        "value": 150,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "fixture-note"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "living",
+        "bedroom"
+      ],
+      "structural_status": "synthetic_fixture"
+    }
+  ],
+  "openings": [
+    {
+      "id": "door-shared",
+      "wall_id": "shared",
+      "kind": "door",
+      "space_ids": [
+        "living",
+        "bedroom"
+      ],
+      "offset_from_wall_start": {
+        "value": 500,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "fixture-note"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "fixture-note"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "fixture-note"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "fixture-note"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    },
+    {
+      "id": "living-window",
+      "wall_id": "west",
+      "kind": "window",
+      "space_ids": [
+        "living"
+      ],
+      "offset_from_wall_start": {
+        "value": 1500,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "fixture-note"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1500,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "fixture-note"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "fixture-note"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "fixture-note"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "fixture-note",
+      "kind": "note",
+      "space_ids": [
+        "living",
+        "bedroom"
+      ],
+      "private_object_id": null,
+      "caption": "Bütün koordinatlar ve ölçüler şema denemesi için sentetiktir; piyasa ölçüsü veya gerçek konut değildir. Eksik giriş, diğer odalar ve tesisat nedeniyle tam ev değildir.",
+      "language": "tr",
+      "training_consent": false,
+      "synthetic": true
+    },
+    {
+      "id": "photo-living-placeholder",
+      "kind": "photo",
+      "space_ids": [
+        "living"
+      ],
+      "private_object_id": null,
+      "caption": "Gerçek fotoğraf yok; yalnız ilişki örneği.",
+      "language": "tr",
+      "training_consent": false,
+      "synthetic": true
+    }
+  ],
+  "items": [
+    {
+      "id": "sofa-existing",
+      "space_id": "living",
+      "category": "furniture",
+      "label": "Korunacak mevcut koltuk",
+      "origin": "existing",
+      "decision": "keep",
+      "evidence_ids": [
+        "fixture-note",
+        "photo-living-placeholder"
+      ],
+      "dimensions": {
+        "width": {
+          "value": 2200,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "fixture-note"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": 900,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "fixture-note"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 850,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "fixture-note"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        500,
+        2500,
+        0
+      ],
+      "rotation_z_deg": 0,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": null
+    },
+    {
+      "id": "rug-proposal",
+      "space_id": "living",
+      "category": "rug",
+      "label": "Halı önerisi",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "fixture-note"
+      ],
+      "dimensions": {
+        "width": {
+          "value": 2000,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "fixture-note"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": 2400,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "fixture-note"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 10,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "fixture-note"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        1000,
+        500,
+        0
+      ],
+      "rotation_z_deg": 0,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": null
+    },
+    {
+      "id": "curtain-proposal",
+      "space_id": "living",
+      "category": "curtain",
+      "label": "Pencere perdesi; ölçü bekliyor",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "fixture-note"
+      ],
+      "dimensions": {
+        "width": {
+          "value": null,
+          "unit": "mm",
+          "status": "unknown",
+          "evidence_ids": [
+            "fixture-note"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": null,
+          "unit": "mm",
+          "status": "unknown",
+          "evidence_ids": [
+            "fixture-note"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": null,
+          "unit": "mm",
+          "status": "unknown",
+          "evidence_ids": [
+            "fixture-note"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        0,
+        1500,
+        0
+      ],
+      "rotation_z_deg": 0,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": null
+    },
+    {
+      "id": "bed-proposal",
+      "space_id": "bedroom",
+      "category": "furniture",
+      "label": "Yatak için ayrılan alan",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "fixture-note"
+      ],
+      "dimensions": {
+        "width": {
+          "value": 1600,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "fixture-note"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": 2000,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "fixture-note"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 500,
+          "unit": "mm",
+          "status": "synthetic_fixture",
+          "evidence_ids": [
+            "fixture-note"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        5000,
+        1500,
+        0
+      ],
+      "rotation_z_deg": 0,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": null
+    },
+    {
+      "id": "lamp-proposal",
+      "space_id": "bedroom",
+      "category": "lighting",
+      "label": "Okuma ışığı; ürün seçilmedi",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "fixture-note"
+      ],
+      "dimensions": {
+        "width": {
+          "value": null,
+          "unit": "mm",
+          "status": "unknown",
+          "evidence_ids": [
+            "fixture-note"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": null,
+          "unit": "mm",
+          "status": "unknown",
+          "evidence_ids": [
+            "fixture-note"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": null,
+          "unit": "mm",
+          "status": "unknown",
+          "evidence_ids": [
+            "fixture-note"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        7000,
+        3000,
+        0
+      ],
+      "rotation_z_deg": 0,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": null
+    },
+    {
+      "id": "mirror-proposal",
+      "space_id": "bedroom",
+      "category": "accessory",
+      "label": "Ayna; ürün seçilmedi",
+      "origin": "proposed",
+      "decision": "proposed",
+      "evidence_ids": [
+        "fixture-note"
+      ],
+      "dimensions": {
+        "width": {
+          "value": null,
+          "unit": "mm",
+          "status": "unknown",
+          "evidence_ids": [
+            "fixture-note"
+          ],
+          "uncertainty": null
+        },
+        "depth": {
+          "value": null,
+          "unit": "mm",
+          "status": "unknown",
+          "evidence_ids": [
+            "fixture-note"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": null,
+          "unit": "mm",
+          "status": "unknown",
+          "evidence_ids": [
+            "fixture-note"
+          ],
+          "uncertainty": null
+        }
+      },
+      "position_xyz_mm": [
+        7900,
+        2000,
+        0
+      ],
+      "rotation_z_deg": 0,
+      "placement_status": "synthetic_fixture",
+      "studio_ref": null
+    }
+  ],
+  "finishes": [
+    {
+      "id": "wall-finish",
+      "space_id": "living",
+      "surface_ref": "west",
+      "material_category": "boya",
+      "asset_ref": null,
+      "net_area": {
+        "value": null,
+        "unit": "m2",
+        "status": "unknown",
+        "evidence_ids": [
+          "fixture-note"
+        ],
+        "uncertainty": null
+      },
+      "waste_fraction": null,
+      "quantity_status": "unknown"
+    }
+  ],
+  "connections": [
+    {
+      "id": "route-1",
+      "from_space_id": "living",
+      "to_space_id": "bedroom",
+      "opening_id": "door-shared",
+      "status": "unverified"
+    }
+  ],
+  "notes": [
+    {
+      "id": "customer-note",
+      "original": "Keep the sofa; discuss curtains and lighting for the whole home.",
+      "original_language": "en",
+      "turkish_translation": "Koltuğu koruyun; bütün evin perde ve aydınlatmasını birlikte değerlendirelim.",
+      "translation_status": "machine_unverified"
+    }
+  ],
+  "issues": [
+    {
+      "id": "survey-needed",
+      "space_ids": [
+        "living",
+        "bedroom"
+      ],
+      "kind": "missing_measurement",
+      "message": "Şema örneği gerçek ölçü, fotoğraf ve bütün ev envanteri içermiyor; uygulamaya hazır değil.",
+      "blocking": true,
+      "status": "open"
+    }
+  ],
+  "review": {
+    "id": "review-1",
+    "state": "awaiting_designer",
+    "revision": 1,
+    "designer_id": null,
+    "designer_approval_revision": null,
+    "blocking_issue_ids": [
+      "survey-needed"
+    ]
+  },
+  "example_only": true
+}

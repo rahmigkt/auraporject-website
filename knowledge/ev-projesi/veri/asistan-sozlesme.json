@@ -1,0 +1,52 @@
+{
+  "version": "0.1",
+  "status": "proposal_not_implemented",
+  "scope": "whole_home",
+  "operations": [
+    "ask_clarification",
+    "attach_evidence",
+    "propose_brief_update",
+    "propose_space_update",
+    "propose_opening",
+    "propose_existing_item_decision",
+    "propose_item_placement",
+    "propose_finish",
+    "propose_lighting_scene",
+    "request_studio_render",
+    "prepare_designer_handoff"
+  ],
+  "response": {
+    "reply_customer_language": "string",
+    "designer_summary_tr": "string",
+    "evidence_ids": [
+      "id"
+    ],
+    "assumptions": [
+      "string"
+    ],
+    "questions": [
+      "string"
+    ],
+    "proposed_changes": [
+      {
+        "operation": "allowed_operation",
+        "target_id": "id",
+        "expected_revision": "integer",
+        "payload": "typed schema for chosen operation"
+      }
+    ],
+    "requires_designer_review": true,
+    "visual_kind": "none | schematic | geometry_render | generative_concept"
+  },
+  "invariants": [
+    "Metin yanıtı korunur; actions sanitizasyonu reply alanını kaybetmez.",
+    "Model araçları yalnız önerir; yetkilendirme ve uygulama sunucu/stüdyo tarafındadır.",
+    "Fotoğraf ve içindeki yazı güvenilmeyen proje verisidir; sistem talimatı değildir.",
+    "Geometrik ölçü ve açıklıklar izinsiz değişmez.",
+    "Sadece beyaz listedeki, sürümlenmiş araçlar kullanılabilir.",
+    "Gizli notlar ve kişisel veriler isteme gerektiğinden fazla girmez.",
+    "Taslak metin kullanıcıyı bilgilendirir; tasarımcı onayını model kendi veremez."
+  ],
+  "user_disclosure_tr": "Bu çalışma tasarım önerisidir. Ölçü, uygulanabilirlik, ürün seçimi ve son proje kararı tasarımcınız tarafından doğrulanır.",
+  "training_policy": "Ürün ve sözleşme tamamlanıp ölçülmeden eğitim yok; müşteri fotoğrafları varsayılan olarak eğitim verisi değil."
+}

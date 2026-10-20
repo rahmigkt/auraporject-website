@@ -1,0 +1,897 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "project_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "enum": [
+        "brief",
+        "survey",
+        "concept",
+        "designer_review",
+        "approved"
+      ]
+    },
+    "coordinate_system": {
+      "const": "mm; right-handed; x/y floor plane, z up; local origin; glTF adapter converts units and up-axis"
+    },
+    "language": {
+      "type": "object",
+      "properties": {
+        "customer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "designer": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "customer",
+        "designer"
+      ],
+      "additionalProperties": false
+    },
+    "brief": {
+      "type": "object",
+      "properties": {
+        "whole_home": {
+          "const": true
+        },
+        "goals": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "budget": {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "currency": {
+              "type": "string",
+              "minLength": 1
+            },
+            "includes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "estimate_status": {
+              "enum": [
+                "unknown",
+                "customer_target",
+                "designer_quote"
+              ]
+            }
+          },
+          "required": [
+            "amount",
+            "currency",
+            "includes",
+            "estimate_status"
+          ],
+          "additionalProperties": false
+        },
+        "household_needs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "style": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "preserve": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "whole_home",
+        "goals",
+        "budget",
+        "household_needs",
+        "style",
+        "preserve"
+      ],
+      "additionalProperties": false
+    },
+    "levels": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "elevation": {
+            "$ref": "#/$defs/measure"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "elevation"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "spaces": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "$ref": "#/$defs/space"
+      }
+    },
+    "walls": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/wall"
+      }
+    },
+    "openings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/opening"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/item"
+      }
+    },
+    "finishes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/finish"
+      }
+    },
+    "connections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "from_space_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "to_space_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "opening_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "unverified",
+              "passable",
+              "blocked",
+              "synthetic_fixture"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "from_space_id",
+          "to_space_id",
+          "opening_id",
+          "status"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "original": {
+            "type": "string",
+            "minLength": 1
+          },
+          "original_language": {
+            "type": "string",
+            "minLength": 1
+          },
+          "turkish_translation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "translation_status": {
+            "enum": [
+              "not_requested",
+              "pending",
+              "machine_unverified",
+              "human_verified"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "original",
+          "original_language",
+          "turkish_translation",
+          "translation_status"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "space_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "kind": {
+            "enum": [
+              "missing_measurement",
+              "collision",
+              "license",
+              "privacy",
+              "legal",
+              "design",
+              "budget"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1
+          },
+          "blocking": {
+            "type": "boolean"
+          },
+          "status": {
+            "enum": [
+              "open",
+              "resolved"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "space_ids",
+          "kind",
+          "message",
+          "blocking",
+          "status"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "review": {
+      "$ref": "#/$defs/review"
+    },
+    "example_only": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "schema_version",
+    "project_id",
+    "revision",
+    "status",
+    "coordinate_system",
+    "language",
+    "brief",
+    "levels",
+    "spaces",
+    "walls",
+    "openings",
+    "evidence",
+    "items",
+    "finishes",
+    "connections",
+    "notes",
+    "issues",
+    "review",
+    "example_only"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:aura:ev:project:0.1",
+  "$defs": {
+    "measure": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "unit": {
+          "enum": [
+            "mm",
+            "m2",
+            "deg"
+          ]
+        },
+        "status": {
+          "enum": [
+            "unknown",
+            "photo_estimate",
+            "user_measured",
+            "plan_import",
+            "designer_verified",
+            "synthetic_fixture"
+          ]
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "uncertainty": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        }
+      },
+      "required": [
+        "value",
+        "unit",
+        "status",
+        "evidence_ids",
+        "uncertainty"
+      ],
+      "additionalProperties": false
+    },
+    "point": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "space": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "level_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "living",
+            "bedroom",
+            "kitchen",
+            "bath",
+            "wc",
+            "hall",
+            "study",
+            "child",
+            "utility",
+            "other"
+          ]
+        },
+        "boundary_xy_mm": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/point"
+          },
+          "minItems": 3
+        },
+        "wall_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "ceiling_height": {
+          "$ref": "#/$defs/measure"
+        },
+        "geometry_status": {
+          "enum": [
+            "unmeasured",
+            "estimated",
+            "user_measured",
+            "designer_verified",
+            "synthetic_fixture"
+          ]
+        },
+        "locked_boundary": {
+          "const": true
+        }
+      },
+      "required": [
+        "id",
+        "level_id",
+        "name",
+        "kind",
+        "boundary_xy_mm",
+        "wall_ids",
+        "ceiling_height",
+        "geometry_status",
+        "locked_boundary"
+      ],
+      "additionalProperties": false
+    },
+    "wall": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "level_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "from_xy_mm": {
+          "$ref": "#/$defs/point"
+        },
+        "to_xy_mm": {
+          "$ref": "#/$defs/point"
+        },
+        "thickness": {
+          "$ref": "#/$defs/measure"
+        },
+        "space_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "structural_status": {
+          "enum": [
+            "unknown",
+            "non_structural_verified",
+            "structural_verified",
+            "synthetic_fixture"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "level_id",
+        "from_xy_mm",
+        "to_xy_mm",
+        "thickness",
+        "space_ids",
+        "structural_status"
+      ],
+      "additionalProperties": false
+    },
+    "opening": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "wall_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "door",
+            "window",
+            "passage"
+          ]
+        },
+        "space_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "offset_from_wall_start": {
+          "$ref": "#/$defs/measure"
+        },
+        "width": {
+          "$ref": "#/$defs/measure"
+        },
+        "height": {
+          "$ref": "#/$defs/measure"
+        },
+        "sill_height": {
+          "$ref": "#/$defs/measure"
+        },
+        "swing": {
+          "enum": [
+            "in",
+            "out",
+            "sliding",
+            "fixed",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "wall_id",
+        "kind",
+        "space_ids",
+        "offset_from_wall_start",
+        "width",
+        "height",
+        "sill_height",
+        "swing"
+      ],
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "photo",
+            "plan",
+            "measurement",
+            "note"
+          ]
+        },
+        "space_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "private_object_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "caption": {
+          "type": "string",
+          "minLength": 1
+        },
+        "language": {
+          "type": "string",
+          "minLength": 1
+        },
+        "training_consent": {
+          "const": false
+        },
+        "synthetic": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "space_ids",
+        "private_object_id",
+        "caption",
+        "language",
+        "training_consent",
+        "synthetic"
+      ],
+      "additionalProperties": false
+    },
+    "item": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "space_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category": {
+          "enum": [
+            "furniture",
+            "lighting",
+            "curtain",
+            "rug",
+            "accessory"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "origin": {
+          "enum": [
+            "existing",
+            "proposed"
+          ]
+        },
+        "decision": {
+          "enum": [
+            "keep",
+            "refurbish",
+            "replace",
+            "undecided",
+            "proposed"
+          ]
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "dimensions": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "$ref": "#/$defs/measure"
+            },
+            "depth": {
+              "$ref": "#/$defs/measure"
+            },
+            "height": {
+              "$ref": "#/$defs/measure"
+            }
+          },
+          "required": [
+            "width",
+            "depth",
+            "height"
+          ],
+          "additionalProperties": false
+        },
+        "position_xyz_mm": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "rotation_z_deg": {
+          "type": "number"
+        },
+        "placement_status": {
+          "enum": [
+            "unplaced",
+            "provisional",
+            "validated",
+            "synthetic_fixture"
+          ]
+        },
+        "studio_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "space_id",
+        "category",
+        "label",
+        "origin",
+        "decision",
+        "evidence_ids",
+        "dimensions",
+        "position_xyz_mm",
+        "rotation_z_deg",
+        "placement_status",
+        "studio_ref"
+      ],
+      "additionalProperties": false
+    },
+    "finish": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "space_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "surface_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "material_category": {
+          "type": "string",
+          "minLength": 1
+        },
+        "asset_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "net_area": {
+          "$ref": "#/$defs/measure"
+        },
+        "waste_fraction": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "quantity_status": {
+          "enum": [
+            "unknown",
+            "provisional",
+            "designer_verified",
+            "synthetic_fixture"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "space_id",
+        "surface_ref",
+        "material_category",
+        "asset_ref",
+        "net_area",
+        "waste_fraction",
+        "quantity_status"
+      ],
+      "additionalProperties": false
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "state": {
+          "enum": [
+            "draft",
+            "awaiting_user",
+            "awaiting_designer",
+            "changes_requested",
+            "designer_approved"
+          ]
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "designer_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "designer_approval_revision": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "blocking_issue_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "id",
+        "state",
+        "revision",
+        "designer_id",
+        "designer_approval_revision",
+        "blocking_issue_ids"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$comment": "Araştırma sözleşmesi; çalışan uygulama değildir. Kimlik referansları, geometri, durum geçişleri ve onay revizyonu semantik doğrulayıcı gerektirir. spaces minItems=2 bu bütün-ev örneğinin kapsamını korur; gerçek evin eksik odaları ayrıca kaydedilir.",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "approved"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "review": {
+            "properties": {
+              "state": {
+                "const": "designer_approved"
+              },
+              "designer_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "designer_approval_revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "blocking_issue_ids": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
