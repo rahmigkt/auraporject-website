@@ -183,23 +183,28 @@ export function compile(raw) {
     const hw = g.w / 2, hd = g.d / 2, loop = densify(roundedRectLoop(g.w - 2 * inset, g.d - 2 * inset, 14), 30);
     parts.push(linePart(`${id}-stitch-${k + 1}`, 'stitch', loop.map(([x, z]) => [x, g.h / 2 + (g.crownTop || 0) * bump(x / hw) * bump(z / hd) + 0.4, z]), pos));
   });
+  // T-cushion: an end cushion grows out to the arm's outer line and is notched behind, around the arm, in one piece.
+  const wrapOn = p.seatFront === 'wrap' && hasArms, earD = p.armSet;
+  const tee = (g, x, sides) => {
+    if (!wrapOn || !sides.length) return {g, x};
+    const w = g.w + aw * sides.length, nx = x + aw / 2 * sides.reduce((a, b) => a + b, 0), base = {...g, w}, nb = seatD - earD + 6;
+    const ops = sides.map(s => ({type: 'pocket', a: aw + 6, b: nb, depth: cT + 120, at: [s * (w / 2 - aw / 2 + 3), cT / 2 + 60, -seatD / 2 - 6 + nb / 2], axis: 1, sign: 1, label: 'T'}));
+    return {g: {fn: 'cut', inner: base, ops}, x: nx, base};
+  };
   if (p.seatType === 'tight') {
-    const g = {...cg(innerW), r: Math.min(30, cT * 0.3)}, pos = [0, deckTop + cT / 2 - 4, seatZ];
-    parts.push(part('seat', 'seat-tight', 'fabric', g, pos)); stitch('seat', g, pos);
+    const t = tee({...cg(innerW), r: Math.min(30, cT * 0.3)}, 0, [-1, 1]), pos = [t.x, deckTop + cT / 2 - 4, seatZ];
+    parts.push(part('seat', 'seat-tight', 'fabric', t.g, pos)); if (!t.base) stitch('seat', t.g, pos);
   } else {
     const n = p.seatType === 'bench' ? 1 : p.seatCount, w = innerW / n;
     for (let i = 0; i < n; i++) {
       const x = -innerW / 2 + w * (i + 0.5);
-      parts.push(part(`seat-cushion-${i + 1}`, 'seat-cushion', 'fabric', cg(w - 6), [x, deckTop + cT / 2, seatZ])); stitch(`seat-${i + 1}`, cg(w - 6), [x, deckTop + cT / 2, seatZ]);
-      if (p.welt !== 'none' && edge !== 'soft') for (const s of edge === 'knife' ? [0] : [-1, 1])
+      const t = tee(cg(w - 6), x, [...(i === 0 ? [-1] : []), ...(i === n - 1 ? [1] : [])]);
+      parts.push(part(`seat-cushion-${i + 1}`, 'seat-cushion', 'fabric', t.g, [t.x, deckTop + cT / 2, seatZ])); if (!t.base) stitch(`seat-${i + 1}`, t.g, [t.x, deckTop + cT / 2, seatZ]);
+      if (p.welt !== 'none' && edge !== 'soft' && !t.base) for (const s of edge === 'knife' ? [0] : [-1, 1])
         parts.push(part(`welt-${i + 1}-${s < 0 ? 'b' : s > 0 ? 't' : 'm'}`, 'welt', p.welt === 'contrast' ? 'welt' : 'fabric', {fn: 'welt', w: w - 6, d: seatD, r: 14, cord: 4}, [x, deckTop + cT / 2 + s * (cT / 2 - 2), seatZ]));
     }
   }
 
-  if (p.seatFront === 'wrap' && hasArms) for (const s of [-1, 1]) { // T-cushion ears in front of the arms, flush with the seat
-    const g = {...cg(aw + 6), d: p.armSet, crownFront: cg(aw).crownFront}, side = s < 0 ? 'l' : 'r';
-    parts.push(part(`seat-ear-${side}`, 'seat-cushion', 'fabric', g, [s * (innerW / 2 + aw / 2 - 3), deckTop + cT / 2 - (p.seatType === 'tight' ? 4 : 0), front - p.armSet / 2]));
-  }
   // ---- Arms -------------------------------------------------------------
   if (hasArms) for (const s of [-1, 1]) {
     const side = s < 0 ? 'l' : 'r', ax = s * (hw - aw / 2);
