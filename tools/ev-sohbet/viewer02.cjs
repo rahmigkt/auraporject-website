@@ -1,7 +1,7 @@
 // Real file-input integration in unmodified ev.html; no fixture interception.
 const fs=require('fs'),path=require('path'),http=require('http');
 const {chromium}=require('playwright');
-const root=process.cwd(),dir=path.join(root,'knowledge/ai-egitim/ev-sohbet-02-ornekler');
+const root=process.cwd(),dir=process.argv[2]?path.resolve(process.argv[2]):path.join(root,'knowledge/ai-egitim/ev-sohbet-02-ornekler');
 const results=[],mime={'.html':'text/html','.js':'text/javascript','.json':'application/json','.css':'text/css'};
 const server=http.createServer((req,res)=>{const file=path.resolve(root,'.'+decodeURIComponent(req.url.split('?')[0]));if(!file.startsWith(root+path.sep)){res.writeHead(403).end();return;}try{res.setHeader('Content-Type',mime[path.extname(file)]||'application/octet-stream');res.end(fs.readFileSync(file));}catch{res.writeHead(404).end();}});
 const bounded=p=>Promise.race([p,new Promise(r=>setTimeout(r,5000))]);
