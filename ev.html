@@ -26,6 +26,7 @@ main{display:grid;grid-template-columns:1fr 300px;height:calc(100vh - 58px)}
 .room:hover,.room.on{border-color:var(--terra)}
 .room span{color:var(--muted)}
 .note{color:var(--muted);font-size:12px;line-height:1.5}
+#walk{position:absolute;right:16px;bottom:14px;display:grid;grid-template-columns:repeat(3,46px);grid-template-rows:repeat(2,46px);gap:6px}#walk button{padding:0;font-size:16px;background:rgba(255,253,248,.92);border:1px solid #ddd6c6;border-radius:50%;color:#5a2a1c}#walk [data-walk=f]{grid-column:2}#walk [data-walk=l]{grid-column:1;grid-row:2}#walk [data-walk=b]{grid-column:2;grid-row:2}#walk [data-walk=r]{grid-column:3;grid-row:2}
 .hint{position:absolute;left:12px;bottom:10px;font-size:12px;color:var(--muted);background:rgba(247,243,232,.85);padding:4px 8px}
 @media (max-width:820px){main{grid-template-columns:1fr;height:auto}#view{height:62vh}#side{border-left:0;border-top:1px solid var(--hair)}}
 </style>
@@ -35,9 +36,9 @@ main{display:grid;grid-template-columns:1fr 300px;height:calc(100vh - 58px)}
   <div class="tabs"><button data-v="plan" aria-pressed="true">Plan</button><button data-v="maket">Maket</button><button data-v="3d">3B</button><button data-v="room">Oda içi</button></div>
 </header>
 <main>
-  <section id="view"><svg id="plan"></svg><canvas id="three" hidden></canvas><div class="hint" id="hint"></div></section>
+  <section id="view"><svg id="plan"></svg><canvas id="three" hidden></canvas><div class="hint" id="hint"></div><div id="walk" hidden><button data-walk="f" aria-label="İleri">▲</button><button data-walk="l" aria-label="Sola dön">◀</button><button data-walk="b" aria-label="Geri">▼</button><button data-walk="r" aria-label="Sağa dön">▶</button></div></section>
   <aside id="side"></aside>
 </main>
-<script type="module" src="assets/ev/plan.js?v=20261020p"></script>
+<script type="module" src="assets/ev/plan.js?v=20261020q"></script>
 </body>
 </html>
