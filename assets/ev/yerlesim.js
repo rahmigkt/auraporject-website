@@ -97,7 +97,7 @@ export function solveRoom(space, roomItems, ev, {count = 3, beam = 60} = {}) {
   const runs = roomRuns(space, ev), room = space.boundary_xy_mm, swings = doorSwings(runs);
   const winCentres = runs.flatMap(r => r.openings.filter(o => o.kind === 'window').map(o => add(add(r.P, mul(r.u, (o.s0 + o.s1) / 2)), mul(r.n, 50))));
   const windowDist = c => winCentres.length ? Math.min(...winCentres.map(w => len(sub(c, w)))) : 9e9;
-  const list = roomItems.map(it => ({it, kind: KIND[it.design.kind] || 'storage', size: compileItem(it).size}))
+  const list = roomItems.map(it => ({it, kind: KIND[it.design.kind] || 'storage', size: it.size || compileItem(it).size}))
     .sort((a, b) => ORDER.indexOf(a.kind) - ORDER.indexOf(b.kind) || b.size.w * b.size.d - a.size.w * a.size.d);
   let states = [{placed: [], score: 0, notes: []}];
   for (const L of list) {
