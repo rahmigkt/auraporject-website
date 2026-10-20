@@ -1,0 +1,262 @@
+{
+  "schema_version": "0.1",
+  "category": "perde",
+  "types": [
+    "fon",
+    "tul",
+    "stor",
+    "zebra",
+    "jaluzi",
+    "roma"
+  ],
+  "asset_candidates": [
+    {
+      "source_id": "infinigen",
+      "status": "license_cleared_generator_inventory_pending",
+      "use": "Blender tarafında üret, glTF ile aktar; tarayıcı portu henüz yok."
+    },
+    {
+      "source_id": "kenney",
+      "status": "license_cleared_file_dimensions_pending",
+      "use": "Düşük ayrıntılı aday; indirilen dosya ve ölçek doğrulanmadan katalog girdisi olamaz."
+    }
+  ],
+  "entries": [
+    {
+      "id": "fon",
+      "market_dimensions": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Tür için doğrulanmış geniş piyasa aralığı yok."
+      },
+      "fabric_width_and_mass": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Yüz kumaşı eni ve g/m² föyü bulunamadı."
+      },
+      "measurement_inputs": [
+        "opening_width_mm",
+        "opening_height_mm",
+        "mount_inside_or_outside",
+        "rail_length_mm",
+        "drop_mm",
+        "heading",
+        "repeat_mm",
+        "shrinkage_fraction"
+      ]
+    },
+    {
+      "id": "tul",
+      "market_dimensions": {
+        "value": {
+          "panel_width": 1450,
+          "panel_height": 3000
+        },
+        "unit": "mm",
+        "source_ids": [
+          "sheer"
+        ],
+        "status": "verified_reference",
+        "note": ""
+      },
+      "fabric_width_and_mass": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Yüz kumaşı eni ve g/m² föyü bulunamadı."
+      },
+      "measurement_inputs": [
+        "opening_width_mm",
+        "opening_height_mm",
+        "mount_inside_or_outside",
+        "rail_length_mm",
+        "drop_mm",
+        "heading",
+        "repeat_mm",
+        "shrinkage_fraction"
+      ]
+    },
+    {
+      "id": "stor",
+      "market_dimensions": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Tür için doğrulanmış geniş piyasa aralığı yok."
+      },
+      "fabric_width_and_mass": {
+        "value": {
+          "width_cm": 300,
+          "gsm": 210
+        },
+        "unit": "mixed",
+        "source_ids": [
+          "loa"
+        ],
+        "status": "needs_datasheet_confirmation",
+        "note": "Arama dizini verisi; görünür ürün sayfası bu alanları sunmuyor. Sipariş hesabında kullanılamaz."
+      },
+      "measurement_inputs": [
+        "opening_width_mm",
+        "opening_height_mm",
+        "mount_inside_or_outside",
+        "rail_length_mm",
+        "drop_mm",
+        "heading",
+        "repeat_mm",
+        "shrinkage_fraction"
+      ]
+    },
+    {
+      "id": "zebra",
+      "market_dimensions": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Tür için doğrulanmış geniş piyasa aralığı yok."
+      },
+      "fabric_width_and_mass": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Yüz kumaşı eni ve g/m² föyü bulunamadı."
+      },
+      "measurement_inputs": [
+        "opening_width_mm",
+        "opening_height_mm",
+        "mount_inside_or_outside",
+        "rail_length_mm",
+        "drop_mm",
+        "heading",
+        "repeat_mm",
+        "shrinkage_fraction"
+      ]
+    },
+    {
+      "id": "jaluzi",
+      "market_dimensions": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Tür için doğrulanmış geniş piyasa aralığı yok."
+      },
+      "fabric_width_and_mass": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Yüz kumaşı eni ve g/m² föyü bulunamadı."
+      },
+      "measurement_inputs": [
+        "opening_width_mm",
+        "opening_height_mm",
+        "mount_inside_or_outside",
+        "rail_length_mm",
+        "drop_mm",
+        "heading",
+        "repeat_mm",
+        "shrinkage_fraction"
+      ]
+    },
+    {
+      "id": "roma",
+      "market_dimensions": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Tür için doğrulanmış geniş piyasa aralığı yok."
+      },
+      "fabric_width_and_mass": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Yüz kumaşı eni ve g/m² föyü bulunamadı."
+      },
+      "measurement_inputs": [
+        "opening_width_mm",
+        "opening_height_mm",
+        "mount_inside_or_outside",
+        "rail_length_mm",
+        "drop_mm",
+        "heading",
+        "repeat_mm",
+        "shrinkage_fraction"
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "id": "fullness",
+      "values": {
+        "value": [
+          1.5,
+          2.5
+        ],
+        "unit": "ratio",
+        "source_ids": [
+          "curtain-guide"
+        ],
+        "status": "verified_reference",
+        "note": "Çubuk boyuna göre genel rehber. 3× doğrulanmadı; stor/jaluziye uygulanmaz."
+      }
+    },
+    {
+      "id": "rod-extension",
+      "values": {
+        "value": [
+          150,
+          220
+        ],
+        "unit": "mm_per_side",
+        "source_ids": [
+          "curtain-guide"
+        ],
+        "status": "verified_reference",
+        "note": ""
+      }
+    },
+    {
+      "id": "rod-above",
+      "values": {
+        "value": 150,
+        "unit": "mm",
+        "source_ids": [
+          "curtain-guide"
+        ],
+        "status": "verified_reference",
+        "note": "Genel öneri, montaj garantisi değil."
+      }
+    },
+    {
+      "id": "quantity",
+      "rule": "Düz kumaş eni = ray boyu × seçilen büzgü. Panel sayısı, tek panel bitmiş eni üzerinden yukarı yuvarlanır. Dikiş, kenar payı, desen tekrarı ve çekme üreticiye göre ayrıca eklenir. Stor/jaluzi/zebra/Roma sipariş ölçüsü kendi mekanizma föyünden alınır.",
+      "source_ids": [
+        "curtain-guide",
+        "vidga"
+      ]
+    },
+    {
+      "id": "rail-types",
+      "design_proposal": [
+        "tek_ray",
+        "cift_ray",
+        "cok_kanalli",
+        "cubuk",
+        "motorlu_ray"
+      ],
+      "note": "Taşıma kapasitesi, motor, elektrik ve montaj yerini tasarımcı/tedarikçi doğrular."
+    }
+  ],
+  "integration_status": "research_only_not_imported"
+}

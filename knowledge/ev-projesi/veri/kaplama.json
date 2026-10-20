@@ -1,0 +1,162 @@
+{
+  "schema_version": "0.1",
+  "category": "kaplama",
+  "types": [
+    "boya",
+    "duvar_kagidi",
+    "lambiri",
+    "tas",
+    "parke",
+    "seramik"
+  ],
+  "asset_candidates": [
+    {
+      "source_id": "ambientcg",
+      "status": "license_cleared_asset_not_selected",
+      "required_metadata": [
+        "asset_id",
+        "download_url",
+        "sha256",
+        "physical_tile_mm",
+        "map_color_space",
+        "normal_convention",
+        "license_snapshot"
+      ]
+    },
+    {
+      "source_id": "polyhaven",
+      "status": "license_cleared_asset_not_selected",
+      "required_metadata": [
+        "asset_id",
+        "download_url",
+        "sha256",
+        "physical_tile_mm",
+        "map_color_space",
+        "normal_convention",
+        "license_snapshot"
+      ]
+    }
+  ],
+  "entries": [
+    {
+      "id": "boya",
+      "market_dimensions": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Doğrulanmış ürün ebadı/sarfiyat föyü seçilmedi."
+      },
+      "waste_fraction": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Bütün ürünlere uygulanabilir sabit fire bulunamadı."
+      }
+    },
+    {
+      "id": "duvar_kagidi",
+      "market_dimensions": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Doğrulanmış ürün ebadı/sarfiyat föyü seçilmedi."
+      },
+      "waste_fraction": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Bütün ürünlere uygulanabilir sabit fire bulunamadı."
+      }
+    },
+    {
+      "id": "lambiri",
+      "market_dimensions": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Doğrulanmış ürün ebadı/sarfiyat föyü seçilmedi."
+      },
+      "waste_fraction": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Bütün ürünlere uygulanabilir sabit fire bulunamadı."
+      }
+    },
+    {
+      "id": "tas",
+      "market_dimensions": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Doğrulanmış ürün ebadı/sarfiyat föyü seçilmedi."
+      },
+      "waste_fraction": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Bütün ürünlere uygulanabilir sabit fire bulunamadı."
+      }
+    },
+    {
+      "id": "parke",
+      "market_dimensions": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Doğrulanmış ürün ebadı/sarfiyat föyü seçilmedi."
+      },
+      "waste_fraction": {
+        "value": 0.1,
+        "unit": "ratio",
+        "source_ids": [
+          "quickstep"
+        ],
+        "status": "verified_reference",
+        "note": "Döşeme rehberinin yaklaşık değeri; desenli döşemede proje bazında yeniden hesaplanır."
+      }
+    },
+    {
+      "id": "seramik",
+      "market_dimensions": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Doğrulanmış ürün ebadı/sarfiyat föyü seçilmedi."
+      },
+      "waste_fraction": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Bütün ürünlere uygulanabilir sabit fire bulunamadı."
+      }
+    }
+  ],
+  "rules": [
+    {
+      "id": "paint",
+      "source_ids": [
+        "dulux"
+      ],
+      "rule": "Net boyanacak alan = yüzey alanları - boyanmayacak açıklıklar. Litre = net alan × ürünün kat sayısı / ürünün m²/L sarfiyatı. Ürün föyü yoksa sonuç hesaplanmaz."
+    },
+    {
+      "id": "other-materials",
+      "source_ids": [],
+      "status": "design_proposal",
+      "rule": "Duvar kâğıdında rulo eni/boyu, desen tekrarı ve düşey parça sayısı; seramik/parke/taşta parça geometrisi, derz ve yerleşim yönü; lambiride profilin faydalı eni ile hesap. Net alan, sipariş alanı ve fire ayrı alanlar olsun."
+    }
+  ],
+  "integration_status": "research_only_not_imported"
+}

@@ -1,0 +1,115 @@
+{
+  "schema_version": "0.1",
+  "category": "plan-kurallari",
+  "types": [
+    "salon",
+    "yatak",
+    "mutfak",
+    "banyo",
+    "wc",
+    "koridor",
+    "calisma",
+    "cocuk",
+    "cok_amacli"
+  ],
+  "asset_candidates": [],
+  "entries": [
+    {
+      "id": "archived-room-minima",
+      "values": {
+        "value": {
+          "salon": {
+            "width_mm": 3000,
+            "area_m2": 12
+          },
+          "yatak": {
+            "width_mm": 2500,
+            "area_m2": 9
+          },
+          "mutfak": {
+            "width_mm": 1500,
+            "area_m2": 3.3
+          },
+          "banyo": {
+            "width_mm": 1500,
+            "area_m2": 3
+          },
+          "wc": {
+            "width_mm": 1000,
+            "area_m2": 1.2
+          },
+          "koridor": {
+            "width_mm": 1200
+          }
+        },
+        "unit": "mixed",
+        "source_ids": [
+          "pair-original",
+          "pairold",
+          "pair-amendment"
+        ],
+        "status": "archived_not_current_law",
+        "note": "Otomatik mevzuat denetiminde KULLANILAMAZ; güncel konsolide metin ve yerel kapsam uzman tarafından doğrulanmalı."
+      }
+    },
+    {
+      "id": "kitchen-aisle",
+      "values": {
+        "value": {
+          "one_cook": 1067,
+          "multiple_cooks": 1219,
+          "walkway": 914
+        },
+        "unit": "mm",
+        "source_ids": [
+          "nkba"
+        ],
+        "status": "verified_reference",
+        "note": "PDF sayfa 6 ve 8 yuvarlatılmış metrik değerleri; ABD rehberi, TR yasal minimumu değil."
+      }
+    },
+    {
+      "id": "kitchen-triangle",
+      "values": {
+        "value": {
+          "leg_min": 1.2,
+          "leg_max": 2.7,
+          "total_max": 7.9
+        },
+        "unit": "m",
+        "source_ids": [
+          "nkba"
+        ],
+        "status": "verified_reference",
+        "note": "PDF sayfa 4 yuvarlatılmış değerleri. Merkez-ön noktalar arası; doğrudan tüm mutfak tiplerine zorunlu uygulanmaz."
+      }
+    },
+    {
+      "id": "bed-clearance",
+      "values": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Yatak çevresinde evrensel asgari geçiş için güvenilir kaynak bulunamadı; halı taşma ölçüsü bu boşluğun yerine geçmez."
+      }
+    }
+  ],
+  "rules": [
+    {
+      "id": "fixed-home",
+      "source_ids": [],
+      "status": "design_proposal",
+      "rule": "Eşya sığmadığında ev/oda büyütülmez. Ölçü belirsizse soru sorulur; sabit sınır ihlali engellenir."
+    },
+    {
+      "id": "legal-gate",
+      "source_ids": [
+        "pair-amendment",
+        "nkba"
+      ],
+      "rule": "Tavsiye, üretici şartı ve yürürlükteki mevzuat ayrı kural türleridir. Yetki alanı/tarih/madde/kapsam olmadan yasal uygunluk iddiası üretilemez."
+    }
+  ],
+  "integration_status": "research_only_not_imported"
+}

@@ -1,0 +1,112 @@
+{
+  "schema_version": "0.1",
+  "category": "mimari",
+  "types": [
+    "menteseli_kapi",
+    "surme_kapi",
+    "sabit_pencere",
+    "acilir_pencere",
+    "surme_pencere",
+    "cati_penceresi",
+    "pervaz",
+    "supurgelik",
+    "kartonpiyer",
+    "duz_tavan",
+    "asma_tavan",
+    "kademeli_tavan"
+  ],
+  "asset_candidates": [
+    {
+      "source_id": "infinigen",
+      "status": "paths_verified_runtime_export_dimensions_pending",
+      "use": "Blender tarafında üret, glTF ile aktar; tarayıcı portu henüz yok.",
+      "inventory_file": "infinigen-envanter.json"
+    },
+    {
+      "source_id": "kenney",
+      "status": "license_cleared_file_dimensions_pending",
+      "use": "Düşük ayrıntılı aday; indirilen dosya ve ölçek doğrulanmadan katalog girdisi olamaz."
+    }
+  ],
+  "entries": [
+    {
+      "id": "uk-door-example",
+      "values": {
+        "value": {
+          "leaf_widths": [
+            610,
+            686,
+            762,
+            838
+          ],
+          "leaf_height": 1981,
+          "leaf_thickness": 35
+        },
+        "unit": "mm",
+        "source_ids": [
+          "jeldwen"
+        ],
+        "status": "verified_reference",
+        "note": "UK ürün örneği; TR veya AB ortak standart ölçüsü ya da net geçiş değil."
+      }
+    },
+    {
+      "id": "roof-window-examples",
+      "values": {
+        "value": [
+          [
+            780,
+            980
+          ],
+          [
+            780,
+            1180
+          ],
+          [
+            940,
+            1180
+          ],
+          [
+            1140,
+            1400
+          ]
+        ],
+        "unit": "mm",
+        "source_ids": [
+          "velux"
+        ],
+        "status": "verified_reference",
+        "note": "Çatı penceresi dış kasa; duvar pencere açıklığı değil."
+      }
+    },
+    {
+      "id": "tr-eu-standard-sizes",
+      "values": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Türkiye/AB için tek ortak kapı-pencere ebat standardı doğrulanmadı. Proje ölçüsü, net geçiş, kaba boşluk ve kanat ayrı tutulmalı."
+      }
+    },
+    {
+      "id": "trim-ceiling-market",
+      "values": {
+        "value": null,
+        "unit": null,
+        "source_ids": [],
+        "status": "kaynak bulunamadı",
+        "note": "Pervaz/süpürgelik/kartonpiyer ve asma tavan ürün föyü bulunamadı."
+      }
+    }
+  ],
+  "rules": [
+    {
+      "id": "architecture",
+      "status": "design_proposal",
+      "source_ids": [],
+      "rule": "Ortak duvar bir kez kaydedilsin; iki oda aynı duvarı referanslasın. Açıklıklar duvara bağlı olsun. Kapı kanat açılımı, pencere açılımı, perde ve radyatör çakışması kontrol edilsin. Asma tavan mevcut tesisat ve net yüksekliği değiştirdiği için uygulama onayı gerektirir."
+    }
+  ],
+  "integration_status": "research_only_not_imported"
+}

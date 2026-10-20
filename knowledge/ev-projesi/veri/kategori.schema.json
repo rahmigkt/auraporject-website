@@ -1,0 +1,1133 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "category": {
+      "type": "string",
+      "minLength": 1
+    },
+    "types": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "asset_candidates": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id"
+        ]
+      }
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id"
+        ]
+      }
+    },
+    "integration_status": {
+      "const": "research_only_not_imported"
+    }
+  },
+  "required": [
+    "schema_version",
+    "category",
+    "types",
+    "asset_candidates",
+    "entries",
+    "rules",
+    "integration_status"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:aura:ev:category:0.1",
+  "$defs": {
+    "fact": {
+      "type": "object",
+      "properties": {
+        "value": {},
+        "unit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "status": {
+          "enum": [
+            "verified_reference",
+            "needs_datasheet_confirmation",
+            "kaynak bulunamadı",
+            "archived_not_current_law"
+          ]
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "value",
+        "unit",
+        "source_ids",
+        "status",
+        "note"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "kaynak bulunamadı"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              },
+              "unit": {
+                "type": "null"
+              },
+              "source_ids": {
+                "maxItems": 0
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "source_ids": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "$comment": "Alan tipleri kategoriye göre aşağıda daraltılır; serbest rule metni çalıştırılabilir kod değildir.",
+  "oneOf": [
+    {
+      "properties": {
+        "category": {
+          "const": "aydinlatma"
+        },
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "avize"
+                  },
+                  "fixture_dimensions_mm": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "mounting_height_mm": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "flux_lm": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "fixture_dimensions_mm",
+                  "mounting_height_mm",
+                  "flux_lm"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "sarkit"
+                  },
+                  "fixture_dimensions_mm": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "mounting_height_mm": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "flux_lm": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "fixture_dimensions_mm",
+                  "mounting_height_mm",
+                  "flux_lm"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "aplik"
+                  },
+                  "fixture_dimensions_mm": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "mounting_height_mm": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "flux_lm": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "fixture_dimensions_mm",
+                  "mounting_height_mm",
+                  "flux_lm"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "lambader"
+                  },
+                  "fixture_dimensions_mm": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "mounting_height_mm": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "flux_lm": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "fixture_dimensions_mm",
+                  "mounting_height_mm",
+                  "flux_lm"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "masa_lambasi"
+                  },
+                  "fixture_dimensions_mm": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "mounting_height_mm": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "flux_lm": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "fixture_dimensions_mm",
+                  "mounting_height_mm",
+                  "flux_lm"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "spot"
+                  },
+                  "fixture_dimensions_mm": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "mounting_height_mm": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "flux_lm": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "fixture_dimensions_mm",
+                  "mounting_height_mm",
+                  "flux_lm"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "ray_spot"
+                  },
+                  "fixture_dimensions_mm": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "mounting_height_mm": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "flux_lm": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "fixture_dimensions_mm",
+                  "mounting_height_mm",
+                  "flux_lm"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "gizli_led"
+                  },
+                  "fixture_dimensions_mm": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "mounting_height_mm": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "flux_lm": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "fixture_dimensions_mm",
+                  "mounting_height_mm",
+                  "flux_lm"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "tablo_isigi"
+                  },
+                  "fixture_dimensions_mm": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "mounting_height_mm": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "flux_lm": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "fixture_dimensions_mm",
+                  "mounting_height_mm",
+                  "flux_lm"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "category": {
+          "const": "perde"
+        },
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "fon"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "fabric_width_and_mass": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "measurement_inputs": {
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "fabric_width_and_mass",
+                  "measurement_inputs"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "tul"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "fabric_width_and_mass": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "measurement_inputs": {
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "fabric_width_and_mass",
+                  "measurement_inputs"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "stor"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "fabric_width_and_mass": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "measurement_inputs": {
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "fabric_width_and_mass",
+                  "measurement_inputs"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "zebra"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "fabric_width_and_mass": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "measurement_inputs": {
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "fabric_width_and_mass",
+                  "measurement_inputs"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "jaluzi"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "fabric_width_and_mass": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "measurement_inputs": {
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "fabric_width_and_mass",
+                  "measurement_inputs"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "roma"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "fabric_width_and_mass": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "measurement_inputs": {
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "fabric_width_and_mass",
+                  "measurement_inputs"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "category": {
+          "const": "hali"
+        },
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "market-sizes"
+                  },
+                  "dimensions": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "dimensions"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "tr-example"
+                  },
+                  "dimensions": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "dimensions"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "materials-and-weaves"
+                  },
+                  "values": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "values"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "category": {
+          "const": "kaplama"
+        },
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "boya"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "waste_fraction": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "waste_fraction"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "duvar_kagidi"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "waste_fraction": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "waste_fraction"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "lambiri"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "waste_fraction": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "waste_fraction"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "tas"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "waste_fraction": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "waste_fraction"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "parke"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "waste_fraction": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "waste_fraction"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "seramik"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "waste_fraction": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "waste_fraction"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "category": {
+          "const": "aksesuar"
+        },
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "ayna"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "geometry_proposal": {
+                    "type": "string"
+                  },
+                  "model_acceptance": {
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "geometry_proposal",
+                  "model_acceptance"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "tablo"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "geometry_proposal": {
+                    "type": "string"
+                  },
+                  "model_acceptance": {
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "geometry_proposal",
+                  "model_acceptance"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "cerceve"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "geometry_proposal": {
+                    "type": "string"
+                  },
+                  "model_acceptance": {
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "geometry_proposal",
+                  "model_acceptance"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "saksi"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "geometry_proposal": {
+                    "type": "string"
+                  },
+                  "model_acceptance": {
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "geometry_proposal",
+                  "model_acceptance"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "bitki"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "geometry_proposal": {
+                    "type": "string"
+                  },
+                  "model_acceptance": {
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "geometry_proposal",
+                  "model_acceptance"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "vazo"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "geometry_proposal": {
+                    "type": "string"
+                  },
+                  "model_acceptance": {
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "geometry_proposal",
+                  "model_acceptance"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "kitap"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "geometry_proposal": {
+                    "type": "string"
+                  },
+                  "model_acceptance": {
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "geometry_proposal",
+                  "model_acceptance"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "yastik"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "geometry_proposal": {
+                    "type": "string"
+                  },
+                  "model_acceptance": {
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "geometry_proposal",
+                  "model_acceptance"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "ortu"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "geometry_proposal": {
+                    "type": "string"
+                  },
+                  "model_acceptance": {
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "geometry_proposal",
+                  "model_acceptance"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "sepet"
+                  },
+                  "market_dimensions": {
+                    "$ref": "#/$defs/fact"
+                  },
+                  "geometry_proposal": {
+                    "type": "string"
+                  },
+                  "model_acceptance": {
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "id",
+                  "market_dimensions",
+                  "geometry_proposal",
+                  "model_acceptance"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "category": {
+          "const": "mimari"
+        },
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "uk-door-example"
+                  },
+                  "values": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "roof-window-examples"
+                  },
+                  "values": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "tr-eu-standard-sizes"
+                  },
+                  "values": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "trim-ceiling-market"
+                  },
+                  "values": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "values"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "category": {
+          "const": "plan-kurallari"
+        },
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "archived-room-minima"
+                  },
+                  "values": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "kitchen-aisle"
+                  },
+                  "values": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "kitchen-triangle"
+                  },
+                  "values": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "const": "bed-clearance"
+                  },
+                  "values": {
+                    "$ref": "#/$defs/fact"
+                  }
+                },
+                "required": [
+                  "id",
+                  "values"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
