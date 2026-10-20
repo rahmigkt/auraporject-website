@@ -5,7 +5,7 @@ import * as THREE from '../vendor/three.module.js?v=20261016b';
 
 const $ = s => document.querySelector(s), NS = 'http://www.w3.org/2000/svg';
 const val = q => (q && typeof q === 'object' ? q.value : q) ?? 0;
-const S = {view: 'plan', room: null, name: ''};
+const S = {view: 'plan', room: null, name: ''}, hooks = {};
 const COLORS = {living: '#ecd7ae', kitchen: '#cddbbf', bath: '#bbdce1', wc: '#a9cfd7', hall: '#eee9df', bedroom: '#ccdae7', utility: '#ded5e3', other: '#d4e0e5', balcony: '#d3e4bf', terrace: '#d3e4bf', stair: '#d5cce4', study: '#e4dccb', dining: '#ecd7ae'};
 const NAMES = {living: 'Salon', kitchen: 'Mutfak', bath: 'Banyo', wc: 'WC', hall: 'Hol', bedroom: 'Yatak odası', utility: 'Kiler / servis', other: 'Oda', balcony: 'Balkon', terrace: 'Teras', stair: 'Merdiven', study: 'Çalışma', dining: 'Yemek'};
 const INK = {wall: '#424949', window: '#4b9dc0', door: '#faf8f1', roomLine: '#b7bab8', text: '#24333c', entry: '#b44e31', paper: '#f6f4ef', select: '#AD503E'};
@@ -16,8 +16,8 @@ let D, walls, W, ops, H, all;
 const area = b => Math.abs(b.reduce((s, [x, y], i) => { const [u, v] = b[(i + 1) % b.length]; return s + x * v - u * y; }, 0)) / 2e6;
 const bbox = pts => { const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]); return {x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys)}; };
 const opsOf = id => ops.filter(o => o.wall_id === id).sort((p, q) => p.a - q.a);
-function load(rec, name) {
-  D = rec; S.name = name; S.room = null; vb = null;
+function load(rec, name, keep = false) {
+  D = rec; S.name = name; if (!keep) { S.room = null; vb = null; }
   walls = D.walls.map(w => { const [x0, y0] = w.from_xy_mm, [x1, y1] = w.to_xy_mm, L = Math.hypot(x1 - x0, y1 - y0) || 1;
     return {...w, x0, y0, x1, y1, L, ux: (x1 - x0) / L, uy: (y1 - y0) / L, t: val(w.thickness) || 120}; });
   W = Object.fromEntries(walls.map(w => [w.id, w]));
@@ -53,8 +53,8 @@ function drawPlan() {
   el('rect', {x: vb[0] - 1e5, y: vb[1] - 1e5, width: 3e5, height: 3e5, fill: INK.paper});
   for (const s of D.spaces) el('polygon', {points: pts(s.boundary_xy_mm), fill: COLORS[s.kind] || '#ddd', stroke: S.room === s.id ? INK.select : INK.roomLine, 'stroke-width': S.room === s.id ? 50 : 8, 'data-room': s.id, style: 'cursor:pointer'});
   const g = el('g', {fill: INK.wall});
-  for (const w of walls) for (const [a, b, lo] of pieces(w)) if (lo === 0) el('polygon', {points: pts(band(w, a, b))}, g);
-  for (const o of ops) { const w = W[o.wall_id]; if (!w) continue; el('polygon', {points: pts(band(w, o.a, o.a + o.w)), fill: o.kind === 'window' ? INK.window : INK.door}); }
+  for (const w of walls) for (const [a, b, lo] of pieces(w)) if (lo === 0) el('polygon', {points: pts(band(w, a, b)), 'data-wall': w.id}, g);
+  for (const o of ops) { const w = W[o.wall_id]; if (!w) continue; el('polygon', {points: pts(band(w, o.a, o.a + o.w)), fill: o.kind === 'window' ? INK.window : INK.door, 'data-op': o.id, 'data-wall': w.id}); }
   for (const s of D.spaces) {
     const b = bbox(s.boundary_xy_mm), [cx, cy] = centroid(s.boundary_xy_mm), fs = Math.min(260, Math.max(130, Math.min(b.x1 - b.x0, b.y1 - b.y0) / 6));
     const t = el('text', {x: cx, y: -cy, 'text-anchor': 'middle', 'font-size': fs, fill: INK.text, style: 'pointer-events:none'});
@@ -65,20 +65,22 @@ function drawPlan() {
     el('circle', {cx: x, cy: -y, r: 210, fill: 'none', stroke: INK.entry, 'stroke-width': 60});
     const t = el('text', {x, y: -y - 300, 'font-size': 220, 'text-anchor': 'middle', fill: '#963e28'}); t.textContent = 'GİRİŞ'; }
   const n = el('text', {x: all.x1 + 200, y: -all.y1 - 300, 'font-size': 240, fill: INK.text}); n.textContent = 'K ↑';
+  hooks.overlay?.();
 }
 { // pan / zoom: one finger or mouse drags, wheel or two fingers zoom, tap a room to select it
   const P = new Map(); let last = null;
   const toMM = (dx, dy) => { const r = svg.getBoundingClientRect(), k = Math.max(vb[2] / r.width, vb[3] / r.height); return [dx * k, dy * k]; };
   const zoom = k => { const cx = vb[0] + vb[2] / 2, cy = vb[1] + vb[3] / 2; vb[2] *= k; vb[3] *= k; vb[0] = cx - vb[2] / 2; vb[1] = cy - vb[3] / 2; svg.setAttribute('viewBox', vb.join(' ')); };
-  svg.addEventListener('pointerdown', e => { P.set(e.pointerId, [e.clientX, e.clientY]); svg.setPointerCapture(e.pointerId); last = null; S.moved = false; });
+  svg.addEventListener('pointerdown', e => { if (P.size === 0 && hooks.down?.(e)) { S.tool_drag = e.pointerId; svg.setPointerCapture(e.pointerId); return; } P.set(e.pointerId, [e.clientX, e.clientY]); svg.setPointerCapture(e.pointerId); last = null; S.moved = false; });
   svg.addEventListener('pointermove', e => {
+    hooks.move?.(e, S.tool_drag === e.pointerId); if (S.tool_drag === e.pointerId) return;
     if (!P.has(e.pointerId)) return; const prev = P.get(e.pointerId); P.set(e.pointerId, [e.clientX, e.clientY]);
     if (P.size === 1) { const [dx, dy] = toMM(e.clientX - prev[0], e.clientY - prev[1]); if (Math.abs(dx) + Math.abs(dy) > 1) S.moved = true; vb[0] -= dx; vb[1] -= dy; svg.setAttribute('viewBox', vb.join(' ')); }
     else if (P.size === 2) { const [a, b] = [...P.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]); if (last) zoom(last / d); last = d; S.moved = true; }
   });
   const up = e => { P.delete(e.pointerId); last = null; };
-  svg.addEventListener('pointerup', e => { const t = document.elementFromPoint(e.clientX, e.clientY)?.closest?.('[data-room]'); if (!S.moved && t) pick(t.dataset.room); up(e); });
-  svg.addEventListener('pointercancel', up);
+  svg.addEventListener('pointerup', e => { if (S.tool_drag === e.pointerId) { S.tool_drag = null; hooks.up?.(e); return; } const t = document.elementFromPoint(e.clientX, e.clientY)?.closest?.('[data-room]'); if (!S.moved && t) pick(t.dataset.room); up(e); });
+  svg.addEventListener('pointercancel', e => { if (S.tool_drag === e.pointerId) { S.tool_drag = null; hooks.up?.(e); } up(e); });
   svg.addEventListener('wheel', e => { e.preventDefault(); zoom(e.deltaY > 0 ? 1.12 : 1 / 1.12); }, {passive: false});
 }
 
@@ -151,14 +153,21 @@ function side() {
   <label class="note" style="display:block;margin-top:8px">Plan dosyası aç (EV JSON) <input type="file" id="openFile" accept=".json,application/json"></label>
   <p class="note">${real ? 'Gerçek konut planı: Swiss Dwellings (Archilyse AG), CC BY 4.0. Ölçüye uyarlanmış; tasarımcı onayı gerekir.' : 'Sentetik örnek (gerçek ev değil).'} Ölçüler mm, alanlar net iç ölçüden. Kuzey yukarı.</p>
   <h2>Odalar · ${tot.toFixed(1)} m²</h2>${D.spaces.map(s => `<div class="room ${S.room === s.id ? 'on' : ''}" data-pick="${s.id}"><b><i style="display:inline-block;width:10px;height:10px;background:${COLORS[s.kind] || '#ddd'};margin-right:6px;border:1px solid #b7bab8"></i>${(s.name || NAMES[s.kind] || 'Oda').replace(/\s+\d+$/, '')}</b><span>${area(s.boundary_xy_mm).toFixed(1)} m²</span></div>`).join('')}
+  ${hooks.panel?.() || ''}
   <h2>Kayıt</h2><p class="note">${walls.length} duvar · ${ops.filter(o => o.kind === 'door').length} kapı · ${ops.filter(o => o.kind === 'window').length} pencere · tavan ${Math.round(H)} mm</p>`;
 }
-$('#side').addEventListener('click', e => { const t = e.target.closest('[data-pick]'); if (t) pick(t.dataset.pick); });
+$('#side').addEventListener('click', e => { if (hooks.click?.(e)) return; const t = e.target.closest('[data-pick]'); if (t) pick(t.dataset.pick); });
 $('#side').addEventListener('change', async e => {
+  if (hooks.change?.(e)) return;
   if (e.target.id === 'pickPlan') await open(e.target.value);
   if (e.target.id === 'openFile' && e.target.files[0]) { try { load(JSON.parse(await e.target.files[0].text()), e.target.files[0].name); side(); show(S.view); } catch (err) { alert('Plan okunamadı: ' + err.message); } }
 });
 document.querySelectorAll('[data-v]').forEach(b => b.addEventListener('click', () => show(b.dataset.v)));
 async function open(f) { load(await (await fetch(`assets/ev/${f}?v=20261020m`)).json(), f); side(); show(S.view); }
 await open(new URLSearchParams(location.search).get('plan') || EXAMPLES[0][0]);
-window.__ev = {get D() { return D; }, S, show, open};
+const toPlan = e => { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; const q = p.matrixTransform(svg.getScreenCTM().inverse()); return [q.x, -q.y]; };
+const pxMM = () => { const r = svg.getBoundingClientRect(); return Math.max(vb[2] / r.width, vb[3] / r.height); };
+const refresh = (full = true) => { load(D, S.name, true); if (S.view === 'plan') drawPlan(); else show(S.view); if (full) side(); };
+const ev = {get D() { return D; }, get walls() { return walls; }, get ops() { return ops; }, get H() { return H; }, S, hooks, show, open, load, refresh, drawPlan, side, toPlan, pxMM, el, pts, band, area, centroid, NAMES, COLORS, INK, svg};
+window.__ev = ev;
+(await import('./edit.js?v=20261020o')).install(ev);
