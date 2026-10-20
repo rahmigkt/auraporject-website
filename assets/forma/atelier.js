@@ -484,10 +484,11 @@ function cutList() {
     for (let i = 0; i < P.length; i += 3) for (let k = 0; k < 3; k++) { lo[k] = Math.min(lo[k], P[i + k]); hi[k] = Math.max(hi[k], P[i + k]); }
     const g = q.geom.fn === 'cut' ? q.geom.inner : q.geom, L = g.fn === 'lathe' ? g : g.fn === 'clipped' && g.inner?.fn === 'lathe' ? g.inner : null;
     const turned = L && [Math.round(Math.max(...L.profile.map(r => r[0])) / (g.fn === 'clipped' ? Math.cos(Math.max(...(g.rot || [0]).map(Math.abs))) : 1)), Math.round(2 * Math.max(...L.profile.map(r => r[1]))), Math.round(2 * Math.max(...L.profile.map(r => r[1])))];
-    const dims = (turned || (Array.isArray(q.cut) ? q.cut.slice() : hi.map((v, k) => Math.round(v - lo[k])))).sort((a, b) => b - a);
+    const dims = (turned || (Array.isArray(q.cut) && q.geom.fn !== 'ends' ? q.cut.slice() : hi.map((v, k) => Math.round(v - lo[k])))).sort((a, b) => b - a);
     const ops = (q.cuts || []).map(c => c.label ? `${c.label}` : c.type === 'hole' ? `delik Ø${c.dia}${c.depth ? ' d' + c.depth : ''}` : `${c.type} ${c.a}×${c.b}${c.depth ? ' d' + c.depth : ''}${c.count > 1 ? ' ×' + c.count : ''}`).join('; ');
     const sw = g.fn === 'sweep' ? g : g.fn === 'clipped' && g.inner?.fn === 'sweep' ? g.inner : null;
     let bent = '';
+    if (q.geom.fn === 'ends') { const e = q.geom, side = (a, n) => a[0] || a[1] ? `${n} uç alt +${a[0]} / üst +${a[1]} mm` : ''; bent = `açılı uç (konik ayağa göre): ${[side(e.neg, 'sol'), side(e.pos, 'sağ')].filter(Boolean).join(', ')}; boy en geniş yerden verildi`; }
     if (sw && sw.bow) { // bent member: blank length along the curve (arc ≈ L(1 + 8/3·(f/L)²); sabre ≈ same with f the foot offset)
       const L0 = sw.L, f0 = Math.abs(sw.bow), arc = Math.round(L0 * (1 + 8 / 3 * (f0 / L0) ** 2) + 30), R = Math.round((L0 * L0 / 4 + f0 * f0) / (2 * f0));
       bent = `bükülmüş: ham boy ~${arc} mm, yarıçap ~${R} mm — ${/wood|veneer/.test(q.matSpec?.surface || 'wood') ? (R < 600 ? 'lamine (ince katman) ya da masiften CNC kesim' : 'buharla bükme ya da lamine') : 'metal bükme'}`;
