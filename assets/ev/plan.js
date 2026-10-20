@@ -125,12 +125,12 @@ function build(cut) {
     const mid = (a + b) / 2, mx = w.x0 + w.ux * mid, my = w.y0 + w.uy * mid, o = w.t / 2 + 150; // each face takes the paint of the room it faces
     const side = k => { const sp = spaceAt([mx + w.uy * o * k, my - w.ux * o * k]); return sp ? paintMat(finishOf(sp).wall) : wallMat; };
     const m = new THREE.Mesh(new THREE.BoxGeometry((b - a) / 1000, (hi - lo) / 1000, w.t / 1000), [wallMat, wallMat, hi < hi0 ? capMat : wallMat, wallMat, side(1), side(-1)]); m.position.set((w.x0 + w.ux * mid) / 1000, (lo + hi) / 2000, -(w.y0 + w.uy * mid) / 1000);
-    m.rotation.y = Math.atan2(w.uy, w.ux); house.add(m);
+    m.rotation.y = Math.atan2(w.uy, w.ux); m.userData = {wall: true, mx: mx / 1000, mz: -my / 1000, lo, hi, y: (lo + hi) / 2000}; house.add(m);
   }
 }
-const orbit = {yaw: 0.7, pitch: 0.75, dist: 16, eye: null, fov: 52, corner: 0};
+const orbit = {target: null, yaw: 0.7, pitch: 0.75, dist: 16, eye: null, fov: 52, corner: 0};
 function place() {
-  const tx = (all.x0 + all.x1) / 2000, tz = -(all.y0 + all.y1) / 2000;
+  const tx = orbit.target ? orbit.target[0] : (all.x0 + all.x1) / 2000, tz = orbit.target ? orbit.target[1] : -(all.y0 + all.y1) / 2000;
   // inside a room: a level architectural camera (no tilt, so verticals stay vertical and walls keep their true proportion)
   if (orbit.eye) { cam.position.set(...orbit.eye); cam.lookAt(orbit.eye[0] + Math.sin(orbit.yaw), orbit.eye[1], orbit.eye[2] + Math.cos(orbit.yaw)); return; }
   cam.position.set(tx + Math.sin(orbit.yaw) * Math.cos(orbit.pitch) * orbit.dist, Math.sin(orbit.pitch) * orbit.dist, tz + Math.cos(orbit.yaw) * Math.cos(orbit.pitch) * orbit.dist);
@@ -158,7 +158,16 @@ function step(dir) {
   const tick = now => { const t = Math.min(1, (now - t0) / 320), k = t * t * (3 - 2 * t); orbit.eye = from.map((v, i) => v + (to[i] - v) * k); render(); if (t < 1) requestAnimationFrame(tick); else walking = 0; };
   requestAnimationFrame(tick); $('#hint').textContent = HINT.room;
 }
-function render() { const r = canvas.getBoundingClientRect(); renderer.setSize(r.width, r.height, false); cam.aspect = r.width / Math.max(1, r.height); cam.fov = orbit.eye ? orbit.fov : 45; cam.updateProjectionMatrix(); place(); renderer.render(scene, cam); }
+function render() { const r = canvas.getBoundingClientRect(); renderer.setSize(r.width, r.height, false); cam.aspect = r.width / Math.max(1, r.height); cam.fov = orbit.eye ? orbit.fov : 45; cam.updateProjectionMatrix(); place(); if (S.view === 'kesit') cutaway(); renderer.render(scene, cam); }
+// Dollhouse: walls between the camera and the chosen room drop to 30 cm, so the room is seen whole from above
+// while the rest of the home stays standing around it. Recomputed as the camera turns.
+function cutaway() {
+  const [tx, tz] = orbit.target, dx = cam.position.x - tx, dz = cam.position.z - tz, L = Math.hypot(dx, dz) || 1, R = orbit.radius;
+  house?.children.forEach(m => { const u = m.userData; if (!u.wall) return;
+    const vx = u.mx - tx, vz = u.mz - tz, along = (vx * dx + vz * dz) / L, side = Math.abs(vx * dz - vz * dx) / L;
+    const cut = along > -0.15 && along < R + 0.6 && side < R + 0.6, top = cut ? Math.max(u.lo, Math.min(u.hi, 300)) : u.hi;
+    if (top <= u.lo) { m.visible = false; return; } m.visible = true; const k = (top - u.lo) / (u.hi - u.lo); m.scale.y = k; m.position.y = (u.lo + top) / 2000; });
+}
 {
   const P = new Map(); let last = null;
   canvas.addEventListener('pointerdown', e => { P.set(e.pointerId, [e.clientX, e.clientY]); canvas.setPointerCapture(e.pointerId); last = null; });
@@ -180,7 +189,7 @@ function render() { const r = canvas.getBoundingClientRect(); renderer.setSize(r
 }
 
 // ---- views and side panel ---------------------------------------------------------------------------------
-const HINT = {plan: 'Sürükleyin: kaydır · tekerlek / iki parmak: yakınlaştır · odaya dokunun: seç', maket: 'Duvarlar 1,1 m\'den kesilmiş ev maketi · sürükleyin: çevir', '3d': 'Tam yükseklik · sürükleyin: çevir · iki parmak: yakınlaştır', room: 'Göz hizası 1,5 m · oklar ya da W/S: yürü · sürükleyin: dönün · iki parmak: görüş açısı · çift dokunun: başka köşe'};
+const HINT = {plan: 'Sürükleyin: kaydır · tekerlek / iki parmak: yakınlaştır · odaya dokunun: seç', maket: 'Duvarlar 1,1 m\'den kesilmiş ev maketi · sürükleyin: çevir', '3d': 'Tam yükseklik · sürükleyin: çevir · iki parmak: yakınlaştır', kesit: 'Tavansız kesit · seçili oda önde açık · sürükleyin: etrafında dönün · iki parmak: yakınlaştır · listeden oda seçin', room: 'Göz hizası 1,5 m · oklar ya da W/S: yürü · sürükleyin: dönün · iki parmak: görüş açısı · çift dokunun: başka köşe'};
 function show(v) {
   S.view = v; document.querySelectorAll('[data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
   svg.hidden = v !== 'plan'; canvas.hidden = v === 'plan'; $('#walk').hidden = v !== 'room'; $('#hint').textContent = HINT[v];
@@ -188,11 +197,14 @@ function show(v) {
   const sp = D.spaces.find(s => s.id === S.room) || D.spaces.find(s => s.kind === 'living') || D.spaces[0]; S.room = sp.id;
   build(v === 'maket' ? 1100 : H);
   const span = Math.max(all.x1 - all.x0, all.y1 - all.y0) / 1000;
+  orbit.target = null;
   if (v === 'room') { // stand in a corner of the room (0.45 m from the walls) at eye height, looking across to the far side
     const b = sp.boundary_xy_mm, [cx, cy] = centroid(b), far = b.map((p, i) => [i, Math.hypot(p[0] - cx, p[1] - cy)]).sort((p, q) => q[1] - p[1]);
     const c = b[far[orbit.corner % Math.min(4, far.length)][0]], dx = cx - c[0], dy = cy - c[1], L = Math.hypot(dx, dy) || 1, step = Math.min(650, L * 0.35);
     orbit.eye = [(c[0] + dx / L * step) / 1000, 1.5, -(c[1] + dy / L * step) / 1000]; orbit.yaw = Math.atan2(dx, -dy); orbit.fov = 52;
     roomLight.position.set(cx / 1000, H / 1000 - 0.3, -cy / 1000); roomLight.intensity = 2.2; }
+  else if (v === 'kesit') { roomLight.intensity = 0; orbit.eye = null; const b = bbox(sp.boundary_xy_mm), [cx, cy] = centroid(sp.boundary_xy_mm);
+    orbit.target = [cx / 1000, -cy / 1000]; orbit.radius = Math.hypot(b.x1 - b.x0, b.y1 - b.y0) / 2000; orbit.pitch = 0.82; orbit.dist = Math.max(6, orbit.radius * 4.2); }
   else { roomLight.intensity = 0; orbit.eye = null; orbit.pitch = v === 'maket' ? 1.0 : 0.6; orbit.dist = span * (v === 'maket' ? 1.5 : 1.6); }
   side(); render();
 }
