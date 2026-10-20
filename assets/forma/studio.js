@@ -27,7 +27,7 @@ import {bom, bomCsv} from './bom.js';
 import {zip, jpegPdf, svgToJpeg, dataUrlJpeg, download} from './package.js';
 const designKey = d => JSON.stringify({p: d.params, m: d.materials, k: d.kind, f: d.family});
 import {t, partName, UI_LANGS} from './i18n.js?v=20261021d';
-import {MODELS as CURTAINS, FABRICS, RUG_MODELS, RUG_COLORS, TEXTILE_KEY} from '../ev/tekstil.js?v=20261021d';
+import {migrate, chooserHTML, applyChoice, TEXTILE_CSS, TEXTILE_KEY, SHEERS, DRAPES, HEADINGS, SYSTEMS, RUGS, PATTERNS as RUG_PATTERNS, colorName} from '../ev/tekstil.js?v=20261021e';
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
@@ -1259,33 +1259,59 @@ const GUIDE_ICONS = [
   '<path d="M12 6h22l8 8v28H12z"/><path d="M34 6v8h8M17 20h18M17 26h18M17 32h10"/><path d="M40 34h16M50 28l6 6-6 6" class="r"/>'
 ];
 // ---- Home textiles: curtains and rugs chosen by model and colour; ev.html uses the same choice ------------------
-function textilePreview(c, r) {
-  const fab = (FABRICS.find(f => f[0] === c.color) || FABRICS[0])[2], rc = (RUG_COLORS.find(f => f[0] === r.color) || RUG_COLORS[0])[2], m = CURTAINS[c.model]?.[1] || {};
-  const folds = (x0, w, col, op) => { let d = ''; const n = Math.max(3, Math.round(w / 9)); for (let i = 0; i < n; i++) { const x = x0 + i * w / n; d += `<rect x="${x.toFixed(1)}" y="22" width="${(w / n).toFixed(1)}" height="168" fill="${col}" opacity="${op}"/><line x1="${(x + w / n / 2).toFixed(1)}" y1="22" x2="${(x + w / n / 2).toFixed(1)}" y2="190" stroke="rgba(0,0,0,${op * .12})" stroke-width="2"/>`; } return d; };
-  let cur = '';
-  if (c.model !== 'yok') {
-    if (m.shade) cur = `<rect x="92" y="40" width="136" height="70" fill="${fab}"/>${m.shade === 'pleated' ? Array.from({length: 9}, (_, i) => `<line x1="92" x2="228" y1="${44 + i * 7.5}" y2="${44 + i * 7.5}" stroke="rgba(0,0,0,.12)"/>`).join('') : ''}<rect x="88" y="36" width="144" height="6" fill="#8b857a"/>`;
-    else { if (m.sheer) cur += folds(72, 176, '#fbf8f1', .55); if (m.drape) cur += folds(58, 36, fab, 1) + folds(226, 36, fab, 1); cur += `<rect x="54" y="18" width="212" height="4" fill="#8b857a"/>`; }
+// ---- Home textiles: the same geometry and fabrics as the home plan (assets/ev/perde.js, hali.js), in a room corner ----
+let txScene = null;
+async function textileScene(host, tx) {
+  const [THREE, P, Hl] = await Promise.all([import('../vendor/three.module.js?v=20261016b'), import('../ev/perde.js?v=20261021e'), import('../ev/hali.js?v=20261021e')]);
+  if (!txScene || txScene.host !== host) {
+    txScene?.dispose?.(); const r = new THREE.WebGLRenderer({antialias: true}); r.setPixelRatio(Math.min(2, devicePixelRatio || 1)); r.shadowMap.enabled = true; r.shadowMap.type = THREE.PCFSoftShadowMap; r.toneMapping = THREE.ACESFilmicToneMapping; r.toneMappingExposure = 1.15;
+    host.innerHTML = ''; host.append(r.domElement); r.domElement.style.cssText = 'width:100%;height:100%;display:block;touch-action:none';
+    const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(45, 1, 0.05, 50), hemi = new THREE.HemisphereLight('#fffaf0', '#d9cfbd', 1.9), sun = new THREE.DirectionalLight('#fff4e2', 2.2);
+    sun.position.set(-1.5, 3.2, -4); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); Object.assign(sun.shadow.camera, {left: -3, right: 3, top: 3, bottom: -3}); const lamp = new THREE.PointLight('#ffcf9a', 0, 8, 1.6); lamp.position.set(1.2, 1.5, 2.2);
+    scene.add(hemi, sun, sun.target, lamp);
+    const wall = new THREE.MeshStandardMaterial({color: '#efeae0', roughness: 0.95}), T = 0.2, W = 5, Hc = 2.6, ww = 1.8, sill = 0.9, wh = 1.5;
+    const box = (w, h, d, x, y, z, m = wall) => { const o = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); o.position.set(x, y, z); o.castShadow = o.receiveShadow = true; scene.add(o); return o; };
+    box((W - ww) / 2, Hc, T, -(ww / 2 + (W - ww) / 4), Hc / 2, -T / 2); box((W - ww) / 2, Hc, T, ww / 2 + (W - ww) / 4, Hc / 2, -T / 2); box(ww, sill, T, 0, sill / 2, -T / 2); box(ww, Hc - sill - wh, T, 0, sill + wh + (Hc - sill - wh) / 2, -T / 2);
+    box(T, Hc, 4, -W / 2 - T / 2, Hc / 2, 2); const floor = new THREE.Mesh(new THREE.PlaneGeometry(W, 4.2), new THREE.MeshStandardMaterial({color: '#c9a476', roughness: 0.75})); floor.rotation.x = -Math.PI / 2; floor.position.z = 1.9; floor.receiveShadow = true; scene.add(floor);
+    const sky = new THREE.Mesh(new THREE.PlaneGeometry(6, 4), new THREE.MeshBasicMaterial({color: '#d7e3ea'})); sky.position.set(0, 1.5, -1.2); scene.add(sky);
+    const dyn = new THREE.Group(); scene.add(dyn);
+    const S = {r, scene, cam, dyn, host, sun, hemi, lamp, sky, yaw: 0.32, pitch: 0.12, dist: 4.6, target: [0, 1.25, 0.4], night: false, close: false};
+    const place = () => { const [tx, ty, tz] = S.close ? [0.55, 1.2, 0.2] : S.target, d = S.close ? 1.1 : S.dist; cam.position.set(tx + Math.sin(S.yaw) * Math.cos(S.pitch) * d, ty + Math.sin(S.pitch) * d, tz + Math.cos(S.yaw) * Math.cos(S.pitch) * d); cam.lookAt(tx, ty, tz); };
+    S.render = () => { const b = host.getBoundingClientRect(); r.setSize(b.width, b.height, false); cam.aspect = b.width / Math.max(1, b.height); cam.updateProjectionMatrix(); place();
+      sun.intensity = S.night ? 0 : 2.2; hemi.intensity = S.night ? 0.3 : 1.9; hemi.color.set(S.night ? '#2c3c5c' : '#fffaf0'); lamp.intensity = S.night ? 3.2 : 0; sky.material.color.set(S.night ? '#141b2b' : '#d7e3ea'); scene.background = new THREE.Color(S.night ? '#1c1f26' : '#f4f1ea'); r.render(scene, cam); };
+    let drag = null; r.domElement.onpointerdown = e => { drag = [e.clientX, e.clientY]; r.domElement.setPointerCapture(e.pointerId); };
+    r.domElement.onpointermove = e => { if (!drag) return; S.yaw = Math.max(-1.1, Math.min(1.1, S.yaw - (e.clientX - drag[0]) * 0.006)); S.pitch = Math.max(-0.1, Math.min(0.9, S.pitch + (e.clientY - drag[1]) * 0.004)); drag = [e.clientX, e.clientY]; S.render(); };
+    r.domElement.onpointerup = () => { drag = null; }; r.domElement.onwheel = e => { e.preventDefault(); S.dist = Math.max(2, Math.min(8, S.dist * (e.deltaY > 0 ? 1.08 : 0.93))); S.render(); };
+    S.dispose = () => r.dispose(); txScene = S; addEventListener('resize', () => txScene === S && S.render());
   }
-  const rug = r.model === 'yok' ? '' : `<rect x="70" y="200" width="180" height="34" fill="${rc}"/>${r.model === 'cizgili' ? Array.from({length: 8}, (_, i) => `<rect x="${82 + i * 21}" y="203" width="7" height="28" fill="rgba(255,250,240,.35)"/>`).join('') : r.model === 'geometrik' ? Array.from({length: 7}, (_, i) => `<path d="M${88 + i * 24} 205l10 12-10 12-10-12z" fill="none" stroke="rgba(255,250,240,.45)" stroke-width="1.6"/>`).join('') : r.model === 'kilim' ? Array.from({length: 7}, (_, i) => `<path d="M${88 + i * 24} 207l8 10-8 10-8-10z" fill="rgba(40,30,20,${i % 2 ? .3 : .15})"/>`).join('') : ''}<rect x="74" y="203" width="172" height="28" fill="none" stroke="rgba(40,30,20,.3)" stroke-width="2"/>`;
-  return `<svg viewBox="0 0 320 244" class="f-tx-view" aria-hidden="true"><rect width="320" height="244" fill="#efeae0"/><rect x="0" y="196" width="320" height="48" fill="#cdb592"/><rect x="92" y="36" width="136" height="150" fill="#cfe0e6" stroke="#fff" stroke-width="6"/><line x1="160" y1="36" x2="160" y2="186" stroke="#fff" stroke-width="4"/>${cur}${rug}</svg>`;
+  const S = txScene; S.dyn.clear();
+  const g = P.windowTreatment({w: 1800, sill: 900, h: 1500}, 2600, tx.curtain); S.dyn.add(g);
+  if (tx.rug.on) { const rug = Hl.rugMesh(1700, 2400, tx.rug); rug.rotation.y = Math.PI / 2; rug.position.set(0.1, 0, 1.45); S.dyn.add(rug); }
+  S.render();
 }
 function textileView() {
   viewer?.dispose(); viewer = null; shellNav();
-  const tx = store.get(TEXTILE_KEY) || {curtain: {model: 'tul-fon', color: 'keten'}, rug: {model: 'duz', color: 'yulaf'}};
-  const main = document.querySelector('.f-layout');
-  const row = (grp, list, cur) => `<div class="f-tx-models">${list.map(([k, v]) => `<button data-g="${grp}" data-m="${k}" aria-pressed="${cur === k}">${esc(v)}</button>`).join('')}</div>`;
-  const sw = (grp, list, cur) => `<div class="f-tx-sw">${list.map(([k, n, h]) => `<button data-g="${grp}" data-c="${k}" title="${esc(n)}" aria-label="${esc(n)}" aria-pressed="${cur === k}" style="background:${h}"></button>`).join('')}</div>`;
-  const nm = (list, k) => (list.find(x => x[0] === k) || [])[1] || '';
-  const draw = () => { main.innerHTML = `<section class="f-visual f-tx-visual"><div class="f-caption"><div><p class="f-eyebrow">AURA · ${esc(L('textile'))}</p><h1>${esc(L('textileTitle'))}</h1>
-      <p class="f-dims">${esc((CURTAINS[tx.curtain.model]?.[0] || 'Perdesiz') + (tx.curtain.model === 'yok' ? '' : ' · ' + nm(FABRICS, tx.curtain.color)))} — ${esc(RUG_MODELS[tx.rug.model] + (tx.rug.model === 'yok' ? '' : ' · ' + nm(RUG_COLORS, tx.rug.color)))}</p></div></div>
-      ${textilePreview(tx.curtain, tx.rug)}</section>
-    <aside class="f-editor"><div class="f-panel f-tx-panel"><h3>Perde</h3>${row('curtain', Object.entries(CURTAINS).map(([k, v]) => [k, v[0]]).concat([['yok', 'Perdesiz']]), tx.curtain.model)}${sw('curtain', FABRICS, tx.curtain.color)}
-      <h3>Halı</h3>${row('rug', Object.entries(RUG_MODELS), tx.rug.model)}${sw('rug', RUG_COLORS, tx.rug.color)}
-      <p class="f-note">${esc(L('textileNote'))}</p><div class="f-actions"><a class="f-primary" href="ev.html">${esc(L('textileHome'))} →</a></div></div></aside>`; };
-  main.onclick = e => { if (!state.textileView) return; const b = e.target.closest('button[data-g]'); if (!b) return;
-    const o = tx[b.dataset.g]; if (b.dataset.m) o.model = b.dataset.m; if (b.dataset.c) o.color = b.dataset.c; store.set(TEXTILE_KEY, tx); draw(); };
-  draw();
+  const tx = migrate(store.get(TEXTILE_KEY)), main = document.querySelector('.f-layout');
+  if (!document.getElementById('tx-css')) { const st = document.createElement('style'); st.id = 'tx-css'; st.textContent = TEXTILE_CSS; document.head.append(st); }
+  const summary = () => { const c = tx.curtain, r = tx.rug, fab = x => `${(x === 'sheer' ? SHEERS : DRAPES)[c[x].family]?.name} · ${colorName(c[x].color)}`;
+    const cs = c.system === 'yok' ? 'Perdesiz' : ['stor', 'plise'].includes(c.system) ? `${SYSTEMS[c.system]} · ${colorName(c.blind.color)}` : [c.system !== 'fon' && 'Tül: ' + fab('sheer'), c.system !== 'tul' && 'Fon: ' + fab('drape'), HEADINGS[c.heading].name].filter(Boolean).join(' — ');
+    return `${cs} | Halı: ${r.on ? `${RUGS[r.construction].name} · ${RUG_PATTERNS[r.pattern]} · ${colorName(r.color)}` : 'yok'}`; };
+  main.innerHTML = `<section class="f-visual f-tx-visual"><div class="f-caption"><div><p class="f-eyebrow">AURA · ${esc(L('textile'))}</p><h1>${esc(L('textileTitle'))}</h1><p class="f-dims" id="txSum"></p></div></div>
+      <div class="f-tx-stage" id="txStage"></div>
+      <div class="f-toolbar"><button data-txv="genel" aria-pressed="true">Genel</button><button data-txv="yakin" aria-pressed="false">Yakın</button><button data-txv="gun" aria-pressed="true">Gündüz</button><button data-txv="gece" aria-pressed="false">Akşam</button></div>
+      <p class="f-hint">Pencere 180 × 150 cm, tavan 260 cm, halı 170 × 240 cm. Sürükleyin: çevirin. Görünüm önerisidir; kumaş ve renk numuneyle doğrulanır.</p></section>
+    <aside class="f-editor"><nav class="f-tabs" role="tablist"><button role="tab" data-txt="curtain" aria-selected="true"><span>01</span>Perde</button><button role="tab" data-txt="rug" aria-selected="false"><span>02</span>Halı</button></nav>
+      <div class="f-panel f-tx-panel"><div class="tx" id="txPanel"></div><p class="f-note">${esc(L('textileNote'))}</p><div class="f-actions"><a class="f-primary" href="ev.html">${esc(L('textileHome'))} →</a></div></div></aside>`;
+  let tab = 'curtain'; const stage = $('#txStage');
+  const draw = () => { $('#txPanel').innerHTML = chooserHTML(tx, tab); $('#txSum').textContent = summary(); main.querySelectorAll('[data-txt]').forEach(b => b.setAttribute('aria-selected', b.dataset.txt === tab)); textileScene(stage, tx).catch(err => { stage.innerHTML = `<p class="f-nogl">WebGL: ${esc(err.message)}</p>`; }); };
+  const change = el => { if (applyChoice(tx, el)) { store.set(TEXTILE_KEY, tx); draw(); } };
+  main.onclick = e => { if (!state.textileView) return; const t = e.target.closest('[data-txt]'); if (t) { tab = t.dataset.txt; return draw(); }
+    const v = e.target.closest('[data-txv]'); if (v && txScene) { const k = v.dataset.txv; if (k === 'genel' || k === 'yakin') txScene.close = k === 'yakin'; else txScene.night = k === 'gece';
+      main.querySelectorAll('[data-txv]').forEach(b => b.setAttribute('aria-pressed', b.dataset.txv === (txScene.close ? 'yakin' : 'genel') || b.dataset.txv === (txScene.night ? 'gece' : 'gun'))); return txScene.render(); }
+    const b = e.target.closest('button[data-p]'); if (b) change(b); };
+  main.oninput = e => { if (state.textileView && e.target.matches('input[data-p]')) { e.target.nextElementSibling.textContent = +e.target.value <= 0.02 ? 'kapalı' : +e.target.value >= 0.98 ? 'açık' : Math.round(e.target.value * 100) + '%'; } };
+  main.onchange = e => { if (state.textileView && e.target.matches('input[data-p]')) change(e.target); };
+  txScene = null; draw();
 }
 let guideThen = null;
 const guideDue = () => !store.get('aura-forma-guide-seen');
