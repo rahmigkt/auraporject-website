@@ -120,6 +120,26 @@ function place() {
   cam.position.set(tx + Math.sin(orbit.yaw) * Math.cos(orbit.pitch) * orbit.dist, Math.sin(orbit.pitch) * orbit.dist, tz + Math.cos(orbit.yaw) * Math.cos(orbit.pitch) * orbit.dist);
   cam.lookAt(tx, 0, tz);
 }
+// ---- walking: half-metre steps at eye height; walls and window sills stop you, door openings let you through ----------
+const inside = (p, poly) => { let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const [xi, yi] = poly[i], [xj, yj] = poly[j]; if ((yi > p[1]) !== (yj > p[1]) && p[0] < (xj - xi) * (p[1] - yi) / (yj - yi) + xi) c = !c; } return c; };
+const crosses = (a, b, c, d) => { const o = (p, q, r) => Math.sign((q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0])); return o(a, b, c) !== o(a, b, d) && o(c, d, a) !== o(c, d, b); };
+function blocked(a, b) { // a, b in plan mm
+  if (!D.spaces.some(s => inside(b, s.boundary_xy_mm))) return true;
+  for (const w of walls) for (const [s0, s1, lo] of pieces(w)) { if (lo > 0) continue; // solid at floor level: keep 60 cm off its face
+    const A = [w.x0 + w.ux * s0, w.y0 + w.uy * s0], B = [w.x0 + w.ux * s1, w.y0 + w.uy * s1];
+    if (crosses(a, b, A, B)) return true;
+    const t = Math.max(0, Math.min(s1 - s0, (b[0] - A[0]) * w.ux + (b[1] - A[1]) * w.uy)), q = [A[0] + w.ux * t, A[1] + w.uy * t];
+    if (Math.hypot(b[0] - q[0], b[1] - q[1]) < w.t / 2 + 600) return true; }
+  return false;
+}
+let walking = 0;
+function step(dir) {
+  if (!orbit.eye || walking) return; const e = orbit.eye, a = [e[0] * 1000, -e[2] * 1000], d = 500 * dir, b = [a[0] + Math.sin(orbit.yaw) * d, a[1] - Math.cos(orbit.yaw) * d];
+  if (blocked(a, b)) { $('#hint').textContent = 'Önünüzde duvar var · dönüp başka yöne yürüyün'; return; }
+  const from = [...e], to = [b[0] / 1000, e[1], -b[1] / 1000], t0 = performance.now(); walking = 1;
+  const tick = now => { const t = Math.min(1, (now - t0) / 320), k = t * t * (3 - 2 * t); orbit.eye = from.map((v, i) => v + (to[i] - v) * k); render(); if (t < 1) requestAnimationFrame(tick); else walking = 0; };
+  requestAnimationFrame(tick); $('#hint').textContent = HINT.room;
+}
 function render() { const r = canvas.getBoundingClientRect(); renderer.setSize(r.width, r.height, false); cam.aspect = r.width / Math.max(1, r.height); cam.fov = orbit.eye ? orbit.fov : 45; cam.updateProjectionMatrix(); place(); renderer.render(scene, cam); }
 {
   const P = new Map(); let last = null;
@@ -133,14 +153,19 @@ function render() { const r = canvas.getBoundingClientRect(); renderer.setSize(r
   canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', up);
   canvas.addEventListener('wheel', e => { e.preventDefault(); if (orbit.eye) orbit.fov = Math.max(38, Math.min(62, orbit.fov * (e.deltaY > 0 ? 1.06 : 0.94))); else orbit.dist = Math.max(3, Math.min(60, orbit.dist * (e.deltaY > 0 ? 1.1 : 0.9))); render(); }, {passive: false});
   canvas.addEventListener('dblclick', () => { if (orbit.eye) { orbit.corner++; show('room'); } });
+  addEventListener('keydown', e => { if (!orbit.eye || /INPUT|SELECT|TEXTAREA/.test(document.activeElement?.tagName)) return;
+    const k = e.key.toLowerCase(); if (k === 'arrowup' || k === 'w') step(1); else if (k === 'arrowdown' || k === 's') step(-1);
+    else if (k === 'arrowleft' || k === 'a') { orbit.yaw += 0.12; render(); } else if (k === 'arrowright' || k === 'd') { orbit.yaw -= 0.12; render(); } else return; e.preventDefault(); });
+  $('#walk').addEventListener('click', e => { const b = e.target.closest('[data-walk]'); if (!b) return; const w = b.dataset.walk;
+    if (w === 'f') step(1); if (w === 'b') step(-1); if (w === 'l') { orbit.yaw += 0.3; render(); } if (w === 'r') { orbit.yaw -= 0.3; render(); } });
   new ResizeObserver(() => { if (!canvas.hidden) render(); }).observe(canvas);
 }
 
 // ---- views and side panel ---------------------------------------------------------------------------------
-const HINT = {plan: 'Sürükleyin: kaydır · tekerlek / iki parmak: yakınlaştır · odaya dokunun: seç', maket: 'Duvarlar 1,1 m\'den kesilmiş ev maketi · sürükleyin: çevir', '3d': 'Tam yükseklik · sürükleyin: çevir · iki parmak: yakınlaştır', room: 'Göz hizası 1,5 m, düz kamera · sürükleyin: dönün · tekerlek / iki parmak: görüş açısı · çift dokunun: başka köşe'};
+const HINT = {plan: 'Sürükleyin: kaydır · tekerlek / iki parmak: yakınlaştır · odaya dokunun: seç', maket: 'Duvarlar 1,1 m\'den kesilmiş ev maketi · sürükleyin: çevir', '3d': 'Tam yükseklik · sürükleyin: çevir · iki parmak: yakınlaştır', room: 'Göz hizası 1,5 m · oklar ya da W/S: yürü · sürükleyin: dönün · iki parmak: görüş açısı · çift dokunun: başka köşe'};
 function show(v) {
   S.view = v; document.querySelectorAll('[data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
-  svg.hidden = v !== 'plan'; canvas.hidden = v === 'plan'; $('#hint').textContent = HINT[v];
+  svg.hidden = v !== 'plan'; canvas.hidden = v === 'plan'; $('#walk').hidden = v !== 'room'; $('#hint').textContent = HINT[v];
   if (v === 'plan') return drawPlan();
   const sp = D.spaces.find(s => s.id === S.room) || D.spaces.find(s => s.kind === 'living') || D.spaces[0]; S.room = sp.id;
   build(v === 'maket' ? 1100 : H);
@@ -175,6 +200,6 @@ await open(new URLSearchParams(location.search).get('plan') || EXAMPLES[0][0]);
 const toPlan = e => { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; const q = p.matrixTransform(svg.getScreenCTM().inverse()); return [q.x, -q.y]; };
 const pxMM = () => { const r = svg.getBoundingClientRect(); return Math.max(vb[2] / r.width, vb[3] / r.height); };
 const refresh = (full = true) => { load(D, S.name, true); if (S.view === 'plan') drawPlan(); else show(S.view); if (full) side(); };
-const ev = {get D() { return D; }, get walls() { return walls; }, get ops() { return ops; }, get H() { return H; }, S, hooks, show, open, load, refresh, drawPlan, side, toPlan, pxMM, el, pts, band, area, centroid, NAMES, COLORS, INK, svg};
+const ev = {orbit: () => orbit, blocked, get D() { return D; }, get walls() { return walls; }, get ops() { return ops; }, get H() { return H; }, S, hooks, show, open, load, refresh, drawPlan, side, toPlan, pxMM, el, pts, band, area, centroid, NAMES, COLORS, INK, svg};
 window.__ev = ev;
-(await import('./edit.js?v=20261020p')).install(ev);
+(await import('./edit.js?v=20261020q')).install(ev);
