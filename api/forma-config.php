@@ -23,5 +23,6 @@ return array_merge([
  'submit_max_mb' => 25,
  'submit_secret' => getenv('AURA_SUBMIT_SECRET') ?: '',  // long random text; signs the designer's download links
  'submit_link_days' => 60,
+ 'mail_api_key' => getenv('AURA_MAIL_API_KEY') ?: '',  // Brevo API key (v3); when set, mails go over HTTPS instead of PHP mail()
  'submit_customer_copy' => true,  // short confirmation to the customer (link to the design, no attachment)
 ], is_array($secrets) ? $secrets : []);

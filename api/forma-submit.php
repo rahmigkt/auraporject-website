@@ -8,7 +8,8 @@ header('Content-Type: application/json; charset=utf-8'); header('Cache-Control: 
 function out(int $status, array $body): void { http_response_code($status); echo json_encode($body, JSON_UNESCAPED_UNICODE); exit; }
 $dir = rtrim((string)$config['submit_store_dir'], '/');
 $ready = $config['submit_enabled'] && filter_var($config['submit_recipient'], FILTER_VALIDATE_EMAIL) && filter_var($config['submit_sender'], FILTER_VALIDATE_EMAIL)
-  && strlen((string)$config['submit_secret']) >= 24 && $dir !== '' && is_dir($dir) && is_writable($dir);
+  && strlen((string)$config['submit_secret']) >= 24 && $dir !== '' && is_dir($dir) && is_writable($dir)
+  && (($config['mail_api_key'] ?? '') !== '' ? function_exists('curl_init') : function_exists('mail')); // Natro shared hosting has no mail(): use the HTTPS API
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET') out(200, ['available' => (bool)$ready]);
 if (!$ready) out(503, ['available' => false, 'error' => 'Direct sending is not configured']);
 $origin = $_SERVER['HTTP_ORIGIN'] ?? ''; $host = $_SERVER['HTTP_HOST'] ?? '';
@@ -40,7 +41,17 @@ $base = "$scheme://$host".rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? '/api/x'), '/
 $download = "$base/forma-file.php?id=$id&exp=$exp&sig=$sig";
 
 $from = $config['submit_sender'];
-$mailTo = function (string $to, string $subject, string $text, string $replyTo = '') use ($from): bool {
+$mailTo = function (string $to, string $subject, string $text, string $replyTo = '') use ($from, $config): bool {
+  if (($config['mail_api_key'] ?? '') !== '') { // Brevo transactional API over HTTPS (free tier); sender domain verified in Brevo (DKIM in Cloudflare)
+    $body = ['sender' => ['name' => 'AURA', 'email' => $from], 'to' => [['email' => $to]], 'subject' => $subject, 'textContent' => $text];
+    if ($replyTo !== '') $body['replyTo'] = ['email' => $replyTo];
+    $ch = curl_init('https://api.brevo.com/v3/smtp/email');
+    curl_setopt_array($ch, [CURLOPT_POST => true, CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 15,
+      CURLOPT_HTTPHEADER => ['accept: application/json', 'content-type: application/json', 'api-key: '.$config['mail_api_key']],
+      CURLOPT_POSTFIELDS => json_encode($body, JSON_UNESCAPED_UNICODE)]);
+    curl_exec($ch); $code = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE); curl_close($ch);
+    return $code >= 200 && $code < 300;
+  }
   $headers = "MIME-Version: 1.0\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Transfer-Encoding: 8bit\r\nFrom: AURA <$from>\r\n".($replyTo ? "Reply-To: $replyTo\r\n" : '');
   return @mail($to, '=?UTF-8?B?'.base64_encode($subject).'?=', $text, $headers, "-f$from");
 };

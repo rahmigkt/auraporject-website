@@ -9,5 +9,6 @@ return [
  'submit_recipient' => 'design@auraproject.com.tr',   // Aster Mail alias (same inbox as info@)
  'submit_sender' => 'info@auraproject.com.tr',      // PHP mail() leaves from the Natro server: its IP must be in the SPF record
  'submit_store_dir' => '/home/HESAP/aura-projeler',
+ 'mail_api_key' => 'xkeysib-...',   // Brevo > SMTP & API > API keys (free plan, 300 mails/day)
  'submit_secret' => 'EN-AZ-24-KARAKTERLIK-RASTGELE-METIN',
 ];
