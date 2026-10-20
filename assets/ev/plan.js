@@ -92,7 +92,8 @@ const cam = new THREE.PerspectiveCamera(50, 1, 0.05, 300);
 scene.add(new THREE.HemisphereLight('#fffaf0', '#b9ae9a', 1.6));
 const sun = new THREE.DirectionalLight('#ffffff', 1.4); sun.position.set(6, 12, -4); scene.add(sun);
 const wallMat = new THREE.MeshStandardMaterial({color: '#f2ede3', roughness: 0.9}), capMat = new THREE.MeshStandardMaterial({color: INK.wall, roughness: 0.9});
-const ceilMat = new THREE.MeshStandardMaterial({color: '#fbf9f4', roughness: 1, side: THREE.DoubleSide});
+const ceilMat = new THREE.MeshStandardMaterial({color: '#fbf9f4', emissive: '#fbf9f4', emissiveIntensity: 0.35, roughness: 1, side: THREE.DoubleSide});
+const roomLight = new THREE.PointLight('#fff6e8', 0, 0, 1.2); scene.add(roomLight);
 const floorMats = {}; const floorMat = k => floorMats[k] ??= new THREE.MeshStandardMaterial({color: COLORS[k] || '#ddd', roughness: 0.85, side: THREE.DoubleSide});
 const selMat = new THREE.MeshStandardMaterial({color: '#e2b49f', roughness: 0.8, side: THREE.DoubleSide});
 let house = null;
@@ -111,30 +112,32 @@ function build(cut) {
     m.rotation.y = Math.atan2(w.uy, w.ux); house.add(m);
   }
 }
-const orbit = {yaw: 0.7, pitch: 0.75, dist: 16, eye: null};
+const orbit = {yaw: 0.7, pitch: 0.75, dist: 16, eye: null, fov: 52, corner: 0};
 function place() {
   const tx = (all.x0 + all.x1) / 2000, tz = -(all.y0 + all.y1) / 2000;
-  if (orbit.eye) { cam.position.set(...orbit.eye); cam.lookAt(orbit.eye[0] + Math.sin(orbit.yaw), orbit.eye[1] - Math.sin(orbit.pitch - 0.75) * 0.5, orbit.eye[2] + Math.cos(orbit.yaw)); return; }
+  // inside a room: a level architectural camera (no tilt, so verticals stay vertical and walls keep their true proportion)
+  if (orbit.eye) { cam.position.set(...orbit.eye); cam.lookAt(orbit.eye[0] + Math.sin(orbit.yaw), orbit.eye[1], orbit.eye[2] + Math.cos(orbit.yaw)); return; }
   cam.position.set(tx + Math.sin(orbit.yaw) * Math.cos(orbit.pitch) * orbit.dist, Math.sin(orbit.pitch) * orbit.dist, tz + Math.cos(orbit.yaw) * Math.cos(orbit.pitch) * orbit.dist);
   cam.lookAt(tx, 0, tz);
 }
-function render() { const r = canvas.getBoundingClientRect(); renderer.setSize(r.width, r.height, false); cam.aspect = r.width / Math.max(1, r.height); cam.fov = orbit.eye ? 70 : 45; cam.updateProjectionMatrix(); place(); renderer.render(scene, cam); }
+function render() { const r = canvas.getBoundingClientRect(); renderer.setSize(r.width, r.height, false); cam.aspect = r.width / Math.max(1, r.height); cam.fov = orbit.eye ? orbit.fov : 45; cam.updateProjectionMatrix(); place(); renderer.render(scene, cam); }
 {
   const P = new Map(); let last = null;
   canvas.addEventListener('pointerdown', e => { P.set(e.pointerId, [e.clientX, e.clientY]); canvas.setPointerCapture(e.pointerId); last = null; });
   canvas.addEventListener('pointermove', e => {
     if (!P.has(e.pointerId)) return; const prev = P.get(e.pointerId); P.set(e.pointerId, [e.clientX, e.clientY]);
-    if (P.size === 1) { const k = orbit.eye ? -0.005 : 0.006; orbit.yaw += (e.clientX - prev[0]) * k; orbit.pitch = Math.max(orbit.eye ? 0.2 : 0.12, Math.min(orbit.eye ? 1.3 : 1.5, orbit.pitch + (e.clientY - prev[1]) * 0.005)); render(); }
-    else if (P.size === 2 && !orbit.eye) { const [a, b] = [...P.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]); if (last) { orbit.dist = Math.max(3, Math.min(60, orbit.dist * last / d)); render(); } last = d; }
+    if (P.size === 1) { if (orbit.eye) { orbit.yaw -= (e.clientX - prev[0]) * 0.004; render(); return; } orbit.yaw += (e.clientX - prev[0]) * 0.006; orbit.pitch = Math.max(0.12, Math.min(1.5, orbit.pitch + (e.clientY - prev[1]) * 0.005)); render(); }
+    else if (P.size === 2) { const [a, b] = [...P.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]); if (last) { if (orbit.eye) orbit.fov = Math.max(38, Math.min(62, orbit.fov * last / d)); else orbit.dist = Math.max(3, Math.min(60, orbit.dist * last / d)); render(); } last = d; }
   });
   const up = e => { P.delete(e.pointerId); last = null; };
   canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', up);
-  canvas.addEventListener('wheel', e => { e.preventDefault(); if (!orbit.eye) { orbit.dist = Math.max(3, Math.min(60, orbit.dist * (e.deltaY > 0 ? 1.1 : 0.9))); render(); } }, {passive: false});
+  canvas.addEventListener('wheel', e => { e.preventDefault(); if (orbit.eye) orbit.fov = Math.max(38, Math.min(62, orbit.fov * (e.deltaY > 0 ? 1.06 : 0.94))); else orbit.dist = Math.max(3, Math.min(60, orbit.dist * (e.deltaY > 0 ? 1.1 : 0.9))); render(); }, {passive: false});
+  canvas.addEventListener('dblclick', () => { if (orbit.eye) { orbit.corner++; show('room'); } });
   new ResizeObserver(() => { if (!canvas.hidden) render(); }).observe(canvas);
 }
 
 // ---- views and side panel ---------------------------------------------------------------------------------
-const HINT = {plan: 'Sürükleyin: kaydır · tekerlek / iki parmak: yakınlaştır · odaya dokunun: seç', maket: 'Duvarlar 1,1 m\'den kesilmiş ev maketi · sürükleyin: çevir', '3d': 'Tam yükseklik · sürükleyin: çevir · iki parmak: yakınlaştır', room: 'Seçili odanın içindesiniz · sürükleyin: etrafa bakın'};
+const HINT = {plan: 'Sürükleyin: kaydır · tekerlek / iki parmak: yakınlaştır · odaya dokunun: seç', maket: 'Duvarlar 1,1 m\'den kesilmiş ev maketi · sürükleyin: çevir', '3d': 'Tam yükseklik · sürükleyin: çevir · iki parmak: yakınlaştır', room: 'Göz hizası 1,5 m, düz kamera · sürükleyin: dönün · tekerlek / iki parmak: görüş açısı · çift dokunun: başka köşe'};
 function show(v) {
   S.view = v; document.querySelectorAll('[data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
   svg.hidden = v !== 'plan'; canvas.hidden = v === 'plan'; $('#hint').textContent = HINT[v];
@@ -142,8 +145,12 @@ function show(v) {
   const sp = D.spaces.find(s => s.id === S.room) || D.spaces.find(s => s.kind === 'living') || D.spaces[0]; S.room = sp.id;
   build(v === 'maket' ? 1100 : H);
   const span = Math.max(all.x1 - all.x0, all.y1 - all.y0) / 1000;
-  if (v === 'room') { const [cx, cy] = centroid(sp.boundary_xy_mm), b = bbox(sp.boundary_xy_mm); orbit.eye = [(cx - (b.x1 - b.x0) * 0.3) / 1000, 1.6, -(cy - (b.y1 - b.y0) * 0.3) / 1000]; orbit.yaw = Math.PI * 0.75; orbit.pitch = 0.75; }
-  else { orbit.eye = null; orbit.pitch = v === 'maket' ? 1.0 : 0.6; orbit.dist = span * (v === 'maket' ? 1.5 : 1.6); }
+  if (v === 'room') { // stand in a corner of the room (0.45 m from the walls) at eye height, looking across to the far side
+    const b = sp.boundary_xy_mm, [cx, cy] = centroid(b), far = b.map((p, i) => [i, Math.hypot(p[0] - cx, p[1] - cy)]).sort((p, q) => q[1] - p[1]);
+    const c = b[far[orbit.corner % Math.min(4, far.length)][0]], dx = cx - c[0], dy = cy - c[1], L = Math.hypot(dx, dy) || 1, step = Math.min(650, L * 0.35);
+    orbit.eye = [(c[0] + dx / L * step) / 1000, 1.5, -(c[1] + dy / L * step) / 1000]; orbit.yaw = Math.atan2(dx, -dy); orbit.fov = 52;
+    roomLight.position.set(cx / 1000, H / 1000 - 0.3, -cy / 1000); roomLight.intensity = 2.2; }
+  else { roomLight.intensity = 0; orbit.eye = null; orbit.pitch = v === 'maket' ? 1.0 : 0.6; orbit.dist = span * (v === 'maket' ? 1.5 : 1.6); }
   side(); render();
 }
 function pick(id) { S.room = id; side(); if (S.view === 'plan') drawPlan(); else show(S.view); }
@@ -170,4 +177,4 @@ const pxMM = () => { const r = svg.getBoundingClientRect(); return Math.max(vb[2
 const refresh = (full = true) => { load(D, S.name, true); if (S.view === 'plan') drawPlan(); else show(S.view); if (full) side(); };
 const ev = {get D() { return D; }, get walls() { return walls; }, get ops() { return ops; }, get H() { return H; }, S, hooks, show, open, load, refresh, drawPlan, side, toPlan, pxMM, el, pts, band, area, centroid, NAMES, COLORS, INK, svg};
 window.__ev = ev;
-(await import('./edit.js?v=20261020o')).install(ev);
+(await import('./edit.js?v=20261020p')).install(ev);
