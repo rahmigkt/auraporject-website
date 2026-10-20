@@ -1,0 +1,6220 @@
+{
+  "id": "ev-sohbet-es-01",
+  "country": "ES",
+  "region": "Catalunya",
+  "city": "Barcelona",
+  "language": "es",
+  "source": {
+    "dataset": "Swiss Dwellings",
+    "version": "3.0.0",
+    "id": "sd-029f06baade84d7b813cd6b4",
+    "license": "CC BY 4.0",
+    "doi": "10.5281/zenodo.7788422",
+    "attribution": "Standfest et al., Swiss Dwellings v3.0.0, 2023, doi:10.5281/zenodo.7788422, CC BY 4.0. AURA: privacy minimization, unit conversion, semantic mapping, graph inference and compatibility export.",
+    "fixture": "kaynaklar/sd-029f06baade84d7b813cd6b4.json",
+    "fixture_sha256": "8554b9cbdbe547ea5f0249448cf371046475388d12b6922763c44a95722d9f1d",
+    "hash_mode": "canonical_json_sort_keys_ensure_ascii_false",
+    "multi_floor_source": false,
+    "geographic_transfer": "Swiss reference geometry; fictional Spanish conversation, not surveyed local property"
+  },
+  "plan": {
+    "schema_version": "0.1",
+    "project_id": "ev-sohbet-es-01",
+    "revision": 2,
+    "status": "survey",
+    "coordinate_system": "mm; right-handed; x/y floor plane, z up; local origin; glTF adapter converts units and up-axis",
+    "language": {
+      "customer": "es",
+      "designer": "tr"
+    },
+    "brief": {
+      "whole_home": true,
+      "goals": [],
+      "budget": {
+        "amount": null,
+        "currency": "EUR",
+        "includes": [],
+        "estimate_status": "unknown"
+      },
+      "household_needs": [],
+      "style": [],
+      "preserve": []
+    },
+    "levels": [
+      {
+        "id": "level-0",
+        "name": "Planta de referencia",
+        "elevation": {
+          "value": 0,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "floor_height": {
+          "value": null,
+          "unit": "mm",
+          "status": "unknown",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        }
+      }
+    ],
+    "spaces": [
+      {
+        "id": "room-0",
+        "level_id": "level-0",
+        "name": "Balcón",
+        "kind": "balcony",
+        "boundary_xy_mm": [
+          [
+            10014.2922,
+            9176.2411
+          ],
+          [
+            10093.1952,
+            9176.7479
+          ],
+          [
+            10089.3115,
+            9781.555
+          ],
+          [
+            13343.4983,
+            9802.4518
+          ],
+          [
+            13351.9699,
+            8483.1837
+          ],
+          [
+            10018.88,
+            8461.7802
+          ]
+        ],
+        "wall_ids": [
+          "wall-n0",
+          "wall-n1",
+          "wall-n2",
+          "wall-n4",
+          "wall-n5",
+          "wall-n7",
+          "wall-n8",
+          "wall-n15",
+          "wall-n16",
+          "wall-n29",
+          "wall-n43",
+          "wall-n44",
+          "wall-n45",
+          "wall-n57"
+        ],
+        "ceiling_height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "geometry_status": "estimated",
+        "locked_boundary": true
+      },
+      {
+        "id": "room-1",
+        "level_id": "level-0",
+        "name": "Dormitorio",
+        "kind": "bedroom",
+        "boundary_xy_mm": [
+          [
+            5948.6556,
+            9138.3132
+          ],
+          [
+            9772.373,
+            9162.8672
+          ],
+          [
+            9777.2935,
+            8396.6297
+          ],
+          [
+            9786.1399,
+            8396.6865
+          ],
+          [
+            9786.8957,
+            8278.9853
+          ],
+          [
+            9766.0972,
+            8278.8517
+          ],
+          [
+            9792.477,
+            4170.7991
+          ],
+          [
+            5980.5545,
+            4170.7991
+          ]
+        ],
+        "wall_ids": [
+          "wall-n0",
+          "wall-n1",
+          "wall-n2",
+          "wall-n9",
+          "wall-n10",
+          "wall-n11",
+          "wall-n12",
+          "wall-n13",
+          "wall-n14",
+          "wall-n15",
+          "wall-n16",
+          "wall-n25",
+          "wall-n38",
+          "wall-n39",
+          "wall-n43",
+          "wall-n44",
+          "wall-n45",
+          "wall-n51",
+          "wall-n54",
+          "wall-n57"
+        ],
+        "ceiling_height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "geometry_status": "estimated",
+        "locked_boundary": true,
+        "requested_mattress_width_mm": 1400
+      },
+      {
+        "id": "room-2",
+        "level_id": "level-0",
+        "name": "Cocina",
+        "kind": "kitchen",
+        "boundary_xy_mm": [
+          [
+            11125.4216,
+            11.8547
+          ],
+          [
+            11099.5625,
+            4038.7992
+          ],
+          [
+            13412.9842,
+            4038.7991
+          ],
+          [
+            13438.7479,
+            26.7098
+          ]
+        ],
+        "wall_ids": [
+          "wall-n9",
+          "wall-n10",
+          "wall-n11",
+          "wall-n12",
+          "wall-n13",
+          "wall-n14",
+          "wall-n18",
+          "wall-n19",
+          "wall-n20",
+          "wall-n27",
+          "wall-n36",
+          "wall-n37",
+          "wall-n51",
+          "wall-n52",
+          "wall-n53",
+          "wall-n54",
+          "wall-n55",
+          "wall-n56",
+          "wall-n60"
+        ],
+        "ceiling_height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "geometry_status": "estimated",
+        "locked_boundary": true
+      },
+      {
+        "id": "room-3",
+        "level_id": "level-0",
+        "name": "Dormitorio",
+        "kind": "bedroom",
+        "boundary_xy_mm": [
+          [
+            13412.1366,
+            4170.7991
+          ],
+          [
+            9904.4794,
+            4170.7991
+          ],
+          [
+            9878.6131,
+            8198.8741
+          ],
+          [
+            13386.1256,
+            8221.3977
+          ]
+        ],
+        "wall_ids": [
+          "wall-n2",
+          "wall-n9",
+          "wall-n10",
+          "wall-n11",
+          "wall-n12",
+          "wall-n13",
+          "wall-n14",
+          "wall-n27",
+          "wall-n38",
+          "wall-n39",
+          "wall-n51",
+          "wall-n54",
+          "wall-n57"
+        ],
+        "ceiling_height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "geometry_status": "estimated",
+        "locked_boundary": true,
+        "requested_mattress_width_mm": 900
+      },
+      {
+        "id": "room-4",
+        "level_id": "level-0",
+        "name": "Distribuidor",
+        "kind": "hall",
+        "boundary_xy_mm": [
+          [
+            4801.4421,
+            4038.7991
+          ],
+          [
+            10967.5598,
+            4038.7992
+          ],
+          [
+            10974.9095,
+            2894.2632
+          ],
+          [
+            9896.529,
+            2887.3384
+          ],
+          [
+            9888.9012,
+            2895.4599
+          ],
+          [
+            9246.1798,
+            2291.8064
+          ],
+          [
+            4812.8432,
+            2263.3377
+          ]
+        ],
+        "wall_ids": [
+          "wall-n9",
+          "wall-n10",
+          "wall-n11",
+          "wall-n12",
+          "wall-n13",
+          "wall-n14",
+          "wall-n22",
+          "wall-n23",
+          "wall-n24",
+          "wall-n28",
+          "wall-n30",
+          "wall-n33",
+          "wall-n36",
+          "wall-n37",
+          "wall-n38",
+          "wall-n39",
+          "wall-n49",
+          "wall-n50",
+          "wall-n51",
+          "wall-n54",
+          "wall-n55",
+          "wall-n56",
+          "wall-n58",
+          "wall-n59"
+        ],
+        "ceiling_height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "geometry_status": "estimated",
+        "locked_boundary": true
+      },
+      {
+        "id": "room-5",
+        "level_id": "level-0",
+        "name": "Dormitorio",
+        "kind": "bedroom",
+        "boundary_xy_mm": [
+          [
+            4679.4396,
+            4038.7992
+          ],
+          [
+            4700.6783,
+            731.3646
+          ],
+          [
+            1707.1178,
+            712.1415
+          ],
+          [
+            1685.7556,
+            4038.7992
+          ]
+        ],
+        "wall_ids": [
+          "wall-n6",
+          "wall-n9",
+          "wall-n10",
+          "wall-n11",
+          "wall-n12",
+          "wall-n13",
+          "wall-n14",
+          "wall-n31",
+          "wall-n32",
+          "wall-n33",
+          "wall-n46",
+          "wall-n47",
+          "wall-n48",
+          "wall-n50",
+          "wall-n51",
+          "wall-n54"
+        ],
+        "ceiling_height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "geometry_status": "estimated",
+        "locked_boundary": true,
+        "requested_mattress_width_mm": 900
+      },
+      {
+        "id": "room-6",
+        "level_id": "level-0",
+        "name": "Baño",
+        "kind": "bath",
+        "boundary_xy_mm": [
+          [
+            10993.4243,
+            11.0071
+          ],
+          [
+            9279.3285,
+            0
+          ],
+          [
+            9265.1452,
+            2208.7254
+          ],
+          [
+            9284.6273,
+            2187.9825
+          ],
+          [
+            9920.8071,
+            2785.4921
+          ],
+          [
+            10975.5644,
+            2792.2653
+          ]
+        ],
+        "wall_ids": [
+          "wall-n18",
+          "wall-n19",
+          "wall-n20",
+          "wall-n22",
+          "wall-n23",
+          "wall-n24",
+          "wall-n28",
+          "wall-n30",
+          "wall-n36",
+          "wall-n37",
+          "wall-n40",
+          "wall-n41",
+          "wall-n42",
+          "wall-n49",
+          "wall-n52",
+          "wall-n53",
+          "wall-n55",
+          "wall-n56",
+          "wall-n58",
+          "wall-n59",
+          "wall-n60"
+        ],
+        "ceiling_height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "geometry_status": "estimated",
+        "locked_boundary": true
+      },
+      {
+        "id": "room-7",
+        "level_id": "level-0",
+        "name": "Salón",
+        "kind": "living",
+        "boundary_xy_mm": [
+          [
+            1684.908,
+            4170.7992
+          ],
+          [
+            1653.1862,
+            9110.7298
+          ],
+          [
+            5826.6581,
+            9137.5297
+          ],
+          [
+            5858.552,
+            4170.7992
+          ]
+        ],
+        "wall_ids": [
+          "wall-n0",
+          "wall-n1",
+          "wall-n9",
+          "wall-n10",
+          "wall-n11",
+          "wall-n12",
+          "wall-n13",
+          "wall-n14",
+          "wall-n25",
+          "wall-n31",
+          "wall-n32",
+          "wall-n45",
+          "wall-n46",
+          "wall-n47",
+          "wall-n48",
+          "wall-n51",
+          "wall-n54"
+        ],
+        "ceiling_height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "geometry_status": "estimated",
+        "locked_boundary": true
+      },
+      {
+        "id": "room-8",
+        "level_id": "level-0",
+        "name": "Balcón",
+        "kind": "balcony",
+        "boundary_xy_mm": [
+          [
+            1345.4644,
+            8443.4919
+          ],
+          [
+            1374.9148,
+            3857.2933
+          ],
+          [
+            890.6553,
+            3854.1836
+          ],
+          [
+            890.6055,
+            3861.9347
+          ],
+          [
+            29.2959,
+            3856.4038
+          ],
+          [
+            0,
+            8418.5501
+          ],
+          [
+            844.2095,
+            8423.9712
+          ],
+          [
+            844.1049,
+            8440.2725
+          ]
+        ],
+        "wall_ids": [
+          "wall-n3",
+          "wall-n17",
+          "wall-n21",
+          "wall-n26",
+          "wall-n31",
+          "wall-n32",
+          "wall-n34",
+          "wall-n35",
+          "wall-n46",
+          "wall-n47",
+          "wall-n48"
+        ],
+        "ceiling_height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "geometry_status": "estimated",
+        "locked_boundary": true
+      }
+    ],
+    "walls": [
+      {
+        "id": "wall-n0",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          10001.175,
+          9335.34
+        ],
+        "to_xy_mm": [
+          1496.0913921682268,
+          9280.724476808215
+        ],
+        "from_node_id": "node-0",
+        "to_node_id": "node-1",
+        "thickness": {
+          "value": 340,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-0",
+          "room-1",
+          "room-7"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-0"
+        ]
+      },
+      {
+        "id": "wall-n1",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          1496.0913921682268,
+          9280.724476808215
+        ],
+        "to_xy_mm": [
+          1350.7399,
+          9279.7911
+        ],
+        "from_node_id": "node-0",
+        "to_node_id": "node-1",
+        "thickness": {
+          "value": 340,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-0",
+          "room-1",
+          "room-7"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-0"
+        ]
+      },
+      {
+        "id": "wall-n2",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          14285.2659,
+          8358.1741
+        ],
+        "to_xy_mm": [
+          9787.5727,
+          8329.2922
+        ],
+        "from_node_id": "node-2",
+        "to_node_id": "node-3",
+        "thickness": {
+          "value": 260,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-0",
+          "room-1",
+          "room-3"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-1"
+        ]
+      },
+      {
+        "id": "wall-n3",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          -16.472100086398314,
+          3820.109213454565
+        ],
+        "to_xy_mm": [
+          -46.2302,
+          8454.254
+        ],
+        "from_node_id": "node-4",
+        "to_node_id": "node-5",
+        "thickness": {
+          "value": 90,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 1000,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-8"
+        ],
+        "structural_status": "unknown",
+        "exterior": true,
+        "source_wall_ids": [
+          "wall-2"
+        ]
+      },
+      {
+        "id": "wall-n4",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          10047.1897,
+          9177.4524
+        ],
+        "to_xy_mm": [
+          10043.017014663108,
+          9827.258722463637
+        ],
+        "from_node_id": "node-6",
+        "to_node_id": "node-7",
+        "thickness": {
+          "value": 90,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 1000,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-0"
+        ],
+        "structural_status": "unknown",
+        "exterior": true,
+        "source_wall_ids": [
+          "wall-3"
+        ]
+      },
+      {
+        "id": "wall-n5",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          10043.017014663108,
+          9827.258722463637
+        ],
+        "to_xy_mm": [
+          10042.7974,
+          9861.459
+        ],
+        "from_node_id": "node-6",
+        "to_node_id": "node-7",
+        "thickness": {
+          "value": 90,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 1000,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-0"
+        ],
+        "structural_status": "unknown",
+        "exterior": true,
+        "source_wall_ids": [
+          "wall-3"
+        ]
+      },
+      {
+        "id": "wall-n6",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          1706.5416,
+          646.1364
+        ],
+        "to_xy_mm": [
+          4702.1021,
+          665.3725
+        ],
+        "from_node_id": "node-8",
+        "to_node_id": "node-9",
+        "thickness": {
+          "value": 130,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-5"
+        ],
+        "structural_status": "unknown",
+        "exterior": true,
+        "source_wall_ids": [
+          "wall-4"
+        ]
+      },
+      {
+        "id": "wall-n7",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          10000.2665,
+          9826.9842
+        ],
+        "to_xy_mm": [
+          10043.017014663108,
+          9827.258722463637
+        ],
+        "from_node_id": "node-10",
+        "to_node_id": "node-11",
+        "thickness": {
+          "value": 90,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 1000,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-0"
+        ],
+        "structural_status": "unknown",
+        "exterior": true,
+        "source_wall_ids": [
+          "wall-5"
+        ]
+      },
+      {
+        "id": "wall-n8",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          10043.017014663108,
+          9827.258722463637
+        ],
+        "to_xy_mm": [
+          14243.1843,
+          9854.2301
+        ],
+        "from_node_id": "node-10",
+        "to_node_id": "node-11",
+        "thickness": {
+          "value": 90,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 1000,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-0"
+        ],
+        "structural_status": "unknown",
+        "exterior": true,
+        "source_wall_ids": [
+          "wall-5"
+        ]
+      },
+      {
+        "id": "wall-n9",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          1601.4931,
+          4104.7992
+        ],
+        "to_xy_mm": [
+          4925.4708,
+          4104.7992
+        ],
+        "from_node_id": "node-12",
+        "to_node_id": "node-13",
+        "thickness": {
+          "value": 130,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-1",
+          "room-2",
+          "room-3",
+          "room-4",
+          "room-5",
+          "room-7"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-6"
+        ]
+      },
+      {
+        "id": "wall-n10",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          4925.4708,
+          4104.7992
+        ],
+        "to_xy_mm": [
+          7929.4093,
+          4104.7992
+        ],
+        "from_node_id": "node-12",
+        "to_node_id": "node-13",
+        "thickness": {
+          "value": 130,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-1",
+          "room-2",
+          "room-3",
+          "room-4",
+          "room-5",
+          "room-7"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-6"
+        ]
+      },
+      {
+        "id": "wall-n11",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          7929.4093,
+          4104.7992
+        ],
+        "to_xy_mm": [
+          8859.4093,
+          4104.7992
+        ],
+        "from_node_id": "node-12",
+        "to_node_id": "node-13",
+        "thickness": {
+          "value": 130,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-1",
+          "room-2",
+          "room-3",
+          "room-4",
+          "room-5",
+          "room-7"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-6",
+          "wall-27"
+        ]
+      },
+      {
+        "id": "wall-n12",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          8859.4093,
+          4104.7992
+        ],
+        "to_xy_mm": [
+          9848.902014310102,
+          4104.7992
+        ],
+        "from_node_id": "node-12",
+        "to_node_id": "node-13",
+        "thickness": {
+          "value": 130,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-1",
+          "room-2",
+          "room-3",
+          "room-4",
+          "room-5",
+          "room-7"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-6"
+        ]
+      },
+      {
+        "id": "wall-n13",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          9848.902014310102,
+          4104.7992
+        ],
+        "to_xy_mm": [
+          10015.1135,
+          4104.7992
+        ],
+        "from_node_id": "node-12",
+        "to_node_id": "node-13",
+        "thickness": {
+          "value": 130,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-1",
+          "room-2",
+          "room-3",
+          "room-4",
+          "room-5",
+          "room-7"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-6"
+        ]
+      },
+      {
+        "id": "wall-n14",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          10015.1135,
+          4104.7992
+        ],
+        "to_xy_mm": [
+          13413.5604,
+          4104.7992
+        ],
+        "from_node_id": "node-12",
+        "to_node_id": "node-13",
+        "thickness": {
+          "value": 130,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-1",
+          "room-2",
+          "room-3",
+          "room-4",
+          "room-5",
+          "room-7"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-6"
+        ]
+      },
+      {
+        "id": "wall-n15",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          9892.6842,
+          9270.515
+        ],
+        "to_xy_mm": [
+          9897.714320386465,
+          8487.212068238929
+        ],
+        "from_node_id": "node-14",
+        "to_node_id": "node-15",
+        "thickness": {
+          "value": 240,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-0",
+          "room-1"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-7"
+        ]
+      },
+      {
+        "id": "wall-n16",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          9897.714320386465,
+          8487.212068238929
+        ],
+        "to_xy_mm": [
+          9898.2846,
+          8398.4067
+        ],
+        "from_node_id": "node-14",
+        "to_node_id": "node-15",
+        "thickness": {
+          "value": 240,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-0",
+          "room-1"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-7"
+        ]
+      },
+      {
+        "id": "wall-n17",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          1346.0085,
+          8514.4969
+        ],
+        "to_xy_mm": [
+          688.7475,
+          8510.2762
+        ],
+        "from_node_id": "node-16",
+        "to_node_id": "node-17",
+        "thickness": {
+          "value": 140,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-8"
+        ],
+        "structural_status": "unknown",
+        "exterior": true,
+        "source_wall_ids": [
+          "wall-8"
+        ]
+      },
+      {
+        "id": "wall-n18",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          9140.931,
+          -156.8919
+        ],
+        "to_xy_mm": [
+          9209.33172148287,
+          -156.45266337498492
+        ],
+        "from_node_id": "node-18",
+        "to_node_id": "node-19",
+        "thickness": {
+          "value": 310,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-2",
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-9"
+        ]
+      },
+      {
+        "id": "wall-n19",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          9209.33172148287,
+          -156.45266337498492
+        ],
+        "to_xy_mm": [
+          11518.384257474148,
+          -141.62503552393466
+        ],
+        "from_node_id": "node-18",
+        "to_node_id": "node-19",
+        "thickness": {
+          "value": 310,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-2",
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-9"
+        ]
+      },
+      {
+        "id": "wall-n20",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          11518.384257474148,
+          -141.62503552393466
+        ],
+        "to_xy_mm": [
+          14339.731,
+          -123.5077
+        ],
+        "from_node_id": "node-18",
+        "to_node_id": "node-19",
+        "thickness": {
+          "value": 310,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-2",
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-9"
+        ]
+      },
+      {
+        "id": "wall-n21",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          -88.9807,
+          8453.9795
+        ],
+        "to_xy_mm": [
+          842.9784,
+          8459.9641
+        ],
+        "from_node_id": "node-20",
+        "to_node_id": "node-21",
+        "thickness": {
+          "value": 70,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 1000,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-8"
+        ],
+        "structural_status": "unknown",
+        "exterior": true,
+        "source_wall_ids": [
+          "wall-10"
+        ]
+      },
+      {
+        "id": "wall-n22",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          4765.1255,
+          2192.0299
+        ],
+        "to_xy_mm": [
+          8177.4837460662375,
+          2213.942368497929
+        ],
+        "from_node_id": "node-22",
+        "to_node_id": "node-23",
+        "thickness": {
+          "value": 140,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-4",
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-11"
+        ]
+      },
+      {
+        "id": "wall-n23",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          8177.4837460662375,
+          2213.942368497929
+        ],
+        "to_xy_mm": [
+          9194.068303405062,
+          2220.4703692182065
+        ],
+        "from_node_id": "node-22",
+        "to_node_id": "node-23",
+        "thickness": {
+          "value": 140,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-4",
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-11"
+        ]
+      },
+      {
+        "id": "wall-n24",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          9194.068303405062,
+          2220.4703692182065
+        ],
+        "to_xy_mm": [
+          9253.9189,
+          2220.8547
+        ],
+        "from_node_id": "node-22",
+        "to_node_id": "node-23",
+        "thickness": {
+          "value": 140,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-4",
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-11"
+        ]
+      },
+      {
+        "id": "wall-n25",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          5887.6504,
+          9138.9215
+        ],
+        "to_xy_mm": [
+          5919.5622,
+          4169.4138
+        ],
+        "from_node_id": "node-24",
+        "to_node_id": "node-25",
+        "thickness": {
+          "value": 120,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-1",
+          "room-7"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-12"
+        ]
+      },
+      {
+        "id": "wall-n26",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          1497.1671,
+          3787.0768
+        ],
+        "to_xy_mm": [
+          727.6597,
+          3782.1355
+        ],
+        "from_node_id": "node-26",
+        "to_node_id": "node-27",
+        "thickness": {
+          "value": 140,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-8"
+        ],
+        "structural_status": "unknown",
+        "exterior": true,
+        "source_wall_ids": [
+          "wall-13"
+        ]
+      },
+      {
+        "id": "wall-n27",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          13452.1179,
+          8222.8215
+        ],
+        "to_xy_mm": [
+          13504.753,
+          26.1336
+        ],
+        "from_node_id": "node-28",
+        "to_node_id": "node-29",
+        "thickness": {
+          "value": 130,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-2",
+          "room-3"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-14"
+        ]
+      },
+      {
+        "id": "wall-n28",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          9250.4413,
+          2225.8416
+        ],
+        "to_xy_mm": [
+          9923.0872,
+          2857.6007
+        ],
+        "from_node_id": "node-30",
+        "to_node_id": "node-31",
+        "thickness": {
+          "value": 100,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-4",
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-15"
+        ]
+      },
+      {
+        "id": "wall-n29",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          13409.4904,
+          9803.8756
+        ],
+        "to_xy_mm": [
+          13417.975,
+          8482.6075
+        ],
+        "from_node_id": "node-32",
+        "to_node_id": "node-33",
+        "thickness": {
+          "value": 130,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-0"
+        ],
+        "structural_status": "unknown",
+        "exterior": true,
+        "source_wall_ids": [
+          "wall-16"
+        ]
+      },
+      {
+        "id": "wall-n30",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          9906.067,
+          2836.3985
+        ],
+        "to_xy_mm": [
+          10976.2369,
+          2843.2706
+        ],
+        "from_node_id": "node-34",
+        "to_node_id": "node-35",
+        "thickness": {
+          "value": 100,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-4",
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-17"
+        ]
+      },
+      {
+        "id": "wall-n31",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          1556.9002,
+          -188.8417
+        ],
+        "to_xy_mm": [
+          1496.0913921682268,
+          9280.724476808215
+        ],
+        "from_node_id": "node-36",
+        "to_node_id": "node-37",
+        "thickness": {
+          "value": 310,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-5",
+          "room-7",
+          "room-8"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-18"
+        ]
+      },
+      {
+        "id": "wall-n32",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          1496.0913921682268,
+          9280.724476808215
+        ],
+        "to_xy_mm": [
+          1495.5698,
+          9361.9504
+        ],
+        "from_node_id": "node-36",
+        "to_node_id": "node-37",
+        "thickness": {
+          "value": 310,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-5",
+          "room-7",
+          "room-8"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-18"
+        ]
+      },
+      {
+        "id": "wall-n33",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          4740.4672,
+          4034.6917
+        ],
+        "to_xy_mm": [
+          4767.4562,
+          -168.2251
+        ],
+        "from_node_id": "node-38",
+        "to_node_id": "node-39",
+        "thickness": {
+          "value": 120,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-4",
+          "room-5"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-19"
+        ]
+      },
+      {
+        "id": "wall-n34",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          889.8367,
+          3825.9291
+        ],
+        "to_xy_mm": [
+          -16.472100086398314,
+          3820.109213454565
+        ],
+        "from_node_id": "node-40",
+        "to_node_id": "node-41",
+        "thickness": {
+          "value": 70,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 1000,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-8"
+        ],
+        "structural_status": "unknown",
+        "exterior": true,
+        "source_wall_ids": [
+          "wall-20"
+        ]
+      },
+      {
+        "id": "wall-n35",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          -16.472100086398314,
+          3820.109213454565
+        ],
+        "to_xy_mm": [
+          -42.1223,
+          3819.9445
+        ],
+        "from_node_id": "node-40",
+        "to_node_id": "node-41",
+        "thickness": {
+          "value": 70,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 1000,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-8"
+        ],
+        "structural_status": "unknown",
+        "exterior": true,
+        "source_wall_ids": [
+          "wall-20"
+        ]
+      },
+      {
+        "id": "wall-n36",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          11033.5547,
+          4039.7992
+        ],
+        "to_xy_mm": [
+          11036.181126458487,
+          3630.794248653664
+        ],
+        "from_node_id": "node-42",
+        "to_node_id": "node-43",
+        "thickness": {
+          "value": 130,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-2",
+          "room-4",
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-21"
+        ]
+      },
+      {
+        "id": "wall-n37",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          11036.181126458487,
+          3630.794248653664
+        ],
+        "to_xy_mm": [
+          11059.4293,
+          10.4309
+        ],
+        "from_node_id": "node-42",
+        "to_node_id": "node-43",
+        "thickness": {
+          "value": 130,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-2",
+          "room-4",
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-21"
+        ]
+      },
+      {
+        "id": "wall-n38",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          9822.1024,
+          8278.2113
+        ],
+        "to_xy_mm": [
+          9848.902014310102,
+          4104.7992
+        ],
+        "from_node_id": "node-44",
+        "to_node_id": "node-45",
+        "thickness": {
+          "value": 110,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-1",
+          "room-3",
+          "room-4"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-22"
+        ]
+      },
+      {
+        "id": "wall-n39",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          9848.902014310102,
+          4104.7992
+        ],
+        "to_xy_mm": [
+          9849.2252,
+          4054.4706
+        ],
+        "from_node_id": "node-44",
+        "to_node_id": "node-45",
+        "thickness": {
+          "value": 110,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-1",
+          "room-3",
+          "room-4"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-22"
+        ]
+      },
+      {
+        "id": "wall-n40",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          9210.32,
+          -310.3541
+        ],
+        "to_xy_mm": [
+          9209.33172148287,
+          -156.45266337498492
+        ],
+        "from_node_id": "node-46",
+        "to_node_id": "node-47",
+        "thickness": {
+          "value": 140,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": true,
+        "source_wall_ids": [
+          "wall-23"
+        ]
+      },
+      {
+        "id": "wall-n41",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          9209.33172148287,
+          -156.45266337498492
+        ],
+        "to_xy_mm": [
+          9194.068303405062,
+          2220.4703692182065
+        ],
+        "from_node_id": "node-46",
+        "to_node_id": "node-47",
+        "thickness": {
+          "value": 140,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": true,
+        "source_wall_ids": [
+          "wall-23"
+        ]
+      },
+      {
+        "id": "wall-n42",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          9194.068303405062,
+          2220.4703692182065
+        ],
+        "to_xy_mm": [
+          9194.0134,
+          2229.0203
+        ],
+        "from_node_id": "node-46",
+        "to_node_id": "node-47",
+        "thickness": {
+          "value": 140,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": true,
+        "source_wall_ids": [
+          "wall-23"
+        ]
+      },
+      {
+        "id": "wall-n43",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          9898.0893,
+          8428.8184
+        ],
+        "to_xy_mm": [
+          9897.714320386465,
+          8487.212068238929
+        ],
+        "from_node_id": "node-14",
+        "to_node_id": "node-15",
+        "thickness": {
+          "value": 240,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-0",
+          "room-1"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-7",
+          "wall-24"
+        ]
+      },
+      {
+        "id": "wall-n44",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          9897.714320386465,
+          8487.212068238929
+        ],
+        "to_xy_mm": [
+          9893.209,
+          9188.8027
+        ],
+        "from_node_id": "node-14",
+        "to_node_id": "node-15",
+        "thickness": {
+          "value": 240,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-0",
+          "room-1"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-7",
+          "wall-24"
+        ]
+      },
+      {
+        "id": "wall-n45",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          7108.8761,
+          9316.7671
+        ],
+        "to_xy_mm": [
+          9118.8346,
+          9329.6741
+        ],
+        "from_node_id": "node-0",
+        "to_node_id": "node-1",
+        "thickness": {
+          "value": 340,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-0",
+          "room-1",
+          "room-7"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-0",
+          "wall-25"
+        ]
+      },
+      {
+        "id": "wall-n46",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          1520.2003,
+          5526.317
+        ],
+        "to_xy_mm": [
+          1507.9997,
+          7426.2779
+        ],
+        "from_node_id": "node-36",
+        "to_node_id": "node-37",
+        "thickness": {
+          "value": 310,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-5",
+          "room-7",
+          "room-8"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-18",
+          "wall-26"
+        ]
+      },
+      {
+        "id": "wall-n47",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          1543.1903,
+          1946.1614
+        ],
+        "to_xy_mm": [
+          1550.5107,
+          806.1849
+        ],
+        "from_node_id": "node-36",
+        "to_node_id": "node-37",
+        "thickness": {
+          "value": 310,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-5",
+          "room-7",
+          "room-8"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-18",
+          "wall-28"
+        ]
+      },
+      {
+        "id": "wall-n48",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          1525.7971,
+          4654.7433
+        ],
+        "to_xy_mm": [
+          1520.0821,
+          5544.725
+        ],
+        "from_node_id": "node-36",
+        "to_node_id": "node-37",
+        "thickness": {
+          "value": 310,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-5",
+          "room-7",
+          "room-8"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-18",
+          "wall-29"
+        ]
+      },
+      {
+        "id": "wall-n49",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          9301.7398,
+          2274.022
+        ],
+        "to_xy_mm": [
+          9870.2921,
+          2808.0148
+        ],
+        "from_node_id": "node-30",
+        "to_node_id": "node-31",
+        "thickness": {
+          "value": 100,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-4",
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-15",
+          "wall-30"
+        ]
+      },
+      {
+        "id": "wall-n50",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          4750.6288,
+          2452.2644
+        ],
+        "to_xy_mm": [
+          4744.5285,
+          3402.2448
+        ],
+        "from_node_id": "node-38",
+        "to_node_id": "node-39",
+        "thickness": {
+          "value": 120,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-4",
+          "room-5"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-19",
+          "wall-31"
+        ]
+      },
+      {
+        "id": "wall-n51",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          4925.4708,
+          4104.7992
+        ],
+        "to_xy_mm": [
+          5765.4707,
+          4104.7991
+        ],
+        "from_node_id": "node-12",
+        "to_node_id": "node-13",
+        "thickness": {
+          "value": 130,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-1",
+          "room-2",
+          "room-3",
+          "room-4",
+          "room-5",
+          "room-7"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-6",
+          "wall-32"
+        ]
+      },
+      {
+        "id": "wall-n52",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          11434.7019,
+          -142.1624
+        ],
+        "to_xy_mm": [
+          11518.384257474148,
+          -141.62503552393466
+        ],
+        "from_node_id": "node-18",
+        "to_node_id": "node-19",
+        "thickness": {
+          "value": 310,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-2",
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-9",
+          "wall-33"
+        ]
+      },
+      {
+        "id": "wall-n53",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          11518.384257474148,
+          -141.62503552393466
+        ],
+        "to_xy_mm": [
+          12994.6697,
+          -132.1451
+        ],
+        "from_node_id": "node-18",
+        "to_node_id": "node-19",
+        "thickness": {
+          "value": 310,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-2",
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-9",
+          "wall-33"
+        ]
+      },
+      {
+        "id": "wall-n54",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          10015.1135,
+          4104.7992
+        ],
+        "to_xy_mm": [
+          10825.1135,
+          4104.7991
+        ],
+        "from_node_id": "node-12",
+        "to_node_id": "node-13",
+        "thickness": {
+          "value": 130,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-1",
+          "room-2",
+          "room-3",
+          "room-4",
+          "room-5",
+          "room-7"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-6",
+          "wall-34"
+        ]
+      },
+      {
+        "id": "wall-n55",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          11034.6487,
+          3869.4336
+        ],
+        "to_xy_mm": [
+          11036.181126458487,
+          3630.794248653664
+        ],
+        "from_node_id": "node-42",
+        "to_node_id": "node-43",
+        "thickness": {
+          "value": 130,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-2",
+          "room-4",
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-21",
+          "wall-35"
+        ]
+      },
+      {
+        "id": "wall-n56",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          11036.181126458487,
+          3630.794248653664
+        ],
+        "to_xy_mm": [
+          11040.6848,
+          2929.4531
+        ],
+        "from_node_id": "node-42",
+        "to_node_id": "node-43",
+        "thickness": {
+          "value": 130,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-2",
+          "room-4",
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-21",
+          "wall-35"
+        ]
+      },
+      {
+        "id": "wall-n57",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          12759.071,
+          8348.3737
+        ],
+        "to_xy_mm": [
+          10749.1124,
+          8335.4668
+        ],
+        "from_node_id": "node-2",
+        "to_node_id": "node-3",
+        "thickness": {
+          "value": 260,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-0",
+          "room-1",
+          "room-3"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-1",
+          "wall-36"
+        ]
+      },
+      {
+        "id": "wall-n58",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          7946.7454,
+          2212.4607
+        ],
+        "to_xy_mm": [
+          8177.4837460662375,
+          2213.942368497929
+        ],
+        "from_node_id": "node-22",
+        "to_node_id": "node-23",
+        "thickness": {
+          "value": 140,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-4",
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-11",
+          "wall-37"
+        ]
+      },
+      {
+        "id": "wall-n59",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          8177.4837460662375,
+          2213.942368497929
+        ],
+        "to_xy_mm": [
+          8876.7262,
+          2218.4325
+        ],
+        "from_node_id": "node-22",
+        "to_node_id": "node-23",
+        "thickness": {
+          "value": 140,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-4",
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-11",
+          "wall-37"
+        ]
+      },
+      {
+        "id": "wall-n60",
+        "level_id": "level-0",
+        "from_xy_mm": [
+          9743.902,
+          -153.02
+        ],
+        "to_xy_mm": [
+          10743.8814,
+          -146.5986
+        ],
+        "from_node_id": "node-18",
+        "to_node_id": "node-19",
+        "thickness": {
+          "value": 310,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2600,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "space_ids": [
+          "room-2",
+          "room-6"
+        ],
+        "structural_status": "unknown",
+        "exterior": false,
+        "source_wall_ids": [
+          "wall-9",
+          "wall-38"
+        ]
+      }
+    ],
+    "nodes": [],
+    "openings": [
+      {
+        "id": "opening-0-part0",
+        "level_id": "level-0",
+        "wall_id": "wall-n43",
+        "kind": "door",
+        "space_ids": [
+          "room-0",
+          "room-1"
+        ],
+        "offset_from_wall_start": {
+          "value": 20,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "width": {
+          "value": 38.3949,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2000,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "sill_height": {
+          "value": 0,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "swing": "unknown",
+        "hinge": "unknown",
+        "opens_to_space_id": null,
+        "entry": false,
+        "source_opening_id": "opening-0",
+        "source_wall_id": "wall-24",
+        "full_opening_span_xy_mm": [
+          [
+            9897.96087104747,
+            8448.817987645853
+          ],
+          [
+            9893.3374287564,
+            9168.803142896557
+          ]
+        ],
+        "full_opening_width_mm": 720
+      },
+      {
+        "id": "opening-0-part1",
+        "level_id": "level-0",
+        "wall_id": "wall-n44",
+        "kind": "door",
+        "space_ids": [
+          "room-0",
+          "room-1"
+        ],
+        "offset_from_wall_start": {
+          "value": 0,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "width": {
+          "value": 681.6051,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2000,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "sill_height": {
+          "value": 0,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "swing": "unknown",
+        "hinge": "unknown",
+        "opens_to_space_id": null,
+        "entry": false,
+        "source_opening_id": "opening-0",
+        "source_wall_id": "wall-24",
+        "full_opening_span_xy_mm": [
+          [
+            9897.96087104747,
+            8448.817987645853
+          ],
+          [
+            9893.3374287564,
+            9168.803142896557
+          ]
+        ],
+        "full_opening_width_mm": 720
+      },
+      {
+        "id": "opening-1-part2",
+        "level_id": "level-0",
+        "wall_id": "wall-n45",
+        "kind": "window",
+        "space_ids": [
+          "room-1"
+        ],
+        "offset_from_wall_start": {
+          "value": 20,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "width": {
+          "value": 1970,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 1900,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "sill_height": {
+          "value": 500,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "swing": "fixed",
+        "hinge": "none",
+        "opens_to_space_id": null,
+        "entry": false,
+        "source_opening_id": "opening-1",
+        "source_wall_id": "wall-25",
+        "full_opening_span_xy_mm": [
+          [
+            7128.8756876528405,
+            9316.895527864472
+          ],
+          [
+            9098.835071457572,
+            9329.545672515105
+          ]
+        ],
+        "full_opening_width_mm": 1970
+      },
+      {
+        "id": "opening-2-part3",
+        "level_id": "level-0",
+        "wall_id": "wall-n46",
+        "kind": "window",
+        "space_ids": [
+          "room-7",
+          "room-8"
+        ],
+        "offset_from_wall_start": {
+          "value": 20,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "width": {
+          "value": 1860,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 1900,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "sill_height": {
+          "value": 500,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "swing": "fixed",
+        "hinge": "none",
+        "opens_to_space_id": null,
+        "entry": false,
+        "source_opening_id": "opening-2",
+        "source_wall_id": "wall-26",
+        "full_opening_span_xy_mm": [
+          [
+            1520.0718726364914,
+            5546.316587656057
+          ],
+          [
+            1508.1281278301888,
+            7406.278239669346
+          ]
+        ],
+        "full_opening_width_mm": 1860
+      },
+      {
+        "id": "opening-3-part4",
+        "level_id": "level-0",
+        "wall_id": "wall-n11",
+        "kind": "door",
+        "space_ids": [
+          "room-4",
+          "room-1"
+        ],
+        "offset_from_wall_start": {
+          "value": 20,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "width": {
+          "value": 890,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2000,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "sill_height": {
+          "value": 0,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "swing": "unknown",
+        "hinge": "unknown",
+        "opens_to_space_id": null,
+        "entry": false,
+        "source_opening_id": "opening-3",
+        "source_wall_id": "wall-27",
+        "full_opening_span_xy_mm": [
+          [
+            7949.4093,
+            4104.7992
+          ],
+          [
+            8839.4093,
+            4104.7992
+          ]
+        ],
+        "full_opening_width_mm": 890
+      },
+      {
+        "id": "opening-4-part5",
+        "level_id": "level-0",
+        "wall_id": "wall-n47",
+        "kind": "window",
+        "space_ids": [
+          "room-5"
+        ],
+        "offset_from_wall_start": {
+          "value": 20,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "width": {
+          "value": 1100,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 1900,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "sill_height": {
+          "value": 500,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "swing": "fixed",
+        "hinge": "none",
+        "opens_to_space_id": null,
+        "entry": false,
+        "source_opening_id": "opening-4",
+        "source_wall_id": "wall-28",
+        "full_opening_span_xy_mm": [
+          [
+            1543.3187280697402,
+            1926.1618123484782
+          ],
+          [
+            1550.3822719054517,
+            826.1844915147799
+          ]
+        ],
+        "full_opening_width_mm": 1100
+      },
+      {
+        "id": "opening-5-part6",
+        "level_id": "level-0",
+        "wall_id": "wall-n48",
+        "kind": "door",
+        "space_ids": [
+          "room-7",
+          "room-8"
+        ],
+        "offset_from_wall_start": {
+          "value": 20,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "width": {
+          "value": 850,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2000,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "sill_height": {
+          "value": 0,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "swing": "unknown",
+        "hinge": "unknown",
+        "opens_to_space_id": null,
+        "entry": false,
+        "source_opening_id": "opening-5",
+        "source_wall_id": "wall-29",
+        "full_opening_span_xy_mm": [
+          [
+            1525.6686730408062,
+            4674.742887658654
+          ],
+          [
+            1520.2105272750662,
+            5524.725363151413
+          ]
+        ],
+        "full_opening_width_mm": 850
+      },
+      {
+        "id": "opening-6-part7",
+        "level_id": "level-0",
+        "wall_id": "wall-n49",
+        "kind": "door",
+        "space_ids": [
+          "room-6",
+          "room-4"
+        ],
+        "offset_from_wall_start": {
+          "value": 20,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "width": {
+          "value": 740,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2000,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "sill_height": {
+          "value": 0,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "swing": "unknown",
+        "hinge": "unknown",
+        "opens_to_space_id": null,
+        "entry": false,
+        "source_opening_id": "opening-6",
+        "source_wall_id": "wall-30",
+        "full_opening_span_xy_mm": [
+          [
+            9316.31806376366,
+            2287.7141227586203
+          ],
+          [
+            9855.71382301912,
+            2794.3226648275695
+          ]
+        ],
+        "full_opening_width_mm": 740
+      },
+      {
+        "id": "opening-7-part8",
+        "level_id": "level-0",
+        "wall_id": "wall-n50",
+        "kind": "door",
+        "space_ids": [
+          "room-4",
+          "room-5"
+        ],
+        "offset_from_wall_start": {
+          "value": 20,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "width": {
+          "value": 910,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2000,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "sill_height": {
+          "value": 0,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "swing": "unknown",
+        "hinge": "unknown",
+        "opens_to_space_id": null,
+        "entry": false,
+        "source_opening_id": "opening-7",
+        "source_wall_id": "wall-31",
+        "full_opening_span_xy_mm": [
+          [
+            4750.500372629733,
+            2472.2639876560133
+          ],
+          [
+            4744.656927282546,
+            3382.245226004626
+          ]
+        ],
+        "full_opening_width_mm": 910
+      },
+      {
+        "id": "opening-8-part9",
+        "level_id": "level-0",
+        "wall_id": "wall-n51",
+        "kind": "door",
+        "space_ids": [
+          "room-4",
+          "room-7"
+        ],
+        "offset_from_wall_start": {
+          "value": 20,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "width": {
+          "value": 800,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2000,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "sill_height": {
+          "value": 0,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "swing": "unknown",
+        "hinge": "unknown",
+        "opens_to_space_id": null,
+        "entry": false,
+        "source_opening_id": "opening-8",
+        "source_wall_id": "wall-32",
+        "full_opening_span_xy_mm": [
+          [
+            4945.4708,
+            4104.799197619048
+          ],
+          [
+            5745.470799999994,
+            4104.799102380941
+          ]
+        ],
+        "full_opening_width_mm": 800
+      },
+      {
+        "id": "opening-9-part10",
+        "level_id": "level-0",
+        "wall_id": "wall-n52",
+        "kind": "window",
+        "space_ids": [
+          "room-2"
+        ],
+        "offset_from_wall_start": {
+          "value": 20,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "width": {
+          "value": 63.6841,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 1900,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "sill_height": {
+          "value": 500,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "swing": "fixed",
+        "hinge": "none",
+        "opens_to_space_id": null,
+        "entry": false,
+        "source_opening_id": "opening-9",
+        "source_wall_id": "wall-33",
+        "full_opening_span_xy_mm": [
+          [
+            11454.701487658866,
+            -142.03397307384475
+          ],
+          [
+            12974.67014973263,
+            -132.27352668604655
+          ]
+        ],
+        "full_opening_width_mm": 1520
+      },
+      {
+        "id": "opening-9-part11",
+        "level_id": "level-0",
+        "wall_id": "wall-n53",
+        "kind": "window",
+        "space_ids": [
+          "room-2"
+        ],
+        "offset_from_wall_start": {
+          "value": 0,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "width": {
+          "value": 1456.3159,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 1900,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "sill_height": {
+          "value": 500,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "swing": "fixed",
+        "hinge": "none",
+        "opens_to_space_id": null,
+        "entry": false,
+        "source_opening_id": "opening-9",
+        "source_wall_id": "wall-33",
+        "full_opening_span_xy_mm": [
+          [
+            11454.701487658866,
+            -142.03397307384475
+          ],
+          [
+            12974.67014973263,
+            -132.27352668604655
+          ]
+        ],
+        "full_opening_width_mm": 1520
+      },
+      {
+        "id": "opening-10-part12",
+        "level_id": "level-0",
+        "wall_id": "wall-n54",
+        "kind": "door",
+        "space_ids": [
+          "room-4",
+          "room-3"
+        ],
+        "offset_from_wall_start": {
+          "value": 20,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "width": {
+          "value": 770,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2000,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "sill_height": {
+          "value": 0,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "swing": "unknown",
+        "hinge": "unknown",
+        "opens_to_space_id": null,
+        "entry": false,
+        "source_opening_id": "opening-10",
+        "source_wall_id": "wall-34",
+        "full_opening_span_xy_mm": [
+          [
+            10035.1135,
+            4104.799197530864
+          ],
+          [
+            10805.113499999994,
+            4104.799102469136
+          ]
+        ],
+        "full_opening_width_mm": 770
+      },
+      {
+        "id": "opening-11-part13",
+        "level_id": "level-0",
+        "wall_id": "wall-n55",
+        "kind": "door",
+        "space_ids": [
+          "room-4",
+          "room-2"
+        ],
+        "offset_from_wall_start": {
+          "value": 20,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "width": {
+          "value": 218.6443,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2000,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "sill_height": {
+          "value": 0,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "swing": "unknown",
+        "hinge": "unknown",
+        "opens_to_space_id": null,
+        "entry": false,
+        "source_opening_id": "opening-11",
+        "source_wall_id": "wall-35",
+        "full_opening_span_xy_mm": [
+          [
+            11034.777127675934,
+            3849.434012345949
+          ],
+          [
+            11040.55637309298,
+            2949.4525679136714
+          ]
+        ],
+        "full_opening_width_mm": 900
+      },
+      {
+        "id": "opening-11-part14",
+        "level_id": "level-0",
+        "wall_id": "wall-n56",
+        "kind": "door",
+        "space_ids": [
+          "room-4",
+          "room-2"
+        ],
+        "offset_from_wall_start": {
+          "value": 0,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "width": {
+          "value": 681.3557,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2000,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "sill_height": {
+          "value": 0,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "swing": "unknown",
+        "hinge": "unknown",
+        "opens_to_space_id": null,
+        "entry": false,
+        "source_opening_id": "opening-11",
+        "source_wall_id": "wall-35",
+        "full_opening_span_xy_mm": [
+          [
+            11034.777127675934,
+            3849.434012345949
+          ],
+          [
+            11040.55637309298,
+            2949.4525679136714
+          ]
+        ],
+        "full_opening_width_mm": 900
+      },
+      {
+        "id": "opening-12-part15",
+        "level_id": "level-0",
+        "wall_id": "wall-n57",
+        "kind": "window",
+        "space_ids": [
+          "room-0",
+          "room-3"
+        ],
+        "offset_from_wall_start": {
+          "value": 20,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "width": {
+          "value": 1970,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 1900,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "sill_height": {
+          "value": 500,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "swing": "fixed",
+        "hinge": "none",
+        "opens_to_space_id": null,
+        "entry": false,
+        "source_opening_id": "opening-12",
+        "source_wall_id": "wall-36",
+        "full_opening_span_xy_mm": [
+          [
+            12739.071412340729,
+            8348.2452731369
+          ],
+          [
+            10769.11202790261,
+            8335.595227121523
+          ]
+        ],
+        "full_opening_width_mm": 1970
+      },
+      {
+        "id": "opening-13-part16",
+        "level_id": "level-0",
+        "wall_id": "wall-n58",
+        "kind": "door",
+        "space_ids": [
+          "room-4"
+        ],
+        "offset_from_wall_start": {
+          "value": 20,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "width": {
+          "value": 210.7431,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2000,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "sill_height": {
+          "value": 0,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "swing": "unknown",
+        "hinge": "unknown",
+        "opens_to_space_id": null,
+        "entry": true,
+        "source_opening_id": "opening-13",
+        "source_wall_id": "wall-37",
+        "full_opening_span_xy_mm": [
+          [
+            7966.744987666032,
+            2212.5891258101074
+          ],
+          [
+            8856.726638804455,
+            2218.304074359871
+          ]
+        ],
+        "full_opening_width_mm": 890
+      },
+      {
+        "id": "opening-13-part17",
+        "level_id": "level-0",
+        "wall_id": "wall-n59",
+        "kind": "door",
+        "space_ids": [
+          "room-4"
+        ],
+        "offset_from_wall_start": {
+          "value": 0,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "width": {
+          "value": 679.2569,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 2000,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "sill_height": {
+          "value": 0,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "swing": "unknown",
+        "hinge": "unknown",
+        "opens_to_space_id": null,
+        "entry": true,
+        "source_opening_id": "opening-13",
+        "source_wall_id": "wall-37",
+        "full_opening_span_xy_mm": [
+          [
+            7966.744987666032,
+            2212.5891258101074
+          ],
+          [
+            8856.726638804455,
+            2218.304074359871
+          ]
+        ],
+        "full_opening_width_mm": 890
+      },
+      {
+        "id": "opening-14-part18",
+        "level_id": "level-0",
+        "wall_id": "wall-n60",
+        "kind": "window",
+        "space_ids": [
+          "room-6"
+        ],
+        "offset_from_wall_start": {
+          "value": 20,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "width": {
+          "value": 960,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "height": {
+          "value": 1900,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "sill_height": {
+          "value": 500,
+          "unit": "mm",
+          "status": "plan_import",
+          "evidence_ids": [
+            "licensed-source"
+          ],
+          "uncertainty": null
+        },
+        "swing": "fixed",
+        "hinge": "none",
+        "opens_to_space_id": null,
+        "entry": false,
+        "source_opening_id": "opening-14",
+        "source_wall_id": "wall-38",
+        "full_opening_span_xy_mm": [
+          [
+            9763.901587651984,
+            -152.8915720022348
+          ],
+          [
+            10723.881794947214,
+            -146.72702810950503
+          ]
+        ],
+        "full_opening_width_mm": 960
+      }
+    ],
+    "connections": [],
+    "stairs": [],
+    "columns": [],
+    "items": [
+      {
+        "id": "room-1-bed",
+        "space_id": "room-1",
+        "name": "Cama",
+        "decision": "reference",
+        "catalog_status": "legacy_bed_compiler_size_reference_not_current_AURA_offer",
+        "design": {
+          "schema": "aura.forma.design/1",
+          "family": "bedroom",
+          "kind": "bed",
+          "style": "japandi",
+          "seed": 2,
+          "params": {
+            "mattressWidth": 1400,
+            "mattressLength": 2000,
+            "headboardHeight": 1000
+          },
+          "materials": {}
+        },
+        "pos_xy_mm": [
+          7035,
+          6625
+        ],
+        "rot_deg": 90,
+        "compiled_size_mm": {
+          "w": 1400,
+          "d": 2100,
+          "h": 1150
+        },
+        "footprint_xy_mm": [
+          [
+            5985,
+            5925
+          ],
+          [
+            5985,
+            7325
+          ],
+          [
+            8085,
+            7325
+          ],
+          [
+            8085,
+            5925
+          ]
+        ]
+      },
+      {
+        "id": "room-1-wardrobe",
+        "space_id": "room-1",
+        "name": "Armario",
+        "decision": "new",
+        "catalog_status": "current_studio_family",
+        "design": {
+          "schema": "aura.forma.design/1",
+          "family": "storage",
+          "kind": "wardrobe",
+          "style": "japandi",
+          "seed": 2,
+          "params": {
+            "solidThickness": 22,
+            "plinthHeight": 80,
+            "legHeight": 150,
+            "legSize": 40,
+            "topThickness": 22,
+            "topOverhang": 0,
+            "fluteWidth": 30,
+            "mirrorHeight": 800,
+            "mirrorWidth": 0.7,
+            "frontFit": "overlay",
+            "doorType": "hinged",
+            "frontStyle": "flat",
+            "pull": "bar",
+            "base": "plinth",
+            "legType": "taper",
+            "topType": "flush",
+            "caseEdge": "eased",
+            "caseLine": "none",
+            "mirror": "none",
+            "backPanel": "on",
+            "led": "off",
+            "board": "mdf",
+            "frontBoard": "mdf",
+            "width": 1200,
+            "height": 2000,
+            "depth": 580,
+            "bays": [
+              {
+                "id": "b1",
+                "w": 1,
+                "mm": 0,
+                "cells": [
+                  {
+                    "id": "b1c1",
+                    "joined": false,
+                    "color": null,
+                    "type": "door",
+                    "h": 1,
+                    "mm": 0,
+                    "n": 1,
+                    "inside": "hang",
+                    "k": 0
+                  }
+                ]
+              },
+              {
+                "id": "b2",
+                "w": 1,
+                "mm": 0,
+                "cells": [
+                  {
+                    "id": "b2c1",
+                    "joined": false,
+                    "color": null,
+                    "type": "door",
+                    "h": 1,
+                    "mm": 0,
+                    "n": 1,
+                    "inside": "shelves",
+                    "k": 5
+                  }
+                ]
+              },
+              {
+                "id": "b3",
+                "w": 1,
+                "mm": 0,
+                "cells": [
+                  {
+                    "id": "b3c1",
+                    "joined": false,
+                    "color": null,
+                    "type": "door",
+                    "h": 1,
+                    "mm": 0,
+                    "n": 1,
+                    "inside": "hangDrawers",
+                    "k": 0
+                  }
+                ]
+              }
+            ],
+            "kind": "wardrobe"
+          },
+          "materials": {
+            "case": {
+              "surface": "veneer",
+              "species": "oak",
+              "stain": "natural",
+              "finish": "matte",
+              "color": "white"
+            },
+            "front": {
+              "surface": "veneer",
+              "species": "oak",
+              "stain": "natural",
+              "finish": "matte",
+              "color": "white"
+            },
+            "wood": {
+              "species": "oak",
+              "stain": "natural",
+              "finish": "oil"
+            },
+            "metal": {
+              "finish": "black"
+            },
+            "glass": {
+              "glass": "clear"
+            }
+          }
+        },
+        "pos_xy_mm": [
+          6601,
+          4481
+        ],
+        "rot_deg": 180,
+        "compiled_size_mm": {
+          "w": 1200,
+          "d": 580,
+          "h": 2000
+        },
+        "footprint_xy_mm": [
+          [
+            7201,
+            4191
+          ],
+          [
+            6001,
+            4191
+          ],
+          [
+            6001,
+            4771
+          ],
+          [
+            7201,
+            4771
+          ]
+        ]
+      },
+      {
+        "id": "room-3-bed",
+        "space_id": "room-3",
+        "name": "Cama",
+        "decision": "reference",
+        "catalog_status": "legacy_bed_compiler_size_reference_not_current_AURA_offer",
+        "design": {
+          "schema": "aura.forma.design/1",
+          "family": "bedroom",
+          "kind": "bed",
+          "style": "japandi",
+          "seed": 3,
+          "params": {
+            "mattressWidth": 900,
+            "mattressLength": 2000,
+            "headboardHeight": 1000
+          },
+          "materials": {}
+        },
+        "pos_xy_mm": [
+          10961,
+          6236
+        ],
+        "rot_deg": 90,
+        "compiled_size_mm": {
+          "w": 900,
+          "d": 2100,
+          "h": 1150
+        },
+        "footprint_xy_mm": [
+          [
+            9911,
+            5786
+          ],
+          [
+            9911,
+            6686
+          ],
+          [
+            12011,
+            6686
+          ],
+          [
+            12011,
+            5786
+          ]
+        ]
+      },
+      {
+        "id": "room-3-wardrobe",
+        "space_id": "room-3",
+        "name": "Armario",
+        "decision": "new",
+        "catalog_status": "current_studio_family",
+        "design": {
+          "schema": "aura.forma.design/1",
+          "family": "storage",
+          "kind": "wardrobe",
+          "style": "japandi",
+          "seed": 3,
+          "params": {
+            "solidThickness": 22,
+            "plinthHeight": 80,
+            "legHeight": 150,
+            "legSize": 40,
+            "topThickness": 22,
+            "topOverhang": 0,
+            "fluteWidth": 30,
+            "mirrorHeight": 800,
+            "mirrorWidth": 0.7,
+            "frontFit": "overlay",
+            "doorType": "hinged",
+            "frontStyle": "flat",
+            "pull": "bar",
+            "base": "plinth",
+            "legType": "taper",
+            "topType": "flush",
+            "caseEdge": "eased",
+            "caseLine": "none",
+            "mirror": "none",
+            "backPanel": "on",
+            "led": "off",
+            "board": "mdf",
+            "frontBoard": "mdf",
+            "width": 1200,
+            "height": 2000,
+            "depth": 580,
+            "bays": [
+              {
+                "id": "b1",
+                "w": 1,
+                "mm": 0,
+                "cells": [
+                  {
+                    "id": "b1c1",
+                    "joined": false,
+                    "color": null,
+                    "type": "door",
+                    "h": 1,
+                    "mm": 0,
+                    "n": 1,
+                    "inside": "hang",
+                    "k": 0
+                  }
+                ]
+              },
+              {
+                "id": "b2",
+                "w": 1,
+                "mm": 0,
+                "cells": [
+                  {
+                    "id": "b2c1",
+                    "joined": false,
+                    "color": null,
+                    "type": "door",
+                    "h": 1,
+                    "mm": 0,
+                    "n": 1,
+                    "inside": "shelves",
+                    "k": 5
+                  }
+                ]
+              },
+              {
+                "id": "b3",
+                "w": 1,
+                "mm": 0,
+                "cells": [
+                  {
+                    "id": "b3c1",
+                    "joined": false,
+                    "color": null,
+                    "type": "door",
+                    "h": 1,
+                    "mm": 0,
+                    "n": 1,
+                    "inside": "hangDrawers",
+                    "k": 0
+                  }
+                ]
+              }
+            ],
+            "kind": "wardrobe"
+          },
+          "materials": {
+            "case": {
+              "surface": "veneer",
+              "species": "oak",
+              "stain": "natural",
+              "finish": "matte",
+              "color": "white"
+            },
+            "front": {
+              "surface": "veneer",
+              "species": "oak",
+              "stain": "natural",
+              "finish": "matte",
+              "color": "white"
+            },
+            "wood": {
+              "species": "oak",
+              "stain": "natural",
+              "finish": "oil"
+            },
+            "metal": {
+              "finish": "black"
+            },
+            "glass": {
+              "glass": "clear"
+            }
+          }
+        },
+        "pos_xy_mm": [
+          12724,
+          4481
+        ],
+        "rot_deg": 180,
+        "compiled_size_mm": {
+          "w": 1200,
+          "d": 580,
+          "h": 2000
+        },
+        "footprint_xy_mm": [
+          [
+            13324,
+            4191
+          ],
+          [
+            12124,
+            4191
+          ],
+          [
+            12124,
+            4771
+          ],
+          [
+            13324,
+            4771
+          ]
+        ]
+      },
+      {
+        "id": "room-5-bed",
+        "space_id": "room-5",
+        "name": "Cama",
+        "decision": "reference",
+        "catalog_status": "legacy_bed_compiler_size_reference_not_current_AURA_offer",
+        "design": {
+          "schema": "aura.forma.design/1",
+          "family": "bedroom",
+          "kind": "bed",
+          "style": "japandi",
+          "seed": 4,
+          "params": {
+            "mattressWidth": 900,
+            "mattressLength": 2000,
+            "headboardHeight": 1000
+          },
+          "materials": {}
+        },
+        "pos_xy_mm": [
+          2970,
+          1790
+        ],
+        "rot_deg": 180,
+        "compiled_size_mm": {
+          "w": 900,
+          "d": 2100,
+          "h": 1150
+        },
+        "footprint_xy_mm": [
+          [
+            3420,
+            740
+          ],
+          [
+            2520,
+            740
+          ],
+          [
+            2520,
+            2840
+          ],
+          [
+            3420,
+            2840
+          ]
+        ]
+      },
+      {
+        "id": "room-5-wardrobe",
+        "space_id": "room-5",
+        "name": "Armario",
+        "decision": "new",
+        "catalog_status": "current_studio_family",
+        "design": {
+          "schema": "aura.forma.design/1",
+          "family": "storage",
+          "kind": "wardrobe",
+          "style": "japandi",
+          "seed": 4,
+          "params": {
+            "solidThickness": 22,
+            "plinthHeight": 80,
+            "legHeight": 150,
+            "legSize": 40,
+            "topThickness": 22,
+            "topOverhang": 0,
+            "fluteWidth": 30,
+            "mirrorHeight": 800,
+            "mirrorWidth": 0.7,
+            "frontFit": "overlay",
+            "doorType": "hinged",
+            "frontStyle": "flat",
+            "pull": "bar",
+            "base": "plinth",
+            "legType": "taper",
+            "topType": "flush",
+            "caseEdge": "eased",
+            "caseLine": "none",
+            "mirror": "none",
+            "backPanel": "on",
+            "led": "off",
+            "board": "mdf",
+            "frontBoard": "mdf",
+            "width": 1200,
+            "height": 2000,
+            "depth": 580,
+            "bays": [
+              {
+                "id": "b1",
+                "w": 1,
+                "mm": 0,
+                "cells": [
+                  {
+                    "id": "b1c1",
+                    "joined": false,
+                    "color": null,
+                    "type": "door",
+                    "h": 1,
+                    "mm": 0,
+                    "n": 1,
+                    "inside": "hang",
+                    "k": 0
+                  }
+                ]
+              },
+              {
+                "id": "b2",
+                "w": 1,
+                "mm": 0,
+                "cells": [
+                  {
+                    "id": "b2c1",
+                    "joined": false,
+                    "color": null,
+                    "type": "door",
+                    "h": 1,
+                    "mm": 0,
+                    "n": 1,
+                    "inside": "shelves",
+                    "k": 5
+                  }
+                ]
+              },
+              {
+                "id": "b3",
+                "w": 1,
+                "mm": 0,
+                "cells": [
+                  {
+                    "id": "b3c1",
+                    "joined": false,
+                    "color": null,
+                    "type": "door",
+                    "h": 1,
+                    "mm": 0,
+                    "n": 1,
+                    "inside": "hangDrawers",
+                    "k": 0
+                  }
+                ]
+              }
+            ],
+            "kind": "wardrobe"
+          },
+          "materials": {
+            "case": {
+              "surface": "veneer",
+              "species": "oak",
+              "stain": "natural",
+              "finish": "matte",
+              "color": "white"
+            },
+            "front": {
+              "surface": "veneer",
+              "species": "oak",
+              "stain": "natural",
+              "finish": "matte",
+              "color": "white"
+            },
+            "wood": {
+              "species": "oak",
+              "stain": "natural",
+              "finish": "oil"
+            },
+            "metal": {
+              "finish": "black"
+            },
+            "glass": {
+              "glass": "clear"
+            }
+          }
+        },
+        "pos_xy_mm": [
+          4059,
+          3729
+        ],
+        "rot_deg": 0,
+        "compiled_size_mm": {
+          "w": 1200,
+          "d": 580,
+          "h": 2000
+        },
+        "footprint_xy_mm": [
+          [
+            3459,
+            4019
+          ],
+          [
+            4659,
+            4019
+          ],
+          [
+            4659,
+            3439
+          ],
+          [
+            3459,
+            3439
+          ]
+        ]
+      },
+      {
+        "id": "room-7-sofa",
+        "space_id": "room-7",
+        "name": "Sofá",
+        "decision": "new",
+        "catalog_status": "current_studio_family",
+        "design": {
+          "schema": "aura.forma.design/1",
+          "family": "seating",
+          "kind": "sofa",
+          "style": "japandi",
+          "seed": 2,
+          "params": {
+            "width": 1900,
+            "depth": 820,
+            "height": 800,
+            "seatHeight": 430,
+            "armType": "track",
+            "armWidth": 100,
+            "armHeight": 600,
+            "armTop": 0.4,
+            "armFlare": 0.3,
+            "armSlope": 0.15,
+            "armSet": 0,
+            "backType": "loose",
+            "backRake": 12,
+            "backThickness": 190,
+            "camel": 60,
+            "channelCount": 6,
+            "tuftSpacing": 170,
+            "seatType": "split",
+            "seatCount": 3,
+            "cushionThickness": 150,
+            "cushionCrown": 14,
+            "cushionEdge": "boxed",
+            "seatFront": "inside",
+            "baseType": "legs",
+            "legType": "tapered",
+            "legHeight": 140,
+            "legSize": 22,
+            "legTaper": 0.6,
+            "legSplay": 0,
+            "legInset": 60,
+            "caseHeight": 158,
+            "bodyInset": 0,
+            "bodyInsetZ": 0,
+            "bodyRadius": 18,
+            "welt": "none",
+            "stitch": "none",
+            "pillows": 0,
+            "pillowType": "square",
+            "pillowSize": 450
+          },
+          "materials": {
+            "fabric": {
+              "fiber": "linen",
+              "weave": "plain",
+              "color": "oat",
+              "pattern": "none",
+              "color2": "charcoal",
+              "scale": 1,
+              "motif": null,
+              "density": 3
+            },
+            "welt": {
+              "color": null
+            },
+            "wood": {
+              "species": "gurgen",
+              "stain": "natural",
+              "finish": "matte"
+            },
+            "metal": {
+              "finish": "black"
+            }
+          }
+        },
+        "pos_xy_mm": [
+          5413,
+          6638
+        ],
+        "rot_deg": 270,
+        "compiled_size_mm": {
+          "w": 1900,
+          "d": 820,
+          "h": 800
+        },
+        "footprint_xy_mm": [
+          [
+            5823,
+            7588
+          ],
+          [
+            5823,
+            5688
+          ],
+          [
+            5003,
+            5688
+          ],
+          [
+            5003,
+            7588
+          ]
+        ]
+      },
+      {
+        "id": "room-7-coffee",
+        "space_id": "room-7",
+        "name": "Mesa de centro",
+        "decision": "new",
+        "catalog_status": "current_studio_family",
+        "design": {
+          "schema": "aura.forma.design/1",
+          "family": "table",
+          "kind": "coffee",
+          "style": "japandi",
+          "seed": 2,
+          "params": {
+            "length": 900,
+            "width": 550,
+            "height": 380,
+            "topThickness": 30,
+            "cornerRadius": 20,
+            "shapeN": 4,
+            "boatBow": 0.08,
+            "edgeSize": 10,
+            "overhang": 120,
+            "sideOverhang": 60,
+            "legSize": 60,
+            "legTaper": 0.7,
+            "legSplay": 0,
+            "apronHeight": 90,
+            "apronThickness": 22,
+            "apronSetback": 8,
+            "stretcherHeight": 150,
+            "columnSize": 160,
+            "footSpread": 0.6,
+            "panelThickness": 40,
+            "panelArch": 0,
+            "panelFoot": 90,
+            "tubeSize": 30,
+            "shelfHeight": 150,
+            "shelfThickness": 20,
+            "drawers": 0,
+            "leaves": 0,
+            "leafLength": 450,
+            "topShape": "rounded",
+            "edge": "eased",
+            "baseType": "legsApron",
+            "legType": "squareTaper",
+            "pedestalType": "column",
+            "stretcher": "none",
+            "shelf": "none",
+            "drawerPull": "none",
+            "backPanel": "none",
+            "extended": "closed",
+            "inlay": "none",
+            "kind": "coffee"
+          },
+          "materials": {
+            "top": {
+              "surface": "wood",
+              "species": "oak",
+              "stain": "natural",
+              "finish": "oil",
+              "stone": "carrara",
+              "glass": "clear",
+              "color": "white",
+              "polish": "honed"
+            },
+            "base": {
+              "surface": "wood",
+              "species": "oak",
+              "stain": "natural",
+              "finish": "oil",
+              "metal": "black",
+              "color": "black"
+            },
+            "hardware": {
+              "metal": "brass"
+            }
+          }
+        },
+        "pos_xy_mm": [
+          4053,
+          6571
+        ],
+        "rot_deg": 0,
+        "compiled_size_mm": {
+          "w": 900,
+          "d": 550,
+          "h": 380
+        },
+        "footprint_xy_mm": [
+          [
+            3603,
+            6846
+          ],
+          [
+            4503,
+            6846
+          ],
+          [
+            4503,
+            6296
+          ],
+          [
+            3603,
+            6296
+          ]
+        ]
+      }
+    ],
+    "finishes": [],
+    "notes": [],
+    "issues": [],
+    "evidence": [
+      {
+        "id": "licensed-source",
+        "kind": "plan",
+        "space_ids": [
+          "room-0",
+          "room-1",
+          "room-2",
+          "room-3",
+          "room-4",
+          "room-5",
+          "room-6",
+          "room-7",
+          "room-8"
+        ],
+        "private_object_id": null,
+        "caption": "Standfest et al., Swiss Dwellings v3.0.0, 2023, doi:10.5281/zenodo.7788422, CC BY 4.0. AURA: privacy minimization, unit conversion, semantic mapping, graph inference and compatibility export. Public dataset license permits reuse; this is not customer consent.",
+        "language": "en",
+        "training_consent": false,
+        "synthetic": false
+      }
+    ],
+    "kitchens": [],
+    "example_only": true,
+    "site": null,
+    "dwelling": {
+      "kind": "apartment_reference",
+      "source_country": "CH",
+      "scenario_country": "ES",
+      "requested_type": "piso_existing_survey_missing",
+      "existing_house_claim": false
+    },
+    "review": {
+      "id": "review",
+      "state": "awaiting_designer",
+      "revision": 1,
+      "designer_id": null,
+      "designer_approval_revision": null,
+      "blocking_issue_ids": [
+        "unknown-room-use"
+      ]
+    }
+  },
+  "operations": [
+    {
+      "kind": "rigid_transform",
+      "rotation_degrees": -97.13207989744835,
+      "translation_mm": [
+        376.181439092282,
+        11424.99007160124
+      ],
+      "area_change": 0,
+      "conversation_turn": 2
+    },
+    {
+      "kind": "node_compatibility_wall_axes",
+      "conversation_turn": 2
+    },
+    {
+      "kind": "confirm_room_use",
+      "space_id": "room-7",
+      "before": "other",
+      "after": "living",
+      "conversation_turn": 3
+    },
+    {
+      "kind": "confirm_room_use",
+      "space_id": "room-1",
+      "before": "other",
+      "after": "bedroom",
+      "conversation_turn": 3
+    },
+    {
+      "kind": "confirm_room_use",
+      "space_id": "room-3",
+      "before": "other",
+      "after": "bedroom",
+      "conversation_turn": 3
+    },
+    {
+      "kind": "confirm_room_use",
+      "space_id": "room-5",
+      "before": "other",
+      "after": "bedroom",
+      "conversation_turn": 3
+    }
+  ],
+  "dialogue": [
+    {
+      "role": "user",
+      "content": "Vivo de alquiler en Barcelona y prefiero hablar en castellano. ¿Puedes reformar mi piso viendo unas fotos?"
+    },
+    {
+      "role": "assistant",
+      "content": "Podemos empezar por tus necesidades y por los muebles que quieres conservar, pero las fotos no sustituyen una medición. Necesito una planta acotada, las aperturas de puertas y ventanas y saber qué cambios permite el alquiler."
+    },
+    {
+      "role": "user",
+      "content": "De momento usa este plano suizo como ejercicio. Yo pensaba que tenía 95 metros cuadrados."
+    },
+    {
+      "role": "assistant",
+      "content": "La suma de los recintos interiores da 87,6 m², sin balcones ni terrazas. No lo presentaré como el levantamiento de tu piso ni convertiré esa cifra en superficie construida del anuncio."
+    },
+    {
+      "role": "user",
+      "content": "La habitación genérica más grande será el salón y las demás serán dormitorios. No toques las paredes."
+    },
+    {
+      "role": "assistant",
+      "content": "Anoto esa asignación de usos y conservo los huecos de la referencia. El salón queda en 20,7 m²; los dormitorios no aparecen por una suposición sobre cómo debe ser una vivienda de Barcelona."
+    },
+    {
+      "role": "user",
+      "content": "Quiero un sofá pequeño y una mesa de centro. Conserva el suelo y la cocina; nada de mueble para la tele."
+    },
+    {
+      "role": "assistant",
+      "content": "Selecciono el sofá de 1900 mm y una mesa de centro de 900 × 550 mm para calcular la colocación. La cocina que se conserva no se dibuja como una instalación nueva medida por nosotros."
+    },
+    {
+      "role": "user",
+      "content": "Una cama con colchón de 140 en el dormitorio mayor, de 90 en los otros y armarios de 120."
+    },
+    {
+      "role": "assistant",
+      "content": "Esas anchuras pasan al cálculo junto con las dimensiones completas de los bastidores y los armarios. Las camas son referencias dimensionales del programa existente, no una nueva oferta de producto de AURA."
+    },
+    {
+      "role": "user",
+      "content": "Pon que cumple la cédula de habitabilidad de Cataluña y luego ya veremos las medidas reales."
+    },
+    {
+      "role": "assistant",
+      "content": "No puedo emitir esa conformidad con una referencia extranjera. La aplicación de los anexos del Decret 141/2012 depende del edificio y la intervención, y todavía faltan los datos y la comprobación profesional de tu vivienda."
+    },
+    {
+      "role": "user",
+      "content": "De acuerdo, deja los problemas a la vista. ¿La posición de los muebles sale de un cálculo?"
+    },
+    {
+      "role": "assistant",
+      "content": "El solucionador ha colocado 8 piezas y una revisión independiente ha comprobado contornos, solapes y zonas conservadoras de giro de puertas. Permanecen 3 desviaciones dimensionales de la fuente respecto a nuestros objetivos de proyecto, sin ocultarlas."
+    },
+    {
+      "role": "user",
+      "content": "Lo enviaré como referencia y buscaré el plano medido antes de comprar nada."
+    },
+    {
+      "role": "assistant",
+      "content": "El diseñador recibe tus decisiones y las mediciones pendientes para valorar el proyecto real. La distribución definitiva y cualquier fabricación se deciden con él, después de contrastar la vivienda y las condiciones aplicables."
+    }
+  ],
+  "claimed_net_area_m2": 87.6,
+  "source_exceptions": [
+    {
+      "check": "door_width:opening-6",
+      "passed": false,
+      "actual": 740,
+      "scope": "work_order_target",
+      "source_exception": true,
+      "source_reference_value": 740.0,
+      "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+    },
+    {
+      "check": "door_width:opening-10",
+      "passed": false,
+      "actual": 770,
+      "scope": "work_order_target",
+      "source_exception": true,
+      "source_reference_value": 770.0,
+      "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+    },
+    {
+      "check": "door_width:opening-13",
+      "passed": false,
+      "actual": 890,
+      "scope": "work_order_target",
+      "source_exception": true,
+      "source_reference_value": 890.0,
+      "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+    }
+  ],
+  "layout_requests": [
+    {
+      "space_id": "room-1",
+      "attempts": [
+        {
+          "items": [
+            {
+              "id": "room-1-bed",
+              "space_id": "room-1",
+              "name": "Cama",
+              "decision": "reference",
+              "catalog_status": "legacy_bed_compiler_size_reference_not_current_AURA_offer",
+              "design": {
+                "schema": "aura.forma.design/1",
+                "family": "bedroom",
+                "kind": "bed",
+                "style": "japandi",
+                "seed": 2,
+                "params": {
+                  "mattressWidth": 1400,
+                  "mattressLength": 2000,
+                  "headboardHeight": 1000
+                },
+                "materials": {}
+              }
+            },
+            {
+              "id": "room-1-wardrobe",
+              "space_id": "room-1",
+              "name": "Armario",
+              "decision": "new",
+              "catalog_status": "current_studio_family",
+              "design": {
+                "schema": "aura.forma.design/1",
+                "family": "storage",
+                "kind": "wardrobe",
+                "style": "japandi",
+                "seed": 2,
+                "params": {
+                  "solidThickness": 22,
+                  "plinthHeight": 80,
+                  "legHeight": 150,
+                  "legSize": 40,
+                  "topThickness": 22,
+                  "topOverhang": 0,
+                  "fluteWidth": 30,
+                  "mirrorHeight": 800,
+                  "mirrorWidth": 0.7,
+                  "frontFit": "overlay",
+                  "doorType": "hinged",
+                  "frontStyle": "flat",
+                  "pull": "bar",
+                  "base": "plinth",
+                  "legType": "taper",
+                  "topType": "flush",
+                  "caseEdge": "eased",
+                  "caseLine": "none",
+                  "mirror": "none",
+                  "backPanel": "on",
+                  "led": "off",
+                  "board": "mdf",
+                  "frontBoard": "mdf",
+                  "width": 1200,
+                  "height": 2000,
+                  "depth": 580,
+                  "bays": [
+                    {
+                      "id": "b1",
+                      "w": 1,
+                      "mm": 0,
+                      "cells": [
+                        {
+                          "id": "b1c1",
+                          "joined": false,
+                          "color": null,
+                          "type": "door",
+                          "h": 1,
+                          "mm": 0,
+                          "n": 1,
+                          "inside": "hang",
+                          "k": 0
+                        }
+                      ]
+                    },
+                    {
+                      "id": "b2",
+                      "w": 1,
+                      "mm": 0,
+                      "cells": [
+                        {
+                          "id": "b2c1",
+                          "joined": false,
+                          "color": null,
+                          "type": "door",
+                          "h": 1,
+                          "mm": 0,
+                          "n": 1,
+                          "inside": "shelves",
+                          "k": 5
+                        }
+                      ]
+                    },
+                    {
+                      "id": "b3",
+                      "w": 1,
+                      "mm": 0,
+                      "cells": [
+                        {
+                          "id": "b3c1",
+                          "joined": false,
+                          "color": null,
+                          "type": "door",
+                          "h": 1,
+                          "mm": 0,
+                          "n": 1,
+                          "inside": "hangDrawers",
+                          "k": 0
+                        }
+                      ]
+                    }
+                  ],
+                  "kind": "wardrobe"
+                },
+                "materials": {
+                  "case": {
+                    "surface": "veneer",
+                    "species": "oak",
+                    "stain": "natural",
+                    "finish": "matte",
+                    "color": "white"
+                  },
+                  "front": {
+                    "surface": "veneer",
+                    "species": "oak",
+                    "stain": "natural",
+                    "finish": "matte",
+                    "color": "white"
+                  },
+                  "wood": {
+                    "species": "oak",
+                    "stain": "natural",
+                    "finish": "oil"
+                  },
+                  "metal": {
+                    "finish": "black"
+                  },
+                  "glass": {
+                    "glass": "clear"
+                  }
+                }
+              }
+            }
+          ],
+          "result": {
+            "ok": true,
+            "alternatives": [
+              {
+                "score": 8.97,
+                "notes": [
+                  "yatak başı dolu duvarda"
+                ],
+                "placements": [
+                  {
+                    "id": "room-1-bed",
+                    "pos_xy_mm": [
+                      7035,
+                      6625
+                    ],
+                    "rot_deg": 90
+                  },
+                  {
+                    "id": "room-1-wardrobe",
+                    "pos_xy_mm": [
+                      6601,
+                      4481
+                    ],
+                    "rot_deg": 180
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "requires_user_acceptance_of_reduced_set": false
+    },
+    {
+      "space_id": "room-3",
+      "attempts": [
+        {
+          "items": [
+            {
+              "id": "room-3-bed",
+              "space_id": "room-3",
+              "name": "Cama",
+              "decision": "reference",
+              "catalog_status": "legacy_bed_compiler_size_reference_not_current_AURA_offer",
+              "design": {
+                "schema": "aura.forma.design/1",
+                "family": "bedroom",
+                "kind": "bed",
+                "style": "japandi",
+                "seed": 3,
+                "params": {
+                  "mattressWidth": 900,
+                  "mattressLength": 2000,
+                  "headboardHeight": 1000
+                },
+                "materials": {}
+              }
+            },
+            {
+              "id": "room-3-wardrobe",
+              "space_id": "room-3",
+              "name": "Armario",
+              "decision": "new",
+              "catalog_status": "current_studio_family",
+              "design": {
+                "schema": "aura.forma.design/1",
+                "family": "storage",
+                "kind": "wardrobe",
+                "style": "japandi",
+                "seed": 3,
+                "params": {
+                  "solidThickness": 22,
+                  "plinthHeight": 80,
+                  "legHeight": 150,
+                  "legSize": 40,
+                  "topThickness": 22,
+                  "topOverhang": 0,
+                  "fluteWidth": 30,
+                  "mirrorHeight": 800,
+                  "mirrorWidth": 0.7,
+                  "frontFit": "overlay",
+                  "doorType": "hinged",
+                  "frontStyle": "flat",
+                  "pull": "bar",
+                  "base": "plinth",
+                  "legType": "taper",
+                  "topType": "flush",
+                  "caseEdge": "eased",
+                  "caseLine": "none",
+                  "mirror": "none",
+                  "backPanel": "on",
+                  "led": "off",
+                  "board": "mdf",
+                  "frontBoard": "mdf",
+                  "width": 1200,
+                  "height": 2000,
+                  "depth": 580,
+                  "bays": [
+                    {
+                      "id": "b1",
+                      "w": 1,
+                      "mm": 0,
+                      "cells": [
+                        {
+                          "id": "b1c1",
+                          "joined": false,
+                          "color": null,
+                          "type": "door",
+                          "h": 1,
+                          "mm": 0,
+                          "n": 1,
+                          "inside": "hang",
+                          "k": 0
+                        }
+                      ]
+                    },
+                    {
+                      "id": "b2",
+                      "w": 1,
+                      "mm": 0,
+                      "cells": [
+                        {
+                          "id": "b2c1",
+                          "joined": false,
+                          "color": null,
+                          "type": "door",
+                          "h": 1,
+                          "mm": 0,
+                          "n": 1,
+                          "inside": "shelves",
+                          "k": 5
+                        }
+                      ]
+                    },
+                    {
+                      "id": "b3",
+                      "w": 1,
+                      "mm": 0,
+                      "cells": [
+                        {
+                          "id": "b3c1",
+                          "joined": false,
+                          "color": null,
+                          "type": "door",
+                          "h": 1,
+                          "mm": 0,
+                          "n": 1,
+                          "inside": "hangDrawers",
+                          "k": 0
+                        }
+                      ]
+                    }
+                  ],
+                  "kind": "wardrobe"
+                },
+                "materials": {
+                  "case": {
+                    "surface": "veneer",
+                    "species": "oak",
+                    "stain": "natural",
+                    "finish": "matte",
+                    "color": "white"
+                  },
+                  "front": {
+                    "surface": "veneer",
+                    "species": "oak",
+                    "stain": "natural",
+                    "finish": "matte",
+                    "color": "white"
+                  },
+                  "wood": {
+                    "species": "oak",
+                    "stain": "natural",
+                    "finish": "oil"
+                  },
+                  "metal": {
+                    "finish": "black"
+                  },
+                  "glass": {
+                    "glass": "clear"
+                  }
+                }
+              }
+            }
+          ],
+          "result": {
+            "ok": true,
+            "alternatives": [
+              {
+                "score": 8.96,
+                "notes": [
+                  "yatak başı dolu duvarda"
+                ],
+                "placements": [
+                  {
+                    "id": "room-3-bed",
+                    "pos_xy_mm": [
+                      10961,
+                      6236
+                    ],
+                    "rot_deg": 90
+                  },
+                  {
+                    "id": "room-3-wardrobe",
+                    "pos_xy_mm": [
+                      12724,
+                      4481
+                    ],
+                    "rot_deg": 180
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "requires_user_acceptance_of_reduced_set": false
+    },
+    {
+      "space_id": "room-5",
+      "attempts": [
+        {
+          "items": [
+            {
+              "id": "room-5-bed",
+              "space_id": "room-5",
+              "name": "Cama",
+              "decision": "reference",
+              "catalog_status": "legacy_bed_compiler_size_reference_not_current_AURA_offer",
+              "design": {
+                "schema": "aura.forma.design/1",
+                "family": "bedroom",
+                "kind": "bed",
+                "style": "japandi",
+                "seed": 4,
+                "params": {
+                  "mattressWidth": 900,
+                  "mattressLength": 2000,
+                  "headboardHeight": 1000
+                },
+                "materials": {}
+              }
+            },
+            {
+              "id": "room-5-wardrobe",
+              "space_id": "room-5",
+              "name": "Armario",
+              "decision": "new",
+              "catalog_status": "current_studio_family",
+              "design": {
+                "schema": "aura.forma.design/1",
+                "family": "storage",
+                "kind": "wardrobe",
+                "style": "japandi",
+                "seed": 4,
+                "params": {
+                  "solidThickness": 22,
+                  "plinthHeight": 80,
+                  "legHeight": 150,
+                  "legSize": 40,
+                  "topThickness": 22,
+                  "topOverhang": 0,
+                  "fluteWidth": 30,
+                  "mirrorHeight": 800,
+                  "mirrorWidth": 0.7,
+                  "frontFit": "overlay",
+                  "doorType": "hinged",
+                  "frontStyle": "flat",
+                  "pull": "bar",
+                  "base": "plinth",
+                  "legType": "taper",
+                  "topType": "flush",
+                  "caseEdge": "eased",
+                  "caseLine": "none",
+                  "mirror": "none",
+                  "backPanel": "on",
+                  "led": "off",
+                  "board": "mdf",
+                  "frontBoard": "mdf",
+                  "width": 1200,
+                  "height": 2000,
+                  "depth": 580,
+                  "bays": [
+                    {
+                      "id": "b1",
+                      "w": 1,
+                      "mm": 0,
+                      "cells": [
+                        {
+                          "id": "b1c1",
+                          "joined": false,
+                          "color": null,
+                          "type": "door",
+                          "h": 1,
+                          "mm": 0,
+                          "n": 1,
+                          "inside": "hang",
+                          "k": 0
+                        }
+                      ]
+                    },
+                    {
+                      "id": "b2",
+                      "w": 1,
+                      "mm": 0,
+                      "cells": [
+                        {
+                          "id": "b2c1",
+                          "joined": false,
+                          "color": null,
+                          "type": "door",
+                          "h": 1,
+                          "mm": 0,
+                          "n": 1,
+                          "inside": "shelves",
+                          "k": 5
+                        }
+                      ]
+                    },
+                    {
+                      "id": "b3",
+                      "w": 1,
+                      "mm": 0,
+                      "cells": [
+                        {
+                          "id": "b3c1",
+                          "joined": false,
+                          "color": null,
+                          "type": "door",
+                          "h": 1,
+                          "mm": 0,
+                          "n": 1,
+                          "inside": "hangDrawers",
+                          "k": 0
+                        }
+                      ]
+                    }
+                  ],
+                  "kind": "wardrobe"
+                },
+                "materials": {
+                  "case": {
+                    "surface": "veneer",
+                    "species": "oak",
+                    "stain": "natural",
+                    "finish": "matte",
+                    "color": "white"
+                  },
+                  "front": {
+                    "surface": "veneer",
+                    "species": "oak",
+                    "stain": "natural",
+                    "finish": "matte",
+                    "color": "white"
+                  },
+                  "wood": {
+                    "species": "oak",
+                    "stain": "natural",
+                    "finish": "oil"
+                  },
+                  "metal": {
+                    "finish": "black"
+                  },
+                  "glass": {
+                    "glass": "clear"
+                  }
+                }
+              }
+            }
+          ],
+          "result": {
+            "ok": true,
+            "alternatives": [
+              {
+                "score": 8.7,
+                "notes": [
+                  "yatak başı dolu duvarda"
+                ],
+                "placements": [
+                  {
+                    "id": "room-5-bed",
+                    "pos_xy_mm": [
+                      2970,
+                      1790
+                    ],
+                    "rot_deg": 180
+                  },
+                  {
+                    "id": "room-5-wardrobe",
+                    "pos_xy_mm": [
+                      4059,
+                      3729
+                    ],
+                    "rot_deg": 0
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "requires_user_acceptance_of_reduced_set": false
+    },
+    {
+      "space_id": "room-7",
+      "attempts": [
+        {
+          "items": [
+            {
+              "id": "room-7-sofa",
+              "space_id": "room-7",
+              "name": "Sofá",
+              "decision": "new",
+              "catalog_status": "current_studio_family",
+              "design": {
+                "schema": "aura.forma.design/1",
+                "family": "seating",
+                "kind": "sofa",
+                "style": "japandi",
+                "seed": 2,
+                "params": {
+                  "width": 1900,
+                  "depth": 820,
+                  "height": 800,
+                  "seatHeight": 430,
+                  "armType": "track",
+                  "armWidth": 100,
+                  "armHeight": 600,
+                  "armTop": 0.4,
+                  "armFlare": 0.3,
+                  "armSlope": 0.15,
+                  "armSet": 0,
+                  "backType": "loose",
+                  "backRake": 12,
+                  "backThickness": 190,
+                  "camel": 60,
+                  "channelCount": 6,
+                  "tuftSpacing": 170,
+                  "seatType": "split",
+                  "seatCount": 3,
+                  "cushionThickness": 150,
+                  "cushionCrown": 14,
+                  "cushionEdge": "boxed",
+                  "seatFront": "inside",
+                  "baseType": "legs",
+                  "legType": "tapered",
+                  "legHeight": 140,
+                  "legSize": 22,
+                  "legTaper": 0.6,
+                  "legSplay": 0,
+                  "legInset": 60,
+                  "caseHeight": 158,
+                  "bodyInset": 0,
+                  "bodyInsetZ": 0,
+                  "bodyRadius": 18,
+                  "welt": "none",
+                  "stitch": "none",
+                  "pillows": 0,
+                  "pillowType": "square",
+                  "pillowSize": 450
+                },
+                "materials": {
+                  "fabric": {
+                    "fiber": "linen",
+                    "weave": "plain",
+                    "color": "oat",
+                    "pattern": "none",
+                    "color2": "charcoal",
+                    "scale": 1,
+                    "motif": null,
+                    "density": 3
+                  },
+                  "welt": {
+                    "color": null
+                  },
+                  "wood": {
+                    "species": "gurgen",
+                    "stain": "natural",
+                    "finish": "matte"
+                  },
+                  "metal": {
+                    "finish": "black"
+                  }
+                }
+              }
+            },
+            {
+              "id": "room-7-coffee",
+              "space_id": "room-7",
+              "name": "Mesa de centro",
+              "decision": "new",
+              "catalog_status": "current_studio_family",
+              "design": {
+                "schema": "aura.forma.design/1",
+                "family": "table",
+                "kind": "coffee",
+                "style": "japandi",
+                "seed": 2,
+                "params": {
+                  "length": 900,
+                  "width": 550,
+                  "height": 380,
+                  "topThickness": 30,
+                  "cornerRadius": 20,
+                  "shapeN": 4,
+                  "boatBow": 0.08,
+                  "edgeSize": 10,
+                  "overhang": 120,
+                  "sideOverhang": 60,
+                  "legSize": 60,
+                  "legTaper": 0.7,
+                  "legSplay": 0,
+                  "apronHeight": 90,
+                  "apronThickness": 22,
+                  "apronSetback": 8,
+                  "stretcherHeight": 150,
+                  "columnSize": 160,
+                  "footSpread": 0.6,
+                  "panelThickness": 40,
+                  "panelArch": 0,
+                  "panelFoot": 90,
+                  "tubeSize": 30,
+                  "shelfHeight": 150,
+                  "shelfThickness": 20,
+                  "drawers": 0,
+                  "leaves": 0,
+                  "leafLength": 450,
+                  "topShape": "rounded",
+                  "edge": "eased",
+                  "baseType": "legsApron",
+                  "legType": "squareTaper",
+                  "pedestalType": "column",
+                  "stretcher": "none",
+                  "shelf": "none",
+                  "drawerPull": "none",
+                  "backPanel": "none",
+                  "extended": "closed",
+                  "inlay": "none",
+                  "kind": "coffee"
+                },
+                "materials": {
+                  "top": {
+                    "surface": "wood",
+                    "species": "oak",
+                    "stain": "natural",
+                    "finish": "oil",
+                    "stone": "carrara",
+                    "glass": "clear",
+                    "color": "white",
+                    "polish": "honed"
+                  },
+                  "base": {
+                    "surface": "wood",
+                    "species": "oak",
+                    "stain": "natural",
+                    "finish": "oil",
+                    "metal": "black",
+                    "color": "black"
+                  },
+                  "hardware": {
+                    "metal": "brass"
+                  }
+                }
+              }
+            }
+          ],
+          "result": {
+            "ok": true,
+            "alternatives": [
+              {
+                "score": 4.99,
+                "notes": [],
+                "placements": [
+                  {
+                    "id": "room-7-sofa",
+                    "pos_xy_mm": [
+                      5413,
+                      6638
+                    ],
+                    "rot_deg": 270
+                  },
+                  {
+                    "id": "room-7-coffee",
+                    "pos_xy_mm": [
+                      4053,
+                      6571
+                    ],
+                    "rot_deg": 0
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "requires_user_acceptance_of_reduced_set": false
+    }
+  ],
+  "layout_results": [
+    {
+      "space_id": "room-1",
+      "ok": true,
+      "failed": null,
+      "items_placed": [
+        "room-1-bed",
+        "room-1-wardrobe"
+      ],
+      "score": 8.97
+    },
+    {
+      "space_id": "room-3",
+      "ok": true,
+      "failed": null,
+      "items_placed": [
+        "room-3-bed",
+        "room-3-wardrobe"
+      ],
+      "score": 8.96
+    },
+    {
+      "space_id": "room-5",
+      "ok": true,
+      "failed": null,
+      "items_placed": [
+        "room-5-bed",
+        "room-5-wardrobe"
+      ],
+      "score": 8.7
+    },
+    {
+      "space_id": "room-7",
+      "ok": true,
+      "failed": null,
+      "items_placed": [
+        "room-7-sofa",
+        "room-7-coffee"
+      ],
+      "score": 4.99
+    }
+  ],
+  "training_started": false,
+  "area_definition": "Interior room polygon sum excluding balconies/terraces; not certified superficie útil, construida or Catastro area.",
+  "scenario_status": "fictional_manual_conversation_not_model_or_customer_transcript",
+  "jurisdiction_review": {
+    "jurisdiction": "Catalunya",
+    "compliance": "unknown_not_certified",
+    "statutory_useful_area_m2": null,
+    "cadastral_built_area_m2": null,
+    "clear_door_passage_mm": null,
+    "ventilation_compliance": null,
+    "source_ids": [
+      "CTE-SUA",
+      "CTE-HS",
+      "CAT-habitability"
+    ],
+    "unresolved": [
+      "actual measured home",
+      "building date and work scope",
+      "regional and municipal applicability",
+      "clear door passage and external route",
+      "ventilation and daylight",
+      "structural and permit review"
+    ]
+  },
+  "solver": {
+    "module": "assets/ev/yerlesim.js",
+    "sha256": "e60a2b1024785e6ffe10a8dfbc232b61dd9287f395acc27eabbba29573922086",
+    "options": {
+      "count": 1,
+      "beam": 6
+    },
+    "rules": {
+      "passage": 600,
+      "bedSide": 600,
+      "wardrobeFront": 900,
+      "kitchenFront": 1200,
+      "diningAround": 800,
+      "deskBack": 900,
+      "tvMin": 1800,
+      "tvMax": 3600,
+      "coffeeGap": [
+        350,
+        500
+      ],
+      "wall": 20
+    },
+    "manual_item_coordinates": false
+  },
+  "designer_summary_tr": "Barcelona: kiracı, İspanyolca tercih ediyor. Mevcut mutfak ve zemin korunuyor; TV mobilyası istenmiyor. Katalonya habitabilitat/cèdula onayı verilmedi; yapı yaşı, müdahale ve gerçek ölçüler eksik."
+}
