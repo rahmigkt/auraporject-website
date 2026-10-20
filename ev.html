@@ -7,13 +7,14 @@
 <title>AURA · Ev planı</title>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <style>
-:root{--paper:#F7F3E8;--ink:#292722;--muted:#746D63;--poche:#45413B;--terra:#AD503E;--floor:#EAE3D6;--hair:#ddd6c6}
+:root{--paper:#f6f4ef;--ink:#292722;--muted:#746D63;--poche:#45413B;--terra:#AD503E;--floor:#EAE3D6;--hair:#ddd6c6}
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif;touch-action:manipulation}
 header{display:flex;align-items:center;gap:14px;padding:10px 16px;border-bottom:1px solid var(--hair);flex-wrap:wrap}
 header b{font:600 20px/1 Georgia,serif;letter-spacing:.12em}
 header small{color:var(--muted);letter-spacing:.18em;font-size:11px;text-transform:uppercase}
 .tabs{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+select{font:inherit;font-size:14px;padding:7px;width:100%;border:1px solid var(--hair);background:#fff}
 button{font:inherit;font-size:14px;padding:8px 14px;border:1px solid var(--hair);background:#fff;color:var(--ink);border-radius:2px;cursor:pointer}
 button[aria-pressed=true]{border-color:var(--terra);color:var(--terra)}
 main{display:grid;grid-template-columns:1fr 300px;height:calc(100vh - 58px)}
@@ -37,6 +38,6 @@ main{display:grid;grid-template-columns:1fr 300px;height:calc(100vh - 58px)}
   <section id="view"><svg id="plan"></svg><canvas id="three" hidden></canvas><div class="hint" id="hint"></div></section>
   <aside id="side"></aside>
 </main>
-<script type="module" src="assets/ev/plan.js?v=20261020l"></script>
+<script type="module" src="assets/ev/plan.js?v=20261020m"></script>
 </body>
 </html>
