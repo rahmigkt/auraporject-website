@@ -3,6 +3,7 @@
 // blue windows across the wall, light door gaps, red entrance mark, north up (plan y grows to the north).
 import * as THREE from '../vendor/three.module.js?v=20261016b';
 import {PAINTS, FLOORS, SCHEMES, paintHex, floorTexture} from './finishes.js?v=20261020r';
+import {compileItem, footprint, itemName} from './items.js?v=20261020u';
 
 const $ = s => document.querySelector(s), NS = 'http://www.w3.org/2000/svg';
 const val = q => (q && typeof q === 'object' ? q.value : q) ?? 0;
@@ -10,7 +11,7 @@ const S = {view: 'plan', room: null, name: ''}, hooks = {};
 const COLORS = {living: '#ecd7ae', kitchen: '#cddbbf', bath: '#bbdce1', wc: '#a9cfd7', hall: '#eee9df', bedroom: '#ccdae7', utility: '#ded5e3', other: '#d4e0e5', balcony: '#d3e4bf', terrace: '#d3e4bf', stair: '#d5cce4', study: '#e4dccb', dining: '#ecd7ae'};
 const NAMES = {living: 'Salon', kitchen: 'Mutfak', bath: 'Banyo', wc: 'WC', hall: 'Hol', bedroom: 'Yatak odası', utility: 'Kiler / servis', other: 'Oda', balcony: 'Balkon', terrace: 'Teras', stair: 'Merdiven', study: 'Çalışma', dining: 'Yemek'};
 const INK = {wall: '#424949', window: '#4b9dc0', door: '#faf8f1', roomLine: '#b7bab8', text: '#24333c', entry: '#b44e31', paper: '#f6f4ef', select: '#AD503E'};
-const EXAMPLES = [['ornek-plan.json', 'Örnek 3+1 (sentetik)'], ...Array.from({length: 6}, (_, i) => [`ornekler/gercek-${i + 1}.json`, `Gerçek plan ${i + 1} · İsviçre`])];
+const EXAMPLES = [['ornekler/sohbet-1.json', 'Sohbet örneği · Brüksel 2+1, mobilyalı'], ['ornek-plan.json', 'Örnek 3+1 (sentetik)'], ...Array.from({length: 6}, (_, i) => [`ornekler/gercek-${i + 1}.json`, `Gerçek plan ${i + 1} · İsviçre`])];
 
 // ---- record → geometry ------------------------------------------------------------------------------------
 let D, walls, W, ops, H, all;
@@ -65,6 +66,10 @@ function drawPlan() {
   const g = el('g', {fill: INK.wall});
   for (const w of walls) for (const [a, b, lo] of pieces(w)) if (lo === 0) el('polygon', {points: pts(band(w, a, b)), 'data-wall': w.id}, g);
   for (const o of ops) { const w = W[o.wall_id]; if (!w) continue; el('polygon', {points: pts(band(w, o.a, o.a + o.w)), fill: o.kind === 'window' ? INK.window : INK.door, 'data-op': o.id, 'data-wall': w.id}); }
+  for (const it of D.items || []) { if (!it.design) continue; const f = footprint(it), k = Math.max(vb[2], vb[3]) / 900;
+    el('polygon', {points: pts(f), fill: 'rgba(255,253,248,.78)', stroke: '#6b645a', 'stroke-width': 14, 'data-item': it.id});
+    const fr = [(f[2][0] + f[3][0]) / 2, (f[2][1] + f[3][1]) / 2], c = centroid(f); el('line', {x1: c[0], y1: -c[1], x2: fr[0], y2: -fr[1], stroke: '#b9b1a3', 'stroke-width': 10});
+    const t = el('text', {x: c[0], y: -c[1] + 50, 'text-anchor': 'middle', 'font-size': 120, fill: '#5d574e', style: 'pointer-events:none'}); t.textContent = itemName(it); }
   for (const s of D.spaces) {
     const b = bbox(s.boundary_xy_mm), [cx, cy] = centroid(s.boundary_xy_mm), fs = Math.min(260, Math.max(130, Math.min(b.x1 - b.x0, b.y1 - b.y0) / 6));
     const t = el('text', {x: cx, y: -cy, 'text-anchor': 'middle', 'font-size': fs, fill: INK.text, style: 'pointer-events:none'});
@@ -109,7 +114,7 @@ sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); sun.shadow.bias = -0.
 const CITIES = {bruksel: ['Brüksel', 50.85], amsterdam: ['Amsterdam', 52.37], berlin: ['Berlin', 52.52], paris: ['Paris', 48.86], londra: ['Londra', 51.51], kopenhag: ['Kopenhag', 55.68], madrid: ['Madrid', 40.42], roma: ['Roma', 41.9], istanbul: ['İstanbul', 41.01]};
 const SEASONS = {kis: ['Kış', 355], ilkbahar: ['İlkbahar', 80], yaz: ['Yaz', 172], sonbahar: ['Sonbahar', 266]};
 const MOMENTS = {gun: ['Gün ışığı', 13, 0], sabah: ['Sabah kahvesi', 8, 0], aksam: ['Akşam okuması', 20, 1], misafir: ['Misafir yemeği', 21, 1.5]};
-const A = {city: 'bruksel', season: 'sonbahar', hour: 13, moment: 'gun', lamps: 0, human: true};
+const A = {wallH: 1100, city: 'bruksel', season: 'sonbahar', hour: 13, moment: 'gun', lamps: 0, human: true};
 function sunPos() {
   const lat = CITIES[A.city][1] * Math.PI / 180, N = SEASONS[A.season][1], dec = 23.44 * Math.PI / 180 * Math.sin(2 * Math.PI * (284 + N) / 365), Ha = (A.hour - 12) * 15 * Math.PI / 180;
   const alt = Math.asin(Math.sin(lat) * Math.sin(dec) + Math.cos(lat) * Math.cos(dec) * Math.cos(Ha));
@@ -142,11 +147,18 @@ const finishOf = s => { const sc = SCHEMES[D.scheme] || SCHEMES.iskandinav, f = 
 const paintMats = {}, paintMat = id => paintMats[id] ??= new THREE.MeshStandardMaterial({color: paintHex(id), roughness: 0.92});
 const floorMats2 = {}, floorFinish = id => floorMats2[id] ??= new THREE.MeshStandardMaterial({map: floorTexture(id), roughness: 0.72, side: THREE.DoubleSide});
 const spaceAt = p => D.spaces.find(s => inside(p, s.boundary_xy_mm));
-let house = null;
+let house = null, productObject = null; const products = new Map();
 function build(cut) {
   if (house) { scene.remove(house); house.traverse(o => { if (o.geometry && !o.userData.keep) o.geometry.dispose(); }); }
   house = new THREE.Group(); scene.add(house); if (S.view === 'room') house.add(ground); ground.userData.keep = true;
-  const hs = D.spaces.find(x => x.id === S.room); if (A.human && hs && S.view !== 'maket') { const [hx, hy] = centroid(hs.boundary_xy_mm); human.position.set(hx / 1000 + 0.4, 0, -hy / 1000 + 0.3); human.traverse(o => { o.userData.keep = true; }); house.add(human); }
+  if ((D.items || []).some(i => i.design)) { if (!productObject) import('../forma/scene.js').then(m => { productObject = m.productObject; if (S.view !== 'plan') show(S.view); });
+    else for (const it of D.items) { if (!it.design) continue; const key = it.id + JSON.stringify(it.design); let o = products.get(key);
+      if (!o) { const {compiled, materials} = compileItem(it); o = productObject(compiled, materials, {onReady: () => render()}); o.traverse(x => { x.userData.keep = true; }); products.set(key, o); }
+      o.position.set(it.pos_xy_mm[0] / 1000, 0, -it.pos_xy_mm[1] / 1000); o.rotation.y = (it.rot_deg || 0) * Math.PI / 180; house.add(o); } }
+  const hs = D.spaces.find(x => x.id === S.room); if (A.human && hs && S.view !== 'maket') { // stand where nothing is placed: free floor point closest to the room centre
+    const b = bbox(hs.boundary_xy_mm), [cx0, cy0] = centroid(hs.boundary_xy_mm), feet = (D.items || []).filter(i => i.design).map(i => footprint(i)); let best = [cx0, cy0], bd = Infinity;
+    for (let x = b.x0 + 400; x < b.x1 - 400; x += 200) for (let y = b.y0 + 400; y < b.y1 - 400; y += 200) { const p = [x, y]; if (!inside(p, hs.boundary_xy_mm) || feet.some(f => inside(p, f) || f.some(q => Math.hypot(q[0] - x, q[1] - y) < 450))) continue; const d = Math.hypot(x - cx0, y - cy0); if (d < bd) { bd = d; best = p; } }
+    human.position.set(best[0] / 1000, 0, -best[1] / 1000); human.traverse(o => { o.userData.keep = true; }); house.add(human); }
   for (const s of D.spaces) {
     const sh = new THREE.Shape(s.boundary_xy_mm.map(([x, y]) => new THREE.Vector2(x / 1000, y / 1000)));
     const m = new THREE.Mesh(new THREE.ShapeGeometry(sh), S.room === s.id && S.view === 'maket' ? selMat : floorFinish(finishOf(s).floor)); m.rotation.x = -Math.PI / 2; m.position.y = 0.001; m.receiveShadow = true; m.userData = {floor: s.id}; house.add(m);
@@ -228,13 +240,13 @@ function cutaway() {
 }
 
 // ---- views and side panel ---------------------------------------------------------------------------------
-const HINT = {plan: 'Sürükleyin: kaydır · tekerlek / iki parmak: yakınlaştır · odaya dokunun: seç', maket: 'Duvarlar 1,1 m\'den kesilmiş ev maketi · sürükleyin: çevir', '3d': 'Tam yükseklik · sürükleyin: çevir · iki parmak: yakınlaştır', kesit: 'Tavansız kesit · seçili oda önde açık · sürükleyin: etrafında dönün · iki parmak: yakınlaştır · listeden oda seçin', room: 'Göz hizası 1,5 m · oklar ya da W/S: yürü · sürükleyin: dönün · iki parmak: görüş açısı · çift dokunun: başka köşe'};
+const HINT = {plan: 'Sürükleyin: kaydır · tekerlek / iki parmak: yakınlaştır · odaya dokunun: seç', maket: 'Ev maketi · duvar yüksekliğini üstteki çubuktan ayarlayın · sürükleyin: çevir · iki parmak: yakınlaştır', '3d': 'Tam yükseklik · sürükleyin: çevir · iki parmak: yakınlaştır', kesit: 'Tavansız kesit · seçili oda önde açık · sürükleyin: etrafında dönün · iki parmak: yakınlaştır · listeden oda seçin', room: 'Göz hizası 1,5 m · oklar ya da W/S: yürü · sürükleyin: dönün · iki parmak: görüş açısı · çift dokunun: başka köşe'};
 function show(v) {
   S.view = v; document.querySelectorAll('[data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
-  svg.hidden = v !== 'plan'; canvas.hidden = v === 'plan'; $('#walk').hidden = v !== 'room'; $('#atmos').hidden = !['room', 'kesit', '3d'].includes(v); atmosUI(); $('#hint').textContent = HINT[v];
+  svg.hidden = v !== 'plan'; canvas.hidden = v === 'plan'; $('#walk').hidden = v !== 'room'; $('#atmos').hidden = !['room', 'kesit', 'maket'].includes(v); atmosUI(); $('#hint').textContent = HINT[v];
   if (v === 'plan') return drawPlan();
   const sp = D.spaces.find(s => s.id === S.room) || D.spaces.find(s => s.kind === 'living') || D.spaces[0]; S.room = sp.id;
-  build(v === 'maket' ? 1100 : H);
+  build(v === 'maket' ? Math.min(A.wallH, H) : H);
   const span = Math.max(all.x1 - all.x0, all.y1 - all.y0) / 1000;
   orbit.target = null;
   if (v === 'room') { // stand in a corner of the room (0.45 m from the walls) at eye height, looking across to the far side
@@ -253,12 +265,14 @@ function atmosUI() {
   <label>Saat <b>${String(Math.floor(A.hour)).padStart(2, '0')}:${A.hour % 1 ? '30' : '00'}</b><input type="range" data-a="hour" min="5" max="23" step="0.5" value="${A.hour}"></label>
   <select data-a="season">${Object.entries(SEASONS).map(([k, v]) => `<option value="${k}" ${A.season === k ? 'selected' : ''}>${v[0]}</option>`).join('')}</select>
   <select data-a="city">${Object.entries(CITIES).map(([k, v]) => `<option value="${k}" ${A.city === k ? 'selected' : ''}>${v[0]}</option>`).join('')}</select>
+  ${S.view === 'maket' ? `<label>Duvar <b>${A.wallH >= H ? 'tam' : (A.wallH / 1000).toFixed(1) + ' m'}</b><input type="range" data-a="wallH" min="300" max="${H}" step="100" value="${Math.min(A.wallH, H)}"></label>` : ''}
   <label class="chk"><input type="checkbox" data-a="human" ${A.human ? 'checked' : ''}> İnsan ölçeği</label>`;
 }
 $('#atmos').addEventListener('input', e => { const k = e.target.dataset.a; if (!k) return;
   if (k === 'moment') { const m = MOMENTS[e.target.value]; A.moment = e.target.value; A.hour = m[1]; A.lamps = m[2]; atmosUI(); }
   else if (k === 'hour') { A.hour = +e.target.value; A.lamps = A.hour >= 19 || A.hour < 7 ? Math.max(A.lamps, 1) : A.lamps; e.target.previousElementSibling.textContent = `${String(Math.floor(A.hour)).padStart(2, '0')}:${A.hour % 1 ? '30' : '00'}`; }
   else if (k === 'human') { A.human = e.target.checked; show(S.view); return; }
+  else if (k === 'wallH') { A.wallH = +e.target.value; e.target.previousElementSibling.textContent = A.wallH >= H ? 'tam' : (A.wallH / 1000).toFixed(1) + ' m'; build(Math.min(A.wallH, H)); }
   else A[k] = e.target.value;
   render(); });
 function finishPanel() {

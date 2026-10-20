@@ -702,3 +702,10 @@ export function renderThumbnail(compiled, materials, {width = 360, height = 240}
   scene.remove(group); disposeGroup(group); mats.dispose();
   return url;
 }
+
+/** A finished product as a Three group in metres (for placing studio products inside the home plan, ev.html). */
+export function productObject(compiled, materials, {onReady} = {}) {
+  const mats = materialSet(materials, {detail: true, onReady}), group = buildGroup(compiled, mats);
+  group.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+  return group;
+}
