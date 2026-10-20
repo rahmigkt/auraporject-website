@@ -185,7 +185,7 @@ function shell() {
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261020c').then(mod => { sceneModule = mod; const {createViewer} = mod;
+  import('./scene.js?v=20261020d').then(mod => { sceneModule = mod; const {createViewer} = mod;
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(shown(), state.design.materials); if (state.room) showRoom(); }
@@ -279,7 +279,7 @@ function partsBody() {
   if (!isTable()) {
     const legs = ['legs', 'frame'].includes(p.baseType);
     return `<h2>${L('tabParts')}</h2>${enumGroup('armType', 'arm')}${enumGroup('backType', 'back')}${enumGroup('seatType', 'seat')}${counter('seatCount', 'seats', [1, 2, 3, 4])}
-    ${enumGroup('cushionEdge', 'cushionEdge')}${enumGroup('baseType', 'base')}${legs ? enumGroup('legType', 'legType') : ''}${enumGroup('welt', 'welt')}${counter('pillows', 'pillows', [0, 1, 2, 3, 4])}${p.pillows ? enumGroup('pillowType', 'pillowType') : ''}`;
+    ${enumGroup('cushionEdge', 'cushionEdge')}${p.armType !== 'none' ? enumGroup('seatFront', 'seatFront') : ''}${enumGroup('baseType', 'base')}${legs ? enumGroup('legType', 'legType') : ''}${enumGroup('welt', 'welt')}${counter('pillows', 'pillows', [0, 1, 2, 3, 4])}${p.pillows ? enumGroup('pillowType', 'pillowType') : ''}`;
   }
   const k = state.design.kind, legBases = ['legsApron', 'legsOnly', 'trestle', 'tripod'].includes(p.baseType);
   return `<h2>${L('tabParts')}</h2>${enumGroup('topShape', 'topShape')}${enumGroup('edge', 'edge')}${enumGroup('baseType', 'baseType', 'tBaseType')}
