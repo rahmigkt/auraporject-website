@@ -1,0 +1,80 @@
+{
+  "rows": 2400,
+  "languages": {
+    "tr": 300,
+    "en": 300,
+    "de": 300,
+    "fr": 300,
+    "nl": 300,
+    "da": 300,
+    "es": 300,
+    "it": 300
+  },
+  "response_contract_passed": 2400,
+  "unique_final_user_utterances": 2400,
+  "source_building_overlap": 0,
+  "source_signature_overlap": 0,
+  "heldout_type_leakage": 0,
+  "review_cases": 52,
+  "first_option_geometry_valid": 52,
+  "human_approved": 0,
+  "model": {
+    "examples": 16,
+    "format_valid": 0,
+    "status_correct": 0,
+    "program_to_valid_geometry": {
+      "denominator": 8,
+      "passed": 0,
+      "cases": [
+        {
+          "id": "tr-0",
+          "passed": false,
+          "reason": "no valid model program; planner not invoked"
+        },
+        {
+          "id": "en-0",
+          "passed": false,
+          "reason": "no valid model program; planner not invoked"
+        },
+        {
+          "id": "de-0",
+          "passed": false,
+          "reason": "no valid model program; planner not invoked"
+        },
+        {
+          "id": "fr-0",
+          "passed": false,
+          "reason": "no valid model program; planner not invoked"
+        },
+        {
+          "id": "nl-0",
+          "passed": false,
+          "reason": "no valid model program; planner not invoked"
+        },
+        {
+          "id": "da-0",
+          "passed": false,
+          "reason": "no valid model program; planner not invoked"
+        },
+        {
+          "id": "es-0",
+          "passed": false,
+          "reason": "no valid model program; planner not invoked"
+        },
+        {
+          "id": "it-0",
+          "passed": false,
+          "reason": "no valid model program; planner not invoked"
+        }
+      ]
+    },
+    "errors": {
+      "JSONDecodeError": 6,
+      "ValidationError": 10
+    },
+    "truncated": 6
+  },
+  "system_sha256": "9182afb206f6fda519d55aa8233fdcf38b0bc3aaa67c735517f8ab3282afc6a1",
+  "gpu_gate": "closed",
+  "training_started": false
+}

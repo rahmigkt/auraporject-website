@@ -1,0 +1,1099 @@
+{
+  "schema_version": "0.1",
+  "project_id": "sd-03230620a6c80fba07a601b2-adapt-b63c49cc",
+  "revision": 2,
+  "status": "survey",
+  "coordinate_system": "mm; right-handed; x/y floor plane, z up; local origin; glTF adapter converts units and up-axis",
+  "language": {
+    "customer": "de",
+    "designer": "tr"
+  },
+  "brief": {
+    "whole_home": true,
+    "goals": [
+      "Whole-home project intent; this licensed reference contains only one source floor unit. Final decisions belong to the designer."
+    ],
+    "budget": {
+      "amount": null,
+      "currency": "TRY",
+      "includes": [],
+      "estimate_status": "unknown"
+    },
+    "household_needs": [],
+    "style": [],
+    "preserve": []
+  },
+  "levels": [
+    {
+      "id": "level-0",
+      "name": "Kaynak katı",
+      "elevation": {
+        "value": 0.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      }
+    }
+  ],
+  "spaces": [
+    {
+      "id": "room-0",
+      "level_id": "level-0",
+      "name": "Banyo 1",
+      "kind": "bath",
+      "boundary_xy_mm": [
+        [
+          5593.5902,
+          5669.2906
+        ],
+        [
+          3362.2909,
+          3750.9628
+        ],
+        [
+          2451.1321,
+          4848.9725
+        ],
+        [
+          4682.4314,
+          6767.3003
+        ]
+      ],
+      "wall_ids": [
+        "wall-0",
+        "wall-1",
+        "wall-2",
+        "wall-4",
+        "wall-9",
+        "wall-12"
+      ],
+      "ceiling_height": {
+        "value": 2600.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "estimated",
+      "locked_boundary": true
+    },
+    {
+      "id": "room-1",
+      "level_id": "level-0",
+      "name": "Mutfak 2",
+      "kind": "kitchen",
+      "boundary_xy_mm": [
+        [
+          3221.5264,
+          8527.7924
+        ],
+        [
+          4589.2908,
+          6879.5411
+        ],
+        [
+          2357.9915,
+          4961.2133
+        ],
+        [
+          990.2271,
+          6609.4646
+        ]
+      ],
+      "wall_ids": [
+        "wall-1",
+        "wall-2",
+        "wall-4",
+        "wall-6",
+        "wall-8",
+        "wall-14"
+      ],
+      "ceiling_height": {
+        "value": 2600.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "estimated",
+      "locked_boundary": true
+    },
+    {
+      "id": "room-2",
+      "level_id": "level-0",
+      "name": "Antre / hol 3",
+      "kind": "hall",
+      "boundary_xy_mm": [
+        [
+          903.888,
+          6535.2357
+        ],
+        [
+          3275.9519,
+          3676.7341
+        ],
+        [
+          2372.0638,
+          2899.6292
+        ],
+        [
+          0.0,
+          5758.1309
+        ]
+      ],
+      "wall_ids": [
+        "wall-0",
+        "wall-1",
+        "wall-5",
+        "wall-6",
+        "wall-7",
+        "wall-8",
+        "wall-9",
+        "wall-11"
+      ],
+      "ceiling_height": {
+        "value": 2600.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "estimated",
+      "locked_boundary": true
+    },
+    {
+      "id": "room-3",
+      "level_id": "level-0",
+      "name": "Oda (işlevi doğrulanmadı) 4",
+      "kind": "other",
+      "boundary_xy_mm": [
+        [
+          3455.4315,
+          3638.722
+        ],
+        [
+          5686.7308,
+          5557.0498
+        ],
+        [
+          7999.7828,
+          2769.6614
+        ],
+        [
+          4778.2564,
+          0.0
+        ],
+        [
+          2465.2044,
+          2787.3883
+        ],
+        [
+          3369.0924,
+          3564.4932
+        ],
+        [
+          3370.5642,
+          3562.7196
+        ],
+        [
+          3458.1723,
+          3635.4192
+        ]
+      ],
+      "wall_ids": [
+        "wall-0",
+        "wall-1",
+        "wall-3",
+        "wall-4",
+        "wall-5",
+        "wall-7",
+        "wall-10",
+        "wall-13"
+      ],
+      "ceiling_height": {
+        "value": 2600.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "estimated",
+      "locked_boundary": true
+    }
+  ],
+  "walls": [
+    {
+      "id": "wall-0",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        5741.2481,
+        5700.0788
+      ],
+      "to_xy_mm": [
+        2333.361,
+        2770.1965
+      ],
+      "thickness": {
+        "value": 143.9426,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "room-0",
+        "room-2",
+        "room-3"
+      ],
+      "structural_status": "unknown"
+    },
+    {
+      "id": "wall-1",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        911.4868,
+        6615.2154
+      ],
+      "to_xy_mm": [
+        3413.7653,
+        3599.796
+      ],
+      "thickness": {
+        "value": 111.9554,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "room-0",
+        "room-1",
+        "room-2",
+        "room-3"
+      ],
+      "structural_status": "unknown"
+    },
+    {
+      "id": "wall-2",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        4672.4803,
+        6854.9035
+      ],
+      "to_xy_mm": [
+        2368.215,
+        4873.8443
+      ],
+      "thickness": {
+        "value": 143.9426,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "room-0",
+        "room-1"
+      ],
+      "structural_status": "unknown"
+    },
+    {
+      "id": "wall-3",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        8432.8572,
+        2877.0976
+      ],
+      "to_xy_mm": [
+        4259.4214,
+        -710.9545
+      ],
+      "thickness": {
+        "value": 399.8405,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "room-3"
+      ],
+      "structural_status": "unknown"
+    },
+    {
+      "id": "wall-4",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        8410.3421,
+        2589.4521
+      ],
+      "to_xy_mm": [
+        2828.8842,
+        9315.4967
+      ],
+      "thickness": {
+        "value": 399.8405,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "room-0",
+        "room-1",
+        "room-3"
+      ],
+      "structural_status": "unknown"
+    },
+    {
+      "id": "wall-5",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        -72.8773,
+        5719.2487
+      ],
+      "to_xy_mm": [
+        4768.2656,
+        -114.6648
+      ],
+      "thickness": {
+        "value": 159.9362,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "room-2",
+        "room-3"
+      ],
+      "structural_status": "unknown"
+    },
+    {
+      "id": "wall-6",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        3267.9252,
+        8674.3876
+      ],
+      "to_xy_mm": [
+        -697.2149,
+        5265.4148
+      ],
+      "thickness": {
+        "value": 159.9362,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "room-1",
+        "room-2"
+      ],
+      "structural_status": "unknown"
+    },
+    {
+      "id": "wall-7",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        2412.8502,
+        2838.5362
+      ],
+      "to_xy_mm": [
+        3108.5135,
+        3436.6228
+      ],
+      "thickness": {
+        "value": 151.1397,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "room-3",
+        "room-2"
+      ],
+      "structural_status": "unknown"
+    },
+    {
+      "id": "wall-8",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        1351.0021,
+        6085.5689
+      ],
+      "to_xy_mm": [
+        1834.7228,
+        5502.6519
+      ],
+      "thickness": {
+        "value": 117.5531,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "room-2",
+        "room-1"
+      ],
+      "structural_status": "unknown"
+    },
+    {
+      "id": "wall-9",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        3283.7398,
+        3756.4858
+      ],
+      "to_xy_mm": [
+        2800.0191,
+        4339.4028
+      ],
+      "thickness": {
+        "value": 117.5531,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "room-0",
+        "room-2"
+      ],
+      "structural_status": "unknown"
+    },
+    {
+      "id": "wall-10",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        6927.8123,
+        4376.0036
+      ],
+      "to_xy_mm": [
+        6147.9035,
+        5315.8479
+      ],
+      "thickness": {
+        "value": 419.8326,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "room-3"
+      ],
+      "structural_status": "unknown"
+    },
+    {
+      "id": "wall-11",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        782.8299,
+        6537.8622
+      ],
+      "to_xy_mm": [
+        2.2726,
+        5866.7891
+      ],
+      "thickness": {
+        "value": 167.933,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "room-2"
+      ],
+      "structural_status": "unknown"
+    },
+    {
+      "id": "wall-12",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        4948.9785,
+        6760.6359
+      ],
+      "to_xy_mm": [
+        5769.7407,
+        5771.5604
+      ],
+      "thickness": {
+        "value": 419.8326,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "room-0"
+      ],
+      "structural_status": "unknown"
+    },
+    {
+      "id": "wall-13",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        5943.6112,
+        737.0037
+      ],
+      "to_xy_mm": [
+        7087.9998,
+        1720.8756
+      ],
+      "thickness": {
+        "value": 419.8326,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "room-3"
+      ],
+      "structural_status": "unknown"
+    },
+    {
+      "id": "wall-14",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        3654.4715,
+        8320.6067
+      ],
+      "to_xy_mm": [
+        4434.3802,
+        7380.7624
+      ],
+      "thickness": {
+        "value": 419.8326,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "room-1"
+      ],
+      "structural_status": "unknown"
+    }
+  ],
+  "openings": [
+    {
+      "id": "opening-0",
+      "wall_id": "wall-7",
+      "kind": "door",
+      "space_ids": [
+        "room-3",
+        "room-2"
+      ],
+      "offset_from_wall_start": {
+        "value": 18.8842,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 879.6492,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2000.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    },
+    {
+      "id": "opening-1",
+      "wall_id": "wall-8",
+      "kind": "door",
+      "space_ids": [
+        "room-2",
+        "room-1"
+      ],
+      "offset_from_wall_start": {
+        "value": 18.8842,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 719.713,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2000.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    },
+    {
+      "id": "opening-2",
+      "wall_id": "wall-9",
+      "kind": "door",
+      "space_ids": [
+        "room-0",
+        "room-2"
+      ],
+      "offset_from_wall_start": {
+        "value": 18.8842,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 719.713,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2000.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    },
+    {
+      "id": "opening-3",
+      "wall_id": "wall-10",
+      "kind": "window",
+      "space_ids": [
+        "room-3"
+      ],
+      "offset_from_wall_start": {
+        "value": 18.8842,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1183.5281,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1900.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 500.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "swing": "fixed"
+    },
+    {
+      "id": "opening-4",
+      "wall_id": "wall-11",
+      "kind": "door",
+      "space_ids": [
+        "room-2"
+      ],
+      "offset_from_wall_start": {
+        "value": 18.8842,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 991.6046,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2000.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    },
+    {
+      "id": "opening-5",
+      "wall_id": "wall-12",
+      "kind": "window",
+      "space_ids": [
+        "room-0"
+      ],
+      "offset_from_wall_start": {
+        "value": 18.8842,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1247.5025,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1900.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 500.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "swing": "fixed"
+    },
+    {
+      "id": "opening-6",
+      "wall_id": "wall-13",
+      "kind": "window",
+      "space_ids": [
+        "room-3"
+      ],
+      "offset_from_wall_start": {
+        "value": 18.8842,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1471.4133,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1900.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 500.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "swing": "fixed"
+    },
+    {
+      "id": "opening-7",
+      "wall_id": "wall-14",
+      "kind": "window",
+      "space_ids": [
+        "room-1"
+      ],
+      "offset_from_wall_start": {
+        "value": 18.8842,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1183.5281,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1900.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 500.0,
+        "unit": "mm",
+        "status": "plan_import",
+        "evidence_ids": [
+          "licensed-source"
+        ],
+        "uncertainty": null
+      },
+      "swing": "fixed"
+    }
+  ],
+  "connections": [
+    {
+      "id": "route-opening-0",
+      "from_space_id": "room-3",
+      "to_space_id": "room-2",
+      "opening_id": "opening-0",
+      "status": "unverified"
+    },
+    {
+      "id": "route-opening-1",
+      "from_space_id": "room-2",
+      "to_space_id": "room-1",
+      "opening_id": "opening-1",
+      "status": "unverified"
+    },
+    {
+      "id": "route-opening-2",
+      "from_space_id": "room-0",
+      "to_space_id": "room-2",
+      "opening_id": "opening-2",
+      "status": "unverified"
+    }
+  ],
+  "items": [],
+  "finishes": [],
+  "notes": [
+    {
+      "id": "attribution",
+      "original": "Standfest et al., Swiss Dwellings v3.0.0, 2023, doi:10.5281/zenodo.7788422, CC BY 4.0. AURA: privacy minimization, unit conversion, semantic mapping, graph inference and compatibility export.",
+      "original_language": "en",
+      "turkish_translation": null,
+      "translation_status": "not_requested"
+    },
+    {
+      "id": "axis-compatibility",
+      "original": "Room axis_boundary copies the source net polygon as an explicit compatibility proxy. Wall axes are minimum-rectangle proxies. Sidecar polygons are authoritative; synthetic axis-closure validator is not applicable.",
+      "original_language": "en",
+      "turkish_translation": null,
+      "translation_status": "not_requested"
+    },
+    {
+      "id": "floor-scope",
+      "original": "One source floor unit, not a complete multi-floor home. Floor height, door hinge and structural status remain unknown. Do not remove or scale existing structural elements using this record.",
+      "original_language": "en",
+      "turkish_translation": null,
+      "translation_status": "not_requested"
+    },
+    {
+      "id": "template-adaptation",
+      "original": "Proposed template affine adaptation: sx=0.9442083873722618, sy=0.9442083873722618. Not a change authorization for an existing building. Original source/attribution retained; all structural decisions require designer/engineer review.",
+      "original_language": "en",
+      "turkish_translation": null,
+      "translation_status": "not_requested"
+    },
+    {
+      "id": "eu-target-context",
+      "original": "Synthetic reference-derived proposal for CH/CH-ZH; geometry source remains Switzerland. Requested local building type and legal compliance are unverified. Final decision belongs to the designer.",
+      "original_language": "en",
+      "turkish_translation": null,
+      "translation_status": "not_requested"
+    },
+    {
+      "id": "viewer-loss",
+      "original": "VIEWER ONLY: selected floor; stairs, site, nodes, columns and door hinge metadata removed. Not a v0.2 round-trip or construction record.",
+      "original_language": "en",
+      "turkish_translation": null,
+      "translation_status": "not_requested"
+    }
+  ],
+  "issues": [
+    {
+      "id": "unknown-room-use",
+      "space_ids": [
+        "room-3"
+      ],
+      "kind": "design",
+      "message": "Generic source ROOM is not a confirmed bedroom; bedroom_count counts confirmed labels only. Ask the user/designer.",
+      "status": "open",
+      "blocking": true
+    }
+  ],
+  "evidence": [
+    {
+      "id": "licensed-source",
+      "kind": "plan",
+      "space_ids": [
+        "room-0",
+        "room-1",
+        "room-2",
+        "room-3"
+      ],
+      "private_object_id": null,
+      "caption": "Standfest et al., Swiss Dwellings v3.0.0, 2023, doi:10.5281/zenodo.7788422, CC BY 4.0. AURA: privacy minimization, unit conversion, semantic mapping, graph inference and compatibility export. Public dataset license permits reuse; this is not customer consent.",
+      "language": "en",
+      "training_consent": false,
+      "synthetic": true
+    }
+  ],
+  "example_only": false,
+  "review": {
+    "id": "review",
+    "state": "awaiting_designer",
+    "revision": 2,
+    "designer_id": null,
+    "designer_approval_revision": null,
+    "blocking_issue_ids": [
+      "unknown-room-use"
+    ]
+  }
+}

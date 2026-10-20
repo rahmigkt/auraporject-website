@@ -1,0 +1,300 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "0.5"
+    },
+    "typology": {
+      "enum": [
+        "kapali",
+        "acik",
+        "yari_acik",
+        "hol",
+        "kose",
+        "cift_cephe",
+        "derin",
+        "dubleks",
+        "mustakil",
+        "avlulu",
+        "real_reference"
+      ]
+    },
+    "dwelling": {
+      "enum": [
+        "apartment",
+        "duplex",
+        "detached"
+      ]
+    },
+    "bedrooms": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "floors": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 3
+    },
+    "kitchen": {
+      "enum": [
+        "closed",
+        "semi_open",
+        "open",
+        null
+      ]
+    },
+    "envelope": {
+      "enum": [
+        "rectangle",
+        "l",
+        "u",
+        "notched"
+      ]
+    },
+    "entry": {
+      "anyOf": [
+        {
+          "enum": [
+            "north",
+            "south",
+            "east",
+            "west"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "living_face": {
+      "anyOf": [
+        {
+          "enum": [
+            "north",
+            "south",
+            "east",
+            "west"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "circulation": {
+      "enum": [
+        "spine",
+        "segmented",
+        "foyer",
+        "unknown"
+      ]
+    },
+    "stair": {
+      "enum": [
+        "none",
+        "straight",
+        "l",
+        "u",
+        "gallery"
+      ]
+    },
+    "setback_m": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 10
+    },
+    "rooms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]{0,40}$"
+          },
+          "kind": {
+            "enum": [
+              "living",
+              "bedroom",
+              "kitchen",
+              "bath",
+              "wc",
+              "hall",
+              "study",
+              "utility",
+              "balcony",
+              "terrace",
+              "stair",
+              "other"
+            ]
+          },
+          "zone": {
+            "enum": [
+              "day",
+              "night",
+              "wet",
+              "service",
+              "unknown"
+            ]
+          },
+          "level": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2
+          },
+          "target_m2": {
+            "type": "number",
+            "minimum": 0.1,
+            "maximum": 1000
+          },
+          "face": {
+            "enum": [
+              "any",
+              "north",
+              "south",
+              "east",
+              "west"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "zone",
+          "level",
+          "target_m2",
+          "face"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "maxItems": 100
+    },
+    "adjacency": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 2,
+        "maxItems": 2
+      },
+      "maxItems": 100
+    },
+    "forbidden": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 2,
+        "maxItems": 2
+      },
+      "maxItems": 100
+    },
+    "fixed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "wall",
+              "shaft",
+              "column"
+            ]
+          },
+          "evidence_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "evidence_id"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 30
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100000
+    },
+    "country": {
+      "enum": [
+        "BE",
+        "NL",
+        "DE",
+        "FR",
+        "GB",
+        "IE",
+        "DK",
+        "ES",
+        "IT",
+        "AT",
+        "CH",
+        "TR",
+        null
+      ]
+    },
+    "region": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 2,
+      "maxLength": 60
+    },
+    "housing_type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 2,
+      "maxLength": 80
+    }
+  },
+  "required": [
+    "version",
+    "typology",
+    "dwelling",
+    "bedrooms",
+    "floors",
+    "kitchen",
+    "envelope",
+    "entry",
+    "living_face",
+    "circulation",
+    "stair",
+    "setback_m",
+    "rooms",
+    "adjacency",
+    "forbidden",
+    "fixed",
+    "revision",
+    "country",
+    "region",
+    "housing_type"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AURA EU plan program 0.5"
+}

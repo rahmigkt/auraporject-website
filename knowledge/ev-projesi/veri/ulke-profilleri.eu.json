@@ -1,0 +1,5425 @@
+{
+  "version": "eu-context/1",
+  "date": "2026-10-20",
+  "groups": [
+    [
+      "BE"
+    ],
+    [
+      "NL"
+    ],
+    [
+      "DE"
+    ],
+    [
+      "FR"
+    ],
+    [
+      "GB",
+      "IE"
+    ],
+    [
+      "DK"
+    ],
+    [
+      "ES"
+    ],
+    [
+      "IT"
+    ],
+    [
+      "AT",
+      "CH"
+    ]
+  ],
+  "countries": {
+    "BE": {
+      "country": "BE",
+      "name_tr": "Belçika",
+      "languages": [
+        "nl",
+        "fr",
+        "de"
+      ],
+      "regions": [
+        "BE-VLG",
+        "BE-BRU",
+        "BE-WAL"
+      ],
+      "typologies": [
+        {
+          "id": "be-1",
+          "local_name": "rijwoning / maison mitoyenne",
+          "geometry_class": "row",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "rear_garden",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            5,
+            7
+          ],
+          "depth_m_proposal": [
+            10,
+            17
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "rear_garden",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://statbel.fgov.be/en/themes/housing/building-stock",
+            "https://episcope.eu/building-typology/country/be/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "be-2",
+          "local_name": "halfopen bebouwing",
+          "geometry_class": "semi",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "side_access",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "side_access",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://statbel.fgov.be/en/themes/housing/building-stock",
+            "https://episcope.eu/building-typology/country/be/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "be-3",
+          "local_name": "vrijstaande woning",
+          "geometry_class": "detached",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "garden",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "garden",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://statbel.fgov.be/en/themes/housing/building-stock",
+            "https://episcope.eu/building-typology/country/be/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "be-4",
+          "local_name": "appartement / appartement",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "shared_stair",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "shared_stair",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://statbel.fgov.be/en/themes/housing/building-stock",
+            "https://episcope.eu/building-typology/country/be/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": true,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "be-5",
+          "local_name": "appartement met veranda",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "wintergarden",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "other"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "wintergarden",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://statbel.fgov.be/en/themes/housing/building-stock",
+            "https://episcope.eu/building-typology/country/be/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "be-6",
+          "local_name": "rijwoning met achterbouw",
+          "geometry_class": "row",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "rear_extension",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            5,
+            7
+          ],
+          "depth_m_proposal": [
+            10,
+            17
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "rear_extension",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://statbel.fgov.be/en/themes/housing/building-stock",
+            "https://episcope.eu/building-typology/country/be/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        }
+      ],
+      "region_required_before_rules": true,
+      "research_license": "sources consulted for facts; no source drawings/images copied; unclear data grants are not corpus licenses",
+      "synthesis_attribution": "IEE Projects TABULA + EPISCOPE (www.episcope.eu); national statistical publishers; AURA authored program hypotheses"
+    },
+    "NL": {
+      "country": "NL",
+      "name_tr": "Hollanda",
+      "languages": [
+        "nl"
+      ],
+      "regions": [],
+      "typologies": [
+        {
+          "id": "nl-1",
+          "local_name": "eengezinswoning / doorzon",
+          "geometry_class": "row",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "front_rear_living",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            5,
+            7
+          ],
+          "depth_m_proposal": [
+            10,
+            17
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "front_rear_living",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.cbs.nl/en-gb/figures/detail/81955ENG",
+            "https://episcope.eu/building-typology/country/nl/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "nl-2",
+          "local_name": "portiekflat",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "shared_stair",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "shared_stair",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.cbs.nl/en-gb/figures/detail/81955ENG",
+            "https://episcope.eu/building-typology/country/nl/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": true,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "nl-3",
+          "local_name": "galerijflat",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "access_gallery",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "access_gallery",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.cbs.nl/en-gb/figures/detail/81955ENG",
+            "https://episcope.eu/building-typology/country/nl/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "nl-4",
+          "local_name": "bovenwoning",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "upper_entrance",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "upper_entrance",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.cbs.nl/en-gb/figures/detail/81955ENG",
+            "https://episcope.eu/building-typology/country/nl/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "nl-5",
+          "local_name": "benedenwoning",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "garden_access",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "garden_access",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.cbs.nl/en-gb/figures/detail/81955ENG",
+            "https://episcope.eu/building-typology/country/nl/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "nl-6",
+          "local_name": "woning met zolder",
+          "geometry_class": "row",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 3,
+          "feature": "attic",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "utility",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            5,
+            7
+          ],
+          "depth_m_proposal": [
+            10,
+            17
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "attic",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.cbs.nl/en-gb/figures/detail/81955ENG",
+            "https://episcope.eu/building-typology/country/nl/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        }
+      ],
+      "region_required_before_rules": false,
+      "research_license": "sources consulted for facts; no source drawings/images copied; unclear data grants are not corpus licenses",
+      "synthesis_attribution": "IEE Projects TABULA + EPISCOPE (www.episcope.eu); national statistical publishers; AURA authored program hypotheses"
+    },
+    "DE": {
+      "country": "DE",
+      "name_tr": "Almanya",
+      "languages": [
+        "de"
+      ],
+      "regions": [
+        "DE-BY",
+        "DE-BE"
+      ],
+      "typologies": [
+        {
+          "id": "de-1",
+          "local_name": "Altbauwohnung",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "enfilade",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "enfilade",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.destatis.de/EN/Themes/Society-Environment/Housing/_node.html",
+            "https://episcope.eu/building-typology/country/de/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": true,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "de-2",
+          "local_name": "Neubauwohnung",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "compact_hall",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "compact_hall",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.destatis.de/EN/Themes/Society-Environment/Housing/_node.html",
+            "https://episcope.eu/building-typology/country/de/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "de-3",
+          "local_name": "Reihenhaus",
+          "geometry_class": "row",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "rear_garden",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            5,
+            7
+          ],
+          "depth_m_proposal": [
+            10,
+            17
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "rear_garden",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.destatis.de/EN/Themes/Society-Environment/Housing/_node.html",
+            "https://episcope.eu/building-typology/country/de/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "de-4",
+          "local_name": "Doppelhaushälfte",
+          "geometry_class": "semi",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "side_access",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "side_access",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.destatis.de/EN/Themes/Society-Environment/Housing/_node.html",
+            "https://episcope.eu/building-typology/country/de/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "de-5",
+          "local_name": "Einfamilienhaus",
+          "geometry_class": "detached",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "garden",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "garden",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.destatis.de/EN/Themes/Society-Environment/Housing/_node.html",
+            "https://episcope.eu/building-typology/country/de/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "de-6",
+          "local_name": "Dachgeschosswohnung",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "attic",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "utility"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "attic",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.destatis.de/EN/Themes/Society-Environment/Housing/_node.html",
+            "https://episcope.eu/building-typology/country/de/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        }
+      ],
+      "region_required_before_rules": true,
+      "research_license": "sources consulted for facts; no source drawings/images copied; unclear data grants are not corpus licenses",
+      "synthesis_attribution": "IEE Projects TABULA + EPISCOPE (www.episcope.eu); national statistical publishers; AURA authored program hypotheses"
+    },
+    "FR": {
+      "country": "FR",
+      "name_tr": "Fransa",
+      "languages": [
+        "fr"
+      ],
+      "regions": [],
+      "typologies": [
+        {
+          "id": "fr-1",
+          "local_name": "appartement T2",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 1,
+          "floors_proposal": 1,
+          "feature": "compact_hall",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            53,
+            95
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "compact_hall",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.insee.fr/fr/statistiques/2412780",
+            "https://episcope.eu/building-typology/country/fr/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": true,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "fr-2",
+          "local_name": "appartement T3",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "separate_wc_preference",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "separate_wc_preference",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.insee.fr/fr/statistiques/2412780",
+            "https://episcope.eu/building-typology/country/fr/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "fr-3",
+          "local_name": "appartement T4",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 1,
+          "feature": "cellier",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "utility"
+          ],
+          "net_area_m2_range_proposal": [
+            89,
+            155
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "cellier",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.insee.fr/fr/statistiques/2412780",
+            "https://episcope.eu/building-typology/country/fr/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "fr-4",
+          "local_name": "appartement ancien / enfilade",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "enfilade",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "enfilade",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.insee.fr/fr/statistiques/2412780",
+            "https://episcope.eu/building-typology/country/fr/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "fr-5",
+          "local_name": "maison de plain-pied",
+          "geometry_class": "detached",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 1,
+          "feature": "garden",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "garden",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.insee.fr/fr/statistiques/2412780",
+            "https://episcope.eu/building-typology/country/fr/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "fr-6",
+          "local_name": "maison à étage",
+          "geometry_class": "detached",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "garage",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "garage",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.insee.fr/fr/statistiques/2412780",
+            "https://episcope.eu/building-typology/country/fr/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        }
+      ],
+      "region_required_before_rules": false,
+      "research_license": "sources consulted for facts; no source drawings/images copied; unclear data grants are not corpus licenses",
+      "synthesis_attribution": "IEE Projects TABULA + EPISCOPE (www.episcope.eu); national statistical publishers; AURA authored program hypotheses"
+    },
+    "GB": {
+      "country": "GB",
+      "name_tr": "Birleşik Krallık",
+      "languages": [
+        "en"
+      ],
+      "regions": [
+        "GB-ENG",
+        "GB-SCT",
+        "GB-WLS",
+        "GB-NIR"
+      ],
+      "typologies": [
+        {
+          "id": "gb-1",
+          "local_name": "Victorian terrace",
+          "geometry_class": "row",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 2,
+          "feature": "rear_extension",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            5,
+            7
+          ],
+          "depth_m_proposal": [
+            10,
+            17
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "rear_extension",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.gov.uk/government/collections/english-housing-survey",
+            "https://episcope.eu/building-typology/country/gb/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "gb-2",
+          "local_name": "semi-detached",
+          "geometry_class": "semi",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "side_access",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "side_access",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.gov.uk/government/collections/english-housing-survey",
+            "https://episcope.eu/building-typology/country/gb/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "gb-3",
+          "local_name": "detached house",
+          "geometry_class": "detached",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "garden",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "garden",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.gov.uk/government/collections/english-housing-survey",
+            "https://episcope.eu/building-typology/country/gb/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "gb-4",
+          "local_name": "purpose-built flat",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "shared_stair",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "shared_stair",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.gov.uk/government/collections/english-housing-survey",
+            "https://episcope.eu/building-typology/country/gb/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": true,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "gb-5",
+          "local_name": "maisonette",
+          "geometry_class": "duplex",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 2,
+          "feature": "own_entrance",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "own_entrance",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.gov.uk/government/collections/english-housing-survey",
+            "https://episcope.eu/building-typology/country/gb/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "gb-6",
+          "local_name": "loft conversion",
+          "geometry_class": "row",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 3,
+          "feature": "attic",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "utility",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            5,
+            7
+          ],
+          "depth_m_proposal": [
+            10,
+            17
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "attic",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.gov.uk/government/collections/english-housing-survey",
+            "https://episcope.eu/building-typology/country/gb/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        }
+      ],
+      "region_required_before_rules": true,
+      "research_license": "sources consulted for facts; no source drawings/images copied; unclear data grants are not corpus licenses",
+      "synthesis_attribution": "IEE Projects TABULA + EPISCOPE (www.episcope.eu); national statistical publishers; AURA authored program hypotheses"
+    },
+    "IE": {
+      "country": "IE",
+      "name_tr": "İrlanda",
+      "languages": [
+        "en"
+      ],
+      "regions": [],
+      "typologies": [
+        {
+          "id": "ie-1",
+          "local_name": "terraced house",
+          "geometry_class": "row",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "rear_garden",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            5,
+            7
+          ],
+          "depth_m_proposal": [
+            10,
+            17
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "rear_garden",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.cso.ie/en/releasesandpublications/ep/p-cpp2/censusofpopulation2022profile2-housinginireland/occupieddwellings/",
+            "https://episcope.eu/building-typology/country/ie/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "ie-2",
+          "local_name": "semi-detached house",
+          "geometry_class": "semi",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "side_access",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "side_access",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.cso.ie/en/releasesandpublications/ep/p-cpp2/censusofpopulation2022profile2-housinginireland/occupieddwellings/",
+            "https://episcope.eu/building-typology/country/ie/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "ie-3",
+          "local_name": "detached house",
+          "geometry_class": "detached",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "garden",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "garden",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.cso.ie/en/releasesandpublications/ep/p-cpp2/censusofpopulation2022profile2-housinginireland/occupieddwellings/",
+            "https://episcope.eu/building-typology/country/ie/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "ie-4",
+          "local_name": "apartment",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "shared_stair",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "shared_stair",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.cso.ie/en/releasesandpublications/ep/p-cpp2/censusofpopulation2022profile2-housinginireland/occupieddwellings/",
+            "https://episcope.eu/building-typology/country/ie/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": true,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "ie-5",
+          "local_name": "duplex apartment",
+          "geometry_class": "duplex",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "own_entrance",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "own_entrance",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.cso.ie/en/releasesandpublications/ep/p-cpp2/censusofpopulation2022profile2-housinginireland/occupieddwellings/",
+            "https://episcope.eu/building-typology/country/ie/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "ie-6",
+          "local_name": "bungalow",
+          "geometry_class": "detached",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 1,
+          "feature": "garden",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "garden",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.cso.ie/en/releasesandpublications/ep/p-cpp2/censusofpopulation2022profile2-housinginireland/occupieddwellings/",
+            "https://episcope.eu/building-typology/country/ie/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        }
+      ],
+      "region_required_before_rules": false,
+      "research_license": "sources consulted for facts; no source drawings/images copied; unclear data grants are not corpus licenses",
+      "synthesis_attribution": "IEE Projects TABULA + EPISCOPE (www.episcope.eu); national statistical publishers; AURA authored program hypotheses"
+    },
+    "DK": {
+      "country": "DK",
+      "name_tr": "Danimarka",
+      "languages": [
+        "da"
+      ],
+      "regions": [],
+      "typologies": [
+        {
+          "id": "dk-1",
+          "local_name": "etagebolig",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "shared_stair",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "shared_stair",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.dst.dk/en/Statistik/emner/borgere/boligforhold/boligbestanden",
+            "https://episcope.eu/building-typology/country/dk/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": true,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "dk-2",
+          "local_name": "rækkehus",
+          "geometry_class": "row",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "rear_garden",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            5,
+            7
+          ],
+          "depth_m_proposal": [
+            10,
+            17
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "rear_garden",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.dst.dk/en/Statistik/emner/borgere/boligforhold/boligbestanden",
+            "https://episcope.eu/building-typology/country/dk/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "dk-3",
+          "local_name": "parcelhus",
+          "geometry_class": "detached",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 1,
+          "feature": "bryggers",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "utility"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "bryggers",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.dst.dk/en/Statistik/emner/borgere/boligforhold/boligbestanden",
+            "https://episcope.eu/building-typology/country/dk/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "dk-4",
+          "local_name": "dobbelthus",
+          "geometry_class": "semi",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "side_access",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "side_access",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.dst.dk/en/Statistik/emner/borgere/boligforhold/boligbestanden",
+            "https://episcope.eu/building-typology/country/dk/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "dk-5",
+          "local_name": "gårdhavehus",
+          "geometry_class": "detached",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "courtyard",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "courtyard",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.dst.dk/en/Statistik/emner/borgere/boligforhold/boligbestanden",
+            "https://episcope.eu/building-typology/country/dk/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "dk-6",
+          "local_name": "taglejlighed",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "attic",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "utility"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "attic",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.dst.dk/en/Statistik/emner/borgere/boligforhold/boligbestanden",
+            "https://episcope.eu/building-typology/country/dk/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        }
+      ],
+      "region_required_before_rules": false,
+      "research_license": "sources consulted for facts; no source drawings/images copied; unclear data grants are not corpus licenses",
+      "synthesis_attribution": "IEE Projects TABULA + EPISCOPE (www.episcope.eu); national statistical publishers; AURA authored program hypotheses"
+    },
+    "ES": {
+      "country": "ES",
+      "name_tr": "İspanya",
+      "languages": [
+        "es"
+      ],
+      "regions": [],
+      "typologies": [
+        {
+          "id": "es-1",
+          "local_name": "piso compacto",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "salon_comedor",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "salon_comedor",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.ine.es/prensa/censo_2021_jun.pdf",
+            "https://episcope.eu/building-typology/country/es/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": true,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "es-2",
+          "local_name": "piso con lavadero",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 1,
+          "feature": "laundry",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "utility"
+          ],
+          "net_area_m2_range_proposal": [
+            89,
+            155
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "laundry",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.ine.es/prensa/censo_2021_jun.pdf",
+            "https://episcope.eu/building-typology/country/es/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "es-3",
+          "local_name": "piso con terraza",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "terrace",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "terrace"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "terrace",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.ine.es/prensa/censo_2021_jun.pdf",
+            "https://episcope.eu/building-typology/country/es/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "es-4",
+          "local_name": "adosado",
+          "geometry_class": "row",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "rear_garden",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            5,
+            7
+          ],
+          "depth_m_proposal": [
+            10,
+            17
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "rear_garden",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.ine.es/prensa/censo_2021_jun.pdf",
+            "https://episcope.eu/building-typology/country/es/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "es-5",
+          "local_name": "chalet",
+          "geometry_class": "detached",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "garden",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "garden",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.ine.es/prensa/censo_2021_jun.pdf",
+            "https://episcope.eu/building-typology/country/es/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "es-6",
+          "local_name": "dúplex",
+          "geometry_class": "duplex",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "internal_stair",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "internal_stair",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.ine.es/prensa/censo_2021_jun.pdf",
+            "https://episcope.eu/building-typology/country/es/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        }
+      ],
+      "region_required_before_rules": true,
+      "research_license": "sources consulted for facts; no source drawings/images copied; unclear data grants are not corpus licenses",
+      "synthesis_attribution": "IEE Projects TABULA + EPISCOPE (www.episcope.eu); national statistical publishers; AURA authored program hypotheses"
+    },
+    "IT": {
+      "country": "IT",
+      "name_tr": "İtalya",
+      "languages": [
+        "it"
+      ],
+      "regions": [],
+      "typologies": [
+        {
+          "id": "it-1",
+          "local_name": "bilocale",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 1,
+          "floors_proposal": 1,
+          "feature": "angolo_cottura",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            53,
+            95
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "angolo_cottura",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.istat.it/comunicato-stampa/censimento-permanente-2021-caratteristiche-delle-abitazioni/",
+            "https://episcope.eu/building-typology/country/it/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": true,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "it-2",
+          "local_name": "trilocale",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "cucina_abitabile",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "cucina_abitabile",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.istat.it/comunicato-stampa/censimento-permanente-2021-caratteristiche-delle-abitazioni/",
+            "https://episcope.eu/building-typology/country/it/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "it-3",
+          "local_name": "quadrilocale",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 1,
+          "feature": "ripostiglio",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "utility"
+          ],
+          "net_area_m2_range_proposal": [
+            89,
+            155
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "ripostiglio",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.istat.it/comunicato-stampa/censimento-permanente-2021-caratteristiche-delle-abitazioni/",
+            "https://episcope.eu/building-typology/country/it/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "it-4",
+          "local_name": "appartamento con balcone",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "balcony",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "balcony"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "balcony",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.istat.it/comunicato-stampa/censimento-permanente-2021-caratteristiche-delle-abitazioni/",
+            "https://episcope.eu/building-typology/country/it/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "it-5",
+          "local_name": "villetta a schiera",
+          "geometry_class": "row",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "rear_garden",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            5,
+            7
+          ],
+          "depth_m_proposal": [
+            10,
+            17
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "rear_garden",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.istat.it/comunicato-stampa/censimento-permanente-2021-caratteristiche-delle-abitazioni/",
+            "https://episcope.eu/building-typology/country/it/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "it-6",
+          "local_name": "casa indipendente",
+          "geometry_class": "detached",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "garden",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "garden",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.istat.it/comunicato-stampa/censimento-permanente-2021-caratteristiche-delle-abitazioni/",
+            "https://episcope.eu/building-typology/country/it/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        }
+      ],
+      "region_required_before_rules": true,
+      "research_license": "sources consulted for facts; no source drawings/images copied; unclear data grants are not corpus licenses",
+      "synthesis_attribution": "IEE Projects TABULA + EPISCOPE (www.episcope.eu); national statistical publishers; AURA authored program hypotheses"
+    },
+    "AT": {
+      "country": "AT",
+      "name_tr": "Avusturya",
+      "languages": [
+        "de"
+      ],
+      "regions": [],
+      "typologies": [
+        {
+          "id": "at-1",
+          "local_name": "Altbauwohnung",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "enfilade",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "enfilade",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.statistik.at/en/statistics/population-and-society/housing",
+            "https://episcope.eu/building-typology/country/at/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": true,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "at-2",
+          "local_name": "Neubauwohnung",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "compact_hall",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "compact_hall",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.statistik.at/en/statistics/population-and-society/housing",
+            "https://episcope.eu/building-typology/country/at/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "at-3",
+          "local_name": "Reihenhaus",
+          "geometry_class": "row",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "rear_garden",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            5,
+            7
+          ],
+          "depth_m_proposal": [
+            10,
+            17
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "rear_garden",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.statistik.at/en/statistics/population-and-society/housing",
+            "https://episcope.eu/building-typology/country/at/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "at-4",
+          "local_name": "Doppelhaus",
+          "geometry_class": "semi",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "side_access",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "side_access",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.statistik.at/en/statistics/population-and-society/housing",
+            "https://episcope.eu/building-typology/country/at/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "at-5",
+          "local_name": "Einfamilienhaus",
+          "geometry_class": "detached",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "basement",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "utility",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "basement",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.statistik.at/en/statistics/population-and-society/housing",
+            "https://episcope.eu/building-typology/country/at/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "at-6",
+          "local_name": "Dachgeschosswohnung",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "attic",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "utility"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "attic",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://www.statistik.at/en/statistics/population-and-society/housing",
+            "https://episcope.eu/building-typology/country/at/"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        }
+      ],
+      "region_required_before_rules": true,
+      "research_license": "sources consulted for facts; no source drawings/images copied; unclear data grants are not corpus licenses",
+      "synthesis_attribution": "IEE Projects TABULA + EPISCOPE (www.episcope.eu); national statistical publishers; AURA authored program hypotheses"
+    },
+    "CH": {
+      "country": "CH",
+      "name_tr": "İsviçre",
+      "languages": [
+        "de",
+        "fr",
+        "it"
+      ],
+      "regions": [],
+      "typologies": [
+        {
+          "id": "ch-1",
+          "local_name": "Geschosswohnung / appartement",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "shared_stair",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "shared_stair",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36141952/master"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": true,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "ch-2",
+          "local_name": "Attikawohnung",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "terrace",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "terrace"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "terrace",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36141952/master"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "licensed_single_floor_reference_proposal"
+        },
+        {
+          "id": "ch-3",
+          "local_name": "Maisonette",
+          "geometry_class": "duplex",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "internal_stair",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "internal_stair",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36141952/master"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "ch-4",
+          "local_name": "Reihenhaus",
+          "geometry_class": "row",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "rear_garden",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            5,
+            7
+          ],
+          "depth_m_proposal": [
+            10,
+            17
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "rear_garden",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36141952/master"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "ch-5",
+          "local_name": "Einfamilienhaus",
+          "geometry_class": "detached",
+          "bedrooms_proposal": 3,
+          "floors_proposal": 2,
+          "feature": "basement",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "bedroom",
+            "utility",
+            "stair"
+          ],
+          "net_area_m2_range_proposal": [
+            75,
+            180
+          ],
+          "facade_width_m_proposal": [
+            8,
+            16
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "side-hall U or straight; headroom/slab requires measured design",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "basement",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ],
+            [
+              "hall",
+              "bedroom-3"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36141952/master"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        },
+        {
+          "id": "ch-6",
+          "local_name": "Wohnung mit Wintergarten",
+          "geometry_class": "flat",
+          "bedrooms_proposal": 2,
+          "floors_proposal": 1,
+          "feature": "wintergarden",
+          "program": [
+            "hall",
+            "living",
+            "kitchen",
+            "bath",
+            "wc",
+            "bedroom",
+            "bedroom",
+            "other"
+          ],
+          "net_area_m2_range_proposal": [
+            71,
+            125
+          ],
+          "facade_width_m_proposal": [
+            7,
+            14
+          ],
+          "depth_m_proposal": [
+            7,
+            13
+          ],
+          "dimension_evidence": "AURA design prior, not a measured national distribution or legal minimum",
+          "exterior_proposal": "rectangle",
+          "stair_proposal": "shared building stair outside the imported unit, if applicable",
+          "entrance_sequence": [
+            "entrance",
+            "hall",
+            "living"
+          ],
+          "wet_layout": "bath + separate WC is a preference, not a universal national mandate",
+          "service_spaces": [
+            "wintergarden",
+            "storage"
+          ],
+          "adjacency_proposal": [
+            [
+              "hall",
+              "living"
+            ],
+            [
+              "hall",
+              "bath"
+            ],
+            [
+              "hall",
+              "wc"
+            ],
+            [
+              "living",
+              "kitchen"
+            ],
+            [
+              "hall",
+              "bedroom-1"
+            ],
+            [
+              "hall",
+              "bedroom-2"
+            ]
+          ],
+          "graph_status": "own schematic intent, not a copied source plan",
+          "research_sources": [
+            "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36141952/master"
+          ],
+          "evidence_scope": "building-class research; precise subtype prevalence, dimensions and internal arrangement not statistically established",
+          "held_out_from_training": false,
+          "geometry_support": "requires_matching_reference_or_designer"
+        }
+      ],
+      "region_required_before_rules": true,
+      "research_license": "sources consulted for facts; no source drawings/images copied; unclear data grants are not corpus licenses",
+      "synthesis_attribution": "IEE Projects TABULA + EPISCOPE (www.episcope.eu); national statistical publishers; AURA authored program hypotheses"
+    }
+  },
+  "provenance_policy": "source country and target jurisdiction are separate; synthetic adaptation is never measured local evidence"
+}

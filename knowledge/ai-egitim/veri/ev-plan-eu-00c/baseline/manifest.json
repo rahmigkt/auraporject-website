@@ -1,0 +1,71 @@
+{
+  "model": "qwen2.5:0.5b-instruct",
+  "contract": "aura-plan-program/0.5-eu",
+  "system_sha256": "9182afb206f6fda519d55aa8233fdcf38b0bc3aaa67c735517f8ab3282afc6a1",
+  "response_schema_sha256": "098439d49dab80289f86eaff9619a62a7401d09751c7a3a3a55b0a5d38b1bf0d",
+  "source_main": "07963e5ff328b7e17853797d14b48f1549e09007",
+  "examples": 16,
+  "languages": {
+    "tr": {
+      "n": 2,
+      "format_valid": 0,
+      "locale_correct": 0,
+      "room_notation_correct": 0
+    },
+    "en": {
+      "n": 2,
+      "format_valid": 0,
+      "locale_correct": 0,
+      "room_notation_correct": 0
+    },
+    "de": {
+      "n": 2,
+      "format_valid": 0,
+      "locale_correct": 0,
+      "room_notation_correct": 0
+    },
+    "fr": {
+      "n": 2,
+      "format_valid": 0,
+      "locale_correct": 0,
+      "room_notation_correct": 0
+    },
+    "nl": {
+      "n": 2,
+      "format_valid": 0,
+      "locale_correct": 0,
+      "room_notation_correct": 0
+    },
+    "da": {
+      "n": 2,
+      "format_valid": 0,
+      "locale_correct": 0,
+      "room_notation_correct": 0
+    },
+    "es": {
+      "n": 2,
+      "format_valid": 0,
+      "locale_correct": 0,
+      "room_notation_correct": 0
+    },
+    "it": {
+      "n": 2,
+      "format_valid": 0,
+      "locale_correct": 0,
+      "room_notation_correct": 0
+    }
+  },
+  "elapsed_seconds": 956.218,
+  "guided_json": true,
+  "generation_format": "json",
+  "strict_output_schema_enforced_by_validator": true,
+  "generation_token_cap": 1000,
+  "trained": false,
+  "gpu_gate": "closed",
+  "limitations": [
+    "two examples per language, not a robust language accuracy estimate",
+    "ambiguous case checks abstention, not a unique inferred country",
+    "geometry execution scored separately from raw responses",
+    "CPU requested explicitly; no paid API or rented GPU"
+  ]
+}

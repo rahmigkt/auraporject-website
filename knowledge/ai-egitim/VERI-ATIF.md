@@ -44,3 +44,21 @@ Diğer adayların kullanım kararları ve dışlama nedenleri
 açık lisansı veri setini, bir deponun MIT/GPL lisansı da ayrı veri/ağırlıkları
 kendiliğinden lisanslamaz. Belirsiz ve ticari kullanımı kapalı kaynaklar çıktılara
 ve eğitim adaylarına karıştırılmaz.
+# EV-QWEN-00C ek kaynak notu — 20 Ekim 2026
+
+00C'nin yeni geometri kaynağı da 00D'deki Swiss CC BY 4.0 korpusudur; kaynak
+ülke CH korunur, farklı hedef ülkeye uyarlama sentetik öneri olarak işaretlenir.
+Tam kaynak künyesi aşağıdaki 00D kaydında ve her örnek JSON'unda kalır.
+
+Tipoloji sentezinde **IEE Projects TABULA + EPISCOPE (www.episcope.eu)**
+[ülke matrisi](https://episcope.eu/building-typology/country/) ve
+[kullanım/atıf koşulları](https://episcope.eu/communication/download/) incelendi.
+Plan/fotoğraf kopyalanmadı; AURA alan ve boyut önerileri kaynak istatistiği sayılmaz.
+Ulusal istatistik ve resmi mevzuat bağlantıları `ulke-profilleri.eu.json` ve
+`plan-kurallari.eu.json` içinde erişim tarihi, sürüm ve kapsamla birlikte listelidir.
+Mevzuat sayfalarının plan veri seti olarak açık lisanslı olduğu iddia edilmez;
+uzun alıntılar ve ücretli DIN metinleri çoğaltılmadı.
+
+Yerel CPU tabanı: [Qwen/Qwen2.5-0.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct),
+Apache-2.0. Model ağırlıkları depoya veya siteye eklenmez. Çok dilli metinler
+AURA bileşenlerinden oluşturulmuş adaylardır; gerçek müşteri bilgisi içermez.
