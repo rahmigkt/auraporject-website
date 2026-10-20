@@ -112,19 +112,19 @@ def validate(plan):
         for p in bywall[w['id']]:
             if min(off+width,p[1])-max(off,p[0])>.1 and min(sill+height,p[3])-max(sill,p[2])>.1:fail('opening_overlap',oid,p[4])
         bywall[w['id']].append((off,off+width,sill,sill+height,oid))
-        if o['kind']=='door':
+        if o['kind'] in ('door','passage'):
             if width<rules['door_min_mm']:fail('door_width',oid,'Below proposed minimum')
             if o['entry']:entry.update(o['space_ids'])
             if len(o['space_ids'])==2:
                 a,b=o['space_ids'];graph[a].add(b);graph[b].add(a)
-            if o['opens_to_space_id'] not in o['space_ids']:fail('door_swing',oid,'Door opens into unrelated space')
+            if o['kind']=='door' and o['opens_to_space_id'] not in o['space_ids']:fail('door_swing',oid,'Door opens into unrelated space')
         if o['kind']=='window' and w['exterior']:
             for sid in o['space_ids']:glazing[sid]+=width*height
     # Route records cannot invent doors or adjacency.
-    expected_routes={frozenset(o['space_ids']) for o in plan['openings'] if o['kind']=='door' and len(o['space_ids'])==2}
+    expected_routes={frozenset(o['space_ids']) for o in plan['openings'] if o['kind'] in ('door','passage') and len(o['space_ids'])==2}
     for r in plan['connections']:
         o=groups['openings'].get(r['opening_id'])
-        if not o or o['kind']!='door' or {r['from_space_id'],r['to_space_id']}!=set(o['space_ids']):fail('route_ref',r['id'],'Not a real door connection')
+        if not o or o['kind'] not in ('door','passage') or {r['from_space_id'],r['to_space_id']}!=set(o['space_ids']):fail('route_ref',r['id'],'Not a real door/passage connection')
     if {frozenset([r['from_space_id'],r['to_space_id']]) for r in plan['connections']}!=expected_routes:fail('route_missing','connections','Door graph and routes disagree')
     for stair in plan['stairs']:
         sid=stair['id'];lo=levels.get(stair['from_level_id']);hi=levels.get(stair['to_level_id'])

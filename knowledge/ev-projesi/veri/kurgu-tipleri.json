@@ -1,0 +1,2018 @@
+{
+  "version": "0.1",
+  "country": "TR",
+  "synthetic": true,
+  "design_status": "proposal_not_empirical_frequency",
+  "sources": {
+    "S1": {
+      "url": "https://dergipark.org.tr/en/pub/tasarimkuram/article/240829",
+      "license": "not verified; read-only; no content imported"
+    },
+    "S2": {
+      "url": "https://dergipark.org.tr/tr/pub/tdad/article/1881082",
+      "license": "CC BY-NC 4.0; research reading only; no training content imported"
+    },
+    "S3": {
+      "url": "https://kb.nkba.org/uploads/2022/05/Kitchen-Planning-Guidelines.pdf",
+      "license": "copyright NKBA; reference only"
+    }
+  },
+  "types": [
+    {
+      "id": "kapali",
+      "label": "Kapalı mutfak",
+      "program": {
+        "version": "0.3",
+        "typology": "kapali",
+        "dwelling": "apartment",
+        "bedrooms": 2,
+        "floors": 1,
+        "kitchen": "closed",
+        "envelope": "rectangle",
+        "entry": "west",
+        "living_face": "south",
+        "circulation": "segmented",
+        "stair": "none",
+        "setback_m": 4,
+        "rooms": [
+          {
+            "id": "wet-0",
+            "kind": "kitchen",
+            "zone": "wet",
+            "level": 0,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "bath-0",
+            "kind": "bath",
+            "zone": "wet",
+            "level": 0,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "hall-0-0",
+            "kind": "hall",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "hall-0-1",
+            "kind": "hall",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "living",
+            "kind": "living",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 24,
+            "face": "south"
+          },
+          {
+            "id": "bed-0",
+            "kind": "bedroom",
+            "zone": "night",
+            "level": 0,
+            "target_m2": 12,
+            "face": "any"
+          },
+          {
+            "id": "bed-1",
+            "kind": "bedroom",
+            "zone": "night",
+            "level": 0,
+            "target_m2": 14,
+            "face": "any"
+          },
+          {
+            "id": "balcony",
+            "kind": "balcony",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 4,
+            "face": "any"
+          }
+        ],
+        "adjacency": [
+          [
+            "living",
+            "balcony"
+          ]
+        ],
+        "forbidden": [
+          [
+            "living",
+            "bed-0"
+          ],
+          [
+            "living",
+            "bed-1"
+          ]
+        ],
+        "fixed": [],
+        "revision": 1
+      },
+      "zones": {
+        "day": [
+          "living",
+          "kitchen",
+          "balcony"
+        ],
+        "night": [
+          "bedroom"
+        ],
+        "wet": [
+          "bath",
+          "wc",
+          "kitchen"
+        ],
+        "service": [
+          "hall",
+          "stair",
+          "utility"
+        ]
+      },
+      "schematic_adjacency": [
+        [
+          "outside",
+          "entrance"
+        ],
+        [
+          "entrance",
+          "living"
+        ],
+        [
+          "entrance",
+          "night_hall"
+        ],
+        [
+          "night_hall",
+          "bedrooms"
+        ],
+        [
+          "living",
+          "balcony"
+        ]
+      ],
+      "features": [
+        "entrance hall",
+        "living balcony",
+        "bedroom wing",
+        "ensuite option",
+        "kitchen pantry or balcony"
+      ],
+      "target_area_m2_proposals": {
+        "entrance": [
+          4,
+          10
+        ],
+        "living": [
+          20,
+          36
+        ],
+        "bedroom": [
+          11,
+          18
+        ],
+        "kitchen": [
+          8,
+          16
+        ],
+        "bath": [
+          3,
+          7
+        ],
+        "wc": [
+          1.5,
+          3
+        ],
+        "balcony": [
+          4,
+          10
+        ]
+      },
+      "source_ids": [
+        "S1",
+        "S2"
+      ],
+      "implementation": "partial; see KURGU-ARASTIRMA-01.md"
+    },
+    {
+      "id": "acik",
+      "label": "Açık mutfak",
+      "program": {
+        "version": "0.3",
+        "typology": "acik",
+        "dwelling": "apartment",
+        "bedrooms": 2,
+        "floors": 1,
+        "kitchen": "open",
+        "envelope": "rectangle",
+        "entry": "west",
+        "living_face": "south",
+        "circulation": "segmented",
+        "stair": "none",
+        "setback_m": 4,
+        "rooms": [
+          {
+            "id": "wet-0",
+            "kind": "kitchen",
+            "zone": "wet",
+            "level": 0,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "bath-0",
+            "kind": "bath",
+            "zone": "wet",
+            "level": 0,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "hall-0-0",
+            "kind": "hall",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "hall-0-1",
+            "kind": "hall",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "living",
+            "kind": "living",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 24,
+            "face": "south"
+          },
+          {
+            "id": "bed-0",
+            "kind": "bedroom",
+            "zone": "night",
+            "level": 0,
+            "target_m2": 12,
+            "face": "any"
+          },
+          {
+            "id": "bed-1",
+            "kind": "bedroom",
+            "zone": "night",
+            "level": 0,
+            "target_m2": 14,
+            "face": "any"
+          },
+          {
+            "id": "balcony",
+            "kind": "balcony",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 4,
+            "face": "any"
+          }
+        ],
+        "adjacency": [
+          [
+            "living",
+            "balcony"
+          ],
+          [
+            "living",
+            "wet-0"
+          ]
+        ],
+        "forbidden": [
+          [
+            "living",
+            "bed-0"
+          ],
+          [
+            "living",
+            "bed-1"
+          ]
+        ],
+        "fixed": [],
+        "revision": 1
+      },
+      "zones": {
+        "day": [
+          "living",
+          "kitchen",
+          "balcony"
+        ],
+        "night": [
+          "bedroom"
+        ],
+        "wet": [
+          "bath",
+          "wc",
+          "kitchen"
+        ],
+        "service": [
+          "hall",
+          "stair",
+          "utility"
+        ]
+      },
+      "schematic_adjacency": [
+        [
+          "outside",
+          "entrance"
+        ],
+        [
+          "entrance",
+          "living"
+        ],
+        [
+          "entrance",
+          "night_hall"
+        ],
+        [
+          "night_hall",
+          "bedrooms"
+        ],
+        [
+          "living",
+          "balcony"
+        ]
+      ],
+      "features": [
+        "open living kitchen",
+        "separate bedroom access"
+      ],
+      "target_area_m2_proposals": {
+        "entrance": [
+          4,
+          10
+        ],
+        "living": [
+          20,
+          36
+        ],
+        "bedroom": [
+          11,
+          18
+        ],
+        "kitchen": [
+          8,
+          16
+        ],
+        "bath": [
+          3,
+          7
+        ],
+        "wc": [
+          1.5,
+          3
+        ],
+        "balcony": [
+          4,
+          10
+        ]
+      },
+      "source_ids": [
+        "S1",
+        "S2"
+      ],
+      "implementation": "partial; see KURGU-ARASTIRMA-01.md"
+    },
+    {
+      "id": "yari_acik",
+      "label": "Yarı açık mutfak",
+      "program": {
+        "version": "0.3",
+        "typology": "yari_acik",
+        "dwelling": "apartment",
+        "bedrooms": 2,
+        "floors": 1,
+        "kitchen": "semi_open",
+        "envelope": "rectangle",
+        "entry": "west",
+        "living_face": "south",
+        "circulation": "segmented",
+        "stair": "none",
+        "setback_m": 4,
+        "rooms": [
+          {
+            "id": "wet-0",
+            "kind": "kitchen",
+            "zone": "wet",
+            "level": 0,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "bath-0",
+            "kind": "bath",
+            "zone": "wet",
+            "level": 0,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "hall-0-0",
+            "kind": "hall",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "hall-0-1",
+            "kind": "hall",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "living",
+            "kind": "living",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 24,
+            "face": "south"
+          },
+          {
+            "id": "bed-0",
+            "kind": "bedroom",
+            "zone": "night",
+            "level": 0,
+            "target_m2": 12,
+            "face": "any"
+          },
+          {
+            "id": "bed-1",
+            "kind": "bedroom",
+            "zone": "night",
+            "level": 0,
+            "target_m2": 14,
+            "face": "any"
+          },
+          {
+            "id": "balcony",
+            "kind": "balcony",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 4,
+            "face": "any"
+          }
+        ],
+        "adjacency": [
+          [
+            "living",
+            "balcony"
+          ],
+          [
+            "living",
+            "wet-0"
+          ]
+        ],
+        "forbidden": [
+          [
+            "living",
+            "bed-0"
+          ],
+          [
+            "living",
+            "bed-1"
+          ]
+        ],
+        "fixed": [],
+        "revision": 1
+      },
+      "zones": {
+        "day": [
+          "living",
+          "kitchen",
+          "balcony"
+        ],
+        "night": [
+          "bedroom"
+        ],
+        "wet": [
+          "bath",
+          "wc",
+          "kitchen"
+        ],
+        "service": [
+          "hall",
+          "stair",
+          "utility"
+        ]
+      },
+      "schematic_adjacency": [
+        [
+          "outside",
+          "entrance"
+        ],
+        [
+          "entrance",
+          "living"
+        ],
+        [
+          "entrance",
+          "night_hall"
+        ],
+        [
+          "night_hall",
+          "bedrooms"
+        ],
+        [
+          "living",
+          "balcony"
+        ]
+      ],
+      "features": [
+        "sliding kitchen threshold"
+      ],
+      "target_area_m2_proposals": {
+        "entrance": [
+          4,
+          10
+        ],
+        "living": [
+          20,
+          36
+        ],
+        "bedroom": [
+          11,
+          18
+        ],
+        "kitchen": [
+          8,
+          16
+        ],
+        "bath": [
+          3,
+          7
+        ],
+        "wc": [
+          1.5,
+          3
+        ],
+        "balcony": [
+          4,
+          10
+        ]
+      },
+      "source_ids": [
+        "S1",
+        "S2"
+      ],
+      "implementation": "partial; see KURGU-ARASTIRMA-01.md"
+    },
+    {
+      "id": "hol",
+      "label": "Hol merkezli",
+      "program": {
+        "version": "0.3",
+        "typology": "hol",
+        "dwelling": "apartment",
+        "bedrooms": 2,
+        "floors": 1,
+        "kitchen": "closed",
+        "envelope": "rectangle",
+        "entry": "west",
+        "living_face": "south",
+        "circulation": "foyer",
+        "stair": "none",
+        "setback_m": 4,
+        "rooms": [
+          {
+            "id": "wet-0",
+            "kind": "kitchen",
+            "zone": "wet",
+            "level": 0,
+            "target_m2": 14.28,
+            "face": "any"
+          },
+          {
+            "id": "bath-0",
+            "kind": "bath",
+            "zone": "wet",
+            "level": 0,
+            "target_m2": 6.84,
+            "face": "any"
+          },
+          {
+            "id": "hall-0-0",
+            "kind": "hall",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 11.64,
+            "face": "any"
+          },
+          {
+            "id": "living",
+            "kind": "living",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 19.72,
+            "face": "south"
+          },
+          {
+            "id": "bed-0",
+            "kind": "bedroom",
+            "zone": "night",
+            "level": 0,
+            "target_m2": 16.72,
+            "face": "any"
+          },
+          {
+            "id": "bed-1",
+            "kind": "bedroom",
+            "zone": "night",
+            "level": 0,
+            "target_m2": 16.72,
+            "face": "any"
+          },
+          {
+            "id": "balcony",
+            "kind": "balcony",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 4,
+            "face": "any"
+          }
+        ],
+        "adjacency": [
+          [
+            "living",
+            "balcony"
+          ]
+        ],
+        "forbidden": [
+          [
+            "living",
+            "bed-0"
+          ],
+          [
+            "living",
+            "bed-1"
+          ]
+        ],
+        "fixed": [],
+        "revision": 1
+      },
+      "zones": {
+        "day": [
+          "living",
+          "kitchen",
+          "balcony"
+        ],
+        "night": [
+          "bedroom"
+        ],
+        "wet": [
+          "bath",
+          "wc",
+          "kitchen"
+        ],
+        "service": [
+          "hall",
+          "stair",
+          "utility"
+        ]
+      },
+      "schematic_adjacency": [
+        [
+          "outside",
+          "entrance"
+        ],
+        [
+          "entrance",
+          "living"
+        ],
+        [
+          "entrance",
+          "night_hall"
+        ],
+        [
+          "night_hall",
+          "bedrooms"
+        ],
+        [
+          "living",
+          "balcony"
+        ]
+      ],
+      "features": [
+        "compact distribution hall"
+      ],
+      "target_area_m2_proposals": {
+        "entrance": [
+          4,
+          10
+        ],
+        "living": [
+          20,
+          36
+        ],
+        "bedroom": [
+          11,
+          18
+        ],
+        "kitchen": [
+          8,
+          16
+        ],
+        "bath": [
+          3,
+          7
+        ],
+        "wc": [
+          1.5,
+          3
+        ],
+        "balcony": [
+          4,
+          10
+        ]
+      },
+      "source_ids": [
+        "S1",
+        "S2"
+      ],
+      "implementation": "partial; see KURGU-ARASTIRMA-01.md"
+    },
+    {
+      "id": "kose",
+      "label": "Köşe daire",
+      "program": {
+        "version": "0.3",
+        "typology": "kose",
+        "dwelling": "apartment",
+        "bedrooms": 2,
+        "floors": 1,
+        "kitchen": "closed",
+        "envelope": "notched",
+        "entry": "west",
+        "living_face": "south",
+        "circulation": "segmented",
+        "stair": "none",
+        "setback_m": 4,
+        "rooms": [
+          {
+            "id": "wet-0",
+            "kind": "kitchen",
+            "zone": "wet",
+            "level": 0,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "bath-0",
+            "kind": "bath",
+            "zone": "wet",
+            "level": 0,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "hall-0-0",
+            "kind": "hall",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "hall-0-1",
+            "kind": "hall",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "living",
+            "kind": "living",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 24,
+            "face": "south"
+          },
+          {
+            "id": "bed-0",
+            "kind": "bedroom",
+            "zone": "night",
+            "level": 0,
+            "target_m2": 12,
+            "face": "any"
+          },
+          {
+            "id": "bed-1",
+            "kind": "bedroom",
+            "zone": "night",
+            "level": 0,
+            "target_m2": 14,
+            "face": "any"
+          },
+          {
+            "id": "balcony",
+            "kind": "balcony",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 4,
+            "face": "any"
+          }
+        ],
+        "adjacency": [
+          [
+            "living",
+            "balcony"
+          ]
+        ],
+        "forbidden": [
+          [
+            "living",
+            "bed-0"
+          ],
+          [
+            "living",
+            "bed-1"
+          ]
+        ],
+        "fixed": [],
+        "revision": 1
+      },
+      "zones": {
+        "day": [
+          "living",
+          "kitchen",
+          "balcony"
+        ],
+        "night": [
+          "bedroom"
+        ],
+        "wet": [
+          "bath",
+          "wc",
+          "kitchen"
+        ],
+        "service": [
+          "hall",
+          "stair",
+          "utility"
+        ]
+      },
+      "schematic_adjacency": [
+        [
+          "outside",
+          "entrance"
+        ],
+        [
+          "entrance",
+          "living"
+        ],
+        [
+          "entrance",
+          "night_hall"
+        ],
+        [
+          "night_hall",
+          "bedrooms"
+        ],
+        [
+          "living",
+          "balcony"
+        ]
+      ],
+      "features": [
+        "two adjacent facades"
+      ],
+      "target_area_m2_proposals": {
+        "entrance": [
+          4,
+          10
+        ],
+        "living": [
+          20,
+          36
+        ],
+        "bedroom": [
+          11,
+          18
+        ],
+        "kitchen": [
+          8,
+          16
+        ],
+        "bath": [
+          3,
+          7
+        ],
+        "wc": [
+          1.5,
+          3
+        ],
+        "balcony": [
+          4,
+          10
+        ]
+      },
+      "source_ids": [
+        "S1",
+        "S2"
+      ],
+      "implementation": "partial; see KURGU-ARASTIRMA-01.md"
+    },
+    {
+      "id": "cift_cephe",
+      "label": "Çift cephe",
+      "program": {
+        "version": "0.3",
+        "typology": "cift_cephe",
+        "dwelling": "apartment",
+        "bedrooms": 2,
+        "floors": 1,
+        "kitchen": "closed",
+        "envelope": "rectangle",
+        "entry": "west",
+        "living_face": "south",
+        "circulation": "segmented",
+        "stair": "none",
+        "setback_m": 4,
+        "rooms": [
+          {
+            "id": "wet-0",
+            "kind": "kitchen",
+            "zone": "wet",
+            "level": 0,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "bath-0",
+            "kind": "bath",
+            "zone": "wet",
+            "level": 0,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "hall-0-0",
+            "kind": "hall",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "hall-0-1",
+            "kind": "hall",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "living",
+            "kind": "living",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 24,
+            "face": "south"
+          },
+          {
+            "id": "bed-0",
+            "kind": "bedroom",
+            "zone": "night",
+            "level": 0,
+            "target_m2": 12,
+            "face": "any"
+          },
+          {
+            "id": "bed-1",
+            "kind": "bedroom",
+            "zone": "night",
+            "level": 0,
+            "target_m2": 14,
+            "face": "any"
+          },
+          {
+            "id": "balcony",
+            "kind": "balcony",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 4,
+            "face": "any"
+          }
+        ],
+        "adjacency": [
+          [
+            "living",
+            "balcony"
+          ]
+        ],
+        "forbidden": [
+          [
+            "living",
+            "bed-0"
+          ],
+          [
+            "living",
+            "bed-1"
+          ]
+        ],
+        "fixed": [],
+        "revision": 1
+      },
+      "zones": {
+        "day": [
+          "living",
+          "kitchen",
+          "balcony"
+        ],
+        "night": [
+          "bedroom"
+        ],
+        "wet": [
+          "bath",
+          "wc",
+          "kitchen"
+        ],
+        "service": [
+          "hall",
+          "stair",
+          "utility"
+        ]
+      },
+      "schematic_adjacency": [
+        [
+          "outside",
+          "entrance"
+        ],
+        [
+          "entrance",
+          "living"
+        ],
+        [
+          "entrance",
+          "night_hall"
+        ],
+        [
+          "night_hall",
+          "bedrooms"
+        ],
+        [
+          "living",
+          "balcony"
+        ]
+      ],
+      "features": [
+        "two opposite facades",
+        "blind party walls"
+      ],
+      "target_area_m2_proposals": {
+        "entrance": [
+          4,
+          10
+        ],
+        "living": [
+          20,
+          36
+        ],
+        "bedroom": [
+          11,
+          18
+        ],
+        "kitchen": [
+          8,
+          16
+        ],
+        "bath": [
+          3,
+          7
+        ],
+        "wc": [
+          1.5,
+          3
+        ],
+        "balcony": [
+          4,
+          10
+        ]
+      },
+      "source_ids": [
+        "S1",
+        "S2"
+      ],
+      "implementation": "partial; see KURGU-ARASTIRMA-01.md"
+    },
+    {
+      "id": "derin",
+      "label": "Derin / aydınlık ve şaft",
+      "program": {
+        "version": "0.3",
+        "typology": "derin",
+        "dwelling": "apartment",
+        "bedrooms": 2,
+        "floors": 1,
+        "kitchen": "closed",
+        "envelope": "rectangle",
+        "entry": "west",
+        "living_face": "south",
+        "circulation": "segmented",
+        "stair": "none",
+        "setback_m": 4,
+        "rooms": [
+          {
+            "id": "wet-0",
+            "kind": "kitchen",
+            "zone": "wet",
+            "level": 0,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "bath-0",
+            "kind": "bath",
+            "zone": "wet",
+            "level": 0,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "hall-0-0",
+            "kind": "hall",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "hall-0-1",
+            "kind": "hall",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "living",
+            "kind": "living",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 24,
+            "face": "south"
+          },
+          {
+            "id": "bed-0",
+            "kind": "bedroom",
+            "zone": "night",
+            "level": 0,
+            "target_m2": 12,
+            "face": "any"
+          },
+          {
+            "id": "bed-1",
+            "kind": "bedroom",
+            "zone": "night",
+            "level": 0,
+            "target_m2": 14,
+            "face": "any"
+          },
+          {
+            "id": "balcony",
+            "kind": "balcony",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 4,
+            "face": "any"
+          }
+        ],
+        "adjacency": [
+          [
+            "living",
+            "balcony"
+          ]
+        ],
+        "forbidden": [
+          [
+            "living",
+            "bed-0"
+          ],
+          [
+            "living",
+            "bed-1"
+          ]
+        ],
+        "fixed": [],
+        "revision": 1
+      },
+      "zones": {
+        "day": [
+          "living",
+          "kitchen",
+          "balcony"
+        ],
+        "night": [
+          "bedroom"
+        ],
+        "wet": [
+          "bath",
+          "wc",
+          "kitchen"
+        ],
+        "service": [
+          "hall",
+          "stair",
+          "utility"
+        ]
+      },
+      "schematic_adjacency": [
+        [
+          "outside",
+          "entrance"
+        ],
+        [
+          "entrance",
+          "living"
+        ],
+        [
+          "entrance",
+          "night_hall"
+        ],
+        [
+          "night_hall",
+          "bedrooms"
+        ],
+        [
+          "living",
+          "balcony"
+        ]
+      ],
+      "features": [
+        "one facade",
+        "lightwell",
+        "service shaft"
+      ],
+      "target_area_m2_proposals": {
+        "entrance": [
+          4,
+          10
+        ],
+        "living": [
+          20,
+          36
+        ],
+        "bedroom": [
+          11,
+          18
+        ],
+        "kitchen": [
+          8,
+          16
+        ],
+        "bath": [
+          3,
+          7
+        ],
+        "wc": [
+          1.5,
+          3
+        ],
+        "balcony": [
+          4,
+          10
+        ]
+      },
+      "source_ids": [
+        "S1",
+        "S2"
+      ],
+      "implementation": "partial; see KURGU-ARASTIRMA-01.md"
+    },
+    {
+      "id": "dubleks",
+      "label": "Dubleks",
+      "program": {
+        "version": "0.3",
+        "typology": "dubleks",
+        "dwelling": "duplex",
+        "bedrooms": 2,
+        "floors": 2,
+        "kitchen": "closed",
+        "envelope": "rectangle",
+        "entry": "west",
+        "living_face": "south",
+        "circulation": "segmented",
+        "stair": "u",
+        "setback_m": 4,
+        "rooms": [
+          {
+            "id": "wet-0",
+            "kind": "kitchen",
+            "zone": "wet",
+            "level": 0,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "bath-0",
+            "kind": "bath",
+            "zone": "wet",
+            "level": 0,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "stair-0",
+            "kind": "stair",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 15,
+            "face": "any"
+          },
+          {
+            "id": "hall-0-0",
+            "kind": "hall",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "hall-0-1",
+            "kind": "hall",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "living",
+            "kind": "living",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 24,
+            "face": "south"
+          },
+          {
+            "id": "study-ground",
+            "kind": "study",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 16,
+            "face": "any"
+          },
+          {
+            "id": "utility-ground",
+            "kind": "study",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 14,
+            "face": "any"
+          },
+          {
+            "id": "work-ground",
+            "kind": "study",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 14,
+            "face": "any"
+          },
+          {
+            "id": "wet-1",
+            "kind": "bath",
+            "zone": "wet",
+            "level": 1,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "bath-1",
+            "kind": "wc",
+            "zone": "wet",
+            "level": 1,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "stair-1",
+            "kind": "stair",
+            "zone": "service",
+            "level": 1,
+            "target_m2": 15,
+            "face": "any"
+          },
+          {
+            "id": "hall-1-0",
+            "kind": "hall",
+            "zone": "service",
+            "level": 1,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "hall-1-1",
+            "kind": "hall",
+            "zone": "service",
+            "level": 1,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "study-upper",
+            "kind": "study",
+            "zone": "night",
+            "level": 1,
+            "target_m2": 15,
+            "face": "any"
+          },
+          {
+            "id": "bed-0",
+            "kind": "bedroom",
+            "zone": "night",
+            "level": 1,
+            "target_m2": 12,
+            "face": "any"
+          },
+          {
+            "id": "bed-1",
+            "kind": "bedroom",
+            "zone": "night",
+            "level": 1,
+            "target_m2": 14,
+            "face": "any"
+          },
+          {
+            "id": "balcony",
+            "kind": "balcony",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 4,
+            "face": "any"
+          }
+        ],
+        "adjacency": [
+          [
+            "living",
+            "balcony"
+          ]
+        ],
+        "forbidden": [
+          [
+            "living",
+            "bed-0"
+          ],
+          [
+            "living",
+            "bed-1"
+          ]
+        ],
+        "fixed": [],
+        "revision": 1
+      },
+      "zones": {
+        "day": [
+          "living",
+          "kitchen",
+          "balcony"
+        ],
+        "night": [
+          "bedroom"
+        ],
+        "wet": [
+          "bath",
+          "wc",
+          "kitchen"
+        ],
+        "service": [
+          "hall",
+          "stair",
+          "utility"
+        ]
+      },
+      "schematic_adjacency": [
+        [
+          "outside",
+          "entrance"
+        ],
+        [
+          "entrance",
+          "living"
+        ],
+        [
+          "entrance",
+          "night_hall"
+        ],
+        [
+          "night_hall",
+          "bedrooms"
+        ],
+        [
+          "living",
+          "balcony"
+        ]
+      ],
+      "features": [
+        "stacked stairs",
+        "upper bedrooms",
+        "gallery option"
+      ],
+      "target_area_m2_proposals": {
+        "entrance": [
+          4,
+          10
+        ],
+        "living": [
+          20,
+          36
+        ],
+        "bedroom": [
+          11,
+          18
+        ],
+        "kitchen": [
+          8,
+          16
+        ],
+        "bath": [
+          3,
+          7
+        ],
+        "wc": [
+          1.5,
+          3
+        ],
+        "balcony": [
+          4,
+          10
+        ]
+      },
+      "source_ids": [
+        "S1",
+        "S2"
+      ],
+      "implementation": "partial; see KURGU-ARASTIRMA-01.md"
+    },
+    {
+      "id": "mustakil",
+      "label": "Müstakil",
+      "program": {
+        "version": "0.3",
+        "typology": "mustakil",
+        "dwelling": "detached",
+        "bedrooms": 2,
+        "floors": 2,
+        "kitchen": "closed",
+        "envelope": "rectangle",
+        "entry": "west",
+        "living_face": "south",
+        "circulation": "segmented",
+        "stair": "u",
+        "setback_m": 4,
+        "rooms": [
+          {
+            "id": "wet-0",
+            "kind": "kitchen",
+            "zone": "wet",
+            "level": 0,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "bath-0",
+            "kind": "bath",
+            "zone": "wet",
+            "level": 0,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "stair-0",
+            "kind": "stair",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 15,
+            "face": "any"
+          },
+          {
+            "id": "hall-0-0",
+            "kind": "hall",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "hall-0-1",
+            "kind": "hall",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "living",
+            "kind": "living",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 24,
+            "face": "south"
+          },
+          {
+            "id": "study-ground",
+            "kind": "study",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 16,
+            "face": "any"
+          },
+          {
+            "id": "utility-ground",
+            "kind": "study",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 14,
+            "face": "any"
+          },
+          {
+            "id": "work-ground",
+            "kind": "study",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 14,
+            "face": "any"
+          },
+          {
+            "id": "wet-1",
+            "kind": "bath",
+            "zone": "wet",
+            "level": 1,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "bath-1",
+            "kind": "wc",
+            "zone": "wet",
+            "level": 1,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "stair-1",
+            "kind": "stair",
+            "zone": "service",
+            "level": 1,
+            "target_m2": 15,
+            "face": "any"
+          },
+          {
+            "id": "hall-1-0",
+            "kind": "hall",
+            "zone": "service",
+            "level": 1,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "hall-1-1",
+            "kind": "hall",
+            "zone": "service",
+            "level": 1,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "study-upper",
+            "kind": "study",
+            "zone": "night",
+            "level": 1,
+            "target_m2": 15,
+            "face": "any"
+          },
+          {
+            "id": "bed-0",
+            "kind": "bedroom",
+            "zone": "night",
+            "level": 1,
+            "target_m2": 12,
+            "face": "any"
+          },
+          {
+            "id": "bed-1",
+            "kind": "bedroom",
+            "zone": "night",
+            "level": 1,
+            "target_m2": 14,
+            "face": "any"
+          },
+          {
+            "id": "balcony",
+            "kind": "balcony",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 4,
+            "face": "any"
+          }
+        ],
+        "adjacency": [
+          [
+            "living",
+            "balcony"
+          ]
+        ],
+        "forbidden": [
+          [
+            "living",
+            "bed-0"
+          ],
+          [
+            "living",
+            "bed-1"
+          ]
+        ],
+        "fixed": [],
+        "revision": 1
+      },
+      "zones": {
+        "day": [
+          "living",
+          "kitchen",
+          "balcony"
+        ],
+        "night": [
+          "bedroom"
+        ],
+        "wet": [
+          "bath",
+          "wc",
+          "kitchen"
+        ],
+        "service": [
+          "hall",
+          "stair",
+          "utility"
+        ]
+      },
+      "schematic_adjacency": [
+        [
+          "outside",
+          "entrance"
+        ],
+        [
+          "entrance",
+          "living"
+        ],
+        [
+          "entrance",
+          "night_hall"
+        ],
+        [
+          "night_hall",
+          "bedrooms"
+        ],
+        [
+          "living",
+          "balcony"
+        ]
+      ],
+      "features": [
+        "porch",
+        "vestibule",
+        "living garden connection",
+        "terrace",
+        "basement or attic option"
+      ],
+      "target_area_m2_proposals": {
+        "entrance": [
+          4,
+          10
+        ],
+        "living": [
+          20,
+          36
+        ],
+        "bedroom": [
+          11,
+          18
+        ],
+        "kitchen": [
+          8,
+          16
+        ],
+        "bath": [
+          3,
+          7
+        ],
+        "wc": [
+          1.5,
+          3
+        ],
+        "balcony": [
+          4,
+          10
+        ]
+      },
+      "source_ids": [
+        "S1",
+        "S2"
+      ],
+      "implementation": "partial; see KURGU-ARASTIRMA-01.md"
+    },
+    {
+      "id": "avlulu",
+      "label": "L / avlulu",
+      "program": {
+        "version": "0.3",
+        "typology": "avlulu",
+        "dwelling": "detached",
+        "bedrooms": 2,
+        "floors": 1,
+        "kitchen": "closed",
+        "envelope": "l",
+        "entry": "west",
+        "living_face": "south",
+        "circulation": "segmented",
+        "stair": "none",
+        "setback_m": 4,
+        "rooms": [
+          {
+            "id": "wet-0",
+            "kind": "kitchen",
+            "zone": "wet",
+            "level": 0,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "bath-0",
+            "kind": "bath",
+            "zone": "wet",
+            "level": 0,
+            "target_m2": 12.6,
+            "face": "any"
+          },
+          {
+            "id": "hall-0-0",
+            "kind": "hall",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "hall-0-1",
+            "kind": "hall",
+            "zone": "service",
+            "level": 0,
+            "target_m2": 8.0,
+            "face": "any"
+          },
+          {
+            "id": "living",
+            "kind": "living",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 24,
+            "face": "south"
+          },
+          {
+            "id": "bed-0",
+            "kind": "bedroom",
+            "zone": "night",
+            "level": 0,
+            "target_m2": 12,
+            "face": "any"
+          },
+          {
+            "id": "bed-1",
+            "kind": "bedroom",
+            "zone": "night",
+            "level": 0,
+            "target_m2": 14,
+            "face": "any"
+          },
+          {
+            "id": "balcony",
+            "kind": "balcony",
+            "zone": "day",
+            "level": 0,
+            "target_m2": 4,
+            "face": "any"
+          }
+        ],
+        "adjacency": [
+          [
+            "living",
+            "balcony"
+          ]
+        ],
+        "forbidden": [
+          [
+            "living",
+            "bed-0"
+          ],
+          [
+            "living",
+            "bed-1"
+          ]
+        ],
+        "fixed": [],
+        "revision": 1
+      },
+      "zones": {
+        "day": [
+          "living",
+          "kitchen",
+          "balcony"
+        ],
+        "night": [
+          "bedroom"
+        ],
+        "wet": [
+          "bath",
+          "wc",
+          "kitchen"
+        ],
+        "service": [
+          "hall",
+          "stair",
+          "utility"
+        ]
+      },
+      "schematic_adjacency": [
+        [
+          "outside",
+          "entrance"
+        ],
+        [
+          "entrance",
+          "living"
+        ],
+        [
+          "entrance",
+          "night_hall"
+        ],
+        [
+          "night_hall",
+          "bedrooms"
+        ],
+        [
+          "living",
+          "balcony"
+        ]
+      ],
+      "features": [
+        "L wings",
+        "courtyard",
+        "U option"
+      ],
+      "target_area_m2_proposals": {
+        "entrance": [
+          4,
+          10
+        ],
+        "living": [
+          20,
+          36
+        ],
+        "bedroom": [
+          11,
+          18
+        ],
+        "kitchen": [
+          8,
+          16
+        ],
+        "bath": [
+          3,
+          7
+        ],
+        "wc": [
+          1.5,
+          3
+        ],
+        "balcony": [
+          4,
+          10
+        ]
+      },
+      "source_ids": [
+        "S1",
+        "S2"
+      ],
+      "implementation": "partial; see KURGU-ARASTIRMA-01.md"
+    }
+  ]
+}

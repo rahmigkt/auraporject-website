@@ -1,0 +1,86 @@
+{
+  "version": "0.1",
+  "not_legal": true,
+  "criteria": [
+    {
+      "id": "circulation",
+      "threshold": 0.2,
+      "unit": "ratio maximum",
+      "status": "proposal"
+    },
+    {
+      "id": "room_aspect",
+      "threshold": 3,
+      "unit": "maximum occupied room bounding-box ratio",
+      "status": "proposal"
+    },
+    {
+      "id": "wet_core",
+      "threshold": 2,
+      "unit": "metres maximum nearest wet-room net polygon distance",
+      "status": "proposal; no shaft routing"
+    },
+    {
+      "id": "wet_stack",
+      "threshold": 0.7,
+      "unit": "minimum wet-room footprint overlap ratio across adjacent floors",
+      "status": "proposal"
+    },
+    {
+      "id": "daylight",
+      "threshold": 0.1,
+      "unit": "minimum glazing/floor ratio",
+      "status": "proposal; inherited research profile; not daylight simulation"
+    },
+    {
+      "id": "area_targets",
+      "threshold": 0.25,
+      "unit": "maximum relative area error",
+      "status": "proposal"
+    },
+    {
+      "id": "bed_clearance",
+      "footprint_mm": [
+        2800,
+        2600
+      ],
+      "bed_mm": [
+        1600,
+        2000
+      ],
+      "status": "proposal: bed plus side/end clearance rectangle"
+    },
+    {
+      "id": "living_clearance",
+      "footprints_mm": [
+        [
+          3200,
+          2800
+        ],
+        [
+          2200,
+          1800
+        ]
+      ],
+      "status": "proposal: simultaneous sofa group and dining table clearance rectangles"
+    },
+    {
+      "id": "kitchen_clearance",
+      "footprint_mm": [
+        2400,
+        1700
+      ],
+      "counter_mm": 600,
+      "aisle_reference_mm": 914.4,
+      "source_id": "S3",
+      "status": "proposal: 2400 counter run plus conservative 1100 aisle; NKBA reference 36 in is not local law"
+    }
+  ],
+  "scoring": "Eight equally weighted boolean research checks; no model/training acceptance threshold",
+  "limitations": [
+    "no solid headroom simulation",
+    "no door sweep",
+    "no shaft routes",
+    "furniture clearance excludes real products and door collisions"
+  ]
+}

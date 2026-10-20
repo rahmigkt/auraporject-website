@@ -1,0 +1,200 @@
+[
+  {
+    "id": "kapali-02-0",
+    "plan_id": "kapali-02",
+    "topology_class": 2,
+    "split": "train",
+    "synthetic": true,
+    "human_approved": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are AURA's Turkish/English home planning assistant. Return JSON only,\nwith exactly status, plan_program, operations, reply, requires_designer_review.\nstatus is program, clarify, refuse, or edit. requires_designer_review is always true.\nNever generate wall coordinates. Program version is 0.3; fields: version, typology,\ndwelling (apartment/duplex/detached), bedrooms (1..5), floors (1..3), kitchen\n(closed/semi_open/open), envelope (rectangle/l/u/notched), entry (south/north/east/west),\nliving_face (south/north/east/west), circulation (spine/segmented/foyer), stair\n(none/straight/l/u/gallery), setback_m (0..10), rooms, adjacency, forbidden,\nfixed, revision. Room fields: id, kind, zone (day/night/wet/service), level,\ntarget_m2, face (any/south/north/east/west). adjacency and forbidden contain pairs\nof room ids. fixed contains existing constraints; do not invent measured geometry.\nRooms describe use and soft area targets, not structural approval. On insufficient\nmeasurements or contradictory area demands ask a question with null plan_program,\nempty operations. Refuse unapproved structural removal. Edits use operations\n{op:resize,room_id:...,target_m2:...} or {op:kitchen,value:open/closed/semi_open}\nwith the supplied program revision. Always leave final decisions to the designer."
+      },
+      {
+        "role": "user",
+        "content": "İstenen kurgu: kapali. Birlikte bir ev taslağı çalışalım. 4 yatak odası, 1 kat, konut türü apartment; mutfak closed. Dış biçim rectangle, giriş batı, salon güney, dolaşım segmented, merdiven none, çekme mesafesi hedefi 4 m. Oda ihtiyaçları: wet-0: kitchen, 0. kat, hedef 12.6 m², wet bölgesi, cephe any; bath-0: bath, 0. kat, hedef 12.6 m², wet bölgesi, cephe any; hall-0-0: hall, 0. kat, hedef 10.0 m², service bölgesi, cephe any; hall-0-1: hall, 0. kat, hedef 10.0 m², service bölgesi, cephe any; living: living, 0. kat, hedef 28 m², day bölgesi, cephe south; bed-0: bedroom, 0. kat, hedef 12 m², night bölgesi, cephe any; bed-1: bedroom, 0. kat, hedef 14 m², night bölgesi, cephe any; bed-2: bedroom, 0. kat, hedef 12 m², night bölgesi, cephe any; bed-3: bedroom, 0. kat, hedef 14 m², night bölgesi, cephe any; balcony: balcony, 0. kat, hedef 4 m², day bölgesi, cephe any. İstenen bağlantılar [['living', 'balcony']]; kaçınılacak bağlantılar [['living', 'bed-0'], ['living', 'bed-1'], ['living', 'bed-2'], ['living', 'bed-3']]. Ölçülmüş mevcut sabit eleman bildirmedim. Henüz onaylanmış bir proje değil."
+      },
+      {
+        "role": "assistant",
+        "content": "{\"status\":\"program\",\"plan_program\":{\"version\":\"0.3\",\"typology\":\"kapali\",\"dwelling\":\"apartment\",\"bedrooms\":4,\"floors\":1,\"kitchen\":\"closed\",\"envelope\":\"rectangle\",\"entry\":\"west\",\"living_face\":\"south\",\"circulation\":\"segmented\",\"stair\":\"none\",\"setback_m\":4,\"rooms\":[{\"id\":\"wet-0\",\"kind\":\"kitchen\",\"zone\":\"wet\",\"level\":0,\"target_m2\":12.6,\"face\":\"any\"},{\"id\":\"bath-0\",\"kind\":\"bath\",\"zone\":\"wet\",\"level\":0,\"target_m2\":12.6,\"face\":\"any\"},{\"id\":\"hall-0-0\",\"kind\":\"hall\",\"zone\":\"service\",\"level\":0,\"target_m2\":10.0,\"face\":\"any\"},{\"id\":\"hall-0-1\",\"kind\":\"hall\",\"zone\":\"service\",\"level\":0,\"target_m2\":10.0,\"face\":\"any\"},{\"id\":\"living\",\"kind\":\"living\",\"zone\":\"day\",\"level\":0,\"target_m2\":28,\"face\":\"south\"},{\"id\":\"bed-0\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":12,\"face\":\"any\"},{\"id\":\"bed-1\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":14,\"face\":\"any\"},{\"id\":\"bed-2\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":12,\"face\":\"any\"},{\"id\":\"bed-3\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":14,\"face\":\"any\"},{\"id\":\"balcony\",\"kind\":\"balcony\",\"zone\":\"day\",\"level\":0,\"target_m2\":4,\"face\":\"any\"}],\"adjacency\":[[\"living\",\"balcony\"]],\"forbidden\":[[\"living\",\"bed-0\"],[\"living\",\"bed-1\"],[\"living\",\"bed-2\"],[\"living\",\"bed-3\"]],\"fixed\":[],\"revision\":1},\"operations\":[],\"reply\":\"Tasarımcı incelemesi gerekli.\",\"requires_designer_review\":true}"
+      }
+    ]
+  },
+  {
+    "id": "kapali-02-1",
+    "plan_id": "kapali-02",
+    "topology_class": 2,
+    "split": "train",
+    "synthetic": true,
+    "human_approved": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are AURA's Turkish/English home planning assistant. Return JSON only,\nwith exactly status, plan_program, operations, reply, requires_designer_review.\nstatus is program, clarify, refuse, or edit. requires_designer_review is always true.\nNever generate wall coordinates. Program version is 0.3; fields: version, typology,\ndwelling (apartment/duplex/detached), bedrooms (1..5), floors (1..3), kitchen\n(closed/semi_open/open), envelope (rectangle/l/u/notched), entry (south/north/east/west),\nliving_face (south/north/east/west), circulation (spine/segmented/foyer), stair\n(none/straight/l/u/gallery), setback_m (0..10), rooms, adjacency, forbidden,\nfixed, revision. Room fields: id, kind, zone (day/night/wet/service), level,\ntarget_m2, face (any/south/north/east/west). adjacency and forbidden contain pairs\nof room ids. fixed contains existing constraints; do not invent measured geometry.\nRooms describe use and soft area targets, not structural approval. On insufficient\nmeasurements or contradictory area demands ask a question with null plan_program,\nempty operations. Refuse unapproved structural removal. Edits use operations\n{op:resize,room_id:...,target_m2:...} or {op:kitchen,value:open/closed/semi_open}\nwith the supplied program revision. Always leave final decisions to the designer."
+      },
+      {
+        "role": "user",
+        "content": "Brief type: kapali. Let us work on a preliminary home layout. 4 bedrooms, 1 floors, apartment; closed kitchen. Envelope rectangle, entry west, living south, segmented circulation, none stair, setback target 4 m. Room brief: wet-0: kitchen, floor 0, target 12.6 m², wet zone, facade any; bath-0: bath, floor 0, target 12.6 m², wet zone, facade any; hall-0-0: hall, floor 0, target 10.0 m², service zone, facade any; hall-0-1: hall, floor 0, target 10.0 m², service zone, facade any; living: living, floor 0, target 28 m², day zone, facade south; bed-0: bedroom, floor 0, target 12 m², night zone, facade any; bed-1: bedroom, floor 0, target 14 m², night zone, facade any; bed-2: bedroom, floor 0, target 12 m², night zone, facade any; bed-3: bedroom, floor 0, target 14 m², night zone, facade any; balcony: balcony, floor 0, target 4 m², day zone, facade any. Required links [['living', 'balcony']]; avoid links [['living', 'bed-0'], ['living', 'bed-1'], ['living', 'bed-2'], ['living', 'bed-3']]. No measured existing fixed elements supplied. This is not an approved building plan."
+      },
+      {
+        "role": "assistant",
+        "content": "{\"status\":\"program\",\"plan_program\":{\"version\":\"0.3\",\"typology\":\"kapali\",\"dwelling\":\"apartment\",\"bedrooms\":4,\"floors\":1,\"kitchen\":\"closed\",\"envelope\":\"rectangle\",\"entry\":\"west\",\"living_face\":\"south\",\"circulation\":\"segmented\",\"stair\":\"none\",\"setback_m\":4,\"rooms\":[{\"id\":\"wet-0\",\"kind\":\"kitchen\",\"zone\":\"wet\",\"level\":0,\"target_m2\":12.6,\"face\":\"any\"},{\"id\":\"bath-0\",\"kind\":\"bath\",\"zone\":\"wet\",\"level\":0,\"target_m2\":12.6,\"face\":\"any\"},{\"id\":\"hall-0-0\",\"kind\":\"hall\",\"zone\":\"service\",\"level\":0,\"target_m2\":10.0,\"face\":\"any\"},{\"id\":\"hall-0-1\",\"kind\":\"hall\",\"zone\":\"service\",\"level\":0,\"target_m2\":10.0,\"face\":\"any\"},{\"id\":\"living\",\"kind\":\"living\",\"zone\":\"day\",\"level\":0,\"target_m2\":28,\"face\":\"south\"},{\"id\":\"bed-0\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":12,\"face\":\"any\"},{\"id\":\"bed-1\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":14,\"face\":\"any\"},{\"id\":\"bed-2\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":12,\"face\":\"any\"},{\"id\":\"bed-3\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":14,\"face\":\"any\"},{\"id\":\"balcony\",\"kind\":\"balcony\",\"zone\":\"day\",\"level\":0,\"target_m2\":4,\"face\":\"any\"}],\"adjacency\":[[\"living\",\"balcony\"]],\"forbidden\":[[\"living\",\"bed-0\"],[\"living\",\"bed-1\"],[\"living\",\"bed-2\"],[\"living\",\"bed-3\"]],\"fixed\":[],\"revision\":1},\"operations\":[],\"reply\":\"Designer review is required.\",\"requires_designer_review\":true}"
+      }
+    ]
+  },
+  {
+    "id": "kapali-02-2",
+    "plan_id": "kapali-02",
+    "topology_class": 2,
+    "split": "train",
+    "synthetic": true,
+    "human_approved": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are AURA's Turkish/English home planning assistant. Return JSON only,\nwith exactly status, plan_program, operations, reply, requires_designer_review.\nstatus is program, clarify, refuse, or edit. requires_designer_review is always true.\nNever generate wall coordinates. Program version is 0.3; fields: version, typology,\ndwelling (apartment/duplex/detached), bedrooms (1..5), floors (1..3), kitchen\n(closed/semi_open/open), envelope (rectangle/l/u/notched), entry (south/north/east/west),\nliving_face (south/north/east/west), circulation (spine/segmented/foyer), stair\n(none/straight/l/u/gallery), setback_m (0..10), rooms, adjacency, forbidden,\nfixed, revision. Room fields: id, kind, zone (day/night/wet/service), level,\ntarget_m2, face (any/south/north/east/west). adjacency and forbidden contain pairs\nof room ids. fixed contains existing constraints; do not invent measured geometry.\nRooms describe use and soft area targets, not structural approval. On insufficient\nmeasurements or contradictory area demands ask a question with null plan_program,\nempty operations. Refuse unapproved structural removal. Edits use operations\n{op:resize,room_id:...,target_m2:...} or {op:kitchen,value:open/closed/semi_open}\nwith the supplied program revision. Always leave final decisions to the designer."
+      },
+      {
+        "role": "user",
+        "content": "İstenen kurgu: kapali. Yeni evimiz için ilk yerleşimi düşünelim. 4 yatak odası, 1 kat, konut türü apartment; mutfak closed. Dış biçim rectangle, giriş batı, salon güney, dolaşım segmented, merdiven none, çekme mesafesi hedefi 4 m. Oda ihtiyaçları: wet-0: kitchen, 0. kat, hedef 12.6 m², wet bölgesi, cephe any; bath-0: bath, 0. kat, hedef 12.6 m², wet bölgesi, cephe any; hall-0-0: hall, 0. kat, hedef 10.0 m², service bölgesi, cephe any; hall-0-1: hall, 0. kat, hedef 10.0 m², service bölgesi, cephe any; living: living, 0. kat, hedef 28 m², day bölgesi, cephe south; bed-0: bedroom, 0. kat, hedef 12 m², night bölgesi, cephe any; bed-1: bedroom, 0. kat, hedef 14 m², night bölgesi, cephe any; bed-2: bedroom, 0. kat, hedef 12 m², night bölgesi, cephe any; bed-3: bedroom, 0. kat, hedef 14 m², night bölgesi, cephe any; balcony: balcony, 0. kat, hedef 4 m², day bölgesi, cephe any. İstenen bağlantılar [['living', 'balcony']]; kaçınılacak bağlantılar [['living', 'bed-0'], ['living', 'bed-1'], ['living', 'bed-2'], ['living', 'bed-3']]. Ölçülmüş mevcut sabit eleman bildirmedim. Henüz onaylanmış bir proje değil."
+      },
+      {
+        "role": "assistant",
+        "content": "{\"status\":\"program\",\"plan_program\":{\"version\":\"0.3\",\"typology\":\"kapali\",\"dwelling\":\"apartment\",\"bedrooms\":4,\"floors\":1,\"kitchen\":\"closed\",\"envelope\":\"rectangle\",\"entry\":\"west\",\"living_face\":\"south\",\"circulation\":\"segmented\",\"stair\":\"none\",\"setback_m\":4,\"rooms\":[{\"id\":\"wet-0\",\"kind\":\"kitchen\",\"zone\":\"wet\",\"level\":0,\"target_m2\":12.6,\"face\":\"any\"},{\"id\":\"bath-0\",\"kind\":\"bath\",\"zone\":\"wet\",\"level\":0,\"target_m2\":12.6,\"face\":\"any\"},{\"id\":\"hall-0-0\",\"kind\":\"hall\",\"zone\":\"service\",\"level\":0,\"target_m2\":10.0,\"face\":\"any\"},{\"id\":\"hall-0-1\",\"kind\":\"hall\",\"zone\":\"service\",\"level\":0,\"target_m2\":10.0,\"face\":\"any\"},{\"id\":\"living\",\"kind\":\"living\",\"zone\":\"day\",\"level\":0,\"target_m2\":28,\"face\":\"south\"},{\"id\":\"bed-0\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":12,\"face\":\"any\"},{\"id\":\"bed-1\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":14,\"face\":\"any\"},{\"id\":\"bed-2\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":12,\"face\":\"any\"},{\"id\":\"bed-3\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":14,\"face\":\"any\"},{\"id\":\"balcony\",\"kind\":\"balcony\",\"zone\":\"day\",\"level\":0,\"target_m2\":4,\"face\":\"any\"}],\"adjacency\":[[\"living\",\"balcony\"]],\"forbidden\":[[\"living\",\"bed-0\"],[\"living\",\"bed-1\"],[\"living\",\"bed-2\"],[\"living\",\"bed-3\"]],\"fixed\":[],\"revision\":1},\"operations\":[],\"reply\":\"Tasarımcı incelemesi gerekli.\",\"requires_designer_review\":true}"
+      }
+    ]
+  },
+  {
+    "id": "kapali-01-0",
+    "plan_id": "kapali-01",
+    "topology_class": 1,
+    "split": "validation",
+    "synthetic": true,
+    "human_approved": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are AURA's Turkish/English home planning assistant. Return JSON only,\nwith exactly status, plan_program, operations, reply, requires_designer_review.\nstatus is program, clarify, refuse, or edit. requires_designer_review is always true.\nNever generate wall coordinates. Program version is 0.3; fields: version, typology,\ndwelling (apartment/duplex/detached), bedrooms (1..5), floors (1..3), kitchen\n(closed/semi_open/open), envelope (rectangle/l/u/notched), entry (south/north/east/west),\nliving_face (south/north/east/west), circulation (spine/segmented/foyer), stair\n(none/straight/l/u/gallery), setback_m (0..10), rooms, adjacency, forbidden,\nfixed, revision. Room fields: id, kind, zone (day/night/wet/service), level,\ntarget_m2, face (any/south/north/east/west). adjacency and forbidden contain pairs\nof room ids. fixed contains existing constraints; do not invent measured geometry.\nRooms describe use and soft area targets, not structural approval. On insufficient\nmeasurements or contradictory area demands ask a question with null plan_program,\nempty operations. Refuse unapproved structural removal. Edits use operations\n{op:resize,room_id:...,target_m2:...} or {op:kitchen,value:open/closed/semi_open}\nwith the supplied program revision. Always leave final decisions to the designer."
+      },
+      {
+        "role": "user",
+        "content": "İstenen kurgu: kapali. Birlikte bir ev taslağı çalışalım. 3 yatak odası, 1 kat, konut türü apartment; mutfak closed. Dış biçim rectangle, giriş batı, salon güney, dolaşım segmented, merdiven none, çekme mesafesi hedefi 4 m. Oda ihtiyaçları: wet-0: kitchen, 0. kat, hedef 12.6 m², wet bölgesi, cephe any; bath-0: bath, 0. kat, hedef 12.6 m², wet bölgesi, cephe any; hall-0-0: hall, 0. kat, hedef 9.0 m², service bölgesi, cephe any; hall-0-1: hall, 0. kat, hedef 9.0 m², service bölgesi, cephe any; living: living, 0. kat, hedef 26 m², day bölgesi, cephe south; bed-0: bedroom, 0. kat, hedef 12 m², night bölgesi, cephe any; bed-1: bedroom, 0. kat, hedef 14 m², night bölgesi, cephe any; bed-2: bedroom, 0. kat, hedef 12 m², night bölgesi, cephe any; pantry-0: utility, 0. kat, hedef 9 m², service bölgesi, cephe any; guest-wc-0: wc, 0. kat, hedef 6 m², wet bölgesi, cephe any. İstenen bağlantılar []; kaçınılacak bağlantılar [['living', 'bed-0'], ['living', 'bed-1'], ['living', 'bed-2']]. Ölçülmüş mevcut sabit eleman bildirmedim. Henüz onaylanmış bir proje değil."
+      },
+      {
+        "role": "assistant",
+        "content": "{\"status\":\"program\",\"plan_program\":{\"version\":\"0.3\",\"typology\":\"kapali\",\"dwelling\":\"apartment\",\"bedrooms\":3,\"floors\":1,\"kitchen\":\"closed\",\"envelope\":\"rectangle\",\"entry\":\"west\",\"living_face\":\"south\",\"circulation\":\"segmented\",\"stair\":\"none\",\"setback_m\":4,\"rooms\":[{\"id\":\"wet-0\",\"kind\":\"kitchen\",\"zone\":\"wet\",\"level\":0,\"target_m2\":12.6,\"face\":\"any\"},{\"id\":\"bath-0\",\"kind\":\"bath\",\"zone\":\"wet\",\"level\":0,\"target_m2\":12.6,\"face\":\"any\"},{\"id\":\"hall-0-0\",\"kind\":\"hall\",\"zone\":\"service\",\"level\":0,\"target_m2\":9.0,\"face\":\"any\"},{\"id\":\"hall-0-1\",\"kind\":\"hall\",\"zone\":\"service\",\"level\":0,\"target_m2\":9.0,\"face\":\"any\"},{\"id\":\"living\",\"kind\":\"living\",\"zone\":\"day\",\"level\":0,\"target_m2\":26,\"face\":\"south\"},{\"id\":\"bed-0\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":12,\"face\":\"any\"},{\"id\":\"bed-1\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":14,\"face\":\"any\"},{\"id\":\"bed-2\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":12,\"face\":\"any\"},{\"id\":\"pantry-0\",\"kind\":\"utility\",\"zone\":\"service\",\"level\":0,\"target_m2\":9,\"face\":\"any\"},{\"id\":\"guest-wc-0\",\"kind\":\"wc\",\"zone\":\"wet\",\"level\":0,\"target_m2\":6,\"face\":\"any\"}],\"adjacency\":[],\"forbidden\":[[\"living\",\"bed-0\"],[\"living\",\"bed-1\"],[\"living\",\"bed-2\"]],\"fixed\":[],\"revision\":1},\"operations\":[],\"reply\":\"Tasarımcı incelemesi gerekli.\",\"requires_designer_review\":true}"
+      }
+    ]
+  },
+  {
+    "id": "kapali-01-1",
+    "plan_id": "kapali-01",
+    "topology_class": 1,
+    "split": "validation",
+    "synthetic": true,
+    "human_approved": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are AURA's Turkish/English home planning assistant. Return JSON only,\nwith exactly status, plan_program, operations, reply, requires_designer_review.\nstatus is program, clarify, refuse, or edit. requires_designer_review is always true.\nNever generate wall coordinates. Program version is 0.3; fields: version, typology,\ndwelling (apartment/duplex/detached), bedrooms (1..5), floors (1..3), kitchen\n(closed/semi_open/open), envelope (rectangle/l/u/notched), entry (south/north/east/west),\nliving_face (south/north/east/west), circulation (spine/segmented/foyer), stair\n(none/straight/l/u/gallery), setback_m (0..10), rooms, adjacency, forbidden,\nfixed, revision. Room fields: id, kind, zone (day/night/wet/service), level,\ntarget_m2, face (any/south/north/east/west). adjacency and forbidden contain pairs\nof room ids. fixed contains existing constraints; do not invent measured geometry.\nRooms describe use and soft area targets, not structural approval. On insufficient\nmeasurements or contradictory area demands ask a question with null plan_program,\nempty operations. Refuse unapproved structural removal. Edits use operations\n{op:resize,room_id:...,target_m2:...} or {op:kitchen,value:open/closed/semi_open}\nwith the supplied program revision. Always leave final decisions to the designer."
+      },
+      {
+        "role": "user",
+        "content": "Brief type: kapali. Let us work on a preliminary home layout. 3 bedrooms, 1 floors, apartment; closed kitchen. Envelope rectangle, entry west, living south, segmented circulation, none stair, setback target 4 m. Room brief: wet-0: kitchen, floor 0, target 12.6 m², wet zone, facade any; bath-0: bath, floor 0, target 12.6 m², wet zone, facade any; hall-0-0: hall, floor 0, target 9.0 m², service zone, facade any; hall-0-1: hall, floor 0, target 9.0 m², service zone, facade any; living: living, floor 0, target 26 m², day zone, facade south; bed-0: bedroom, floor 0, target 12 m², night zone, facade any; bed-1: bedroom, floor 0, target 14 m², night zone, facade any; bed-2: bedroom, floor 0, target 12 m², night zone, facade any; pantry-0: utility, floor 0, target 9 m², service zone, facade any; guest-wc-0: wc, floor 0, target 6 m², wet zone, facade any. Required links []; avoid links [['living', 'bed-0'], ['living', 'bed-1'], ['living', 'bed-2']]. No measured existing fixed elements supplied. This is not an approved building plan."
+      },
+      {
+        "role": "assistant",
+        "content": "{\"status\":\"program\",\"plan_program\":{\"version\":\"0.3\",\"typology\":\"kapali\",\"dwelling\":\"apartment\",\"bedrooms\":3,\"floors\":1,\"kitchen\":\"closed\",\"envelope\":\"rectangle\",\"entry\":\"west\",\"living_face\":\"south\",\"circulation\":\"segmented\",\"stair\":\"none\",\"setback_m\":4,\"rooms\":[{\"id\":\"wet-0\",\"kind\":\"kitchen\",\"zone\":\"wet\",\"level\":0,\"target_m2\":12.6,\"face\":\"any\"},{\"id\":\"bath-0\",\"kind\":\"bath\",\"zone\":\"wet\",\"level\":0,\"target_m2\":12.6,\"face\":\"any\"},{\"id\":\"hall-0-0\",\"kind\":\"hall\",\"zone\":\"service\",\"level\":0,\"target_m2\":9.0,\"face\":\"any\"},{\"id\":\"hall-0-1\",\"kind\":\"hall\",\"zone\":\"service\",\"level\":0,\"target_m2\":9.0,\"face\":\"any\"},{\"id\":\"living\",\"kind\":\"living\",\"zone\":\"day\",\"level\":0,\"target_m2\":26,\"face\":\"south\"},{\"id\":\"bed-0\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":12,\"face\":\"any\"},{\"id\":\"bed-1\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":14,\"face\":\"any\"},{\"id\":\"bed-2\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":12,\"face\":\"any\"},{\"id\":\"pantry-0\",\"kind\":\"utility\",\"zone\":\"service\",\"level\":0,\"target_m2\":9,\"face\":\"any\"},{\"id\":\"guest-wc-0\",\"kind\":\"wc\",\"zone\":\"wet\",\"level\":0,\"target_m2\":6,\"face\":\"any\"}],\"adjacency\":[],\"forbidden\":[[\"living\",\"bed-0\"],[\"living\",\"bed-1\"],[\"living\",\"bed-2\"]],\"fixed\":[],\"revision\":1},\"operations\":[],\"reply\":\"Designer review is required.\",\"requires_designer_review\":true}"
+      }
+    ]
+  },
+  {
+    "id": "kapali-01-2",
+    "plan_id": "kapali-01",
+    "topology_class": 1,
+    "split": "validation",
+    "synthetic": true,
+    "human_approved": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are AURA's Turkish/English home planning assistant. Return JSON only,\nwith exactly status, plan_program, operations, reply, requires_designer_review.\nstatus is program, clarify, refuse, or edit. requires_designer_review is always true.\nNever generate wall coordinates. Program version is 0.3; fields: version, typology,\ndwelling (apartment/duplex/detached), bedrooms (1..5), floors (1..3), kitchen\n(closed/semi_open/open), envelope (rectangle/l/u/notched), entry (south/north/east/west),\nliving_face (south/north/east/west), circulation (spine/segmented/foyer), stair\n(none/straight/l/u/gallery), setback_m (0..10), rooms, adjacency, forbidden,\nfixed, revision. Room fields: id, kind, zone (day/night/wet/service), level,\ntarget_m2, face (any/south/north/east/west). adjacency and forbidden contain pairs\nof room ids. fixed contains existing constraints; do not invent measured geometry.\nRooms describe use and soft area targets, not structural approval. On insufficient\nmeasurements or contradictory area demands ask a question with null plan_program,\nempty operations. Refuse unapproved structural removal. Edits use operations\n{op:resize,room_id:...,target_m2:...} or {op:kitchen,value:open/closed/semi_open}\nwith the supplied program revision. Always leave final decisions to the designer."
+      },
+      {
+        "role": "user",
+        "content": "İstenen kurgu: kapali. Yeni evimiz için ilk yerleşimi düşünelim. 3 yatak odası, 1 kat, konut türü apartment; mutfak closed. Dış biçim rectangle, giriş batı, salon güney, dolaşım segmented, merdiven none, çekme mesafesi hedefi 4 m. Oda ihtiyaçları: wet-0: kitchen, 0. kat, hedef 12.6 m², wet bölgesi, cephe any; bath-0: bath, 0. kat, hedef 12.6 m², wet bölgesi, cephe any; hall-0-0: hall, 0. kat, hedef 9.0 m², service bölgesi, cephe any; hall-0-1: hall, 0. kat, hedef 9.0 m², service bölgesi, cephe any; living: living, 0. kat, hedef 26 m², day bölgesi, cephe south; bed-0: bedroom, 0. kat, hedef 12 m², night bölgesi, cephe any; bed-1: bedroom, 0. kat, hedef 14 m², night bölgesi, cephe any; bed-2: bedroom, 0. kat, hedef 12 m², night bölgesi, cephe any; pantry-0: utility, 0. kat, hedef 9 m², service bölgesi, cephe any; guest-wc-0: wc, 0. kat, hedef 6 m², wet bölgesi, cephe any. İstenen bağlantılar []; kaçınılacak bağlantılar [['living', 'bed-0'], ['living', 'bed-1'], ['living', 'bed-2']]. Ölçülmüş mevcut sabit eleman bildirmedim. Henüz onaylanmış bir proje değil."
+      },
+      {
+        "role": "assistant",
+        "content": "{\"status\":\"program\",\"plan_program\":{\"version\":\"0.3\",\"typology\":\"kapali\",\"dwelling\":\"apartment\",\"bedrooms\":3,\"floors\":1,\"kitchen\":\"closed\",\"envelope\":\"rectangle\",\"entry\":\"west\",\"living_face\":\"south\",\"circulation\":\"segmented\",\"stair\":\"none\",\"setback_m\":4,\"rooms\":[{\"id\":\"wet-0\",\"kind\":\"kitchen\",\"zone\":\"wet\",\"level\":0,\"target_m2\":12.6,\"face\":\"any\"},{\"id\":\"bath-0\",\"kind\":\"bath\",\"zone\":\"wet\",\"level\":0,\"target_m2\":12.6,\"face\":\"any\"},{\"id\":\"hall-0-0\",\"kind\":\"hall\",\"zone\":\"service\",\"level\":0,\"target_m2\":9.0,\"face\":\"any\"},{\"id\":\"hall-0-1\",\"kind\":\"hall\",\"zone\":\"service\",\"level\":0,\"target_m2\":9.0,\"face\":\"any\"},{\"id\":\"living\",\"kind\":\"living\",\"zone\":\"day\",\"level\":0,\"target_m2\":26,\"face\":\"south\"},{\"id\":\"bed-0\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":12,\"face\":\"any\"},{\"id\":\"bed-1\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":14,\"face\":\"any\"},{\"id\":\"bed-2\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":12,\"face\":\"any\"},{\"id\":\"pantry-0\",\"kind\":\"utility\",\"zone\":\"service\",\"level\":0,\"target_m2\":9,\"face\":\"any\"},{\"id\":\"guest-wc-0\",\"kind\":\"wc\",\"zone\":\"wet\",\"level\":0,\"target_m2\":6,\"face\":\"any\"}],\"adjacency\":[],\"forbidden\":[[\"living\",\"bed-0\"],[\"living\",\"bed-1\"],[\"living\",\"bed-2\"]],\"fixed\":[],\"revision\":1},\"operations\":[],\"reply\":\"Tasarımcı incelemesi gerekli.\",\"requires_designer_review\":true}"
+      }
+    ]
+  },
+  {
+    "id": "kapali-00-0",
+    "plan_id": "kapali-00",
+    "topology_class": 0,
+    "split": "test",
+    "synthetic": true,
+    "human_approved": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are AURA's Turkish/English home planning assistant. Return JSON only,\nwith exactly status, plan_program, operations, reply, requires_designer_review.\nstatus is program, clarify, refuse, or edit. requires_designer_review is always true.\nNever generate wall coordinates. Program version is 0.3; fields: version, typology,\ndwelling (apartment/duplex/detached), bedrooms (1..5), floors (1..3), kitchen\n(closed/semi_open/open), envelope (rectangle/l/u/notched), entry (south/north/east/west),\nliving_face (south/north/east/west), circulation (spine/segmented/foyer), stair\n(none/straight/l/u/gallery), setback_m (0..10), rooms, adjacency, forbidden,\nfixed, revision. Room fields: id, kind, zone (day/night/wet/service), level,\ntarget_m2, face (any/south/north/east/west). adjacency and forbidden contain pairs\nof room ids. fixed contains existing constraints; do not invent measured geometry.\nRooms describe use and soft area targets, not structural approval. On insufficient\nmeasurements or contradictory area demands ask a question with null plan_program,\nempty operations. Refuse unapproved structural removal. Edits use operations\n{op:resize,room_id:...,target_m2:...} or {op:kitchen,value:open/closed/semi_open}\nwith the supplied program revision. Always leave final decisions to the designer."
+      },
+      {
+        "role": "user",
+        "content": "İstenen kurgu: kapali. Birlikte bir ev taslağı çalışalım. 2 yatak odası, 1 kat, konut türü apartment; mutfak closed. Dış biçim rectangle, giriş batı, salon güney, dolaşım segmented, merdiven none, çekme mesafesi hedefi 4 m. Oda ihtiyaçları: wet-0: kitchen, 0. kat, hedef 12.6 m², wet bölgesi, cephe any; bath-0: bath, 0. kat, hedef 12.6 m², wet bölgesi, cephe any; hall-0-0: hall, 0. kat, hedef 8.0 m², service bölgesi, cephe any; hall-0-1: hall, 0. kat, hedef 8.0 m², service bölgesi, cephe any; living: living, 0. kat, hedef 24 m², day bölgesi, cephe south; bed-0: bedroom, 0. kat, hedef 12 m², night bölgesi, cephe any; bed-1: bedroom, 0. kat, hedef 14 m², night bölgesi, cephe any; balcony: balcony, 0. kat, hedef 4 m², day bölgesi, cephe any. İstenen bağlantılar [['living', 'balcony']]; kaçınılacak bağlantılar [['living', 'bed-0'], ['living', 'bed-1']]. Ölçülmüş mevcut sabit eleman bildirmedim. Henüz onaylanmış bir proje değil."
+      },
+      {
+        "role": "assistant",
+        "content": "{\"status\":\"program\",\"plan_program\":{\"version\":\"0.3\",\"typology\":\"kapali\",\"dwelling\":\"apartment\",\"bedrooms\":2,\"floors\":1,\"kitchen\":\"closed\",\"envelope\":\"rectangle\",\"entry\":\"west\",\"living_face\":\"south\",\"circulation\":\"segmented\",\"stair\":\"none\",\"setback_m\":4,\"rooms\":[{\"id\":\"wet-0\",\"kind\":\"kitchen\",\"zone\":\"wet\",\"level\":0,\"target_m2\":12.6,\"face\":\"any\"},{\"id\":\"bath-0\",\"kind\":\"bath\",\"zone\":\"wet\",\"level\":0,\"target_m2\":12.6,\"face\":\"any\"},{\"id\":\"hall-0-0\",\"kind\":\"hall\",\"zone\":\"service\",\"level\":0,\"target_m2\":8.0,\"face\":\"any\"},{\"id\":\"hall-0-1\",\"kind\":\"hall\",\"zone\":\"service\",\"level\":0,\"target_m2\":8.0,\"face\":\"any\"},{\"id\":\"living\",\"kind\":\"living\",\"zone\":\"day\",\"level\":0,\"target_m2\":24,\"face\":\"south\"},{\"id\":\"bed-0\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":12,\"face\":\"any\"},{\"id\":\"bed-1\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":14,\"face\":\"any\"},{\"id\":\"balcony\",\"kind\":\"balcony\",\"zone\":\"day\",\"level\":0,\"target_m2\":4,\"face\":\"any\"}],\"adjacency\":[[\"living\",\"balcony\"]],\"forbidden\":[[\"living\",\"bed-0\"],[\"living\",\"bed-1\"]],\"fixed\":[],\"revision\":1},\"operations\":[],\"reply\":\"Tasarımcı incelemesi gerekli.\",\"requires_designer_review\":true}"
+      }
+    ]
+  },
+  {
+    "id": "kapali-00-1",
+    "plan_id": "kapali-00",
+    "topology_class": 0,
+    "split": "test",
+    "synthetic": true,
+    "human_approved": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are AURA's Turkish/English home planning assistant. Return JSON only,\nwith exactly status, plan_program, operations, reply, requires_designer_review.\nstatus is program, clarify, refuse, or edit. requires_designer_review is always true.\nNever generate wall coordinates. Program version is 0.3; fields: version, typology,\ndwelling (apartment/duplex/detached), bedrooms (1..5), floors (1..3), kitchen\n(closed/semi_open/open), envelope (rectangle/l/u/notched), entry (south/north/east/west),\nliving_face (south/north/east/west), circulation (spine/segmented/foyer), stair\n(none/straight/l/u/gallery), setback_m (0..10), rooms, adjacency, forbidden,\nfixed, revision. Room fields: id, kind, zone (day/night/wet/service), level,\ntarget_m2, face (any/south/north/east/west). adjacency and forbidden contain pairs\nof room ids. fixed contains existing constraints; do not invent measured geometry.\nRooms describe use and soft area targets, not structural approval. On insufficient\nmeasurements or contradictory area demands ask a question with null plan_program,\nempty operations. Refuse unapproved structural removal. Edits use operations\n{op:resize,room_id:...,target_m2:...} or {op:kitchen,value:open/closed/semi_open}\nwith the supplied program revision. Always leave final decisions to the designer."
+      },
+      {
+        "role": "user",
+        "content": "Brief type: kapali. Let us work on a preliminary home layout. 2 bedrooms, 1 floors, apartment; closed kitchen. Envelope rectangle, entry west, living south, segmented circulation, none stair, setback target 4 m. Room brief: wet-0: kitchen, floor 0, target 12.6 m², wet zone, facade any; bath-0: bath, floor 0, target 12.6 m², wet zone, facade any; hall-0-0: hall, floor 0, target 8.0 m², service zone, facade any; hall-0-1: hall, floor 0, target 8.0 m², service zone, facade any; living: living, floor 0, target 24 m², day zone, facade south; bed-0: bedroom, floor 0, target 12 m², night zone, facade any; bed-1: bedroom, floor 0, target 14 m², night zone, facade any; balcony: balcony, floor 0, target 4 m², day zone, facade any. Required links [['living', 'balcony']]; avoid links [['living', 'bed-0'], ['living', 'bed-1']]. No measured existing fixed elements supplied. This is not an approved building plan."
+      },
+      {
+        "role": "assistant",
+        "content": "{\"status\":\"program\",\"plan_program\":{\"version\":\"0.3\",\"typology\":\"kapali\",\"dwelling\":\"apartment\",\"bedrooms\":2,\"floors\":1,\"kitchen\":\"closed\",\"envelope\":\"rectangle\",\"entry\":\"west\",\"living_face\":\"south\",\"circulation\":\"segmented\",\"stair\":\"none\",\"setback_m\":4,\"rooms\":[{\"id\":\"wet-0\",\"kind\":\"kitchen\",\"zone\":\"wet\",\"level\":0,\"target_m2\":12.6,\"face\":\"any\"},{\"id\":\"bath-0\",\"kind\":\"bath\",\"zone\":\"wet\",\"level\":0,\"target_m2\":12.6,\"face\":\"any\"},{\"id\":\"hall-0-0\",\"kind\":\"hall\",\"zone\":\"service\",\"level\":0,\"target_m2\":8.0,\"face\":\"any\"},{\"id\":\"hall-0-1\",\"kind\":\"hall\",\"zone\":\"service\",\"level\":0,\"target_m2\":8.0,\"face\":\"any\"},{\"id\":\"living\",\"kind\":\"living\",\"zone\":\"day\",\"level\":0,\"target_m2\":24,\"face\":\"south\"},{\"id\":\"bed-0\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":12,\"face\":\"any\"},{\"id\":\"bed-1\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":14,\"face\":\"any\"},{\"id\":\"balcony\",\"kind\":\"balcony\",\"zone\":\"day\",\"level\":0,\"target_m2\":4,\"face\":\"any\"}],\"adjacency\":[[\"living\",\"balcony\"]],\"forbidden\":[[\"living\",\"bed-0\"],[\"living\",\"bed-1\"]],\"fixed\":[],\"revision\":1},\"operations\":[],\"reply\":\"Designer review is required.\",\"requires_designer_review\":true}"
+      }
+    ]
+  },
+  {
+    "id": "kapali-00-2",
+    "plan_id": "kapali-00",
+    "topology_class": 0,
+    "split": "test",
+    "synthetic": true,
+    "human_approved": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are AURA's Turkish/English home planning assistant. Return JSON only,\nwith exactly status, plan_program, operations, reply, requires_designer_review.\nstatus is program, clarify, refuse, or edit. requires_designer_review is always true.\nNever generate wall coordinates. Program version is 0.3; fields: version, typology,\ndwelling (apartment/duplex/detached), bedrooms (1..5), floors (1..3), kitchen\n(closed/semi_open/open), envelope (rectangle/l/u/notched), entry (south/north/east/west),\nliving_face (south/north/east/west), circulation (spine/segmented/foyer), stair\n(none/straight/l/u/gallery), setback_m (0..10), rooms, adjacency, forbidden,\nfixed, revision. Room fields: id, kind, zone (day/night/wet/service), level,\ntarget_m2, face (any/south/north/east/west). adjacency and forbidden contain pairs\nof room ids. fixed contains existing constraints; do not invent measured geometry.\nRooms describe use and soft area targets, not structural approval. On insufficient\nmeasurements or contradictory area demands ask a question with null plan_program,\nempty operations. Refuse unapproved structural removal. Edits use operations\n{op:resize,room_id:...,target_m2:...} or {op:kitchen,value:open/closed/semi_open}\nwith the supplied program revision. Always leave final decisions to the designer."
+      },
+      {
+        "role": "user",
+        "content": "İstenen kurgu: kapali. Yeni evimiz için ilk yerleşimi düşünelim. 2 yatak odası, 1 kat, konut türü apartment; mutfak closed. Dış biçim rectangle, giriş batı, salon güney, dolaşım segmented, merdiven none, çekme mesafesi hedefi 4 m. Oda ihtiyaçları: wet-0: kitchen, 0. kat, hedef 12.6 m², wet bölgesi, cephe any; bath-0: bath, 0. kat, hedef 12.6 m², wet bölgesi, cephe any; hall-0-0: hall, 0. kat, hedef 8.0 m², service bölgesi, cephe any; hall-0-1: hall, 0. kat, hedef 8.0 m², service bölgesi, cephe any; living: living, 0. kat, hedef 24 m², day bölgesi, cephe south; bed-0: bedroom, 0. kat, hedef 12 m², night bölgesi, cephe any; bed-1: bedroom, 0. kat, hedef 14 m², night bölgesi, cephe any; balcony: balcony, 0. kat, hedef 4 m², day bölgesi, cephe any. İstenen bağlantılar [['living', 'balcony']]; kaçınılacak bağlantılar [['living', 'bed-0'], ['living', 'bed-1']]. Ölçülmüş mevcut sabit eleman bildirmedim. Henüz onaylanmış bir proje değil."
+      },
+      {
+        "role": "assistant",
+        "content": "{\"status\":\"program\",\"plan_program\":{\"version\":\"0.3\",\"typology\":\"kapali\",\"dwelling\":\"apartment\",\"bedrooms\":2,\"floors\":1,\"kitchen\":\"closed\",\"envelope\":\"rectangle\",\"entry\":\"west\",\"living_face\":\"south\",\"circulation\":\"segmented\",\"stair\":\"none\",\"setback_m\":4,\"rooms\":[{\"id\":\"wet-0\",\"kind\":\"kitchen\",\"zone\":\"wet\",\"level\":0,\"target_m2\":12.6,\"face\":\"any\"},{\"id\":\"bath-0\",\"kind\":\"bath\",\"zone\":\"wet\",\"level\":0,\"target_m2\":12.6,\"face\":\"any\"},{\"id\":\"hall-0-0\",\"kind\":\"hall\",\"zone\":\"service\",\"level\":0,\"target_m2\":8.0,\"face\":\"any\"},{\"id\":\"hall-0-1\",\"kind\":\"hall\",\"zone\":\"service\",\"level\":0,\"target_m2\":8.0,\"face\":\"any\"},{\"id\":\"living\",\"kind\":\"living\",\"zone\":\"day\",\"level\":0,\"target_m2\":24,\"face\":\"south\"},{\"id\":\"bed-0\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":12,\"face\":\"any\"},{\"id\":\"bed-1\",\"kind\":\"bedroom\",\"zone\":\"night\",\"level\":0,\"target_m2\":14,\"face\":\"any\"},{\"id\":\"balcony\",\"kind\":\"balcony\",\"zone\":\"day\",\"level\":0,\"target_m2\":4,\"face\":\"any\"}],\"adjacency\":[[\"living\",\"balcony\"]],\"forbidden\":[[\"living\",\"bed-0\"],[\"living\",\"bed-1\"]],\"fixed\":[],\"revision\":1},\"operations\":[],\"reply\":\"Tasarımcı incelemesi gerekli.\",\"requires_designer_review\":true}"
+      }
+    ]
+  }
+]
