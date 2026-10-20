@@ -4,3 +4,8 @@ tests/ai-eval/sinav-01b-*.jsonl text eol=lf
 # EV-QWEN-00D evidence manifests hash the exact exported bytes, including newlines.
 # Review generated evidence through HTML, images and manifests instead of huge diffs.
 knowledge/ai-egitim/veri/ev-plan-reel-00d/** -text -diff linguist-generated=true whitespace=cr-at-eol
+
+# EV-SOHBET-02 generated plan fixtures are reviewed through the HTML, report and
+# three ev.html examples. Keep the implementation and authored conversations visible.
+knowledge/ai-egitim/veri/ev-sohbet-02/*.json -diff linguist-generated=true
+knowledge/ai-egitim/veri/ev-sohbet-02/kaynaklar/*.json -diff linguist-generated=true
