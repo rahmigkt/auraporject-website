@@ -13,6 +13,12 @@ export const TREAT = { // default suggestion per room function; a starting point
   kitchen: {shade: 'roller'},
   bath: {shade: 'pleated'}, wc: {shade: 'pleated'}
 };
+// customer choices: model and colour (per room, falling back to the whole home)
+export const MODELS = {'tul-fon': ['Tül + fon', {sheer: true, drape: 'dimout', heading: 'wave'}], 'tul': ['Yalnız tül', {sheer: true, heading: 'wave'}],
+  'fon': ['Yalnız fon', {drape: 'dimout', heading: 'wave'}], 'karartma': ['Tül + karartma', {sheer: true, drape: 'blackout', heading: 'wave'}],
+  'stor': ['Stor', {shade: 'roller'}], 'plise': ['Plise', {shade: 'pleated'}]};
+export const FABRICS = [['keten', 'Keten', '#d8cdbb'], ['kirik-beyaz', 'Kırık beyaz', '#efe9de'], ['kum', 'Kum', '#cdb99a'], ['adacayi', 'Adaçayı', '#a8b09a'],
+  ['terrakota', 'Terrakota', '#b9775c'], ['hardal', 'Hardal', '#c49a45'], ['gece-mavisi', 'Gece mavisi', '#4c5a66'], ['antrasit', 'Antrasit', '#55534f']];
 export const TREAT_NAME = {sheer: 'tül', dimout: 'fon (ışık kesen)', blackout: 'karartma fon', roller: 'stor', pleated: 'plise'};
 const FULL = {wave: 2.3}, OVER = 150, FLOOR_GAP = 10, PITCH = 120, STACK_PER_M = 180;
 const OPACITY = {sheer: 0.25, dimout: 0.8, blackout: 1};
@@ -21,20 +27,20 @@ const COLOR = {sheer: '#fbf8f1', dimout: '#d8cdbb', blackout: '#8d9188', roller:
 export const STATES = {acik: 'Gündüz · tül', yarim: 'Yarı kapalı', kapali: 'Gece · kapalı', yok: 'Perdesiz'};
 
 const mats = {};
-const mat = k => mats[k] ??= new THREE.MeshStandardMaterial({color: COLOR[k], roughness: 0.9, side: THREE.DoubleSide,
+const mat = (k, col) => mats[k + (col || '')] ??= new THREE.MeshStandardMaterial({color: k === 'sheer' || k === 'rail' ? COLOR[k] : col || COLOR[k], roughness: 0.9, side: THREE.DoubleSide,
   transparent: (OPACITY[k] ?? 1) < 1, opacity: OPACITY[k] ?? 1, depthWrite: (OPACITY[k] ?? 1) >= 1});
 
 // one panel: displayed width w (m), flat fabric width f (m), height h (m); soft S folds that keep the fabric length
-function panel(w, f, h, kind) {
+function panel(w, f, h, kind, col) {
   const n = Math.max(2, Math.round(f * 1000 / (2 * PITCH))), P = w / n, r = Math.max(1, f / w);
   const a = Math.min(P * 0.6, P / Math.PI * Math.sqrt((r * r - 1) / 2)), seg = n * 8;
   const g = new THREE.PlaneGeometry(w, h, seg, 1), p = g.attributes.position;
   for (let i = 0; i < p.count; i++) { const x = p.getX(i) + w / 2; p.setZ(i, a * Math.sin(2 * Math.PI * x / P)); }
-  g.computeVertexNormals(); const m = new THREE.Mesh(g, mat(kind)); m.castShadow = kind !== 'sheer'; m.receiveShadow = true; return m;
+  g.computeVertexNormals(); const m = new THREE.Mesh(g, mat(kind, col)); m.castShadow = kind !== 'sheer'; m.receiveShadow = true; return m;
 }
 
 // walls/ops in mm (plan.js frames), spaceAt(p) → space, H ceiling mm, state one of STATES
-export function curtains(walls, ops, spaceAt, H, state = 'acik') {
+export function curtains(walls, ops, spaceAt, H, state = 'acik', choice = () => ({})) {
   const G = new THREE.Group(); if (state === 'yok') return G;
   const W = Object.fromEntries(walls.map(w => [w.id, w]));
   for (const o of ops) {
@@ -45,13 +51,14 @@ export function curtains(walls, ops, spaceAt, H, state = 'acik') {
     const inner = sides.find(x => x.s && !out(x.s)), outer = sides.find(x => x !== inner);
     if (!inner || !out(outer?.s)) continue;                // only openings to the outside or a balcony
     if (o.kind === 'door' && outer.s == null) continue;    // a street door gets no curtain
-    const T = TREAT[inner.s.kind]; if (!T) continue;
+    const ch = choice(inner.s) || {}, T = (ch.model && MODELS[ch.model]?.[1]) || TREAT[inner.s.kind]; if (!T || ch.model === 'yok') continue;
+    const col = (FABRICS.find(f => f[0] === ch.color) || [])[2];
     const nx = w.uy * inner.k, ny = -w.ux * inner.k;      // unit normal into the room (plan)
     const at = (along, off) => [ (w.x0 + w.ux * along + nx * off) / 1000, -(w.y0 + w.uy * along + ny * off) / 1000 ];
     const rot = Math.atan2(w.uy, w.ux), top = o.sill + o.h;
     if (T.shade) { // inside the reveal: a fabric blind lowered from the window head
       const c = {acik: 0.12, yarim: 0.5, kapali: 1}[state], drop = Math.max(60, o.h * c), [x, z] = at(mid, w.t / 2 - 50);
-      const m = new THREE.Mesh(new THREE.BoxGeometry((o.w - 20) / 1000, drop / 1000, 0.006), mat(T.shade));
+      const m = new THREE.Mesh(new THREE.BoxGeometry((o.w - 20) / 1000, drop / 1000, 0.006), mat(T.shade, col));
       if (T.shade === 'pleated') { const g = m.geometry, n = Math.max(4, Math.round(drop / 25)); m.geometry = new THREE.PlaneGeometry((o.w - 20) / 1000, drop / 1000, 1, n * 2);
         const p = m.geometry.attributes.position; for (let i = 0; i < p.count; i++) p.setZ(i, (Math.round((p.getY(i) + drop / 2000) * 1000 / 12.5) % 2) * 0.008); m.geometry.computeVertexNormals(); g.dispose(); }
       m.position.set(x, (top - drop / 2) / 1000, z); m.rotation.y = rot; m.castShadow = true; G.add(m);
@@ -66,7 +73,7 @@ export function curtains(walls, ops, spaceAt, H, state = 'acik') {
       const half = railW / 2, stack = Math.max(120, STACK_PER_M * railW / 1000 / 2), flat = half * FULL[T.heading];
       const disp = stack + (half - stack) * L.c;                      // displayed width of each panel
       for (const s of [0, 1]) { // left panel from rail start, right panel from rail end
-        const pm = panel(disp / 1000, flat / 1000, hgt, L.kind), along = s ? o.a + o.w + OVER - disp / 2 : o.a - OVER + disp / 2, [x, z] = at(along, L.off);
+        const pm = panel(disp / 1000, flat / 1000, hgt, L.kind, col), along = s ? o.a + o.w + OVER - disp / 2 : o.a - OVER + disp / 2, [x, z] = at(along, L.off);
         pm.position.set(x, cy, z); pm.rotation.y = rot; G.add(pm);
       }
       const [x, z] = at(mid, L.off), rail = new THREE.Mesh(new THREE.BoxGeometry(railW / 1000, 0.015, 0.02), mat('rail'));
