@@ -6,12 +6,14 @@ import {readLink, designLink, projectLink} from './link.js';
 import {editableParts, currentShape, sampleCurve, bbox, silhouetteDxf, ADD_SHAPES, EDGE_TYPES} from './overrides.js';
 import {analyse} from './physics.js';
 import {loadCsg} from './csg.js';
-import {worldPositions} from './build.js';
+import {worldPositions, worldMesh} from './build.js';
 import {WOODS, STAINS, FINISHES, STONES, METALS, COLORS, GLASS} from './catalog.js';
-import {download} from './package.js';
+import {download, jpegPdf, svgToJpeg, dataUrlJpeg} from './package.js';
+import {drawingSheet} from './drawing.js';
+import {t} from './i18n.js';
 
 const $ = s => document.querySelector(s);
-const NAMES = {top: 'Tabla', leg: 'Ayak', 'case-top': 'Üst tabla', 'vanity-top': 'Lavabo tezgahı', 'mirror-frame': 'Ayna arkalığı', mirror: 'Ayna camı', 'arm-post': 'Kol dikmesi',
+const NAMES = {top: 'Tabla', 'back-panel': 'Arka panel', apron: 'Kayıt', leg: 'Ayak', 'case-top': 'Üst tabla', 'vanity-top': 'Lavabo tezgahı', 'mirror-frame': 'Ayna arkalığı', mirror: 'Ayna camı', 'arm-post': 'Kol dikmesi',
   column: 'Sütun', foot: 'Taban', 'top-plate': 'Tabla altı tablası', shelf: 'Raf', worktop: 'Tezgah', led: 'Işık', headboard: 'Başlık', 'added-box': 'Eklenen kutu', 'added-softbox': 'Eklenen yuvarlatılmış kutu', 'added-round': 'Eklenen yuvarlak çubuk', 'added-square': 'Eklenen kare çubuk', 'added-panel': 'Eklenen panel',
   rail: 'Kayıt', apron: 'Kayıt', stretcher: 'Germe', 'arm-top': 'Kol', 'base-rail': 'Çerçeve rayı', 'seat-deck': 'Oturma gövdesi', 'seat-cushion': 'Oturma minderi', 'back-cushion': 'Sırt minderi', arm: 'Kol', side: 'Yan', door: 'Kapak', drawer: 'Çekmece', back: 'Arkalık'};
 const nameOf = t => `${NAMES[t.role] || t.role}${t.tool === 'profile' ? ' · profil' : ' · siluet'}`;
@@ -413,22 +415,44 @@ function addJoint(key, count, depthIn) {
 // ---- Auto-join: close small gaps between parts that face each other (stretch the smaller part to touch) ----
 const SKIP_JOIN = /stitch|welt|inlay|line|pull|knob|handle|hinge|grommet|drain|tap|led|dugme/;
 function autoJoin(maxGap = 40) {
-  const ps = S.compiled.parts.filter(q => !SKIP_JOIN.test(q.role) && q.rot.every(v => Math.abs(v) < 1e-3)).map(q => ({q, b: worldBox(q.id)})).filter(x => x.b && [0, 1, 2].every(k => x.b.hi[k] - x.b.lo[k] >= 6));
-  const vol = b => [0, 1, 2].reduce((m, k) => m * (b.hi[k] - b.lo[k]), 1), best = new Map();
-  for (const A of ps) for (const B of ps) { if (A === B) continue;
-    if (A.q.role === B.q.role || [A, B].some(x => x.q.mat === 'fabric' || /front|door|drawer|cushion|pillow|mattress/.test(x.q.role))) continue; // design gaps: reveals, cushion splits
-    for (let k = 0; k < 3; k++) { const gap = B.b.lo[k] - A.b.hi[k]; if (!(gap > 4 && gap <= maxGap)) continue;
-      const ok = [0, 1, 2].filter(j => j !== k).every(j => { const ov = Math.min(A.b.hi[j], B.b.hi[j]) - Math.max(A.b.lo[j], B.b.lo[j]); return ov >= 0.6 * Math.min(A.b.hi[j] - A.b.lo[j], B.b.hi[j] - B.b.lo[j]); });
-      if (!ok) continue;
-      const [mov, dir] = vol(A.b) <= vol(B.b) ? [A, 1] : [B, -1], key = `${mov.q.id}|${k}|${dir}`;
-      if (!best.has(key) || best.get(key).gap > gap) best.set(key, {id: mov.q.id, k, dir, gap, ext: mov.b.hi[k] - mov.b.lo[k]}); } }
-  if (!best.size) return 'Kapatılacak boşluk bulunmadı.';
-  let list = ovs(); const touched = new Set();
-  for (const {id, k, dir, gap, ext} of best.values()) {
+  // Faces are measured on the real meshes, at the bottom and top of the part: a tapered leg gives an angled end.
+  const ps = S.compiled.parts.filter(q => !SKIP_JOIN.test(q.role)).map(q => ({q, b: worldBox(q.id), straight: q.rot.every(v => Math.abs(v) < 1e-3)})).filter(x => x.b && [0, 1, 2].every(k => x.b.hi[k] - x.b.lo[k] >= 6));
+  const vol = b => [0, 1, 2].reduce((m, k) => m * (b.hi[k] - b.lo[k]), 1), plans = new Map(), P = new Map();
+  const mesh = q => P.get(q.id) || (P.set(q.id, worldMesh(q)), P.get(q.id));
+  for (const A of ps) for (const B of ps) { if (A === B || !A.straight) continue; // A grows when B covers A's height (a leg beside a panel), whatever their sizes
+    if (A.q.role === B.q.role || [A, B].some(x => x.q.mat === 'fabric' || /front|door|drawer|cushion|pillow|mattress/.test(x.q.role))) continue;
+    for (let k = 0; k < 3; k++) for (const dir of [1, -1]) {
+      const gap = dir > 0 ? B.b.lo[k] - A.b.hi[k] : A.b.lo[k] - B.b.hi[k]; if (!(gap > -60 && gap <= maxGap)) continue;
+      const others = [0, 1, 2].filter(x => x !== k); // j = the longer in-plane axis of A (height of a panel), m = its thickness
+      const [j, m] = others.sort((x, y) => (A.b.hi[y] - A.b.lo[y]) - (A.b.hi[x] - A.b.lo[x]));
+      const ovj = Math.min(A.b.hi[j], B.b.hi[j]) - Math.max(A.b.lo[j], B.b.lo[j]), ovm = Math.min(A.b.hi[m], B.b.hi[m]) - Math.max(A.b.lo[m], B.b.lo[m]);
+      if (ovj < 0.6 * (A.b.hi[j] - A.b.lo[j]) || ovm < 0.5 * (A.b.hi[m] - A.b.lo[m])) continue;
+      const edgeA = dir > 0 ? A.b.hi[k] : A.b.lo[k], {P: V, I} = mesh(B.q);
+      const mc = (A.b.lo[m] + A.b.hi[m]) / 2;
+      const face = yj => { let best = null; // B's surface on the line {height yj, mid-thickness of A}: plane cut of each triangle, then the cut segment at mc
+        const cross = (a, c, out) => { const ya = V[a * 3 + j], yc = V[c * 3 + j]; if ((ya - yj) * (yc - yj) > 0 || ya === yc) return; const t = (yj - ya) / (yc - ya);
+          out.push([V[a * 3 + k] + t * (V[c * 3 + k] - V[a * 3 + k]), V[a * 3 + m] + t * (V[c * 3 + m] - V[a * 3 + m])]); };
+        for (let i = 0; i < I.length; i += 3) { const pts = []; cross(I[i], I[i + 1], pts); cross(I[i + 1], I[i + 2], pts); cross(I[i + 2], I[i], pts); if (pts.length < 2) continue;
+          const [p0, p1] = pts; if ((p0[1] - mc) * (p1[1] - mc) > 0) continue; const x = p0[1] === p1[1] ? Math.min(p0[0], p1[0]) : p0[0] + (mc - p0[1]) / (p1[1] - p0[1]) * (p1[0] - p0[0]);
+          if (dir > 0 ? x < edgeA - 80 : x > edgeA + 80) continue; best = best === null ? x : dir > 0 ? Math.min(best, x) : Math.max(best, x); }
+        return best; };
+      const sp = A.b.hi[j] - A.b.lo[j]; let g0 = face(A.b.lo[j] + 0.1 * sp), g1 = face(A.b.hi[j] - 0.1 * sp); // inside the ends (a tenon or cap there is not the face)
+      if (g0 === null && g1 === null) continue; g0 ??= g1; g1 ??= g0;
+      const f0 = g0 - (g1 - g0) * 0.125, f1 = g1 + (g1 - g0) * 0.125; // extend the line to the part's own ends
+      const e0 = Math.max(0, dir * (f0 - edgeA)), e1 = Math.max(0, dir * (f1 - edgeA)); // only grows: a part already housed in the leg stays
+      if (Math.max(e0, e1) < 0.5 || Math.max(e0, e1) > maxGap) continue;
+      const pl = plans.get(A.q.id) || {k, j, neg: [0, 0], pos: [0, 0], names: new Set()}; if (pl.k !== k || pl.j !== j) continue;
+      pl[dir > 0 ? 'pos' : 'neg'] = [e0, e1].map(v => Math.round(v * 10) / 10); pl.names.add(NAMES[B.q.role] || B.q.role); plans.set(A.q.id, pl);
+    } }
+  if (!plans.size) return 'Kapatılacak boşluk bulunmadı.';
+  let list = ovs();
+  for (const [id, pl] of plans) {
     const t = structuredClone(list.filter(o => o.tool === 'transform' && o.id === id).at(-1) || {tool: 'transform', id, move: [0, 0, 0], rot: [0, 0, 0], scale: [1, 1, 1]});
-    t.scale[k] *= (ext + gap) / ext; t.move[k] += dir * gap / 2; list = [...list.filter(o => !(o.tool === 'transform' && o.id === id)), t]; touched.add(id);
+    const prev = t.ends && t.ends.k === pl.k && t.ends.j === pl.j ? t.ends : {neg: [0, 0], pos: [0, 0]};
+    t.ends = {k: pl.k, j: pl.j, neg: prev.neg.map((v, i) => v + pl.neg[i]), pos: prev.pos.map((v, i) => v + pl.pos[i])};
+    list = [...list.filter(o => !(o.tool === 'transform' && o.id === id)), t];
   }
-  commit(list); return `${best.size} boşluk kapatıldı: ${[...touched].map(id => NAMES[partOf(id)?.role] || id).join(', ')}. Geri almak için “Yapı geri”.`;
+  commit(list); return `${plans.size} parça komşusunun yüzeyine oturtuldu: ${[...plans.keys()].map(id => NAMES[partOf(id)?.role] || id).join(', ')}. Konik yüzeylerde uç açılı uzar. Geri almak için “Yapı geri”.`;
 }
 function jointPanel() {
   if (!S.multiOn || S.multi.length < 2) return `<h2>Birleşim · zıvana, kavela, DOMINO</h2><div class="a-tools"><button data-autojoin>Otomatik birleştir (40 mm'ye kadar boşluklar)</button></div>${S.jmsg ? `<p class="a-note"><b>${S.jmsg}</b></p>` : ''}<p class="a-note">1) ${S.multiOn ? '<b>Çoklu seçim açık.</b>' : '<button data-multi aria-pressed="false">Çoklu seçimi aç</button>'} 2) Modelde birbirine değen iki parçaya sırayla tıklayın (${S.multi.length}/2 seçili). 3) Burada türü seçip “Birleşimi ekle”ye basın. Zıvana ikinci parçaya açılır.</p>`;
@@ -488,7 +512,7 @@ function renderPanel() {
   <p class="a-note">Noktayı sürükleyin; eğriye dokunarak nokta ekleyin; noktaya uzun basarak silin. İki parmakla yakınlaştırın. Kesik çizgi özgün biçimdir.</p>` : '<p class="a-note">Biçimlendirmek için bir parça seçin.</p>'}
   ${versionPanel()}
   <h2>Fizik ve üretim</h2><ul class="a-checks" id="checks"></ul>
-  <h2>Teslim</h2><div class="a-acts"><button class="f-primary" data-act="prod">Üretime gönder →</button><button data-act="link">Bağlantıyı kopyala</button><button data-act="dxf">CNC (DXF) ↓</button><button data-act="stl">STL ↓</button><button data-act="cut">Kesim listesi ↓</button><button data-act="json">design.json ↓</button></div>
+  <h2>Teslim</h2><div class="a-acts"><button class="f-primary" data-act="prod">Üretime gönder →</button><button data-act="link">Bağlantıyı kopyala</button><button data-act="dxf">CNC (DXF) ↓</button><button data-act="pdf">Sunum PDF ↓</button><button data-act="glb">3B model (GLB) ↓</button><button data-act="stl">STL (3B yazıcı) ↓</button><button data-act="cut">Kesim listesi ↓</button><button data-act="json">design.json ↓</button></div>
   <input id="linkOut" readonly hidden>`;
   if (S.target) { drawEditor(); bindEditor(); renderToolState(); }
   renderChecks();
@@ -548,6 +572,14 @@ $('#panel').addEventListener('click', async e => {
   if (act === 'prod') location.href = `uretim.html${link.slice(link.indexOf('#'))}`;
   if (act === 'dxf') download(`AURA-${design().kind}-siluet.dxf`, silhouetteDxf(S.compiled), 'application/dxf');
   if (act === 'stl' && viewer) { const data = await viewer.exportSTL(); download(`AURA-${design().kind}.stl`, new Uint8Array(data.buffer || data), 'model/stl'); }
+  if (act === 'glb' && viewer) { const data = await viewer.exportGLB(); download(`AURA-${design().kind}.glb`, new Uint8Array(data), 'model/gltf-binary'); }
+  if (act === 'pdf' && viewer) { // photo + dimensioned drawing sheet with the design link: opens on any phone or PC
+    b.disabled = true; try {
+      const T = k => t(k, 'tr'), lab = {front: T('frontView'), side: T('sideView'), top: T('topView'), section: T('sectionView'), scale: T('scaleLabel'), units: T('units'), title: T(design().kind), note: T('concept'), seatDepth: T('seatDepth'), rake: T('rake'), status: T('status'), spec: T('spec'), knee: T('knee'), edgeDetail: T('edgeDetail'), mattressTop: T('mattressTop'), link: T('designLink')};
+      const sheet = drawingSheet(S.compiled, lab, {title: `AURA · ${T(design().kind)}`}), photo = await dataUrlJpeg(await viewer.photo(2, {width: 1800, height: 1200, samples: 24}));
+      download(`AURA-${design().kind}-sunum.pdf`, jpegPdf([photo, {...await svgToJpeg(sheet.svg), link: {url: link, rect: [12 / 420, (297 - 18) / 297, 0.62, (297 - 11) / 297]}}]), 'application/pdf');
+    } finally { b.disabled = false; }
+  }
   if (act === 'cut') download(`AURA-${design().kind}-kesim-listesi.csv`, cutList(), 'text/csv');
   if (act === 'json') download(`AURA-${design().kind}-design.json`, JSON.stringify(design(), null, 2), 'application/json');
 });
