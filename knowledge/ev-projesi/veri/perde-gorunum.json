@@ -1,0 +1,218 @@
+{
+  "schema_version": "1.0",
+  "unit": "mm",
+  "status": "renderer_proposals_not_photometric_or_manufacturing_certification",
+  "coordinate_system": {
+    "x": "ray boyunca",
+    "y": "odaya doğru",
+    "z": "zeminden yukarı",
+    "closed_fraction": "0 fully raised/open; 1 fully down/closed"
+  },
+  "curtain_motion": {
+    "split": "panel_count=2: iki panel karşı yönlere; panel_count=1: kullanıcı sağ/sol seçer",
+    "closed": "Toplam örtü ray eni; R*f düz kumaş kıvrımlarda korunur.",
+    "open": "Panel hacmi park bölgesinde kalır; sıfır ene sıkıştırılmaz. Wave stack eni kaynak tablosundan, uç parça SKUdan alınır; diğer başlıklarda ölçülmüş paket eni istenir.",
+    "returned_edges": "Yan dönüş ve merkez örtüşme ölçüsü bilinmiyorsa null; imalat eni diye varsayılmaz.",
+    "status": "AURA_geometry_contract"
+  },
+  "headings": {
+    "single": {
+      "fold_model": "alternating_soft_folds",
+      "fold_count": "ceil(flat_width / proposed_fold_pitch_mm)",
+      "proposed_fold_pitch_mm": 120,
+      "proposed_depth_mm": 60,
+      "status": "AURA_visual_proposal",
+      "source_ids": [
+        "HEMA",
+        "IKEA-NL"
+      ]
+    },
+    "double": {
+      "fold_model": "alternating_soft_folds",
+      "fold_count": "ceil(flat_width / proposed_fold_pitch_mm)",
+      "proposed_fold_pitch_mm": 120,
+      "proposed_depth_mm": 60,
+      "status": "AURA_visual_proposal",
+      "source_ids": [
+        "HEMA",
+        "IKEA-NL"
+      ]
+    },
+    "triple": {
+      "fold_model": "alternating_soft_folds",
+      "fold_count": "ceil(flat_width / proposed_fold_pitch_mm)",
+      "proposed_fold_pitch_mm": 120,
+      "proposed_depth_mm": 60,
+      "status": "AURA_visual_proposal",
+      "source_ids": [
+        "HEMA"
+      ]
+    },
+    "wave": {
+      "fold_model": "smooth_periodic_S",
+      "fold_count": "ceil(flat_width / proposed_fold_pitch_mm)",
+      "proposed_fold_pitch_mm": 120,
+      "proposed_depth_mm": 60,
+      "status": "AURA_visual_proposal",
+      "source_ids": [
+        "SG"
+      ]
+    },
+    "pencil": {
+      "fold_model": "alternating_soft_folds",
+      "fold_count": "ceil(flat_width / proposed_fold_pitch_mm)",
+      "proposed_fold_pitch_mm": 120,
+      "proposed_depth_mm": 60,
+      "status": "AURA_visual_proposal",
+      "source_ids": [
+        "JL",
+        "DUNELM"
+      ]
+    },
+    "eyelet": {
+      "fold_model": "alternating_soft_folds",
+      "fold_count": "ceil(flat_width / proposed_fold_pitch_mm)",
+      "proposed_fold_pitch_mm": 120,
+      "proposed_depth_mm": 60,
+      "status": "AURA_visual_proposal",
+      "source_ids": [
+        "JL",
+        "DUNELM"
+      ]
+    },
+    "rings": {
+      "fold_model": "alternating_soft_folds",
+      "fold_count": "ceil(flat_width / proposed_fold_pitch_mm)",
+      "proposed_fold_pitch_mm": 120,
+      "proposed_depth_mm": 60,
+      "status": "AURA_visual_proposal",
+      "source_ids": [
+        "IKEA-CH",
+        "IKEA-AT"
+      ]
+    },
+    "rod_pocket": {
+      "fold_model": "alternating_soft_folds",
+      "fold_count": "ceil(flat_width / proposed_fold_pitch_mm)",
+      "proposed_fold_pitch_mm": 120,
+      "proposed_depth_mm": 60,
+      "status": "AURA_visual_proposal",
+      "source_ids": [
+        "IKEA-AT"
+      ]
+    },
+    "velcro": {
+      "fold_model": "alternating_soft_folds",
+      "fold_count": "ceil(flat_width / proposed_fold_pitch_mm)",
+      "proposed_fold_pitch_mm": 120,
+      "proposed_depth_mm": 60,
+      "status": "AURA_visual_proposal",
+      "source_ids": [
+        "LEROY-IT"
+      ]
+    }
+  },
+  "wave_hardware": {
+    "carrier_spacing_mm": 80,
+    "pockets": 7,
+    "approx_fullness": 2.3,
+    "front_back_depth_mm": 160,
+    "minimum_clearance_mm": 100,
+    "stack_width_mm_per_m_track": 180,
+    "end_piece_allowance_mm": null,
+    "glider": "standard_not_roller",
+    "source_ids": [
+      "SG"
+    ],
+    "note": "Tablo s.5; en sona eklenen uç parça ayrıca seçilir. Sinüs kıvrım sayısı kanca siparişi değildir."
+  },
+  "materials": {
+    "sheer": {
+      "shader_opacity": 0.25,
+      "roughness": 0.9,
+      "status": "AURA_shader_proposal_not_measured_transmittance",
+      "drape": "flexible",
+      "source_ids": [
+        "DAYBREAK",
+        "DUNELM"
+      ]
+    },
+    "dimout": {
+      "shader_opacity": 0.8,
+      "roughness": 0.9,
+      "status": "AURA_shader_proposal_not_measured_transmittance",
+      "drape": "weighted",
+      "source_ids": [
+        "DAYBREAK",
+        "DUNELM"
+      ]
+    },
+    "blackout": {
+      "shader_opacity": 1,
+      "roughness": 0.9,
+      "status": "AURA_shader_proposal_not_measured_transmittance",
+      "drape": "weighted",
+      "source_ids": [
+        "DAYBREAK",
+        "DUNELM"
+      ]
+    }
+  },
+  "hardware": {
+    "rail": {
+      "shape": "rounded_rectangle",
+      "width_mm": 20,
+      "height_mm": 15,
+      "status": "AURA_placeholder_replace_by_SKU"
+    },
+    "rod": {
+      "shape": "circle",
+      "diameter_mm": 28,
+      "status": "AURA_placeholder_replace_by_SKU"
+    },
+    "load_capacity_kg": null
+  },
+  "states": {
+    "roller": {
+      "down": "flat rectangular cloth under cassette",
+      "up": "cloth wound onto tube; cassette remains",
+      "fabric_width": "mechanism_width minus SKU offsets, unknown until selected"
+    },
+    "pleated": {
+      "down": "accordion pleats between rails",
+      "up": "compressed stack; never zero height",
+      "proposed_pleat_pitch_mm": 20,
+      "status": "AURA_visual_proposal"
+    },
+    "roman": {
+      "down": "flat cloth with horizontal batten lines",
+      "up": "stacked horizontal folds below headrail",
+      "proposed_batten_spacing_mm": 250,
+      "status": "AURA_visual_proposal"
+    }
+  },
+  "transitions": "Açık/kapalı sınırları arasında kesintisiz ölçekle; kumaş yan açıklıkları ve toplanma hacmi koldan, kanattan ve tavandan geçmesin.",
+  "references": [
+    {
+      "source_id": "SG",
+      "url": "https://www.silentgliss.co.uk/fileadmin/redaktion/contentserv/Images/Web_Partner_Downloads/SGGB/Various_Documents/Wave_-_Curtain_Workroom_Guide.pdf"
+    },
+    {
+      "source_id": "JYSK",
+      "url": "https://gardiner.jysk.dk/opmaalingsvejledning"
+    },
+    {
+      "source_id": "LEROY-IT",
+      "url": "https://www.leroymerlin.it/guide-alla-scelta/come-scegliere-tende-a-pacchetto.html"
+    },
+    {
+      "source_id": "DAYBREAK",
+      "url": "https://www.kvadrat.dk/da-dk/produkter/curtains/7401-daybreak-2"
+    },
+    {
+      "source_id": "JL",
+      "url": "https://www.johnlewis.com/buying-guides/curtains-buying-guide"
+    }
+  ],
+  "not_supported": "Ölçülmemiş gerçek mekanizma, sertifikalı ışık/ses/ısı simülasyonu ve imalat kıvrımı bu görsel yaklaşımın dışında."
+}
