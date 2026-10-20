@@ -38,6 +38,17 @@ export function buildMesh(q) {
     else mesh = r;
   }
   else if (g.fn === 'sweep') mesh = sweep(g);
+  else if (g.fn === 'ends') {
+    // Auto-join: grow one or both ends along axis k by an amount that varies linearly along axis j (meets a tapered leg).
+    const inner = buildMesh({geom: g.inner}), P = new Float32Array(inner.positions), {k, j} = g, lo = [Infinity, Infinity, Infinity], hi = [-Infinity, -Infinity, -Infinity];
+    for (let v = 0; v < P.length; v += 3) for (let a = 0; a < 3; a++) { lo[a] = Math.min(lo[a], P[v + a]); hi[a] = Math.max(hi[a], P[v + a]); }
+    const span = hi[j] - lo[j] || 1, mid = (lo[k] + hi[k]) / 2, half = (hi[k] - lo[k]) / 2 || 1;
+    for (let v = 0; v < P.length; v += 3) {
+      const t = (P[v + j] - lo[j]) / span, f = (P[v + k] - mid) / half, e = f >= 0 ? g.pos[0] + (g.pos[1] - g.pos[0]) * t : g.neg[0] + (g.neg[1] - g.neg[0]) * t;
+      P[v + k] += Math.abs(f) * e * Math.sign(f || 1);
+    }
+    mesh = {...inner, positions: P};
+  }
   else if (g.fn === 'scaled') {
     // Designer scale: stretch the inner part along its own axes; normals take the inverse scale.
     const inner = buildMesh({geom: g.inner}), [sx, sy, sz] = g.s, positions = new Float32Array(inner.positions), normals = new Float32Array(inner.normals);
@@ -70,6 +81,7 @@ export function buildMesh(q) {
 
 /** World-space positions of a part (mm). */
 export function worldPositions(q) { return transformPositions(buildMesh(q).positions, q.pos, q.rot); }
+export function worldMesh(q) { const m = buildMesh(q); return {P: transformPositions(m.positions, q.pos, q.rot), I: m.indices}; }
 
 /** Reeded (fluted) face: half-round vertical reeds of a given pitch and depth, with top and bottom caps.
  * Built at z = 0 (back) to z = depth (reed crowns), centred in x and y. */

@@ -148,7 +148,10 @@ export function normalizeOverrides(list) {
     }
     else if (o.tool === 'transform' && typeof o.id === 'string') {
       const sc = v3(o.scale, 10, 1).map(v => Math.max(0.05, Math.min(10, v || 1)));
-      out.push({tool: 'transform', id: o.id.slice(0, 60), move: v3(o.move, 5000), rot: v3(o.rot, Math.PI * 2), scale: sc});
+      const T = {tool: 'transform', id: o.id.slice(0, 60), move: v3(o.move, 5000), rot: v3(o.rot, Math.PI * 2), scale: sc}, e = o.ends;
+      const pr = a => Array.isArray(a) ? [0, 1].map(i => Math.max(-200, Math.min(200, num(a[i])))) : [0, 0];
+      if (e && [0, 1, 2].includes(e.k) && [0, 1, 2].includes(e.j) && e.k !== e.j) T.ends = {k: e.k, j: e.j, neg: pr(e.neg), pos: pr(e.pos)};
+      out.push(T);
     }
   }
   return out;
@@ -231,7 +234,8 @@ export function applyOverrides(compiled, overrides) {
   out = out.map(q => {
     const t = list.filter(o => o.tool === 'transform' && o.id === q.id).at(-1); if (!t) return q;
     const s3 = t.scale, scaled = s3.some(v => Math.abs(v - 1) > 1e-6);
-    return {...q, pos: q.pos.map((v, i) => v + t.move[i]), rot: q.rot.map((v, i) => v + t.rot[i]), geom: scaled ? {fn: 'scaled', s: s3, inner: q.geom} : q.geom, cut: scaled && Array.isArray(q.cut) ? q.cut.map(v => Math.round(v * Math.max(...s3))) : q.cut, shaped: q.shaped || scaled};
+    let geom = scaled ? {fn: 'scaled', s: s3, inner: q.geom} : q.geom; if (t.ends) geom = {fn: 'ends', ...t.ends, inner: geom};
+    return {...q, pos: q.pos.map((v, i) => v + t.move[i]), rot: q.rot.map((v, i) => v + t.rot[i]), geom, cut: scaled && Array.isArray(q.cut) ? q.cut.map(v => Math.round(v * Math.max(...s3))) : q.cut, shaped: q.shaped || scaled || !!t.ends};
   });
   return {...compiled, parts: out, meta: {...compiled.meta, shaped: list.length}};
 }
