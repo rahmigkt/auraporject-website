@@ -1,5 +1,42 @@
 {
  "schema": "aura.ev.sohbet/1",
+ "layout_solver": "assets/ev/yerlesim.js",
+ "layout": {
+  "salon": {
+   "alternatives": 3,
+   "chosen_score": 10.14,
+   "notes": [
+    "TV pencereye karşı değil",
+    "TV'ye 3.2 m"
+   ]
+  },
+  "yatak1": {
+   "alternatives": 2,
+   "chosen_score": 8.98,
+   "notes": [
+    "yatak başı dolu duvarda"
+   ]
+  },
+  "yatak2": {
+   "alternatives": 3,
+   "chosen_score": 5.96,
+   "notes": [
+    "yatak başı dolu duvarda"
+   ]
+  },
+  "banyo": {
+   "alternatives": 3,
+   "chosen_score": 1.98,
+   "notes": []
+  },
+  "calisma": {
+   "alternatives": 3,
+   "chosen_score": 3.77,
+   "notes": [
+    "masa gün ışığında"
+   ]
+  }
+ },
  "id": "sohbet-001",
  "synthetic": true,
  "note": "Simüle edilmiş eğitim sohbeti; gerçek müşteri değildir. Asistan sözleşmesi: knowledge/ev-projesi/veri/asistan-sozlesme.json.",
@@ -514,11 +551,18 @@
   {
    "role": "user",
    "lang": "tr",
-   "text": "Güzel. Şimdi mobilyalar: salonda 3 kişilik bir kanepe, karşısında televizyon, ortada sehpa. Mutfağın önünde 4-6 kişilik yemek masası. Yatak odasına 160'lık yatak ve gardırop, çocuğa tek kişilik yatak, çalışma odasına bir masa. Banyoya da lavabo dolabı."
+   "text": "Güzel. Şimdi mobilyalar: salonda 3 kişilik bir kanepe, karşısında televizyon, ortada sehpa. Mutfağın önünde 4 kişilik yemek masası. Yatak odasına 160'lık yatak ve gardırop, çocuğa tek kişilik yatak, çalışma odasına bir masa. Banyoya da lavabo dolabı."
   },
   {
    "role": "assistant",
-   "text": "Hepsini evin ölçüsüne göre yerleştirdim. Mutfak kuzey duvar boyunca 3,9 m; yemek masası 160×90 cm, mutfakla salonun arasında. Kanepe 230 cm, batıda pencereye yakın, doğu duvarındaki 180 cm TV ünitesine bakıyor; arada 110 cm'lik sehpa. Yatak odasında yatağın başı doğu duvarında, gardırop karşı duvarda; aralarında rahat geçiş var. Çocuk odasında tek kişilik yatak kuzey duvarında, çalışma odasında masa pencerenin önünde, banyoda 90 cm lavabo dolabı. Bunların hepsi AURA stüdyosunda özel ölçüyle üretilebilen tasarımlar; renk ve malzemeyi birlikte seçebiliriz.",
+   "text": "Hepsini evin ölçüsüne göre yerleştirdim. Mutfak 3 m; yemek masası 140×85 cm, dört kişilik, mutfakla salonun arasında. Kanepe 230 cm, batıda pencereye yakın, doğu duvarındaki 180 cm TV ünitesine bakıyor; arada 110 cm'lik sehpa. Yatak odasında yatağın başı penceresiz, dolu bir duvarda; iki yanında ve ayak ucunda 60 cm geçiş var; gardırop kapının açılışına girmeyen duvarda. Çocuk odasında tek kişilik yatak kuzey duvarında, çalışma odasında masa pencerenin önünde, banyoda 90 cm lavabo dolabı. Bunların hepsi AURA stüdyosunda özel ölçüyle üretilebilen tasarımlar; renk ve malzemeyi birlikte seçebiliriz.",
+   "intent": [
+    "TV penceresiz duvarda, ekrana ışık vurmasın",
+    "kanepe TV'ye baksın, 1,8–3,6 m",
+    "yemek masası mutfağa yakın",
+    "yatağın iki yanından geçilsin",
+    "çalışma masası gün ışığında"
+   ],
    "proposed_changes": [
     {
      "operation": "propose_item_placement",
@@ -528,10 +572,12 @@
       "space_id": "salon",
       "family": "kitchen",
       "kind": "run",
-      "params": {},
+      "params": {
+       "width": 3000
+      },
       "pos_xy_mm": [
-       2100,
-       4440
+       2170,
+       4420
       ],
       "rot_deg": 0
      }
@@ -550,8 +596,8 @@
        "height": 730
       },
       "pos_xy_mm": [
-       2350,
-       1700
+       2550,
+       1500
       ],
       "rot_deg": 90
      }
@@ -570,8 +616,8 @@
        "depth": 420
       },
       "pos_xy_mm": [
-       5730,
-       1700
+       5710,
+       1370
       ],
       "rot_deg": 270
      }
@@ -590,10 +636,10 @@
        "height": 385
       },
       "pos_xy_mm": [
-       3650,
-       1700
+       3900,
+       1500
       ],
-      "rot_deg": 90
+      "rot_deg": 0
      }
     },
     {
@@ -605,15 +651,15 @@
       "family": "table",
       "kind": "dining",
       "params": {
-       "length": 1600,
-       "width": 900,
+       "length": 1400,
+       "width": 850,
        "height": 745
       },
       "pos_xy_mm": [
-       1500,
+       4650,
        3150
       ],
-      "rot_deg": 0
+      "rot_deg": 90
      }
     },
     {
@@ -624,12 +670,10 @@
       "space_id": "yatak1",
       "family": "bedroom",
       "kind": "bed",
-      "params": {
-       "width": 1600
-      },
+      "params": {},
       "pos_xy_mm": [
-       8400,
-       2400
+       7130,
+       2420
       ],
       "rot_deg": 90
      }
@@ -648,10 +692,10 @@
        "depth": 600
       },
       "pos_xy_mm": [
-       6360,
-       2400
+       8430,
+       4420
       ],
-      "rot_deg": 90
+      "rot_deg": 0
      }
     },
     {
@@ -662,14 +706,12 @@
       "space_id": "yatak2",
       "family": "bedroom",
       "kind": "bed",
-      "params": {
-       "width": 1200
-      },
+      "params": {},
       "pos_xy_mm": [
-       1300,
-       7800
+       1370,
+       7780
       ],
-      "rot_deg": 180
+      "rot_deg": 0
      }
     },
     {
@@ -686,10 +728,10 @@
        "height": 750
       },
       "pos_xy_mm": [
-       8700,
-       8550
+       8730,
+       8530
       ],
-      "rot_deg": 180
+      "rot_deg": 0
      }
     },
     {
@@ -706,10 +748,10 @@
        "depth": 480
       },
       "pos_xy_mm": [
-       3600,
-       8605
+       4875,
+       7530
       ],
-      "rot_deg": 180
+      "rot_deg": 270
      }
     },
     {
