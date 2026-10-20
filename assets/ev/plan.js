@@ -4,8 +4,10 @@
 import * as THREE from '../vendor/three.module.js?v=20261016b';
 import {PAINTS, FLOORS, SCHEMES, paintHex, floorTexture} from './finishes.js?v=20261020r';
 import {compileItem, footprint, itemName} from './items.js?v=20261020u';
-import {accessories, RUG_MODELS, RUG_COLORS} from './aksesuar.js?v=20261021d';
-import {curtains, STATES as PSTATES, MODELS as CMODELS, FABRICS} from './perde.js?v=20261021d';
+import {accessories} from './aksesuar.js?v=20261021e';
+import {rugMesh} from './hali.js?v=20261021e';
+import {migrate, merged, chooserHTML, applyChoice, TEXTILE_CSS, TEXTILE_KEY} from './tekstil.js?v=20261021e';
+import {curtains, STATES as PSTATES} from './perde.js?v=20261021e';
 
 const $ = s => document.querySelector(s), NS = 'http://www.w3.org/2000/svg';
 const val = q => (q && typeof q === 'object' ? q.value : q) ?? 0;
@@ -30,7 +32,7 @@ const opsOf = id => { if (opsCache.has(id)) return opsCache.get(id); const w = W
     a = Math.max(0, a); b = Math.min(w.L, b); if (b - a > 50) out.push({...o, a, w: b - a, ghost: true}); }
   out.sort((p, q) => p.a - q.a); opsCache.set(id, out); return out; };
 function load(rec, name, keep = false) {
-  D = rec; if (!D.decor) try { const t = JSON.parse(localStorage.getItem('aura-tekstil')); if (t) D.decor = {curtain: t.curtain, rug: t.rug}; } catch {} S.name = name; if (!keep) { S.room = null; vb = null; }
+  D = rec; if (!D.decor) { let t = null; try { t = JSON.parse(localStorage.getItem(TEXTILE_KEY)); } catch {} D.decor = migrate(t); } else D.decor = migrate(D.decor); for (const s of D.spaces || []) if (s.decor) s.decor = migrate(s.decor); S.name = name; if (!keep) { S.room = null; vb = null; }
   walls = D.walls.map(w => { const [x0, y0] = w.from_xy_mm, [x1, y1] = w.to_xy_mm, L = Math.hypot(x1 - x0, y1 - y0) || 1;
     return {...w, x0, y0, x1, y1, L, ux: (x1 - x0) / L, uy: (y1 - y0) / L, t: val(w.thickness) || 120}; });
   W = Object.fromEntries(walls.map(w => [w.id, w]));
@@ -154,16 +156,6 @@ const finishOf = s => { const sc = SCHEMES[D.scheme] || SCHEMES.iskandinav, f = 
 const paintMats = {}, paintMat = id => paintMats[id] ??= new THREE.MeshStandardMaterial({color: paintHex(id), roughness: 0.92});
 const floorMats2 = {}, floorFinish = id => floorMats2[id] ??= new THREE.MeshStandardMaterial({map: floorTexture(id), roughness: 0.72, side: THREE.DoubleSide});
 const spaceAt = p => D.spaces.find(s => inside(p, s.boundary_xy_mm));
-const rugMats = {}, rugMat = (c, model = 'duz') => rugMats[c + model] ??= (() => { const cv = document.createElement('canvas'); cv.width = cv.height = 512; const g = cv.getContext('2d'), N = 512;
-  const dk = 'rgba(40,30,20,.32)', lt = 'rgba(255,250,240,.38)'; g.fillStyle = c; g.fillRect(0, 0, N, N);
-  if (model === 'cizgili') for (let y = 40; y < N - 40; y += 36) { g.fillStyle = y % 72 < 36 ? dk : lt; g.fillRect(30, y, N - 60, 12); }
-  else if (model === 'geometrik') { g.strokeStyle = lt; g.lineWidth = 6; for (let x = -N; x < 2 * N; x += 64) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x + N, N); g.stroke(); g.beginPath(); g.moveTo(x + N, 0); g.lineTo(x, N); g.stroke(); } }
-  else if (model === 'kilim') { for (let y = 70; y < N - 70; y += 74) for (let x = 70; x < N - 40; x += 74) { g.fillStyle = (x + y) % 148 ? dk : lt; g.beginPath(); g.moveTo(x, y - 26); g.lineTo(x + 22, y); g.lineTo(x, y + 26); g.lineTo(x - 22, y); g.closePath(); g.fill(); }
-    g.fillStyle = dk; g.fillRect(0, 0, N, 24); g.fillRect(0, N - 24, N, 24); }
-  g.strokeStyle = model === 'duz' ? dk : lt; g.lineWidth = 10; g.strokeRect(18, 18, N - 36, N - 36); g.lineWidth = 3; g.strokeRect(36, 36, N - 72, N - 72);
-  for (let i = 0; i < 9000; i++) { g.fillStyle = `rgba(${Math.random() < .5 ? '255,255,255' : '40,30,20'},.05)`; g.fillRect(Math.random() * N, Math.random() * N, 2, 2); }
-  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; const top = new THREE.MeshStandardMaterial({map: t, roughness: 1}), side = new THREE.MeshStandardMaterial({color: c, roughness: 1});
-  return [side, side, top, side, side, side]; })();
 const lampLights = [], shadeMat = new THREE.MeshStandardMaterial({color: '#f3ead8', emissive: '#ffd9a8', emissiveIntensity: 0, roughness: 0.8, side: THREE.DoubleSide}), metalMat = new THREE.MeshStandardMaterial({color: '#3c3a36', roughness: 0.5, metalness: 0.4});
 function lampObject(l) { const g = new THREE.Group(), add = (geo, m, y) => { const o = new THREE.Mesh(geo, m); o.position.y = y; g.add(o); return o; };
   if (l.kind === 'ceiling') add(new THREE.CylinderGeometry(0.17, 0.2, 0.07, 32), shadeMat, H / 1000 - 0.04);
@@ -191,12 +183,12 @@ function build(cut) {
   }
   { const ACC = accessories(D); lampLights.length = 0;
     for (const r of ACC.rugs) { const c = r.poly.reduce((m, p) => [m[0] + p[0] / 4, m[1] + p[1] / 4], [0, 0]), a = Math.hypot(r.poly[1][0] - r.poly[0][0], r.poly[1][1] - r.poly[0][1]), f = Math.hypot(r.poly[2][0] - r.poly[1][0], r.poly[2][1] - r.poly[1][1]);
-      const m = new THREE.Mesh(new THREE.BoxGeometry(a / 1000, 0.008, f / 1000), rugMat(r.color, r.model)); m.position.set(c[0] / 1000, 0.006, -c[1] / 1000); m.rotation.y = Math.atan2(r.poly[1][1] - r.poly[0][1], r.poly[1][0] - r.poly[0][0]); m.receiveShadow = true; house.add(m); }
+      const m = rugMesh(a, f, r.rug); m.position.set(c[0] / 1000, 0, -c[1] / 1000); m.rotation.y = Math.atan2(r.poly[1][1] - r.poly[0][1], r.poly[1][0] - r.poly[0][0]); m.receiveShadow = true; house.add(m); }
     for (const l of ACC.lights) { if (S.view === 'maket' && (l.kind === 'ceiling' || l.kind === 'pendant')) continue;
       const g3 = lampObject(l), y = l.kind === 'ceiling' ? H / 1000 - 0.12 : l.kind === 'desk' ? l.h / 1000 + 0.3 : l.h / 1000 - 0.15;
       g3.position.set(l.pos[0] / 1000, 0, -l.pos[1] / 1000); if (!(S.view === 'kesit' && l.kind === 'ceiling')) house.add(g3);
       const pl = new THREE.PointLight('#ffcf9a', 0, l.kind === 'ceiling' ? 7 : 5, 2); pl.position.set(l.pos[0] / 1000, y, -l.pos[1] / 1000); pl.userData.k = l.kind; house.add(pl); lampLights.push(pl); } }
-  if (S.view !== 'maket') house.add(curtains(walls, ops, spaceAt, H, A.perde, sp => ({...(D.decor?.curtain || {}), ...(sp.decor?.curtain || {})})));
+  if (S.view !== 'maket') house.add(curtains(walls, ops, spaceAt, H, A.perde, sp => ({...merged(D.decor, sp.decor), room: !!sp.decor})));
   for (const w of walls) for (const [a, b, lo, hi0] of pieces(w)) {
     const hi = Math.min(hi0, cut); if (hi <= lo) continue;
     const mid = (a + b) / 2, mx = w.x0 + w.ux * mid, my = w.y0 + w.uy * mid, o = w.t / 2 + 150; // each face takes the paint of the room it faces
@@ -295,19 +287,18 @@ function show(v) {
 const DEC = {tab: 'curtain'};
 function decorUI() {
   const el = $('#dekor'); el.hidden = S.view === 'plan'; if (el.hidden) return;
-  const sp = D.spaces.find(x => x.id === S.room), scope = sp ? (sp.decor ??= {}) : (D.decor ??= {}), cur = {...(D.decor?.[DEC.tab] || {}), ...(sp?.decor?.[DEC.tab] || {})};
-  const models = DEC.tab === 'curtain' ? Object.entries(CMODELS).map(([k, v]) => [k, v[0]]).concat([['yok', 'Perdesiz']]) : Object.entries(RUG_MODELS), colors = DEC.tab === 'curtain' ? FABRICS : RUG_COLORS;
-  el.innerHTML = `<div class="dk-tabs"><button data-dt="curtain" aria-pressed="${DEC.tab === 'curtain'}">Perde</button><button data-dt="rug" aria-pressed="${DEC.tab === 'rug'}">Halı</button><span>${sp ? (sp.name || NAMES[sp.kind] || 'Oda').replace(/\s+\d+$/, '') + ' için' : 'Bütün ev'}</span></div>
-  <div class="dk-models">${models.map(([k, v]) => `<button data-dm="${k}" aria-pressed="${cur.model === k}">${v}</button>`).join('')}</div>
-  <div class="sw">${colors.map(([k, n, h]) => `<button data-dc="${k}" title="${n}" aria-pressed="${cur.color === k}" style="background:${h}"></button>`).join('')}</div>
-  ${sp && scope[DEC.tab] ? '<button data-dr="1" class="dk-reset">Ev geneline dön</button>' : ''}`;
+  const sp = D.spaces.find(x => x.id === S.room), t = merged(D.decor, sp?.decor);
+  el.innerHTML = `<div class="dk-tabs"><button data-dt="curtain" aria-pressed="${DEC.tab === 'curtain'}">Perde</button><button data-dt="rug" aria-pressed="${DEC.tab === 'rug'}">Halı</button><span>${sp ? (sp.name || NAMES[sp.kind] || 'Oda').replace(/\s+\d+$/, '') + (sp.decor ? ' · odaya özel' : ' · ev geneli') : 'Bütün ev'}</span></div>
+  <div class="tx">${chooserHTML(t, DEC.tab, {compact: true})}</div>${sp?.decor ? '<button data-dr="1" class="dk-reset">Ev geneline dön</button>' : ''}`;
 }
-$('#dekor').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return;
-  const sp = D.spaces.find(x => x.id === S.room), scope = sp ? (sp.decor ??= {}) : (D.decor ??= {});
-  if (b.dataset.dt) DEC.tab = b.dataset.dt;
-  else if (b.dataset.dr) delete scope[DEC.tab];
-  else { const o = scope[DEC.tab] ??= {}; if (b.dataset.dm) o.model = b.dataset.dm; if (b.dataset.dc) o.color = b.dataset.dc; }
-  decorUI(); if (!b.dataset.dt) { build(S.view === 'maket' ? Math.min(A.wallH, H) : H); render(); side(); } });
+{ const D0 = $('#dekor'), st = document.createElement('style'); st.textContent = TEXTILE_CSS; document.head.append(st);
+  const change = el => { const sp = D.spaces.find(x => x.id === S.room);
+    if (el.dataset.dt) { DEC.tab = el.dataset.dt; return decorUI(); }
+    if (el.dataset.dr) delete sp.decor;
+    else { const target = sp ? (sp.decor ??= JSON.parse(JSON.stringify(merged(D.decor)))) : D.decor; if (!applyChoice(target, el)) return; if (!sp) try { localStorage.setItem(TEXTILE_KEY, JSON.stringify(D.decor)); } catch {} }
+    decorUI(); build(S.view === 'maket' ? Math.min(A.wallH, H) : H); render(); side(); };
+  D0.addEventListener('click', e => { const b = e.target.closest('button'); if (b) change(b); });
+  D0.addEventListener('change', e => { if (e.target.matches('input[type=range]')) change(e.target); }); }
 function atmosUI() {
   const el = $('#atmos'); if (el.hidden) return;
   el.innerHTML = `<select data-a="moment">${Object.entries(MOMENTS).map(([k, v]) => `<option value="${k}" ${A.moment === k ? 'selected' : ''}>${v[0]}</option>`).join('')}</select>
