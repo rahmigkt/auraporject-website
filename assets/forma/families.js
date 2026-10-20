@@ -79,7 +79,7 @@ export const FAMILIES = {
     sampleParams(st, kind, r, locks) {
       const {RANGES, ENUMS, KINDS} = table, k = KINDS[kind] || KINDS.dining, p = {kind};
       for (const key of Object.keys(ENUMS)) p[key] = LINE_KEYS.includes(key) ? 'none' : st.enums[key] ? r.weighted(st.enums[key]) : r.pick(ENUMS[key]);
-      for (const key of Object.keys(RANGES)) { const [lo, hi] = st.ranges[key] || TABLE_SAMPLE_RANGES[key] || RANGES[key]; p[key] = r.range(lo, hi); }
+      for (const key of Object.keys(RANGES)) { if (key === 'panelArch' || key === 'panelFoot') { p[key] = table.DEFAULTS[key]; continue; } /* designer choice; keeps seeded samples stable */ const [lo, hi] = st.ranges[key] || TABLE_SAMPLE_RANGES[key] || RANGES[key]; p[key] = r.range(lo, hi); }
       // Shapes and bases that suit each kind.
       if (kind === 'console' || kind === 'desk') { if (!['rect', 'rounded', 'racetrack', 'boat'].includes(p.topShape)) p.topShape = r.pick(['rect', 'rounded']); if (['pedestal', 'tripod', 'drum', 'doublePedestal'].includes(p.baseType)) p.baseType = r.pick(['legsApron', 'slabEnds', 'sled', 'legsOnly']); }
       if (kind === 'side') { if (['trestle', 'doublePedestal'].includes(p.baseType)) p.baseType = r.pick(['pedestal', 'legsOnly', 'drum']); if (r.next() < 0.5) p.topShape = r.pick(['round', 'superellipse', 'round']); }
