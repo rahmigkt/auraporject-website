@@ -1,0 +1,76 @@
+{
+  "contract": "ev-plan-tools/0.2",
+  "seed_policy": "10000+i",
+  "count": 2200,
+  "counts": {
+    "single_room": 220,
+    "split:train": 1540,
+    "corridor": 220,
+    "open_kitchen": 220,
+    "corner_living": 220,
+    "duplex": 220,
+    "detached_2": 220,
+    "detached_3": 220,
+    "gallery": 220,
+    "split:validation": 220,
+    "courtyard": 220,
+    "split:test": 440,
+    "notch": 220
+  },
+  "rejected": {},
+  "generator_valid_rate": 1.0,
+  "elapsed_seconds": 141.51,
+  "human_reviewed": false,
+  "synthetic": true,
+  "sources": {
+    "assets/ev/plan.js": "92ecdd8b11c4567ebcc60e160ffe28b87fba469e92db9552d566d4d3f72f17e0",
+    "assets/ev/ornek-plan.json": "368fb188db511611fa604495f057021b49d11e5663638a3995ab2da79a41298a",
+    "knowledge/ev-projesi/veri/ev-projesi.schema.json": "f202c6c3fc01961be11093a26edb579249eb1ab7babe09200be7c65bac2001ae",
+    "knowledge/ev-projesi/veri/ev-projesi.schema.v0.2.json": "d1f6de161f66d7404572e29512deced3d3bac2617f116f636136c4ec38887511",
+    "knowledge/ev-projesi/veri/plan-kurallari.v2.json": "02c3e6187e679371ff9f921fc2e7bd61fa9bd1f272f829cb3fa9a5f85a09cb08",
+    "tools/ev-plan/common.py": "5d7c8f4b1488a3ff126df282460ad63477a3a72476b3333e6bf707b7dcf14570",
+    "tools/ev-plan/compat.py": "761c8185f5a0c58ef19ab6b4f13b7b88715c9e0e8632046adee1ef94ac0bdb2c",
+    "tools/ev-plan/dataset.py": "5f62f1908f7e870232bef795fdade8c8bdbfff4105a16d8edeb7950e933e7876",
+    "tools/ev-plan/evaluate.py": "0b69f27907e0f604a5810de0bc5ea87089422ced4bb29a64157ca1b2e9069453",
+    "tools/ev-plan/generator.py": "cfa3627096c770913eaeb4290c655e7004e31ebce9267615674a299815815602",
+    "tools/ev-plan/test_pipeline.py": "1b0607ee40195a9380702d49888a7210572f12ff628fc38f085a1dc6655311bb",
+    "tools/ev-plan/validate.py": "4c300d7558c36753a63e9c96ede83063669568de246ee568a565f57403498431",
+    "origin/main:assets/ev/plan.js": "2510e861be04029981cc426408ececc4a1d5ad867660858c039a5b19605ee217",
+    "origin/main:assets/ev/ornek-plan.json": "692fb129ca52e6e4636e18fa75050536b6841c8c5d694fc184cbd2ef1e6d9043"
+  },
+  "source_fingerprint": "77b2ec7567da9ea99c3d478dac278bd108c8e4275aa025346abfe0c1624bf782",
+  "split_policy": {
+    "train": [
+      "single_room",
+      "corridor",
+      "open_kitchen",
+      "corner_living",
+      "duplex",
+      "detached_2",
+      "detached_3"
+    ],
+    "validation": [
+      "gallery"
+    ],
+    "test": [
+      "courtyard",
+      "notch"
+    ]
+  },
+  "files": {
+    "edits.jsonl": "d7f1b1e9798c33081b0b1916c621c72292505ae88a101862953ede1d0fb148b9",
+    "plans.jsonl": "e3f2981b82dd07104de5c4bb81ef35c0ffa4a56241ebbba7ea26aec1690c6c47",
+    "sample-chat.jsonl": "637cc6154fe1a76757115897720058a4187bd17b542e006f781a667621b12529",
+    "test.jsonl": "fe8955c8164dfc8302b51a04e2aba203329a342be5721a7712e975c2f62e2577",
+    "train.jsonl": "7684fb5882dd8ac89c8c339922252bbb98626a1f0c2bff6ad0c3005af120eaf7",
+    "validation.jsonl": "d86811208b21151f45ece8de39c99ef3a88a1735464282a4752eef3b9fe8b7db"
+  },
+  "cache_reuse": {
+    "validated_plan_cache_hits": 2200,
+    "cached_validated_records": 2200,
+    "cache_input_records_sha256": "c40902aaeb58767849fff02cea2c1b9e336925bbb2c16358b12de4dde9d15f41",
+    "cache_source_manifest_file": "initial-2000-manifest.json",
+    "cache_policy": "Only identical source fingerprint and exact create args; validators reuse exact full-plan SHA256 verdict. New plans/edits checked normally.",
+    "initial_generation_seconds": 1003.14
+  }
+}

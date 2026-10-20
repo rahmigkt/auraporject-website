@@ -1,0 +1,23 @@
+{
+  "mode": "oracle",
+  "model": "oracle_target_replay_NOT_MODEL",
+  "contract": "ev-plan-tools/0.2",
+  "source_fingerprint": "77b2ec7567da9ea99c3d478dac278bd108c8e4275aa025346abfe0c1624bf782",
+  "test_file_hash": "fe8955c8164dfc8302b51a04e2aba203329a342be5721a7712e975c2f62e2577",
+  "measured": 1807,
+  "total_requested": 1807,
+  "rates": {
+    "format_valid": 1.0,
+    "valid": 1.0,
+    "intent": 1.0,
+    "levels": 1.0
+  },
+  "area_consistency_rate": 1.0,
+  "rule_violations": 0,
+  "note": "Oracle replay tests data/tool plumbing, not model quality. Local model pilot is capped at 768 output tokens and 180s/request; truncation/timeouts are reported, not hidden. No fine-tuning.",
+  "prior_score_cache": {
+    "hits": 1647,
+    "policy": "Only exact complete dataset row hash and identical raw target; source fingerprint unchanged. All added rows scored normally."
+  },
+  "full_result_sha256": "7867ecbaf225e170d455b79dfa78817ce27c6bbdec2c73c009a3891f3b074e5d"
+}

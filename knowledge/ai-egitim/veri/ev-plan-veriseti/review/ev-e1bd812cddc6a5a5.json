@@ -1,0 +1,433 @@
+{
+  "schema_version": "0.2",
+  "project_id": "ev-e1bd812cddc6a5a5",
+  "revision": 1,
+  "status": "survey",
+  "coordinate_system": "mm; right-handed; x/y floor plane, z up; local origin; glTF adapter converts units and up-axis",
+  "language": {
+    "customer": "tr",
+    "designer": "tr"
+  },
+  "brief": {
+    "whole_home": true,
+    "goals": [
+      "Tamamen sentetik; tasarımcı doğrulaması gerekli"
+    ],
+    "budget": {
+      "amount": null,
+      "currency": "TRY",
+      "includes": [],
+      "estimate_status": "unknown"
+    },
+    "household_needs": [],
+    "style": [],
+    "preserve": []
+  },
+  "levels": [
+    {
+      "id": "level-0",
+      "name": "Kat 0",
+      "elevation": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "floor_height": {
+        "value": 3000,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      }
+    }
+  ],
+  "spaces": [
+    {
+      "id": "level-0-s0",
+      "level_id": "level-0",
+      "name": "Tek oda",
+      "kind": "living",
+      "axis_boundary_xy_mm": [
+        [
+          4600.0,
+          0.0
+        ],
+        [
+          4600.0,
+          4800.0
+        ],
+        [
+          0.0,
+          4800.0
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "boundary_xy_mm": [
+        [
+          4500.0,
+          100.0
+        ],
+        [
+          100.0,
+          100.0
+        ],
+        [
+          100.0,
+          4700.0
+        ],
+        [
+          4500.0,
+          4700.0
+        ]
+      ],
+      "wall_ids": [
+        "level-0-w0",
+        "level-0-w1",
+        "level-0-w2",
+        "level-0-w3"
+      ],
+      "ceiling_height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    }
+  ],
+  "walls": [
+    {
+      "id": "level-0-w0",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        4600.0,
+        0.0
+      ],
+      "to_xy_mm": [
+        4600.0,
+        4800.0
+      ],
+      "from_node_id": "level-0-n0",
+      "to_node_id": "level-0-n1",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s0"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": true
+    },
+    {
+      "id": "level-0-w1",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        4600.0,
+        4800.0
+      ],
+      "to_xy_mm": [
+        0.0,
+        4800.0
+      ],
+      "from_node_id": "level-0-n1",
+      "to_node_id": "level-0-n2",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s0"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": true
+    },
+    {
+      "id": "level-0-w2",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        0.0,
+        4800.0
+      ],
+      "to_xy_mm": [
+        0.0,
+        0.0
+      ],
+      "from_node_id": "level-0-n2",
+      "to_node_id": "level-0-n3",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s0"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": true
+    },
+    {
+      "id": "level-0-w3",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        0.0,
+        0.0
+      ],
+      "to_xy_mm": [
+        4600.0,
+        0.0
+      ],
+      "from_node_id": "level-0-n3",
+      "to_node_id": "level-0-n0",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s0"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": true
+    }
+  ],
+  "nodes": [
+    {
+      "id": "level-0-n0",
+      "level_id": "level-0",
+      "xy_mm": [
+        4600.0,
+        0.0
+      ]
+    },
+    {
+      "id": "level-0-n1",
+      "level_id": "level-0",
+      "xy_mm": [
+        4600.0,
+        4800.0
+      ]
+    },
+    {
+      "id": "level-0-n2",
+      "level_id": "level-0",
+      "xy_mm": [
+        0.0,
+        4800.0
+      ]
+    },
+    {
+      "id": "level-0-n3",
+      "level_id": "level-0",
+      "xy_mm": [
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "openings": [
+    {
+      "id": "level-0-o0",
+      "level_id": "level-0",
+      "wall_id": "level-0-w0",
+      "kind": "door",
+      "space_ids": [
+        "level-0-s0"
+      ],
+      "offset_from_wall_start": {
+        "value": 1900.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1000,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "swing": "in",
+      "hinge": "start",
+      "opens_to_space_id": "level-0-s0",
+      "entry": true
+    },
+    {
+      "id": "level-0-o1",
+      "level_id": "level-0",
+      "wall_id": "level-0-w2",
+      "kind": "window",
+      "space_ids": [
+        "level-0-s0"
+      ],
+      "offset_from_wall_start": {
+        "value": 1780.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1240,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 700,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "swing": "fixed",
+      "hinge": "none",
+      "opens_to_space_id": null,
+      "entry": false
+    }
+  ],
+  "connections": [],
+  "stairs": [],
+  "columns": [],
+  "items": [],
+  "finishes": [],
+  "notes": [],
+  "issues": [],
+  "evidence": [
+    {
+      "id": "synthetic",
+      "kind": "note",
+      "space_ids": [
+        "level-0-s0"
+      ],
+      "private_object_id": null,
+      "caption": "Original seeded synthetic geometry. Not a real home or construction approval.",
+      "language": "en",
+      "training_consent": false,
+      "synthetic": true
+    }
+  ],
+  "kitchens": [],
+  "example_only": true,
+  "site": null,
+  "dwelling": {
+    "kind": "single_room",
+    "bedroom_count": 0,
+    "family": "single_room",
+    "north_deg": 0
+  },
+  "review": {
+    "id": "review",
+    "state": "awaiting_designer",
+    "revision": 1,
+    "designer_id": null,
+    "designer_approval_revision": null,
+    "blocking_issue_ids": []
+  }
+}
