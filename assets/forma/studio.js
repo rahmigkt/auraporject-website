@@ -157,7 +157,6 @@ function shell() {
   <header class="f-header">
     <a class="f-brand" href="index.html?lang=${state.lang}">AURA</a>
     <nav class="f-families" id="families" aria-label="${esc(L('title'))}"></nav>
-    <button class="f-guide-btn" id="textileBtn" type="button">${L('textile')}</button>
     <button class="f-account" id="accountBtn" type="button"></button>
     <label class="f-lang"><span class="sr">Language</span><select id="lang">${Object.entries(UI_LANGS).map(([k, v]) => `<option value="${k}" ${k === state.lang ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
   </header>
@@ -193,9 +192,11 @@ function shell() {
   }).catch(() => { host.innerHTML = '<p class="f-nogl">WebGL</p>'; });
   bindShell(); shellNav();
   renderCaption(); renderPanel();
+  if (state.textileView) textileView();
 }
 function shellNav() {
-  $('#families').innerHTML = FAMILY_NAV.map(([f, k]) => `<button data-family="${f}" aria-pressed="${state.design.family === f}">${esc(L(k))}</button>`).join('');
+  $('#families').innerHTML = FAMILY_NAV.map(([f, k]) => `<button data-family="${f}" aria-pressed="${!state.textileView && state.design.family === f}">${esc(L(k))}</button>`).join('')
+    + `<button data-textile="1" aria-pressed="${!!state.textileView}">${esc(L('textile'))}</button>`;
 }
 
 function renderCaption() {
@@ -1144,10 +1145,13 @@ function listen() {
 // ---- Events ----------------------------------------------------------------------------------
 function bindShell() {
   $('#accountBtn').onclick = () => openAccount();
-  $('#textileBtn').onclick = () => openTextile();
+  
   renderAccountBtn();
   $('#lang').onchange = e => { state.lang = e.target.value; store.set('aura-forma-lang', state.lang); state.drawingCache = null; shell(); };
-  $('#families').onclick = e => { const b = e.target.closest('[data-family]'); if (b && b.dataset.family !== state.design.family) switchFamily(b.dataset.family); };
+  $('#families').onclick = e => { if (e.target.closest('[data-textile]')) { state.textileView = true; return textileView(); }
+    const b = e.target.closest('[data-family]'); if (!b) return;
+    if (state.textileView) { state.textileView = false; if (b.dataset.family === state.design.family) return shell(); }
+    if (b.dataset.family !== state.design.family) switchFamily(b.dataset.family); };
   for (const b of document.querySelectorAll('[data-view]')) b.onclick = () => { viewer?.view(b.dataset.view); markView(b.dataset.view); };
   for (const b of document.querySelectorAll('[data-zoom]')) b.onclick = () => viewer?.zoom(+b.dataset.zoom);
   $('#structureBtn').onclick = toggleStructure;
@@ -1266,21 +1270,22 @@ function textilePreview(c, r) {
   const rug = r.model === 'yok' ? '' : `<rect x="70" y="200" width="180" height="34" fill="${rc}"/>${r.model === 'cizgili' ? Array.from({length: 8}, (_, i) => `<rect x="${82 + i * 21}" y="203" width="7" height="28" fill="rgba(255,250,240,.35)"/>`).join('') : r.model === 'geometrik' ? Array.from({length: 7}, (_, i) => `<path d="M${88 + i * 24} 205l10 12-10 12-10-12z" fill="none" stroke="rgba(255,250,240,.45)" stroke-width="1.6"/>`).join('') : r.model === 'kilim' ? Array.from({length: 7}, (_, i) => `<path d="M${88 + i * 24} 207l8 10-8 10-8-10z" fill="rgba(40,30,20,${i % 2 ? .3 : .15})"/>`).join('') : ''}<rect x="74" y="203" width="172" height="28" fill="none" stroke="rgba(40,30,20,.3)" stroke-width="2"/>`;
   return `<svg viewBox="0 0 320 244" class="f-tx-view" aria-hidden="true"><rect width="320" height="244" fill="#efeae0"/><rect x="0" y="196" width="320" height="48" fill="#cdb592"/><rect x="92" y="36" width="136" height="150" fill="#cfe0e6" stroke="#fff" stroke-width="6"/><line x1="160" y1="36" x2="160" y2="186" stroke="#fff" stroke-width="4"/>${cur}${rug}</svg>`;
 }
-function openTextile() {
-  document.querySelector('.f-modal')?.remove();
+function textileView() {
+  viewer?.dispose(); viewer = null; shellNav();
   const tx = store.get(TEXTILE_KEY) || {curtain: {model: 'tul-fon', color: 'keten'}, rug: {model: 'duz', color: 'yulaf'}};
-  const m = document.createElement('div'); m.className = 'f-modal f-textile'; m.setAttribute('role', 'dialog'); m.setAttribute('aria-modal', 'true');
+  const main = document.querySelector('.f-layout');
   const row = (grp, list, cur) => `<div class="f-tx-models">${list.map(([k, v]) => `<button data-g="${grp}" data-m="${k}" aria-pressed="${cur === k}">${esc(v)}</button>`).join('')}</div>`;
   const sw = (grp, list, cur) => `<div class="f-tx-sw">${list.map(([k, n, h]) => `<button data-g="${grp}" data-c="${k}" title="${esc(n)}" aria-label="${esc(n)}" aria-pressed="${cur === k}" style="background:${h}"></button>`).join('')}</div>`;
-  const draw = () => { m.innerHTML = `<div class="f-modal-box"><button class="f-modal-x" data-x="1" aria-label="×">×</button><p class="f-eyebrow">AURA · ${esc(L('textile'))}</p><h2>${esc(L('textileTitle'))}</h2>
-    ${textilePreview(tx.curtain, tx.rug)}
-    <h3>Perde</h3>${row('curtain', Object.entries(CURTAINS).map(([k, v]) => [k, v[0]]).concat([['yok', 'Perdesiz']]), tx.curtain.model)}${sw('curtain', FABRICS, tx.curtain.color)}
-    <h3>Halı</h3>${row('rug', Object.entries(RUG_MODELS), tx.rug.model)}${sw('rug', RUG_COLORS, tx.rug.color)}
-    <p class="f-note">${esc(L('textileNote'))}</p><div class="f-actions"><a class="f-primary" href="ev.html">${esc(L('textileHome'))} →</a></div></div>`; };
-  m.addEventListener('click', e => { if (e.target === m || e.target.closest('[data-x]')) return m.remove(); const b = e.target.closest('button[data-g]'); if (!b) return;
-    const o = tx[b.dataset.g]; if (b.dataset.m) o.model = b.dataset.m; if (b.dataset.c) o.color = b.dataset.c; store.set(TEXTILE_KEY, tx); draw(); });
-  m.addEventListener('keydown', e => { if (e.key === 'Escape') m.remove(); });
-  draw(); document.body.append(m);
+  const nm = (list, k) => (list.find(x => x[0] === k) || [])[1] || '';
+  const draw = () => { main.innerHTML = `<section class="f-visual f-tx-visual"><div class="f-caption"><div><p class="f-eyebrow">AURA · ${esc(L('textile'))}</p><h1>${esc(L('textileTitle'))}</h1>
+      <p class="f-dims">${esc((CURTAINS[tx.curtain.model]?.[0] || 'Perdesiz') + (tx.curtain.model === 'yok' ? '' : ' · ' + nm(FABRICS, tx.curtain.color)))} — ${esc(RUG_MODELS[tx.rug.model] + (tx.rug.model === 'yok' ? '' : ' · ' + nm(RUG_COLORS, tx.rug.color)))}</p></div></div>
+      ${textilePreview(tx.curtain, tx.rug)}</section>
+    <aside class="f-editor"><div class="f-panel f-tx-panel"><h3>Perde</h3>${row('curtain', Object.entries(CURTAINS).map(([k, v]) => [k, v[0]]).concat([['yok', 'Perdesiz']]), tx.curtain.model)}${sw('curtain', FABRICS, tx.curtain.color)}
+      <h3>Halı</h3>${row('rug', Object.entries(RUG_MODELS), tx.rug.model)}${sw('rug', RUG_COLORS, tx.rug.color)}
+      <p class="f-note">${esc(L('textileNote'))}</p><div class="f-actions"><a class="f-primary" href="ev.html">${esc(L('textileHome'))} →</a></div></div></aside>`; };
+  main.onclick = e => { if (!state.textileView) return; const b = e.target.closest('button[data-g]'); if (!b) return;
+    const o = tx[b.dataset.g]; if (b.dataset.m) o.model = b.dataset.m; if (b.dataset.c) o.color = b.dataset.c; store.set(TEXTILE_KEY, tx); draw(); };
+  draw();
 }
 let guideThen = null;
 const guideDue = () => !store.get('aura-forma-guide-seen');
