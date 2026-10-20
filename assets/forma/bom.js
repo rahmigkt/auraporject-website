@@ -27,7 +27,7 @@ const ROLE = {
   'skirt': ['Etek', 'Skirt', 'Astarlı kumaş panel, köşe pileli', 'Lined fabric panel, corner pleats'],
   'sled': ['Kızak ayak', 'Sled base', 'Bükülmüş çelik boru, toz boya / kaplama', 'Bent steel tube, powder coat / plating'],
   'base-rail': ['Taban kayıtı', 'Base rail', 'Masif ahşap, görünür birleşim', 'Solid wood, visible joinery'],
-  'welt': ['Biye', 'Welt / piping', 'Ø5 mm kordon üzerine kumaş biye', 'Fabric over Ø5 mm cord'],
+  'welt': ['Biye (boy, mm)', 'Welt / piping (length, mm)', 'Ø5 mm kordon üzerine kumaş biye; ölçü şeridin boyudur', 'Fabric over Ø5 mm cord; size is the strip length'],
   'tuft-button': ['Kapitone düğmesi', 'Tufting button', 'Kumaş kaplı düğme Ø18 mm', 'Fabric-covered button Ø18 mm'],
   'pillow': ['Kırlent', 'Throw pillow', 'Elyaf veya kuştüyü iç yastık', 'Fibre or feather insert'],
   'frame-rail': ['İskelet kayıtı (iç)', 'Frame rail (internal)', 'Kurutulmuş masif gürgen 30×90, kavela + tutkal', 'Kiln-dried solid beech (gürgen) 30×90, dowelled and glued'],
@@ -98,13 +98,14 @@ export function bom(compiled, materials, lang = 'tr') {
       else if (part.role === 'tuft-button') buttons += part.qty || 0;
       else fabricArea += meshArea(m) * (part.role === 'seat-deck' ? 0.55 : 1);
     }
-    const key = `${part.role}|${part.mat}|${size.join('x')}`;
-    const g = groups.get(key) || {role: part.role, mat: part.mat, size, qty: 0, ids: [], internal: !!part.internal};
+    const len = part.role === 'welt' ? [Math.round(2 * (part.geom.w + part.geom.d))] : size; // piping is a strip: its length is the cushion perimeter
+    const key = `${part.role}|${part.mat}|${len.join('x')}`;
+    const g = groups.get(key) || {role: part.role, mat: part.mat, size: len, qty: 0, ids: [], internal: !!part.internal};
     g.qty += part.role === 'tuft-button' ? part.qty : 1; g.ids.push(part.id); groups.set(key, g);
   }
   const rows = [...groups.values()].map((g, i) => {
     const r = ROLE[g.role] || [g.role, g.role, '', ''];
-    return {code: `P${String(i + 1).padStart(2, '0')}`, ids: g.ids, nameTr: r[0], nameEn: r[1], qty: g.qty, size: g.size, material: materialText(g.mat, materials, lang), specTr: r[2], specEn: r[3], internal: g.internal};
+    return {code: `P${String(i + 1).padStart(2, '0')}`, ids: g.ids, nameTr: r[0], nameEn: r[1], qty: g.qty, size: g.size, material: g.role === 'seat-deck' ? (lang === 'tr' ? `Kemer/yay taban + köpük; kaplama: ${materialText(g.mat, materials, lang)}` : `Webbing/springs + foam; cover: ${materialText(g.mat, materials, lang)}`) : materialText(g.mat, materials, lang), specTr: r[2], specEn: r[3], internal: g.internal};
   });
   const metres = yardage(fabricArea, {pattern: materials.fabric.pattern});
   return {rows, totals: {fabricAreaM2: +(fabricArea / 1e6).toFixed(2), fabricMetres: metres, weltMetres: +(weltLength / 1000).toFixed(1), buttons}};
