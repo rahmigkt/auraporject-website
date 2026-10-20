@@ -1,0 +1,108 @@
+{
+  "version": "2",
+  "status": "research_profile_not_building_certification",
+  "profile": {
+    "min_area_m2": {
+      "living": 12,
+      "bedroom": 9,
+      "kitchen": 5,
+      "bath": 3,
+      "wc": 1.2,
+      "study": 9
+    },
+    "min_width_mm": {
+      "living": 3000,
+      "bedroom": 2500,
+      "kitchen": 1500,
+      "bath": 1500,
+      "wc": 1000,
+      "hall": 1200,
+      "stair": 2400
+    },
+    "door_min_mm": 800,
+    "stair_width_min_mm": 1000,
+    "headroom_min_mm": 2000,
+    "stair_formula_mm": [
+      600,
+      640
+    ],
+    "glazing_floor_ratio": 0.1
+  },
+  "rules": [
+    {
+      "id": "room-minima",
+      "category": "area_width",
+      "kind": "proposal",
+      "source": "https://webdosya.csb.gov.tr/db/tabiat/icerikler/planli-20210811131259.pdf",
+      "note": "Arşiv referansından esinlenen araştırma eşikleri; mutfak 5 m² ve çalışma 9 m² seçimi AURA önerisi. Güncel konsolide mevzuat değil.",
+      "enforcement": "error_in_research_profile"
+    },
+    {
+      "id": "door-corridor",
+      "category": "circulation",
+      "kind": "proposal",
+      "source": null,
+      "note": "Kaynak bulunamadı: bu profil kapı 800 mm/hol 1200 mm seçer. Gerçek proje erişilebilirlik ve mevzuat kontrolü ister.",
+      "enforcement": "error_in_research_profile"
+    },
+    {
+      "id": "wet-grouping",
+      "category": "services",
+      "kind": "proposal",
+      "source": null,
+      "note": "Kaynak bulunamadı: ıslak hacimler yakın/üst üste tercih edilir. Şaft/boru güzergâhı henüz modellenmedi.",
+      "enforcement": "warning"
+    },
+    {
+      "id": "bedroom-privacy",
+      "category": "privacy",
+      "kind": "proposal",
+      "source": null,
+      "note": "Kaynak bulunamadı: yatak odasına başka yatak odasından zorunlu geçiş olmasın; tasarım önerisi.",
+      "enforcement": "graph_check"
+    },
+    {
+      "id": "kitchen-triangle",
+      "category": "kitchen",
+      "kind": "reference_guideline",
+      "source": "https://media.nkba.org/uploads/2022/05/Kitchen-Planning-Guidelines.pdf",
+      "values": {
+        "leg_m": [
+          1.2,
+          2.7
+        ],
+        "total_max_m": 7.9
+      },
+      "note": "NKBA s.4, ABD önerisi; doğrusal/açık mutfakta zorunlu norm değil. Cihaz konumu yoksa değerlendirilemedi.",
+      "enforcement": "error_in_research_profile_when_work_centers_present"
+    },
+    {
+      "id": "stair-formula",
+      "category": "stairs",
+      "kind": "proposal",
+      "source": "https://webdosya.csb.gov.tr/db/tabiat/icerikler/planli-20210811131259.pdf",
+      "values_mm": [
+        600,
+        640
+      ],
+      "note": "Arşiv m.31 içindeki 2a+b=60..64 cm referansı. Profil yalnız konfor aralığını sınar; güncel yasal uygunluk iddia etmez.",
+      "enforcement": "error_in_research_profile"
+    },
+    {
+      "id": "daylight",
+      "category": "window",
+      "kind": "proposal",
+      "source": null,
+      "note": "Kaynak bulunamadı: cam alanı/net alan >=0.10 yalnız sentetik profil hedefi. Gün ışığı hesabı, net açılır alan veya yasal yeterlilik değildir.",
+      "enforcement": "error_in_research_profile"
+    },
+    {
+      "id": "law-currentness",
+      "category": "legal",
+      "kind": "source_gap",
+      "source": "https://meslekihizmetler.csb.gov.tr/haberler/planli-alanlar-imar-yonetmeliginde-degisiklik-yapildi-305960",
+      "note": "2026-07-01 değişikliği bulundu. Güncel konsolide metin ve yerel uygulama uzman tarafından doğrulanmadan legal pass yok.",
+      "enforcement": "designer_review"
+    }
+  ]
+}

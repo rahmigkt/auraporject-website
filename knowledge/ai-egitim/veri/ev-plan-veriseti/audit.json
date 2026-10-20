@@ -1,0 +1,27 @@
+{
+  "valid_records": 2200,
+  "distinct_geometry_signatures": 2068,
+  "duplicate_geometry_records": 132,
+  "warning_counts": {
+    "not_certified": 2200,
+    "wet_grouping_review": 1760
+  },
+  "chat_rows": {
+    "train": 6300,
+    "validation": 904,
+    "test": 1807
+  },
+  "split_group_overlap": 0,
+  "split_plan_id_overlap": 0,
+  "split_full_user_context_overlap": 0,
+  "shared_edit_utterances": "Identical edit wording can occur with different previous plans; complete user context is disjoint",
+  "oracle_plan_hash_matches": true,
+  "review_count": 40,
+  "note": "Raw valid records retained for audit. Duplicate design ids and all language/edit descendants removed from SFT.",
+  "sft_deduplication": "completed",
+  "sft_rows": {
+    "train": 5772,
+    "validation": 904,
+    "test": 1807
+  }
+}

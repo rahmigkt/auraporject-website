@@ -1,0 +1,2040 @@
+{
+  "schema_version": "0.2",
+  "project_id": "ev-621e2dd265bf490f",
+  "revision": 1,
+  "status": "survey",
+  "coordinate_system": "mm; right-handed; x/y floor plane, z up; local origin; glTF adapter converts units and up-axis",
+  "language": {
+    "customer": "tr",
+    "designer": "tr"
+  },
+  "brief": {
+    "whole_home": true,
+    "goals": [
+      "Tamamen sentetik; tasarımcı doğrulaması gerekli"
+    ],
+    "budget": {
+      "amount": null,
+      "currency": "TRY",
+      "includes": [],
+      "estimate_status": "unknown"
+    },
+    "household_needs": [],
+    "style": [],
+    "preserve": []
+  },
+  "levels": [
+    {
+      "id": "level-0",
+      "name": "Kat 0",
+      "elevation": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "floor_height": {
+        "value": 3000,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      }
+    }
+  ],
+  "spaces": [
+    {
+      "id": "level-0-s0",
+      "level_id": "level-0",
+      "name": "Holsüz açık yaşam ve dağılım",
+      "kind": "living",
+      "axis_boundary_xy_mm": [
+        [
+          0.0,
+          8400.0
+        ],
+        [
+          12800.0,
+          8400.0
+        ],
+        [
+          12800.0,
+          5000.0
+        ],
+        [
+          4100.0,
+          5000.0
+        ],
+        [
+          4100.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          5000.0
+        ]
+      ],
+      "boundary_xy_mm": [
+        [
+          100.0,
+          8300.0
+        ],
+        [
+          12700.0,
+          8300.0
+        ],
+        [
+          12700.0,
+          5100.0
+        ],
+        [
+          4000.0,
+          5100.0
+        ],
+        [
+          4000.0,
+          100.0
+        ],
+        [
+          100.0,
+          100.0
+        ]
+      ],
+      "wall_ids": [
+        "level-0-w0",
+        "level-0-w1",
+        "level-0-w2",
+        "level-0-w3",
+        "level-0-w4",
+        "level-0-w5",
+        "level-0-w6",
+        "level-0-w7",
+        "level-0-w8",
+        "level-0-w9"
+      ],
+      "ceiling_height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    },
+    {
+      "id": "level-0-s1",
+      "level_id": "level-0",
+      "name": "Mutfak",
+      "kind": "kitchen",
+      "axis_boundary_xy_mm": [
+        [
+          4100.0,
+          8400.0
+        ],
+        [
+          4100.0,
+          13400.0
+        ],
+        [
+          0.0,
+          13400.0
+        ],
+        [
+          0.0,
+          8400.0
+        ]
+      ],
+      "boundary_xy_mm": [
+        [
+          4000.0,
+          8500.0
+        ],
+        [
+          100.0,
+          8500.0
+        ],
+        [
+          100.0,
+          13300.0
+        ],
+        [
+          4000.0,
+          13300.0
+        ]
+      ],
+      "wall_ids": [
+        "level-0-w0",
+        "level-0-w10",
+        "level-0-w11",
+        "level-0-w12"
+      ],
+      "ceiling_height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    },
+    {
+      "id": "level-0-s2",
+      "level_id": "level-0",
+      "name": "Çalışma / yardımcı alan",
+      "kind": "study",
+      "axis_boundary_xy_mm": [
+        [
+          8400.0,
+          0.0
+        ],
+        [
+          8400.0,
+          5000.0
+        ],
+        [
+          4100.0,
+          5000.0
+        ],
+        [
+          4100.0,
+          0.0
+        ]
+      ],
+      "boundary_xy_mm": [
+        [
+          8300.0,
+          100.0
+        ],
+        [
+          4200.0,
+          100.0
+        ],
+        [
+          4200.0,
+          4900.0
+        ],
+        [
+          8300.0,
+          4900.0
+        ]
+      ],
+      "wall_ids": [
+        "level-0-w5",
+        "level-0-w6",
+        "level-0-w13",
+        "level-0-w14"
+      ],
+      "ceiling_height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    },
+    {
+      "id": "level-0-s3",
+      "level_id": "level-0",
+      "name": "Yatak odası 2",
+      "kind": "bedroom",
+      "axis_boundary_xy_mm": [
+        [
+          8400.0,
+          8400.0
+        ],
+        [
+          8400.0,
+          13400.0
+        ],
+        [
+          4100.0,
+          13400.0
+        ],
+        [
+          4100.0,
+          8400.0
+        ]
+      ],
+      "boundary_xy_mm": [
+        [
+          8300.0,
+          8500.0
+        ],
+        [
+          4200.0,
+          8500.0
+        ],
+        [
+          4200.0,
+          13300.0
+        ],
+        [
+          8300.0,
+          13300.0
+        ]
+      ],
+      "wall_ids": [
+        "level-0-w1",
+        "level-0-w10",
+        "level-0-w15",
+        "level-0-w16"
+      ],
+      "ceiling_height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    },
+    {
+      "id": "level-0-s4",
+      "level_id": "level-0",
+      "name": "Yatak odası 1",
+      "kind": "bedroom",
+      "axis_boundary_xy_mm": [
+        [
+          12800.0,
+          0.0
+        ],
+        [
+          12800.0,
+          5000.0
+        ],
+        [
+          8400.0,
+          5000.0
+        ],
+        [
+          8400.0,
+          0.0
+        ]
+      ],
+      "boundary_xy_mm": [
+        [
+          12700.0,
+          100.0
+        ],
+        [
+          8500.0,
+          100.0
+        ],
+        [
+          8500.0,
+          4900.0
+        ],
+        [
+          12700.0,
+          4900.0
+        ]
+      ],
+      "wall_ids": [
+        "level-0-w4",
+        "level-0-w13",
+        "level-0-w17",
+        "level-0-w18"
+      ],
+      "ceiling_height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    },
+    {
+      "id": "level-0-s5",
+      "level_id": "level-0",
+      "name": "Banyo",
+      "kind": "bath",
+      "axis_boundary_xy_mm": [
+        [
+          12800.0,
+          8400.0
+        ],
+        [
+          12800.0,
+          13400.0
+        ],
+        [
+          8400.0,
+          13400.0
+        ],
+        [
+          8400.0,
+          8400.0
+        ]
+      ],
+      "boundary_xy_mm": [
+        [
+          12700.0,
+          8500.0
+        ],
+        [
+          8500.0,
+          8500.0
+        ],
+        [
+          8500.0,
+          13300.0
+        ],
+        [
+          12700.0,
+          13300.0
+        ]
+      ],
+      "wall_ids": [
+        "level-0-w2",
+        "level-0-w15",
+        "level-0-w19",
+        "level-0-w20"
+      ],
+      "ceiling_height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    }
+  ],
+  "walls": [
+    {
+      "id": "level-0-w0",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        0.0,
+        8400.0
+      ],
+      "to_xy_mm": [
+        4100.0,
+        8400.0
+      ],
+      "from_node_id": "level-0-n0",
+      "to_node_id": "level-0-n1",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s0",
+        "level-0-s1"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": false
+    },
+    {
+      "id": "level-0-w1",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        4100.0,
+        8400.0
+      ],
+      "to_xy_mm": [
+        8400.0,
+        8400.0
+      ],
+      "from_node_id": "level-0-n1",
+      "to_node_id": "level-0-n2",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s0",
+        "level-0-s3"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": false
+    },
+    {
+      "id": "level-0-w2",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        8400.0,
+        8400.0
+      ],
+      "to_xy_mm": [
+        12800.0,
+        8400.0
+      ],
+      "from_node_id": "level-0-n2",
+      "to_node_id": "level-0-n3",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s0",
+        "level-0-s5"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": false
+    },
+    {
+      "id": "level-0-w3",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        12800.0,
+        8400.0
+      ],
+      "to_xy_mm": [
+        12800.0,
+        5000.0
+      ],
+      "from_node_id": "level-0-n3",
+      "to_node_id": "level-0-n4",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s0"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": true
+    },
+    {
+      "id": "level-0-w4",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        12800.0,
+        5000.0
+      ],
+      "to_xy_mm": [
+        8400.0,
+        5000.0
+      ],
+      "from_node_id": "level-0-n4",
+      "to_node_id": "level-0-n5",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s0",
+        "level-0-s4"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": false
+    },
+    {
+      "id": "level-0-w5",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        8400.0,
+        5000.0
+      ],
+      "to_xy_mm": [
+        4100.0,
+        5000.0
+      ],
+      "from_node_id": "level-0-n5",
+      "to_node_id": "level-0-n6",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s0",
+        "level-0-s2"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": false
+    },
+    {
+      "id": "level-0-w6",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        4100.0,
+        5000.0
+      ],
+      "to_xy_mm": [
+        4100.0,
+        0.0
+      ],
+      "from_node_id": "level-0-n6",
+      "to_node_id": "level-0-n7",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s0",
+        "level-0-s2"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": false
+    },
+    {
+      "id": "level-0-w7",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        4100.0,
+        0.0
+      ],
+      "to_xy_mm": [
+        0.0,
+        0.0
+      ],
+      "from_node_id": "level-0-n7",
+      "to_node_id": "level-0-n8",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s0"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": true
+    },
+    {
+      "id": "level-0-w8",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        0.0,
+        0.0
+      ],
+      "to_xy_mm": [
+        0.0,
+        5000.0
+      ],
+      "from_node_id": "level-0-n8",
+      "to_node_id": "level-0-n9",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s0"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": true
+    },
+    {
+      "id": "level-0-w9",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        0.0,
+        5000.0
+      ],
+      "to_xy_mm": [
+        0.0,
+        8400.0
+      ],
+      "from_node_id": "level-0-n9",
+      "to_node_id": "level-0-n0",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s0"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": true
+    },
+    {
+      "id": "level-0-w10",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        4100.0,
+        8400.0
+      ],
+      "to_xy_mm": [
+        4100.0,
+        13400.0
+      ],
+      "from_node_id": "level-0-n1",
+      "to_node_id": "level-0-n10",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s1",
+        "level-0-s3"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": false
+    },
+    {
+      "id": "level-0-w11",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        4100.0,
+        13400.0
+      ],
+      "to_xy_mm": [
+        0.0,
+        13400.0
+      ],
+      "from_node_id": "level-0-n10",
+      "to_node_id": "level-0-n11",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s1"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": true
+    },
+    {
+      "id": "level-0-w12",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        0.0,
+        13400.0
+      ],
+      "to_xy_mm": [
+        0.0,
+        8400.0
+      ],
+      "from_node_id": "level-0-n11",
+      "to_node_id": "level-0-n0",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s1"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": true
+    },
+    {
+      "id": "level-0-w13",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        8400.0,
+        0.0
+      ],
+      "to_xy_mm": [
+        8400.0,
+        5000.0
+      ],
+      "from_node_id": "level-0-n12",
+      "to_node_id": "level-0-n5",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s2",
+        "level-0-s4"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": false
+    },
+    {
+      "id": "level-0-w14",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        4100.0,
+        0.0
+      ],
+      "to_xy_mm": [
+        8400.0,
+        0.0
+      ],
+      "from_node_id": "level-0-n7",
+      "to_node_id": "level-0-n12",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s2"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": true
+    },
+    {
+      "id": "level-0-w15",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        8400.0,
+        8400.0
+      ],
+      "to_xy_mm": [
+        8400.0,
+        13400.0
+      ],
+      "from_node_id": "level-0-n2",
+      "to_node_id": "level-0-n13",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s3",
+        "level-0-s5"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": false
+    },
+    {
+      "id": "level-0-w16",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        8400.0,
+        13400.0
+      ],
+      "to_xy_mm": [
+        4100.0,
+        13400.0
+      ],
+      "from_node_id": "level-0-n13",
+      "to_node_id": "level-0-n10",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s3"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": true
+    },
+    {
+      "id": "level-0-w17",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        12800.0,
+        0.0
+      ],
+      "to_xy_mm": [
+        12800.0,
+        5000.0
+      ],
+      "from_node_id": "level-0-n14",
+      "to_node_id": "level-0-n4",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s4"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": true
+    },
+    {
+      "id": "level-0-w18",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        8400.0,
+        0.0
+      ],
+      "to_xy_mm": [
+        12800.0,
+        0.0
+      ],
+      "from_node_id": "level-0-n12",
+      "to_node_id": "level-0-n14",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s4"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": true
+    },
+    {
+      "id": "level-0-w19",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        12800.0,
+        8400.0
+      ],
+      "to_xy_mm": [
+        12800.0,
+        13400.0
+      ],
+      "from_node_id": "level-0-n3",
+      "to_node_id": "level-0-n15",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s5"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": true
+    },
+    {
+      "id": "level-0-w20",
+      "level_id": "level-0",
+      "from_xy_mm": [
+        12800.0,
+        13400.0
+      ],
+      "to_xy_mm": [
+        8400.0,
+        13400.0
+      ],
+      "from_node_id": "level-0-n15",
+      "to_node_id": "level-0-n13",
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "level-0-s5"
+      ],
+      "structural_status": "synthetic_fixture",
+      "exterior": true
+    }
+  ],
+  "nodes": [
+    {
+      "id": "level-0-n0",
+      "level_id": "level-0",
+      "xy_mm": [
+        0.0,
+        8400.0
+      ]
+    },
+    {
+      "id": "level-0-n1",
+      "level_id": "level-0",
+      "xy_mm": [
+        4100.0,
+        8400.0
+      ]
+    },
+    {
+      "id": "level-0-n2",
+      "level_id": "level-0",
+      "xy_mm": [
+        8400.0,
+        8400.0
+      ]
+    },
+    {
+      "id": "level-0-n3",
+      "level_id": "level-0",
+      "xy_mm": [
+        12800.0,
+        8400.0
+      ]
+    },
+    {
+      "id": "level-0-n4",
+      "level_id": "level-0",
+      "xy_mm": [
+        12800.0,
+        5000.0
+      ]
+    },
+    {
+      "id": "level-0-n5",
+      "level_id": "level-0",
+      "xy_mm": [
+        8400.0,
+        5000.0
+      ]
+    },
+    {
+      "id": "level-0-n6",
+      "level_id": "level-0",
+      "xy_mm": [
+        4100.0,
+        5000.0
+      ]
+    },
+    {
+      "id": "level-0-n7",
+      "level_id": "level-0",
+      "xy_mm": [
+        4100.0,
+        0.0
+      ]
+    },
+    {
+      "id": "level-0-n8",
+      "level_id": "level-0",
+      "xy_mm": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "id": "level-0-n9",
+      "level_id": "level-0",
+      "xy_mm": [
+        0.0,
+        5000.0
+      ]
+    },
+    {
+      "id": "level-0-n10",
+      "level_id": "level-0",
+      "xy_mm": [
+        4100.0,
+        13400.0
+      ]
+    },
+    {
+      "id": "level-0-n11",
+      "level_id": "level-0",
+      "xy_mm": [
+        0.0,
+        13400.0
+      ]
+    },
+    {
+      "id": "level-0-n12",
+      "level_id": "level-0",
+      "xy_mm": [
+        8400.0,
+        0.0
+      ]
+    },
+    {
+      "id": "level-0-n13",
+      "level_id": "level-0",
+      "xy_mm": [
+        8400.0,
+        13400.0
+      ]
+    },
+    {
+      "id": "level-0-n14",
+      "level_id": "level-0",
+      "xy_mm": [
+        12800.0,
+        0.0
+      ]
+    },
+    {
+      "id": "level-0-n15",
+      "level_id": "level-0",
+      "xy_mm": [
+        12800.0,
+        13400.0
+      ]
+    }
+  ],
+  "openings": [
+    {
+      "id": "level-0-o0",
+      "level_id": "level-0",
+      "wall_id": "level-0-w0",
+      "kind": "door",
+      "space_ids": [
+        "level-0-s0",
+        "level-0-s1"
+      ],
+      "offset_from_wall_start": {
+        "value": 1600.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "swing": "in",
+      "hinge": "start",
+      "opens_to_space_id": "level-0-s0",
+      "entry": false
+    },
+    {
+      "id": "level-0-o1",
+      "level_id": "level-0",
+      "wall_id": "level-0-w6",
+      "kind": "door",
+      "space_ids": [
+        "level-0-s0",
+        "level-0-s2"
+      ],
+      "offset_from_wall_start": {
+        "value": 2050.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "swing": "in",
+      "hinge": "start",
+      "opens_to_space_id": "level-0-s0",
+      "entry": false
+    },
+    {
+      "id": "level-0-o2",
+      "level_id": "level-0",
+      "wall_id": "level-0-w1",
+      "kind": "door",
+      "space_ids": [
+        "level-0-s0",
+        "level-0-s3"
+      ],
+      "offset_from_wall_start": {
+        "value": 1700.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "swing": "in",
+      "hinge": "start",
+      "opens_to_space_id": "level-0-s0",
+      "entry": false
+    },
+    {
+      "id": "level-0-o3",
+      "level_id": "level-0",
+      "wall_id": "level-0-w4",
+      "kind": "door",
+      "space_ids": [
+        "level-0-s0",
+        "level-0-s4"
+      ],
+      "offset_from_wall_start": {
+        "value": 1750.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "swing": "in",
+      "hinge": "start",
+      "opens_to_space_id": "level-0-s0",
+      "entry": false
+    },
+    {
+      "id": "level-0-o4",
+      "level_id": "level-0",
+      "wall_id": "level-0-w2",
+      "kind": "door",
+      "space_ids": [
+        "level-0-s0",
+        "level-0-s5"
+      ],
+      "offset_from_wall_start": {
+        "value": 1750.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "swing": "in",
+      "hinge": "start",
+      "opens_to_space_id": "level-0-s0",
+      "entry": false
+    },
+    {
+      "id": "level-0-o5",
+      "level_id": "level-0",
+      "wall_id": "level-0-w8",
+      "kind": "door",
+      "space_ids": [
+        "level-0-s0"
+      ],
+      "offset_from_wall_start": {
+        "value": 2000.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1000,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "swing": "in",
+      "hinge": "start",
+      "opens_to_space_id": "level-0-s0",
+      "entry": true
+    },
+    {
+      "id": "level-0-o6",
+      "level_id": "level-0",
+      "wall_id": "level-0-w7",
+      "kind": "window",
+      "space_ids": [
+        "level-0-s0"
+      ],
+      "offset_from_wall_start": {
+        "value": 220.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 3660,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 700,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "swing": "fixed",
+      "hinge": "none",
+      "opens_to_space_id": null,
+      "entry": false
+    },
+    {
+      "id": "level-0-o7",
+      "level_id": "level-0",
+      "wall_id": "level-0-w12",
+      "kind": "window",
+      "space_ids": [
+        "level-0-s1"
+      ],
+      "offset_from_wall_start": {
+        "value": 1925.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1150,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 700,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "swing": "fixed",
+      "hinge": "none",
+      "opens_to_space_id": null,
+      "entry": false
+    },
+    {
+      "id": "level-0-o8",
+      "level_id": "level-0",
+      "wall_id": "level-0-w14",
+      "kind": "window",
+      "space_ids": [
+        "level-0-s2"
+      ],
+      "offset_from_wall_start": {
+        "value": 1545.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1210,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 700,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "swing": "fixed",
+      "hinge": "none",
+      "opens_to_space_id": null,
+      "entry": false
+    },
+    {
+      "id": "level-0-o9",
+      "level_id": "level-0",
+      "wall_id": "level-0-w16",
+      "kind": "window",
+      "space_ids": [
+        "level-0-s3"
+      ],
+      "offset_from_wall_start": {
+        "value": 1545.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1210,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 700,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "swing": "fixed",
+      "hinge": "none",
+      "opens_to_space_id": null,
+      "entry": false
+    },
+    {
+      "id": "level-0-o10",
+      "level_id": "level-0",
+      "wall_id": "level-0-w17",
+      "kind": "window",
+      "space_ids": [
+        "level-0-s4"
+      ],
+      "offset_from_wall_start": {
+        "value": 1880.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1240,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 700,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "swing": "fixed",
+      "hinge": "none",
+      "opens_to_space_id": null,
+      "entry": false
+    },
+    {
+      "id": "level-0-o11",
+      "level_id": "level-0",
+      "wall_id": "level-0-w19",
+      "kind": "window",
+      "space_ids": [
+        "level-0-s5"
+      ],
+      "offset_from_wall_start": {
+        "value": 1880.0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1240,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 700,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic"
+        ],
+        "uncertainty": null
+      },
+      "swing": "fixed",
+      "hinge": "none",
+      "opens_to_space_id": null,
+      "entry": false
+    }
+  ],
+  "connections": [
+    {
+      "id": "route-level-0-o0",
+      "from_space_id": "level-0-s0",
+      "to_space_id": "level-0-s1",
+      "opening_id": "level-0-o0",
+      "status": "synthetic_fixture"
+    },
+    {
+      "id": "route-level-0-o1",
+      "from_space_id": "level-0-s0",
+      "to_space_id": "level-0-s2",
+      "opening_id": "level-0-o1",
+      "status": "synthetic_fixture"
+    },
+    {
+      "id": "route-level-0-o2",
+      "from_space_id": "level-0-s0",
+      "to_space_id": "level-0-s3",
+      "opening_id": "level-0-o2",
+      "status": "synthetic_fixture"
+    },
+    {
+      "id": "route-level-0-o3",
+      "from_space_id": "level-0-s0",
+      "to_space_id": "level-0-s4",
+      "opening_id": "level-0-o3",
+      "status": "synthetic_fixture"
+    },
+    {
+      "id": "route-level-0-o4",
+      "from_space_id": "level-0-s0",
+      "to_space_id": "level-0-s5",
+      "opening_id": "level-0-o4",
+      "status": "synthetic_fixture"
+    }
+  ],
+  "stairs": [],
+  "columns": [],
+  "items": [],
+  "finishes": [],
+  "notes": [],
+  "issues": [],
+  "evidence": [
+    {
+      "id": "synthetic",
+      "kind": "note",
+      "space_ids": [
+        "level-0-s0",
+        "level-0-s1",
+        "level-0-s2",
+        "level-0-s3",
+        "level-0-s4",
+        "level-0-s5"
+      ],
+      "private_object_id": null,
+      "caption": "Original seeded synthetic geometry. Not a real home or construction approval.",
+      "language": "en",
+      "training_consent": false,
+      "synthetic": true
+    }
+  ],
+  "kitchens": [
+    {
+      "space_id": "level-0-s1",
+      "sink_xy_mm": [
+        600.0,
+        9000.0
+      ],
+      "cooktop_xy_mm": [
+        2400.0,
+        9000.0
+      ],
+      "fridge_xy_mm": [
+        600.0,
+        10800.0
+      ]
+    }
+  ],
+  "example_only": true,
+  "site": null,
+  "dwelling": {
+    "kind": "apartment",
+    "bedroom_count": 2,
+    "family": "gallery",
+    "north_deg": 0
+  },
+  "review": {
+    "id": "review",
+    "state": "awaiting_designer",
+    "revision": 1,
+    "designer_id": null,
+    "designer_approval_revision": null,
+    "blocking_issue_ids": []
+  }
+}
