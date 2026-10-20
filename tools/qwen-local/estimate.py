@@ -19,7 +19,7 @@ def estimate_stage(stage, plan, seconds_per_step):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--plan', default='tools/qwen-local/training-plan.json')
-    parser.add_argument('--data', default='outputs/qwen-local/pilot-v1/sft-unreviewed.jsonl')
+    parser.add_argument('--data', default='knowledge/ai-egitim/qwen-pilot-01/pilot-v1/sft-unreviewed.jsonl')
     parser.add_argument('--measured-step-seconds', type=float, help='Mean steady-state FULL optimizer step on matching GPU/config/data; not a micro-batch timing')
     args = parser.parse_args()
     if args.measured_step_seconds is not None and (not math.isfinite(args.measured_step_seconds) or args.measured_step_seconds <= 0):

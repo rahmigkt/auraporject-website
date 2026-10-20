@@ -62,3 +62,49 @@ Tarih: 2026-10-20. Bu liste bu iş emrindeki yeni ev planı prototipine aittir;
 **Kiralık GPU kapısı: KAPALI.** QWEN-YEREL-02'deki kusur, insan onayı,
 biçim/doğal dil/kapalı test ve gerileme koşulları sağlanmış değildir. Bu görevde GPU
 veya ücretli API izni yoktur. Oracle geri oynatmanın başarısı bu kapıları açmaz.
+
+
+## TOPARLAMA-01: geri kazanılan tarihsel kayıtlar
+
+Kayıtlar kendi tur kapsamındadır; yeni kapanış veya eğitim onayı değildir. Tam eski sürümler `toparlama-01/archive/` altında korunur.
+
+### EV-QWEN-00B — 20 Ekim 2026 ek denetim
+
+Önceki kusurlar kendiliğinden kapanmadı. Bu tur kısmi prototiptir; eğitim ve
+kiralık GPU kapısı kapalı. Kanıt: `EV-QWEN-00B-RAPOR.md`.
+
+| Kimlik | Durum | Kanıt / kapanış koşulu |
+|---|---|---|
+| EV00B-001 — aynı programda mimari çeşitlilik | Açık | 60 planda toplam 20 gerçekleşmiş graf sınıfı; tip başına 2–6. Ek oda sayısı çeşitliliği de sayıyı artırıyor. Aynı programda onlarca kurgu kanıtlanmadı. |
+| EV00B-002 — genel çözücü kapsamı | Açık | U/gerçek avlu, şaftlı derin plan, tek/çift sağır cephe, farklı yönler, tek kol/L/galeri merdiven, ölçülmüş sabitler ve ızgara henüz yok. Desteklenmeyen açık kısıtlar reddedilir; bazı katalog tip isimleri yalnız araştırma yer tutucusudur. |
+| EV00B-003 — program alan uyumu | Açık | Son dilim büyümesi, geniş banyo/WC ve yardımcı alanlar; sapmalar ölçülüyor. Hedef dışı planlar eğitim için kabul edilmez. |
+| EV00B-004 — mimari ilişkiler | Açık | Ebeveyn banyosu, mutfak-kiler/balkon, sundurma/rüzgârlık/bahçe kapısı, bodrum/çatı kuralları genel olarak sağlanmış değil. |
+| EV00B-005 — insan ve altın test | Açık | 60 yeni taslak bekliyor. Hash bağlı karar ithali var; insan onayı 0, altın set boş. |
+| EV00B-006 — doğal dil | Açık | 1500 üretim isteği 60 programın bileşimsel ihtiyaç listesi çeşitleri; gerçek serbest diyalog yeterliği değil. 120 düzenlemenin tüm yeniden yerleşimleri topluca doğrulanmadı. |
+| EV00B-007 — tamamlanmış model tabanı | Açık | Küçük Qwen CPU denemesinde 65,454 saniyede 3 süre aşımı, tamamlanan yanıt 0. Ham istek ve süre kayıtları PR'da; başarı oranı çıkarılamaz. |
+| EV00B-008 — kalite ölçülerinin kapsamı | Açık | Ortak öneri puanı 100 olabilen planlarda bile tipoloji/alan kusurları var. Gerçek şaft, kapı süpürmesi, kolon/ürün yerleşimi ve gün ışığı simülasyonu gerekli. |
+| EV00B-F1 — koordinat hedefinden program hedefine geçiş | Prototipte uygulandı | Ortak 0.3 istem/şema; sürüm denetimli düzenleme ve gerçek mutfak açıklığı testleri geçti. Model başarısı/üretim onayı değildir. |
+| EV00B-F2 — bölümler arası graf tekrarı | Bu veri üretiminde önlendi | İd/ölçüden bağımsız tam tür etiketli izomorfizm grupları ve türevleri birlikte bölündü. Yeni turda yeniden kontrol edilir. |
+
+
+### Pilot #69 / QWEN-YEREL-02 tarihçesi
+
+# Qwen kusur listesi
+
+19 Ekim 2026. Kaynak iş emri: QWEN-YEREL-02. Açık kusurlar varken büyük eğitim kapalıdır.
+Altyapı düzeltmesi, modelin aynı kusuru kapattığı anlamına gelmez.
+
+| Kimlik | Kaynak / kusur | Durum | Düzeltme / kapanış kanıtı |
+|---|---|---|---|
+| Q02-001 | Pilot 01: istem değişince dış JSON nesnesi yerine dizi, 0/40 | Açık | Hazırlık doğrudan üretim PHP istemini okuyor; modelin yeni ölçümü ve dayanıklılık sınavı bekleniyor |
+| Q02-002 | Pilot 01: sayısal örneği kopyalayan yanlış delta | Açık | Yeni tur ve kapalı test kanıtı yok |
+| Q02-003 | Eski veri, değişmiş stüdyo kaynaklarına bağlı | Açık | Yeni kaynak parmak izi ve bayat işareti var; eski adaptör yeniden kullanılabilir sayılmıyor |
+| Q02-004 | İç parametre adları doğal dil sayılıyor | Açık | Yeni havuzda gerçek TR/EN etiketli çekirdek ve ayrıca açıkça işaretli teknik örnekler var; çoğu parametrenin insan dilinde karşılığı eksik |
+| Q02-005 | İnsan onaylı etiket ve estetik veri yok | Kısmen giderildi | Karar sahibi 19 Ekim'de okuma.html'deki 40 adayın tamamını onayladı; kimlikler ve paket hash'i human-approval.json'da, ayrı reviewed-40.jsonl ihracı var. Kalan havuz onaysız; estetik veri onayı iddiası yok |
+| Q02-006 | Gerçek tarayıcı yolu yerine VM tekrarına dayanılıyordu | Açık | Yerel HTTP yanıtına yalnız test kancası ekleyen tarayıcı tekrarı hazır; bütün havuzda kanıt bekleniyor |
+| Q02-007 | İş emri ≈24 GB GPU varsayıyor; bu makinede GPU yok | Engelli | Karar sahibi doğruladı: GPU yok, 36 GB RAM var. Iris Xe görüntü bağdaştırıcısı CUDA eğitim GPU'su değildir. Yerel model eğitimi başlamadı; kiralık GPU kullanılmayacak |
+| Q02-008 | Aynı kapalı sınav / dayanıklılık / TR / netleştirme / ret / gerileme ölçümü yok | Açık | Aday havuzu sınav değildir; insan denetimli sürümlü sınav dondurulmalı, önceki turlar aynı sınavda yeniden ölçülmeli |
+| Q02-009 | Canlı ai.js interpret yalnız actions döndürüyor; model reply'sı netleştirme sorusu olarak gösterilmiyor | Açık | assets değişikliği gerektirir; bu eğitim PR'ında değiştirilmedi. Ayrı kapsamlı stüdyo PR'ı gerekir |
+| Q02-010 | Yeni araç vocabulary dışında kalırsa otomatik eğitim kapsamı dışında kalabilir | Açık | Parametre/enum/style/kind/material sözlükten çoğalır; yeni eylem türleri için sözleşme ve örnek yazarı ayrıca genişletilmeli |
+
+Henüz yeni model turu tamamlanmadı; hiçbir model kusuru kapalı işaretlenmedi.

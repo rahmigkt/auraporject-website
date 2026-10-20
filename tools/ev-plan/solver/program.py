@@ -35,7 +35,9 @@ def check(program):
         if isinstance(value,list):return all(finite(v) for v in value)
         return not isinstance(value,float) or math.isfinite(value)
     if not finite(program):raise ValueError('nonfinite program number')
-    Draft202012Validator(read(DATA/'plan-program.schema.json')).validate(program)
+    # 0.3 stays an explicitly historical contract; 0.4 preserves unknown semantics.
+    schema = 'plan-program-v03.schema.json' if program.get('version') == '0.3' else 'plan-program.schema.json'
+    Draft202012Validator(read(DATA/schema)).validate(program)
     ids=[r['id'] for r in program['rooms']]
     if len(ids)!=len(set(ids)):raise ValueError('duplicate room id')
     if program['bedrooms'] is not None and sum(r['kind']=='bedroom' for r in program['rooms'])!=program['bedrooms']:

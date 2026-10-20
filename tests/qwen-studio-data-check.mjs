@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {replay} from '../tools/qwen-local/studio_data.mjs';
-const dir='outputs/qwen-local/studio-v1';
+const dir='knowledge/ai-egitim/qwen-pilot-01/studio-v1';
 const manifest=JSON.parse(readFileSync(`${dir}/manifest.json`,'utf8'));
 for(const[name,hash]of Object.entries(manifest.files))assert.equal(createHash('sha256').update(readFileSync(`${dir}/${name}`)).digest('hex'),hash);
 const rows=['train','dev','test'].flatMap(s=>readFileSync(`${dir}/${s}.jsonl`,'utf8').trim().split('\n').map(JSON.parse));

@@ -1,0 +1,592 @@
+{
+  "scope": "offline-unit-and-replay",
+  "results": [
+    {
+      "id": "tests/ai-workspace-check.mjs",
+      "file": "tests/ai-workspace-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 3 imported home templates Ã— 14 furniture families: proposals do not mutate rooms, bounds, occupancy, edit exclusion, sliding-door clearance and sanitised restore.\n",
+      "stderr": "",
+      "milliseconds": 233
+    },
+    {
+      "id": "tests/assistant-contract-check.mjs",
+      "file": "tests/assistant-contract-check.mjs",
+      "args": [],
+      "code": 1,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "node:internal/modules/esm/resolve:271\r\n    throw new ERR_MODULE_NOT_FOUND(\r\n          ^\r\n\r\nError [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\services\\design\\style-training.mjs' imported from C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\toparlama-1-hijyen\\tests\\assistant-contract-check.mjs\r\n    at finalizeResolution (node:internal/modules/esm/resolve:271:11)\r\n    at moduleResolve (node:internal/modules/esm/resolve:865:10)\r\n    at defaultResolve (node:internal/modules/esm/resolve:992:11)\r\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)\r\n    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)\r\n    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)\r\n    at #resolve (node:internal/modules/esm/loader:683:17)\r\n    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)\r\n    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)\r\n    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {\r\n  code: 'ERR_MODULE_NOT_FOUND',\r\n  url: 'file:///C:/Users/User/Documents/Codex/2026-10-18/rahmigkt-auraporject-website-deposunda-main-i/work/services/design/style-training.mjs'\r\n}\r\n\r\nNode.js v24.18.0\r\n",
+      "milliseconds": 194
+    },
+    {
+      "id": "tests/brief-pdf-check.mjs",
+      "file": "tests/brief-pdf-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS brief PDF accepts no design and paginates long requests without invoking furniture drawing (mock canvas).\n",
+      "stderr": "",
+      "milliseconds": 234
+    },
+    {
+      "id": "tests/camera-framing-check.mjs",
+      "file": "tests/camera-framing-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 243 perspective fits: all 3D envelope corners stay in frame.\n",
+      "stderr": "",
+      "milliseconds": 185
+    },
+    {
+      "id": "tests/catalogue-check.mjs",
+      "file": "tests/catalogue-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 11 spaces, 14 groups, 88 product types, 62 valid paths; no misleading drawing for unsupported products; saved-state migration and invalid cross-room choices.\n",
+      "stderr": "",
+      "milliseconds": 244
+    },
+    {
+      "id": "tests/catalogue-graph-check.mjs",
+      "file": "tests/catalogue-graph-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 62 allowed and 13490 rejected space/group/product triples, migrations and context resets.\n",
+      "stderr": "",
+      "milliseconds": 725
+    },
+    {
+      "id": "tests/choice-flow-check.mjs",
+      "file": "tests/choice-flow-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 463 option variants across 14 complete family flows; fixed seats, rounded/sloped arms, back variants, chaise, round tops, project hand-off.\nPASS continuous back support for 9 armless seating variants\n",
+      "stderr": "",
+      "milliseconds": 475
+    },
+    {
+      "id": "tests/codesign-check.mjs",
+      "file": "tests/codesign-check.mjs",
+      "args": [],
+      "code": 1,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "node:internal/modules/esm/resolve:271\r\n    throw new ERR_MODULE_NOT_FOUND(\r\n          ^\r\n\r\nError [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\services\\design\\server.mjs' imported from C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\toparlama-1-hijyen\\tests\\codesign-check.mjs\r\n    at finalizeResolution (node:internal/modules/esm/resolve:271:11)\r\n    at moduleResolve (node:internal/modules/esm/resolve:865:10)\r\n    at defaultResolve (node:internal/modules/esm/resolve:992:11)\r\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)\r\n    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)\r\n    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)\r\n    at #resolve (node:internal/modules/esm/loader:683:17)\r\n    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)\r\n    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)\r\n    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {\r\n  code: 'ERR_MODULE_NOT_FOUND',\r\n  url: 'file:///C:/Users/User/Documents/Codex/2026-10-18/rahmigkt-auraporject-website-deposunda-main-i/work/services/design/server.mjs'\r\n}\r\n\r\nNode.js v24.18.0\r\n",
+      "milliseconds": 186
+    },
+    {
+      "id": "tests/csg-check.mjs",
+      "file": "tests/csg-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "cut 2525 -> 2336 ok\n",
+      "stderr": "",
+      "milliseconds": 733
+    },
+    {
+      "id": "tests/forma-check.mjs",
+      "file": "tests/forma-check.mjs",
+      "args": [],
+      "code": null,
+      "timedOut": true,
+      "stdout": "",
+      "stderr": "",
+      "milliseconds": 60032
+    },
+    {
+      "id": "tests/kitchen-studies-check.mjs",
+      "file": "tests/kitchen-studies-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 9 kitchen studies, finite parts, 27 drawings, sink openings, fluting and waterfall ends.\n",
+      "stderr": "",
+      "milliseconds": 521
+    },
+    {
+      "id": "tests/model-check.mjs",
+      "file": "tests/model-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS: 192 boundary configurations, positive geometry, overall bounds, share/JSON round trips and invalid inputs.\n",
+      "stderr": "",
+      "milliseconds": 256
+    },
+    {
+      "id": "tests/panel-engine-check.mjs",
+      "file": "tests/panel-engine-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 48 panel constructions, clearances, internal drawer components and BOM consistency.\n",
+      "stderr": "",
+      "milliseconds": 520
+    },
+    {
+      "id": "tests/preference-evidence-check.mjs",
+      "file": "tests/preference-evidence-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS exact named-style evidence in TR/EN/FR/DA and source-grounded correction of a semantically wrong model result.\n",
+      "stderr": "",
+      "milliseconds": 329
+    },
+    {
+      "id": "tests/qwen-atolye-data.mjs",
+      "file": "tests/qwen-atolye-data.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "",
+      "milliseconds": 370
+    },
+    {
+      "id": "tests/qwen-current-contract-check.mjs",
+      "file": "tests/qwen-current-contract-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS live PHP prompt extraction, batch parity, strict outer JSON and action types, key order independence, stale marking.\n",
+      "stderr": "",
+      "milliseconds": 2063
+    },
+    {
+      "id": "tests/qwen-geometry-data-check.py",
+      "file": "tests/qwen-geometry-data-check.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 1400 geometry examples; exact boundary/curved-corner checks; all repair targets; one-field edits; group isolation; training-only SFT; deterministic frozen artifacts.\r\n",
+      "stderr": "",
+      "milliseconds": 1647
+    },
+    {
+      "id": "tests/qwen-large-gate-check.py",
+      "file": "tests/qwen-large-gate-check.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS fail-closed thresholds, missing evidence, explicit approval and invalid metric types.\r\n",
+      "stderr": "",
+      "milliseconds": 340
+    },
+    {
+      "id": "tests/qwen-local-check.mjs",
+      "file": "tests/qwen-local-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS: 45 engine-audited rows; grouped splits; raw invalid input; no eval in SFT; deterministic build; frozen-file integrity; missing/duplicate/unsafe predictions.\n",
+      "stderr": "",
+      "milliseconds": 42972
+    },
+    {
+      "id": "tests/qwen-response-loss-check.py",
+      "file": "tests/qwen-response-loss-check.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS assistant-only loss, target EOS retained, prompt excluded, aligned masks and no silent truncation.\r\n",
+      "stderr": "",
+      "milliseconds": 371
+    },
+    {
+      "id": "tests/qwen-studio-data-check.mjs",
+      "file": "tests/qwen-studio-data-check.mjs",
+      "args": [],
+      "code": 1,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "node:internal/modules/run_main:107\r\n    triggerUncaughtException(\r\n    ^\r\n\r\nAssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\r\n+ actual - expected\r\n... Skipped lines\r\n\r\n  {\r\n    family: 'seating',\r\n    kind: 'sofa',\r\n    materials: {\r\n      fabric: {\r\n...\r\n      baseType: 'frame',\r\n+     bodyInset: 0,\r\n+     bodyInsetZ: 0,\r\n+     bodyRadius: 18,\r\n      camel: 120,\r\n+     caseHeight: 146,\r\n      channelCount: 4,\r\n      cushionCrown: 12,\r\n      cushionEdge: 'boxed',\r\n      cushionThickness: 130,\r\n      depth: 780,\r\n...\r\n      seatCount: 2,\r\n+     seatFront: 'inside',\r\n      seatHeight: 420,\r\n      seatType: 'split',\r\n      stitch: 'none',\r\n      tuftSpacing: 215,\r\n      welt: 'self',\r\n\r\n    at file:///C:/Users/User/Documents/Codex/2026-10-18/rahmigkt-auraporject-website-deposunda-main-i/work/toparlama-1-hijyen/tests/qwen-studio-data-check.mjs:18:9\r\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\r\n    at async node:internal/modules/esm/loader:643:26\r\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\r\n  generatedMessage: true,\r\n  code: 'ERR_ASSERTION',\r\n  actual: {\r\n    schema: 'aura.forma.design/1',\r\n    family: 'seating',\r\n    kind: 'sofa',\r\n    style: 'aura',\r\n    seed: 1,\r\n    params: {\r\n      width: 2550,\r\n      depth: 780,\r\n      height: 770,\r\n      seatHeight: 420,\r\n      armType: 'wood',\r\n      armWidth: 70,\r\n      armHeight: 565,\r\n      armTop: 0.95,\r\n      armFlare: 0.8,\r\n      armSlope: 0.22,\r\n      armSet: 25,\r\n      backType: 'tight',\r\n      backRake: 10,\r\n      backThickness: 145,\r\n      camel: 120,\r\n      channelCount: 4,\r\n      tuftSpacing: 215,\r\n      seatType: 'split',\r\n      seatCount: 2,\r\n      cushionThickness: 130,\r\n      cushionCrown: 12,\r\n      cushionEdge: 'boxed',\r\n      seatFront: 'inside',\r\n      baseType: 'frame',\r\n      legType: 'tapered',\r\n      legHeight: 160,\r\n      legSize: 26,\r\n      legTaper: 0.65,\r\n      legSplay: 0,\r\n      legInset: 20,\r\n      caseHeight: 146,\r\n      bodyInset: 0,\r\n      bodyInsetZ: 0,\r\n      bodyRadius: 18,\r\n      welt: 'self',\r\n      stitch: 'none',\r\n      pillows: 0,\r\n      pillowType: 'mix',\r\n      pillowSize: 590\r\n    },\r\n    materials: {\r\n      fabric: {\r\n        fiber: 'linen',\r\n        weave: 'herringbone',\r\n        color: 'cream',\r\n        pattern: 'check',\r\n        color2: 'cream',\r\n        scale: 1,\r\n        motif: null,\r\n        density: 4\r\n      },\r\n      welt: { color: null },\r\n      wood: { species: 'gurgen', stain: 'oak', finish: 'oil' },\r\n      metal: { finish: 'bronze' }\r\n    }\r\n  },\r\n  expected: {\r\n    schema: 'aura.forma.design/1',\r\n    family: 'seating',\r\n    kind: 'sofa',\r\n    style: 'aura',\r\n    seed: 1,\r\n    params: {\r\n      width: 2550,\r\n      depth: 780,\r\n      height: 770,\r\n      seatHeight: 420,\r\n      armType: 'wood',\r\n      armWidth: 70,\r\n      armHeight: 565,\r\n      armTop: 0.95,\r\n      armFlare: 0.8,\r\n      armSlope: 0.22,\r\n      armSet: 25,\r\n      backType: 'tight',\r\n      backRake: 10,\r\n      backThickness: 145,\r\n      camel: 120,\r\n      channelCount: 4,\r\n      tuftSpacing: 215,\r\n      seatType: 'split',\r\n      seatCount: 2,\r\n      cushionThickness: 130,\r\n      cushionCrown: 12,\r\n      cushionEdge: 'boxed',\r\n      baseType: 'frame',\r\n      legType: 'tapered',\r\n      legHeight: 160,\r\n      legSize: 26,\r\n      legTaper: 0.65,\r\n      legSplay: 0,\r\n      legInset: 20,\r\n      welt: 'self',\r\n      stitch: 'none',\r\n      pillows: 0,\r\n      pillowType: 'mix',\r\n      pillowSize: 590\r\n    },\r\n    materials: {\r\n      fabric: {\r\n        fiber: 'linen',\r\n        weave: 'herringbone',\r\n        color: 'cream',\r\n        pattern: 'check',\r\n        color2: 'cream',\r\n        scale: 1,\r\n        motif: null,\r\n        density: 4\r\n      },\r\n      welt: { color: null },\r\n      wood: { species: 'gurgen', stain: 'oak', finish: 'oil' },\r\n      metal: { finish: 'bronze' }\r\n    }\r\n  },\r\n  operator: 'deepStrictEqual',\r\n  diff: 'simple'\r\n}\r\n\r\nNode.js v24.18.0\r\n",
+      "milliseconds": 538
+    },
+    {
+      "id": "tests/qwen-training-plan-check.py",
+      "file": "tests/qwen-training-plan-check.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS training-plan arithmetic, partial batches, honest data availability, hypothetical timings and invalid measured values.\r\n",
+      "stderr": "",
+      "milliseconds": 1953
+    },
+    {
+      "id": "tests/reference-studies-check.mjs",
+      "file": "tests/reference-studies-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 528 reference study variants, positive parts, rotated bounds, source-specific features, SVG views and camera fit.\n",
+      "stderr": "",
+      "milliseconds": 1719
+    },
+    {
+      "id": "tests/ritmo-check.mjs",
+      "file": "tests/ritmo-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 324 cabinet assemblies: part bounds, positive dimensions, stable identities, 2â€“5 bays, BOM, save/restore and independent compartment changes.\n",
+      "stderr": "",
+      "milliseconds": 1867
+    },
+    {
+      "id": "tests/room-family-check.mjs",
+      "file": "tests/room-family-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS room-specific family lists, incompatible restored/changed selection reset, compatible selection and direct product room inference.\n",
+      "stderr": "",
+      "milliseconds": 224
+    },
+    {
+      "id": "tests/sectional-check.mjs",
+      "file": "tests/sectional-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 216 sectional bounds/support variants, mirrored layouts, real tool contract and seat/back variants.\n",
+      "stderr": "",
+      "milliseconds": 582
+    },
+    {
+      "id": "tests/sketch-check.mjs",
+      "file": "tests/sketch-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS sketch: overlap/reversal/collinearity, genuine gaps/reveals, detail classes, six-family finite/non-mutating geometry.\nseating: 1644 â†’ 1154\ntable: 1665 â†’ 380\nstorage: 24204 â†’ 3072\nkitchen: 21890 â†’ 4362\nbath: 3204 â†’ 778\nbedroom: 1463 â†’ 923\n",
+      "stderr": "",
+      "milliseconds": 13328
+    },
+    {
+      "id": "tests/space-check.mjs",
+      "file": "tests/space-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS home room counts, retained dimensions, rotation, bounds, overlaps, door swing, obstacles, JSON round trip, size limits and SVG sanitisation.\n",
+      "stderr": "",
+      "milliseconds": 226
+    },
+    {
+      "id": "tests/studio-agent-check.mjs",
+      "file": "tests/studio-agent-check.mjs",
+      "args": [],
+      "code": 1,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "node:internal/modules/esm/resolve:271\r\n    throw new ERR_MODULE_NOT_FOUND(\r\n          ^\r\n\r\nError [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\services\\design\\studio-agent.mjs' imported from C:\\Users\\User\\Documents\\Codex\\2026-10-18\\rahmigkt-auraporject-website-deposunda-main-i\\work\\toparlama-1-hijyen\\tests\\studio-agent-check.mjs\r\n    at finalizeResolution (node:internal/modules/esm/resolve:271:11)\r\n    at moduleResolve (node:internal/modules/esm/resolve:865:10)\r\n    at defaultResolve (node:internal/modules/esm/resolve:992:11)\r\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:701:20)\r\n    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:721:38)\r\n    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:759:56)\r\n    at #resolve (node:internal/modules/esm/loader:683:17)\r\n    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:35)\r\n    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33)\r\n    at ModuleJob.link (node:internal/modules/esm/module_job:253:17) {\r\n  code: 'ERR_MODULE_NOT_FOUND',\r\n  url: 'file:///C:/Users/User/Documents/Codex/2026-10-18/rahmigkt-auraporject-website-deposunda-main-i/work/services/design/studio-agent.mjs'\r\n}\r\n\r\nNode.js v24.18.0\r\n",
+      "milliseconds": 177
+    },
+    {
+      "id": "tests/studio-tools-check.mjs",
+      "file": "tests/studio-tools-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS all 14 families, option enums, drawing geometry, action allowlist, invalid calls, prototype keys and dimension adjustments.\n",
+      "stderr": "",
+      "milliseconds": 253
+    },
+    {
+      "id": "tests/table-geometry.mjs",
+      "file": "tests/table-geometry.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "",
+      "milliseconds": 325
+    },
+    {
+      "id": "tests/upholstery-engine-check.mjs",
+      "file": "tests/upholstery-engine-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 72 independent upholstery assemblies, part bounds, BOM totals, distinct topology, actual tuft mesh and style constraints.\n",
+      "stderr": "",
+      "milliseconds": 581
+    },
+    {
+      "id": "tests/yerlesim-adversarial-check.mjs",
+      "file": "tests/yerlesim-adversarial-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS authoritative solver: impossible placement, empty room, immutability, deterministic rejection. No second solver imported.\n",
+      "stderr": "",
+      "milliseconds": 328
+    },
+    {
+      "id": "tests/ai-eval/test-01b.mjs",
+      "file": "tests/ai-eval/test-01b.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "âœ” numeric and courtesy variants share a skeleton (5.9648ms)\nâœ” audit exposes duplicate count and split leakage (1.0359ms)\nâœ” actual CSV has 400 unique, blank decisions with exact source text (12.4951ms)\nâœ” 01B decisions can be staged in memory without changing either frozen file (12.482ms)\nâœ” 01B manifest pins the actual test bytes and only the POSIX repository path (3.2805ms)\nâ„¹ tests 5\nâ„¹ suites 0\nâ„¹ pass 5\nâ„¹ fail 0\nâ„¹ cancelled 0\nâ„¹ skipped 0\nâ„¹ todo 0\nâ„¹ duration_ms 49.9055\n",
+      "stderr": "",
+      "milliseconds": 275
+    },
+    {
+      "id": "tests/ai-eval/test-uzman-onay.mjs",
+      "file": "tests/ai-eval/test-uzman-onay.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "âœ” BOM, CRLF, quoted commas/newlines/quotes (4.0864ms)\nâœ” blank decisions preserve approvals; no record mutation (2.8315ms)\nâœ” approval and rejection are explicit and attributed (4.7256ms)\nâœ” corrections require notes and never approve (0.6649ms)\nâœ” reject unknown, duplicate, altered records and invalid decisions (0.7951ms)\nâœ” reject malformed quoting (0.3232ms)\nâ„¹ tests 6\nâ„¹ suites 0\nâ„¹ pass 6\nâ„¹ fail 0\nâ„¹ cancelled 0\nâ„¹ skipped 0\nâ„¹ todo 0\nâ„¹ duration_ms 26.2538\n",
+      "stderr": "",
+      "milliseconds": 215
+    },
+    {
+      "id": "tests/ai-eval/verify-01b.mjs",
+      "file": "tests/ai-eval/verify-01b.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "01B frozen hash matches (separate manifest; only Linux path).\nPASS: 400 manually authored records; all composition/context/gold checks; 400 skeletons; no split leakage.\n",
+      "stderr": "",
+      "milliseconds": 226
+    },
+    {
+      "id": "tests/text-eval/verify-stage1.mjs",
+      "file": "tests/text-eval/verify-stage1.mjs",
+      "args": [],
+      "code": 1,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "node:internal/modules/run_main:107\r\n    triggerUncaughtException(\r\n    ^\r\n\r\nAssertionError [ERR_ASSERTION]: M01: noncanonical design\r\n+ actual - expected\r\n... Skipped lines\r\n\r\n  {\r\n    family: 'seating',\r\n    kind: 'armchair',\r\n    materials: {\r\n      fabric: {\r\n...\r\n      baseType: 'frame',\r\n+     bodyInset: 0,\r\n+     bodyInsetZ: 0,\r\n+     bodyRadius: 18,\r\n      camel: 0,\r\n+     caseHeight: 114,\r\n      channelCount: 7,\r\n      cushionCrown: 5,\r\n      cushionEdge: 'boxed',\r\n      cushionThickness: 155,\r\n      depth: 970,\r\n...\r\n      seatCount: 1,\r\n+     seatFront: 'inside',\r\n      seatHeight: 410,\r\n      seatType: 'bench',\r\n      stitch: 'none',\r\n      tuftSpacing: 200,\r\n      welt: 'none',\r\n\r\n    at file:///C:/Users/User/Documents/Codex/2026-10-18/rahmigkt-auraporject-website-deposunda-main-i/work/toparlama-1-hijyen/tests/text-eval/verify-stage1.mjs:62:10\r\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\r\n    at async node:internal/modules/esm/loader:643:26\r\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\r\n  generatedMessage: false,\r\n  code: 'ERR_ASSERTION',\r\n  actual: {\r\n    schema: 'aura.forma.design/1',\r\n    family: 'seating',\r\n    kind: 'armchair',\r\n    style: 'aura',\r\n    seed: 101,\r\n    params: {\r\n      width: 960,\r\n      depth: 970,\r\n      height: 780,\r\n      seatHeight: 410,\r\n      armType: 'wood',\r\n      armWidth: 95,\r\n      armHeight: 580,\r\n      armTop: 0.35,\r\n      armFlare: 0.9,\r\n      armSlope: 0.24,\r\n      armSet: 45,\r\n      backType: 'tight',\r\n      backRake: 12,\r\n      backThickness: 265,\r\n      camel: 0,\r\n      channelCount: 7,\r\n      tuftSpacing: 200,\r\n      seatType: 'bench',\r\n      seatCount: 1,\r\n      cushionThickness: 155,\r\n      cushionCrown: 5,\r\n      cushionEdge: 'boxed',\r\n      seatFront: 'inside',\r\n      baseType: 'frame',\r\n      legType: 'tapered',\r\n      legHeight: 160,\r\n      legSize: 27,\r\n      legTaper: 0.7,\r\n      legSplay: 7,\r\n      legInset: 35,\r\n      caseHeight: 114,\r\n      bodyInset: 0,\r\n      bodyInsetZ: 0,\r\n      bodyRadius: 18,\r\n      welt: 'none',\r\n      stitch: 'none',\r\n      pillows: 0,\r\n      pillowType: 'mix',\r\n      pillowSize: 300\r\n    },\r\n    materials: {\r\n      fabric: {\r\n        fiber: 'linen',\r\n        weave: 'plain',\r\n        color: 'cream',\r\n        pattern: 'check',\r\n        color2: 'anthracite',\r\n        scale: 1,\r\n        motif: null,\r\n        density: 2\r\n      },\r\n      welt: { color: null },\r\n      wood: { species: 'ash', stain: 'natural', finish: 'matte' },\r\n      metal: { finish: 'bronze' }\r\n    }\r\n  },\r\n  expected: {\r\n    schema: 'aura.forma.design/1',\r\n    family: 'seating',\r\n    kind: 'armchair',\r\n    style: 'aura',\r\n    seed: 101,\r\n    params: {\r\n      width: 960,\r\n      depth: 970,\r\n      height: 780,\r\n      seatHeight: 410,\r\n      armType: 'wood',\r\n      armWidth: 95,\r\n      armHeight: 580,\r\n      armTop: 0.35,\r\n      armFlare: 0.9,\r\n      armSlope: 0.24,\r\n      armSet: 45,\r\n      backType: 'tight',\r\n      backRake: 12,\r\n      backThickness: 265,\r\n      camel: 0,\r\n      channelCount: 7,\r\n      tuftSpacing: 200,\r\n      seatType: 'bench',\r\n      seatCount: 1,\r\n      cushionThickness: 155,\r\n      cushionCrown: 5,\r\n      cushionEdge: 'boxed',\r\n      baseType: 'frame',\r\n      legType: 'tapered',\r\n      legHeight: 160,\r\n      legSize: 27,\r\n      legTaper: 0.7,\r\n      legSplay: 7,\r\n      legInset: 35,\r\n      welt: 'none',\r\n      stitch: 'none',\r\n      pillows: 0,\r\n      pillowType: 'mix',\r\n      pillowSize: 300\r\n    },\r\n    materials: {\r\n      fabric: {\r\n        fiber: 'linen',\r\n        weave: 'plain',\r\n        color: 'cream',\r\n        pattern: 'check',\r\n        color2: 'anthracite',\r\n        scale: 1,\r\n        motif: null,\r\n        density: 2\r\n      },\r\n      welt: { color: null },\r\n      wood: { species: 'ash', stain: 'natural', finish: 'matte' },\r\n      metal: { finish: 'bronze' }\r\n    }\r\n  },\r\n  operator: 'deepStrictEqual',\r\n  diff: 'simple'\r\n}\r\n\r\nNode.js v24.18.0\r\n",
+      "milliseconds": 447
+    },
+    {
+      "id": "tools/ev-plan/test_eu.py",
+      "file": "tools/ev-plan/test_eu.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "....................\r\n----------------------------------------------------------------------\r\nRan 20 tests in 1.762s\r\n\r\nOK\r\n",
+      "milliseconds": 3563
+    },
+    {
+      "id": "tools/ev-plan/test_pipeline.py",
+      "file": "tools/ev-plan/test_pipeline.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "...................\r\n----------------------------------------------------------------------\r\nRan 19 tests in 9.249s\r\n\r\nOK\r\n",
+      "milliseconds": 10815
+    },
+    {
+      "id": "tools/ev-plan/test_real.py",
+      "file": "tools/ev-plan/test_real.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": ".......................\r\n----------------------------------------------------------------------\r\nRan 23 tests in 0.967s\r\n\r\nOK\r\n",
+      "milliseconds": 2390
+    },
+    {
+      "id": "tools/ev-plan/test_v2.py",
+      "file": "tools/ev-plan/test_v2.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "...................\r\n----------------------------------------------------------------------\r\nRan 19 tests in 0.627s\r\n\r\nOK\r\n",
+      "milliseconds": 1831
+    },
+    {
+      "id": "tools/ev-sohbet/test02.py",
+      "file": "tools/ev-sohbet/test02.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "..............\r\n----------------------------------------------------------------------\r\nRan 14 tests in 2.607s\r\n\r\nOK\r\n",
+      "milliseconds": 3467
+    },
+    {
+      "id": "tools/ev-sohbet/test_dk.py",
+      "file": "tools/ev-sohbet/test_dk.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": ".......\r\n----------------------------------------------------------------------\r\nRan 7 tests in 18.575s\r\n\r\nOK\r\n",
+      "milliseconds": 19577
+    },
+    {
+      "id": "tools/ev-sohbet/test_es.py",
+      "file": "tools/ev-sohbet/test_es.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "........\r\n----------------------------------------------------------------------\r\nRan 8 tests in 12.508s\r\n\r\nOK\r\n",
+      "milliseconds": 13444
+    },
+    {
+      "id": "tools/ev-sohbet/test_it.py",
+      "file": "tools/ev-sohbet/test_it.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "..........\r\n----------------------------------------------------------------------\r\nRan 10 tests in 27.790s\r\n\r\nOK\r\n",
+      "milliseconds": 28768
+    },
+    {
+      "id": "tools/ev-sohbet/test_uk_ie.py",
+      "file": "tools/ev-sohbet/test_uk_ie.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "........\r\n----------------------------------------------------------------------\r\nRan 8 tests in 31.543s\r\n\r\nOK\r\n",
+      "milliseconds": 32715
+    },
+    {
+      "id": "tools/perde/test_hesap.py",
+      "file": "tools/perde/test_hesap.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "..................\r\n----------------------------------------------------------------------\r\nRan 18 tests in 0.524s\r\n\r\nOK\r\n",
+      "milliseconds": 863
+    },
+    {
+      "id": "replay-02",
+      "file": "tools/ev-sohbet/verify02.mjs",
+      "args": [
+        "knowledge/ai-egitim/veri/ev-sohbet-02"
+      ],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "ev-sohbet-02-01.json replayed\nev-sohbet-02-02.json replayed\nev-sohbet-02-03.json replayed\nev-sohbet-02-04.json replayed\nev-sohbet-02-05.json replayed\nev-sohbet-02-06.json replayed\nev-sohbet-02-07.json replayed\nev-sohbet-02-08.json replayed\nev-sohbet-02-09.json replayed\nev-sohbet-02-10.json replayed\nev-sohbet-02-11.json replayed\nev-sohbet-02-12.json replayed\nev-sohbet-02-13.json replayed\nev-sohbet-02-14.json replayed\nev-sohbet-02-15.json replayed\nev-sohbet-02-16.json replayed\nev-sohbet-02-17.json replayed\nev-sohbet-02-18.json replayed\nev-sohbet-02-19.json replayed\nev-sohbet-02-20.json replayed\n{\"attempts_replayed\":74,\"honest_no_fit_results\":10,\"records\":20,\"passed\":true}\n",
+      "stderr": "",
+      "milliseconds": 9095
+    },
+    {
+      "id": "replay-uk-ie",
+      "file": "tools/ev-sohbet/verify02.mjs",
+      "args": [
+        "knowledge/ai-egitim/veri/ev-sohbet-uk-ie"
+      ],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "ev-sohbet-uk-ie-01.json replayed\nev-sohbet-uk-ie-02.json replayed\nev-sohbet-uk-ie-03.json replayed\nev-sohbet-uk-ie-04.json replayed\nev-sohbet-uk-ie-05.json replayed\nev-sohbet-uk-ie-06.json replayed\nev-sohbet-uk-ie-07.json replayed\nev-sohbet-uk-ie-08.json replayed\n{\"attempts_replayed\":23,\"honest_no_fit_results\":0,\"records\":8,\"passed\":true}\n",
+      "stderr": "",
+      "milliseconds": 3177
+    },
+    {
+      "id": "replay-dk",
+      "file": "tools/ev-sohbet/verify02.mjs",
+      "args": [
+        "knowledge/ai-egitim/veri/ev-sohbet-dk"
+      ],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "ev-sohbet-dk-01.json replayed\nev-sohbet-dk-02.json replayed\nev-sohbet-dk-03.json replayed\nev-sohbet-dk-04.json replayed\n{\"attempts_replayed\":14,\"honest_no_fit_results\":0,\"records\":4,\"passed\":true}\n",
+      "stderr": "",
+      "milliseconds": 1682
+    },
+    {
+      "id": "replay-es",
+      "file": "tools/ev-sohbet/verify02.mjs",
+      "args": [
+        "knowledge/ai-egitim/veri/ev-sohbet-es"
+      ],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "ev-sohbet-es-01.json replayed\nev-sohbet-es-02.json replayed\nev-sohbet-es-03.json replayed\nev-sohbet-es-04.json replayed\n{\"attempts_replayed\":13,\"honest_no_fit_results\":0,\"records\":4,\"passed\":true}\n",
+      "stderr": "",
+      "milliseconds": 1896
+    },
+    {
+      "id": "replay-it",
+      "file": "tools/ev-sohbet/verify02.mjs",
+      "args": [
+        "knowledge/ai-egitim/veri/ev-sohbet-it"
+      ],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "ev-sohbet-it-01.json replayed\nev-sohbet-it-02.json replayed\nev-sohbet-it-03.json replayed\nev-sohbet-it-04.json replayed\n{\"attempts_replayed\":13,\"honest_no_fit_results\":0,\"records\":4,\"passed\":true}\n",
+      "stderr": "",
+      "milliseconds": 2286
+    }
+  ],
+  "execution_notes": [
+    "AURA_PYTHON=bundled Python 3.11; PYTHONPATH=ev-plan-deps; AURA_TEST_TIMEOUT_MS=60000",
+    "52 job sweep; qwen-atolye was initially a no-op without CLI args, then fixed and separately rerun successfully with 238 in-memory assertions.",
+    "toparlama-hijyen-check.py added after sweep and separately passed; not counted in 52.",
+    "Runner inventory/not_run reporting added after sweep; syntax checked."
+  ]
+}

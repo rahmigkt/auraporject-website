@@ -9,7 +9,7 @@ from pathlib import Path
 from collections import Counter,defaultdict
 from common import ROOT,DATA,write,compact,digest,sources
 from solver.catalog import program
-from solver.program import TYPES,SYSTEM,CONTRACT
+from legacy_v03.program import TYPES,SYSTEM,CONTRACT
 from solver.layout import solve,Unsupported
 from metrics import measure,diversity,graph,isomorphic
 from generator import generate

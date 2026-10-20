@@ -1,0 +1,24 @@
+{
+  "schema": "aura.geometry.curriculum/1",
+  "training_started": false,
+  "generator_sha256_lf": "f3f5fc486f5afd94f869d3e2c6b37d389e3e731195de8e2c6eab74884d728ccd",
+  "counts": {
+    "train": 1000,
+    "dev": 200,
+    "test": 200
+  },
+  "files": {
+    "train.jsonl": "e2db6706dd568b6531ecf456c7f68110de7ca712a8beb4467dca6eed4ed0fedb",
+    "sft-unreviewed.jsonl": "834116a577d2d82b8de7e3784ecfb8a0dbbfc356f6daccc0682f07ab94f63997",
+    "dev.jsonl": "b30c887cd6ebaab5b86dfe76d9569a09ddf22b946208a364d7e0fa3eed0da24e",
+    "dev-prompts.jsonl": "7852f6cafca6389d6fd4e7c8c754fdf943b0bbc1cc5b080a4870969d1e5533c3",
+    "test.jsonl": "4b4c21ef6211d2efb486e8934c93d5a25ee5fba776ce8c86a357231849254786"
+  },
+  "limitations": [
+    "unreviewed deterministic exercise labels",
+    "one rounded-plate topology",
+    "no aesthetic or structural-strength labels",
+    "no external CAD dataset imported",
+    "parameter-held-out only; not topology-generalisation evaluation"
+  ]
+}

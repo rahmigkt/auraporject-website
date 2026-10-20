@@ -8,7 +8,7 @@ import {sample,compileDesign,normalizeDesign} from '../assets/forma/generate.js'
 import {normalizeOverrides} from '../assets/forma/overrides.js';
 import {worldPositions,buildMesh} from '../assets/forma/build.js';
 import {loadCsg,csgReady} from '../assets/forma/csg.js';
-const out='outputs/qwen-local/atolye-v1',sha=x=>createHash('sha256').update(x).digest('hex');
+const out='work/qwen-local/atolye-v1',sha=x=>createHash('sha256').update(x).digest('hex');
 const canonical=x=>Array.isArray(x)?x.map(canonical):x&&typeof x==='object'?Object.fromEntries(Object.keys(x).sort().map(k=>[k,canonical(x[k])])):x;
 const equal=(a,b)=>JSON.stringify(canonical(a))===JSON.stringify(canonical(b));
 const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
@@ -91,7 +91,13 @@ export function build(){const rows=[];
  }
  return rows;
 }
-if(process.argv[2]==='--check'){
+if(!process.argv[2] || process.argv[2]==='--unit'){
+ await loadCsg();assert(csgReady(),'CSG_WASM_NOT_READY');
+ const rows=build();assert.equal(rows.length,238);
+ assert.equal(rows.filter(r=>r.decision==='edit').length,210);
+ assert.equal(rows.filter(r=>r.decision==='reject').length,28);
+ console.log('PASS 238 in-memory workshop fixtures; 210 edits and 28 rejects; no dataset export.');
+}else if(process.argv[2]==='--check'){
  await loadCsg();assert(csgReady(),'CSG_WASM_NOT_READY');
  const m=JSON.parse(readFileSync(out+'/manifest.json','utf8'));
  if(source().sha256!==m.source.sha256)throw Error('STALE_SOURCE');

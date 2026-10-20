@@ -12,7 +12,7 @@ import urllib.request
 from pathlib import Path
 from common import read,write,digest
 from build_v2 import source_hashes
-from solver.program import response
+from legacy_v03.program import response
 from solver.layout import solve
 from metrics import measure
 
