@@ -26,7 +26,7 @@ import {drawingSheet, drawingDxf} from './drawing.js';
 import {bom, bomCsv} from './bom.js';
 import {zip, jpegPdf, svgToJpeg, dataUrlJpeg, download} from './package.js';
 const designKey = d => JSON.stringify({p: d.params, m: d.materials, k: d.kind, f: d.family});
-import {t, partName, UI_LANGS} from './i18n.js?v=20261021d';
+import {t, partName, UI_LANGS} from './i18n.js?v=20261021g';
 import {migrate, chooserHTML, applyChoice, TEXTILE_CSS, TEXTILE_KEY, SHEERS, DRAPES, HEADINGS, SYSTEMS, RUGS, PATTERNS as RUG_PATTERNS, colorName} from '../ev/tekstil.js?v=20261021e';
 
 const $ = (sel, root = document) => root.querySelector(sel);
@@ -151,7 +151,7 @@ const bomOf = () => deliverables().bom;
 
 // ---- Layout --------------------------------------------------------------------------
 function shell() {
-  document.documentElement.lang = state.lang;
+  document.documentElement.lang = state.lang; document.documentElement.dir = state.lang === 'ar' ? 'rtl' : 'ltr';
   document.title = `AURA · ${L('title')}`;
   $('#app').innerHTML = `
   <header class="f-header">
