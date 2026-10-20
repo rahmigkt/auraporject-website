@@ -1,0 +1,52 @@
+{
+  "checked_on": "2026-10-21",
+  "sources": [
+    {
+      "id": "BR18-layout",
+      "url": "https://www.bygningsreglementet.dk/tekniske-bestemmelser/09/krav/199_213/",
+      "access": "primary_current_page_read",
+      "edition": "BR18 Aktuelt, accessed 2026-10-21",
+      "clauses": [
+        "199",
+        "205",
+        "208"
+      ],
+      "finding": "Layout evidence matters; height is contextual; entry-level door clear passage minimum 0.77 m, not raw drawing aperture.",
+      "numeric_rule": {
+        "clear_passage_min_mm": 770
+      },
+      "application": "Actual property and work applicability unknown; no national pass computed"
+    },
+    {
+      "id": "BR18-daylight",
+      "url": "https://www.bygningsreglementet.dk/tekniske-bestemmelser/18/vejledninger/generel_vejledning/dagslys/",
+      "access": "primary_current_guidance_read",
+      "clauses": [
+        "379-381 guidance"
+      ],
+      "finding": "10-percent documentation uses actual glass with corrections, not raw aperture area.",
+      "unknown": [
+        "glass area excluding frame",
+        "glass transmittance",
+        "shading and obstructions"
+      ],
+      "application": "Project raw-opening check remains separate; no daylight pass"
+    },
+    {
+      "id": "DST-area",
+      "url": "https://www.dst.dk/en/Statistik/dokumentation/documentationofstatistics/census-of-housing/statistical-presentation",
+      "access": "primary_page_read",
+      "finding": "Registered dwelling area is measured externally and includes allocated stairwell share in multi-dwelling houses; not net polygon sum.",
+      "application": "No invented conversion factor or BBR area"
+    },
+    {
+      "id": "DST-types",
+      "url": "https://www.dst.dk/en/Statistik/emner/borgere/boligforhold/boligbestanden",
+      "access": "primary_page_read",
+      "finding": "Housing-stock source distinguishes dwelling types.",
+      "application": "No national furniture taste or local typology inferred from Swiss plans"
+    }
+  ],
+  "legal_compliance": "unknown_not_certified",
+  "not_a_complete_BR18_checker": true
+}

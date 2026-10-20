@@ -1,0 +1,856 @@
+{
+  "records": 4,
+  "exchanges": 32,
+  "messages": 64,
+  "accepted": 4,
+  "strict_pass": 0,
+  "source_exception_count": 18,
+  "suite_errors": [],
+  "results": [
+    {
+      "id": "ev-sohbet-es-01",
+      "source": "sd-029f06baade84d7b813cd6b4",
+      "country": "ES",
+      "net_area_m2": 87.621,
+      "levels": 1,
+      "items": 8,
+      "checks": [
+        {
+          "check": "net_area_delta_percent",
+          "passed": true,
+          "actual": 0.0241,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "hall_fraction",
+          "passed": true,
+          "actual": 0.11400907727214075,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bedroom_area:room-1",
+          "passed": true,
+          "actual": 18.99403826206845,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bedroom_short_side:room-1",
+          "passed": true,
+          "actual": 3832.642924437078,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bedroom_area:room-3",
+          "passed": true,
+          "actual": 14.168608679616048,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bedroom_short_side:room-3",
+          "passed": true,
+          "actual": 3507.58488150487,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bedroom_area:room-5",
+          "passed": true,
+          "actual": 9.930187889257033,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bedroom_short_side:room-5",
+          "passed": true,
+          "actual": 2993.6222785869827,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bath_area:room-6",
+          "passed": true,
+          "actual": 4.566366720240724,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "door_width:opening-3",
+          "passed": true,
+          "actual": 890,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "door_width:opening-6",
+          "passed": false,
+          "actual": 740,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 740.0,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-7",
+          "passed": true,
+          "actual": 910,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "door_width:opening-8",
+          "passed": true,
+          "actual": 800,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "door_width:opening-10",
+          "passed": false,
+          "actual": 770,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 770.0,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-11",
+          "passed": true,
+          "actual": 900,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "door_width:opening-13",
+          "passed": false,
+          "actual": 890,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 890.0,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "window_floor_ratio:room-1",
+          "passed": true,
+          "actual": 0.19706183321083756,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "window_floor_ratio:room-3",
+          "passed": true,
+          "actual": 0.2641755506583326,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "window_floor_ratio:room-5",
+          "passed": true,
+          "actual": 0.21046933082314234,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "window_floor_ratio:room-7",
+          "passed": true,
+          "actual": 0.1709439883863667,
+          "scope": "work_order_target"
+        }
+      ],
+      "source_exceptions": [
+        {
+          "check": "door_width:opening-6",
+          "passed": false,
+          "actual": 740,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 740.0,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-10",
+          "passed": false,
+          "actual": 770,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 770.0,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-13",
+          "passed": false,
+          "actual": 890,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 890.0,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        }
+      ],
+      "errors": [],
+      "daylight": {
+        "room-1": {
+          "opening_area_m2": 3.743,
+          "floor_area_m2": 18.99403826206845,
+          "ratio": 0.19706183321083756,
+          "country_review": "not_a_national_legal_certificate",
+          "stricter_nrw_ratio_pass": null,
+          "equivalent_daylight_m2": null,
+          "frame_glass_fraction": null,
+          "obstruction_factor": null
+        },
+        "room-3": {
+          "opening_area_m2": 3.743,
+          "floor_area_m2": 14.168608679616048,
+          "ratio": 0.2641755506583326,
+          "country_review": "not_a_national_legal_certificate",
+          "stricter_nrw_ratio_pass": null,
+          "equivalent_daylight_m2": null,
+          "frame_glass_fraction": null,
+          "obstruction_factor": null
+        },
+        "room-5": {
+          "opening_area_m2": 2.09,
+          "floor_area_m2": 9.930187889257033,
+          "ratio": 0.21046933082314234,
+          "country_review": "not_a_national_legal_certificate",
+          "stricter_nrw_ratio_pass": null,
+          "equivalent_daylight_m2": null,
+          "frame_glass_fraction": null,
+          "obstruction_factor": null
+        },
+        "room-7": {
+          "opening_area_m2": 3.534,
+          "floor_area_m2": 20.67343831952997,
+          "ratio": 0.1709439883863667,
+          "country_review": "not_a_national_legal_certificate",
+          "stricter_nrw_ratio_pass": null,
+          "equivalent_daylight_m2": null,
+          "frame_glass_fraction": null,
+          "obstruction_factor": null
+        }
+      },
+      "strict_pass": false,
+      "accepted_with_documented_source_exceptions": true,
+      "building_law_compliance": "not_certified",
+      "stair_structural_or_headroom_approval": null
+    },
+    {
+      "id": "ev-sohbet-es-02",
+      "source": "sd-035dd88082c3d780707f28b9",
+      "country": "ES",
+      "net_area_m2": 74.429,
+      "levels": 1,
+      "items": 6,
+      "checks": [
+        {
+          "check": "net_area_delta_percent",
+          "passed": true,
+          "actual": 0.0392,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "hall_fraction",
+          "passed": true,
+          "actual": 0.03748872410177498,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bedroom_area:room-0",
+          "passed": true,
+          "actual": 16.25198802107891,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bedroom_short_side:room-0",
+          "passed": true,
+          "actual": 3972.3439,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "wc_area:room-2",
+          "passed": true,
+          "actual": 1.3814056485265294,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bath_area:room-6",
+          "passed": false,
+          "actual": 3.168728272600945,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 3.168728145684686,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "bedroom_area:room-8",
+          "passed": true,
+          "actual": 10.142761740797443,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bedroom_short_side:room-8",
+          "passed": true,
+          "actual": 3095.537799999999,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "door_width:opening-0",
+          "passed": false,
+          "actual": 516.8944,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 516.8944,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-3",
+          "passed": false,
+          "actual": 715.9945,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 715.9945,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-4",
+          "passed": false,
+          "actual": 750.4541,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 750.4541,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-6",
+          "passed": true,
+          "actual": 936.9865,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "door_width:opening-7",
+          "passed": true,
+          "actual": 811.7157,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "door_width:opening-9",
+          "passed": true,
+          "actual": 796.4003,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "door_width:opening-11",
+          "passed": true,
+          "actual": 796.4003,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "window_floor_ratio:room-0",
+          "passed": false,
+          "actual": 0.0,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 0.0,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "window_floor_ratio:room-1",
+          "passed": false,
+          "actual": 0.04331259144590167,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 0.043312591128894844,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "window_floor_ratio:room-8",
+          "passed": false,
+          "actual": 0.0,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 0.0,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        }
+      ],
+      "source_exceptions": [
+        {
+          "check": "bath_area:room-6",
+          "passed": false,
+          "actual": 3.168728272600945,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 3.168728145684686,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-0",
+          "passed": false,
+          "actual": 516.8944,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 516.8944,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-3",
+          "passed": false,
+          "actual": 715.9945,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 715.9945,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-4",
+          "passed": false,
+          "actual": 750.4541,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 750.4541,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "window_floor_ratio:room-0",
+          "passed": false,
+          "actual": 0.0,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 0.0,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "window_floor_ratio:room-1",
+          "passed": false,
+          "actual": 0.04331259144590167,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 0.043312591128894844,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "window_floor_ratio:room-8",
+          "passed": false,
+          "actual": 0.0,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 0.0,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        }
+      ],
+      "errors": [],
+      "daylight": {
+        "room-0": {
+          "opening_area_m2": 0,
+          "floor_area_m2": 16.25198802107891,
+          "ratio": 0.0,
+          "country_review": "not_a_national_legal_certificate",
+          "stricter_nrw_ratio_pass": null,
+          "equivalent_daylight_m2": null,
+          "frame_glass_fraction": null,
+          "obstruction_factor": null
+        },
+        "room-1": {
+          "opening_area_m2": 1.2856501999999999,
+          "floor_area_m2": 29.68305883072833,
+          "ratio": 0.04331259144590167,
+          "country_review": "not_a_national_legal_certificate",
+          "stricter_nrw_ratio_pass": null,
+          "equivalent_daylight_m2": null,
+          "frame_glass_fraction": null,
+          "obstruction_factor": null
+        },
+        "room-8": {
+          "opening_area_m2": 0,
+          "floor_area_m2": 10.142761740797443,
+          "ratio": 0.0,
+          "country_review": "not_a_national_legal_certificate",
+          "stricter_nrw_ratio_pass": null,
+          "equivalent_daylight_m2": null,
+          "frame_glass_fraction": null,
+          "obstruction_factor": null
+        }
+      },
+      "strict_pass": false,
+      "accepted_with_documented_source_exceptions": true,
+      "building_law_compliance": "not_certified",
+      "stair_structural_or_headroom_approval": null
+    },
+    {
+      "id": "ev-sohbet-es-03",
+      "source": "sd-037b110a098ce5610a87866a",
+      "country": "ES",
+      "net_area_m2": 69.714,
+      "levels": 1,
+      "items": 6,
+      "checks": [
+        {
+          "check": "net_area_delta_percent",
+          "passed": true,
+          "actual": 0.0201,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "hall_fraction",
+          "passed": true,
+          "actual": 0.055872715492447565,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bedroom_area:room-1",
+          "passed": true,
+          "actual": 11.450568298881308,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bedroom_short_side:room-1",
+          "passed": true,
+          "actual": 2773.522000000001,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bath_area:room-3",
+          "passed": true,
+          "actual": 5.82228531794234,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bedroom_area:room-4",
+          "passed": true,
+          "actual": 15.462454438643261,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bedroom_short_side:room-4",
+          "passed": true,
+          "actual": 3922.7362000000003,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "door_width:opening-3",
+          "passed": true,
+          "actual": 788.589,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "door_width:opening-4",
+          "passed": true,
+          "actual": 904.1386,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "door_width:opening-5",
+          "passed": false,
+          "actual": 693.0779,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 693.0779,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-7",
+          "passed": true,
+          "actual": 803.8667,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "door_width:opening-9",
+          "passed": true,
+          "actual": 997.9883,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "door_width:opening-10",
+          "passed": false,
+          "actual": 685.9108,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 685.9108,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "window_floor_ratio:room-1",
+          "passed": true,
+          "actual": 0.19876964449199977,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "window_floor_ratio:room-4",
+          "passed": true,
+          "actual": 0.2074755610585644,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "window_floor_ratio:room-6",
+          "passed": false,
+          "actual": 0.0,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 0.0,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        }
+      ],
+      "source_exceptions": [
+        {
+          "check": "door_width:opening-5",
+          "passed": false,
+          "actual": 693.0779,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 693.0779,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-10",
+          "passed": false,
+          "actual": 685.9108,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 685.9108,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "window_floor_ratio:room-6",
+          "passed": false,
+          "actual": 0.0,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 0.0,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        }
+      ],
+      "errors": [],
+      "daylight": {
+        "room-1": {
+          "opening_area_m2": 2.27602539,
+          "floor_area_m2": 11.450568298881308,
+          "ratio": 0.19876964449199977,
+          "country_review": "not_a_national_legal_certificate",
+          "stricter_nrw_ratio_pass": null,
+          "equivalent_daylight_m2": null,
+          "frame_glass_fraction": null,
+          "obstruction_factor": null
+        },
+        "room-4": {
+          "opening_area_m2": 3.20808141,
+          "floor_area_m2": 15.462454438643261,
+          "ratio": 0.2074755610585644,
+          "country_review": "not_a_national_legal_certificate",
+          "stricter_nrw_ratio_pass": null,
+          "equivalent_daylight_m2": null,
+          "frame_glass_fraction": null,
+          "obstruction_factor": null
+        },
+        "room-6": {
+          "opening_area_m2": 0,
+          "floor_area_m2": 23.63706704303284,
+          "ratio": 0.0,
+          "country_review": "not_a_national_legal_certificate",
+          "stricter_nrw_ratio_pass": null,
+          "equivalent_daylight_m2": null,
+          "frame_glass_fraction": null,
+          "obstruction_factor": null
+        }
+      },
+      "strict_pass": false,
+      "accepted_with_documented_source_exceptions": true,
+      "building_law_compliance": "not_certified",
+      "stair_structural_or_headroom_approval": null
+    },
+    {
+      "id": "ev-sohbet-es-04",
+      "source": "sd-03a3d3e59376e86135ab4ba4",
+      "country": "ES",
+      "net_area_m2": 71.532,
+      "levels": 1,
+      "items": 6,
+      "checks": [
+        {
+          "check": "net_area_delta_percent",
+          "passed": true,
+          "actual": 0.0446,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "hall_fraction",
+          "passed": true,
+          "actual": 0.0,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bath_area:room-0",
+          "passed": true,
+          "actual": 5.6726386454175515,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bedroom_area:room-1",
+          "passed": true,
+          "actual": 19.82946660002929,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bedroom_short_side:room-1",
+          "passed": true,
+          "actual": 3105.1455000000005,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bedroom_area:room-3",
+          "passed": true,
+          "actual": 12.916589461264065,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "bedroom_short_side:room-3",
+          "passed": true,
+          "actual": 2889.2065000000002,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "wc_area:room-5",
+          "passed": false,
+          "actual": 2.59657040193072,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 2.596570394209021,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-1",
+          "passed": false,
+          "actual": 1180.8561,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 1180.8561,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-5",
+          "passed": false,
+          "actual": 974.9417,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 974.9417,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-6",
+          "passed": false,
+          "actual": 974.9417,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 974.9417,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-7",
+          "passed": false,
+          "actual": 974.9417,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 974.9417,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-11",
+          "passed": true,
+          "actual": 985.0696,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "window_floor_ratio:room-1",
+          "passed": true,
+          "actual": 0.14470812240586248,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "window_floor_ratio:room-3",
+          "passed": true,
+          "actual": 0.24478883837580537,
+          "scope": "work_order_target"
+        },
+        {
+          "check": "window_floor_ratio:room-6",
+          "passed": true,
+          "actual": 0.25890872916603497,
+          "scope": "work_order_target"
+        }
+      ],
+      "source_exceptions": [
+        {
+          "check": "wc_area:room-5",
+          "passed": false,
+          "actual": 2.59657040193072,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 2.596570394209021,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-1",
+          "passed": false,
+          "actual": 1180.8561,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 1180.8561,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-5",
+          "passed": false,
+          "actual": 974.9417,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 974.9417,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-6",
+          "passed": false,
+          "actual": 974.9417,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 974.9417,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        },
+        {
+          "check": "door_width:opening-7",
+          "passed": false,
+          "actual": 974.9417,
+          "scope": "work_order_target",
+          "source_exception": true,
+          "source_reference_value": 974.9417,
+          "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
+        }
+      ],
+      "errors": [],
+      "daylight": {
+        "room-1": {
+          "opening_area_m2": 2.86948488,
+          "floor_area_m2": 19.82946660002929,
+          "ratio": 0.14470812240586248,
+          "country_review": "not_a_national_legal_certificate",
+          "stricter_nrw_ratio_pass": null,
+          "equivalent_daylight_m2": null,
+          "frame_glass_fraction": null,
+          "obstruction_factor": null
+        },
+        "room-3": {
+          "opening_area_m2": 3.16183693,
+          "floor_area_m2": 12.916589461264065,
+          "ratio": 0.24478883837580537,
+          "country_review": "not_a_national_legal_certificate",
+          "stricter_nrw_ratio_pass": null,
+          "equivalent_daylight_m2": null,
+          "frame_glass_fraction": null,
+          "obstruction_factor": null
+        },
+        "room-6": {
+          "opening_area_m2": 6.147572930000001,
+          "floor_area_m2": 23.74417019388187,
+          "ratio": 0.25890872916603497,
+          "country_review": "not_a_national_legal_certificate",
+          "stricter_nrw_ratio_pass": null,
+          "equivalent_daylight_m2": null,
+          "frame_glass_fraction": null,
+          "obstruction_factor": null
+        }
+      },
+      "strict_pass": false,
+      "accepted_with_documented_source_exceptions": true,
+      "building_law_compliance": "not_certified",
+      "stair_structural_or_headroom_approval": null
+    }
+  ],
+  "passed": true,
+  "legal_compliance": "unknown_not_certified",
+  "scope": "Geometric targets with retained source exceptions; no useful-area/cadastral/clear-passage/ventilation substitution."
+}
