@@ -1,5 +1,7 @@
 // Interface text in the eight site languages. Missing keys fall back to English.
-export const UI_LANGS = {tr: 'Türkçe', en: 'English', de: 'Deutsch', fr: 'Français', nl: 'Nederlands', da: 'Dansk', es: 'Español', it: 'Italiano'};
+import {AR, AR_P} from './i18n-ar.js?v=20261021a';
+export const UI_LANGS = {tr: 'Türkçe', en: 'English', de: 'Deutsch', fr: 'Français', nl: 'Nederlands', da: 'Dansk', es: 'Español', it: 'Italiano', ar: 'العربية'};
+export const isRTL = lang => lang === 'ar';
 
 const T = {
   title:        ['Tasarım stüdyosu', 'Design studio', 'Designstudio', 'Studio de design', 'Ontwerpstudio', 'Designstudie', 'Estudio de diseño', 'Studio di design'],
@@ -303,6 +305,7 @@ const T = {
 const ORDER = ['tr', 'en', 'de', 'fr', 'nl', 'da', 'es', 'it'];
 export function t(key, lang) {
   const row = key.includes('.') ? key.split('.').reduce((o, k) => o?.[k], T) : T[key];
+  if (lang === 'ar' && AR[key] != null) return AR[key];
   if (!row) return key;
   const i = ORDER.indexOf(lang);
   return row[i >= 0 ? i : 1] ?? row[1];
@@ -378,6 +381,7 @@ const P = {
   }
 };
 export function partName(group, key, lang) {
+  if (lang === 'ar' && AR_P[group + '.' + key] != null) return AR_P[group + '.' + key];
   const row = P[group]?.[key]; if (!row) return key;
   const i = ORDER.indexOf(lang); return row[i >= 0 ? i : 1] ?? row[1];
 }

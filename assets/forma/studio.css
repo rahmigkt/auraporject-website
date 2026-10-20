@@ -194,3 +194,8 @@ body[data-room] .f-step,body[data-room] .f-start{display:none}
 .f-tx-sw{display:grid;grid-template-columns:repeat(8,1fr);gap:7px}.f-tx-sw button{aspect-ratio:1;border:1px solid #cfc8ba;border-radius:50%;cursor:pointer;padding:0}.f-tx-sw button[aria-pressed=true]{outline:2px solid #AD503E;outline-offset:2px}
 .f-tx-visual .f-tx-view{max-width:760px;margin:12px auto 0;border:1px solid var(--hair)}.f-tx-panel{padding:20px 24px}
 .f-tx-stage{position:relative;height:min(62vh,640px);border:1px solid var(--hair);margin-top:12px;background:#f4f1ea}
+
+/* Arabic: right-to-left page; the 3D stage, drawings and numbers keep their own direction */
+[dir=rtl] body{font-family:'Noto Naskh Arabic','Segoe UI','Tahoma',system-ui,sans-serif}
+[dir=rtl] .f-stage,[dir=rtl] .f-tx-stage,[dir=rtl] svg,[dir=rtl] canvas{direction:ltr}
+[dir=rtl] *{letter-spacing:0!important}
