@@ -6,7 +6,7 @@ import {compileItem,footprint} from '../../assets/ev/items.js';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
 const dir=process.argv[2]?path.resolve(process.argv[2]):path.join(root,'knowledge/ai-egitim/veri/ev-sohbet-02');
 let tested=0,failed=0,records=0;
-for(const file of fs.readdirSync(dir).filter(f=>/^ev-sohbet-(?:02|uk-ie)-\d+\.json$/.test(f)).sort()){
+for(const file of fs.readdirSync(dir).filter(f=>/^ev-sohbet-(?:02|uk-ie|dk)-\d+\.json$/.test(f)).sort()){
  records++;
  const r=JSON.parse(fs.readFileSync(path.join(dir,file),'utf8')),p=r.plan;
  const hash=crypto.createHash('sha256').update(fs.readFileSync(path.join(root,r.solver.module))).digest('hex');

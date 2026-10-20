@@ -11,6 +11,7 @@ const dir=process.argv[2]?path.resolve(process.argv[2]):path.join(root,'knowledg
 const solverHash=crypto.createHash('sha256').update(fs.readFileSync(path.join(root,'assets/ev/yerlesim.js'))).digest('hex');
 const names={tr:{sofa:'Kanepe',coffee:'Sehpa',bed:'Yatak',wardrobe:'Dolap',run:'Mutfak',basin:'Lavabo dolabı',desk:'Çalışma masası',dining:'Yemek masası'},nl:{sofa:'Bank',coffee:'Salontafel',bed:'Bed',wardrobe:'Kast',run:'Keukenblok',basin:'Wastafelmeubel',desk:'Bureau',dining:'Eettafel'},fr:{sofa:'Canapé',coffee:'Table basse',bed:'Lit',wardrobe:'Armoire',run:'Meuble de cuisine',basin:'Meuble vasque',desk:'Bureau',dining:'Table à manger'},de:{sofa:'Sofa',coffee:'Couchtisch',bed:'Bett',wardrobe:'Schrank',run:'Küchenzeile',basin:'Waschtisch',desk:'Schreibtisch',dining:'Esstisch'}};
 names.en={sofa:'Sofa',coffee:'Coffee table',bed:'Bed',wardrobe:'Wardrobe',run:'Kitchen run',basin:'Vanity',desk:'Desk',dining:'Dining table'};
+names.da={sofa:'Sofa',coffee:'Sofabord',bed:'Seng',wardrobe:'Garderobeskab',run:'Køkkenelement',basin:'Vaskeskab',desk:'Skrivebord',dining:'Spisebord'};
 function product(kind,room,index,lang){
  let family=['sofa'].includes(kind)?'seating':['bed'].includes(kind)?'bedroom':['wardrobe'].includes(kind)?'storage':kind==='run'?'kitchen':kind==='basin'?'bath':'table';
  let params=kind==='sofa'?{width:1800+(index%3)*100,depth:820,height:800,armWidth:100}:kind==='coffee'?{length:900,width:550,height:380}:kind==='desk'?{length:1000,width:550,height:740}:kind==='dining'?{length:1200,width:800,height:750}:kind==='wardrobe'?{width:1200,depth:580,height:2000}:kind==='run'?{modules:[{type:'sink',w:600},{type:'hob',w:600}],topDepth:600}:kind==='basin'?{width:600,depth:450,height:850}:{mattressWidth:index%2?1400:900,mattressLength:2000,headboardHeight:1000};
@@ -24,7 +25,7 @@ function adapter(plan){
  const ops=[];for(const [id,o] of groups){const [a,b]=o.full_opening_span_xy_mm,L=Math.hypot(b[0]-a[0],b[1]-a[1]),wid='layout-'+id,t=plan.walls.find(w=>w.id===o.wall_id)?.thickness.value||120;walls.push({id:wid,level_id:o.level_id,x0:a[0],y0:a[1],ux:(b[0]-a[0])/L,uy:(b[1]-a[1])/L,L,t});ops.push({...o,id,wall_id:wid,a:0,w:L,h:o.height.value,sill:o.sill_height.value});}
  return {walls,ops};
 }
-for(const name of fs.readdirSync(dir).filter(n=>/^ev-sohbet-(?:02|uk-ie)-\d+\.json$/.test(n)).sort()){
+for(const name of fs.readdirSync(dir).filter(n=>/^ev-sohbet-(?:02|uk-ie|dk)-\d+\.json$/.test(n)).sort()){
  const file=path.join(dir,name),rec=JSON.parse(fs.readFileSync(file,'utf8')),plan=rec.plan;plan.items=[];rec.layout_requests=[];rec.layout_results=[];
  let bedIndex=0;
  for(const space of plan.spaces){
