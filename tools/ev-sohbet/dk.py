@@ -4,7 +4,12 @@ import json
 import sqlite3
 import sys
 from pathlib import Path
-from build02 import ROOT,normalize,node_walls,dump,sha,area,net
+from build02 import ROOT,normalize,node_walls,sha,area,net
+
+def dump(path,value):
+    """Stable raw evidence bytes across Windows and Git LF normalization."""
+    path.parent.mkdir(parents=True,exist_ok=True)
+    path.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
 
 OUT=ROOT/'knowledge/ai-egitim/veri/ev-sohbet-dk'
 IDS=['00550e307e8c04a1873367f8','0112efabc9a7f548826180ce','01a28816ab56c6b614fe5e85','01f1d98dbb589f2518bee5b3']

@@ -1,4 +1,6 @@
 import copy
+import hashlib
+import json
 import unittest
 from dk_audit import records,audit
 from dk import OUT
@@ -26,5 +28,10 @@ class DanishTransferTests(unittest.TestCase):
     def test_manual_position_detected(self):
         r=copy.deepcopy(self.batch[0]);r['plan']['items'][0]['pos_xy_mm'][0]+=200
         self.assertTrue(any(x['code']=='manual_item_position' for x in check(r,OUT/'kaynaklar')['errors']))
+    def test_raw_record_hashes_survive_git_line_endings(self):
+        manifest=json.loads((OUT/'yeniden-uretim-sonucu.json').read_text(encoding='utf-8'))
+        for file,digest in manifest['hashes'].items():
+            raw=(OUT/file).read_bytes();self.assertNotIn(b'\r',raw)
+            self.assertEqual(hashlib.sha256(raw).hexdigest(),digest)
 
 if __name__=='__main__':unittest.main()

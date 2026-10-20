@@ -1,7 +1,7 @@
 """Four independently written Danish conversations; substitute measured values only."""
 import json
-from dk import OUT
-from build02 import dump,area
+from dk import OUT,dump
+from build02 import area
 from denetim import check
 
 CASES=[

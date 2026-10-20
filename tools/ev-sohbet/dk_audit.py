@@ -1,8 +1,8 @@
 """Denmark continuation audit; project targets are not BR18 certification."""
 import json
 import sys
-from build02 import ROOT,dump
-from dk import OUT
+from build02 import ROOT
+from dk import OUT,dump
 from denetim import check,sentences
 
 def records():return [json.loads(p.read_text(encoding='utf-8')) for p in sorted(OUT.glob('ev-sohbet-dk-*.json'))]

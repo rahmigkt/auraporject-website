@@ -2,8 +2,8 @@
 import copy
 import html
 import json
-from build02 import ROOT,dump,area
-from dk import OUT
+from build02 import ROOT,area
+from dk import OUT,dump
 from dk_audit import records
 from review02 import svg
 

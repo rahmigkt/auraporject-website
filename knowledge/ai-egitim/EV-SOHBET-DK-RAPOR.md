@@ -36,7 +36,7 @@ Kaynaklar 21 Ekim 2026'da okundu; BR18 sayfalarında `Aktuelt` seçiliydi. Somut
 | Değiştirilmemiş stüdyo çözücüsü | 4 kayıt / 14 deneme; birebir tekrarlandı |
 | Yeni turda sığmama sonucu | 0; başarısız sonuç uydurulmadı |
 | Eski 28 kayıtta tekrar | 20 kayıt / 74 deneme / 10 no-fit ve 8 kayıt / 23 deneme / 0 no-fit aynı |
-| Yeni yanlış veri aşılamaları | 6/6 test geçti: BBR, serbest geçiş, cam, sahte onay, uydurma kat, elle konum |
+| Yeni denetim testleri | 7/7 geçti: BBR, serbest geçiş, cam, sahte onay, uydurma kat, elle konum ve ham dosya özeti/satır sonu |
 | Önceki geometri denetimleri | 14/14 test geçti |
 | Gerçek stüdyo dosya açma | 4/4; oda sayısı ve net iç alan eşleşti; plan/maket, sayfa hatası yok |
 | Çevrimdışı yeniden üretim | 4/4 kayıt bayt düzeyinde aynı |
