@@ -246,7 +246,7 @@ export function compile(raw) {
       else for (const s of [-1, 1]) parts.push(box(`stretcher-${s < 0 ? 'b' : 'f'}`, 'stretcher', legMat, lenX, st, st, [0, sy, s * szL]));
     }
     { const [sxL, szL] = legAt(ax, az, p.shelfHeight); shelfAt(2 * sxL + ls * 0.4, 2 * szL + ls * 0.4, p.shelfHeight); }
-    if (p.backPanel === 'panel') parts.push(box('back-panel', 'back-panel', legMat, 2 * ax - ls + 2, Math.min(380, yu * 0.5), 16, [0, yu - Math.min(380, yu * 0.5) / 2, -az]));
+    if (p.backPanel === 'panel') parts.push(box('back-panel', 'back-panel', legMat, 2 * ax, /* ends run into the legs (housed), no gap at tapered legs */ Math.min(380, yu * 0.5), 16, [0, yu - Math.min(380, yu * 0.5) / 2, -az]));
   } else if (bt === 'trestle') {
     const x0 = LB / 2 - p.overhang - ls / 2, z0 = W / 2 - p.sideOverhang - ls / 2, rail = Math.max(50, p.apronHeight || 70);
     const t = fitScale(baseOutline, t => mirror4(x0 * t + ls * 0.55, z0 * t + ls / 2 + 30), M);

@@ -410,8 +410,28 @@ function addJoint(key, count, depthIn) {
   if (mkA) next.push(add(A, sgnA, mkA)); else { const pa = list.filter(o => o.tool === 'cut' && o.id === A.id).at(-1); if (pa) next.push(pa); }
   next.push(add(B, -sgnA, mkB)); commit(next); return `${J.tr}: ${pts.length} adet eklendi.`;
 }
+// ---- Auto-join: close small gaps between parts that face each other (stretch the smaller part to touch) ----
+const SKIP_JOIN = /stitch|welt|inlay|line|pull|knob|handle|hinge|grommet|drain|tap|led|dugme/;
+function autoJoin(maxGap = 40) {
+  const ps = S.compiled.parts.filter(q => !SKIP_JOIN.test(q.role) && q.rot.every(v => Math.abs(v) < 1e-3)).map(q => ({q, b: worldBox(q.id)})).filter(x => x.b && [0, 1, 2].every(k => x.b.hi[k] - x.b.lo[k] >= 6));
+  const vol = b => [0, 1, 2].reduce((m, k) => m * (b.hi[k] - b.lo[k]), 1), best = new Map();
+  for (const A of ps) for (const B of ps) { if (A === B) continue;
+    if (A.q.role === B.q.role || [A, B].some(x => x.q.mat === 'fabric' || /front|door|drawer|cushion|pillow|mattress/.test(x.q.role))) continue; // design gaps: reveals, cushion splits
+    for (let k = 0; k < 3; k++) { const gap = B.b.lo[k] - A.b.hi[k]; if (!(gap > 4 && gap <= maxGap)) continue;
+      const ok = [0, 1, 2].filter(j => j !== k).every(j => { const ov = Math.min(A.b.hi[j], B.b.hi[j]) - Math.max(A.b.lo[j], B.b.lo[j]); return ov >= 0.6 * Math.min(A.b.hi[j] - A.b.lo[j], B.b.hi[j] - B.b.lo[j]); });
+      if (!ok) continue;
+      const [mov, dir] = vol(A.b) <= vol(B.b) ? [A, 1] : [B, -1], key = `${mov.q.id}|${k}|${dir}`;
+      if (!best.has(key) || best.get(key).gap > gap) best.set(key, {id: mov.q.id, k, dir, gap, ext: mov.b.hi[k] - mov.b.lo[k]}); } }
+  if (!best.size) return 'Kapatılacak boşluk bulunmadı.';
+  let list = ovs(); const touched = new Set();
+  for (const {id, k, dir, gap, ext} of best.values()) {
+    const t = structuredClone(list.filter(o => o.tool === 'transform' && o.id === id).at(-1) || {tool: 'transform', id, move: [0, 0, 0], rot: [0, 0, 0], scale: [1, 1, 1]});
+    t.scale[k] *= (ext + gap) / ext; t.move[k] += dir * gap / 2; list = [...list.filter(o => !(o.tool === 'transform' && o.id === id)), t]; touched.add(id);
+  }
+  commit(list); return `${best.size} boşluk kapatıldı: ${[...touched].map(id => NAMES[partOf(id)?.role] || id).join(', ')}. Geri almak için “Yapı geri”.`;
+}
 function jointPanel() {
-  if (!S.multiOn || S.multi.length < 2) return `<h2>Birleşim · zıvana, kavela, DOMINO</h2><p class="a-note">1) ${S.multiOn ? '<b>Çoklu seçim açık.</b>' : '<button data-multi aria-pressed="false">Çoklu seçimi aç</button>'} 2) Modelde birbirine değen iki parçaya sırayla tıklayın (${S.multi.length}/2 seçili). 3) Burada türü seçip “Birleşimi ekle”ye basın. Zıvana ikinci parçaya açılır.</p>`;
+  if (!S.multiOn || S.multi.length < 2) return `<h2>Birleşim · zıvana, kavela, DOMINO</h2><div class="a-tools"><button data-autojoin>Otomatik birleştir (40 mm'ye kadar boşluklar)</button></div>${S.jmsg ? `<p class="a-note"><b>${S.jmsg}</b></p>` : ''}<p class="a-note">1) ${S.multiOn ? '<b>Çoklu seçim açık.</b>' : '<button data-multi aria-pressed="false">Çoklu seçimi aç</button>'} 2) Modelde birbirine değen iki parçaya sırayla tıklayın (${S.multi.length}/2 seçili). 3) Burada türü seçip “Birleşimi ekle”ye basın. Zıvana ikinci parçaya açılır.</p>`;
   return `<h2>Birleşim (son iki parça)</h2><div class="a-grid a-grid2"><span>Tür</span><select id="jType">${Object.entries(JOINTS).map(([k, j]) => `<option value="${k}">${j.tr}</option>`).join('')}</select>
     <span>Adet (0 = otomatik)</span><input id="jCount" type="number" value="0" inputmode="numeric"><span>Zıvana derinliği mm</span><input id="jDepth" type="number" value="" placeholder="yalnız zıvana" inputmode="numeric"></div>
     <div class="a-tools"><button data-joint>Birleşimi ekle</button></div><p class="a-note" id="jOut">${S.jmsg ? `<b>${S.jmsg}</b><br>` : ''}Ölçüler: Hettich kavela, Festool DOMINO, Häfele konfirmat kayıtları (birlesim.json). Mukavemet onayı değildir.</p>`;
@@ -500,6 +520,7 @@ $('#panel').addEventListener('click', async e => {
     $('#shareOut').innerHTML = `Bağlantı kopyalandı. Onay kodu <b>${h}</b> — müşteri bu tasarımı açınca aynı kodu görür; onay bu koda bağlıdır.`; try { await navigator.clipboard.writeText(url); } catch {} saveVersion('müşteriye gönderildi ' + h); return;
   }
   if (b.hasAttribute('data-matoff')) return commit(ovs().filter(o => !(o.tool === 'material' && o.id === S.part)));
+  if (b.hasAttribute('data-autojoin')) { S.jmsg = autoJoin(); renderPanel(); return; }
   if (b.hasAttribute('data-multi')) { S.multiOn = !S.multiOn; S.multi = S.multiOn && S.part ? [S.part] : []; renderPanel(); syncViewerSel(); return; }
   if (b.hasAttribute('data-snap')) { S.snap = !S.snap; viewer?.snap(S.snap ? 5 : 0, S.snap ? 5 : 0); renderPanel(); return; }
   if (b.dataset.align) { const [a, w] = b.dataset.align.split(':'); return alignParts(+a, w); }
