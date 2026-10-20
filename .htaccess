@@ -1,6 +1,14 @@
 Options -Indexes
 DirectoryIndex index.html
 
+# Always HTTPS (certificate verified on the phone 2026-10-20)
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
 # The site is the former /w4/ edition: old addresses lead to the same pages; pages of the previous site lead home.
 <IfModule mod_alias.c>
 RedirectMatch 301 ^/w4/?(.*)$ /$1
