@@ -185,7 +185,7 @@ function shell() {
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261020i').then(mod => { sceneModule = mod; const {createViewer} = mod;
+  import('./scene.js?v=20261020j').then(mod => { sceneModule = mod; const {createViewer} = mod;
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(shown(), state.design.materials); if (state.room) showRoom(); }
@@ -516,7 +516,7 @@ function sizeGroups() {
   if (bt === 'legsApron') base.push('apronHeight', 'apronThickness', 'apronSetback');
   if (p.stretcher !== 'none' || bt === 'trestle') base.push('stretcherHeight');
   if (['pedestal', 'doublePedestal'].includes(bt)) base.push('columnSize', 'footSpread');
-  if (bt === 'slabEnds') base.push('panelThickness');
+  if (bt === 'slabEnds') base.push('panelThickness', 'panelArch', ...(p.panelArch > 0 ? ['panelFoot'] : []));
   if (['sled', 'xBase', 'hairpin'].includes(bt)) base.push('tubeSize');
   if (p.shelf !== 'none') base.push('shelfHeight', 'shelfThickness');
   if (p.leaves) base.push('leafLength');

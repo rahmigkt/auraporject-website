@@ -24,7 +24,7 @@ export const RANGES = {
   edgeSize: [0, 40, 1], overhang: [0, 450, 5], sideOverhang: [0, 250, 5],
   legSize: [16, 120, 1], legTaper: [0.35, 1, 0.05], legSplay: [0, 15, 1],
   apronHeight: [0, 170, 5], apronThickness: [16, 40, 1], apronSetback: [0, 30, 1], stretcherHeight: [60, 420, 5],
-  columnSize: [50, 520, 5], footSpread: [0.3, 0.95, 0.01], panelThickness: [12, 90, 1], tubeSize: [12, 60, 1],
+  columnSize: [50, 520, 5], footSpread: [0.3, 0.95, 0.01], panelThickness: [12, 90, 1], panelArch: [0, 600, 10], panelFoot: [40, 300, 5], tubeSize: [12, 60, 1],
   shelfHeight: [80, 420, 5], shelfThickness: [12, 40, 1], drawers: [0, 4, 1], leaves: [0, 2, 1], leafLength: [300, 600, 10]
 };
 
@@ -45,7 +45,7 @@ export const ENUMS = {
 export const DEFAULTS = {
   length: 1800, width: 900, height: 750, topThickness: 30, cornerRadius: 20, shapeN: 4, boatBow: 0.08, edgeSize: 10, overhang: 120, sideOverhang: 60,
   legSize: 60, legTaper: 0.7, legSplay: 0, apronHeight: 90, apronThickness: 22, apronSetback: 8, stretcherHeight: 150,
-  columnSize: 160, footSpread: 0.6, panelThickness: 40, tubeSize: 30, shelfHeight: 150, shelfThickness: 20, drawers: 0, leaves: 0, leafLength: 450,
+  columnSize: 160, footSpread: 0.6, panelThickness: 40, panelArch: 0, panelFoot: 90, tubeSize: 30, shelfHeight: 150, shelfThickness: 20, drawers: 0, leaves: 0, leafLength: 450,
   topShape: 'rounded', edge: 'eased', baseType: 'legsApron', legType: 'squareTaper', pedestalType: 'column', stretcher: 'none', shelf: 'none', drawerPull: 'none', backPanel: 'none', extended: 'closed', inlay: 'none', kind: 'dining'
 };
 
@@ -295,6 +295,13 @@ export function compile(raw) {
       const tx = fitScale(baseOutline, t => mirror4(x0 * t + pt / 2, d / 2), M);
       xs = x0 * tx;
     }
+    const arch = Math.min(p.panelArch, yu * 0.75), foot = Math.min(p.panelFoot, d * 0.4);
+    if (arch > 0) { // panel end cut out between two feet: one solid board, the arch is sawn/CNC from the bottom edge
+      const H = yu + (waterfall ? 0 : 1), hw = d / 2 - foot, out = [[0, -d / 2], [H, -d / 2], [H, d / 2], [0, d / 2], [0, hw]];
+      for (let i = 1; i < 40; i++) { const v = hw - 2 * hw * i / 40, k = Math.abs(v / hw); out.push([arch * Math.pow(Math.max(0, 1 - Math.pow(k, 4)), 0.25), v]); }
+      out.push([0, -hw]);
+      for (const s of [-1, 1]) parts.push(part(`end-panel-${s < 0 ? 'l' : 'r'}`, 'end-panel', waterfall ? 'top' : legMat, {fn: 'slab', outline: out, t: pt, profile: ['eased', pt, Math.min(4, pt / 4)]}, [s * xs + pt / 2, 0, 0], [0, 0, Math.PI / 2]));
+    } else
     for (const s of [-1, 1]) parts.push(part(`end-panel-${s < 0 ? 'l' : 'r'}`, 'end-panel', waterfall ? 'top' : legMat, {fn: 'cushion', w: pt, h: yu + (waterfall ? 0 : 1), d, r: Math.min(3, pt / 3)}, [s * xs, yu / 2, 0]));
     if (p.kind === 'console' || p.kind === 'desk' || p.length > 1600) parts.push(box('slab-stretcher', 'stretcher', legMat, 2 * xs - pt + 2, 60, 30, [0, yu - 30, -d / 2 + 40]));
     shelfAt(2 * xs - pt + 2, d - 10, p.shelfHeight);
