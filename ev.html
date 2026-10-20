@@ -29,8 +29,9 @@ main{display:grid;grid-template-columns:1fr 300px;height:calc(100vh - 58px)}
 #walk{position:absolute;right:16px;bottom:14px;display:grid;grid-template-columns:repeat(3,46px);grid-template-rows:repeat(2,46px);gap:6px}#walk button{padding:0;font-size:16px;background:rgba(255,253,248,.92);border:1px solid #ddd6c6;border-radius:50%;color:#5a2a1c}#walk [data-walk=f]{grid-column:2}#walk [data-walk=l]{grid-column:1;grid-row:2}#walk [data-walk=b]{grid-column:2;grid-row:2}#walk [data-walk=r]{grid-column:3;grid-row:2}
 .sw{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.sw button{aspect-ratio:1;padding:0;border:1px solid #cfc8ba;border-radius:50%}.sw button[aria-pressed=true]{outline:2px solid #AD503E;outline-offset:2px}
 #atmos{position:absolute;left:12px;top:12px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;background:rgba(255,253,248,.9);border:1px solid #ddd6c6;padding:6px 8px;max-width:calc(100% - 24px);font-size:12px}#atmos select{width:auto;font-size:12px;padding:4px}#atmos label{display:flex;align-items:center;gap:6px}#atmos input[type=range]{width:120px;accent-color:#AD503E}
-.hint{position:absolute;left:12px;bottom:10px;font-size:12px;color:var(--muted);background:rgba(247,243,232,.85);padding:4px 8px}
-@media (max-width:820px){main{grid-template-columns:1fr;height:auto}#view{height:62vh}#side{border-left:0;border-top:1px solid var(--hair)}}
+.hint:empty{display:none}#dekor{position:absolute;left:12px;bottom:12px;width:min(340px,calc(100% - 200px));background:rgba(255,253,248,.94);border:1px solid #ddd6c6;padding:8px;font-size:12px;display:grid;gap:7px}#dekor button{font-size:12px;padding:5px 9px}.dk-tabs{display:flex;gap:6px;align-items:center}.dk-tabs span{margin-left:auto;color:var(--muted)}.dk-models{display:flex;flex-wrap:wrap;gap:4px}#dekor .sw{grid-template-columns:repeat(8,1fr)}#dekor .sw button{padding:0}.dk-reset{justify-self:start;color:var(--muted)}
+.hint{position:absolute;left:12px;top:56px;z-index:2;font-size:12px;color:var(--muted);background:rgba(247,243,232,.85);padding:4px 8px}
+@media (max-width:820px){#dekor{width:calc(100% - 24px);bottom:auto;top:auto;position:relative;left:auto;margin:8px 12px}main{grid-template-columns:1fr;height:auto}#view{height:62vh}#side{border-left:0;border-top:1px solid var(--hair)}}
 </style>
 </head>
 <body>
@@ -38,9 +39,9 @@ main{display:grid;grid-template-columns:1fr 300px;height:calc(100vh - 58px)}
   <div class="tabs"><button data-v="plan" aria-pressed="true">Plan</button><button data-v="maket">Maket</button><button data-v="kesit">Kesit</button><button data-v="room">Oda içi</button></div>
 </header>
 <main>
-  <section id="view"><svg id="plan"></svg><canvas id="three" hidden></canvas><div class="hint" id="hint"></div><div id="atmos" hidden></div><div id="walk" hidden><button data-walk="f" aria-label="İleri">▲</button><button data-walk="l" aria-label="Sola dön">◀</button><button data-walk="b" aria-label="Geri">▼</button><button data-walk="r" aria-label="Sağa dön">▶</button></div></section>
+  <section id="view"><svg id="plan"></svg><canvas id="three" hidden></canvas><div class="hint" id="hint"></div><div id="dekor" hidden></div><div id="atmos" hidden></div><div id="walk" hidden><button data-walk="f" aria-label="İleri">▲</button><button data-walk="l" aria-label="Sola dön">◀</button><button data-walk="b" aria-label="Geri">▼</button><button data-walk="r" aria-label="Sağa dön">▶</button></div></section>
   <aside id="side"></aside>
 </main>
-<script type="module" src="assets/ev/plan.js?v=20261021b"></script>
+<script type="module" src="assets/ev/plan.js?v=20261021c"></script>
 </body>
 </html>

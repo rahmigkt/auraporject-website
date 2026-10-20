@@ -4,8 +4,8 @@
 import * as THREE from '../vendor/three.module.js?v=20261016b';
 import {PAINTS, FLOORS, SCHEMES, paintHex, floorTexture} from './finishes.js?v=20261020r';
 import {compileItem, footprint, itemName} from './items.js?v=20261020u';
-import {accessories} from './aksesuar.js?v=20261021b';
-import {curtains, STATES as PSTATES} from './perde.js?v=20261021a';
+import {accessories, RUG_MODELS, RUG_COLORS} from './aksesuar.js?v=20261021c';
+import {curtains, STATES as PSTATES, MODELS as CMODELS, FABRICS} from './perde.js?v=20261021c';
 
 const $ = s => document.querySelector(s), NS = 'http://www.w3.org/2000/svg';
 const val = q => (q && typeof q === 'object' ? q.value : q) ?? 0;
@@ -154,10 +154,15 @@ const finishOf = s => { const sc = SCHEMES[D.scheme] || SCHEMES.iskandinav, f = 
 const paintMats = {}, paintMat = id => paintMats[id] ??= new THREE.MeshStandardMaterial({color: paintHex(id), roughness: 0.92});
 const floorMats2 = {}, floorFinish = id => floorMats2[id] ??= new THREE.MeshStandardMaterial({map: floorTexture(id), roughness: 0.72, side: THREE.DoubleSide});
 const spaceAt = p => D.spaces.find(s => inside(p, s.boundary_xy_mm));
-const rugMats = {}, rugMat = c => rugMats[c] ??= (() => { const cv = document.createElement('canvas'); cv.width = cv.height = 256; const g = cv.getContext('2d');
-  g.fillStyle = c; g.fillRect(0, 0, 256, 256); g.strokeStyle = 'rgba(70,55,40,.35)'; g.lineWidth = 6; g.strokeRect(14, 14, 228, 228); g.lineWidth = 2; g.strokeRect(26, 26, 204, 204);
-  for (let i = 0; i < 3000; i++) { g.fillStyle = `rgba(${Math.random() < .5 ? '255,255,255' : '40,30,20'},.05)`; g.fillRect(Math.random() * 256, Math.random() * 256, 2, 2); }
-  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; const top = new THREE.MeshStandardMaterial({map: t, roughness: 1}), side = new THREE.MeshStandardMaterial({color: c, roughness: 1});
+const rugMats = {}, rugMat = (c, model = 'duz') => rugMats[c + model] ??= (() => { const cv = document.createElement('canvas'); cv.width = cv.height = 512; const g = cv.getContext('2d'), N = 512;
+  const dk = 'rgba(40,30,20,.32)', lt = 'rgba(255,250,240,.38)'; g.fillStyle = c; g.fillRect(0, 0, N, N);
+  if (model === 'cizgili') for (let y = 40; y < N - 40; y += 36) { g.fillStyle = y % 72 < 36 ? dk : lt; g.fillRect(30, y, N - 60, 12); }
+  else if (model === 'geometrik') { g.strokeStyle = lt; g.lineWidth = 6; for (let x = -N; x < 2 * N; x += 64) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x + N, N); g.stroke(); g.beginPath(); g.moveTo(x + N, 0); g.lineTo(x, N); g.stroke(); } }
+  else if (model === 'kilim') { for (let y = 70; y < N - 70; y += 74) for (let x = 70; x < N - 40; x += 74) { g.fillStyle = (x + y) % 148 ? dk : lt; g.beginPath(); g.moveTo(x, y - 26); g.lineTo(x + 22, y); g.lineTo(x, y + 26); g.lineTo(x - 22, y); g.closePath(); g.fill(); }
+    g.fillStyle = dk; g.fillRect(0, 0, N, 24); g.fillRect(0, N - 24, N, 24); }
+  g.strokeStyle = model === 'duz' ? dk : lt; g.lineWidth = 10; g.strokeRect(18, 18, N - 36, N - 36); g.lineWidth = 3; g.strokeRect(36, 36, N - 72, N - 72);
+  for (let i = 0; i < 9000; i++) { g.fillStyle = `rgba(${Math.random() < .5 ? '255,255,255' : '40,30,20'},.05)`; g.fillRect(Math.random() * N, Math.random() * N, 2, 2); }
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; const top = new THREE.MeshStandardMaterial({map: t, roughness: 1}), side = new THREE.MeshStandardMaterial({color: c, roughness: 1});
   return [side, side, top, side, side, side]; })();
 const lampLights = [], shadeMat = new THREE.MeshStandardMaterial({color: '#f3ead8', emissive: '#ffd9a8', emissiveIntensity: 0, roughness: 0.8, side: THREE.DoubleSide}), metalMat = new THREE.MeshStandardMaterial({color: '#3c3a36', roughness: 0.5, metalness: 0.4});
 function lampObject(l) { const g = new THREE.Group(), add = (geo, m, y) => { const o = new THREE.Mesh(geo, m); o.position.y = y; g.add(o); return o; };
@@ -186,12 +191,12 @@ function build(cut) {
   }
   { const ACC = accessories(D); lampLights.length = 0;
     for (const r of ACC.rugs) { const c = r.poly.reduce((m, p) => [m[0] + p[0] / 4, m[1] + p[1] / 4], [0, 0]), a = Math.hypot(r.poly[1][0] - r.poly[0][0], r.poly[1][1] - r.poly[0][1]), f = Math.hypot(r.poly[2][0] - r.poly[1][0], r.poly[2][1] - r.poly[1][1]);
-      const m = new THREE.Mesh(new THREE.BoxGeometry(a / 1000, 0.008, f / 1000), rugMat(r.color)); m.position.set(c[0] / 1000, 0.006, -c[1] / 1000); m.rotation.y = Math.atan2(r.poly[1][1] - r.poly[0][1], r.poly[1][0] - r.poly[0][0]); m.receiveShadow = true; house.add(m); }
+      const m = new THREE.Mesh(new THREE.BoxGeometry(a / 1000, 0.008, f / 1000), rugMat(r.color, r.model)); m.position.set(c[0] / 1000, 0.006, -c[1] / 1000); m.rotation.y = Math.atan2(r.poly[1][1] - r.poly[0][1], r.poly[1][0] - r.poly[0][0]); m.receiveShadow = true; house.add(m); }
     for (const l of ACC.lights) { if (S.view === 'maket' && (l.kind === 'ceiling' || l.kind === 'pendant')) continue;
       const g3 = lampObject(l), y = l.kind === 'ceiling' ? H / 1000 - 0.12 : l.kind === 'desk' ? l.h / 1000 + 0.3 : l.h / 1000 - 0.15;
       g3.position.set(l.pos[0] / 1000, 0, -l.pos[1] / 1000); if (!(S.view === 'kesit' && l.kind === 'ceiling')) house.add(g3);
       const pl = new THREE.PointLight('#ffcf9a', 0, l.kind === 'ceiling' ? 7 : 5, 2); pl.position.set(l.pos[0] / 1000, y, -l.pos[1] / 1000); pl.userData.k = l.kind; house.add(pl); lampLights.push(pl); } }
-  if (S.view !== 'maket') house.add(curtains(walls, ops, spaceAt, H, A.perde));
+  if (S.view !== 'maket') house.add(curtains(walls, ops, spaceAt, H, A.perde, sp => ({...(D.decor?.curtain || {}), ...(sp.decor?.curtain || {})})));
   for (const w of walls) for (const [a, b, lo, hi0] of pieces(w)) {
     const hi = Math.min(hi0, cut); if (hi <= lo) continue;
     const mid = (a + b) / 2, mx = w.x0 + w.ux * mid, my = w.y0 + w.uy * mid, o = w.t / 2 + 150; // each face takes the paint of the room it faces
@@ -228,7 +233,7 @@ function step(dir) {
   if (blocked(a, b)) { $('#hint').textContent = 'Önünüzde duvar var · dönüp başka yöne yürüyün'; return; }
   const from = [...e], to = [b[0] / 1000, e[1], -b[1] / 1000], t0 = performance.now(); walking = 1;
   const tick = now => { const t = Math.min(1, (now - t0) / 320), k = t * t * (3 - 2 * t); orbit.eye = from.map((v, i) => v + (to[i] - v) * k); render(); if (t < 1) requestAnimationFrame(tick); else walking = 0; };
-  requestAnimationFrame(tick); $('#hint').textContent = HINT.room;
+  requestAnimationFrame(tick); $('#hint').textContent = '';
 }
 function render() { const r = canvas.getBoundingClientRect(); renderer.setSize(r.width, r.height, false); cam.aspect = r.width / Math.max(1, r.height); cam.fov = orbit.eye ? orbit.fov : 45; cam.updateProjectionMatrix(); place(); applyAtmos(); if (S.view === 'kesit') cutaway(); renderer.render(scene, cam); }
 // Dollhouse: walls between the camera and the chosen room drop to 30 cm, so the room is seen whole from above
@@ -270,7 +275,7 @@ function cutaway() {
 const HINT = {plan: 'Sürükleyin: kaydır · tekerlek / iki parmak: yakınlaştır · odaya dokunun: seç', maket: 'Ev maketi · duvar yüksekliğini üstteki çubuktan ayarlayın · sürükleyin: çevir · iki parmak: yakınlaştır', '3d': 'Tam yükseklik · sürükleyin: çevir · iki parmak: yakınlaştır', kesit: 'Tavansız kesit · seçili oda önde açık · sürükleyin: etrafında dönün · iki parmak: yakınlaştır · listeden oda seçin', room: 'Göz hizası 1,5 m · oklar ya da W/S: yürü · sürükleyin: dönün · iki parmak: görüş açısı · çift dokunun: başka köşe'};
 function show(v) {
   S.view = v; document.querySelectorAll('[data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
-  svg.hidden = v !== 'plan'; canvas.hidden = v === 'plan'; $('#walk').hidden = v !== 'room'; $('#atmos').hidden = !['room', 'kesit', 'maket'].includes(v); atmosUI(); $('#hint').textContent = HINT[v];
+  svg.hidden = v !== 'plan'; canvas.hidden = v === 'plan'; $('#walk').hidden = v !== 'room'; $('#atmos').hidden = !['room', 'kesit', 'maket'].includes(v); atmosUI(); $('#hint').textContent = ''; decorUI();
   if (v === 'plan') return drawPlan();
   const sp = D.spaces.find(s => s.id === S.room) || D.spaces.find(s => s.kind === 'living') || D.spaces[0]; S.room = sp.id;
   build(v === 'maket' ? Math.min(A.wallH, H) : H);
@@ -286,6 +291,23 @@ function show(v) {
   else { roomLight.intensity = 0; orbit.eye = null; orbit.pitch = v === 'maket' ? 1.0 : 0.6; orbit.dist = span * (v === 'maket' ? 1.5 : 1.6); }
   side(); render();
 }
+// ---- decor: curtain and rug, chosen by model and colour (for the selected room, else for the whole home) ---------
+const DEC = {tab: 'curtain'};
+function decorUI() {
+  const el = $('#dekor'); el.hidden = S.view === 'plan'; if (el.hidden) return;
+  const sp = D.spaces.find(x => x.id === S.room), scope = sp ? (sp.decor ??= {}) : (D.decor ??= {}), cur = {...(D.decor?.[DEC.tab] || {}), ...(sp?.decor?.[DEC.tab] || {})};
+  const models = DEC.tab === 'curtain' ? Object.entries(CMODELS).map(([k, v]) => [k, v[0]]).concat([['yok', 'Perdesiz']]) : Object.entries(RUG_MODELS), colors = DEC.tab === 'curtain' ? FABRICS : RUG_COLORS;
+  el.innerHTML = `<div class="dk-tabs"><button data-dt="curtain" aria-pressed="${DEC.tab === 'curtain'}">Perde</button><button data-dt="rug" aria-pressed="${DEC.tab === 'rug'}">Halı</button><span>${sp ? (sp.name || NAMES[sp.kind] || 'Oda').replace(/\s+\d+$/, '') + ' için' : 'Bütün ev'}</span></div>
+  <div class="dk-models">${models.map(([k, v]) => `<button data-dm="${k}" aria-pressed="${cur.model === k}">${v}</button>`).join('')}</div>
+  <div class="sw">${colors.map(([k, n, h]) => `<button data-dc="${k}" title="${n}" aria-pressed="${cur.color === k}" style="background:${h}"></button>`).join('')}</div>
+  ${sp && scope[DEC.tab] ? '<button data-dr="1" class="dk-reset">Ev geneline dön</button>' : ''}`;
+}
+$('#dekor').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return;
+  const sp = D.spaces.find(x => x.id === S.room), scope = sp ? (sp.decor ??= {}) : (D.decor ??= {});
+  if (b.dataset.dt) DEC.tab = b.dataset.dt;
+  else if (b.dataset.dr) delete scope[DEC.tab];
+  else { const o = scope[DEC.tab] ??= {}; if (b.dataset.dm) o.model = b.dataset.dm; if (b.dataset.dc) o.color = b.dataset.dc; }
+  decorUI(); if (!b.dataset.dt) { build(S.view === 'maket' ? Math.min(A.wallH, H) : H); render(); side(); } });
 function atmosUI() {
   const el = $('#atmos'); if (el.hidden) return;
   el.innerHTML = `<select data-a="moment">${Object.entries(MOMENTS).map(([k, v]) => `<option value="${k}" ${A.moment === k ? 'selected' : ''}>${v[0]}</option>`).join('')}</select>
@@ -330,7 +352,7 @@ function finishPanel() {
   ${r ? `<p class="note"><b>${(r.name || NAMES[r.kind] || 'Oda').replace(/\s+\d+$/, '')}</b> · duvar</p><div class="sw">${PAINTS.map(([id, n, hex]) => `<button data-paint="${id}" title="${n}" aria-pressed="${f.wall === id}" style="background:${hex}"></button>`).join('')}</div>
   <label class="note" style="display:block;margin:8px 0">Zemin <select id="floorPick">${Object.entries(FLOORS).map(([id, v]) => `<option value="${id}" ${f.floor === id ? 'selected' : ''}>${v.name}</option>`).join('')}</select></label>` : '<p class="note">Bir oda seçin.</p>'}`;
 }
-function pick(id) { S.room = id; side(); if (S.view === 'plan') drawPlan(); else show(S.view); }
+function pick(id) { S.room = id; side(); decorUI(); if (S.view === 'plan') drawPlan(); else show(S.view); }
 function side() {
   const tot = D.spaces.reduce((s, x) => s + area(x.boundary_xy_mm), 0), real = /gercek-|licensed|plan_import/.test(S.name + JSON.stringify(D.walls[0] || {}));
   $('#side').innerHTML = `<h2>Plan</h2><select id="pickPlan">${EXAMPLES.map(([f, t]) => `<option value="${f}" ${f === S.name ? 'selected' : ''}>${t}</option>`).join('')}${EXAMPLES.some(e => e[0] === S.name) ? '' : `<option selected>${S.name}</option>`}</select>

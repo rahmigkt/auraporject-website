@@ -7,6 +7,9 @@
 // (≈750–800 above the top), a floor lamp at the sofa end, a desk lamp on the desk, one ceiling light per room.
 import {compileItem} from './items.js?v=20261020u';
 
+export const RUG_MODELS = {duz: 'Düz · bordürlü', cizgili: 'Çizgili', geometrik: 'Geometrik', kilim: 'Kilim', yok: 'Halısız'};
+export const RUG_COLORS = [['yulaf', 'Yulaf', '#cdbb9c'], ['kum', 'Kum', '#b8a184'], ['krem', 'Krem', '#e3d9c6'], ['gri', 'Taş gri', '#a9a59c'],
+  ['adacayi', 'Adaçayı', '#9ea58e'], ['terrakota', 'Terrakota', '#b06f55'], ['lacivert', 'Lacivert', '#3f4b5c'], ['bordo', 'Bordo', '#7a3b3b']];
 export const RUG_SIZES = [[1200, 1800], [1400, 2000], [1600, 2300], [1700, 2400], [2000, 2000], [2000, 2500], [2000, 3000], [2400, 3400], [800, 2500]];
 const frame = it => { const t = (it.rot_deg || 0) * Math.PI / 180, {size} = compileItem(it);
   return {c: it.pos_xy_mm, X: [Math.cos(t), Math.sin(t)], F: [Math.sin(t), -Math.cos(t)], w: size.w, d: size.d, h: size.h}; };
@@ -30,13 +33,14 @@ function rug(needA, needF, place, room, block, maxA = Infinity) {
 export function accessories(D) {
   const rugs = [], lights = [], items = (D.items || []).filter(i => i.design);
   for (const s of D.spaces) {
+    const rc = {...(D.decor?.rug || {}), ...(s.decor?.rug || {})}, rcol = (RUG_COLORS.find(c => c[0] === rc.color) || [])[2], push = (r, use, col) => { if (r && rc.model !== 'yok') rugs.push({...r, space: s.id, use, color: rcol || col, model: rc.model || 'duz'}); };
     const room = s.boundary_xy_mm, mine = items.filter(i => i.space_id === s.id), k = i => i.design.kind;
     const block = mine.filter(i => ['run', 'island', 'wardrobe', 'tvunit', 'basin', 'bookcase', 'sideboard'].includes(k(i))).map(i => { const f = frame(i); return rect(f.c, f.X, f.F, f.w + 100, f.d + 100); });
     const sofa = mine.find(i => k(i) === 'sofa'), coffee = mine.find(i => k(i) === 'coffee');
     if (sofa) { const S = frame(sofa); let reach = 900; // sofa front → far side of the coffee table + 300
       if (coffee) { const C = frame(coffee), dist = (C.c[0] - S.c[0]) * S.F[0] + (C.c[1] - S.c[1]) * S.F[1]; reach = dist - S.d / 2 + C.d / 2 + 300; }
       const r = rug(S.w + 200, 250 + reach, (a, f, sl) => rect(at(S.c, S.X, S.F, sl, S.d / 2 - 250 + f / 2), S.X, S.F, a, f), room, block) || rug(S.w, 250 + reach - 300, (a, f, sl) => rect(at(S.c, S.X, S.F, sl, S.d / 2 - 250 + f / 2), S.X, S.F, a, f), room, block);
-      if (r) rugs.push({...r, space: s.id, use: 'oturma', color: '#b8a184'});
+      push(r, 'oturma', '#b8a184');
       // floor lamp beside the sofa: the end with more free floor
       for (const side of [1, -1]) { const p = at(S.c, S.X, S.F, side * (S.w / 2 + 230), -S.d / 2 + 230);
         if (inside(p, room) && edgeDist(p, room) >= 180 && !block.some(b => inside(p, b))) { lights.push({kind: 'floor', pos: p, h: 1550, space: s.id}); break; } }
@@ -44,11 +48,11 @@ export function accessories(D) {
     const bed = mine.find(i => k(i) === 'bed');
     if (bed) { const B = frame(bed), single = B.w <= 1400;
       const r = rug(B.w + (single ? 500 : 700), B.d * 0.55, (a, f, sl) => rect(at(B.c, B.X, B.F, sl, -B.d / 2 + B.d / 3 + f / 2), B.X, B.F, a, f), room, block);
-      if (r) rugs.push({...r, space: s.id, use: 'yatak', color: '#d8ccbb'}); }
+      push(r, 'yatak', '#d8ccbb'); }
     const dining = mine.find(i => k(i) === 'dining');
     if (dining) { const T = frame(dining);
       const r = rug(T.w + 1200, T.d + 1200, (a, f) => rect(T.c, T.X, T.F, a, f), room, block);
-      if (r) rugs.push({...r, space: s.id, use: 'yemek', color: '#a79783'});
+      push(r, 'yemek', '#a79783');
       lights.push({kind: 'pendant', pos: T.c, h: 1550, space: s.id}); }
     const desk = mine.find(i => k(i) === 'desk');
     if (desk) { const K = frame(desk); lights.push({kind: 'desk', pos: at(K.c, K.X, K.F, K.w / 2 - 180, -K.d / 2 + 160), h: K.h || 750, space: s.id}); }
