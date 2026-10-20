@@ -1,0 +1,291 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AURA-EGITIM-1",
+  "type": "object",
+  "required": [
+    "id",
+    "dil",
+    "ulke",
+    "katman",
+    "kaynak",
+    "durum_once",
+    "mesajlar",
+    "islemler",
+    "denetim",
+    "bolum"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dil": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ulke": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "katman": {
+      "enum": [
+        "mobilya",
+        "ev-plani",
+        "yerlesim",
+        "tekstil",
+        "genel-sohbet"
+      ]
+    },
+    "kaynak": {
+      "type": "object",
+      "required": [
+        "veri_seti",
+        "kayit",
+        "lisans",
+        "dosya",
+        "sha256",
+        "gruplar"
+      ],
+      "properties": {
+        "veri_seti": {
+          "type": "string"
+        },
+        "kayit": {
+          "type": "string"
+        },
+        "lisans": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "dosya": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "gruplar": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "durum_once": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "mesajlar": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "rol",
+          "metin"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "rol": {
+            "enum": [
+              "system",
+              "user",
+              "assistant"
+            ]
+          },
+          "metin": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "islemler": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "tur",
+          "katman"
+        ],
+        "properties": {
+          "tur": {
+            "enum": [
+              "set",
+              "delta",
+              "enum",
+              "material",
+              "style",
+              "kind",
+              "family",
+              "seats",
+              "drawers",
+              "mattress",
+              "duvar_ekle",
+              "duvar_sil",
+              "duvar_tasi",
+              "aciklik_ekle",
+              "oda_tanimla",
+              "oda_birlestir",
+              "kat_ekle",
+              "merdiven",
+              "yerlestir",
+              "secenek_sec",
+              "perde",
+              "hali",
+              "projeye_ekle",
+              "tasarimciya_gonder"
+            ]
+          },
+          "katman": {
+            "enum": [
+              "mobilya",
+              "ev",
+              "yerlesim",
+              "tekstil",
+              "proje"
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "denetim": {
+      "type": "object",
+      "required": [
+        "gecti",
+        "uyarilar",
+        "yasakli_terim",
+        "dil_tutarli",
+        "motor_gecti",
+        "insan_onayi",
+        "grup"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "gecti": {
+          "type": "boolean"
+        },
+        "uyarilar": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "yasakli_terim": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "dil_tutarli": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "motor_gecti": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "insan_onayi": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "grup": {
+          "type": "string"
+        }
+      }
+    },
+    "bolum": {
+      "enum": [
+        "train",
+        "dev",
+        "test"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "denetim": {
+            "properties": {
+              "gecti": {
+                "const": true
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "dil": {
+            "type": "string",
+            "minLength": 2
+          },
+          "denetim": {
+            "properties": {
+              "uyarilar": {
+                "maxItems": 0
+              },
+              "yasakli_terim": {
+                "const": 0
+              },
+              "dil_tutarli": {
+                "const": true
+              },
+              "insan_onayi": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "islemler": {
+            "minItems": 1
+          },
+          "denetim": {
+            "properties": {
+              "gecti": {
+                "const": true
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "durum_once": {
+            "type": "object"
+          },
+          "denetim": {
+            "properties": {
+              "motor_gecti": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
