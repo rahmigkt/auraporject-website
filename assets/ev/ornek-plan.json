@@ -1,0 +1,1818 @@
+{
+  "schema_version": "0.1",
+  "project_id": "synthetic-3plus1-plan-02",
+  "revision": 1,
+  "status": "survey",
+  "coordinate_system": "mm; right-handed; x/y floor plane, z up; local origin; glTF adapter converts units and up-axis",
+  "language": {
+    "customer": "tr",
+    "designer": "tr"
+  },
+  "brief": {
+    "whole_home": true,
+    "goals": [
+      "Ölçülü bütün ev krokisi",
+      "Aynı veriden 2B ve 3B",
+      "Kapı ve pencere boşluklarının doğrulanması"
+    ],
+    "budget": {
+      "amount": null,
+      "currency": "TRY",
+      "includes": [],
+      "estimate_status": "unknown"
+    },
+    "household_needs": [
+      "Tüm odalara holden erişim"
+    ],
+    "style": [
+      "AURA plan çizim dili"
+    ],
+    "preserve": []
+  },
+  "levels": [
+    {
+      "id": "kat-0",
+      "name": "Sentetik daire katı",
+      "elevation": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      }
+    }
+  ],
+  "spaces": [
+    {
+      "id": "salon",
+      "level_id": "kat-0",
+      "name": "Salon",
+      "kind": "living",
+      "boundary_xy_mm": [
+        [
+          100,
+          100
+        ],
+        [
+          4440,
+          100
+        ],
+        [
+          4440,
+          3940
+        ],
+        [
+          100,
+          3940
+        ]
+      ],
+      "wall_ids": [
+        "wall-1",
+        "wall-4",
+        "wall-15",
+        "wall-19"
+      ],
+      "ceiling_height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    },
+    {
+      "id": "mutfak",
+      "level_id": "kat-0",
+      "name": "Mutfak",
+      "kind": "kitchen",
+      "boundary_xy_mm": [
+        [
+          4560,
+          100
+        ],
+        [
+          7940,
+          100
+        ],
+        [
+          7940,
+          3940
+        ],
+        [
+          4560,
+          3940
+        ]
+      ],
+      "wall_ids": [
+        "wall-2",
+        "wall-5",
+        "wall-19",
+        "wall-20"
+      ],
+      "ceiling_height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    },
+    {
+      "id": "yatak-1",
+      "level_id": "kat-0",
+      "name": "Yatak odası 1",
+      "kind": "bedroom",
+      "boundary_xy_mm": [
+        [
+          8060,
+          100
+        ],
+        [
+          11900,
+          100
+        ],
+        [
+          11900,
+          3940
+        ],
+        [
+          8060,
+          3940
+        ]
+      ],
+      "wall_ids": [
+        "wall-3",
+        "wall-6",
+        "wall-20",
+        "wall-23"
+      ],
+      "ceiling_height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    },
+    {
+      "id": "yatak-2",
+      "level_id": "kat-0",
+      "name": "Yatak odası 2",
+      "kind": "bedroom",
+      "boundary_xy_mm": [
+        [
+          100,
+          5560
+        ],
+        [
+          3940,
+          5560
+        ],
+        [
+          3940,
+          8900
+        ],
+        [
+          100,
+          8900
+        ]
+      ],
+      "wall_ids": [
+        "wall-7",
+        "wall-11",
+        "wall-17",
+        "wall-18"
+      ],
+      "ceiling_height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    },
+    {
+      "id": "yatak-3",
+      "level_id": "kat-0",
+      "name": "Yatak odası 3",
+      "kind": "bedroom",
+      "boundary_xy_mm": [
+        [
+          4060,
+          5560
+        ],
+        [
+          7940,
+          5560
+        ],
+        [
+          7940,
+          8900
+        ],
+        [
+          4060,
+          8900
+        ]
+      ],
+      "wall_ids": [
+        "wall-8",
+        "wall-12",
+        "wall-18",
+        "wall-21"
+      ],
+      "ceiling_height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    },
+    {
+      "id": "banyo",
+      "level_id": "kat-0",
+      "name": "Banyo",
+      "kind": "bath",
+      "boundary_xy_mm": [
+        [
+          8060,
+          5560
+        ],
+        [
+          9940,
+          5560
+        ],
+        [
+          9940,
+          8900
+        ],
+        [
+          8060,
+          8900
+        ]
+      ],
+      "wall_ids": [
+        "wall-9",
+        "wall-13",
+        "wall-21",
+        "wall-22"
+      ],
+      "ceiling_height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    },
+    {
+      "id": "wc",
+      "level_id": "kat-0",
+      "name": "WC",
+      "kind": "wc",
+      "boundary_xy_mm": [
+        [
+          10060,
+          5560
+        ],
+        [
+          11900,
+          5560
+        ],
+        [
+          11900,
+          8900
+        ],
+        [
+          10060,
+          8900
+        ]
+      ],
+      "wall_ids": [
+        "wall-10",
+        "wall-14",
+        "wall-22",
+        "wall-25"
+      ],
+      "ceiling_height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    },
+    {
+      "id": "hol",
+      "level_id": "kat-0",
+      "name": "Giriş ve hol",
+      "kind": "hall",
+      "boundary_xy_mm": [
+        [
+          100,
+          4060
+        ],
+        [
+          11900,
+          4060
+        ],
+        [
+          11900,
+          5440
+        ],
+        [
+          100,
+          5440
+        ]
+      ],
+      "wall_ids": [
+        "wall-4",
+        "wall-5",
+        "wall-6",
+        "wall-7",
+        "wall-8",
+        "wall-9",
+        "wall-10",
+        "wall-16",
+        "wall-24"
+      ],
+      "ceiling_height": {
+        "value": 2800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "geometry_status": "synthetic_fixture",
+      "locked_boundary": true
+    }
+  ],
+  "walls": [
+    {
+      "id": "wall-1",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        0,
+        0
+      ],
+      "to_xy_mm": [
+        4500,
+        0
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "salon"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-2",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        4500,
+        0
+      ],
+      "to_xy_mm": [
+        8000,
+        0
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "mutfak"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-3",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        8000,
+        0
+      ],
+      "to_xy_mm": [
+        12000,
+        0
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "yatak-1"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-4",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        0,
+        4000
+      ],
+      "to_xy_mm": [
+        4500,
+        4000
+      ],
+      "thickness": {
+        "value": 120,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "salon",
+        "hol"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-5",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        4500,
+        4000
+      ],
+      "to_xy_mm": [
+        8000,
+        4000
+      ],
+      "thickness": {
+        "value": 120,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "mutfak",
+        "hol"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-6",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        8000,
+        4000
+      ],
+      "to_xy_mm": [
+        12000,
+        4000
+      ],
+      "thickness": {
+        "value": 120,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "yatak-1",
+        "hol"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-7",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        0,
+        5500
+      ],
+      "to_xy_mm": [
+        4000,
+        5500
+      ],
+      "thickness": {
+        "value": 120,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "yatak-2",
+        "hol"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-8",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        4000,
+        5500
+      ],
+      "to_xy_mm": [
+        8000,
+        5500
+      ],
+      "thickness": {
+        "value": 120,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "yatak-3",
+        "hol"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-9",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        8000,
+        5500
+      ],
+      "to_xy_mm": [
+        10000,
+        5500
+      ],
+      "thickness": {
+        "value": 120,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "banyo",
+        "hol"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-10",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        10000,
+        5500
+      ],
+      "to_xy_mm": [
+        12000,
+        5500
+      ],
+      "thickness": {
+        "value": 120,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "wc",
+        "hol"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-11",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        0,
+        9000
+      ],
+      "to_xy_mm": [
+        4000,
+        9000
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "yatak-2"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-12",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        4000,
+        9000
+      ],
+      "to_xy_mm": [
+        8000,
+        9000
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "yatak-3"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-13",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        8000,
+        9000
+      ],
+      "to_xy_mm": [
+        10000,
+        9000
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "banyo"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-14",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        10000,
+        9000
+      ],
+      "to_xy_mm": [
+        12000,
+        9000
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "wc"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-15",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        0,
+        0
+      ],
+      "to_xy_mm": [
+        0,
+        4000
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "salon"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-16",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        0,
+        4000
+      ],
+      "to_xy_mm": [
+        0,
+        5500
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "hol"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-17",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        0,
+        5500
+      ],
+      "to_xy_mm": [
+        0,
+        9000
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "yatak-2"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-18",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        4000,
+        5500
+      ],
+      "to_xy_mm": [
+        4000,
+        9000
+      ],
+      "thickness": {
+        "value": 120,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "yatak-2",
+        "yatak-3"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-19",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        4500,
+        0
+      ],
+      "to_xy_mm": [
+        4500,
+        4000
+      ],
+      "thickness": {
+        "value": 120,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "salon",
+        "mutfak"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-20",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        8000,
+        0
+      ],
+      "to_xy_mm": [
+        8000,
+        4000
+      ],
+      "thickness": {
+        "value": 120,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "mutfak",
+        "yatak-1"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-21",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        8000,
+        5500
+      ],
+      "to_xy_mm": [
+        8000,
+        9000
+      ],
+      "thickness": {
+        "value": 120,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "yatak-3",
+        "banyo"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-22",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        10000,
+        5500
+      ],
+      "to_xy_mm": [
+        10000,
+        9000
+      ],
+      "thickness": {
+        "value": 120,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "banyo",
+        "wc"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-23",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        12000,
+        0
+      ],
+      "to_xy_mm": [
+        12000,
+        4000
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "yatak-1"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-24",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        12000,
+        4000
+      ],
+      "to_xy_mm": [
+        12000,
+        5500
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "hol"
+      ],
+      "structural_status": "synthetic_fixture"
+    },
+    {
+      "id": "wall-25",
+      "level_id": "kat-0",
+      "from_xy_mm": [
+        12000,
+        5500
+      ],
+      "to_xy_mm": [
+        12000,
+        9000
+      ],
+      "thickness": {
+        "value": 200,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "space_ids": [
+        "wc"
+      ],
+      "structural_status": "synthetic_fixture"
+    }
+  ],
+  "openings": [
+    {
+      "id": "door-salon",
+      "wall_id": "wall-4",
+      "kind": "door",
+      "space_ids": [
+        "salon",
+        "hol"
+      ],
+      "offset_from_wall_start": {
+        "value": 400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    },
+    {
+      "id": "door-mutfak",
+      "wall_id": "wall-5",
+      "kind": "door",
+      "space_ids": [
+        "mutfak",
+        "hol"
+      ],
+      "offset_from_wall_start": {
+        "value": 400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    },
+    {
+      "id": "door-yatak-1",
+      "wall_id": "wall-6",
+      "kind": "door",
+      "space_ids": [
+        "yatak-1",
+        "hol"
+      ],
+      "offset_from_wall_start": {
+        "value": 400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    },
+    {
+      "id": "door-yatak-2",
+      "wall_id": "wall-7",
+      "kind": "door",
+      "space_ids": [
+        "yatak-2",
+        "hol"
+      ],
+      "offset_from_wall_start": {
+        "value": 400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    },
+    {
+      "id": "door-yatak-3",
+      "wall_id": "wall-8",
+      "kind": "door",
+      "space_ids": [
+        "yatak-3",
+        "hol"
+      ],
+      "offset_from_wall_start": {
+        "value": 400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    },
+    {
+      "id": "door-banyo",
+      "wall_id": "wall-9",
+      "kind": "door",
+      "space_ids": [
+        "banyo",
+        "hol"
+      ],
+      "offset_from_wall_start": {
+        "value": 400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    },
+    {
+      "id": "door-wc",
+      "wall_id": "wall-10",
+      "kind": "door",
+      "space_ids": [
+        "wc",
+        "hol"
+      ],
+      "offset_from_wall_start": {
+        "value": 400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 800,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    },
+    {
+      "id": "door-entry",
+      "wall_id": "wall-16",
+      "kind": "door",
+      "space_ids": [
+        "hol"
+      ],
+      "offset_from_wall_start": {
+        "value": 250,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1000,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 2100,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 0,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    },
+    {
+      "id": "window-salon",
+      "wall_id": "wall-1",
+      "kind": "window",
+      "space_ids": [
+        "salon"
+      ],
+      "offset_from_wall_start": {
+        "value": 600,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    },
+    {
+      "id": "window-mutfak",
+      "wall_id": "wall-2",
+      "kind": "window",
+      "space_ids": [
+        "mutfak"
+      ],
+      "offset_from_wall_start": {
+        "value": 600,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    },
+    {
+      "id": "window-yatak-1",
+      "wall_id": "wall-3",
+      "kind": "window",
+      "space_ids": [
+        "yatak-1"
+      ],
+      "offset_from_wall_start": {
+        "value": 600,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    },
+    {
+      "id": "window-yatak-2",
+      "wall_id": "wall-11",
+      "kind": "window",
+      "space_ids": [
+        "yatak-2"
+      ],
+      "offset_from_wall_start": {
+        "value": 600,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    },
+    {
+      "id": "window-yatak-3",
+      "wall_id": "wall-12",
+      "kind": "window",
+      "space_ids": [
+        "yatak-3"
+      ],
+      "offset_from_wall_start": {
+        "value": 600,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 1400,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 900,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    },
+    {
+      "id": "window-banyo",
+      "wall_id": "wall-13",
+      "kind": "window",
+      "space_ids": [
+        "banyo"
+      ],
+      "offset_from_wall_start": {
+        "value": 600,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 600,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 600,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 1600,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    },
+    {
+      "id": "window-wc",
+      "wall_id": "wall-14",
+      "kind": "window",
+      "space_ids": [
+        "wc"
+      ],
+      "offset_from_wall_start": {
+        "value": 600,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "width": {
+        "value": 600,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "height": {
+        "value": 600,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "sill_height": {
+        "value": 1600,
+        "unit": "mm",
+        "status": "synthetic_fixture",
+        "evidence_ids": [
+          "synthetic-plan"
+        ],
+        "uncertainty": null
+      },
+      "swing": "unknown"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "synthetic-plan",
+      "kind": "note",
+      "space_ids": [
+        "salon",
+        "mutfak",
+        "yatak-1",
+        "yatak-2",
+        "yatak-3",
+        "banyo",
+        "wc",
+        "hol"
+      ],
+      "private_object_id": null,
+      "caption": "Gerçek müşteri, ev, fotoğraf veya tarama kullanılmadı; bütün sayılar özgün sentetik örnek ölçüleridir.",
+      "language": "tr",
+      "training_consent": false,
+      "synthetic": true
+    }
+  ],
+  "items": [],
+  "finishes": [],
+  "connections": [
+    {
+      "id": "route-salon",
+      "from_space_id": "hol",
+      "to_space_id": "salon",
+      "opening_id": "door-salon",
+      "status": "synthetic_fixture"
+    },
+    {
+      "id": "route-mutfak",
+      "from_space_id": "hol",
+      "to_space_id": "mutfak",
+      "opening_id": "door-mutfak",
+      "status": "synthetic_fixture"
+    },
+    {
+      "id": "route-yatak-1",
+      "from_space_id": "hol",
+      "to_space_id": "yatak-1",
+      "opening_id": "door-yatak-1",
+      "status": "synthetic_fixture"
+    },
+    {
+      "id": "route-yatak-2",
+      "from_space_id": "hol",
+      "to_space_id": "yatak-2",
+      "opening_id": "door-yatak-2",
+      "status": "synthetic_fixture"
+    },
+    {
+      "id": "route-yatak-3",
+      "from_space_id": "hol",
+      "to_space_id": "yatak-3",
+      "opening_id": "door-yatak-3",
+      "status": "synthetic_fixture"
+    },
+    {
+      "id": "route-banyo",
+      "from_space_id": "hol",
+      "to_space_id": "banyo",
+      "opening_id": "door-banyo",
+      "status": "synthetic_fixture"
+    },
+    {
+      "id": "route-wc",
+      "from_space_id": "hol",
+      "to_space_id": "wc",
+      "opening_id": "door-wc",
+      "status": "synthetic_fixture"
+    }
+  ],
+  "notes": [
+    {
+      "id": "synthetic-disclosure",
+      "original": "Tamamen sentetik 3+1: salon, üç yatak odası, ayrı mutfak, banyo, WC ve hol. Ölçüler ve duvar kalınlıkları test içindir; mevzuata uygunluk, taşıyıcılık ve üretim onayı iddiası değildir. Duvar uçları eksen; mekân poligonları bitmiş iç yüzdür. Açıklık offseti duvar başlangıcından boşluğun ilk kenarınadır. Menteşe yönü EV-01 içinde tanımlı olmadığı için swing unknown bırakıldı.",
+      "original_language": "tr",
+      "turkish_translation": null,
+      "translation_status": "not_requested"
+    }
+  ],
+  "issues": [
+    {
+      "id": "designer-survey-required",
+      "space_ids": [
+        "salon",
+        "mutfak",
+        "yatak-1",
+        "yatak-2",
+        "yatak-3",
+        "banyo",
+        "wc",
+        "hol"
+      ],
+      "kind": "missing_measurement",
+      "message": "Sentetik örnek; gerçek keşif, kapı menteşe/açılım yönü, tesisat, taşıyıcılık ve mevzuat değerlendirmesi yok.",
+      "blocking": true,
+      "status": "open"
+    }
+  ],
+  "review": {
+    "id": "review-plan-02",
+    "state": "awaiting_designer",
+    "revision": 1,
+    "designer_id": null,
+    "designer_approval_revision": null,
+    "blocking_issue_ids": [
+      "designer-survey-required"
+    ]
+  },
+  "example_only": true
+}
