@@ -1,0 +1,37 @@
+import assert from 'node:assert/strict';
+import {mkdtempSync, readFileSync, writeFileSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {execFileSync} from 'node:child_process';
+import {records, inspect, score} from '../tools/qwen-local/core.mjs';
+
+const {result, rejected} = records();
+assert.equal(result.length,45); assert.deepEqual(rejected,[]);
+assert.equal(new Set(result.map(r => r.id)).size,result.length);
+for (const group of new Set(result.map(r => r.group))) assert.equal(new Set(result.filter(r => r.group===group).map(r=>r.split)).size,1);
+for (const row of result) { assert.equal(row.review,'unreviewed'); assert.deepEqual(inspect(row.input),row.expected); }
+const bad = structuredClone(result[0].input); bad.params.width = NaN;
+assert.throws(()=>inspect(bad),/Out of range/);
+bad.params.width = 1e9; assert.throws(()=>inspect(bad),/Out of range/);
+assert.throws(()=>inspect({family:'unknown',params:{}}),/Unknown family/);
+const fakeRows = [{id:'one',expected:{decision:'reject',issues:[{code:'tip',level:'error'}]}}];
+assert.equal(score(fakeRows,[]).missing,1);
+assert.equal(score(fakeRows,[{id:'one',output:{decision:'pass_advisory',issues:[]}}]).falsePass,1);
+assert.equal(score(fakeRows,[{id:'one',output:fakeRows[0].expected}]).exact,1);
+assert.throws(()=>score(fakeRows,[{id:'unknown',output:{}}]),/Unknown or duplicate/);
+assert.throws(()=>score(fakeRows,[{id:'one'},{id:'one'}]),/Unknown or duplicate/);
+const dir = mkdtempSync(join(tmpdir(),'aura-qwen-'));
+const run = (file,args) => execFileSync(process.execPath,[`tools/qwen-local/${file}`, ...args],{encoding:'utf8',stdio:'pipe'});
+run('build.mjs',[dir]);
+const before = readFileSync(join(dir,'manifest.json'),'utf8');
+run('build.mjs',[dir]); assert.equal(readFileSync(join(dir,'manifest.json'),'utf8'),before);
+const training = readFileSync(join(dir,'sft-unreviewed.jsonl'),'utf8').trim().split('\n').map(JSON.parse);
+assert.equal(training.length,15);
+assert(training.every(r=>result.find(x=>x.id===r.id)?.split==='train'));
+writeFileSync(join(dir,'predictions.jsonl'),'');
+const report = JSON.parse(run('evaluate.mjs',[dir,join(dir,'predictions.jsonl')]));
+assert.equal(report.received,0); assert.equal(report.missing,15); assert.equal(report.exact,0);
+writeFileSync(join(dir,'test.jsonl'),'changed\n');
+assert.throws(()=>run('evaluate.mjs',[dir,join(dir,'predictions.jsonl')]),/Hash mismatch/);
+assert.throws(()=>run('build.mjs',[dir]),/Refusing to overwrite/);
+console.log('PASS: 45 engine-audited rows; grouped splits; raw invalid input; no eval in SFT; deterministic build; frozen-file integrity; missing/duplicate/unsafe predictions.');

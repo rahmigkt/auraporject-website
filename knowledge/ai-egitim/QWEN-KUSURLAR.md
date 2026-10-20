@@ -1,5 +1,26 @@
 # QWEN kusurları — EV-QWEN-00
 
+## EV-QWEN-00C güncellemesi — 20 Ekim 2026
+
+| Kimlik | Durum | Kanıt / kalan koşul |
+|---|---|---|
+| EV00C-001 — ülke ve kaynak karışması | Prototipte ayrıldı | 11 hedef ülke / 66 tip kartı; geometri kaynağı CH kalır, hedef etiket ayrı. Yerel tip özellikleri ve tam ev geometrisi doğrulanmadı. |
+| EV00C-002 — referansı olmayan yeni evler | Kullanıcı kararıyla netleştirmeye bırakıldı | Sıra ev, bodrum/çatı, çok katlı ve özel geometri uydurulmaz; ölçülü plan ve tasarımcı istenir. Kaynak kapsamı genişlemiş sayılmaz. |
+| EV00C-003 — kural kapsamı | Kısmen araştırıldı; açık | Bölge/kullanım/alan tanımı ve sürüm koşulları, bilinmeyene `unknown`. IE/IT genel eşikleri, yerel geçerlilik, erişilebilirlik ve mühendislik uzman teyidi bekliyor. |
+| EV00C-004 — dil ve veri sızıntısı | Aday veri denetlendi; insan incelemesi açık | 8×300 bileşimli metin; bina/imza çakışması ve ayrılmış tip sızıntısı 0. Doğal müşteri dili, ana dil ve şablondan bağımsız genelleme kanıtı değil. |
+| EV00C-005 — yeni görsel onay | Açık | 52 örnek / 156 alternatif kullanıcı incelemesi bekler; otomatik test onay sayılmaz. |
+| EV00C-006 — gerçek CPU model tabanı | Ölçüldü; başarısızlık açık | Qwen2.5 0.5B: 0/16 katı biçim, 0/8 programdan geometri. 6 kesilmiş JSON, 10 şema hatası. Qwen3.5 9B sonucu değildir. |
+| EV00C-007 — SVG tarayıcı gösterimi | Yerel testte düzeltildi | XML öneki kaldırıldı; namespace regresyon testi, masaüstü/390 px ve alternatif/hash dışa aktarım testleri. |
+| EV00C-008 — eğitim/GPU | Kapı kapalı | Ağırlık güncellemesi, kiralık GPU veya ücretli API yok. Ücretsiz küçük model yerel CPU tabanı için indirildi. |
+
+00D'nin **EV00D-007** kaydındaki 60 örneklik görsel inceleme, kullanıcının toplu
+onayıyla bu kapsamda kapandı: `veri/ev-plan-eu-00c/00d-kullanici-onayi.json`.
+Her alternatif tek tek seçilmedi; bütün korpusun eğitim veya mühendislik onayı değildir.
+00D tablosu aşağıda tarihsel kayıt olarak korunur. Güncel sonuçlar
+[EV-QWEN-00C-RAPOR.md](EV-QWEN-00C-RAPOR.md) içindedir. Main PR122'de viewer
+dosya açma desteği geldi; eski EV00-006'nın dosya açma eksikliği bu yönden eskidi.
+Gerçek kat bağlantısı/merdiven kapsamı hâlâ açıktır.
+
 ## EV-QWEN-00D güncellemesi — 20 Ekim 2026
 
 00B'nin sentetik yerleşim yolu güncel veri kaynağı değildir. Gerçek veri tesliminin

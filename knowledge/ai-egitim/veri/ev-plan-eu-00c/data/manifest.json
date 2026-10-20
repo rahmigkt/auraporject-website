@@ -1,0 +1,74 @@
+{
+  "contract": "aura-plan-program/0.5-eu",
+  "rows": 2400,
+  "counts": {
+    "tr": 300,
+    "train": 1780,
+    "status:clarify": 1537,
+    "test": 422,
+    "status:refuse": 480,
+    "status:program": 383,
+    "validation": 198,
+    "en": 300,
+    "de": 300,
+    "fr": 300,
+    "nl": 300,
+    "da": 300,
+    "es": 300,
+    "it": 300
+  },
+  "held_out_types": {
+    "BE": [
+      "be-4"
+    ],
+    "NL": [
+      "nl-2"
+    ],
+    "DE": [
+      "de-1"
+    ],
+    "FR": [
+      "fr-1"
+    ],
+    "GB": [
+      "gb-4"
+    ],
+    "IE": [
+      "ie-4"
+    ],
+    "DK": [
+      "dk-1"
+    ],
+    "ES": [
+      "es-1"
+    ],
+    "IT": [
+      "it-1"
+    ],
+    "AT": [
+      "at-1"
+    ],
+    "CH": [
+      "ch-1"
+    ]
+  },
+  "type_leakage": 0,
+  "human_approved": 0,
+  "files": {
+    "test.jsonl": "3232327fe8805068a7781c325150932f077dbf68b52863e923ea495c0efd9529",
+    "train.jsonl": "7383a2d797674603873098df6bb624906ba741670bfee772de97a2ba0f36a934",
+    "validation.jsonl": "dc7d14a95447a2acbace72da5297f3ca61405765170bfa9fcc69f7ec2e8ab1a1"
+  },
+  "system_sha256": "9182afb206f6fda519d55aa8233fdcf38b0bc3aaa67c735517f8ab3282afc6a1",
+  "profiles_sha256": "7e11ed9b6ab444787a11eb5e45f22dfded42c7d0eaeb19decbd0c7b3dbed3b7e",
+  "source_conversion_hash": "86bba94a0bb0a0e8eb585e2ede306337ac24b42b049ef614ae6e3db82074f4af",
+  "source_building_overlap": 0,
+  "training_started": false,
+  "gpu_gate": "closed",
+  "limits": [
+    "compositional synthetic language requires native-speaker review",
+    "unseen type split is not a geometric generalization score",
+    "CH source geometry is not local country evidence",
+    "country details confirmed in these program examples; unclear country cases abstain"
+  ]
+}

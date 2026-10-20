@@ -36,7 +36,8 @@ const bounded=promise=>Promise.race([promise,new Promise(resolve=>setTimeout(res
       save();
       if(results.length%10===0)console.log('checked',results.length,'/',names.length);
     }
-    if(names.length!==120 || results.some(r=>!r.passed))throw Error('Incomplete or failed viewer delivery');
+    const expectedFiles=Number(process.argv[3]||120);
+    if(names.length!==expectedFiles || results.some(r=>!r.passed))throw Error('Incomplete or failed viewer delivery');
     console.log(JSON.stringify({tested:results.length,passed:results.filter(r=>r.passed).length,failures:results.filter(r=>!r.passed)}));
   }catch(error){console.error(error);process.exitCode=1;}
   finally{
