@@ -1,0 +1,73 @@
+{
+  "source_units_scanned": 46937,
+  "accepted_unique": 8719,
+  "complete_scan": true,
+  "counts": {
+    "validation": 1205,
+    "train": 6150,
+    "test": 1364
+  },
+  "split_buildings": {
+    "validation": 293,
+    "train": 1448,
+    "test": 306
+  },
+  "cross_split_building_overlap": 0,
+  "duplicate_net_geometry": 0,
+  "source_room_labels": {
+    "CORRIDOR": 9495,
+    "ROOM": 17191,
+    "KITCHEN": 8264,
+    "BATHROOM": 12463,
+    "BALCONY": 8100,
+    "LIVING_ROOM": 1865,
+    "BEDROOM": 3729,
+    "WINTERGARTEN": 89,
+    "STOREROOM": 2086,
+    "LIVING_DINING": 3420,
+    "LOGGIA": 575,
+    "DINING": 143,
+    "TERRACE": 71,
+    "KITCHEN_DINING": 11,
+    "PATIO": 17,
+    "STAIRCASE": 11
+  },
+  "heldout_real_score": {
+    "n": 1364,
+    "p05": 47.730000000000004,
+    "p25": 100.0,
+    "p50": 100.0,
+    "p75": 100.0,
+    "p95": 100.0,
+    "mean": 93.57697947214076
+  },
+  "old_00b_wc": {
+    "score": 29.17,
+    "wc_area_evidence": [
+      {
+        "room": "guest-wc-0",
+        "kind": "wc",
+        "metric": "area_m2",
+        "value": 10.92,
+        "score": 0,
+        "distribution_key": "CH|single_floor_residential_unit|wc|area_m2",
+        "supported": true
+      }
+    ],
+    "source": "AURA synthetic 00B commit 41923a3, kapali-01"
+  },
+  "real_vs_bad_separation": 70.83,
+  "checks": {
+    "wc_counterexample_low": true,
+    "heldout_median_high": true,
+    "complete_scan": true,
+    "sixty_cases": true,
+    "three_each": true
+  },
+  "review_cases": 60,
+  "review_alternatives": 180,
+  "human_approved": 0,
+  "interpreted_as": "Source-aware data/retrieval audit, not Qwen accuracy, aesthetics, construction or structural approval",
+  "gpu_gate": "closed",
+  "training_started": false
+}

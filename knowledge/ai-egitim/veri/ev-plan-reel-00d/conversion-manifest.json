@@ -1,0 +1,911 @@
+{
+  "source": {
+    "source": {
+      "source": "Swiss Dwellings",
+      "version": "3.0.0",
+      "record": "7788422",
+      "doi": "10.5281/zenodo.7788422",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/legalcode",
+      "url": "https://zenodo.org/api/records/7788422/files/swiss-dwellings-v3.0.0.zip/content",
+      "file": "swiss-dwellings-v3.0.0.zip",
+      "size": 931868205,
+      "publisher_md5": "3b7915ecd5bf8e492a3e78c598b74123",
+      "sha256": "382e528fae3220b7747f4e6bc7d79261fee1b5d4d7902f18c548c0e6f22ef80a",
+      "download_seconds": 553.391,
+      "privacy_policy": "Only geometry fields consumed; never extract locations.csv, location_ratings.csv or address/geolocation metadata. Rebase local geometry per dwelling and pseudonymize source ids."
+    },
+    "rows": {
+      "csv_rows": 3255905,
+      "non_residential_or_unowned_rows": 605121,
+      "candidate_units": 46937
+    },
+    "labels": {
+      "area:BATHROOM": 68434,
+      "area:LIVING_ROOM": 8459,
+      "area:ROOM": 82618,
+      "area:KITCHEN": 44085,
+      "area:BALCONY": 43084,
+      "area:CORRIDOR": 53392,
+      "feature:BATHTUB": 41073,
+      "feature:TOILET": 61907,
+      "feature:SINK": 66109,
+      "feature:KITCHEN": 71465,
+      "separator:WALL": 1178839,
+      "separator:RAILING": 145911,
+      "opening:DOOR": 316342,
+      "opening:WINDOW": 230804,
+      "opening:ENTRANCE_DOOR": 52195,
+      "area:DINING": 1315,
+      "area:SHAFT": 72255,
+      "area:STOREROOM": 14348,
+      "feature:STAIRS": 8164,
+      "separator:COLUMN": 19105,
+      "feature:SHOWER": 11915,
+      "area:LIVING_DINING": 24200,
+      "area:STAIRCASE": 58,
+      "area:BEDROOM": 22997,
+      "area:OUTDOOR_VOID": 19,
+      "area:LOGGIA": 4404,
+      "area:VOID": 893,
+      "area:KITCHEN_DINING": 41,
+      "feature:WASHING_MACHINE": 1582,
+      "area:TERRACE": 603,
+      "area:WINTERGARTEN": 331,
+      "feature:BUILT_IN_FURNITURE": 3330,
+      "area:LIGHTWELL": 91,
+      "area:ELEVATOR": 15,
+      "feature:ELEVATOR": 24,
+      "area:PATIO": 178,
+      "area:GARDEN": 186,
+      "area:TECHNICAL_AREA": 6,
+      "area:STUDIO": 7
+    },
+    "stage_seconds": 84.313,
+    "privacy": "no addresses, coordinates of geographic location, apartment/site/building/floor ids or location/simulation tables retained; public source ids pseudonymized; source area ids remain only in local staging DB for fixture mapping"
+  },
+  "code_hashes": {
+    "tools/ev-plan/real/swiss.py": "cda77a3dee0822f0e8c7176d6e7debbd358c95d715c24519d068e1538c858289",
+    "tools/ev-plan/real/geometry.py": "feea5abbe68bd7287f27c93f3a2c41c45be6828f5a8fe417197e4ceef321241b",
+    "tools/ev-plan/common.py": "0d41e69f2849aea7ca088e0c472b44344b0f175ea23773a796dbe344c00a8e7d",
+    "tools/ev-plan/generator.py": "e4b019eba748abbe1ad2d891de69c5080cc157be808f0e1fc4dae1d9ea6b5bc4",
+    "tools/ev-plan/validate.py": "630cbcffba486d544c985bb8e59274c9c94cbd59d823d9d29fbd6bfe978aa164",
+    "knowledge/ev-projesi/veri/ev-projesi.schema.v0.2.json": "d1f6de161f66d7404572e29512deced3d3bac2617f116f636136c4ec38887511"
+  },
+  "processed_units": 46937,
+  "total_candidate_units": 46937,
+  "complete_source_scan": true,
+  "accepted_unique": 8719,
+  "rejected": {
+    "unresolved_opening_room_membership": 9831,
+    "disconnected_access_graph": 15457,
+    "no_source_entrance": 1313,
+    "polygon_holes_not_representable_in_v02": 2953,
+    "duplicate_net_geometry": 7988,
+    "usable_room_below_0_3_m2": 265,
+    "unit_net_area_outside_ingest_range": 133,
+    "unmapped_room_label": 156,
+    "ambiguous_interior_entrance": 122
+  },
+  "rejection_rate": 0.8142403647442317,
+  "unknown_labels": {
+    "GARDEN": 186
+  },
+  "rejection_samples": [
+    {
+      "unit_ref": "000d9098f5470a1e37dc051a",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "000f09fef71779f0788d85db",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "0012adc2b73807e65a32d2e1",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "0012fae9b0d2c2b9ffb43373",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "0015ca0741c32b5cb7ad1a32",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "00165ed26904f228069d69da",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "0016c96b762b2e934509434b",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "0017d25f8ff5b767d80fba60",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00191566525ca75978990112",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "001dcc1c1da8f13fe21be40d",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "001e7c675f9ac6433acedcb3",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "002048a639e3da2d9cfefcb4",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00235ec16231c9c2dbba6eab",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "00238914e981ecbb8c527d2e",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00264d308c38f7be9911b02c",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "002e2f79fe50f37815bc7c5a",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "002f955d1634665e9470cb55",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "002fb41d1ac2a508dfde4c7c",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00306d98bcac1393fdc23ce6",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "0036bf1a58a00dba735616c9",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00395f71def09c3a357ecc4a",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "003b11241788907c73368822",
+      "reason": "no_source_entrance"
+    },
+    {
+      "unit_ref": "003b3e98a40045315f3f82ee",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "003d7f83615236317a4fc166",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "003ec04ff44229ac210fba53",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "003f5cf830d38d936f0c8881",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00417fc586fbeedce29ea396",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "0041d47de3d644a54971b482",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "004462a0ecd2038f567ad045",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "004469032e16557434d2e7cb",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00454ff60ed66dab041b05e4",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "00493f1625cf2d398c48c6b8",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "004e89c54c607e55c506a9e7",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "004f7eb967eac6491956888d",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00529e9a0e20fb170c70c810",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00533de91288993b3833a95b",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "00541c16186c22298c5ef658",
+      "reason": "polygon_holes_not_representable_in_v02"
+    },
+    {
+      "unit_ref": "005435902f64a1abe3191872",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00561c9cdd3e97494e27248e",
+      "reason": "polygon_holes_not_representable_in_v02"
+    },
+    {
+      "unit_ref": "0057c8c530b578d617ad36c1",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "005be112688227515c6f6034",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "005edade8fa56d44e32d43c6",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "005ee9572b7b471de6e7fa5f",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "005fd65e20342b901dcabc7d",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "006213fc621f284b8daa57ba",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00651acac694fb96f86d17f4",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "0067d2c1b34851284bb24ffb",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00683bbe635aaa11f2ebda4b",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "0068e532f6ba18347c837250",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "006a02a95017e6e3aebec952",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "006baf67fd3d185025a9069d",
+      "reason": "polygon_holes_not_representable_in_v02"
+    },
+    {
+      "unit_ref": "006c3f98db46539c06685d90",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "006cb1a9996704a5937b157c",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "006ccaef3c4dcd21a8138a87",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "0070a9fbc29e3282da0f4466",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "0072e07dd8bf2fe9f2a6564e",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "0075d9e00801de24a3faa70d",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "007651df3d4d3799ad1e78c3",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "0076e69b588e93265ee39c25",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "0077f1a725d3833062f6ec6a",
+      "reason": "polygon_holes_not_representable_in_v02"
+    },
+    {
+      "unit_ref": "0079150af9c51a97feeec3be",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "007a32b98700e7725f6301f8",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "007cd25da71a5e93b2b53378",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "007d37a47d8cf704e3bada40",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "008061ae31c0448afa5a4b92",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "0081fe3ffb7a745d3332fefb",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "0085b5a686e8d8f07653cb68",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "008652799b4ac9e47260e373",
+      "reason": "no_source_entrance"
+    },
+    {
+      "unit_ref": "0089455e554f06d65a0471d5",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "008d5bc6bc0e021fff8e966c",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "008d867c70cd9225f0297152",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "008fa1f7a02def15300c9447",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "0090ebcc356054b6e964e14d",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "0091198e3bb28950fb6c5c41",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "0099a2363c7db14cca92a087",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "009f3e93b819381b0e66c8dd",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "00a12c6eaca89ac8b4f2b833",
+      "reason": "no_source_entrance"
+    },
+    {
+      "unit_ref": "00a1acece6a17d4e543d0789",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00a576c03f968d774c1b6f3d",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "00a5a28908760e6e11af5f19",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "00a90fc26391e74b224c9cf0",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00ae8b4bc869a4297f27cbd3",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00ae919962258cb680e26358",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00b65ec9fcd0b031664c9a3c",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "00b8b6c329772843881c2e4d",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00b905004111421f90c0e409",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "00bbb59a7cb6532ffe96f735",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "00bbe0f7fe911912aa564f4e",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "00bcae8bb3de9ee7853a971f",
+      "reason": "no_source_entrance"
+    },
+    {
+      "unit_ref": "00bd880bfe9374e87a0358ea",
+      "reason": "polygon_holes_not_representable_in_v02"
+    },
+    {
+      "unit_ref": "00bf3512ff26d44a604ef665",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00c5349891ebad00768d2bdd",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00cc0b698e3fdb3781cb0e9a",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00ccbb2eeec33ee993e69fba",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "00cee0a2b40d5ff04ee552d6",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "00cf1de61a59f6ff77ae5036",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "00d26c05896e61d948e30631",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00d6fd50c699ab83a0991fbd",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "00d9d40f3e65e5162dc728dc",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "00dddbcbd4c97064d0785c1d",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00e0204ee5262437e8fea9ee",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "00e7ba5ba2198c5bd4387523",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "00e8b935d0314c97054dd026",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00ec1f90950447c48367b52f",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00ec7116de4673f83f2f0d65",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00ed30115e51e7279b39d8f0",
+      "reason": "polygon_holes_not_representable_in_v02"
+    },
+    {
+      "unit_ref": "00ee14f018211784d6669a61",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00f060885339ea6bb5c4c251",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00f2feb71e870d609210253a",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "00f881720786acac95785adb",
+      "reason": "polygon_holes_not_representable_in_v02"
+    },
+    {
+      "unit_ref": "00f93061e6084ed6225482e3",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "0101531523cb37b5e78fa520",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "0106116020f76aac5b74fa3a",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "01076c26e0bf2c0faab08d71",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "01087cd0fdb6f1af3b5b03dd",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "010964766b39c2056269b2a7",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "010a493d7ceb40ce912818f7",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "010adbd0d62bde65f4da30fa",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "010d76949b814b97e3f3edde",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "0110b5c534b87dece5d262eb",
+      "reason": "no_source_entrance"
+    },
+    {
+      "unit_ref": "0111f9a5e6c81b015c61d59f",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "0111ff91a80a6f3bc72525a2",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "0112992e44868d4502bfcdd9",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "0112f58f58629ee468fff2a7",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "01140ea33abe78f8f7695d66",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "0114160b2bd89e1be37fb2cd",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "011582e9c268529dc250587d",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "011764bf52d37bdd9a4a6cda",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "01177056253c8efa0771d3ad",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "011a9b7941a76f149ee08fb0",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "011ba8734c7d047d0e70dd9d",
+      "reason": "polygon_holes_not_representable_in_v02"
+    },
+    {
+      "unit_ref": "011ea62199ec892c9ed9d032",
+      "reason": "no_source_entrance"
+    },
+    {
+      "unit_ref": "0120430e44b72ecda64288ed",
+      "reason": "polygon_holes_not_representable_in_v02"
+    },
+    {
+      "unit_ref": "0121b8a01c47ef16ae8c1f3e",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "012401e35dec75eeb53025b4",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "012ce3d27f5dcd2cd8f1dd26",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "0130c82f831ff4a4ce1b51c2",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "0130e600ec3160d3ec74b5a4",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "013169faa7f73d765083bee2",
+      "reason": "no_source_entrance"
+    },
+    {
+      "unit_ref": "0131f2ba4c673eb077863cef",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "01338f2bf7d1b0a5a1a3cb68",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "013ddb37416efdc5e6e09034",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "013e335f3419984895e216bc",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "013e491c129797cf3a17c77f",
+      "reason": "polygon_holes_not_representable_in_v02"
+    },
+    {
+      "unit_ref": "013fe4ab712d184cfd4c3d0b",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "014129367013738e7407265a",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "01423c95c5cc445cf2263611",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "0145cf5dd39162652a640023",
+      "reason": "polygon_holes_not_representable_in_v02"
+    },
+    {
+      "unit_ref": "01479b257a6b22fce87a79ee",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "01498e102482128e924098cd",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "014ca83a64a86d52cc95b0f4",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "014d453b9648e5a892f73c17",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "014e5228af743ca717625f81",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "0150a0d428d988635bc541dc",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "0151d9b128184986bbe5fd4c",
+      "reason": "polygon_holes_not_representable_in_v02"
+    },
+    {
+      "unit_ref": "01521a26e35a623373b9756f",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "01539b99cc0af6c02bdc179b",
+      "reason": "polygon_holes_not_representable_in_v02"
+    },
+    {
+      "unit_ref": "0153a026bfc3380e36dd6d48",
+      "reason": "no_source_entrance"
+    },
+    {
+      "unit_ref": "015a433753feec375e22a206",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "015e54edeb68b71370e3ba31",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "01649cc695a3cc8ebc19b43a",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "01692479c7938110da118da6",
+      "reason": "no_source_entrance"
+    },
+    {
+      "unit_ref": "0169f03da1076f144d2fd5e5",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "016b72b1674cd1facb9a89a8",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "016ba5002febcb26de493cb8",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "016ef9c44dba2fb5eaa2cdbf",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "016f0087256498033acf2b61",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "016f9be5c77194cdb1dd3d1f",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "01709b860117720443ebc3e3",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "0170bdd2c560f6833815a5d5",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "017272d0a05c923ad8879c59",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "017843a8614d4af5d96e197c",
+      "reason": "polygon_holes_not_representable_in_v02"
+    },
+    {
+      "unit_ref": "01797988fefc22fc061ca8c0",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "0179d6bed429d255c58652be",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "017c738af4aa461196279561",
+      "reason": "polygon_holes_not_representable_in_v02"
+    },
+    {
+      "unit_ref": "017cefa770c0aeef24af742b",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "01853047d2ab06a68a805037",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "01871c22dfb6451344d3e54d",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "01893cb3a5aeef1bb9f935f4",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "018c9cd06f36d510f2c17eb1",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "018cb517c46828289e361e86",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "019025c3e0008a21d877c407",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "019100caa32f1286b97838b5",
+      "reason": "no_source_entrance"
+    },
+    {
+      "unit_ref": "01940b4d60437691f440fedc",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "01944d70efa3f782867e4acc",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "0194c454448eb30bd3375e81",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "01994c861127f3e002bc72c2",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "019c2dfbd2d7c621ddafa542",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "019c4315c40be113cee2bd50",
+      "reason": "polygon_holes_not_representable_in_v02"
+    },
+    {
+      "unit_ref": "019e2aff12d1a7cd35f14c75",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "019faaada1d934af37e8383b",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "01a059902759fd21a7c37a37",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "01a2d589f594e07fa99ed9fb",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "01a4d0eb377f90e8faad4d57",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "01a5636e2f17c007a3a42df9",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "01a5ecd646b8260868e7b31c",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "01a62bae99b1c11d5db3acf6",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "01a64b9bd67d8af2cccdad00",
+      "reason": "unresolved_opening_room_membership"
+    },
+    {
+      "unit_ref": "01a77022cadea485d83b1b74",
+      "reason": "disconnected_access_graph"
+    },
+    {
+      "unit_ref": "01ac70bbbc0de915fddfbee1",
+      "reason": "unresolved_opening_room_membership"
+    }
+  ],
+  "elapsed_seconds": 3192.25,
+  "files": {
+    "plans.jsonl": "14c4ce4abb282d51fc6b3621667713b72ff3c8273b0e042ce401c1bd2ff7c17c",
+    "index.sqlite": "7742ef130d665ba9538d3a16f0f1929a91fbb1ab60d416049633f4343ee62be6"
+  },
+  "fields_not_invented": [
+    "bedrooms from generic ROOM",
+    "floor slab heights",
+    "door hinges",
+    "load-bearing classification",
+    "multi-storey connectivity"
+  ],
+  "schema_axis_limitation": "EV v0.2 is a compatibility projection, not a verified centerline model. Mandatory source polygon sidecar remains authoritative.",
+  "training_started": false,
+  "gpu_gate": "closed"
+}

@@ -1,5 +1,10 @@
 # EV-QWEN-00 — yerel plan veri hattı
 
+**Güncel yol EV-QWEN-00D:** [gerçek veri hattı](real/README.md), lisanslı gerçek
+planlardan program çıkarır ve referans getirip uyarlar. Aşağıdaki EV-QWEN-00
+sentetik komutları tarihsel prototiptir; 00D eğitim verisinin kaynağı değildir.
+00D sözleşmesi `solver/program.py` ve `plan-program.schema.json` v0.4'tür.
+
 Bu araçlar araştırma prototipidir. Yalnız özgün, sentetik plan üretir; müşteri fotoğrafı,
 plan veri seti, API anahtarı veya ücretli servis kullanmaz. `assets/` değiştirmez.
 `tools/`, `outputs/` ve `knowledge/` mevcut deploy hariç listesinde bulunur.

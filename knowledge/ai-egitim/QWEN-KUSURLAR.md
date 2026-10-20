@@ -1,5 +1,25 @@
 # QWEN kusurları — EV-QWEN-00
 
+## EV-QWEN-00D güncellemesi — 20 Ekim 2026
+
+00B'nin sentetik yerleşim yolu güncel veri kaynağı değildir. Gerçek veri tesliminin
+ölçümleri [EV-QWEN-00D-RAPOR.md](EV-QWEN-00D-RAPOR.md) dosyasındadır.
+
+| Kimlik | Durum | Kanıt / kalan koşul |
+|---|---|---|
+| EV00D-001 — lisans ve kaynak ayrımı | Uygulandı | 20 kaynak envanteri; Swiss CC BY 4.0 yayıncı doğrulaması ve hash; NC/belirsiz veri alınmadı; VERI-ATIF.md. |
+| EV00D-002 — oda işlevi uydurma | Yerel testte düzeltildi | Kaynak ROOM → other/unknown, doğrulanmamış yatak sayısı/mutfak/çekme mesafesi null; sözleşme ve testler aynı sınırı koruyor. |
+| EV00D-003 — büyük WC'ye yüksek puan | Yerel karşı örnekte düzeltildi | Eğitim binalarından gerçek dağılım ve en aykırı oda ağırlığı; 00B 10,92 m² WC örneği 29,17/100, WC alan bileşeni 0. Aynı planın sentetik bayrağını değiştirmek puanı etkilemiyor. Mimari kalite onayı değildir. |
+| EV00D-004 — gerçek referans ve veri sızıntısı | Bu korpusta denetlendi | 8.719 gerçek benzersiz plan; bina bazında bölme çakışması 0, birebir net geometri tekrarı 0. 60 örnek / 180 alternatif yalnız eğitim binalarından getirildi; istekler ayrılmış test binalarından. Yakın tekrar temizliği ve başka korpuslar için genelleme açık. |
+| EV00D-005 — gerçek ortak duvar eksenleri | Açık | EV v0.2 alanları açıkça işaretlenmiş uyumluluk izdüşümüdür; kaynak poligonlar zorunlu yan kayıtta korunuyor. Ölçülmüş eksen ve ortak kapanma kanıtı yok. |
+| EV00D-006 — ülke/ev/kat kapsamı | Açık | Kanonik kaynak yalnız CH tek kat konut birimi; tüm Avrupa, müstakil ve çok katlı ev verisi doğrulanmadı. Araç bu istekleri netleştirmeye bırakır. |
+| EV00D-007 — insan onayı | Açık | İnceleme sayfası karar sahibini bekler. Otomatik SVG/viewer testi, yüksek istatistik puanı ve kaynak verinin gerçek olması mimari onay değildir. |
+| EV00D-008 — doğal dil / model başarısı | Açık | Gerçek programlara bağlı TR/EN adaylar kısa, bileşimli tariflerdir. Serbest müşteri dili, belirsizlik/reddetme, model dayanıklılığı ve gerileme henüz ölçülmedi. F'nin kaynak/maliyet raporu seçeneği kullanıldı. |
+| EV00D-009 — yapısal kullanılabilirlik | Açık | Kapı kanadı, taşıyıcı, döşeme, merdiven, tesisat ve gün ışığı mühendislik kontrolü yapılmadı. Afin uyarlama mevcut binaya uygulama izni değildir. |
+| EV00D-010 — eğitim / GPU | Kapı kapalı | Bu tur ağırlık eğitimi, model indirme, kiralık GPU veya ücretli API yok. Önce insan kararı ve açık kusurlar, sonra ayrı eğitim kararı. |
+
+## Önceki EV-QWEN-00 kaydı
+
 Tarih: 2026-10-20. Bu liste bu iş emrindeki yeni ev planı prototipine aittir;
 önceki farklı dallarda tutulmuş onay veya kusur kapanışlarını devralmaz.
 
