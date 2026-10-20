@@ -1,0 +1,757 @@
+{
+ "schema": "aura.ev.sohbet/1",
+ "id": "sohbet-001",
+ "synthetic": true,
+ "note": "Simüle edilmiş eğitim sohbeti; gerçek müşteri değildir. Asistan sözleşmesi: knowledge/ev-projesi/veri/asistan-sozlesme.json.",
+ "customer_language": "tr",
+ "city": "Brüksel",
+ "result_plan": "assets/ev/ornekler/sohbet-1.json",
+ "designer_summary_tr": "Brüksel, 2+1, ~85 m², çift + bir çocuk. Güneyde açık mutfaklı salon ve balkon, doğudan girişli hol, kuzeyde ıslak hacimler ve çalışma odası. Sıcak, doğal, ahşap ağırlıklı (Toprak tonları). 10 özel ölçü ürün yerleştirildi. Ölçüler müşteri beyanı; yerinde doğrulanacak.",
+ "turns": [
+  {
+   "role": "user",
+   "lang": "tr",
+   "text": "Merhaba, Brüksel'de 2+1 bir daire aldık, yaklaşık 85 metrekare. Evin tamamını sizinle tasarlamak istiyoruz."
+  },
+  {
+   "role": "assistant",
+   "text": "Hoş geldiniz. Önce evin planını birlikte çizelim. Elinizde tapu ya da emlakçı planı var mı? Yoksa odaları tek tek anlatın; ölçüleri biliyorsanız yazın, bilmediklerinizi sonra birlikte netleştiririz. Bir de balkon ve giriş kapısı hangi cephede?",
+   "questions": [
+    "Plan çizimi var mı?",
+    "Balkon ve giriş hangi yönde?"
+   ],
+   "proposed_changes": []
+  },
+  {
+   "role": "user",
+   "lang": "tr",
+   "text": "Planımız yok. Daire yaklaşık 9,6 m'ye 9 m. Güneyde salon ve açık mutfak var, salonun önünde balkon. Güneydoğu köşede yatak odamız. Girişi doğudan, uzun bir holden. Holün kuzeyinde banyo, ayrı bir WC, küçük bir çamaşır odası ve küçük bir çalışma odası var. Batıda kuzeyde de çocuğun odası."
+  },
+  {
+   "role": "assistant",
+   "text": "Anlattığınıza göre planı çizdim: güneyde 26,6 m² salon ve açık mutfak, güneydoğuda 15,6 m² yatak odası, doğudan girişli 8,7 m² hol, kuzeyde banyo, WC, çamaşır odası ve çalışma odası, kuzeybatıda 9,5 m² çocuk odası, salonun önünde 7 m² balkon. Dış duvarları 30 cm, iç duvarları 12 cm kabul ettim; bunlar tahmini ölçüler, tasarımcımız yerinde doğrulayacak. Plan ve maket ekranda; bir yer yanlışsa söyleyin.",
+   "assumptions": [
+    "Dış duvar 300 mm, iç duvar 120 mm",
+    "Tavan yüksekliği 2700 mm",
+    "Kuzey plan yukarısı"
+   ],
+   "proposed_changes": [
+    {
+     "operation": "propose_brief_update",
+     "target_id": "sohbet-001",
+     "payload": {
+      "whole_home": true,
+      "city": "Brüksel",
+      "household": "çift + bir çocuk",
+      "total_area_m2": 85
+     }
+    },
+    {
+     "operation": "propose_space_update",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "salon",
+      "name": "Salon + mutfak",
+      "kind": "living",
+      "boundary_xy_mm": [
+       [
+        150,
+        150
+       ],
+       [
+        5940,
+        150
+       ],
+       [
+        5940,
+        4740
+       ],
+       [
+        150,
+        4740
+       ]
+      ]
+     }
+    },
+    {
+     "operation": "propose_space_update",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "yatak1",
+      "name": "Yatak odası",
+      "kind": "bedroom",
+      "boundary_xy_mm": [
+       [
+        6060,
+        150
+       ],
+       [
+        9450,
+        150
+       ],
+       [
+        9450,
+        4740
+       ],
+       [
+        6060,
+        4740
+       ]
+      ]
+     }
+    },
+    {
+     "operation": "propose_space_update",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "hol",
+      "name": "Antre / hol",
+      "kind": "hall",
+      "boundary_xy_mm": [
+       [
+        2660,
+        4860
+       ],
+       [
+        9450,
+        4860
+       ],
+       [
+        9450,
+        6140
+       ],
+       [
+        2660,
+        6140
+       ]
+      ]
+     }
+    },
+    {
+     "operation": "propose_space_update",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "yatak2",
+      "name": "Çocuk odası",
+      "kind": "bedroom",
+      "boundary_xy_mm": [
+       [
+        150,
+        4860
+       ],
+       [
+        2540,
+        4860
+       ],
+       [
+        2540,
+        8850
+       ],
+       [
+        150,
+        8850
+       ]
+      ]
+     }
+    },
+    {
+     "operation": "propose_space_update",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "banyo",
+      "name": "Banyo",
+      "kind": "bath",
+      "boundary_xy_mm": [
+       [
+        2660,
+        6260
+       ],
+       [
+        5140,
+        6260
+       ],
+       [
+        5140,
+        8850
+       ],
+       [
+        2660,
+        8850
+       ]
+      ]
+     }
+    },
+    {
+     "operation": "propose_space_update",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "wc",
+      "name": "WC",
+      "kind": "wc",
+      "boundary_xy_mm": [
+       [
+        5260,
+        6260
+       ],
+       [
+        6540,
+        6260
+       ],
+       [
+        6540,
+        8850
+       ],
+       [
+        5260,
+        8850
+       ]
+      ]
+     }
+    },
+    {
+     "operation": "propose_space_update",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "kiler",
+      "name": "Çamaşır / kiler",
+      "kind": "utility",
+      "boundary_xy_mm": [
+       [
+        6660,
+        6260
+       ],
+       [
+        7740,
+        6260
+       ],
+       [
+        7740,
+        8850
+       ],
+       [
+        6660,
+        8850
+       ]
+      ]
+     }
+    },
+    {
+     "operation": "propose_space_update",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "calisma",
+      "name": "Çalışma",
+      "kind": "study",
+      "boundary_xy_mm": [
+       [
+        7860,
+        6260
+       ],
+       [
+        9450,
+        6260
+       ],
+       [
+        9450,
+        8850
+       ],
+       [
+        7860,
+        8850
+       ]
+      ]
+     }
+    },
+    {
+     "operation": "propose_space_update",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "balkon",
+      "name": "Balkon",
+      "kind": "balcony",
+      "boundary_xy_mm": [
+       [
+        1500,
+        -1700
+       ],
+       [
+        6000,
+        -1700
+       ],
+       [
+        6000,
+        -150
+       ],
+       [
+        1500,
+        -150
+       ]
+      ]
+     }
+    },
+    {
+     "operation": "propose_opening",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "giris",
+      "wall_id": "dis-dogu",
+      "kind": "door",
+      "offset_mm": 5150,
+      "width_mm": 950,
+      "sill_mm": 0
+     }
+    },
+    {
+     "operation": "propose_opening",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "balkon-kapi",
+      "wall_id": "dis-guney",
+      "kind": "door",
+      "offset_mm": 3000,
+      "width_mm": 1800,
+      "sill_mm": 0
+     }
+    },
+    {
+     "operation": "propose_opening",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "salon-pencere",
+      "wall_id": "dis-guney",
+      "kind": "window",
+      "offset_mm": 700,
+      "width_mm": 1800,
+      "sill_mm": 850
+     }
+    },
+    {
+     "operation": "propose_opening",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "yatak1-pencere",
+      "wall_id": "dis-guney",
+      "kind": "window",
+      "offset_mm": 7000,
+      "width_mm": 1600,
+      "sill_mm": 850
+     }
+    },
+    {
+     "operation": "propose_opening",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "yatak1-dogu",
+      "wall_id": "dis-dogu",
+      "kind": "window",
+      "offset_mm": 1600,
+      "width_mm": 1400,
+      "sill_mm": 850
+     }
+    },
+    {
+     "operation": "propose_opening",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "mutfak-pencere",
+      "wall_id": "dis-bati",
+      "kind": "window",
+      "offset_mm": 5700,
+      "width_mm": 1300,
+      "sill_mm": 1050
+     }
+    },
+    {
+     "operation": "propose_opening",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "yatak2-pencere",
+      "wall_id": "dis-bati",
+      "kind": "window",
+      "offset_mm": 1100,
+      "width_mm": 1400,
+      "sill_mm": 850
+     }
+    },
+    {
+     "operation": "propose_opening",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "banyo-pencere",
+      "wall_id": "dis-kuzey",
+      "kind": "window",
+      "offset_mm": 5300,
+      "width_mm": 800,
+      "sill_mm": 1500
+     }
+    },
+    {
+     "operation": "propose_opening",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "calisma-pencere",
+      "wall_id": "dis-kuzey",
+      "kind": "window",
+      "offset_mm": 300,
+      "width_mm": 1200,
+      "sill_mm": 850
+     }
+    },
+    {
+     "operation": "propose_opening",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "salon-hol",
+      "wall_id": "ic-3",
+      "kind": "door",
+      "offset_mm": 1900,
+      "width_mm": 1400,
+      "sill_mm": 0
+     }
+    },
+    {
+     "operation": "propose_opening",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "yatak1-hol",
+      "wall_id": "ic-4",
+      "kind": "door",
+      "offset_mm": 400,
+      "width_mm": 900,
+      "sill_mm": 0
+     }
+    },
+    {
+     "operation": "propose_opening",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "yatak2-hol",
+      "wall_id": "ic-5",
+      "kind": "door",
+      "offset_mm": 300,
+      "width_mm": 850,
+      "sill_mm": 0
+     }
+    },
+    {
+     "operation": "propose_opening",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "banyo-hol",
+      "wall_id": "ic-6",
+      "kind": "door",
+      "offset_mm": 1500,
+      "width_mm": 800,
+      "sill_mm": 0
+     }
+    },
+    {
+     "operation": "propose_opening",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "wc-hol",
+      "wall_id": "ic-6",
+      "kind": "door",
+      "offset_mm": 2750,
+      "width_mm": 750,
+      "sill_mm": 0
+     }
+    },
+    {
+     "operation": "propose_opening",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "kiler-hol",
+      "wall_id": "ic-6",
+      "kind": "door",
+      "offset_mm": 4250,
+      "width_mm": 750,
+      "sill_mm": 0
+     }
+    },
+    {
+     "operation": "propose_opening",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "calisma-hol",
+      "wall_id": "ic-6",
+      "kind": "door",
+      "offset_mm": 5650,
+      "width_mm": 800,
+      "sill_mm": 0
+     }
+    },
+    {
+     "operation": "request_studio_render",
+     "target_id": "sohbet-001",
+     "payload": {
+      "views": [
+       "plan",
+       "maket"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "role": "user",
+   "lang": "tr",
+   "text": "Evet, aşağı yukarı böyle. Sıcak, doğal bir ev istiyoruz; çok beyaz olmasın. Ahşap seviyoruz."
+  },
+  {
+   "role": "assistant",
+   "text": "O zaman \"Toprak tonları\" önerisiyle başlayalım: duvarlarda kum ve kil tonları, yatak odasında greige; salon, yatak odaları ve holde doğal meşe parke, banyo ve WC'de terrazzo, mutfakta çimento karo. Boya ve kaplamayı biz yapmıyoruz, öneri olarak paketinize ekliyoruz. Oda içi görünümde günün saatini ve mevsimi değiştirip ışığı görebilirsiniz.",
+   "proposed_changes": [
+    {
+     "operation": "propose_finish",
+     "target_id": "sohbet-001",
+     "payload": {
+      "scheme": "toprak"
+     }
+    }
+   ]
+  },
+  {
+   "role": "user",
+   "lang": "tr",
+   "text": "Güzel. Şimdi mobilyalar: salonda 3 kişilik bir kanepe, karşısında televizyon, ortada sehpa. Mutfağın önünde 4-6 kişilik yemek masası. Yatak odasına 160'lık yatak ve gardırop, çocuğa tek kişilik yatak, çalışma odasına bir masa. Banyoya da lavabo dolabı."
+  },
+  {
+   "role": "assistant",
+   "text": "Hepsini evin ölçüsüne göre yerleştirdim. Mutfak kuzey duvar boyunca 3,9 m; yemek masası 160×90 cm, mutfakla salonun arasında. Kanepe 230 cm, batıda pencereye yakın, doğu duvarındaki 180 cm TV ünitesine bakıyor; arada 110 cm'lik sehpa. Yatak odasında yatağın başı doğu duvarında, gardırop karşı duvarda; aralarında rahat geçiş var. Çocuk odasında tek kişilik yatak kuzey duvarında, çalışma odasında masa pencerenin önünde, banyoda 90 cm lavabo dolabı. Bunların hepsi AURA stüdyosunda özel ölçüyle üretilebilen tasarımlar; renk ve malzemeyi birlikte seçebiliriz.",
+   "proposed_changes": [
+    {
+     "operation": "propose_item_placement",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "mutfak",
+      "space_id": "salon",
+      "family": "kitchen",
+      "kind": "run",
+      "params": {},
+      "pos_xy_mm": [
+       2100,
+       4440
+      ],
+      "rot_deg": 0
+     }
+    },
+    {
+     "operation": "propose_item_placement",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "kanepe",
+      "space_id": "salon",
+      "family": "seating",
+      "kind": "sofa",
+      "params": {
+       "width": 2300,
+       "depth": 720,
+       "height": 730
+      },
+      "pos_xy_mm": [
+       2350,
+       1700
+      ],
+      "rot_deg": 90
+     }
+    },
+    {
+     "operation": "propose_item_placement",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "tv",
+      "space_id": "salon",
+      "family": "storage",
+      "kind": "tvunit",
+      "params": {
+       "width": 1800,
+       "height": 480,
+       "depth": 420
+      },
+      "pos_xy_mm": [
+       5730,
+       1700
+      ],
+      "rot_deg": 270
+     }
+    },
+    {
+     "operation": "propose_item_placement",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "orta-sehpa",
+      "space_id": "salon",
+      "family": "table",
+      "kind": "coffee",
+      "params": {
+       "length": 1100,
+       "width": 650,
+       "height": 385
+      },
+      "pos_xy_mm": [
+       3650,
+       1700
+      ],
+      "rot_deg": 90
+     }
+    },
+    {
+     "operation": "propose_item_placement",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "yemek",
+      "space_id": "salon",
+      "family": "table",
+      "kind": "dining",
+      "params": {
+       "length": 1600,
+       "width": 900,
+       "height": 745
+      },
+      "pos_xy_mm": [
+       1500,
+       3150
+      ],
+      "rot_deg": 0
+     }
+    },
+    {
+     "operation": "propose_item_placement",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "yatak1",
+      "space_id": "yatak1",
+      "family": "bedroom",
+      "kind": "bed",
+      "params": {
+       "width": 1600
+      },
+      "pos_xy_mm": [
+       8400,
+       2400
+      ],
+      "rot_deg": 90
+     }
+    },
+    {
+     "operation": "propose_item_placement",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "gardirop",
+      "space_id": "yatak1",
+      "family": "storage",
+      "kind": "wardrobe",
+      "params": {
+       "width": 2000,
+       "height": 2200,
+       "depth": 600
+      },
+      "pos_xy_mm": [
+       6360,
+       2400
+      ],
+      "rot_deg": 90
+     }
+    },
+    {
+     "operation": "propose_item_placement",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "yatak2",
+      "space_id": "yatak2",
+      "family": "bedroom",
+      "kind": "bed",
+      "params": {
+       "width": 1200
+      },
+      "pos_xy_mm": [
+       1300,
+       7800
+      ],
+      "rot_deg": 180
+     }
+    },
+    {
+     "operation": "propose_item_placement",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "calisma-masasi",
+      "space_id": "calisma",
+      "family": "table",
+      "kind": "desk",
+      "params": {
+       "length": 1200,
+       "width": 600,
+       "height": 750
+      },
+      "pos_xy_mm": [
+       8700,
+       8550
+      ],
+      "rot_deg": 180
+     }
+    },
+    {
+     "operation": "propose_item_placement",
+     "target_id": "sohbet-001",
+     "payload": {
+      "id": "lavabo",
+      "space_id": "banyo",
+      "family": "bath",
+      "kind": "basin",
+      "params": {
+       "width": 900,
+       "height": 360,
+       "depth": 480
+      },
+      "pos_xy_mm": [
+       3600,
+       8605
+      ],
+      "rot_deg": 180
+     }
+    },
+    {
+     "operation": "request_studio_render",
+     "target_id": "sohbet-001",
+     "payload": {
+      "views": [
+       "maket",
+       "kesit:salon",
+       "oda:salon"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "role": "user",
+   "lang": "tr",
+   "text": "Çok güzel olmuş. Tasarımcıya gönderebilir miyiz?"
+  },
+  {
+   "role": "assistant",
+   "text": "Tabii. Plan, maket görüntüleri, renk ve zemin önerileri ve mobilyaların ölçülü çizimleriyle bir proje paketi hazırlıyorum. Tasarımcımız ölçüleri yerinde doğruladıktan sonra size dönecek; son karar ve fiyat onda.",
+   "proposed_changes": [
+    {
+     "operation": "prepare_designer_handoff",
+     "target_id": "sohbet-001",
+     "payload": {
+      "include": [
+       "plan",
+       "maket",
+       "finishes",
+       "items",
+       "drawings"
+      ],
+      "open_questions": [
+       "Duvar kalınlıkları ve tavan yüksekliği yerinde ölçülecek",
+       "Kapı açılış yönleri"
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
