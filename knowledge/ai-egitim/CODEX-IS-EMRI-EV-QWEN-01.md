@@ -1,5 +1,7 @@
 # CODEX-IS-EMRI-EV-QWEN-01 — Ev projesi için Qwen'in görevleri: araştırma, veri ve ölçüm planı
 
+**Sıra:** İKİNCİ. Önce CODEX-IS-EMRI-EV-QWEN-00 (ev çizmeyi öğretmek) bitirilecek.
+
 Tarih: 2026-10-20 · Karar: kullanıcı · Hazırlayan: Claude · Uygulayan: Codex (araştırma, veri, değerlendirme seti; `assets/` klasörüne dokunmaz)
 
 ## Yön değişikliği
