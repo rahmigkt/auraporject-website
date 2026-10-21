@@ -1,15 +1,220 @@
 {
   "version": "aura-catalog/1",
   "date": "2026-10-21",
-  "snapshot_base": "32d35ed343113b553310246b3b17fc95853cc3fa",
+  "snapshot_base": "7d29053865fcf99d14de1ae5fccb1848d8f41cd8",
   "hash_policy": "Exact tracked Git blob bytes; checkout CRLF does not change catalogue hashes. Aggregate hash includes file paths, sizes and primary/support roles.",
   "counts_policy": "Counts cover tracked primary rows only; sets may overlap, so totals are NOT unique projects. Null is unknown/not applicable, never zero.",
   "datasets": [
     {
+      "id": "hacim-1-komut",
+      "path": "knowledge/ai-egitim/veri/hacim-1-komut",
+      "summary": "1800 authored phrase/value candidates; common-contract quarantine is a projection, not another 1800 records.",
+      "sha256": "da33d2e7dbf7486bd9f82b6b515b3ace606796b26bb88c81ab9738c540eedb16",
+      "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
+      "sources": [
+        "Current vocabulary(design), actions.js and tools/studyo-motoru"
+      ],
+      "license": "AURA original authored text",
+      "record_count": 1800,
+      "record_count_scope": "primary files only; derivatives excluded",
+      "languages": {
+        "ar": 200,
+        "da": 200,
+        "de": 200,
+        "en": 200,
+        "es": 200,
+        "fr": 200,
+        "it": 200,
+        "nl": 200,
+        "tr": 200
+      },
+      "countries": {},
+      "layer": "mobilya",
+      "status": "inceleme-bekliyor",
+      "known_defects": [
+        "Designer/native review pending; no human approval",
+        "Phrase families expanded with six grounded values, not independent customer utterances",
+        "Only seating/table/storage; enum/delta and wet-room coverage pending",
+        "Lexical exam screening is not semantic paraphrase certification",
+        "Separate H1 quarantine; combined-corpus dedup review pending"
+      ],
+      "primary_files": [
+        "knowledge/ai-egitim/veri/hacim-1-komut/ar.jsonl",
+        "knowledge/ai-egitim/veri/hacim-1-komut/da.jsonl",
+        "knowledge/ai-egitim/veri/hacim-1-komut/de.jsonl",
+        "knowledge/ai-egitim/veri/hacim-1-komut/en.jsonl",
+        "knowledge/ai-egitim/veri/hacim-1-komut/es.jsonl",
+        "knowledge/ai-egitim/veri/hacim-1-komut/fr.jsonl",
+        "knowledge/ai-egitim/veri/hacim-1-komut/it.jsonl",
+        "knowledge/ai-egitim/veri/hacim-1-komut/nl.jsonl",
+        "knowledge/ai-egitim/veri/hacim-1-komut/tr.jsonl"
+      ],
+      "files": [
+        {
+          "path": "knowledge/ai-egitim/veri/hacim-1-komut/ar.jsonl",
+          "sha256": "b7246e428d450e451c09098f7ed55314ed32cd890d550941e8a0297f16c76c9a",
+          "bytes": 448337,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/hacim-1-komut/da.jsonl",
+          "sha256": "4fa235770c27de99aee2fb18682527801f647fd8bb6d8c92180093adf8c6cb2e",
+          "bytes": 437989,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/hacim-1-komut/de.jsonl",
+          "sha256": "91fbc2e32e78b0a1d2dd3a6c022d7476afbab791131f8154f921da14b88bbe50",
+          "bytes": 440621,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/hacim-1-komut/en.jsonl",
+          "sha256": "363ce766d0db7156d06e80cd908817b91d5c7d05653e59aa5293ffdf9edcf87b",
+          "bytes": 437774,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/hacim-1-komut/es.jsonl",
+          "sha256": "9514a3ba668cbc4b38e5f4630839460b65e0bff651dfec92d53bea74b16191c3",
+          "bytes": 439944,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/hacim-1-komut/fr.jsonl",
+          "sha256": "665cac698964a4eb226625dc8569faf3475be286dd213eb6c22439c6c96e1288",
+          "bytes": 440858,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/hacim-1-komut/gorsel-denetim.json",
+          "sha256": "4ef054f1909a37b8a800a88bfcca7e53a194fe6fe818059c6eed71d046dd0faa",
+          "bytes": 563,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/hacim-1-komut/it.jsonl",
+          "sha256": "3460fcf25f1a4c445997ef1d9e5a454492e7fd8b7aa55ff62afb70c153e12473",
+          "bytes": 440729,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/hacim-1-komut/karantina.jsonl",
+          "sha256": "7624b477ef4069d8f56255d7364bc2aec98086c5b3bcd4d909c235ab93caf71e",
+          "bytes": 3668231,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/hacim-1-komut/main-baslangic-hatalari.json",
+          "sha256": "f7728fd104d09e1eaf080ac9b2939036cc265bb3c7fb8e55e8ea0454e5c20f69",
+          "bytes": 17041,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/hacim-1-komut/nl.jsonl",
+          "sha256": "07699ff1e664d778d18f2e0fad52b3cf20fb7f079dcfe35c510da821cced5117",
+          "bytes": 439218,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/hacim-1-komut/sayim-raporu.json",
+          "sha256": "311fe98a3885ede201c7037ce56811623db6407b5cef36c179f71df412577961",
+          "bytes": 2872,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/hacim-1-komut/sinav-yeniden-dogrulama.json",
+          "sha256": "94103219942e024d3bf052af34cb21e8c715f3d681188509790699a87672de3d",
+          "bytes": 62739,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/hacim-1-komut/sizma-denetimi.json",
+          "sha256": "4459a97ebc73cc2a70ec6366a373065362c69f42aebe1bba575b288377e4298f",
+          "bytes": 2827,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/hacim-1-komut/tr.jsonl",
+          "sha256": "cd31cadd7528fb71f1501220524d6b46222cb5510bb0fcc14dee46bf822c8169",
+          "bytes": 437801,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/hacim-1-komut/yerlesim-geometri-denetimi.json",
+          "sha256": "95be712df6f4b36b45aa659f3496e1507b9ba52c9bfca605a744cb41ff44e585",
+          "bytes": 244227,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/hacim-1-komut/yerlesim-yenileme.json",
+          "sha256": "f1b68cdfab18eabcfa0989a27b63cf564fd52f02676e77e3cc76e698fcc8b968",
+          "bytes": 28491,
+          "role": "support"
+        }
+      ],
+      "coverage": [
+        {
+          "language": "ar",
+          "country": null,
+          "layer": "mobilya",
+          "records": 200
+        },
+        {
+          "language": "da",
+          "country": null,
+          "layer": "mobilya",
+          "records": 200
+        },
+        {
+          "language": "de",
+          "country": null,
+          "layer": "mobilya",
+          "records": 200
+        },
+        {
+          "language": "en",
+          "country": null,
+          "layer": "mobilya",
+          "records": 200
+        },
+        {
+          "language": "es",
+          "country": null,
+          "layer": "mobilya",
+          "records": 200
+        },
+        {
+          "language": "fr",
+          "country": null,
+          "layer": "mobilya",
+          "records": 200
+        },
+        {
+          "language": "it",
+          "country": null,
+          "layer": "mobilya",
+          "records": 200
+        },
+        {
+          "language": "nl",
+          "country": null,
+          "layer": "mobilya",
+          "records": 200
+        },
+        {
+          "language": "tr",
+          "country": null,
+          "layer": "mobilya",
+          "records": 200
+        }
+      ]
+    },
+    {
       "id": "ev-sohbet-02",
       "path": "knowledge/ai-egitim/veri/ev-sohbet-02",
       "summary": "Hand-authored home conversations; adapted CH reference geometry, not local building certification.",
-      "sha256": "6c7d65b26928dbae146dcd6755a7c2fe2dbb5d67412b616d997ca8248f042d61",
+      "sha256": "fdb629bedc38d5d32feca172d802dd3610731cd8c07c9f310c74c89095ed2f8a",
       "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
       "sources": [
         "Swiss Dwellings 3.0.0; doi:10.5281/zenodo.7788422",
@@ -70,122 +275,122 @@
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-01.json",
-          "sha256": "e7e484a53b3a38268ca1d9daf21699c84814d4184293f74b937bbd37e5877d61",
-          "bytes": 206580,
+          "sha256": "2200ba90c7b9465899130e33e95e82826147c5dcc106585ba3d363d9369da8a0",
+          "bytes": 206612,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-02.json",
-          "sha256": "10003d18ce5bfb9268b0f56284ffc2acf02f61669ab4972880b324a3418ba60a",
-          "bytes": 215787,
+          "sha256": "c3613050315c3312f17dad2860945316fd81c4da9cc7272147b76c77bc32c3ff",
+          "bytes": 215815,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-03.json",
-          "sha256": "d47593da92404e972e7ba41cdd056995d5b1ae13c4df88fe4450e59b8583889e",
-          "bytes": 320124,
+          "sha256": "83d355265cda1b5c980f00bcaa4d0da425197801e496a7f637a4d826d2300318",
+          "bytes": 320167,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-04.json",
-          "sha256": "0a7583ef969464880bd8ec5928f34fec9622f72bd6c4ec9a169cb43219966f55",
-          "bytes": 264370,
+          "sha256": "88102afaf2f4c50b118da8d8b0f24e168adef9b83e86af7d8e003401fcda1506",
+          "bytes": 264398,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-05.json",
-          "sha256": "5644b7221fda49d5108d089ce036d8d67b43dca7cb5529cad95d6b2fa76a35e7",
-          "bytes": 196077,
+          "sha256": "ee508113ff4310f6e61e693d2ad57eae1cb694fb2c5381b77eb3fbedd57de762",
+          "bytes": 196111,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-06.json",
-          "sha256": "d2e10b853b4f9457ad4cbe5845c6f0d4a39a2d84d9af2d406b46eb5c5ac9b11c",
-          "bytes": 283132,
+          "sha256": "80de9073358f38dfc62f3449b0deeb8ece19ffae62392beae6a119f14ed56f5f",
+          "bytes": 283166,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-07.json",
-          "sha256": "13d994c1fc84148883f3577b4fcb6ac643cfcee888cca70aabb400c49b550604",
-          "bytes": 351360,
+          "sha256": "330c2205cb52d97b57077fd3e2846efe2a0c5bad5f0bfcc79a9b0cc25117a969",
+          "bytes": 351395,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-08.json",
-          "sha256": "5d1ca38a42b2b72eca11a3faf9e31421f653b4a1f2cdcc84592099e311ad927a",
-          "bytes": 234964,
+          "sha256": "c9b5d2103b0055091e88e8435a721746d7505482713c340df5cd91308fff7fa5",
+          "bytes": 234994,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-09.json",
-          "sha256": "1d8b522e3d91b51929a8fa6228eb49dfe9f40bcdf4d6a06218cd1debd21c9d6b",
-          "bytes": 196423,
+          "sha256": "bd4836b7c8fad89c70b7f8b4c6e604c5aaebc9e8a707590a207706d0793e23b0",
+          "bytes": 196455,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-10.json",
-          "sha256": "9a5a017885341761902de6077637ee025e363ee82250c2e49525aa8675895e45",
-          "bytes": 372748,
+          "sha256": "5b5921477406b3f5f3b9a89ea49dbbb6820f5134f0098726ffff8dd3eb4acbd3",
+          "bytes": 372778,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-11.json",
-          "sha256": "69f3c563432d7af3b87c1ae59bd69dfd9aa174995d36344dd4fef8fbec98f7e8",
-          "bytes": 360292,
+          "sha256": "178a3769e86324107a35bd3d3fa17b38b56613ab467db7edea65c0500443568c",
+          "bytes": 360322,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-12.json",
-          "sha256": "3eb14fe108a962ff7cd6aec33eae1c69dfd3baf3f42be41fcfa3632ce367648a",
-          "bytes": 221317,
+          "sha256": "67e768587702acdabf77dc6de48e1ec8d0cec8234426ed8209a442c7358d5f29",
+          "bytes": 221345,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-13.json",
-          "sha256": "e59876893265033f49a165d1aad7a868389a4b359edbd22cc60f0503e7507018",
-          "bytes": 244227,
+          "sha256": "717ec609a07ffcb9dfc044ecee09040571749e7cd8c8762bbb56ec68950392af",
+          "bytes": 244259,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-14.json",
-          "sha256": "2f631647cbe9b0ec6ca3d1cc77c5816cde9b370e3ebac4d39d48461115cb4414",
-          "bytes": 280139,
+          "sha256": "9e14cab71a5393acd74427adb5a16d01cdedc8f802cf88038a2b4e206a3a86d0",
+          "bytes": 280163,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-15.json",
-          "sha256": "2ff7e9ccae88583af9031bc66b2a49e2f2a771b912a9de25e9b3363aecf3bea0",
-          "bytes": 282054,
+          "sha256": "bce323f5f6451d9afe3ca30fca80ff01dfd3cf8a57d24b8c63572945e1a26bb7",
+          "bytes": 282084,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-16.json",
-          "sha256": "7efc3d7c29528ec48bcdc4d2932ad47871377d087c77beed342abba0e31c4158",
-          "bytes": 237096,
+          "sha256": "d90c068c07b7b19a6f0711239cbe9928be232d6d42933d4f7ca9bf0feda27987",
+          "bytes": 237128,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-17.json",
-          "sha256": "8ae3a46641e2de52d5e85f915b7e0c9ac498b55ec3857cc6d6ba51ff5df66784",
-          "bytes": 301904,
+          "sha256": "61d3de9db4a21cb9cf497a66779e4d00033ebdc29d9dc07a88e47650ae5e029d",
+          "bytes": 301936,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-18.json",
-          "sha256": "129addfc63c982c09f308385785035047060af48a5d05dddafa5d529e23863ef",
-          "bytes": 252736,
+          "sha256": "71a8f43c2f16d07bc3e20d096e98fccf12c9f097f53e7f51d8cea957586dc7f1",
+          "bytes": 252768,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-19.json",
-          "sha256": "3c1af4a96fe4ca7cebbbbb22ef6746dd446711e0726d5496c13c2e5dd2df08dd",
-          "bytes": 298930,
+          "sha256": "9bc69a3d6e89bb789be8f2fbabd56f73b29d37d61f3e45179c230175e8aa2c51",
+          "bytes": 298956,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-20.json",
-          "sha256": "624a107a44bd30e27fe44cd1608e9f550cb79e7149bdba80d1fb19be111c1022",
-          "bytes": 317802,
+          "sha256": "904f015b4c9b8605df0f2a49a2f76b1d00b2626c70aafd7828b8a8343fa2bc8a",
+          "bytes": 317830,
           "role": "primary"
         },
         {
@@ -316,8 +521,8 @@
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-02/yeniden-uretim-sonucu.json",
-          "sha256": "1f3641a655c5e77730b847f658e5fade4849136a78de997bc1969c3f0714d281",
-          "bytes": 2339,
+          "sha256": "3fabba814de6a8b804ba5ccf16a9ecd0fe5aedf613bedc5b0d5d57d2168cccb2",
+          "bytes": 3342,
           "role": "support"
         }
       ],
@@ -364,7 +569,7 @@
       "id": "ev-sohbet-uk-ie",
       "path": "knowledge/ai-egitim/veri/ev-sohbet-uk-ie",
       "summary": "Hand-authored home conversations; adapted CH reference geometry, not local building certification.",
-      "sha256": "22a8f42797cf6b896357bb412c165ce28a45199899e35e9f3c9a98e72ad675f5",
+      "sha256": "4efde41d7ed08232a71755385185c3647b92c4e9c8ad41a56d2aac433db792b4",
       "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
       "sources": [
         "Swiss Dwellings 3.0.0; doi:10.5281/zenodo.7788422",
@@ -407,50 +612,50 @@
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-uk-ie/ev-sohbet-uk-ie-01.json",
-          "sha256": "694aa12ca85a3692f9b2897219b76ce7e0e910417fa8d271f8a559963864ae89",
-          "bytes": 134723,
+          "sha256": "c195b4c1fa22c3207796b32a63494f1211596ae86b8a763031d969b9fdcbb909",
+          "bytes": 134747,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-uk-ie/ev-sohbet-uk-ie-02.json",
-          "sha256": "2b935242f7e3721b10a9d1e08386e4bbecba66a2eae0eb0bea4d1d07e24a6db6",
-          "bytes": 213429,
+          "sha256": "b34ee5dd275da5577f6faa186eff53ae6aa9587ba1e736f5e7d53b314d98561e",
+          "bytes": 213457,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-uk-ie/ev-sohbet-uk-ie-03.json",
-          "sha256": "8feb29802b994bd2978985666ba3b2d508aed8945016d339bde1c0fae46917e2",
-          "bytes": 151940,
+          "sha256": "5d721a52b6296c504afca93ad6e96860749c5dfb13eb1dcab0db2cf5bb92dbfa",
+          "bytes": 151966,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-uk-ie/ev-sohbet-uk-ie-04.json",
-          "sha256": "35449e1a27dbae9b8e8908dc66bb49b51600eb63f54515af5b46824b6d82d241",
-          "bytes": 154736,
+          "sha256": "0a9f7a9ac951de4f72a69927c95b2c870d51641c12462b1ec547d0d7fa32bc66",
+          "bytes": 154768,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-uk-ie/ev-sohbet-uk-ie-05.json",
-          "sha256": "29dfd30d73d06449df79b709edae5b8eb755861f22752a36a9ea82c9d7fe22ec",
-          "bytes": 128233,
+          "sha256": "1cb7aa08e94c460a12c36eded18fccbfc0d693a182cf581a9bf93464f448e40a",
+          "bytes": 128265,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-uk-ie/ev-sohbet-uk-ie-06.json",
-          "sha256": "e7125fed927d42764c8bbb814f7e91b9f1c42c0be436ce0078e9e30637b63e6f",
-          "bytes": 103036,
+          "sha256": "4ab82724020d6f14727865949db289baeac077dc421347c2fc94e01e0565e6bb",
+          "bytes": 103068,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-uk-ie/ev-sohbet-uk-ie-07.json",
-          "sha256": "5f4c57b5f7950c25c44c9c9b4b2d1290089aee415a4c11ed870905fad1b41ae7",
-          "bytes": 165866,
+          "sha256": "f947dadd39d2b73a09b7f88af9d6384fd53cffc350b4fa872dc844b3bb27515b",
+          "bytes": 165898,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-uk-ie/ev-sohbet-uk-ie-08.json",
-          "sha256": "2e6e0ab1eeed9d06b17b2c7aa370bb6fc74506b44e73776ac82a0801d30cbf2c",
-          "bytes": 135918,
+          "sha256": "8af8df6c45793a99e0384bcabc5b28a9e91ef8afca616aeb003d209e5e758317",
+          "bytes": 135946,
           "role": "primary"
         },
         {
@@ -515,8 +720,8 @@
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-uk-ie/yeniden-uretim-sonucu.json",
-          "sha256": "43ca26fd78fe22787f06a2f0a52cffba134d5655bbb96557208a7a6fc488cba2",
-          "bytes": 1110,
+          "sha256": "7d04bcce894132a9d7b052434de63cc838812a05249bf6a41f680e9f89e6bfe7",
+          "bytes": 1904,
           "role": "support"
         }
       ],
@@ -539,7 +744,7 @@
       "id": "ev-sohbet-dk",
       "path": "knowledge/ai-egitim/veri/ev-sohbet-dk",
       "summary": "Hand-authored home conversations; adapted CH reference geometry, not local building certification.",
-      "sha256": "18e51e41f5e84230a18b085ea29d314c9d0fcc2435845ec4919c5106ceb740f0",
+      "sha256": "aeca8cec3922f8634a3a6719a26cba2c449e308f7f37279f13334c805e0fb091",
       "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
       "sources": [
         "Swiss Dwellings 3.0.0; doi:10.5281/zenodo.7788422",
@@ -577,26 +782,26 @@
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-dk/ev-sohbet-dk-01.json",
-          "sha256": "fc30643481668db98f49164846caeafafcad92e65f582c0b6874008f0dca3adc",
-          "bytes": 166808,
+          "sha256": "72859b82262318e01b4c2567294d8a67d64ceaa8526253b617a996618497dd52",
+          "bytes": 166832,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-dk/ev-sohbet-dk-02.json",
-          "sha256": "1b3a6dd7c055e7af91959bbba157fdaf25a00868b68a74cfa2154fdf15c287f3",
-          "bytes": 228422,
+          "sha256": "0b38e5bc74960cdbf38653441ee737e1218059c089c4c45e8186e32834c46030",
+          "bytes": 228448,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-dk/ev-sohbet-dk-03.json",
-          "sha256": "e275ac7595fe3c952de8ecdb69fd0d9da88121259d908d4146f5c41cab77ca77",
-          "bytes": 187889,
+          "sha256": "931a86549b3628e090fde80f92be0a9ed27a1d125b66df38802a7ee62539aadb",
+          "bytes": 187917,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-dk/ev-sohbet-dk-04.json",
-          "sha256": "9d79b93349ff157965f66ab3b40d21a6429af6a5c768581ee25377c5a2cc63f9",
-          "bytes": 170282,
+          "sha256": "00597954f48a6565c9d9e3144759a885a13be189afec8f42a5ce441d89bc224b",
+          "bytes": 170314,
           "role": "primary"
         },
         {
@@ -637,8 +842,8 @@
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-dk/yeniden-uretim-sonucu.json",
-          "sha256": "ebdb63e5754383b76d46c3eaf2f7bbe8b00d50034b37968adabb69bdff7ca0f4",
-          "bytes": 778,
+          "sha256": "d2b1981de235bf882e03950b562a882d3072915fa6819a8226fd905612d5cb83",
+          "bytes": 1357,
           "role": "support"
         }
       ],
@@ -655,7 +860,7 @@
       "id": "ev-sohbet-es",
       "path": "knowledge/ai-egitim/veri/ev-sohbet-es",
       "summary": "Hand-authored home conversations; adapted CH reference geometry, not local building certification.",
-      "sha256": "5cb775c466303f7d081bec25b3c9a1a5772d2f115398ffff0a451c8f88a991bf",
+      "sha256": "fdf6d4a486b3c515c47339c1e6262ef7f99f26b4d447c3f37fa091a75b0a3272",
       "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
       "sources": [
         "Swiss Dwellings 3.0.0; doi:10.5281/zenodo.7788422",
@@ -693,26 +898,26 @@
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-es/ev-sohbet-es-01.json",
-          "sha256": "513976f90a8800f9db8daa62fb7aedc2cee321921f447f047b3f1d757e8a82fc",
-          "bytes": 154210,
+          "sha256": "a0d70a775e3d4e9d9d7f6c719a8bcacbff6051961b5a9b807b1d9ccef0e413ec",
+          "bytes": 154236,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-es/ev-sohbet-es-02.json",
-          "sha256": "9f799d0215c27daf942574f363834a9a659a20d79e5cc723d9eec0b7abdab115",
-          "bytes": 174019,
+          "sha256": "7e35d4742248325eabac63f9616ae42ca7a1d948e4b142e8e4f750c37cbfeaf5",
+          "bytes": 174045,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-es/ev-sohbet-es-03.json",
-          "sha256": "85a8c2bb71d8aac2cc4a3dfa9d2d436a3268b5ad026b1499ecf9ee784171b111",
-          "bytes": 107617,
+          "sha256": "af5fefcfbbfc7bd44476b721a82b662bd0ba3f3ce8cfa0536d1c5bf1b503683d",
+          "bytes": 107643,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-es/ev-sohbet-es-04.json",
-          "sha256": "2a49cd45cab7566537bd46f764fbe99494a1f00a3f0b9da81339e429d09445c5",
-          "bytes": 144648,
+          "sha256": "10a6470aa6bffbf2100c344156862cfe7e0e8cb028d331193c418616dff0731f",
+          "bytes": 144678,
           "role": "primary"
         },
         {
@@ -753,8 +958,8 @@
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-es/yeniden-uretim-sonucu.json",
-          "sha256": "f3c2f72dc9fd641a8d0851d16eb3a6890b393545505dba5bd712cd230cf74715",
-          "bytes": 745,
+          "sha256": "ceeff74c4cc2efe38811b90a317c46b28e8b3fc3e6a64c9c05c561681793f2cb",
+          "bytes": 1357,
           "role": "support"
         }
       ],
@@ -771,7 +976,7 @@
       "id": "ev-sohbet-it",
       "path": "knowledge/ai-egitim/veri/ev-sohbet-it",
       "summary": "Hand-authored home conversations; adapted CH reference geometry, not local building certification.",
-      "sha256": "afe46fa9b4509771e06edaf320cac1fa13e651d6a6a03e4b526e0dd3e850a7b5",
+      "sha256": "c32eef5a702438c51aa725b0f785b16b6db0e6d562118efdec2d2cf3c25f615e",
       "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
       "sources": [
         "Swiss Dwellings 3.0.0; doi:10.5281/zenodo.7788422",
@@ -809,26 +1014,26 @@
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-it/ev-sohbet-it-01.json",
-          "sha256": "19b5b9447443341ebb0193c75991f0c239125a9ace96770724eb21a12ea96d0b",
-          "bytes": 168543,
+          "sha256": "13d6d2d903828ca16a3283e7c40bbf3941c3d1532706b71bb7379ec8eb33d7ce",
+          "bytes": 168569,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-it/ev-sohbet-it-02.json",
-          "sha256": "5d5de18b64c7a051f66c6941e8d82973cd376343748c31667d9a56411e1da5d0",
-          "bytes": 156480,
+          "sha256": "c87ce202a807e5377cfb49439917d83d131ae8aa7b87d6c1ea79dffa3e9feea7",
+          "bytes": 156508,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-it/ev-sohbet-it-03.json",
-          "sha256": "aef5f17d0670dad185563d4fe98a0689fbe53e4ce1b78e09b861d75ecf86f7c7",
-          "bytes": 186190,
+          "sha256": "3f71ef44bd4f87cec9fa4a62ce0fb2322eb3f70858cf52e0c46f05ce4903f570",
+          "bytes": 186220,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-it/ev-sohbet-it-04.json",
-          "sha256": "560163448c86a1e04c34dab2d86f975914b4a4611718ac3de64207cd2b73e326",
-          "bytes": 157025,
+          "sha256": "73ed433c53e5f94d18406f43598cea537d477add283b6ee4b0a739f4819394b6",
+          "bytes": 157049,
           "role": "primary"
         },
         {
@@ -869,8 +1074,8 @@
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-it/yeniden-uretim-sonucu.json",
-          "sha256": "a33cd3689f1b815e94330a199905e03c3150bad28cbeff939fa6631050ef7f72",
-          "bytes": 777,
+          "sha256": "fc02f899ff57a5a960db1ba4be3b54189c90efe71bb051b66cf70c7972b0baa3",
+          "bytes": 1357,
           "role": "support"
         }
       ],
@@ -1051,7 +1256,7 @@
       "id": "ev-sohbet-arap-olculu",
       "path": "knowledge/ai-egitim/veri/ev-sohbet-arap-olculu",
       "summary": "Hand-authored home conversations; adapted CH reference geometry, not local building certification.",
-      "sha256": "089113795013ee913211aee86b1dd6ebe93f3b953d6d439777d5840d6b023d41",
+      "sha256": "b9a3c14ec508a14289260222460bb4a0f5aa5171a9eed2993eb9e26c1baa04ba",
       "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
       "sources": [
         "Swiss Dwellings 3.0.0; doi:10.5281/zenodo.7788422",
@@ -1096,8 +1301,8 @@
       "files": [
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/byte-tekrar.json",
-          "sha256": "55cc1e3f28c7699d2c15e547f2f634eb8061176f6ca8b314e0277a27602fca3c",
-          "bytes": 6214,
+          "sha256": "c81605f6d2b24f2764372c981d2bf0a03c7804a8c85bbe2a19d17bf618918bbb",
+          "bytes": 6357,
           "role": "support"
         },
         {
@@ -1108,79 +1313,79 @@
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-01.json",
-          "sha256": "43a027ce4b4b419633283e68a386517cb4e07af78706566d94ad788be49dca11",
-          "bytes": 140516,
+          "sha256": "ebab062736cddab0c88ad7d2d7e9a78393fc3aaf3bb136e58368447dd42eef6b",
+          "bytes": 140585,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-02.json",
-          "sha256": "52555b55e0733b23be8ded455368bfedae4488d8ccd0d387511d6a3d6a3c4407",
-          "bytes": 208292,
+          "sha256": "7c1892597c7fca1f81892f5b057406d458f812d51c3562d1434b0b88f0564b0f",
+          "bytes": 208367,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-03.json",
-          "sha256": "31d872eaa61f37aa8b9543312f989a8e49be8010ff4d5a1d437ab3c60fd2ed4b",
-          "bytes": 157694,
+          "sha256": "7f963f6dabfb1b8088064260ec91bbf86fa55c73f3e082410f7e2eaedae36fb2",
+          "bytes": 157795,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-04.json",
-          "sha256": "bf79db629d05bc323a6bbeb7828702d4a753b4283827f726484bdcde2da563d3",
-          "bytes": 160885,
+          "sha256": "4e045021a619aadabe7a8af0496d87e8bbbc67e3c36a1b336c0c4b6200cb4b2e",
+          "bytes": 160508,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-05.json",
-          "sha256": "1365177faad50d26e20cca953f3f8bf5e4a705b40ebf77cb1c4cf733cb7706e5",
-          "bytes": 144871,
+          "sha256": "29174ae7542c9246d43dcd87925040e857d85c42cf6f9f5d9e263aae0bd94b16",
+          "bytes": 144946,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-06.json",
-          "sha256": "b46b64f26e74d99a3bf84e5e7f554055230ab00e6ffcca6a264baa39a11bf54e",
-          "bytes": 119704,
+          "sha256": "cb5fae0f9e0085df54b11c753e31721e41eb14a20ec098bc4feec79239884f70",
+          "bytes": 119818,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-07.json",
-          "sha256": "30907efe45af838c452e58c8802fab13fa2e5306924c74ecdfd48e4faced2296",
-          "bytes": 171408,
+          "sha256": "313ea46ec7494554df5244e85193c45236141bf79a3983356b9d89d8fde83f56",
+          "bytes": 171494,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-08.json",
-          "sha256": "f8546243cef39177ab117fc80fb6da74997a51efb32bf039203a21c8895260aa",
-          "bytes": 141675,
+          "sha256": "39ba6e5f2462efb50a9870b89bd4fe9df51ea095f5f8ae621c35294b4b4b771d",
+          "bytes": 141758,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-09.json",
-          "sha256": "9d064725fcf5661948d9dc1620815598a2f0443c46323506c7d89e25a42236d7",
-          "bytes": 173427,
+          "sha256": "2bb2d70c82a31819ad16a5ae1bb04fbd30f370d5906180e62bc31b04fe876de1",
+          "bytes": 173507,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-10.json",
-          "sha256": "77285de42de56e021a9764022eac016c188b283f65aa17368850d60a26fdc4ec",
-          "bytes": 161381,
+          "sha256": "9ce9d1f491a45c09f92f0ef310dd4409a0d8c3cba2a8bf75ef010f1708f15de5",
+          "bytes": 161463,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-11.json",
-          "sha256": "4b2282af943df1851bde9e60ef8fc74547e176f98a8d11e7dc60e7516054288a",
-          "bytes": 191055,
+          "sha256": "e68c3c1c18de80e06ff9d20135fe7e061eb253ad85eefa87fdc083e5054c5e67",
+          "bytes": 191138,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-12.json",
-          "sha256": "2ab73a569f7e53d333e6794435fc8403f8abab2b009dfe5891bd7774797c3d06",
-          "bytes": 150480,
+          "sha256": "ca8acc647c2a1c11bf2ed98e4b345fc1e3429ba9ac6b4c29d659bd8029d156a7",
+          "bytes": 150555,
           "role": "primary"
         },
         {
           "path": "knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/inceleme-manifest.json",
-          "sha256": "a1b5d0a29cb08a41bccfc63640f1cd3b63bbda61683eb3c861f2295a3e1426eb",
+          "sha256": "01930891856d956f3556fcf05a118d6d26163d3c87b6f7136482612c0a70e5af",
           "bytes": 3387,
           "role": "support"
         },
@@ -7319,7 +7524,7 @@
       "id": "aura-sinav-01",
       "path": "tests/ai-eval/aura-sinav-01",
       "summary": "120 held-out tasks; archived pre-model drafts are support, never additional task counts.",
-      "sha256": "f1f70ae10fa95b4d54e3ccbddb8c0f4ee041b79923582b22eae284cd89db7033",
+      "sha256": "d3d30541c626e1c2e9fd28e994a1f3cd3263df58588890b48e69bbce2a98d221",
       "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
       "sources": [
         "Independent AURA original exam fixtures"
@@ -7353,8 +7558,8 @@
       "files": [
         {
           "path": "tests/ai-eval/aura-sinav-01/FREEZE.json",
-          "sha256": "9eb442702f37bc610e266a07c813c82e76e2c854fa5c801c5101f965b4d8d339",
-          "bytes": 691,
+          "sha256": "ab17ffc9cc88ac2ec852c6f76b97918bf23428fde102114d54c67d2f45624782",
+          "bytes": 1015,
           "role": "support"
         },
         {
@@ -7578,7 +7783,7 @@
       "id": "support-archive-superseded",
       "path": "knowledge/ai-egitim/toparlama-01/archive/arap-olculu-draft-00",
       "summary": "Structured research/support/derived artifacts; primary candidate counts not inferred.",
-      "sha256": "6224454e9acbdf32a0dd132b2669aae1f31ae4c5274a47195b63bd530655e4a6",
+      "sha256": "185beed2f60ffe292f3c5c2cd6e480c94bd345ab63df7a88e16d9b8a32bc3388",
       "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
       "sources": [],
       "license": null,
@@ -7789,6 +7994,462 @@
           "path": "knowledge/ai-egitim/toparlama-01/archive/generation-manifests/ev-sohbet-uk-ie.json",
           "sha256": "97075ad470083788f5b94d4f864f123528a72eeef8e6302d43aadded16bc9b5a",
           "bytes": 952,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/FREEZE-before.json",
+          "sha256": "9eb442702f37bc610e266a07c813c82e76e2c854fa5c801c5101f965b4d8d339",
+          "bytes": 691,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/combined-conversations-before.jsonl",
+          "sha256": "2240f77001c4bceb476ba18adac0dec928353199bdfb29907dfcce29661ab1c0",
+          "bytes": 3482781,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/combined-engine-before.json",
+          "sha256": "091fd7f38f93290e4867591c216ea96977ca2888c5b72766476be0e9e446f90a",
+          "bytes": 119984,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-01.json",
+          "sha256": "e7e484a53b3a38268ca1d9daf21699c84814d4184293f74b937bbd37e5877d61",
+          "bytes": 206580,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-02.json",
+          "sha256": "10003d18ce5bfb9268b0f56284ffc2acf02f61669ab4972880b324a3418ba60a",
+          "bytes": 215787,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-03.json",
+          "sha256": "d47593da92404e972e7ba41cdd056995d5b1ae13c4df88fe4450e59b8583889e",
+          "bytes": 320124,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-04.json",
+          "sha256": "0a7583ef969464880bd8ec5928f34fec9622f72bd6c4ec9a169cb43219966f55",
+          "bytes": 264370,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-05.json",
+          "sha256": "5644b7221fda49d5108d089ce036d8d67b43dca7cb5529cad95d6b2fa76a35e7",
+          "bytes": 196077,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-06.json",
+          "sha256": "d2e10b853b4f9457ad4cbe5845c6f0d4a39a2d84d9af2d406b46eb5c5ac9b11c",
+          "bytes": 283132,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-07.json",
+          "sha256": "13d994c1fc84148883f3577b4fcb6ac643cfcee888cca70aabb400c49b550604",
+          "bytes": 351360,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-08.json",
+          "sha256": "5d1ca38a42b2b72eca11a3faf9e31421f653b4a1f2cdcc84592099e311ad927a",
+          "bytes": 234964,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-09.json",
+          "sha256": "1d8b522e3d91b51929a8fa6228eb49dfe9f40bcdf4d6a06218cd1debd21c9d6b",
+          "bytes": 196423,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-10.json",
+          "sha256": "9a5a017885341761902de6077637ee025e363ee82250c2e49525aa8675895e45",
+          "bytes": 372748,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-11.json",
+          "sha256": "69f3c563432d7af3b87c1ae59bd69dfd9aa174995d36344dd4fef8fbec98f7e8",
+          "bytes": 360292,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-12.json",
+          "sha256": "3eb14fe108a962ff7cd6aec33eae1c69dfd3baf3f42be41fcfa3632ce367648a",
+          "bytes": 221317,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-13.json",
+          "sha256": "e59876893265033f49a165d1aad7a868389a4b359edbd22cc60f0503e7507018",
+          "bytes": 244227,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-14.json",
+          "sha256": "2f631647cbe9b0ec6ca3d1cc77c5816cde9b370e3ebac4d39d48461115cb4414",
+          "bytes": 280139,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-15.json",
+          "sha256": "2ff7e9ccae88583af9031bc66b2a49e2f2a771b912a9de25e9b3363aecf3bea0",
+          "bytes": 282054,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-16.json",
+          "sha256": "7efc3d7c29528ec48bcdc4d2932ad47871377d087c77beed342abba0e31c4158",
+          "bytes": 237096,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-17.json",
+          "sha256": "8ae3a46641e2de52d5e85f915b7e0c9ac498b55ec3857cc6d6ba51ff5df66784",
+          "bytes": 301904,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-18.json",
+          "sha256": "129addfc63c982c09f308385785035047060af48a5d05dddafa5d529e23863ef",
+          "bytes": 252736,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-19.json",
+          "sha256": "3c1af4a96fe4ca7cebbbbb22ef6746dd446711e0726d5496c13c2e5dd2df08dd",
+          "bytes": 298930,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-20.json",
+          "sha256": "624a107a44bd30e27fe44cd1608e9f550cb79e7149bdba80d1fb19be111c1022",
+          "bytes": 317802,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-02/yeniden-uretim-sonucu.json",
+          "sha256": "1f3641a655c5e77730b847f658e5fade4849136a78de997bc1969c3f0714d281",
+          "bytes": 2339,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/byte-tekrar.json",
+          "sha256": "55cc1e3f28c7699d2c15e547f2f634eb8061176f6ca8b314e0277a27602fca3c",
+          "bytes": 6214,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/denetim-sonucu.json",
+          "sha256": "944b4453feb10f47597819dbc502b243634530c564eb706529a3ac469ce683d8",
+          "bytes": 72679,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-01.json",
+          "sha256": "43a027ce4b4b419633283e68a386517cb4e07af78706566d94ad788be49dca11",
+          "bytes": 140516,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-02.json",
+          "sha256": "52555b55e0733b23be8ded455368bfedae4488d8ccd0d387511d6a3d6a3c4407",
+          "bytes": 208292,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-03.json",
+          "sha256": "31d872eaa61f37aa8b9543312f989a8e49be8010ff4d5a1d437ab3c60fd2ed4b",
+          "bytes": 157694,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-04.json",
+          "sha256": "bf79db629d05bc323a6bbeb7828702d4a753b4283827f726484bdcde2da563d3",
+          "bytes": 160885,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-05.json",
+          "sha256": "1365177faad50d26e20cca953f3f8bf5e4a705b40ebf77cb1c4cf733cb7706e5",
+          "bytes": 144871,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-06.json",
+          "sha256": "b46b64f26e74d99a3bf84e5e7f554055230ab00e6ffcca6a264baa39a11bf54e",
+          "bytes": 119704,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-07.json",
+          "sha256": "30907efe45af838c452e58c8802fab13fa2e5306924c74ecdfd48e4faced2296",
+          "bytes": 171408,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-08.json",
+          "sha256": "f8546243cef39177ab117fc80fb6da74997a51efb32bf039203a21c8895260aa",
+          "bytes": 141675,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-09.json",
+          "sha256": "9d064725fcf5661948d9dc1620815598a2f0443c46323506c7d89e25a42236d7",
+          "bytes": 173427,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-10.json",
+          "sha256": "77285de42de56e021a9764022eac016c188b283f65aa17368850d60a26fdc4ec",
+          "bytes": 161381,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-11.json",
+          "sha256": "4b2282af943df1851bde9e60ef8fc74547e176f98a8d11e7dc60e7516054288a",
+          "bytes": 191055,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-12.json",
+          "sha256": "2ab73a569f7e53d333e6794435fc8403f8abab2b009dfe5891bd7774797c3d06",
+          "bytes": 150480,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/inceleme-manifest.json",
+          "sha256": "a1b5d0a29cb08a41bccfc63640f1cd3b63bbda61683eb3c861f2295a3e1426eb",
+          "bytes": 3387,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/kaynaklar/sd-004691117f23c987a692849c.json",
+          "sha256": "17dfd3593e12409cd9a4c74116fc4569a63f27beb705451bc450192c1fa3792a",
+          "bytes": 123939,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/kaynaklar/sd-00e3970d9c34d5e4f1d3116f.json",
+          "sha256": "5ea8e7ee07988d1210ff1bbfc45ea6fbcfc0da8e8f1425d30914ab2ab329b7f6",
+          "bytes": 147417,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/kaynaklar/sd-01557bd6a494a662d8005fdd.json",
+          "sha256": "c9a6a77c85816385951f7dbc9fbe2f978a2ab5823ecc6b9de20f565b363ed23e",
+          "bytes": 96947,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/kaynaklar/sd-0165ea3ec9c8956a3c59c8c4.json",
+          "sha256": "ddd2026925d8086b6678faec2d0e11a12ae0508692430e87f5e8936d3943f356",
+          "bytes": 115286,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/kaynaklar/sd-0294d6ea603c2bd88be9ee03.json",
+          "sha256": "b76b549452e3eec14aacff014e68d128b9e2e6cdad5745e941691f6d5da6573d",
+          "bytes": 99274,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/kaynaklar/sd-02f0a42cff9f59fc3d355a2c.json",
+          "sha256": "28df060397f90d3a28d2ea5c8cb7d24cd9c835acb53dce5a406f327daa8ba0a4",
+          "bytes": 88937,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/kaynaklar/sd-03133a1c0173b8e825c6ff3c.json",
+          "sha256": "70d9738c543788de56e697d04be34b1dc0e7bb99ad1fb577c7d84fb62ec7d2d2",
+          "bytes": 134848,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/kaynaklar/sd-031a7f9da8eccc474ea12138.json",
+          "sha256": "1c0629b174a4ad21e0f6f1786582cf8c692455bb04a3fbecd5028e86fb53450c",
+          "bytes": 110792,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/kaynaklar/sd-03c78f4f5e232f70d247ff6e.json",
+          "sha256": "5d786ef65f893b2840c60b6aeb5b144481c2befab7331fdde87852538e51c2e8",
+          "bytes": 115432,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/kaynaklar/sd-03e7675243b8ff0359a9a52c.json",
+          "sha256": "3703ae78d2beac0a7c8beb59271f17e144119c0b732cefac822153525a90d2ab",
+          "bytes": 106398,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/kaynaklar/sd-03f400af6a7449edb03153fc.json",
+          "sha256": "de3940c5e00171f8e070939299bdc3d70af30b72bf9fc0a14fc900b87820e630",
+          "bytes": 109941,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/kaynaklar/sd-03f5d66743677ad404fe8eaa.json",
+          "sha256": "dfa35ef5e1ca016cf55504f76100c9364e01116285d5e6793971014922989355",
+          "bytes": 115943,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-dk/ev-sohbet-dk-01.json",
+          "sha256": "fc30643481668db98f49164846caeafafcad92e65f582c0b6874008f0dca3adc",
+          "bytes": 166808,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-dk/ev-sohbet-dk-02.json",
+          "sha256": "1b3a6dd7c055e7af91959bbba157fdaf25a00868b68a74cfa2154fdf15c287f3",
+          "bytes": 228422,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-dk/ev-sohbet-dk-03.json",
+          "sha256": "e275ac7595fe3c952de8ecdb69fd0d9da88121259d908d4146f5c41cab77ca77",
+          "bytes": 187889,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-dk/ev-sohbet-dk-04.json",
+          "sha256": "9d79b93349ff157965f66ab3b40d21a6429af6a5c768581ee25377c5a2cc63f9",
+          "bytes": 170282,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-dk/yeniden-uretim-sonucu.json",
+          "sha256": "ebdb63e5754383b76d46c3eaf2f7bbe8b00d50034b37968adabb69bdff7ca0f4",
+          "bytes": 778,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-es/ev-sohbet-es-01.json",
+          "sha256": "513976f90a8800f9db8daa62fb7aedc2cee321921f447f047b3f1d757e8a82fc",
+          "bytes": 154210,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-es/ev-sohbet-es-02.json",
+          "sha256": "9f799d0215c27daf942574f363834a9a659a20d79e5cc723d9eec0b7abdab115",
+          "bytes": 174019,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-es/ev-sohbet-es-03.json",
+          "sha256": "85a8c2bb71d8aac2cc4a3dfa9d2d436a3268b5ad026b1499ecf9ee784171b111",
+          "bytes": 107617,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-es/ev-sohbet-es-04.json",
+          "sha256": "2a49cd45cab7566537bd46f764fbe99494a1f00a3f0b9da81339e429d09445c5",
+          "bytes": 144648,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-es/yeniden-uretim-sonucu.json",
+          "sha256": "f3c2f72dc9fd641a8d0851d16eb3a6890b393545505dba5bd712cd230cf74715",
+          "bytes": 745,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-it/ev-sohbet-it-01.json",
+          "sha256": "19b5b9447443341ebb0193c75991f0c239125a9ace96770724eb21a12ea96d0b",
+          "bytes": 168543,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-it/ev-sohbet-it-02.json",
+          "sha256": "5d5de18b64c7a051f66c6941e8d82973cd376343748c31667d9a56411e1da5d0",
+          "bytes": 156480,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-it/ev-sohbet-it-03.json",
+          "sha256": "aef5f17d0670dad185563d4fe98a0689fbe53e4ce1b78e09b861d75ecf86f7c7",
+          "bytes": 186190,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-it/ev-sohbet-it-04.json",
+          "sha256": "560163448c86a1e04c34dab2d86f975914b4a4611718ac3de64207cd2b73e326",
+          "bytes": 157025,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-it/yeniden-uretim-sonucu.json",
+          "sha256": "a33cd3689f1b815e94330a199905e03c3150bad28cbeff939fa6631050ef7f72",
+          "bytes": 777,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-uk-ie/ev-sohbet-uk-ie-01.json",
+          "sha256": "694aa12ca85a3692f9b2897219b76ce7e0e910417fa8d271f8a559963864ae89",
+          "bytes": 134723,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-uk-ie/ev-sohbet-uk-ie-02.json",
+          "sha256": "2b935242f7e3721b10a9d1e08386e4bbecba66a2eae0eb0bea4d1d07e24a6db6",
+          "bytes": 213429,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-uk-ie/ev-sohbet-uk-ie-03.json",
+          "sha256": "8feb29802b994bd2978985666ba3b2d508aed8945016d339bde1c0fae46917e2",
+          "bytes": 151940,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-uk-ie/ev-sohbet-uk-ie-04.json",
+          "sha256": "35449e1a27dbae9b8e8908dc66bb49b51600eb63f54515af5b46824b6d82d241",
+          "bytes": 154736,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-uk-ie/ev-sohbet-uk-ie-05.json",
+          "sha256": "29dfd30d73d06449df79b709edae5b8eb755861f22752a36a9ea82c9d7fe22ec",
+          "bytes": 128233,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-uk-ie/ev-sohbet-uk-ie-06.json",
+          "sha256": "e7125fed927d42764c8bbb814f7e91b9f1c42c0be436ce0078e9e30637b63e6f",
+          "bytes": 103036,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-uk-ie/ev-sohbet-uk-ie-07.json",
+          "sha256": "5f4c57b5f7950c25c44c9c9b4b2d1290089aee415a4c11ed870905fad1b41ae7",
+          "bytes": 165866,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-uk-ie/ev-sohbet-uk-ie-08.json",
+          "sha256": "2e6e0ab1eeed9d06b17b2c7aa370bb6fc74506b44e73776ac82a0801d30cbf2c",
+          "bytes": 135918,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/knowledge/ai-egitim/veri/ev-sohbet-uk-ie/yeniden-uretim-sonucu.json",
+          "sha256": "43ca26fd78fe22787f06a2f0a52cffba134d5655bbb96557208a7a6fc488cba2",
+          "bytes": 1110,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/manifest.json",
+          "sha256": "0d3667da0a8071bf74e3f213cbf563712f987919215f7179a0f0dd7b40ef3e26",
+          "bytes": 15317,
           "role": "support"
         },
         {
@@ -8126,7 +8787,7 @@
       "id": "support-knowledge-ai-egitim-veri",
       "path": "knowledge/ai-egitim/veri/birlesik",
       "summary": "Structured research/support/derived artifacts; primary candidate counts not inferred.",
-      "sha256": "94deab66488d8f6a4ebc14ed7eb4b93ee758cf2aad66b2bd48ce96c5bf27dfc2",
+      "sha256": "51f9cbc355a4e24b07abca39a79867f8e7b23ba39ed8a1902be98737e73f7845",
       "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
       "sources": [],
       "license": null,
@@ -8143,8 +8804,8 @@
       "files": [
         {
           "path": "knowledge/ai-egitim/veri/birlesik/adaylar.jsonl",
-          "sha256": "4f7630f24bfbff9131c07cec97f2ce9221bdf8c9d599159f25ed2d608a46ba30",
-          "bytes": 12638182,
+          "sha256": "a84ce347e26cb4ab1c5733027e691594a2dab414f3c79e7e35cdcad96246e65e",
+          "bytes": 12638130,
           "role": "support"
         },
         {
@@ -8155,8 +8816,8 @@
         },
         {
           "path": "knowledge/ai-egitim/veri/birlesik/sayim-raporu.json",
-          "sha256": "9bf2f06bc057123447895623d78da3f5981897e4cfff7ba25ba9b1ae22817cb9",
-          "bytes": 128731,
+          "sha256": "66d76a9f85f486b4880da5c6e5456ca7af92ae082827651a37f9b1dfc17003a8",
+          "bytes": 128938,
           "role": "support"
         },
         {
@@ -8175,6 +8836,12 @@
           "path": "knowledge/ai-egitim/veri/birlesik/train.jsonl",
           "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
           "bytes": 0,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/yerlesim/procthor-denetim-raporu.json",
+          "sha256": "a0eb064b179ec7741939b15c8d1859a8f519750d4125862b56c835d0225806ae",
+          "bytes": 666,
           "role": "support"
         }
       ],
@@ -8697,8 +9364,8 @@
         "unknown_count_datasets": 0
       },
       "inceleme-bekliyor": {
-        "datasets": 14,
-        "records": 2590,
+        "datasets": 15,
+        "records": 4390,
         "unknown_count_datasets": 1
       },
       "superseded": {
@@ -8713,8 +9380,8 @@
       }
     },
     "licenses": {
+      "AURA original authored text": 2,
       "CC-BY-4.0 geometry; AURA-authored dialogue": 6,
-      "AURA original authored text": 1,
       "CC-BY-4.0 geometry; AURA transformation": 2,
       "AURA original synthetic research": 2,
       "AURA original": 5,
@@ -8801,6 +9468,12 @@
         "country": null,
         "layer": "genel-sohbet",
         "records": 14
+      },
+      {
+        "language": "ar",
+        "country": null,
+        "layer": "mobilya",
+        "records": 200
       },
       {
         "language": "da",
@@ -8890,7 +9563,7 @@
         "language": "da",
         "country": null,
         "layer": "mobilya",
-        "records": 41
+        "records": 241
       },
       {
         "language": "de",
@@ -8992,7 +9665,7 @@
         "language": "de",
         "country": null,
         "layer": "mobilya",
-        "records": 45
+        "records": 245
       },
       {
         "language": "en",
@@ -9100,7 +9773,7 @@
         "language": "en",
         "country": null,
         "layer": "mobilya",
-        "records": 150
+        "records": 350
       },
       {
         "language": "es",
@@ -9190,7 +9863,7 @@
         "language": "es",
         "country": null,
         "layer": "mobilya",
-        "records": 41
+        "records": 241
       },
       {
         "language": "fr",
@@ -9298,7 +9971,7 @@
         "language": "fr",
         "country": null,
         "layer": "mobilya",
-        "records": 41
+        "records": 241
       },
       {
         "language": "it",
@@ -9394,7 +10067,7 @@
         "language": "it",
         "country": null,
         "layer": "mobilya",
-        "records": 41
+        "records": 241
       },
       {
         "language": "nl",
@@ -9496,7 +10169,7 @@
         "language": "nl",
         "country": null,
         "layer": "mobilya",
-        "records": 41
+        "records": 241
       },
       {
         "language": "no",
@@ -9604,7 +10277,7 @@
         "language": "tr",
         "country": null,
         "layer": "mobilya",
-        "records": 2321
+        "records": 2521
       },
       {
         "language": "tr",
@@ -9633,8 +10306,8 @@
     ]
   },
   "coverage": {
-    "structured_files": 1092,
-    "inventoried_files": 1092,
+    "structured_files": 1186,
+    "inventoried_files": 1186,
     "unassigned": []
   }
 }
