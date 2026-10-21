@@ -77,6 +77,12 @@
             "type": "string"
           },
           "minItems": 1
+        },
+        "ureten": {
+          "enum": [
+            "Codex",
+            "Claude"
+          ]
         }
       },
       "additionalProperties": false
@@ -208,6 +214,64 @@
         },
         "grup": {
           "type": "string"
+        },
+        "capraz_onay": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "karar",
+            "ureten",
+            "denetci",
+            "zaman",
+            "row_sha256"
+          ],
+          "properties": {
+            "karar": {
+              "const": "uygun"
+            },
+            "ureten": {
+              "enum": [
+                "Codex",
+                "Claude"
+              ]
+            },
+            "denetci": {
+              "enum": [
+                "Codex",
+                "Claude"
+              ]
+            },
+            "zaman": {
+              "type": "string",
+              "minLength": 8
+            },
+            "row_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "anyOf": [
+            {
+              "properties": {
+                "ureten": {
+                  "const": "Codex"
+                },
+                "denetci": {
+                  "const": "Claude"
+                }
+              }
+            },
+            {
+              "properties": {
+                "ureten": {
+                  "const": "Claude"
+                },
+                "denetci": {
+                  "const": "Codex"
+                }
+              }
+            }
+          ]
         }
       }
     },
@@ -248,11 +312,82 @@
               },
               "dil_tutarli": {
                 "const": true
-              },
-              "insan_onayi": {
-                "const": true
               }
-            }
+            },
+            "anyOf": [
+              {
+                "properties": {
+                  "insan_onayi": {
+                    "const": true
+                  }
+                }
+              },
+              {
+                "required": [
+                  "capraz_onay"
+                ],
+                "properties": {
+                  "capraz_onay": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "karar",
+                      "ureten",
+                      "denetci",
+                      "zaman",
+                      "row_sha256"
+                    ],
+                    "properties": {
+                      "karar": {
+                        "const": "uygun"
+                      },
+                      "ureten": {
+                        "enum": [
+                          "Codex",
+                          "Claude"
+                        ]
+                      },
+                      "denetci": {
+                        "enum": [
+                          "Codex",
+                          "Claude"
+                        ]
+                      },
+                      "zaman": {
+                        "type": "string",
+                        "minLength": 8
+                      },
+                      "row_sha256": {
+                        "type": "string",
+                        "pattern": "^[a-f0-9]{64}$"
+                      }
+                    },
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "ureten": {
+                            "const": "Codex"
+                          },
+                          "denetci": {
+                            "const": "Claude"
+                          }
+                        }
+                      },
+                      {
+                        "properties": {
+                          "ureten": {
+                            "const": "Claude"
+                          },
+                          "denetci": {
+                            "const": "Codex"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
           }
         }
       }

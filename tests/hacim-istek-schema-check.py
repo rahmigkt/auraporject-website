@@ -1,5 +1,5 @@
 from pathlib import Path
-import json,hashlib
+import json,hashlib,copy,importlib.util
 import sys
 from jsonschema import Draft202012Validator
 base=Path('knowledge/ai-egitim/veri/hacim-1-istek')
@@ -24,4 +24,16 @@ sys.path.insert(0,str(Path('tools/ev-sohbet').resolve()))
 from uslup_denetim import inspect
 style=inspect([{'id':r['id'],'language':r['language'],'dialogue':[{'role':'user','content':r['user']},{'role':'assistant','content':r['assistant']['reply']}]} for r in originals.values()])
 assert style['passed'],'Existing forbidden-term, language-mix and length heuristics must pass'
+spec=importlib.util.spec_from_file_location('converter','tools/egitim-donustur/donustur.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+# Unit-only approval fixtures. Never persist these synthetic decisions or exports.
+sample=copy.deepcopy(rows[0]);sample['denetim']['uyarilar']=['claude_cross_review_pending']
+decision={'karar':'uygun','denetci':'Claude','zaman':'2026-10-21T00:00:00Z','row_sha256':m.approval_digest(sample)}
+accepted=m.qualify(copy.deepcopy(sample),{sample['id']:decision})
+assert accepted['denetim']['gecti'] and not accepted['denetim']['insan_onayi'];v.validate(accepted)
+self_review={**decision,'denetci':'Codex'}
+assert not m.qualify(copy.deepcopy(sample),{sample['id']:self_review})['denetim']['gecti']
+changed=copy.deepcopy(accepted);changed['mesajlar'][0]['metin']+=' changed'
+assert not m.qualify(changed,{sample['id']:decision})['denetim']['gecti'],'Target edit must revoke cross-review'
+rejected={**decision,'karar':'düzeltilmeli'}
+assert not m.qualify(copy.deepcopy(sample),{sample['id']:rejected})['denetim']['gecti']
 print('PASS 1800 unapproved AURA-EGITIM-1 projections, source hashes, one plan cluster and split; no furniture-detail actions')

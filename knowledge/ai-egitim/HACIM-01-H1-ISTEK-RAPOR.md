@@ -18,6 +18,8 @@ Hedefler yeni oda sınırı ve türü, bağımsız duvar çalışması, kapı/pe
 
 Birincil hedef `state + user → {reply, actions}` biçiminde dokuz JSONL dosyasıdır. `karantina.jsonl` aynı kayıtların `AURA-EGITIM-1` izdüşümüdür; fazladan 1.800 kayıt değildir. Ortak sözleşmedeki `tur` işlem adı ile yerel oda/açıklık `tur` değerinin çakışması `arguments` alanıyla kayıpsız giderildi; ortak adaptör eski düz işlemleri de destekler. Her izdüşüm birincil işlem dizisine bire bir geri çevrilerek denetlenir.
 
+Ortak şema ve yeterlilik kapısı, insan onayı olmadan farklı üretici/denetçi modellerinin `uygun` kararını kabul edecek biçimde genişletildi. Karar tüm girdi/hedefin `row_sha256` değerine bağlanır; aynı modelin kendi kaydına onayı ve hedefi değişmiş eski onay reddedilir. Claude için mevcut digest'ler `veri/hacim-1-istek/inceleme-sha256.json` dosyasındadır. `kararlar.json` ve `codex-kararlari.json` ortak dönüştürücü tarafından okunur; eşleşmeyen kod-probu kararları eğitim kaydı onayı sayılmaz. Birim testindeki yapay onaylar dosyaya veya eğitim çıktısına yazılmaz.
+
 Claude çapraz onayı **0**, eğitime uygun satır **0**, yeni eğitim dışa aktarımı **0**. Mevcut birleşik 2.590 aday ile bu 1.800 aday toplam 4.390 aday satırdır; benzersiz proje sayısı değildir. Eski mobilya detayı odaklı `hacim-1-komut` dalındaki kayıtlar bu teslimin kaynakları değildir; o çalışma yerinde korunmuştur. Birleşik korpusla anlamsal tekrar ve yeni kapsamın eski korpusa uygulanması ayrı inceleme gerektirir.
 
 ## Sızma ve dil denetimi

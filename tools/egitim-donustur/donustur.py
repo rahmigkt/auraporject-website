@@ -23,8 +23,27 @@ def qualify(row,decisions):
         row['denetim']['insan_onayi']=True;row['denetim']['dil_tutarli']=True
         row['denetim']['uyarilar']=[w for w in row['denetim']['uyarilar'] if w not in ['human_review_pending','language_review_pending']]
     d=row['denetim']
-    d['gecti']=bool(d['insan_onayi'] and d['dil_tutarli'] is True and not d['uyarilar'] and d['yasakli_terim']==0 and row['dil'] and (not row['islemler'] or d['motor_gecti'] is True))
+    decision=decisions.get(row['id'],{})
+    producer=row.get('kaynak',{}).get('ureten')
+    reviewer=decision.get('denetci')
+    if (producer,reviewer) in [('Codex','Claude'),('Claude','Codex')] and decision.get('karar')=='uygun' and decision.get('zaman') and decision.get('row_sha256')==approval_digest(row):
+        d['capraz_onay']={k:decision[k] for k in ['karar','denetci','zaman','row_sha256']}
+        d['capraz_onay']['ureten']=producer
+        d['dil_tutarli']=True
+        d['uyarilar']=[w for w in d['uyarilar'] if w not in ['claude_cross_review_pending','codex_cross_review_pending','human_review_pending','language_review_pending']]
+    receipt=d.get('capraz_onay',{})
+    cross=bool((receipt.get('ureten'),receipt.get('denetci')) in [('Codex','Claude'),('Claude','Codex')] and receipt.get('ureten')==producer and receipt.get('karar')=='uygun' and receipt.get('zaman') and receipt.get('row_sha256')==approval_digest(row))
+    d['gecti']=bool((d['insan_onayi'] or cross) and d['dil_tutarli'] is True and not d['uyarilar'] and d['yasakli_terim']==0 and row['dil'] and (not row['islemler'] or d['motor_gecti'] is True))
     return row
+
+def review_decisions():
+    """Read legacy receipts and the two cross-review ledgers; no approval inferred."""
+    legacy=OUT/'onaylar.json'
+    decisions=json.loads(legacy.read_text(encoding='utf8')) if legacy.exists() else {}
+    for name in ['kararlar.json','codex-kararlari.json']:
+        file=ROOT/'knowledge/ai-egitim/inceleme'/name
+        if file.exists():decisions.update(json.loads(file.read_text(encoding='utf8')).get('kararlar',{}))
+    return decisions
 def node(payload,timeout=45):
     try:
         r=subprocess.run(['node',str(ROOT/'tools/egitim-donustur/motor.mjs')],input=canonical(payload),cwd=ROOT,text=True,encoding='utf8',capture_output=True,timeout=timeout)
@@ -171,8 +190,7 @@ def main():
         previous=[json.loads(x) for x in (OUT/'adaylar.jsonl').read_text(encoding='utf8').splitlines()] if (OUT/'adaylar.jsonl').exists() else []
         ledger=seed_ledger(previous)
     groups=assign(rows,ledger);assert not leakage(rows)
-    approval_path=OUT/'onaylar.json'
-    decisions=json.loads(approval_path.read_text(encoding='utf8')) if approval_path.exists() else {}
+    decisions=review_decisions()
     rows=[qualify(r,decisions) for r in rows]
     schema=json.loads((ROOT/'knowledge/ai-egitim/AURA-EGITIM-1.schema.json').read_text(encoding='utf8'));v=Draft202012Validator(schema)
     for r in rows:v.validate(r)
