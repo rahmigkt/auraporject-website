@@ -4865,9 +4865,9 @@
         },
         "pos_xy_mm": [
           7675,
-          4717
+          4867
         ],
-        "rot_deg": 90,
+        "rot_deg": 0,
         "compiled_size_mm": {
           "w": 900,
           "d": 550,
@@ -4875,20 +4875,20 @@
         },
         "footprint_xy_mm": [
           [
-            7400,
-            4267
+            7225,
+            5142
           ],
           [
-            7400,
-            5167
+            8125,
+            5142
           ],
           [
-            7950,
-            5167
+            8125,
+            4592
           ],
           [
-            7950,
-            4267
+            7225,
+            4592
           ]
         ]
       },
@@ -5478,10 +5478,10 @@
     {
       "check": "window_floor_ratio:room-3",
       "passed": false,
-      "actual": 0.0,
+      "actual": 0,
       "scope": "work_order_target",
       "source_exception": true,
-      "source_reference_value": 0.0,
+      "source_reference_value": 0,
       "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
     }
   ],
@@ -5838,7 +5838,7 @@
             "ok": true,
             "alternatives": [
               {
-                "score": 4.98,
+                "score": 6.48,
                 "notes": [],
                 "placements": [
                   {
@@ -5853,9 +5853,9 @@
                     "id": "room-3-coffee",
                     "pos_xy_mm": [
                       7675,
-                      4717
+                      4867
                     ],
-                    "rot_deg": 90
+                    "rot_deg": 0
                   }
                 ]
               }
@@ -6255,7 +6255,7 @@
         "room-3-sofa",
         "room-3-coffee"
       ],
-      "score": 4.98
+      "score": 6.48
     },
     {
       "space_id": "room-4",
@@ -6305,7 +6305,7 @@
   },
   "solver": {
     "module": "assets/ev/yerlesim.js",
-    "sha256": "e60a2b1024785e6ffe10a8dfbc232b61dd9287f395acc27eabbba29573922086",
+    "sha256": "3eabdd0aa6c31dfa72cf3b5a7173d1e1c60bca7affec0c2013b937e299e25ba5",
     "options": {
       "count": 1,
       "beam": 6
@@ -6325,7 +6325,8 @@
       ],
       "wall": 20
     },
-    "manual_item_coordinates": false
+    "manual_item_coordinates": false,
+    "hash_policy": "utf8-lf"
   },
   "designer_summary_tr": "Palermo: müstakil ev ve torun ziyaretleri; üç ayrı yatak odası, çift kişilik ana yatak ve diğerlerinde tek kişilikler. Teras yalnız istek, geometri eklenmedi. Banyo yerinde; perde/halı/ışık kararı açık.",
   "style_revision": {

@@ -13,7 +13,12 @@ for r in rows:
  assert r['native_motor']['result']['report']['gecti'] and not r['denetim']['gecti']
  assert not r['training_started'] and r['human_review']=='pending' and r['native_review']=='pending'
 style=inspect(rows);assert style['passed'] and not style['repeated_assistant_sentences']
-door=copy.deepcopy(rows[3]);door['plan']['items']=copy.deepcopy(door['layout_candidates'][0]['items']);door['layout_requests'][0]['selected_alternative']=0
+# Upstream now returns a safe first option. Keep the actual old unsafe option as
+# the negative fixture; do not weaken the door-swing test to fit new snapshots.
+archive=Path('knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi')
+for saved in json.loads((archive/'manifest.json').read_text(encoding='utf-8')):
+ assert hashlib.sha256(Path(saved['path']).read_bytes()).hexdigest()==saved['sha256']
+door=json.loads((archive/'knowledge/ai-egitim/veri/ev-sohbet-arap-olculu/ev-sohbet-arap-olculu-04.json').read_text(encoding='utf-8'));door['plan']['items']=copy.deepcopy(door['layout_candidates'][0]['items']);door['layout_requests'][0]['selected_alternative']=0
 assert any(e['code']=='door_swing_obstructed' for e in check(door,root/'kaynaklar')['errors']),'Unsafe raw solver option must remain rejected'
 assert sum(r['requested_floors']==2 for r in rows)==2
 assert sum(r['layout_scope']['majlis_pending'] for r in rows)==4

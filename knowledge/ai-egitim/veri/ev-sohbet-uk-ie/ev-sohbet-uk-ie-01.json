@@ -4492,9 +4492,9 @@
         },
         "pos_xy_mm": [
           998,
-          8182
+          8332
         ],
-        "rot_deg": 90,
+        "rot_deg": 0,
         "compiled_size_mm": {
           "w": 900,
           "d": 550,
@@ -4502,20 +4502,20 @@
         },
         "footprint_xy_mm": [
           [
-            723,
-            7732
+            548,
+            8607
           ],
           [
-            723,
-            8632
+            1448,
+            8607
           ],
           [
-            1273,
-            8632
+            1448,
+            8057
           ],
           [
-            1273,
-            7732
+            548,
+            8057
           ]
         ]
       },
@@ -4885,7 +4885,7 @@
       "actual": 750,
       "scope": "work_order_target",
       "source_exception": true,
-      "source_reference_value": 750.0,
+      "source_reference_value": 750,
       "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
     },
     {
@@ -4894,7 +4894,7 @@
       "actual": 750,
       "scope": "work_order_target",
       "source_exception": true,
-      "source_reference_value": 750.0,
+      "source_reference_value": 750,
       "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
     }
   ],
@@ -5251,7 +5251,7 @@
             "ok": true,
             "alternatives": [
               {
-                "score": 5.99,
+                "score": 7.49,
                 "notes": [],
                 "placements": [
                   {
@@ -5266,9 +5266,9 @@
                     "id": "room-4-coffee",
                     "pos_xy_mm": [
                       998,
-                      8182
+                      8332
                     ],
-                    "rot_deg": 90
+                    "rot_deg": 0
                   }
                 ]
               }
@@ -5483,7 +5483,7 @@
         "room-4-sofa",
         "room-4-coffee"
       ],
-      "score": 5.99
+      "score": 7.49
     },
     {
       "space_id": "room-5",
@@ -5501,7 +5501,7 @@
   "scenario_status": "fictional_manual_conversation_not_model_or_customer_transcript",
   "solver": {
     "module": "assets/ev/yerlesim.js",
-    "sha256": "e60a2b1024785e6ffe10a8dfbc232b61dd9287f395acc27eabbba29573922086",
+    "sha256": "3eabdd0aa6c31dfa72cf3b5a7173d1e1c60bca7affec0c2013b937e299e25ba5",
     "options": {
       "count": 1,
       "beam": 6
@@ -5521,7 +5521,8 @@
       ],
       "wall": 20
     },
-    "manual_item_coordinates": false
+    "manual_item_coordinates": false,
+    "hash_policy": "utf8-lf"
   },
   "jurisdiction_review": {
     "jurisdiction": "England",

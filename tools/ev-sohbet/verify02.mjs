@@ -10,7 +10,8 @@ let tested=0,failed=0,records=0,sourceChanges=0;
 for(const file of fs.readdirSync(dir).filter(f=>/^ev-sohbet-(?:02|uk-ie|dk|es|it)-\d+\.json$/.test(f)).sort()){
  records++;
  const r=JSON.parse(fs.readFileSync(path.join(dir,file),'utf8')),p=r.plan;
- const hash=crypto.createHash('sha256').update(fs.readFileSync(path.join(root,r.solver.module))).digest('hex');
+ const source=fs.readFileSync(path.join(root,r.solver.module));
+ const hash=crypto.createHash('sha256').update(r.solver.hash_policy==='utf8-lf'?source.toString('utf8').replaceAll('\r\n','\n'):source).digest('hex');
  if(hash!==r.solver.sha256){
   if(!compareCurrent)throw Error('Studio solver changed: regenerate data');
   sourceChanges++; // Every recorded request/result must still compare exactly below.
