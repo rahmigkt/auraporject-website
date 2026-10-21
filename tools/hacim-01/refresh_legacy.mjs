@@ -26,3 +26,4 @@ for(const batch of ['02','uk-ie','dk','es','it']){
  }
 }
 assert.equal(report.length,40);fs.writeFileSync('knowledge/ai-egitim/veri/hacim-1-komut/yerlesim-yenileme.json',JSON.stringify({version:'hacim-placement-refresh/1',rows:report,coordinates:'Production solveRoom only; no manual positions, new attempts, resizing or product removal',human_approval:false},null,2)+'\n');
+execFileSync(process.env.AURA_PYTHON||'python',['tools/hacim-01/finalize_legacy.py'],{cwd:root,stdio:'inherit'});
