@@ -22,6 +22,8 @@ for r in rows:v.validate(r)
 (BASE/'karantina.jsonl').write_text(''.join(m.canonical(r)+'\n' for r in rows),encoding='utf8',newline='\n')
 (BASE/'inceleme-sha256.json').write_text(json.dumps({r['id']:m.approval_digest(r) for r in rows},ensure_ascii=False,indent=2)+'\n',encoding='utf8',newline='\n')
 manifest=json.loads((BASE/'sayim-raporu.json').read_text(encoding='utf8'))
+manifest['limitations']=[s for s in manifest['limitations'] if s!='No project dispatch or lighting action claimed']
+manifest['capability_coverage']={'lighting_temperature':sum(any(a['tur']=='isik' for a in r['islemler']) for r in rows),'persisted_designer_requests':sum(any(a['tur']=='tasarimciya_gonder' for a in r['islemler']) for r in rows),'external_delivery':False,'percentage_dimming_supported':False}
 decision_file=ROOT/'knowledge/ai-egitim/inceleme/kararlar.json'
 decision_bytes=decision_file.read_bytes();decisions=json.loads(decision_bytes).get('kararlar',{})
 manifest['cross_review']={'producer':'Codex','required_reviewer':'Claude','decision_file':decision_file.relative_to(ROOT).as_posix(),'decision_file_sha256':m.sha(decision_bytes),'matching_decisions':{r['id']:decisions[r['id']] for r in rows if r['id'] in decisions},'status':'pending','human_review_required':False,'approval_inferred':False}

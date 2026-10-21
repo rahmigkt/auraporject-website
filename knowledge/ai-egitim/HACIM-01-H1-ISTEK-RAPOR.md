@@ -1,6 +1,6 @@
 # HACIM-01 — H1 / C1 düzeltme teslimi
 
-21 Ekim 2026 · PR #187 · main b443269 (#189–190) dala alındı.
+21 Ekim 2026 · PR #187 · main 544d901 (#189–192) dala alındı.
 Görev kaynağı `GOREVLER.md` içindeki C1'dir. Claude'un `hacim-1-istek:* = duzelt` kararı korunur; bu sürüm yeniden incelemeye sunulur. Onaylı/eğitime uygun kayıt: **0**. Eğitim, GPU, ücretli API, dağıtım ve merge yapılmadı.
 
 ## C1 karşılıkları
@@ -12,7 +12,7 @@ Görev kaynağı `GOREVLER.md` içindeki C1'dir. Claude'un `hacim-1-istek:* = du
 | Doğal çoklu istek ve en az %20 kısıt | Her dilde 50 doğal, tek cümleli çoklu istek; noktalı virgül birleştirmesi yok. 40/50 (%80) kısıtlı; bakar/yakin/uzak türlerinin tamamı var. |
 | Konuya özgü netleştirme | Halıda ölçü/renk/doku, perdede katman/renk/başlık, açıklıklarda duvar/konum/ölçü gibi eksikler sorulur; işlem üretilmez. |
 | Dil başına en az 150 kalıp | Her dilde 200 kullanıcı ve 190 yanıt kalıbı. Ölçü/değişken, sayı, noktalama ve aksan normalize edilir; sayı değiştirmek ayrı kalıp sayılmaz. Kanıt: `C1-kalite-raporu.json`. |
-| Uzakta boş oda ekleme kalıbını azalt | Yeni oda poligonu ekleyen kayıt 0. Mevcut odanın adı değişebilir. Bütün örnekler bağlantılı beş odalı aynı kurgusal evdedir. |
+| Uzakta boş oda ekleme kalıbını azalt | Yeni oda poligonu ekleyen kayıt 0. İstekler mevcut ev planında uygulanır. Bütün örnekler bağlantılı beş odalı aynı kurgusal evdedir. |
 
 TR, EN, DE, FR, NL, DA, ES, IT, AR: her dilde **200** kayıt (120 tek işlem, 50 çoklu, 20 netleştirme, 10 kapsam dışı), toplam **1.800**. Körfez ağzı kullanıcı satırı **40**; asistan yanıtları standart Arapça adayıdır. Dil başına toplam kısıtlı kayıt **80/200 (%40)**.
 
@@ -26,7 +26,7 @@ Bakış yönü kullanıcı isteğidir. Yakın/uzak için milimetre eşikleri AUR
 
 Plan; salon, yatak odası, çocuk odası, antre ve yemek odasını, ortak duvarları, kapı ve pencereleri içerir. Geometri sentetiktir; gerçek bina veya mimari uygunluk kanıtı değildir. Bütün dil ve değerler tek kaynak kümesinde tutulur; bağımsız dev/test kapsamı iddia edilmez.
 
-Mobilya detayı hedefi yoktur. Desteklenmeyen talepte yönlendirme, belirsiz istekte konuya özgü soru ve boş işlem listesi vardır. Aydınlatma ve gerçek tasarımcı gönderimi motor hedefi olarak eklenmedi. Tekstil yalnız seçili oda çalışma bağlamıdır; çok odalı kalıcılık iddia edilmez.
+Mobilya detayı hedefi yoktur. Desteklenmeyen talepte yönlendirme, belirsiz istekte konuya özgü soru ve boş işlem listesi vardır. Her dilde beş ışık renk sıcaklığı ve beş kalıcı tasarımcı inceleme talebi hedefi vardır (#191). Yüzdelik ışık kısma hâlâ motor sözlüğünde yoktur; kapsam dışı örnek özellikle bunu sorar. Tasarımcı hedefi yalnız projedeki kalıcı talep kaydıdır; dışarıya mesaj/teslim gerçekleştiği iddia edilmez. Tekstil yalnız seçili oda çalışma bağlamıdır; çok odalı kalıcılık iddia edilmez.
 
 ## Arşiv ve inceleme
 
@@ -36,7 +36,7 @@ Birincil dokuz JSONL ile `karantina.jsonl` aynı 1.800 kayıttır. Ortak şema, 
 
 Üretici sınavı okumaz. Ayrı sözcüksel dışlama denetimi yalnız sınav kullanıcı metnini okur; eşikler düşürülmez. Sayı değiştirme ve ek taleple gizleme negatif testleri korunur. Bu tarama anlamsal/çapraz dil benzerlik yokluğunun kanıtı değildir.
 
-Main #189 motor ağacı değiştiği için eski 40 Avrupa + 12 Arapça sohbetin mekanik kanıt zinciri, 52 ortak motor izdüşümü ve donmuş sınav kaynak manifesti yeniden doğrulanır. Eski konuşma metinleri ve 120 donmuş sınav görev baytı korunur. Bu işlem C2'deki 47 üslup düzeltmesini tamamlamış sayılmaz. Önceki merdiven bulguları #189'da giderildi; tarihsel #184 denetimi yeni motor bulgusu diye sunulmaz.
+Main #189 ve #191 motor ağacı değiştiği için eski 40 Avrupa + 12 Arapça sohbetin mekanik kanıt zinciri, 52 ortak motor izdüşümü ve donmuş sınav kaynak manifesti yeniden doğrulanır. Eski konuşma metinleri ve 120 donmuş sınav görev baytı korunur. Bu işlem C2'deki 47 üslup düzeltmesini tamamlamış sayılmaz. Önceki merdiven bulguları #189'da giderildi; tarihsel #184 denetimi yeni motor bulgusu diye sunulmaz.
 
 [İnceleme sayfası](HACIM-01-H1-ISTEK-inceleme.html) dil/tür filtreleri, sayfalama ve Arapça RTL içerir. Sayfa karar kaydetmez. Görsel tarayıcı onayı veya ana dil onayı iddia edilmez.
 

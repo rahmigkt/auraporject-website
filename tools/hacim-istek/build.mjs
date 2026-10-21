@@ -10,6 +10,8 @@ import {P} from './phrases-v2.mjs';
 import {initial as home,spec,multiPairs} from './curriculum.mjs';
 import {multiLayout}from'./multi-layout.mjs';
 import {quality}from'./quality.mjs';
+import {applyFeatures}from'./features.mjs';
+applyFeatures(P);
 export const root=fileURLToPath(new URL('../../',import.meta.url));
 export const dest=new URL('../../knowledge/ai-egitim/veri/hacim-1-istek/',import.meta.url);
 export const langs=Object.keys(L),hash=b=>crypto.createHash('sha256').update(b).digest('hex');
@@ -83,8 +85,6 @@ function revisedRows(){
  for(const language of langs){const p=P[language],old=L[language];let sequence=0;
   const values=j=>({color:(p.colors||old.colors)[j],rug:old.rugs[j],name:old.names[j],sheer:p.sheers[j%2],heading:p.headings[j]});
   function localized(i,j){const s=spec(i,j);s.variables={...s.variables,...values(j)};
-   if(i===13){s.actions[0].ad=p.guest;s.observations[0][1]=p.guest;}
-   if(i===20){s.actions[0].ad=s.variables.name;s.observations[0][1]=s.variables.name;}
    return s;
   }
   function add(category,user_template,s,result,variant,gulf=false,group='clarification'){
@@ -110,7 +110,7 @@ function revisedRows(){
    const s={state:home(j?'bedroom':'living'),actions:[],observations:[],variables:{}};
    add('clarify',p.questions[i].split('|')[j],s,p.ask[i],j,false,'clarify-'+i);
   }
-  for(let i=0;i<10;i++)add('unsupported',old.out[i],{state:home(),actions:[],observations:[],variables:{}},p.outReplies[i],0,false,'out-'+i);
+  for(let i=0;i<10;i++)add('unsupported',i===7?p.dimUser:old.out[i],{state:home(),actions:[],observations:[],variables:{}},p.outReplies[i],0,false,'out-'+i);
  }
  return rows;
 }
@@ -122,7 +122,7 @@ export function write(){
  const manifest={version:'hacim-istek/2-cross-review',source_commit:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),source_lock:{git_tree_sha256:hash(tree),scope:['assets/','tools/studyo-motoru/']},rows:rows.length,per_language:Object.fromEntries(langs.map(l=>[l,Object.fromEntries(['single','multiple','clarify','unsupported'].map(c=>[c,rows.filter(r=>r.language===l&&r.category===c).length]))])),gulf_rows:rows.filter(r=>r.user_dialect==='gulf').length,accepted:rows.filter(r=>r.motor.report.gecti).length,rejected:0,warnings:0,target_mismatches:0,qualified_training_rows:0,approval_policy:'Codex-authored records await Claude cross-review. Human/native review optional, not a required approval gate.',files,limitations:['Synthetic disconnected room studies; not real building plans or certified architecture','20 single-intent templates × 6 values; 25 operation pairs × 2; 10 clarification templates × 2 rooms; 10 scope refusals per language. Not 1800 independently sourced intentions.','No project dispatch or lighting action claimed: project layer only acknowledges operations; lighting absent from motor vocabulary','Claude cross-review and combined corpus semantic deduplication pending','Existing combined corpus count/splits and existing frozen exam task bytes are preserved']};
  manifest.version='hacim-istek/3-C1';
  manifest.revision='C1/2';
- manifest.limitations=['One fictional connected five-room home; not a real building or certified architecture','24 single intent families with five authored paraphrases each; ten coordinated pairs with five frames each; ten clarification topics and ten unsupported requests per language. Surface variation is not independent intent coverage.','Near/far distances are declared AURA operational interpretations; user utterances do not claim measured clearance','No project dispatch or lighting action claimed','Claude re-review and combined corpus semantic deduplication pending; prior duzelt decision remains preserved','Existing combined corpus count/splits and frozen exam task bytes are preserved'];
+ manifest.limitations=['One fictional connected five-room home; not a real building or certified architecture','24 single intent families with five authored paraphrases each; ten coordinated pairs with five frames each; ten clarification topics and ten unsupported requests per language. Surface variation is not independent intent coverage.','Near/far distances are declared AURA operational interpretations; user utterances do not claim measured clearance','Lighting colour-temperature and persisted designer-request targets included; no external delivery. Percentage dimming unsupported','Claude re-review and combined corpus semantic deduplication pending; prior duzelt decision remains preserved','Existing combined corpus count/splits and frozen exam task bytes are preserved'];
  const q=quality(rows);
  for(const [l,v]of Object.entries(q.by_language)){
   assert(v.authored_user_patterns>=150,l+' user patterns');assert(v.reply_patterns>=150,l+' reply patterns');

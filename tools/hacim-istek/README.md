@@ -12,7 +12,7 @@ Ortak şema izdüşümü ayrı karantinadır. Aynı sentetik oda planını payla
 
 Eski yerleşimlerin yenilenmesi: `refresh_legacy.mjs`, `finalize_legacy.py`, `refresh_arabic.py`, `revalidate_exam.mjs <eski-donmuş-kaynak-klasörü>` sırası. İlk üç araç özgün a724690 kaynaklarını okur; yeniden hesaplanan çıktılar arşivlenmiş özgün veriye karşı karşılaştırılır, arşivler değiştirilmez. Sınav aracının ikinci geçişinde önce özgün `FREEZE-before.json` çalışma manifestine alınır; aynı özgün sınav ve kaynakla yeni motora karşı karşılaştırma yapılır. Kaynak JSON'ları commit edildikten sonra `revalidate_common.py`. `finalize_legacy.py`, Python'daki eski `1.0` sayılarının JS'de `1` yazılmasından doğan hash farklarını eski Python kanıtıyla karşılaştırır; geometrik ya da metinsel değişikliği saklamaz.
 
-Proje gönderme motoru yalnız kabul kaydı üretir; gerçek teslim/kayıt etkisi yoktur. Aydınlatma için işlem yoktur. Bu sürüm bunları başarı hedefi olarak üretmez. Tekstil durumu seçili oda çalışmasına aittir; çok odalı bağımsız tekstil kalıcılığı iddia edilmez.
+Main #191 ışık türü/sayısı/renk sıcaklığını ve projede kalıcı tasarımcı inceleme talebini destekler. `features.mjs` her dilde beş renk sıcaklığı ve beş kalıcı talep örneği ekler; dışarıya mesaj/teslim iddiası yoktur. Yüzdelik ışık kısma desteklenmez. Tekstil durumu seçili oda çalışmasına aittir; çok odalı bağımsız tekstil kalıcılığı iddia edilmez.
 
 ## C1 üretimi ve çeşitlilik
 

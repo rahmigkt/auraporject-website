@@ -42,14 +42,14 @@ export function spec(i,j){
  if(i===12){const s=layout('dining',[item('dining',[1300,1400,1500,1600,1700][j],900)]);s.variables.width=[130,140,150,160,170][j];return s;}
  const s={state:initial(),actions:[],observations:[],variables:{n,bed,desk},family:i};
  const tx=(type,payload,observations)=>{s.actions=[{katman:'tekstil',type,...payload}];s.observations=observations;return s;};
- if(i===13){s.state.selection.room='child';s.actions=[{katman:'ev',type:'oda_tanimla',id:'child',ad:'Guest bedroom',tur:'bedroom'}];s.observations=[['plan.spaces.2.name','Guest bedroom'],['plan.spaces.2.kind','bedroom']];return s;}
+ if(i===13){s.variables.kelvin=[2700,2900,3000,3200,3500][j];s.actions=[{katman:'aydinlatma',type:'isik',oda:'living',renk_k:s.variables.kelvin}];s.observations=[['aydinlatma.living.renk_k',s.variables.kelvin]];return s;}
  if(i===14)return tx('hali',{construction:rugIds[j],on:true},[['tekstil.rug.construction',rugIds[j]],['tekstil.rug.on',true]]);
  if(i===15)return tx('perde',{drape:{color:colorIds[j]}},[['tekstil.curtain.drape.color',colorIds[j]]]);
  if(i===16){const family=j%2?'leno-yun':'acik-keten';return tx('perde',{system:'tul-fon',sheer:{family}},[['tekstil.curtain.sheer.family',family],['tekstil.curtain.system','tul-fon']]);}
  if(i===17)return tx('perde',{system:'tul-fon',drape:{family:'blackout'}},[['tekstil.curtain.drape.family','blackout'],['tekstil.curtain.system','tul-fon']]);
  if(i===18)return tx('hali',{on:false},[['tekstil.rug.on',false]]);
  if(i===19)return tx('hali',{color:colorIds[j]},[['tekstil.rug.color',colorIds[j]]]);
- if(i===20){s.actions=[{katman:'ev',type:'oda_tanimla',id:'living',ad:names[j]}];s.observations=[['plan.spaces.0.name',names[j]]];return s;}
+ if(i===20){s.actions=[{katman:'proje',type:'tasarimciya_gonder'}];s.observations=[['proje.gonderimler.0.sira',1],['proje.gonderimler.0.not',''],['proje.gonderimler.0.oda',['living','bedroom','child','hall','dining']]];return s;}
  if(i===21)return tx('perde',{heading:headings[j]},[['tekstil.curtain.heading',headings[j]]]);
  const window=i===22,wall=window?'h-0-0-6000':'h-9000-2000-6000',width=window?[1000,1100,1200,1300,1400][j]:[750,800,850,900,950][j];
  s.state.selection.wall=wall;s.actions=[{katman:'ev',type:'aciklik_ekle',id:'requested-opening',wall_id:wall,tur:window?'window':'door',konum:window?1500:500,en:width}];

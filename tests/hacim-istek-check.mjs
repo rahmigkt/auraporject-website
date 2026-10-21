@@ -11,11 +11,13 @@ const rows=load();assert.equal(rows.length,1800);assert.equal(new Set(rows.map(r
 assert.deepEqual(rows,make(),'Inputs, labels or exact motor replay changed');
 for(const l of langs){const rs=rows.filter(r=>r.language===l);assert.equal(rs.length,200);assert.equal(new Set(rs.map(r=>r.user)).size,200);for(const [k,n]of Object.entries({single:120,multiple:50,clarify:20,unsupported:10}))assert.equal(rs.filter(r=>r.category===k).length,n);}
 assert.equal(rows.filter(r=>r.user_dialect==='gulf').length,40);
+assert.equal(rows.filter(r=>r.assistant.actions.some(a=>a.type==='isik')).length,45);
+assert.equal(rows.filter(r=>r.assistant.actions.some(a=>a.type==='tasarimciya_gonder')).length,45);
 for(const r of rows){assert(!/solver|çözücü|pos_xy_mm|wall_id|katman|backRake|armHeight|source exception|referans plan/iu.test(r.user+' '+r.assistant.reply));if(r.language==='ar')assert(!/[a-z]/i.test(r.user+r.assistant.reply));
  assert(r.review.status==='quarantine'&&!r.review.designer_approved&&!r.review.native_language_approved&&!r.training_started);
  assert.equal(r.review.producer,'Codex');assert.equal(r.review.required_reviewer,'Claude');assert.equal(r.review.cross_review_status,'pending');assert.equal(r.review.human_review_required,false);
  assert.equal(r.assistant.actions.length,{single:1,multiple:2,clarify:0,unsupported:0}[r.category]);assert(r.motor.report.gecti);assert.deepEqual(r.motor.report.red,[]);assert.deepEqual(r.motor.report.uyari,[]);assert.deepEqual(r.motor.target_mismatches,[]);
- assert(r.assistant.actions.every(a=>['ev','yerlesim','tekstil','proje'].includes(a.katman)));
+ assert(r.assistant.actions.every(a=>['ev','yerlesim','tekstil','aydinlatma','proje'].includes(a.katman)));
 }
 const ex=loadExam(),report={...audit(rows,ex.tasks),exam_sha256:ex.sha256};assert.equal(report.hits.length,0);assert.deepEqual(JSON.parse(fs.readFileSync(new URL('sizma-denetimi.json',dest))),report);
 for(const t of ex.tasks){assert(similarity(t.input.text,t.input.text.replace(/[0-9٠-٩]+/g,'987'))>=.85);assert(audit([{...rows[0],language:t.lang,user:t.input.text+'; '+rows[0].user}],ex.tasks).hits.length);}
@@ -28,6 +30,7 @@ for(const v of Object.values(q.by_language)){
  assert.deepEqual(v.internal_term_rows,[]);assert.deepEqual(v.semicolon_multiple,[]);assert.deepEqual(v.new_remote_rooms,[]);assert.equal(v.clarify_topics.length,10);
 }
 const fallback=structuredClone(rows.find(r=>r.assistant.actions[0]?.type==='perde'));fallback.assistant.actions[0].drape.color='unlisted';assert(checkTarget(fallback).target_mismatches.length,'Accepted textile merge cannot hide wrong target');
+const invalidLight=structuredClone(rows.find(r=>r.assistant.actions[0]?.type==='isik'));invalidLight.assistant.actions[0].renk_k=9000;assert.throws(()=>checkTarget(invalidLight),'Invalid temperature must not be accepted');
 const impossible=structuredClone(rows.find(r=>r.assistant.actions[0]?.kisitlar?.some(k=>k.tur==='yakin')));
 impossible.assistant.actions[0].kisitlar.forEach(k=>k.mm=1);
 const impossibleResult=uygula(impossible.state,impossible.assistant.actions);

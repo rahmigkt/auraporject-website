@@ -1,8 +1,8 @@
 {
   "version": "hacim-istek/3-C1",
-  "source_commit": "bb8b65a29acb7e525eb1bd45c9879144ac601113",
+  "source_commit": "8d776574a882df9bd95f98cacfab2be1c4ec5d0c",
   "source_lock": {
-    "git_tree_sha256": "91af97ce319ae6b1e92aaea8a309aaae528bca0ee4bf637c93865fa2f878aa4c",
+    "git_tree_sha256": "79c517eb7248f5efbd89f8f5dd710fc9b16f81e5b0ea1eb50253d87509ccce67",
     "scope": [
       "assets/",
       "tools/studyo-motoru/"
@@ -75,51 +75,56 @@
   "files": [
     {
       "path": "tr.jsonl",
-      "sha256": "ca98dbffdb26363fb8b4fbfd7b4458afacd15e73af5fb6015c677d44ee10ad7b"
+      "sha256": "0935849d0a0ffe869b4e32df77fbaad1f61c3e6d6931c5c13e705935f6c56841"
     },
     {
       "path": "en.jsonl",
-      "sha256": "a56f11a95416e1f578a1facde2edd2cd5646eae35c6ac32bf00a1a2065a65cba"
+      "sha256": "100bc6bd8aa0e9f589395517ca152ba45aaf228aefd7fb6e1efef280874df223"
     },
     {
       "path": "de.jsonl",
-      "sha256": "7f0a1d7ca72e9e5dd4faa49563c45ab600fd194ab9d8d68ed2d6a2c890a57036"
+      "sha256": "c90faf6654ee760807b26a9cae24b677107a55a03a0e7cd23960804205c1d767"
     },
     {
       "path": "fr.jsonl",
-      "sha256": "3c071d4d1e6c4ee1ad657179826b400fa86b202f7bd14fdecfac8478dac1cebe"
+      "sha256": "2cec2f9baada2c238136a0568e4b7e92e750c5b3722cf4d556f194c95e369eaf"
     },
     {
       "path": "nl.jsonl",
-      "sha256": "22fbe47e4dc123cf1a256eee600578239362c99d709c05a0fa58e96ee745cb01"
+      "sha256": "2bf71b85a9b529fd307ac71775889f8f326573443622ce01ed3b716c6721d9af"
     },
     {
       "path": "da.jsonl",
-      "sha256": "49234af59634e3408999dfb3c2f8c868137bb6014d262864cdbcc9054e5dcbae"
+      "sha256": "ea356f3d6db2482256f3f8f7fba2da1a306d59cfccc43cb6d2c3b6d32e7aa934"
     },
     {
       "path": "es.jsonl",
-      "sha256": "eb8ff1ae18ce1394b060c64fface42fa301a44c5fe046a6642f7dea6eac45cbc"
+      "sha256": "f0f0f97687d56a80fa00babd335a212d7533aa630d77e5ae1fb67f00f4d74072"
     },
     {
       "path": "it.jsonl",
-      "sha256": "86bcd2839bf9a610b5f45da93a8e960dc51bac17dd5083750f6b409c44181590"
+      "sha256": "2fe03d75b667cc8c19b0b88f43f4a48ef79b4a2d25c9551e1009e2481a1bdd0d"
     },
     {
       "path": "ar.jsonl",
-      "sha256": "dccd186367b40bd14826ff75e22700b85aac810b55045391e634ee799acf8720"
+      "sha256": "9de4898e68b8b311a32503d3e7d92da6f1f15bd254495004158949ea55901cc5"
     }
   ],
   "limitations": [
     "One fictional connected five-room home; not a real building or certified architecture",
     "24 single intent families with five authored paraphrases each; ten coordinated pairs with five frames each; ten clarification topics and ten unsupported requests per language. Surface variation is not independent intent coverage.",
     "Near/far distances are declared AURA operational interpretations; user utterances do not claim measured clearance",
-    "No project dispatch or lighting action claimed",
     "Claude re-review and combined corpus semantic deduplication pending; prior duzelt decision remains preserved",
     "Existing combined corpus count/splits and frozen exam task bytes are preserved"
   ],
   "revision": "C1/2",
   "quality_report": "C1-kalite-raporu.json",
+  "capability_coverage": {
+    "lighting_temperature": 45,
+    "persisted_designer_requests": 45,
+    "external_delivery": false,
+    "percentage_dimming_supported": false
+  },
   "cross_review": {
     "producer": "Codex",
     "required_reviewer": "Claude",
