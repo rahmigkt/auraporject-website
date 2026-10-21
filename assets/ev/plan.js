@@ -326,12 +326,18 @@ function layoutPanel() {
   return `<h2>Mobilya yerleşimi</h2><p class="note">${its.length} ürün · kurallar: kapı açılışı, pencere, geçiş payları, TV–kanepe, masa–mutfak.</p>
   <div class="ev-row" style="display:flex;gap:6px;flex-wrap:wrap"><button data-lay="solve">Yerleşim önerileri</button></div>
   <p class="note">Proje katmanı: ${rr.length ? rr.map(x => `halı ${x.size[0] / 10}×${x.size[1] / 10}`).join(', ') : 'halı yok'} · ${ll.map(x => LN[x.kind]).join(', ') || 'ışık yok'}</p>
-  ${res ? (res.ok ? `${''}<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">${res.alternatives.map((a, i) => `<button data-lay="alt" data-i="${i}" aria-pressed="${LAY.pick === i}">Seçenek ${i + 1}</button>`).join('')}</div><p class="note">${res.alternatives[LAY.pick].notes.join(' · ')}</p>` : `<p class="note" style="color:#a63030">${res.reason}. Ürünü küçültün ya da başka odaya alın.</p>`) : ''}`;
+  ${res ? (res.ok ? `${''}<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">${res.alternatives.map((a, i) => `<button data-lay="alt" data-i="${i}" aria-pressed="${LAY.pick === i}">Seçenek ${i + 1}</button>`).join('')}</div><p class="note">${res.alternatives[LAY.pick].notes.join(' · ')}</p>` : `<p class="note" style="color:#a63030">${res.reason}.</p>${LAY.fit ? (LAY.fit.ok ? `<p class="note">Şu ölçülerle sığar:<br>${LAY.fit.changes.map(c => `${c.name}: ${c.from.w}×${c.from.d} → <b>${c.to.w}×${c.to.d}</b> mm`).join('<br>')}</p><button data-lay="apply">Bu ölçüleri uygula</button>` : `<p class="note">En küçük kullanışlı ölçülerde de sığmıyor; bir parçayı çıkarmayı düşünün.</p>`) : `<button data-lay="shrink">Küçülterek sığdır</button>`}`) : ''}`;
 }
 async function layoutAction(b) { try { await layoutRun(b); } catch (err) { console.error('layout', err); LAY.res = {ok: false, reason: 'Yerleşim hesaplanamadı: ' + err.message}; side(); } }
 async function layoutRun(b) {
-  const {solveRoom} = await import('./yerlesim.js?v=20261021f');
+  const {solveRoom, fitByShrinking} = await import('./yerlesim.js?v=20261021f');
   if (b.dataset.lay === 'solve') { const r = D.spaces.find(x => x.id === S.room); LAY.room = r.id; LAY.pick = 0; LAY.res = solveRoom(r, D.items.filter(i => i.design && i.space_id === r.id), {walls, ops}, {beam: 60}); }
+  if (b.dataset.lay === 'solve') LAY.fit = null;
+  if (b.dataset.lay === 'shrink') { b.textContent = 'Hesaplanıyor…'; b.disabled = true; await new Promise(r => setTimeout(r, 30)); const r = D.spaces.find(x => x.id === S.room); LAY.fit = fitByShrinking(r, D.items.filter(i => i.design && i.space_id === r.id), {walls, ops}, {beam: 40}); }
+  if (b.dataset.lay === 'apply' && LAY.fit?.ok) { // a proposal the customer accepted: the studio products take the new sizes
+    for (const c of LAY.fit.changes) { const it = D.items.find(i => i.id === c.id), P = it.design.params ??= {}, f = it.design.family;
+      if (f === 'table') { P.length = c.to.w; P.width = c.to.d; } else if (f === 'bedroom' && it.design.kind === 'bed') P.mattressWidth = c.to.w - 100; else { P.width = c.to.w; P.depth = c.to.d; } }
+    LAY.res = LAY.fit.result; LAY.pick = 0; LAY.fit = null; }
   if (b.dataset.lay === 'alt') LAY.pick = +b.dataset.i;
   if (LAY.res?.ok) for (const pl of LAY.res.alternatives[LAY.pick].placements) Object.assign(D.items.find(i => i.id === pl.id), {pos_xy_mm: pl.pos_xy_mm, rot_deg: pl.rot_deg});
   side(); if (S.view === 'plan') drawPlan(); else show(S.view);
