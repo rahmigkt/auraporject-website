@@ -15,12 +15,12 @@ export const VERSION = 'studyo-motoru/1';
 // ---- operation vocabulary (versioned). layer → op → required fields --------------------------------------------
 export const SOZLUK = {
   mobilya: {set: ['key', 'value'], delta: ['key', 'value'], enum: ['key', 'value'], material: ['slot', 'key', 'value'], style: ['value'], kind: ['value'], family: ['value'], seats: ['value'], drawers: ['value'], mattress: ['value']},
-  ev: {duvar_ekle: ['from', 'to'], duvar_sil: ['id'], duvar_tasi: ['id', 'dx', 'dy'], aciklik_ekle: ['wall_id', 'tur', 'konum', 'en'], oda_tanimla: ['id'], kat_ekle: [], merdiven: [], oda_birlestir: ['a', 'b']},
+  ev: {duvar_ekle: ['from', 'to'], duvar_sil: ['id'], duvar_tasi: ['id', 'dx', 'dy'], aciklik_ekle: ['wall_id', 'tur', 'konum', 'en'], oda_tanimla: ['id'], kat_ekle: ['id'], merdiven: ['alt', 'ust', 'konum', 'en'], oda_birlestir: ['a', 'b']},
   yerlesim: {yerlestir: ['oda', 'esyalar'], secenek_sec: ['index']},
   tekstil: {perde: [], hali: []},
   proje: {projeye_ekle: [], tasarimciya_gonder: []}
 };
-const NOT_YET = {kat_ekle: 'çok katlı plan motorda henüz yok', merdiven: 'merdiven motorda henüz yok', oda_birlestir: 'oda birleştirme motorda henüz yok'};
+const NOT_YET = {oda_birlestir: 'oda birleştirme motorda henüz yok'};
 
 // ---- small geometry ----------------------------------------------------------------------------------------------
 const area = b => Math.abs(b.reduce((s, [x, y], i) => { const [u, v] = b[(i + 1) % b.length]; return s + x * v - u * y; }, 0)) / 2e6;
@@ -53,11 +53,33 @@ function mobilya(state, ops, rep) {
   catch (e) { rep.red.push({katman: 'mobilya', op: null, neden: 'derlenemedi: ' + e.message}); }
 }
 
+// Levels: state.plan is the ground level ('k0'); upper levels live in state.katlar[id] = {yukseklik, plan}. Any ev operation
+// may carry {kat} to act on that level. Stairs follow the step rule 2·riser + going ≈ 630 mm (±30), width ≥ 800, a landing at
+// least as deep as the stair is wide, risers that add up exactly to the floor-to-floor height (Codex EV-SOHBET-02 checks).
+const STAIR = {width: 800, rule: 630, tol: 30, riserMax: 190, goingMin: 250};
+function levelOf(state, kat) { if (!kat || kat === 'k0') return state.plan ??= {walls: [], openings: [], spaces: [], items: []}; return state.katlar?.[kat]?.plan; }
+function stair(state, op, no) {
+  const lo = levelOf(state, op.alt), up = state.katlar?.[op.ust]; if (!lo || !up) { no(op, 'merdivenin bağlandığı kat yok'); return null; }
+  const H = up.yukseklik || 2800, n = op.basamak_sayisi || Math.ceil(H / STAIR.riserMax), riser = H / n, going = op.basamak_derinlik || Math.max(STAIR.goingMin, Math.round(STAIR.rule - 2 * riser)), landing = op.sahanlik || op.en;
+  if (op.en < STAIR.width) { no(op, `merdiven eni ${op.en} mm; en az ${STAIR.width} mm`); return null; }
+  if (Math.abs(2 * riser + going - STAIR.rule) > STAIR.tol) { no(op, `adım kuralı tutmuyor: 2×${riser.toFixed(0)} + ${going} = ${(2 * riser + going).toFixed(0)} mm (630 ± 30)`); return null; }
+  if (landing < op.en) { no(op, 'sahanlık merdiven eninden kısa olamaz'); return null; }
+  const L = (n - 1) * going + landing, t = (op.aci || 0) * Math.PI / 180, ax = [Math.cos(t), Math.sin(t)], az = [-Math.sin(t), Math.cos(t)], [cx, cy] = op.konum;
+  const poly = [[-1, 0], [1, 0], [1, 1], [-1, 1]].map(([i, j]) => [Math.round(cx + ax[0] * op.en / 2 * i + az[0] * L * j), Math.round(cy + ax[1] * op.en / 2 * i + az[1] * L * j)]);
+  const inside = (p, b) => { let r = false; for (let i = 0, j = b.length - 1; i < b.length; j = i++) { const [xi, yi] = b[i], [xj, yj] = b[j]; if ((yi > p[1]) !== (yj > p[1]) && p[0] < (xj - xi) * (p[1] - yi) / (yj - yi) + xi) r = !r; } return r; };
+  const room = lo.spaces.find(sp => poly.every(p => inside(p, sp.boundary_xy_mm))); if (!room) { no(op, 'merdiven alt kattaki bir odanın içine sığmıyor'); return null; }
+  const upRoom = up.plan.spaces.find(sp => poly.every(p => inside(p, sp.boundary_xy_mm)));
+  return {id: op.id || 'merdiven', alt: op.alt || 'k0', ust: op.ust, en: op.en, riser_mm: +riser.toFixed(1), riser_count: n, tread_mm: going, landing_depth_mm: landing, width_mm: op.en, boyu_mm: L, poly, alt_oda: room.id, ust_oda: upRoom?.id || null};
+}
 function ev(state, ops, rep) {
-  const P = state.plan ??= {walls: [], openings: [], spaces: [], items: []}; let n = P.walls.length + P.openings.length + P.spaces.length;
-  const no = (op, neden) => rep.red.push({katman: 'ev', op, neden});
+  const no = (op, neden) => rep.red.push({katman: 'ev', op, neden}); let n = 0;
   for (const op of ops) {
     if (NOT_YET[op.type]) { no(op, NOT_YET[op.type]); continue; }
+    if (op.type === 'kat_ekle') { state.katlar ??= {}; if (state.katlar[op.id] || op.id === 'k0') { no(op, 'bu kat zaten var'); continue; }
+      const base = levelOf(state, op.kopya || 'k0'), outer = op.dis_duvarlar !== false ? (base?.walls || []).filter(w => (val(w.thickness) || 120) >= (op.dis_kalinlik || 200)) : [];
+      state.katlar[op.id] = {yukseklik: op.yukseklik || 2800, plan: {walls: structuredClone(outer), openings: [], spaces: [], items: []}}; rep.kabul.push({katman: 'ev', op}); continue; }
+    if (op.type === 'merdiven') { const st = stair(state, op, no); if (!st) continue; (state.merdivenler ??= []).push(st); const up = state.katlar[op.ust].plan; (up.voids ??= []).push({id: st.id + '-bosluk', poly: st.poly}); rep.kabul.push({katman: 'ev', op, merdiven: st}); continue; }
+    const P = levelOf(state, op.kat); if (!P) { no(op, `böyle bir kat yok: ${op.kat}`); continue; } n = Math.max(n, P.walls.length + P.openings.length + P.spaces.length);
     if (op.type === 'duvar_ekle') { const w = {id: op.id || 'w' + (++n), from_xy_mm: op.from, to_xy_mm: op.to, thickness: op.kalinlik || 120};
       if (wallLen(w) < 100) { no(op, 'duvar 100 mm\'den kısa'); continue; } P.walls.push(w); }
     else if (op.type === 'duvar_sil') { const i = P.walls.findIndex(w => w.id === op.id); if (i < 0) { no(op, 'böyle bir duvar yok'); continue; } P.walls.splice(i, 1); P.openings = P.openings.filter(o => o.wall_id !== op.id); }
@@ -75,13 +97,16 @@ function ev(state, ops, rep) {
     else { no(op, 'ev katmanında bilinmeyen işlem'); continue; }
     rep.kabul.push({katman: 'ev', op});
   }
-  // plan audit: shapes, areas, openings
-  const rooms = []; for (const s of P.spaces) { const A = area(s.boundary_xy_mm); rooms.push({id: s.id, tur: s.kind, m2: +A.toFixed(1)});
+  // plan audit, every level: shapes, areas, openings
+  const levels = [['k0', state.plan], ...Object.entries(state.katlar || {}).map(([k, v]) => [k, v.plan])].filter(([, P]) => P), rooms = [];
+  for (const [kat, P] of levels) {
+  for (const s of P.spaces) { const A = area(s.boundary_xy_mm); rooms.push({id: s.id, kat, tur: s.kind, m2: +A.toFixed(1)});
     if (selfIntersects(s.boundary_xy_mm)) rep.uyari.push({katman: 'ev', kod: 'oda_kendini_kesiyor', oda: s.id});
     const lim = {bath: [2.5, 12], wc: [0.9, 3], bedroom: [6, 30], living: [10, 60], kitchen: [4, 30], hall: [1, 20]}[s.kind];
     if (lim && (A < lim[0] || A > lim[1])) rep.uyari.push({katman: 'ev', kod: 'oda_alani_olagan_disi', oda: s.id, m2: +A.toFixed(1), olagan: lim}); }
   for (const o of P.openings) if (o.kind === 'door' && (val(o.width) < 700 || val(o.width) > 1200)) rep.uyari.push({katman: 'ev', kod: 'kapi_eni', aciklik: o.id, mm: val(o.width)});
-  rep.olcum.ev = {oda: rooms, toplam_m2: +rooms.reduce((s, r) => s + r.m2, 0).toFixed(1), duvar: P.walls.length, aciklik: P.openings.length};
+  }
+  rep.olcum.ev = {oda: rooms, toplam_m2: +rooms.reduce((s, r) => s + r.m2, 0).toFixed(1), kat: levels.length, merdiven: (state.merdivenler || []).map(m => ({id: m.id, en: m.en, riht: m.riser_mm, basamak: m.tread_mm, adet: m.riser_count, boy: m.boyu_mm}))};
 }
 
 // constraints the assistant writes; the solver places, the engine checks which constraints the result meets
@@ -91,19 +116,20 @@ const CONS = {
   uzak: (P, c) => { const a = P[c.a], b = P[c.b]; if (!a || !b) return null; return Math.hypot(a.pos_xy_mm[0] - b.pos_xy_mm[0], a.pos_xy_mm[1] - b.pos_xy_mm[1]) >= (c.mm || 1500); }
 };
 const KINDS = {kanepe: 'sofa', sofa: 'sofa', tv: 'tvunit', tvunit: 'tvunit', sehpa: 'coffee', coffee: 'coffee', masa: 'dining', dining: 'dining', yatak: 'bed', bed: 'bed', gardirop: 'wardrobe', wardrobe: 'wardrobe',
-  ikili: 'loveseat', loveseat: 'loveseat', tekli: 'armchair', kahve_kosesi: 'reading', reading: 'reading', yan_sehpa: 'side', side: 'side', bufe: 'sideboard', sideboard: 'sideboard', ayakkabilik: 'shoe', shoe: 'shoe', portmanto: 'coatrack', coatrack: 'coatrack', komodin: 'nightstand', nightstand: 'nightstand', calisma: 'desk', desk: 'desk', berjer: 'armchair', armchair: 'armchair', kitaplik: 'bookcase', bookcase: 'bookcase', sifonyer: 'dresser', dresser: 'dresser', mutfak: 'run', run: 'run', lavabo: 'basin', basin: 'basin'};
+  meclis: 'majlis', majlis: 'majlis', ikili: 'loveseat', loveseat: 'loveseat', tekli: 'armchair', kahve_kosesi: 'reading', reading: 'reading', yan_sehpa: 'side', side: 'side', bufe: 'sideboard', sideboard: 'sideboard', ayakkabilik: 'shoe', shoe: 'shoe', portmanto: 'coatrack', coatrack: 'coatrack', komodin: 'nightstand', nightstand: 'nightstand', calisma: 'desk', desk: 'desk', berjer: 'armchair', armchair: 'armchair', kitaplik: 'bookcase', bookcase: 'bookcase', sifonyer: 'dresser', dresser: 'dresser', mutfak: 'run', run: 'run', lavabo: 'basin', basin: 'basin'};
 function yerlesim(state, ops, rep) {
-  const P = state.plan;
   for (const op of ops) {
+    const P = levelOf(state, op.kat);
     if (op.type === 'secenek_sec') { const r = state.yerlesim?.[op.oda || state.sonOda]; if (!r || !r.alternatives[op.index]) { rep.red.push({katman: 'yerlesim', op, neden: 'böyle bir seçenek yok'}); continue; } state.secili = op.index; rep.kabul.push({katman: 'yerlesim', op}); continue; }
     if (op.type !== 'yerlestir') { rep.red.push({katman: 'yerlesim', op, neden: 'bilinmeyen işlem'}); continue; }
     const sp = P?.spaces.find(s => s.id === op.oda); if (!sp) { rep.red.push({katman: 'yerlesim', op, neden: 'böyle bir oda yok'}); continue; }
     const items = []; let bad = null;
-    for (const e of op.esyalar) { const kind = KINDS[e.tur]; if (!kind || !(e.en > 0 && e.derinlik > 0)) { bad = e; break; } items.push({id: e.id || e.tur, name: e.ad || e.tur, design: {kind}, size: {w: e.en, d: e.derinlik, h: e.yukseklik || 800}}); }
+    for (const e of op.esyalar) { const kind = KINDS[e.tur]; if (!kind || !((e.en > 0 || kind === 'majlis') && e.derinlik > 0)) { bad = e; break; } items.push({id: e.id || e.tur, name: e.ad || e.tur, design: {kind, params: kind === 'majlis' ? {layout: e.duzen || 'U', depth: e.derinlik} : undefined}, size: {w: e.en || 0, d: e.derinlik, h: e.yukseklik || (kind === 'majlis' ? 450 : 800)}}); }
     if (bad) { rep.red.push({katman: 'yerlesim', op, neden: `eşya tanınmadı ya da ölçüsü eksik: ${JSON.stringify(bad)}`}); continue; }
     const walls = P.walls.map(w => { const [x0, y0] = w.from_xy_mm, [x1, y1] = w.to_xy_mm, L = Math.hypot(x1 - x0, y1 - y0) || 1; return {...w, x0, y0, ux: (x1 - x0) / L, uy: (y1 - y0) / L, L, t: val(w.thickness) || 120}; });
     const opsE = P.openings.map(o => ({...o, a: val(o.offset_from_wall_start), w: val(o.width), h: val(o.height) || 2100, sill: val(o.sill_height)}));
-    const res = solveRoom(sp, items, {walls, ops: opsE}, {count: 4, beam: 40});
+    const obstacles = (state.merdivenler || []).filter(m => (m.alt === (op.kat || 'k0')) || m.ust === op.kat).map(m => ({id: m.id, poly: m.poly})).concat((P.voids || []).map(v => ({id: v.id, poly: v.poly})));
+    const res = solveRoom(sp, items, {walls, ops: opsE, obstacles}, {count: 4, beam: 40});
     (state.yerlesim ??= {})[sp.id] = res; state.sonOda = sp.id;
     if (!res.ok) { rep.kabul.push({katman: 'yerlesim', op}); rep.uyari.push({katman: 'yerlesim', kod: 'sigmiyor', oda: sp.id, metin: res.reason}); rep.olcum.yerlesim = {oda: sp.id, sigdi: false}; continue; }
     // pick the alternative that meets most constraints (ties: solver score)
@@ -113,7 +139,7 @@ function yerlesim(state, ops, rep) {
     const scored = res.alternatives.map((alt, i) => ({i, alt, r: score(alt)})).sort((a, b) => b.r.filter(x => x.ok).length - a.r.filter(x => x.ok).length || b.alt.score - a.alt.score);
     const best = scored[0]; state.secili = best.i;
     for (const x of best.r) { if (x.ok === null) rep.uyari.push({katman: 'yerlesim', kod: 'kisit_anlasilmadi', kisit: x.c}); else if (!x.ok) rep.uyari.push({katman: 'yerlesim', kod: 'kisit_karsilanmadi', kisit: x.c}); }
-    P.items = [...(P.items || []).filter(i => i.space_id !== sp.id), ...best.alt.placements.map(p => ({id: p.id, space_id: sp.id, pos_xy_mm: p.pos_xy_mm, rot_deg: p.rot_deg, size_mm: items.find(i => i.id === p.id).size}))];
+    P.items = [...(P.items || []).filter(i => i.space_id !== sp.id), ...best.alt.placements.map(p => ({id: p.id, space_id: sp.id, pos_xy_mm: p.pos_xy_mm, rot_deg: p.rot_deg, size_mm: items.find(i => i.id === p.id)?.size || p.size_mm, ...(p.kind ? {kind: p.kind} : {})}))];
     rep.kabul.push({katman: 'yerlesim', op}); rep.olcum.yerlesim = {oda: sp.id, sigdi: true, secenek: res.alternatives.length, secilen: best.i, kisit_karsilanan: best.r.filter(x => x.ok).length, kisit_toplam: best.r.length};
   }
 }

@@ -16,8 +16,15 @@ let fail = 0; const ok = (c, m) => { if (!c) { fail++; console.log('✗', m); } 
   ok(r.rapor.olcum.yerlesim?.sigdi && r.rapor.olcum.yerlesim.kisit_karsilanan === 2, 'salon: kanepe TV\'ye bakar, sehpa yakın — çözücü yerleştirdi, kısıtlar tuttu');
   const r2 = uygula({plan}, [{katman: 'yerlesim', type: 'yerlestir', oda: 'wc', esyalar: [{tur: 'yatak', en: 1800, derinlik: 2100}]}]);
   ok(r2.rapor.uyari.some(u => u.kod === 'sigmiyor'), 'WC\'ye çift kişilik yatak: sığmıyor');
+  for (const duzen of ['U', 'L']) { const rm = uygula({plan}, [{katman: 'yerlesim', type: 'yerlestir', oda: 'yatak1', esyalar: [{tur: 'meclis', duzen, derinlik: 800}, {tur: 'sehpa', en: 1000, derinlik: 600}]}]);
+    const seg = rm.state.plan.items.filter(i => i.kind === 'majlis'); ok(rm.rapor.olcum.yerlesim?.sigdi && seg.length >= (duzen === 'U' ? 3 : 2), `meclis ${duzen}: ${seg.length} duvar boyunca oturma, sehpa ortada`); }
   const r3 = uygula({plan}, [{katman: 'ev', type: 'aciklik_ekle', wall_id: D.walls[0].id, tur: 'kapi', konum: -50, en: 900}]); ok(r3.rapor.red.length === 1, 'duvar dışına taşan kapı reddedilir');
-  const r4 = uygula({plan}, [{katman: 'ev', type: 'merdiven'}]); ok(r4.rapor.red[0]?.neden.includes('henüz'), 'merdiven: motorda henüz yok diye dürüst ret');
+  const kat = [{katman: 'ev', type: 'kat_ekle', id: 'k1', yukseklik: 2800}];
+  const rs = uygula({plan}, [...kat, {katman: 'ev', type: 'merdiven', alt: 'k0', ust: 'k1', konum: [1500, 200], aci: 0, en: 900}]);
+  ok(rs.rapor.gecti && rs.state.merdivenler?.[0]?.riser_count === 15, 'merdiven: 15 rıht ' + JSON.stringify(rs.rapor.olcum.ev.merdiven));
+  const rs2 = uygula({plan}, [...kat, {katman: 'ev', type: 'merdiven', alt: 'k0', ust: 'k1', konum: [1500, 200], en: 700}]); ok(rs2.rapor.red[0]?.neden.includes('en az 800'), 'dar merdiven reddedilir');
+  const rs3 = uygula({plan}, [...kat, {katman: 'ev', type: 'merdiven', alt: 'k0', ust: 'k1', konum: [1500, 200], en: 900, basamak_derinlik: 150}]); ok(rs3.rapor.red[0]?.neden.includes('adım kuralı'), 'adım kuralına uymayan merdiven reddedilir');
+  const rs4 = uygula({plan}, [{katman: 'ev', type: 'merdiven', alt: 'k0', ust: 'k9', konum: [1500, 200], en: 900}]); ok(rs4.rapor.red.length === 1, 'olmayan kata merdiven reddedilir');
   ok(uygula({plan}, []).rapor.gecti !== undefined, 'boş işlem listesi'); }
 // tekstil
 { const r = uygula({}, [{katman: 'tekstil', type: 'perde', system: 'tul-fon', drape: {family: 'pamuk-kadife', color: 'zeytin'}}, {katman: 'tekstil', type: 'hali', construction: 'bukle', color: 'kum'}]);

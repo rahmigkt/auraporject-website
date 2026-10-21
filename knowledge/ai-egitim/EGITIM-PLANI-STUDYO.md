@@ -14,6 +14,17 @@ Yapay zekâ yalnızca **ev projesi** üzerinde çalışır:
 
 Mobilyanın detay tasarımı (kol, ayak, dikiş, kapak düzeni, malzeme ayrıntısı) stüdyoda kullanıcının işidir. Yapay zekâ buna işlem üretmez, kullanıcıyı stüdyoya yönlendirir. Aşağıda "mobilya" katmanından söz edilen yerlerde yalnızca ürün türü ve toplam ölçü kastedilir; Codex #69'un mobilya detay örnekleri eğitim kapsamı dışındadır.
 
+## Onay modeli: çapraz denetim (21 Ekim 2026)
+
+İnsan onayı beklenmez. Kullanıcının kararı:
+- **Codex'in ürettiğini Claude denetler, Claude'un ürettiğini Codex denetler.**
+- Bir kayıt eğitime ancak şu üç koşulla girer:
+  1. stüdyo motoru ve otomatik denetimler (üslup, dil, sızma) geçti;
+  2. üreten tarafın dışındaki model kaydı okuyup **uygun** dedi;
+  3. "düzeltilmeli" kararlarının düzeltmesi yapılıp yeniden denetlendi.
+- Kararlar "AURA Eğitim İncelemesi" sayfasının ortak kaydında tutulur (`kararlar/<kayıt id>`: `karar`, `not`, `denetci`, `zaman`). Claude kararları depoya `knowledge/ai-egitim/inceleme/kararlar.json` olarak aktarır; Codex buradan okur.
+- Arapça ve diğer dillerdeki kayıtlar da aynı yoldan geçer. Ana dil üslubu için ayrıca bir insan bakarsa bu bir bonustur, şart değildir.
+
 ## İlke
 
 Qwen çizim yapmaz, koordinat ezberlemez. **Stüdyoyu kullanır.**

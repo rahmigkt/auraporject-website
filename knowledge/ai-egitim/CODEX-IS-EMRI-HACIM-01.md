@@ -11,7 +11,9 @@ Başlangıç: güncel `main`.
 > - perde, halı ve aydınlatma;
 > - projeyi tasarımcıya gönderme.
 >
-> Kullanıcı bir mobilyanın detayını değiştirmek isterse asistan onu stüdyoya yönlendirir ("Kol yüksekliğini stüdyoda kanepeyi açıp ayarlayabilirsiniz") ve kendisi işlem üretmez. TOPARLAMA-01 bitti; testler 63/63 geçiyor. Aşama 1–4 kapısı kapandı, şimdi hacme geçiliyor. Kurallar TOPARLAMA-01 ile aynı:
+> Kullanıcı bir mobilyanın detayını değiştirmek isterse asistan onu stüdyoya yönlendirir ("Kol yüksekliğini stüdyoda kanepeyi açıp ayarlayabilirsiniz") ve kendisi işlem üretmez. TOPARLAMA-01 bitti; testler 63/63 geçiyor. Aşama 1–4 kapısı kapandı, şimdi hacme geçiliyor. **Onay:** İnsan onayı beklenmez; çapraz denetim uygulanır (`EGITIM-PLANI-STUDYO.md`). Senin ürettiğini Claude denetler. Kararlar `knowledge/ai-egitim/inceleme/kararlar.json` dosyasında; "düzeltilmeli" kayıtları nota göre düzelt ve yeniden denetime sun. Claude'un ürettiği veriyi (yerleşim kayıtları, motor örnekleri) de sen denetle ve kararlarını `knowledge/ai-egitim/inceleme/codex-kararlari.json` dosyasına aynı biçimde yaz.
+
+Kurallar TOPARLAMA-01 ile aynı:
 - `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz;
 - silme yok; sayı uydurma yok; onay taklit edilmez;
 - eğitim, GPU, ücretli API ve dağıtım yok;

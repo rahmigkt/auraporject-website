@@ -14,8 +14,8 @@ Stüdyonun tarayıcısız hâli. Eğitim verisi ve sınav seti buradan geçer (`
 | katman | işlemler |
 |---|---|
 | mobilya | `set`, `delta`, `enum`, `material`, `style`, `kind`, `family`, `seats`, `drawers`, `mattress` |
-| ev | `duvar_ekle`, `duvar_sil`, `duvar_tasi`, `aciklik_ekle`, `oda_tanimla`. `kat_ekle`, `merdiven` ve `oda_birlestir` henüz yok; dürüstçe reddedilir |
-| yerlesim | `yerlestir {oda, esyalar[{tur, en, derinlik}], kisitlar[{tur: bakar, yakin, uzak; a; b; mm}]}`, `secenek_sec` |
+| ev | `duvar_ekle`, `duvar_sil`, `duvar_tasi`, `aciklik_ekle`, `oda_tanimla`. `kat_ekle {id, yukseklik}` (dış duvarlar kopyalanır), `merdiven {alt, ust, konum, aci, en}` (en ≥ 800, 2·rıht + basamak ≈ 630 ± 30, sahanlık ≥ en, rıhtlar kat yüksekliğini tam tutar; alt kattaki bir odaya sığmalı; üst katta boşluk açılır, merdiven yerleşimde engel sayılır). Her ev ve yerleşim işlemi `kat` alır. `oda_birlestir` henüz yok; dürüstçe reddedilir |
+| yerlesim | `yerlestir {oda, esyalar[{tur, en, derinlik}]` (meclis: `{tur: meclis, duzen: U|L, derinlik}` — duvar boyunca oturma, kapılar açık kalır, derinlik bilinmiyorsa 800 mm AURA önerisi)`,, kisitlar[{tur: bakar, yakin, uzak; a; b; mm}]}`, `secenek_sec` |
 | tekstil | `perde {...}`, `hali {...}` (tekstil.js sürüm 2 alanları) |
 | proje | `projeye_ekle`, `tasarimciya_gonder` |
 
