@@ -1,478 +1,18 @@
 {
-  "scope": "C1/2 final authored prose and targets; complete offline suite. No model, training or visual browser approval.",
-  "full_suite": {
-    "command": "node tests/hepsi.mjs",
-    "timeout_ms_per_test": 900000,
-    "passed": 66,
-    "failed": 1,
-    "tested_source_commit": "3bca11048b9cfe4f117e65358f9f4b79b6406059",
-    "engine_tree_sha256": "79c517eb7248f5efbd89f8f5dd710fc9b16f81e5b0ea1eb50253d87509ccce67",
-    "results": [
-      {
-        "id": "tests/ai-workspace-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 271
-      },
-      {
-        "id": "tests/assistant-contract-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 203
-      },
-      {
-        "id": "tests/brief-pdf-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 186
-      },
-      {
-        "id": "tests/camera-framing-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 168
-      },
-      {
-        "id": "tests/catalogue-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 216
-      },
-      {
-        "id": "tests/catalogue-graph-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 613
-      },
-      {
-        "id": "tests/choice-flow-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 352
-      },
-      {
-        "id": "tests/codesign-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 295
-      },
-      {
-        "id": "tests/csg-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 418
-      },
-      {
-        "id": "tests/ev-arap-olculu-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 15098
-      },
-      {
-        "id": "tests/ev-arap-olculu-geometry-check.py",
-        "exit_code": 0,
-        "milliseconds": 6177
-      },
-      {
-        "id": "tests/forma-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 417610
-      },
-      {
-        "id": "tests/hacim-istek-check.mjs",
-        "exit_code": 1,
-        "milliseconds": 106717
-      },
-      {
-        "id": "tests/hacim-istek-schema-check.py",
-        "exit_code": 0,
-        "milliseconds": 2281
-      },
-      {
-        "id": "tests/kitchen-studies-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 168
-      },
-      {
-        "id": "tests/model-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 120
-      },
-      {
-        "id": "tests/panel-engine-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 255
-      },
-      {
-        "id": "tests/preference-evidence-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 128
-      },
-      {
-        "id": "tests/qwen-atolye-data.mjs",
-        "exit_code": 0,
-        "milliseconds": 1910
-      },
-      {
-        "id": "tests/qwen-current-contract-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 616
-      },
-      {
-        "id": "tests/qwen-geometry-data-check.py",
-        "exit_code": 0,
-        "milliseconds": 993
-      },
-      {
-        "id": "tests/qwen-large-gate-check.py",
-        "exit_code": 0,
-        "milliseconds": 138
-      },
-      {
-        "id": "tests/qwen-local-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 21785
-      },
-      {
-        "id": "tests/qwen-response-loss-check.py",
-        "exit_code": 0,
-        "milliseconds": 158
-      },
-      {
-        "id": "tests/qwen-studio-data-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 594
-      },
-      {
-        "id": "tests/qwen-training-plan-check.py",
-        "exit_code": 0,
-        "milliseconds": 1669
-      },
-      {
-        "id": "tests/reference-studies-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 784
-      },
-      {
-        "id": "tests/ritmo-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 847
-      },
-      {
-        "id": "tests/room-family-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 147
-      },
-      {
-        "id": "tests/sectional-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 292
-      },
-      {
-        "id": "tests/sketch-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 5970
-      },
-      {
-        "id": "tests/space-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 109
-      },
-      {
-        "id": "tests/studio-agent-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 102
-      },
-      {
-        "id": "tests/studio-tools-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 111
-      },
-      {
-        "id": "tests/table-geometry.mjs",
-        "exit_code": 0,
-        "milliseconds": 146
-      },
-      {
-        "id": "tests/toparlama-arap-check.py",
-        "exit_code": 0,
-        "milliseconds": 169
-      },
-      {
-        "id": "tests/toparlama-bicim-check.py",
-        "exit_code": 0,
-        "milliseconds": 2089
-      },
-      {
-        "id": "tests/toparlama-hijyen-check.py",
-        "exit_code": 0,
-        "milliseconds": 287
-      },
-      {
-        "id": "tests/toparlama-katalog-check.py",
-        "exit_code": 0,
-        "milliseconds": 7073
-      },
-      {
-        "id": "tests/toparlama-sinav-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 39980
-      },
-      {
-        "id": "tests/toparlama-sinav-prompt-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 515
-      },
-      {
-        "id": "tests/toparlama-split-ledger-check.py",
-        "exit_code": 0,
-        "milliseconds": 156
-      },
-      {
-        "id": "tests/toparlama-studio-replay-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 612
-      },
-      {
-        "id": "tests/toparlama-uslup-check.py",
-        "exit_code": 0,
-        "milliseconds": 1772
-      },
-      {
-        "id": "tests/upholstery-engine-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 283
-      },
-      {
-        "id": "tests/yerlesim-adversarial-check.mjs",
-        "exit_code": 0,
-        "milliseconds": 205
-      },
-      {
-        "id": "tests/ai-eval/test-01b.mjs",
-        "exit_code": 0,
-        "milliseconds": 167
-      },
-      {
-        "id": "tests/ai-eval/test-uzman-onay.mjs",
-        "exit_code": 0,
-        "milliseconds": 131
-      },
-      {
-        "id": "tests/ai-eval/verify-01b.mjs",
-        "exit_code": 0,
-        "milliseconds": 144
-      },
-      {
-        "id": "tests/text-eval/verify-stage1.mjs",
-        "exit_code": 0,
-        "milliseconds": 435
-      },
-      {
-        "id": "tools/ev-plan/test_eu.py",
-        "exit_code": 0,
-        "milliseconds": 1149
-      },
-      {
-        "id": "tools/ev-plan/test_pipeline.py",
-        "exit_code": 0,
-        "milliseconds": 4548
-      },
-      {
-        "id": "tools/ev-plan/test_real.py",
-        "exit_code": 0,
-        "milliseconds": 1199
-      },
-      {
-        "id": "tools/ev-plan/test_v2.py",
-        "exit_code": 0,
-        "milliseconds": 1018
-      },
-      {
-        "id": "tools/ev-sohbet/test02.py",
-        "exit_code": 0,
-        "milliseconds": 1744
-      },
-      {
-        "id": "tools/ev-sohbet/test_dk.py",
-        "exit_code": 0,
-        "milliseconds": 7624
-      },
-      {
-        "id": "tools/ev-sohbet/test_es.py",
-        "exit_code": 0,
-        "milliseconds": 7999
-      },
-      {
-        "id": "tools/ev-sohbet/test_it.py",
-        "exit_code": 0,
-        "milliseconds": 15443
-      },
-      {
-        "id": "tools/ev-sohbet/test_uk_ie.py",
-        "exit_code": 0,
-        "milliseconds": 11785
-      },
-      {
-        "id": "tools/perde/test_hesap.py",
-        "exit_code": 0,
-        "milliseconds": 440
-      },
-      {
-        "id": "replay-02",
-        "exit_code": 0,
-        "milliseconds": 4134
-      },
-      {
-        "id": "replay-uk-ie",
-        "exit_code": 0,
-        "milliseconds": 1980
-      },
-      {
-        "id": "replay-dk",
-        "exit_code": 0,
-        "milliseconds": 1079
-      },
-      {
-        "id": "replay-es",
-        "exit_code": 0,
-        "milliseconds": 1105
-      },
-      {
-        "id": "replay-it",
-        "exit_code": 0,
-        "milliseconds": 1044
-      },
-      {
-        "id": "tools/studyo-motoru/test.mjs",
-        "exit_code": 0,
-        "milliseconds": 2642
-      },
-      {
-        "id": "tools/ev-sohbet/uslup_denetim.py",
-        "exit_code": 0,
-        "milliseconds": 458
-      }
-    ],
-    "utilities_not_run": [
-      {
-        "file": "tests/ai-eval/aura-sinav-01/score.mjs",
-        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
-      },
-      {
-        "file": "tests/ai-eval/build-sinav-01.mjs",
-        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
-      },
-      {
-        "file": "tests/ai-eval/iskelet.mjs",
-        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
-      },
-      {
-        "file": "tests/ai-eval/report-01b.mjs",
-        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
-      },
-      {
-        "file": "tests/ai-eval/report-sinav-01.mjs",
-        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
-      },
-      {
-        "file": "tests/ai-eval/run-score-windows.mjs",
-        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
-      },
-      {
-        "file": "tests/ai-eval/score.mjs",
-        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
-      },
-      {
-        "file": "tests/ai-eval/uzman-onay-01b.mjs",
-        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
-      },
-      {
-        "file": "tests/ai-eval/uzman-onay.mjs",
-        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
-      },
-      {
-        "file": "tests/ai-eval/vocab.mjs",
-        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
-      },
-      {
-        "file": "tests/helpers/legacy-design.mjs",
-        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
-      },
-      {
-        "file": "tests/visual/denetim-01/capture.mjs",
-        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
-      },
-      {
-        "file": "tests/visual/denetim-01/inspect.mjs",
-        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
-      },
-      {
-        "file": "tests/visual/denetim-02/capture.mjs",
-        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
-      },
-      {
-        "file": "tests/visual/foto/atolye-cikti.mjs",
-        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
-      },
-      {
-        "file": "tests/visual/foto/atolye.mjs",
-        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
-      },
-      {
-        "file": "tests/visual/foto/birlesim.mjs",
-        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
-      },
-      {
-        "file": "tests/visual/foto/kasa.mjs",
-        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
-      },
-      {
-        "file": "tests/visual/foto/real.mjs",
-        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
-      },
-      {
-        "file": "tests/visual/foto/shot.mjs",
-        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
-      },
-      {
-        "file": "tests/visual/foto/surum.mjs",
-        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
-      },
-      {
-        "file": "tests/visual/gorsel-01/capture.mjs",
-        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
-      },
-      {
-        "file": "tests/visual/gorsel-01/serve.py",
-        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
-      }
-    ],
-    "initial_failure_details": [
-      {
-        "id": "tests/hacim-istek-check.mjs",
-        "stderr": "node:internal/modules/run_main:107\r\n    triggerUncaughtException(\r\n    ^\r\n\r\nAssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\r\n\r\n  assert(!/solver|çözücü|pos_xy_mm|wall_id|katman|backRake|armHeight|source exception|referans plan/iu.test(r.user+' '+r.assistant.reply))\r\n\r\n    at file:///C:/Users/User/Documents/Codex/2026-10-21/aura-ai-s-nav-i-emrini/work/hacim-1-istek/tests/hacim-istek-check.mjs:16:22\r\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\r\n    at async node:internal/modules/esm/loader:643:26\r\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\r\n  generatedMessage: true,\r\n  code: 'ERR_ASSERTION',\r\n  actual: false,\r\n  expected: true,\r\n  operator: '==',\r\n  diff: 'simple'\r\n}\r\n\r\nNode.js v24.18.0\r\n"
-      }
-    ]
-  },
-  "targeted_after_correction": [
-    {
-      "command": [
-        "node",
-        "tools/hacim-istek/audit.mjs"
-      ],
-      "code": 0,
-      "milliseconds": 1328,
-      "stdout": "{\"rows\":1800,\"hits\":0,\"nearest\":[{\"row\":\"hacim-istek-tr-111\",\"score\":0.7083333333333334,\"exam_id\":\"aura-sinav-060\"},{\"row\":\"hacim-istek-nl-031\",\"score\":0.6618705035971223,\"exam_id\":\"aura-sinav-063\"},{\"row\":\"hacim-istek-ar-114\",\"score\":0.6412213740458015,\"exam_id\":\"aura-sinav-059\"},{\"row\":\"hacim-istek-fr-062\",\"score\":0.6050420168067226,\"exam_id\":\"aura-sinav-020\"}]}\n",
-      "stderr": ""
-    },
-    {
-      "command": [
-        "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
-        "tools/hacim-istek/style.py"
-      ],
-      "code": 0,
-      "milliseconds": 719,
-      "stdout": "{\"conversations\": 1800, \"messages\": 3600, \"forbidden\": [], \"language_mix_heuristic\": [], \"over_60_words\": [], \"native_review\": \"pending_not_a_language_identification_proof\"}\n",
-      "stderr": ""
-    },
+  "scope": "C1b targeted content, deterministic native replay, schema, frozen-exam and split/catalog checks; no model, training, GPU or browser visual run",
+  "tested_main": "128dd93",
+  "tested_branch_commit": "3b5dc1c0752bbd0103f050c6621b92c9c967005a",
+  "engine_tree_sha256": "ba823d3c85d6a097508672988109dd92a25ed6ab457a241e7d06fffea32ebfc8",
+  "passed_check_groups": 12,
+  "failed": 0,
+  "results": [
     {
       "command": [
         "node",
         "tests/hacim-istek-check.mjs"
       ],
       "code": 0,
-      "milliseconds": 113156,
+      "milliseconds": 149516,
       "stdout": "PASS 1800 deterministic targets, exact motor results, scope rejection, wrong geometry/textile mutations, nine-language mix, Gulf40, lexical held-out exclusion; native review pending\n",
       "stderr": ""
     },
@@ -482,8 +22,58 @@
         "tests/hacim-istek-schema-check.py"
       ],
       "code": 0,
-      "milliseconds": 2609,
+      "milliseconds": 2953,
       "stdout": "PASS 1800 unapproved AURA-EGITIM-1 projections, source hashes, one plan cluster and split; no furniture-detail actions\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "tests/hacim-exam-revalidation-policy-check.mjs"
+      ],
+      "code": 0,
+      "milliseconds": 78,
+      "stdout": "PASS strict absent-to-zero leaf normalization policy; nonzero/existing/width/unrelated changes rejected\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "tests/toparlama-sinav-check.mjs"
+      ],
+      "code": 0,
+      "milliseconds": 100688,
+      "stdout": "{\"tasks\":120,\"gold_engine_unit_cases\":100,\"assertion_groups\":119,\"model_run\":false,\"expert_review\":\"pending\"}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "tests/toparlama-sinav-prompt-check.mjs"
+      ],
+      "code": 0,
+      "milliseconds": 703,
+      "stdout": "PASS 3 prompt contracts; expected/rubric mutation cannot leak to model; no inference\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "tools/hacim-istek/audit.mjs"
+      ],
+      "code": 0,
+      "milliseconds": 1500,
+      "stdout": "{\"rows\":1800,\"hits\":0,\"nearest\":[{\"row\":\"hacim-istek-tr-111\",\"score\":0.7083333333333334,\"exam_id\":\"aura-sinav-060\"},{\"row\":\"hacim-istek-nl-031\",\"score\":0.6618705035971223,\"exam_id\":\"aura-sinav-063\"},{\"row\":\"hacim-istek-ar-114\",\"score\":0.6412213740458015,\"exam_id\":\"aura-sinav-059\"},{\"row\":\"hacim-istek-fr-062\",\"score\":0.6050420168067226,\"exam_id\":\"aura-sinav-020\"}]}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "tools/hacim-istek/style.py"
+      ],
+      "code": 0,
+      "milliseconds": 812,
+      "stdout": "{\"conversations\": 1800, \"messages\": 3600, \"forbidden\": [], \"language_mix_heuristic\": [], \"over_60_words\": [], \"native_review\": \"pending_not_a_language_identification_proof\"}\n",
       "stderr": ""
     },
     {
@@ -492,74 +82,59 @@
         "work/c1-review-dom.mjs"
       ],
       "code": 0,
-      "milliseconds": 750,
+      "milliseconds": 688,
       "stdout": "PASS review script, nine languages, four categories, paging and Arabic RTL; mock DOM only\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "tools/hacim-istek/c1b-audit.mjs"
+      ],
+      "code": 0,
+      "milliseconds": 2140,
+      "stdout": "{\"changed_users\":42,\"changed_replies\":1530,\"native_evidence_unchanged\":1800,\"openings\":{\"tr\":{\"before\":6,\"after\":10,\"definition\":\"First five normalized tokens; placeholders, numbers, punctuation and accents normalized\"},\"en\":{\"before\":32,\"after\":10,\"definition\":\"First five normalized tokens; placeholders, numbers, punctuation and accents normalized\"},\"de\":{\"before\":34,\"after\":10,\"definition\":\"First five normalized tokens; placeholders, numbers, punctuation and accents normalized\"},\"fr\":{\"before\":34,\"after\":10,\"definition\":\"First five normalized tokens; placeholders, numbers, punctuation and accents normalized\"},\"nl\":{\"before\":34,\"after\":10,\"definition\":\"First five normalized tokens; placeholders, numbers, punctuation and accents normalized\"},\"da\":{\"before\":34,\"after\":10,\"definition\":\"First five normalized tokens; placeholders, numbers, punctuation and accents normalized\"},\"es\":{\"before\":34,\"after\":10,\"definition\":\"First five normalized tokens; placeholders, numbers, punctuation and accents normalized\"},\"it\":{\"before\":34,\"after\":10,\"definition\":\"First five normalized tokens; placeholders, numbers, punctuation and accents normalized\"},\"ar\":{\"before\":4,\"after\":10,\"definition\":\"First five normalized tokens; placeholders, numbers, punctuation and accents normalized\"}}}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "tests/toparlama-bicim-check.py"
+      ],
+      "code": 0,
+      "milliseconds": 6125,
+      "stdout": "PASS 2590 schema-valid quarantined rows, 52 motor contract reports, empty exports, source/building split mutations, review-target hash binding\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "tests/toparlama-split-ledger-check.py"
+      ],
+      "code": 0,
+      "milliseconds": 484,
+      "stdout": "PASS immutable prior splits under new language/country; shared-source clustering; train/test bridge rejected\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "tests/toparlama-katalog-check.py"
+      ],
+      "code": 0,
+      "milliseconds": 17547,
+      "stdout": "PASS 40 groups; 1203 Git-blob hashes; counts, completeness, tamper/count mutations, frozen-exam exclusion\n",
       "stderr": ""
     }
   ],
-  "final_effective_check_results": {
-    "passed": 67,
-    "unresolved_failures": 0,
-    "correction": "Turkish curtain wording changed from karartma katmanlı fon to karartma özellikli fon; engine inputs, operations, observations and motor evidence unchanged. Full C1 deterministic replay and related schema/audit/style/DOM checks rerun."
+  "historical_full_suite": {
+    "commit": "6b1464d",
+    "file": "knowledge/ai-egitim/veri/hacim-1-istek/test-ozeti.json",
+    "scope": "Previous C1 validation only, not a claim of rerunning the full UI suite for C1b"
   },
-  "C1_checks": [
-    "Exact deterministic replay of all 1800 final rows",
-    "200 normalized user and 190 reply patterns per language",
-    "80 constrained rows per language; all three types; no semicolon concatenation or new remote rooms",
-    "Wrong opening width, invalid textile and impossible proximity mutations",
-    "Archived v1 bytes unchanged; prior Claude duzelt retained",
-    "1800 lossless common-schema projections and no self approval"
-  ],
-  "review_dom": {
-    "scope": "Script syntax and mock DOM filters/pagination only; no browser visual QA",
-    "rows": 1800,
-    "languages": [
-      {
-        "language": "tr",
-        "categories": 4,
-        "passed": true
-      },
-      {
-        "language": "en",
-        "categories": 4,
-        "passed": true
-      },
-      {
-        "language": "de",
-        "categories": 4,
-        "passed": true
-      },
-      {
-        "language": "fr",
-        "categories": 4,
-        "passed": true
-      },
-      {
-        "language": "nl",
-        "categories": 4,
-        "passed": true
-      },
-      {
-        "language": "da",
-        "categories": 4,
-        "passed": true
-      },
-      {
-        "language": "es",
-        "categories": 4,
-        "passed": true
-      },
-      {
-        "language": "it",
-        "categories": 4,
-        "passed": true
-      },
-      {
-        "language": "ar",
-        "categories": 4,
-        "passed": true
-      }
-    ]
-  },
-  "cross_review": "Claude re-review pending; previous duzelt is preserved; zero qualified training rows"
+  "native_rows": 1800,
+  "frozen_positive_targets": 100,
+  "new_default_leaf_count_states": 10,
+  "review": "C1b resubmitted; Claude duzelt preserved; no automatic or self approval",
+  "qualified_H1_training_rows": 0
 }

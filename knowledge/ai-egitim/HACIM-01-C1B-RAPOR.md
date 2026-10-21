@@ -32,3 +32,5 @@ Main #197, dolap hücrelerine `lv: 0` (otomatik kapak sayısı) varsayılanını
 Eski 12 Arapça sohbetin motor kaynak zinciri yenilenir, iki üretim aynı baytları verir; diyaloglar değişmez. Birleşik korpusun bölmeleri ve ilgisiz satırları korunur. Bu mekanik işlem C2'yi kapatmaz.
 
 Önceki C1 raporu/test sonucu tarihsel kanıttır. Güncel C1b test kapsamı `veri/hacim-1-istek/test-ozeti.json` içindedir. Görsel tarayıcı veya ana dil QA iddia edilmez. Uygulama/motor dosyaları main'den gelir; bu düzeltme `assets/`, `api/`, kök HTML dosyalarını değiştirmez.
+
+Son doğrulama: **12/12 hedefli kontrol grubu geçti**. C1 deterministik motor/şema, varsayılan alan negatif politikası, 100 olumlu sınav hedefi ve puanlayıcı negatifleri, gold sızdırmayan istem, sızma/üslup, DOM filtre/sayfalama, 42 satırlık değişiklik kanıtı, ortak karantina/bölme defteri ve katalog denetlendi. C1b için tam UI/forma paketi yeniden çalıştırıldığı iddia edilmez; önceki C1 tam koşusu tarihsel olarak Git 6b1464d içindedir.
