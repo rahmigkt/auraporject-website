@@ -1,5 +1,7 @@
 // In-memory Supabase/storage only: never connect, sign in or write to a real account.
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {runInNewContext} from 'node:vm';
 const originals={window:globalThis.window,localStorage:globalThis.localStorage};
 let serial=0;
 class Storage {
@@ -25,7 +27,18 @@ async function setup({local={},remote={},remoteAt='2026-02-01T00:00:00Z',query,u
  return {account,storage,writes,selects,switchTo(id){onAuth('SIGNED_IN',id?{user:{id}}:null);}};
 }
 const keyOf=d=>d.key;
+// Exercise the studio's actual storage adapter without loading WebGL or external services.
+const studioSource=readFileSync(new URL('../assets/forma/studio.js',import.meta.url),'utf8');
+const storeCode=studioSource.match(/^const store = .+;$/m)?.[0];
+assert(storeCode,'studio storage adapter exists');
+const studioStore=account=>runInNewContext(storeCode+'\nstore;',{account,localStorage:globalThis.localStorage,JSON});
 const tests=[
+ ['opening unchanged saved work does not make it newer than a remote edit',async()=>{
+  const e=await setup({local:{'aura-forma-synced-user':'A','aura-forma-local-at':'2026-01-01T00:00:00Z','aura-forma-family':'"seating"'},remote:{'aura-forma-family':'"storage"'}});
+  studioStore(e.account).set('aura-forma-family','seating');
+  assert.equal(e.storage.getItem('aura-forma-local-at'),'2026-01-01T00:00:00Z');
+  await e.account.pull(keyOf);assert.equal(e.storage.getItem('aura-forma-family'),'"storage"');
+ }],
  ['first pull merges projects without losing unsynced local work',async()=>{
   const item=(id,key)=>({id,design:{key}});
   const e=await setup({local:{'aura-forma-project':JSON.stringify({items:[item('P1','same'),item('P2','local')]}),'aura-forma-local':'local'},remote:{'aura-forma-project':JSON.stringify({items:[item('P3','same')]}),'aura-forma-remote':'remote'}});
@@ -33,6 +46,12 @@ const tests=[
   const items=JSON.parse(e.storage.getItem('aura-forma-project')).items;
   assert.deepEqual(items.map(i=>i.design.key),['same','local']);assert.equal(new Set(items.map(i=>i.id)).size,2);
   assert.equal(e.storage.getItem('aura-forma-local'),'local');assert.equal(e.storage.getItem('aura-forma-remote'),'remote');
+ }],
+ ['editing stored work still marks it newer and saves it',async()=>{
+  const e=await setup({local:{'aura-forma-synced-user':'A','aura-forma-local-at':'2026-01-01T00:00:00Z','aura-forma-family':'"seating"'},remote:{'aura-forma-family':'"storage"'}});
+  studioStore(e.account).set('aura-forma-family','table');
+  assert.notEqual(e.storage.getItem('aura-forma-local-at'),'2026-01-01T00:00:00Z');
+  await e.account.flush();await e.account.pull(keyOf);assert.equal(e.storage.getItem('aura-forma-family'),'"table"');
  }],
  ['newer remote snapshot preserves deletions instead of uploading stale keys again',async()=>{
   const e=await setup({local:{'aura-forma-synced-user':'A','aura-forma-local-at':'2026-01-01T00:00:00Z','aura-forma-old':'deleted on another device','unrelated':'keep'},remote:{'aura-forma-new':'remote'}});
