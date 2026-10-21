@@ -206,25 +206,27 @@ export const DEFAULT_MATERIALS = {
   metal: {finish: 'black'}
 };
 
+const has = (catalog, key) => typeof key === 'string' && Object.prototype.hasOwnProperty.call(catalog, key);
+
 export function normalizeMaterials(m = {}) {
   const f = {...DEFAULT_MATERIALS.fabric, ...(m.fabric || {})};
-  if (!FIBERS[f.fiber]) f.fiber = 'linen';
-  if (!WEAVES[f.weave]) f.weave = 'plain';
-  if (!COLORS[f.color]) f.color = 'cream';
-  if (!COLORS[f.color2]) f.color2 = 'charcoal';
-  if (PATTERN_ALIASES[f.pattern]) f.pattern = PATTERN_ALIASES[f.pattern];
-  if (!PATTERNS[f.pattern] || HIDES.includes(f.fiber)) f.pattern = 'none'; // hides take no printed pattern
+  if (!has(FIBERS, f.fiber)) f.fiber = 'linen';
+  if (!has(WEAVES, f.weave)) f.weave = 'plain';
+  if (!has(COLORS, f.color)) f.color = 'cream';
+  if (!has(COLORS, f.color2)) f.color2 = 'charcoal';
+  if (has(PATTERN_ALIASES, f.pattern)) f.pattern = PATTERN_ALIASES[f.pattern];
+  if (!has(PATTERNS, f.pattern) || HIDES.includes(f.fiber)) f.pattern = 'none'; // hides take no printed pattern
   f.scale = Math.min(3, Math.max(0.5, Number(f.scale) || 1));
   f.density = Math.min(12, Math.max(1, Math.round(Number(f.density) || 3))); // 1 very sparse … 12 very dense
   const motifs = MOTIF_CHOICES[f.pattern];
   f.motif = motifs ? (motifs.includes(f.motif) ? f.motif : motifs[0]) : null;
   const w = {...DEFAULT_MATERIALS.wood, ...(m.wood || {})};
-  if (!WOODS[w.species]) w.species = 'gurgen';
-  if (!STAINS[w.stain]) w.stain = 'natural';
-  if (!FINISHES[w.finish]) w.finish = 'matte';
+  if (!has(WOODS, w.species)) w.species = 'gurgen';
+  if (!has(STAINS, w.stain)) w.stain = 'natural';
+  if (!has(FINISHES, w.finish)) w.finish = 'matte';
   const metal = {...DEFAULT_MATERIALS.metal, ...(m.metal || {})};
-  if (!METALS[metal.finish]) metal.finish = 'black';
-  const welt = {color: COLORS[m.welt?.color] ? m.welt.color : null};
+  if (!has(METALS, metal.finish)) metal.finish = 'black';
+  const welt = {color: has(COLORS, m.welt?.color) ? m.welt.color : null};
   return {fabric: f, welt, wood: w, metal};
 }
 
@@ -241,9 +243,9 @@ export function normalizeTableMaterials(m = {}) {
   const top = {...DEFAULT_TABLE_MATERIALS.top, ...(m.top || {})}, base = {...DEFAULT_TABLE_MATERIALS.base, ...(m.base || {})}, hardware = {...DEFAULT_TABLE_MATERIALS.hardware, ...(m.hardware || {})};
   if (!['wood', 'veneer', 'stone', 'glass', 'lacquer'].includes(top.surface)) top.surface = 'wood';
   if (!['wood', 'metal', 'lacquer', 'same'].includes(base.surface)) base.surface = 'wood';
-  for (const o of [top, base]) { if (!WOODS[o.species]) o.species = 'oak'; if (!STAINS[o.stain]) o.stain = 'natural'; if (!FINISHES[o.finish]) o.finish = 'oil'; if (!COLORS[o.color]) o.color = o === top ? 'white' : 'black'; }
-  if (!STONES[top.stone]) top.stone = 'carrara'; if (!GLASS[top.glass]) top.glass = 'clear'; if (!['honed', 'polished'].includes(top.polish)) top.polish = 'honed';
-  if (!METALS[base.metal]) base.metal = 'black'; if (!METALS[hardware.metal]) hardware.metal = 'brass';
+  for (const o of [top, base]) { if (!has(WOODS, o.species)) o.species = 'oak'; if (!has(STAINS, o.stain)) o.stain = 'natural'; if (!has(FINISHES, o.finish)) o.finish = 'oil'; if (!has(COLORS, o.color)) o.color = o === top ? 'white' : 'black'; }
+  if (!has(STONES, top.stone)) top.stone = 'carrara'; if (!has(GLASS, top.glass)) top.glass = 'clear'; if (!['honed', 'polished'].includes(top.polish)) top.polish = 'honed';
+  if (!has(METALS, base.metal)) base.metal = 'black'; if (!has(METALS, hardware.metal)) hardware.metal = 'brass';
   return {top, base, hardware};
 }
 
@@ -254,18 +256,18 @@ export function normalizeBedroomMaterials(m = {}) {
   const base = normalizeMaterials({...m, wood: {species: 'oak', stain: 'natural', finish: 'oil', ...(m.wood || {})}});
   const c = {surface: 'veneer', species: 'oak', stain: 'natural', finish: 'matte', color: 'cream', ...(m.case || {})};
   if (!['wood', 'veneer', 'lacquer'].includes(c.surface)) c.surface = 'veneer';
-  if (!WOODS[c.species]) c.species = 'oak'; if (!STAINS[c.stain]) c.stain = 'natural'; if (!FINISHES[c.finish]) c.finish = 'matte'; if (!COLORS[c.color]) c.color = 'cream';
+  if (!has(WOODS, c.species)) c.species = 'oak'; if (!has(STAINS, c.stain)) c.stain = 'natural'; if (!has(FINISHES, c.finish)) c.finish = 'matte'; if (!has(COLORS, c.color)) c.color = 'cream';
   const linen = {color: LINEN_COLORS.includes(m.linen?.color) ? m.linen.color : 'white'};
   return {...base, case: c, linen};
 }
 
 /** Case goods (RİTMO): carcass and fronts (solid wood, veneered MDF or lacquered MDF), leg wood, metal, glass. */
-const SURF = s => { const c = {surface: 'veneer', species: 'oak', stain: 'natural', finish: 'matte', color: 'white', ...s}; if (!['wood', 'veneer', 'lacquer'].includes(c.surface)) c.surface = 'veneer'; if (!WOODS[c.species] || c.species === 'gurgen') c.species = 'oak'; if (!STAINS[c.stain]) c.stain = 'natural'; if (!FINISHES[c.finish]) c.finish = 'matte'; if (!COLORS[c.color]) c.color = 'white'; return {surface: c.surface, species: c.species, stain: c.stain, finish: c.finish, color: c.color}; };
+const SURF = s => { const c = {surface: 'veneer', species: 'oak', stain: 'natural', finish: 'matte', color: 'white', ...s}; if (!['wood', 'veneer', 'lacquer'].includes(c.surface)) c.surface = 'veneer'; if (!has(WOODS, c.species) || c.species === 'gurgen') c.species = 'oak'; if (!has(STAINS, c.stain)) c.stain = 'natural'; if (!has(FINISHES, c.finish)) c.finish = 'matte'; if (!has(COLORS, c.color)) c.color = 'white'; return {surface: c.surface, species: c.species, stain: c.stain, finish: c.finish, color: c.color}; };
 export function normalizeStorageMaterials(m = {}) {
   const kase = SURF(m.case || {}), front = SURF(m.front || m.case || {});
   const w = {species: kase.surface === 'lacquer' ? 'oak' : kase.species, stain: kase.surface === 'lacquer' ? 'natural' : kase.stain, finish: 'oil', ...(m.wood || {})};
-  const wood = {species: WOODS[w.species] ? w.species : 'oak', stain: STAINS[w.stain] ? w.stain : 'natural', finish: FINISHES[w.finish] ? w.finish : 'oil'};
-  return {case: kase, front, wood, metal: {finish: METALS[m.metal?.finish] ? m.metal.finish : 'black'}, glass: {glass: GLASS[m.glass?.glass] ? m.glass.glass : 'clear'}};
+  const wood = {species: has(WOODS, w.species) ? w.species : 'oak', stain: has(STAINS, w.stain) ? w.stain : 'natural', finish: has(FINISHES, w.finish) ? w.finish : 'oil'};
+  return {case: kase, front, wood, metal: {finish: has(METALS, m.metal?.finish) ? m.metal.finish : 'black'}, glass: {glass: has(GLASS, m.glass?.glass) ? m.glass.glass : 'clear'}};
 }
 
 /** Kitchen: case-goods materials plus the worktop (stone, wood or lacquered compact) and the sink finish. */
@@ -273,8 +275,8 @@ export const SINK_FINISHES = ['steel', 'black', 'grey', 'white'];
 export function normalizeKitchenMaterials(m = {}) {
   const base = normalizeStorageMaterials(m), t = {surface: 'stone', stone: 'carrara', polish: 'honed', species: 'oak', stain: 'natural', finish: 'oil', color: 'white', ...(m.top || {})};
   if (!['stone', 'wood', 'lacquer'].includes(t.surface)) t.surface = 'stone';
-  if (!STONES[t.stone]) t.stone = 'carrara'; if (!['honed', 'polished'].includes(t.polish)) t.polish = 'honed';
-  if (!WOODS[t.species]) t.species = 'oak'; if (!STAINS[t.stain]) t.stain = 'natural'; if (!FINISHES[t.finish]) t.finish = 'oil'; if (!COLORS[t.color]) t.color = 'white';
+  if (!has(STONES, t.stone)) t.stone = 'carrara'; if (!['honed', 'polished'].includes(t.polish)) t.polish = 'honed';
+  if (!has(WOODS, t.species)) t.species = 'oak'; if (!has(STAINS, t.stain)) t.stain = 'natural'; if (!has(FINISHES, t.finish)) t.finish = 'oil'; if (!has(COLORS, t.color)) t.color = 'white';
   return {...base, top: t, sink: {finish: SINK_FINISHES.includes(m.sink?.finish) ? m.sink.finish : 'steel'}};
 }
 
@@ -286,7 +288,7 @@ export function normalizeRoomMaterials(m = {}) {
   const wall = {color: WALL_COLORS.includes(m.wall?.color) ? m.wall.color : 'cream'};
   const fl = {surface: 'wood', species: 'oak', stain: 'natural', finish: 'matte', stone: 'travertine', polish: 'honed', ...(m.floor || {})};
   if (!['wood', 'stone'].includes(fl.surface)) fl.surface = 'wood';
-  if (!WOODS[fl.species]) fl.species = 'oak'; if (!STAINS[fl.stain]) fl.stain = 'natural'; if (!FINISHES[fl.finish]) fl.finish = 'matte'; if (!STONES[fl.stone]) fl.stone = 'travertine';
+  if (!has(WOODS, fl.species)) fl.species = 'oak'; if (!has(STAINS, fl.stain)) fl.stain = 'natural'; if (!has(FINISHES, fl.finish)) fl.finish = 'matte'; if (!has(STONES, fl.stone)) fl.stone = 'travertine';
   const rug = {color: RUG_COLORS.includes(m.rug?.color) ? m.rug.color : 'cream'};
   return {...base, wall, floor: fl, rug};
 }
