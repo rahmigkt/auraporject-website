@@ -4,6 +4,7 @@ declare(strict_types=1);
 // package as a download. When enabled, the ZIP is stored OUTSIDE the web root and only small mails are sent:
 // the designer gets a signed download link, the customer a short confirmation with the design link. No attachments.
 $config = require __DIR__.'/forma-config.php';
+require_once __DIR__.'/forma-rate-limit.php';
 header('Content-Type: application/json; charset=utf-8'); header('Cache-Control: no-store'); header('X-Content-Type-Options: nosniff');
 function out(int $status, array $body): void { http_response_code($status); echo json_encode($body, JSON_UNESCAPED_UNICODE); exit; }
 $dir = rtrim((string)$config['submit_store_dir'], '/');
@@ -16,9 +17,9 @@ $origin = $_SERVER['HTTP_ORIGIN'] ?? ''; $host = $_SERVER['HTTP_HOST'] ?? '';
 if ($origin === '' || parse_url($origin, PHP_URL_HOST) !== explode(':', $host)[0]) out(403, ['error' => 'Origin not allowed']);
 // At most 5 submissions per address per hour.
 $bucket = sys_get_temp_dir().'/aura-submit-'.hash('sha256', ($_SERVER['REMOTE_ADDR'] ?? '').date('YmdH'));
-$count = is_file($bucket) ? (int)file_get_contents($bucket) : 0;
-if ($count >= 5) out(429, ['error' => 'Too many submissions']);
-file_put_contents($bucket, (string)($count + 1));
+try {
+  if (!forma_rate_slot($bucket, 5)) out(429, ['error' => 'Too many submissions']);
+} catch (RuntimeException $e) { out(503, ['error' => 'Request limit storage unavailable']); }
 
 $file = $_FILES['package'] ?? null;
 if (!$file || $file['error'] !== UPLOAD_ERR_OK || $file['size'] > $config['submit_max_mb'] * 1048576) out(400, ['error' => 'Missing or oversized package']);
