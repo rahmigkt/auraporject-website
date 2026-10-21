@@ -1,5 +1,5 @@
 // Interface text in the eight site languages. Missing keys fall back to English.
-import {AR, AR_P} from './i18n-ar.js?v=20261021a';
+import {AR, AR_P} from './i18n-ar.js?v=20261021b';
 export const UI_LANGS = {tr: 'Türkçe', en: 'English', de: 'Deutsch', fr: 'Français', nl: 'Nederlands', da: 'Dansk', es: 'Español', it: 'Italiano', ar: 'العربية'};
 export const isRTL = lang => lang === 'ar';
 
@@ -418,7 +418,7 @@ Object.assign(T, {
   sameAsCase:   ['Gövde ile aynı', 'Same as carcass', 'Wie Korpus', 'Comme le caisson', 'Zoals korpus', 'Som korpus', 'Igual que el casco', 'Come la struttura'],
   legWood:      ['Ayak', 'Legs', 'Beine', 'Pieds', 'Poten', 'Ben', 'Patas', 'Gambe'],
   glassKind:    ['Cam', 'Glass', 'Glas', 'Verre', 'Glas', 'Glas', 'Vidrio', 'Vetro'],
-  leaves:       ['Kapak', 'Door leaves', 'Türflügel', 'Vantaux', 'Deurvleugels', 'Lågefløje', 'Hojas', 'Ante'],
+  doorLeaves:   ['Kapak', 'Door leaves', 'Türflügel', 'Vantaux', 'Deurvleugels', 'Lågefløje', 'Hojas', 'Ante'],
   hingesN:      ['Menteşe', 'Hinges', 'Scharniere', 'Charnières', 'Scharnieren', 'Hængsler', 'Bisagras', 'Cerniere'],
   modulesN:     ['Modül', 'Modules', 'Module', 'Modules', 'Modules', 'Moduler', 'Módulos', 'Moduli'],
   designLink:   ['Tasarımı açan bağlantı', 'Link that opens the design', 'Link, der den Entwurf öffnet', 'Lien qui ouvre le design', 'Link die het ontwerp opent', 'Link der åbner designet', 'Enlace que abre el diseño', 'Link che apre il progetto'],
