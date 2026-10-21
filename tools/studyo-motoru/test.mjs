@@ -28,7 +28,13 @@ let fail = 0; const ok = (c, m) => { if (!c) { fail++; console.log('✗', m); } 
   const rs5 = uygula({plan}, [...kat, {katman: 'ev', type: 'merdiven', alt: 'k0', ust: 'k1', konum: [1500, 200], en: 900, basamak_sayisi: 12}]); ok(rs5.rapor.red[0]?.neden.includes('rıht'), 'yüksek rıht reddedilir');
   const rs6 = uygula({plan}, [...kat, {katman: 'ev', type: 'merdiven', alt: 'k0', ust: 'k1', konum: [1500, 200], en: 900, basamak_derinlik: 200}]); ok(rs6.rapor.red[0]?.neden.includes('basamak derinliği'), 'sığ basamak reddedilir');
   const rs7 = uygula({plan}, [{katman: 'ev', type: 'kat_ekle', id: 'k1', yukseklik: -2800}]); ok(rs7.rapor.red[0]?.neden.includes('kat yüksekliği'), 'negatif kat yüksekliği reddedilir');
-  ok(uygula({plan}, []).rapor.gecti !== undefined, 'boş işlem listesi'); }
+  ok(uygula({plan}, []).rapor.gecti !== undefined, 'boş işlem listesi');
+  const oda = plan.spaces[0].id, ri = uygula({plan}, [{katman: 'aydinlatma', type: 'isik', oda, tur: 'lambader', adet: 2, renk_k: 2700}, {katman: 'aydinlatma', type: 'isik', oda, tur: 'tavan', kapat: true}]);
+  const io = ri.rapor.olcum.aydinlatma?.find(x => x.oda === oda); ok(ri.rapor.gecti && io?.isik.lambader === 2 && io.isik.tavan === 0, 'ışık: iki lambader, tavan kapalı ' + JSON.stringify(io));
+  ok(uygula({plan}, [{katman: 'aydinlatma', type: 'isik', oda, renk_k: 9000}]).rapor.red.length === 1, 'aşırı renk sıcaklığı reddedilir');
+  ok(uygula({plan}, [{katman: 'aydinlatma', type: 'isik', oda: 'yok'}]).rapor.red.length === 1, 'olmayan odaya ışık reddedilir');
+  const rp = uygula({plan}, [{katman: 'proje', type: 'tasarimciya_gonder', not: 'salonu öncelikli'}]); ok(rp.rapor.gecti && rp.state.proje.gonderimler[0].not === 'salonu öncelikli', 'tasarımcıya gönderim kaydedilir');
+  ok(uygula({}, [{katman: 'proje', type: 'tasarimciya_gonder'}]).rapor.red.length === 1, 'boş proje gönderilmez'); }
 // tekstil
 { const r = uygula({}, [{katman: 'tekstil', type: 'perde', system: 'tul-fon', drape: {family: 'pamuk-kadife', color: 'zeytin'}}, {katman: 'tekstil', type: 'hali', construction: 'bukle', color: 'kum'}]);
   ok(r.state.tekstil.curtain.drape.family === 'pamuk-kadife' && r.state.tekstil.rug.construction === 'bukle' && r.state.tekstil.v === 2, 'perde kadife, halı bukle'); }
