@@ -108,3 +108,18 @@ Altyapı düzeltmesi, modelin aynı kusuru kapattığı anlamına gelmez.
 | Q02-010 | Yeni araç vocabulary dışında kalırsa otomatik eğitim kapsamı dışında kalabilir | Açık | Parametre/enum/style/kind/material sözlükten çoğalır; yeni eylem türleri için sözleşme ve örnek yazarı ayrıca genişletilmeli |
 
 Henüz yeni model turu tamamlanmadı; hiçbir model kusuru kapalı işaretlenmedi.
+
+
+## TOPARLAMA-01 yeni açıklar (21 Ekim 2026)
+
+| Kimlik | Açık durum | Kapanış için gereken |
+|---|---|---|
+| T01-001 | Birleşik 2578 adayın eğitim onayı yok; export 0 | Tam kayıt hash'ine bağlı insan/native onayı, kaynak ve uyarı incelemesi |
+| T01-002 | 40 sohbetin son yerleşim işlemleri var, her asistan turunun durum/eylem etiketi yok | Tur başına önce/sonra durum, doğru işlemler ve gerçek motor geri oynatması; son sonucu önceki turlara kopyalamamak |
+| T01-003 | Ev/yerleşim/tekstil ortak motoru hazır; canlı sohbet köprüsü ve ortak istem tamam değil | Assets/API sorumlusunun ayrı PR'ı; aynı prompt/vocabulary/action sürümüyle uçtan uca test |
+| T01-004 | Arap intake12, ölçülü yerleşim0; meclis/iki kat desteği eksik | İzinli ölçülü kaynak, motor desteği, native tasarımcı denetimi |
+| T01-005 | Kapalı sınav120 motor kontrollü fakat uzman onaysız; temel model koşusu yok | Bağımsız gold/native incelemesi; ayrı yetkilendirilmiş GPU'suz taban, biçim ve gerileme ölçümü |
+| T01-006 | Depo çapında eski services/snapshot hata ve forma süre aşımı açık | Tam hepsi.mjs sonucu ve ayrı sorumluluklu kod düzeltmeleri; sahte services veya sessiz skip yok |
+| T01-007 | Hacim30–40/ülke ve9×200 doğal komut tamam değil | Ülke başına ayrı, denetimli PR; sayılar mevcut geometri ve ön görüşme diye ayrılmalı |
+
+Bu satırlar yeni model başarısızlığı ölçümü değildir; hazırlık eksikleridir. Eğitim veya kiralık GPU kapısı açılmadı.

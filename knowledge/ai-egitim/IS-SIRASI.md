@@ -10,8 +10,8 @@ Güncel emir: [TOPARLAMA-01](CODEX-IS-EMRI-TOPARLAMA-01.md). Eğitim/GPU/ücretl
 | 4 | Toparlama 4: üslup | PR #165 açık; 40 sohbet tarandı, 178 mesaj düzeltildi; geometri sabit |
 | 5 | Toparlama 5: Arap dünyası | PR #166 açık, kısmi: 12 ön görüşme / 192 mesaj; yeni ölçülü yerleşim 0. Meclis ve iki katlı kaynak/motor desteği açık |
 | 6 | Toparlama 6: 120 kapalı görev | PR #167 açık: 120 görev; 100 motor gold kontrolü; model koşusu yok, uzman onayı bekliyor |
-| 7 | Toparlama 7: ülke başına hacim | Bekliyor: 1–4 kabul kapıları açık; 18 ülke açığı ASAMA-7-HACIM-DURUM.md içinde. Yeni kayıt teslimi yok |
-| 8 | Toparlama 8: eğitim hazırlığı | Ölçülen veri hacmine göre plan; eğitim başlatılmaz |
+| 7 | Toparlama 7: ülke başına hacim | PR #168 yalnız durum raporu; 1–4 kabul kapıları açık; 18 ülke açığı ASAMA-7-HACIM-DURUM.md içinde. Yeni kayıt teslimi yok |
+| 8 | Toparlama 8: eğitim hazırlığı | Bu dalda plan2, cevap maskesi ve koşullu süre/maliyet raporu; uygun train0, başlatma kapalı |
 | Paralel | Stüdyo motoru | Claude; bu veri dalı uygulama kodunu değiştirmez |
 | Beklemede | TASARIM-01, ARAŞTIRMA-01, SINAV-01B bağımsız onayı | Bu görev tarafından başlatılmadı |
 
