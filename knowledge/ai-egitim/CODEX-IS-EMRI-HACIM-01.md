@@ -1,6 +1,17 @@
 # CODEX-IS-EMRI-HACIM-01: Eğitim verisinin hacmi
 
-Başlangıç: güncel `main`. TOPARLAMA-01 bitti; testler 63/63 geçiyor. Aşama 1–4 kapısı kapandı, şimdi hacme geçiliyor. Kurallar TOPARLAMA-01 ile aynı:
+Başlangıç: güncel `main`.
+
+> **Kapsam kararı (kullanıcı, 21 Ekim 2026):** Yapay zekâ yalnızca **ev projesi** üzerinde çalışır. Mobilyanın detay tasarımı (kol yüksekliği, ayak, dikiş, kapak düzeni, malzeme ayrıntısı) stüdyonun ve kullanıcının işidir; yapay zekâ buna girmez, bu tür eğitim verisi üretilmez.
+>
+> Yapay zekânın işi:
+> - evin planı (duvar, kapı, pencere, oda);
+> - hangi odaya hangi eşyanın gireceği ve **toplam ölçüsü** (örneğin "üçlü kanepe 220×90");
+> - yerleşim isteği ve kısıtları;
+> - perde, halı ve aydınlatma;
+> - projeyi tasarımcıya gönderme.
+>
+> Kullanıcı bir mobilyanın detayını değiştirmek isterse asistan onu stüdyoya yönlendirir ("Kol yüksekliğini stüdyoda kanepeyi açıp ayarlayabilirsiniz") ve kendisi işlem üretmez. TOPARLAMA-01 bitti; testler 63/63 geçiyor. Aşama 1–4 kapısı kapandı, şimdi hacme geçiliyor. Kurallar TOPARLAMA-01 ile aynı:
 - `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz;
 - silme yok; sayı uydurma yok; onay taklit edilmez;
 - eğitim, GPU, ücretli API ve dağıtım yok;
@@ -17,19 +28,31 @@ Başlangıç: güncel `main`. TOPARLAMA-01 bitti; testler 63/63 geçiyor. Aşama
 
 ## Senin işlerin (sırayla, her biri ayrı PR)
 
-### H1: Mobilya komutları, 9 dil (PR: `hacim-1-komut`)
+### H1: Ev projesi istekleri, 9 dil (PR: `hacim-1-istek`)
 
-- **Dağılım:** TR, EN, DE, FR, NL, DA, ES, IT ve AR'nin her biri için en az 200 doğal mobilya komutu. Toplam en az 1.800.
-- **Gerçek seçenekler:** Komutlar canlı `vocabulary(design)` seçeneklerine bağlanır.
-- **Doğallık:** İnsanın yazacağı biçimde olacak: "kolları biraz alçalt", "ceviz ayak olsun", "240'lık, üç kapaklı", "biraz daha derin". Parametre adı geçen satır doğal komut sayılmaz.
+- **Dağılım:** TR, EN, DE, FR, NL, DA, ES, IT ve AR'nin her biri için en az 200 kısa ve doğal ev projesi isteği. Toplam en az 1.800.
+- **Örnekler:**
+  - "salona 3+2+1 koy, tekliyi pencere yanına";
+  - "yatak odasına 160'lık yatak ve iki komodin";
+  - "çocuk odasıyla çalışma odasının yerini değiştir";
+  - "balkon kapısının önünü boş bırak";
+  - "perdeleri koyu yeşil yap, salona kilim";
+  - "antreye ayakkabılık sığar mı";
+  - "projeyi tasarımcıya gönder".
+- **Hedef:** Stüdyo motoru işlemleri. Kullanılacak katmanlar:
+  - `ev`;
+  - `yerlesim` (`esyalar` + `kisitlar`; eşyanın türü ve toplam ölçüsü);
+  - `tekstil`;
+  - `proje`.
+
+  **`mobilya` katmanındaki detay işlemleri (`set/delta/enum/material` ile kol, ayak, kapak gibi parçalar) kullanılmaz.**
 - **İçerik karışımı (dil başına):**
   - %60 tek işlem;
   - %25 birden çok işlem;
-  - %10 belirsiz istek (asistan soru sorar, işlem üretmez);
-  - %5 stüdyoda olmayan istek (asistan dürüstçe söyler).
-- **Hedef ve doğrulama:** Hedef, `actions.js` işlem dizisi ve kısa cevaptır. Her satır `tools/studyo-motoru` ile doğrulanır; motorun reddettiği satır karantinaya gider.
+  - %10 belirsiz istek (asistan ölçü ya da oda sorar);
+  - %5 kapsam dışı istek: mobilya detayı ("kolu alçalt") ya da stüdyoda olmayan bir şey. Asistan stüdyoya yönlendirir ya da dürüstçe söyler; işlem üretmez.
+- **Doğrulama:** Her satır `tools/studyo-motoru` ile doğrulanır; reddedilen satır karantinaya gider. Sınavla benzerlik denetimi yapılır.
 - **Arapça:** Modern Standart Arapça. Körfez ağzıyla yazılmış kullanıcı satırları %20.
-- **Sızma yok:** Sınav setindeki (`aura-sinav-01`) komutlarla aynı ya da çok benzer satır olmayacak; benzerlik denetimi yazılacak.
 
 ### H2: Avrupa sohbetleri (PR'lar: `hacim-2-<ülke>`)
 
@@ -50,7 +73,7 @@ Başlangıç: güncel `main`. TOPARLAMA-01 bitti; testler 63/63 geçiyor. Aşama
 - **Sohbet türleri çeşitli olacak:**
   - bütün ev projesi;
   - tek oda;
-  - mobilya değişikliği;
+  - mevcut eşyanın değişmesi (ne ve hangi ölçüde, detay tasarımı değil);
   - perde ve halı;
   - "sığmıyor" durumu;
   - fikir değiştiren kullanıcı;
@@ -73,6 +96,8 @@ Başlangıç: güncel `main`. TOPARLAMA-01 bitti; testler 63/63 geçiyor. Aşama
 
 ### H5: Sınavın ilk koşusu, CPU (PR: `hacim-5-sinav-cpu`)
 
+- **Önce sınavı kapsama uydur:** `aura-sinav-01` içindeki 40 "mobilya düzenleme" görevi kapsam dışı kaldı. Bunları arşive al ve yerlerine 40 ev projesi isteği görevi koy (H1 türünde, sızma denetimiyle). İçlerinde 5 "mobilya detayı isteniyor → asistan stüdyoya yönlendirir, işlem üretmez" görevi olsun. Yeni sınav sürümünü dondur (`FREEZE`).
+
 - `aura-sinav-01`, `CPU-KOSU-PLANI.md`'ye göre küçük bir yerel Qwen ile (ya da en küçük uygun sürümle) çalıştırılır. GPU yok.
 - Amaç puan değil, puanlayıcının, istem biçiminin ve motor bağlantısının uçtan uca çalıştığını göstermek.
 - Sonuç, eğitimsiz temel modelin ilk ölçümü olarak kaydedilir.
@@ -87,7 +112,7 @@ Başlangıç: güncel `main`. TOPARLAMA-01 bitti; testler 63/63 geçiyor. Aşama
 
 **Tahmini hacim (hepsi tamamlanınca):**
 - 18 ülke × 30 = 540 sohbet;
-- 1.800+ mobilya komutu;
+- 1.800+ ev projesi isteği;
 - birkaç bin yerleşim becerisi kaydı.
 
 İlk gerçek eğitim, bunların tasarımcı onayından geçen kısmıyla yapılacak.
