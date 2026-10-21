@@ -15,6 +15,7 @@ Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sa
   - plana uzakta boş oda ekleme kalıbı azalır.
 - [x] **C1b · #187 kalan düzeltmeler** (Claude ikinci denetimi, `kararlar.json`): EN/FR/ES/IT/DA'da 'for the furniture' türü yapıştırma bağlacı olan 42 satır yeniden yazılır; asistan açılış kalıpları çeşitlenir. Tekstil satırları kalır (kullanıcı kararı: perde/halı asistanın işinde). #193 (eski mobilya komutu sürümü) kapsam dışı; kullanıcı onayıyla kapatılır.
 - [ ] **C8 · Eğitim betiğini EGITIM-01 biçimine bağla.** `tools/qwen-local/train_gpu.py` `outputs/egitim-01/{train,dev}.jsonl` (messages; son asistan turu `{"reply","actions"}`) okur, loss yalnız asistan turlarında. CPU'da 5 örnekle kuru koşu (model yüklemeden tokenizasyon + maske denetimi). GPU açılmaz. (`EGITIM-01.md`)
+  - Yerel uygulama ve 12 birim testi tamamlandı (`egitim-01-cpu-mask`, #187 üzerine). Gerçek tokenizer ile 5 örneğin maskesi ve tekrarlanabilirliği doğrulandı; 49 eğitim kaydının tüm maskeleri doğru. Beş kayıt 4096 token sınırını aşıyor; eğitim hazır değil, G9 açık. Kanıt: `C8-CPU-DOGRULAMA.json`. GitHub gönderimi otomatik onay denetimince engellendi; PR henüz açılmadığından görev kutusu açık tutuldu.
 - [ ] **C2 · 47 kaydın üslup düzeltmesi.** `inceleme/kararlar.json` içindeki `duzelt` kayıtları (ev-sohbet-02, uk-ie, dk 01/03/04, es, arap-olculu):
   - asistan satırlarında iç terim kalmaz ("adsız oda", "hesap", "kayıt", "yerleştirilen eşya sayısı", "elle konum");
   - kullanıcı satırları doğal olur, kendi evini anlatır;
