@@ -8,6 +8,7 @@ import {readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync} from 'n
 import {createHash} from 'node:crypto';
 import {uygula, SOZLUK, VERSION} from '../studyo-motoru/motor.mjs';
 import {motorDenetimi} from './motor-onbellek.mjs';
+import {h4Kaynak} from './h4-kaynak.mjs';
 import * as SINAV from '../aura-sinav-01/tasks.mjs';
 
 const arg = (k, d) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : d; };
@@ -38,7 +39,7 @@ if (existsSync(H1)) for (const f of readdirSync(H1).filter(f => /^[a-z]{2}\.json
   kayitlar.push({id: `hacim-1-istek:${r.id}`, ureten: r.review?.producer || 'Codex', dil: r.language, durum: r.state || {}, mesajlar: [{rol: 'user', metin: r.user}, {rol: 'assistant', metin: r.assistant.reply}], islemler: r.assistant.actions || [], grup: r.source?.group || r.id});
 const H4 = `${K}/veri/yerlesim-kisit`;
 if (existsSync(H4)) for (const f of readdirSync(H4).filter(f => f.endsWith('.jsonl'))) for (const r of jsonl(`${H4}/${f}`))
-  kayitlar.push({id: `yerlesim-kisit:${r.id}`, ureten: 'Claude', dil: r.dil || r.language, durum: r.durum || r.state || {}, mesajlar: r.mesajlar, islemler: r.islemler || r.actions || [], grup: r.grup || r.id});
+  kayitlar.push(h4Kaynak(r));
 
 // ---- süzme
 const sayim = {toplam: kayitlar.length, alinan: 0, neden: {}}, al = [], ret = (k, n) => { sayim.neden[n] = (sayim.neden[n] || 0) + 1; };

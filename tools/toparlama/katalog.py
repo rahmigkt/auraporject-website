@@ -40,6 +40,9 @@ def build():
     paths=[p for p in contents if p.startswith(prefix)]
     primary=[p for p in paths if re.search(r'/(tr|en|de|fr|nl|da|es|it|ar)\.jsonl$',p)]
     take('hacim-1-istek',paths,primary,'ev-plani','inceleme-bekliyor','1800 home-project request candidates; furniture detail actions excluded; common projection is support, not additional examples.','AURA original authored text and synthetic room studies',['HACIM-01 scope #180 and cross-review policy #185; fictional connected five-room home'],['C1b: 24 intent families; 200 normalized user patterns and 54 content-specific reply families per language; no global preambles','C1b resubmitted after Claude second duzelt; no training export; human/native review optional','Single synthetic-plan split cluster; no independent evaluation split','Lighting colour temperature and persisted designer request covered; no external delivery; percentage dimming unsupported','Combined corpus semantic deduplication pending'])
+    paths=[p for p in contents if p.startswith(base+'yerlesim-kisit/')]
+    primary=[p for p in paths if p.endswith('/adaylar.jsonl')]
+    take('yerlesim-kisit',paths,primary,'yerlesim','inceleme-bekliyor','H4 constraint conversion; CPU replay in progress. Checkpoint samples are support, not a delivered full corpus.','ProcTHOR Apache-2.0 geometry; AURA authored transformation',['procthor-aura-cozucu.jsonl.gz; original Claude source, Codex transformation'],['Full 4340-room engine replay pending; do not count source rows as accepted targets','New Codex target labels require Claude cross-review','Procedural geometry is not designer-authored housing','No training export or full-corpus approval'])
     for batch in ['02','uk-ie','dk','es','it','arap','arap-olculu']:
         prefix=base+'ev-sohbet-'+batch+'/'
         paths=[p for p in contents if p.startswith(prefix)]
