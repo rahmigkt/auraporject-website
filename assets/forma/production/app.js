@@ -14,8 +14,13 @@ const $ = s => document.querySelector(s);
 const PANEL = ['storage', 'kitchen', 'bath'];
 let items = [];
 
+function quantity(value = 1) {
+  const n = Number(value);
+  if (!['number', 'string'].includes(typeof value) || !Number.isInteger(n) || n < 1 || n > 999) throw new Error('Adet 1 ile 999 arasında tam sayı olmalı.');
+  return n;
+}
 function setItems(list) {
-  items = list.map((it, i) => ({id: it.id || `U${i + 1}`, qty: it.qty || 1, design: normalizeDesign(it.design)}));
+  items = list.map((it, i) => ({id: it.id || `U${i + 1}`, qty: quantity(it.qty ?? 1), design: normalizeDesign(it.design)}));
   $('#loadState').textContent = items.length ? `${items.length} ürün yüklendi.` : 'Tasarım bulunamadı.';
   render();
 }
@@ -57,7 +62,7 @@ async function shapedFiles(i) {
   return [{name: `${dir}/cnc-siluetler.dxf`, data: silhouetteDxf(c)}, {name: `${dir}/onay.json`, data: JSON.stringify({approvedBy: s.approvedBy, date: s.date, quantity: it.qty, link, design: d}, null, 2)}];
 }
 
-$('#items').addEventListener('change', e => { const q = e.target.dataset.qty; if (q !== undefined) items[+q].qty = Math.max(1, Math.min(999, +e.target.value || 1)); });
+$('#items').addEventListener('change', e => { const q = e.target.dataset.qty; if (q !== undefined) { try { items[+q].qty = quantity(e.target.value); $('#outState').textContent = ''; } catch (err) { e.target.value = String(items[+q].qty); $('#outState').textContent = err.message; } } });
 $('#items').addEventListener('click', async e => {
   const b = e.target.closest('button'); if (!b || !ready()) return;
   const i = +(b.dataset.cut ?? b.dataset.book); $('#outState').textContent = 'Hazırlanıyor…';
@@ -74,11 +79,11 @@ $('#all').onclick = async () => {
   catch (err) { $('#outState').textContent = String(err.message || err); }
 };
 for (const el of ['#approve', '#approver']) $(el).addEventListener('input', render);
-$('#link').addEventListener('change', async e => { const u = e.target.value.trim(), h = u.slice(u.indexOf('#')); const r = await readLink(h); if (!r) { $('#loadState').textContent = 'Bağlantı okunamadı.'; return; } setItems(r.design ? [{design: r.design}] : r.items); });
+$('#link').addEventListener('change', async e => { try { const u = e.target.value.trim(), h = u.slice(u.indexOf('#')); const r = await readLink(h); if (!r) { $('#loadState').textContent = 'Bağlantı okunamadı.'; return; } setItems(r.design ? [{design: r.design}] : r.items); } catch { $('#loadState').textContent = 'Bağlantı okunamadı.'; } });
 $('#file').addEventListener('change', async e => {
   const f = e.target.files[0]; if (!f) return;
   try { const j = JSON.parse(await f.text()); if (j.design) setItems([{design: j.design, qty: j.quantity}]); else if (j.link) { const r = await readLink(j.link.slice(j.link.indexOf('#'))); setItems(r?.design ? [{design: r.design}] : r?.items || []); } else setItems([]); }
   catch { $('#loadState').textContent = 'Dosya okunamadı.'; }
 });
-readLink().then(r => { if (r) setItems(r.design ? [{design: r.design}] : r.items); });
+readLink().then(r => { if (r) setItems(r.design ? [{design: r.design}] : r.items); }).catch(() => { $('#loadState').textContent = 'Bağlantı okunamadı.'; });
 void partName;
