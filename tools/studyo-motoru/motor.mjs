@@ -105,7 +105,7 @@ function yerlesim(state, ops, rep) {
     const opsE = P.openings.map(o => ({...o, a: val(o.offset_from_wall_start), w: val(o.width), h: val(o.height) || 2100, sill: val(o.sill_height)}));
     let res = solveRoom(sp, items, {walls, ops: opsE}, {count: 4, beam: 40});
     if (!res.ok) { // studio products are parametric: find the smallest change that fits, propose it, apply only with permission
-      const f = fitByShrinking(sp, items, {walls, ops: opsE}, {count: 4, beam: 40}, 6), ch = f.changes.map(c => ({esya: c.id, en: [c.from.w, c.to.w], derinlik: [c.from.d, c.to.d]}));
+      const f = fitByShrinking(sp, items, {walls, ops: opsE}, {count: 4, beam: 40}, 10), ch = f.changes.map(c => ({esya: c.id, en: [c.from.w, c.to.w], derinlik: [c.from.d, c.to.d]}));
       if (f.ok && op.kucultme === 'izinli') { res = f.result; for (const it of items) it.size = f.items.find(x => x.id === it.id).size; rep.uyari.push({katman: 'yerlesim', kod: 'kucultuldu', oda: sp.id, degisiklik: ch}); }
       else if (f.ok) (rep.oneri ??= []).push({katman: 'yerlesim', kod: 'kucultme_onerisi', oda: sp.id, degisiklik: ch, not: 'müşteri onaylarsa yerlestir işlemi kucultme: "izinli" ile tekrarlanır'});
       else { const without = items.filter(it => it.id !== res.failed), g = solveRoom(sp, without, {walls, ops: opsE}, {count: 1, beam: 40}); // smallest honest alternative: leave the piece out

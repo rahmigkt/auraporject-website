@@ -174,12 +174,13 @@ function smaller(it) { // one step smaller, or null at the limit
 }
 /** Try the room as asked; if it does not fit, shrink the piece that failed (then the largest movable pieces) step by step.
  *  Returns {ok, result, changes:[{id, name, from:{w,d}, to:{w,d}}]} — changes are a proposal until the customer agrees. */
-export function fitByShrinking(space, roomItems, ev, opts = {}, maxTries = 8) {
+export function fitByShrinking(space, roomItems, ev, opts = {}, maxTries = 10) {
   const quick = o => solveOnce(space, items, ev, {...o, beam: Math.min(o.beam || 60, 40)}); // the search itself stays narrow; the final answer widens
   let items = roomItems.map(it => ({...it, size: sizeOf(it)})), r = quick(opts); const orig = new Map(items.map(it => [it.id, it.size]));
   for (let t = 0; !r.ok && t < maxTries; t++) {
-    const order = [items.find(it => it.id === r.failed), ...[...items].sort((a, b) => b.size.w * b.size.d - a.size.w * a.size.d)].filter(Boolean);
-    const target = order.find(it => smaller(it)); if (!target) break;
+    // alternate: the piece that failed, then the largest other piece — a room is usually too full, not one piece too big
+    const failed = items.find(it => it.id === r.failed), others = items.filter(it => it !== failed && smaller(it)).sort((a, b) => b.size.w * b.size.d - a.size.w * a.size.d);
+    const target = (t % 2 === 0 && failed && smaller(failed)) ? failed : others[0] || (failed && smaller(failed) ? failed : null); if (!target) break;
     target.size = smaller(target); r = quick(opts);
   }
   if (!r.ok) r = solveRoom(space, items, ev, opts);
