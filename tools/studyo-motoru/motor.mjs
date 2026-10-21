@@ -8,7 +8,7 @@ import {FAMILIES} from '../../assets/forma/families.js';
 import {vocabulary, sanitizeActions} from '../../assets/forma/ai.js';
 import {applyDesignActions, headlessEnv} from '../../assets/forma/actions.js';
 import {analyse} from '../../assets/forma/physics.js';
-import {solveRoom, fitByShrinking} from '../../assets/ev/yerlesim.js';
+import {solveRoom} from '../../assets/ev/yerlesim.js';
 import {migrate} from '../../assets/ev/tekstil.js';
 
 export const VERSION = 'studyo-motoru/1';
@@ -103,14 +103,7 @@ function yerlesim(state, ops, rep) {
     if (bad) { rep.red.push({katman: 'yerlesim', op, neden: `eşya tanınmadı ya da ölçüsü eksik: ${JSON.stringify(bad)}`}); continue; }
     const walls = P.walls.map(w => { const [x0, y0] = w.from_xy_mm, [x1, y1] = w.to_xy_mm, L = Math.hypot(x1 - x0, y1 - y0) || 1; return {...w, x0, y0, ux: (x1 - x0) / L, uy: (y1 - y0) / L, L, t: val(w.thickness) || 120}; });
     const opsE = P.openings.map(o => ({...o, a: val(o.offset_from_wall_start), w: val(o.width), h: val(o.height) || 2100, sill: val(o.sill_height)}));
-    let res = solveRoom(sp, items, {walls, ops: opsE}, {count: 4, beam: 40});
-    if (!res.ok) { // studio products are parametric: find the smallest change that fits, propose it, apply only with permission
-      const f = fitByShrinking(sp, items, {walls, ops: opsE}, {count: 4, beam: 40}, 10), ch = f.changes.map(c => ({esya: c.id, en: [c.from.w, c.to.w], derinlik: [c.from.d, c.to.d]}));
-      if (f.ok && op.kucultme === 'izinli') { res = f.result; for (const it of items) it.size = f.items.find(x => x.id === it.id).size; rep.uyari.push({katman: 'yerlesim', kod: 'kucultuldu', oda: sp.id, degisiklik: ch}); }
-      else if (f.ok) (rep.oneri ??= []).push({katman: 'yerlesim', kod: 'kucultme_onerisi', oda: sp.id, degisiklik: ch, not: 'müşteri onaylarsa yerlestir işlemi kucultme: "izinli" ile tekrarlanır'});
-      else { const without = items.filter(it => it.id !== res.failed), g = solveRoom(sp, without, {walls, ops: opsE}, {count: 1, beam: 40}); // smallest honest alternative: leave the piece out
-        if (g.ok) (rep.oneri ??= []).push({katman: 'yerlesim', kod: 'cikarma_onerisi', oda: sp.id, esya: res.failed, not: 'en küçük ölçüde bile sığmıyor; bu parça olmadan oda kurallara uyuyor'}); }
-    }
+    const res = solveRoom(sp, items, {walls, ops: opsE}, {count: 4, beam: 40});
     (state.yerlesim ??= {})[sp.id] = res; state.sonOda = sp.id;
     if (!res.ok) { rep.kabul.push({katman: 'yerlesim', op}); rep.uyari.push({katman: 'yerlesim', kod: 'sigmiyor', oda: sp.id, metin: res.reason}); rep.olcum.yerlesim = {oda: sp.id, sigdi: false}; continue; }
     // pick the alternative that meets most constraints (ties: solver score)

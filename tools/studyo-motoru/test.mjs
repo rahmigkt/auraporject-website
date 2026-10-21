@@ -16,11 +16,6 @@ let fail = 0; const ok = (c, m) => { if (!c) { fail++; console.log('✗', m); } 
   ok(r.rapor.olcum.yerlesim?.sigdi && r.rapor.olcum.yerlesim.kisit_karsilanan === 2, 'salon: kanepe TV\'ye bakar, sehpa yakın — çözücü yerleştirdi, kısıtlar tuttu');
   const r2 = uygula({plan}, [{katman: 'yerlesim', type: 'yerlestir', oda: 'wc', esyalar: [{tur: 'yatak', en: 1800, derinlik: 2100}]}]);
   ok(r2.rapor.uyari.some(u => u.kod === 'sigmiyor'), 'WC\'ye çift kişilik yatak: sığmıyor');
-  const big = [{tur: 'mutfak', en: 3000, derinlik: 600}, {tur: 'tv', en: 2000, derinlik: 450}, {tur: 'kanepe', en: 2400, derinlik: 950}, {tur: 'sehpa', en: 1200, derinlik: 600}, {tur: 'masa', en: 2000, derinlik: 1000}];
-  const rk = uygula({plan}, [{katman: 'yerlesim', type: 'yerlestir', oda: 'salon', esyalar: big}]);
-  ok(rk.rapor.uyari.some(u => u.kod === 'sigmiyor') && rk.rapor.oneri?.length > 0, 'büyük takım sığmıyor; öneri verildi: ' + JSON.stringify(rk.rapor.oneri));
-  const rk2 = uygula({plan}, [{katman: 'yerlesim', type: 'yerlestir', oda: 'salon', esyalar: big, kucultme: 'izinli'}]);
-  ok(rk.rapor.oneri?.[0]?.kod !== 'kucultme_onerisi' || (rk2.rapor.olcum.yerlesim?.sigdi && rk2.rapor.uyari.some(u => u.kod === 'kucultuldu')), 'küçültme önerildiyse izinle uygulanır: ' + JSON.stringify(rk2.rapor.uyari));
   const r3 = uygula({plan}, [{katman: 'ev', type: 'aciklik_ekle', wall_id: D.walls[0].id, tur: 'kapi', konum: -50, en: 900}]); ok(r3.rapor.red.length === 1, 'duvar dışına taşan kapı reddedilir');
   const r4 = uygula({plan}, [{katman: 'ev', type: 'merdiven'}]); ok(r4.rapor.red[0]?.neden.includes('henüz'), 'merdiven: motorda henüz yok diye dürüst ret');
   ok(uygula({plan}, []).rapor.gecti !== undefined, 'boş işlem listesi'); }
