@@ -15,6 +15,12 @@ Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sa
   - plana uzakta boş oda ekleme kalıbı azalır.
 - [x] **C1b · #187 kalan düzeltmeler** (Claude ikinci denetimi, `kararlar.json`): EN/FR/ES/IT/DA'da 'for the furniture' türü yapıştırma bağlacı olan 42 satır yeniden yazılır; asistan açılış kalıpları çeşitlenir. Tekstil satırları kalır (kullanıcı kararı: perde/halı asistanın işinde). #193 (eski mobilya komutu sürümü) kapsam dışı; kullanıcı onayıyla kapatılır.
 - [ ] **C8 · Eğitim betiğini EGITIM-01 biçimine bağla.** `tools/qwen-local/train_gpu.py` `outputs/egitim-01/{train,dev}.jsonl` (messages; son asistan turu `{"reply","actions"}`) okur, loss yalnız asistan turlarında. CPU'da 5 örnekle kuru koşu (model yüklemeden tokenizasyon + maske denetimi). GPU açılmaz. (`EGITIM-01.md`)
+- [ ] **E1 · Ortak puanlayıcı** `tools/egitim/puanla.mjs` (biçim, motor, istek, dürüstlük, dil, kısalık; hile testleri).
+- [ ] **E2 · Süzerek öğrenme döngüsü** `tools/egitim/ornekle.py`; CPU kuru koşu.
+- [ ] **E3 · Pekiştirmeli öğrenme hazırlığı** (GRPO yapılandırması, KL, sınav aralığı; CPU kuru koşu).
+- [ ] **E4 · Görsel hakem araştırması** → `GORSEL-HAKEM-01.md`.
+- [ ] **E5 · Serbest çizim araçları sözleşmesi** → `SERBEST-CIZIM-SOZLESME-01.md`.
+- [ ] **E6 · Ev tekstili seçenek kataloğu** → `knowledge/ev-projesi/veri/ev-tekstili-katalog.json`.
 - [ ] **C2 · 47 kaydın üslup düzeltmesi.** `inceleme/kararlar.json` içindeki `duzelt` kayıtları (ev-sohbet-02, uk-ie, dk 01/03/04, es, arap-olculu):
   - asistan satırlarında iç terim kalmaz ("adsız oda", "hesap", "kayıt", "yerleştirilen eşya sayısı", "elle konum");
   - kullanıcı satırları doğal olur, kendi evini anlatır;
@@ -47,13 +53,15 @@ Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sa
 - [x] **G7 · Ev tekstili ürün araştırması** (`knowledge/ev-projesi/EV-TEKSTILI-URUN-ARASTIRMA-03.md`). Uygulama kullanıcı kararından sonra.
 - [x] **G8 · Eğitim kümesi derleyici** (`tools/egitim/derle.mjs`, `sistem.md`, `EGITIM-01.md`). İlk koşu: 51 uygun kayıt.
 - [ ] **G9 · Eğitim öncesi kararlar:** H1 ve H4 geldikçe denetim, kümeyi derleme, sınav puanlayıcısını yeni biçime bağlama.
+- [ ] **G10 · Ev tekstili ürün ailesi** (stüdyoda perde ve halı; E6 kataloğu gelince).
+- [ ] **G11 · Serbest çizim araçlarının stüdyoda uygulanması** (E5 sözleşmesinden sonra).
 - [ ] **G6 · C2 ve C3 çıktılarının denetimi** (her PR geldikçe).
 
 ## Kullanıcı kararları
 
 Verildi (21 Ekim 2026): model Qwen3.5-9B; GPU sınırı 6 saat / 4 dolar; perde ve halı asistanın işinde (seçim ve ölçü projeye eklenir). Eğitim sırası `EGITIM-01.md`.
 
-**Codex için öncelik sırası (eğitime giden yol):** C1b → C8 → H4 (C5) → C7 → H5 (C6). C2, C3, C4 eğitim sonrasına kalır.
+**Codex için öncelik sırası (eğitime giden yol):** C1b (bitti, #187 uygun ve main'de) → C8 → H4 (C5) → C7 → H5 (C6) → EGITIM-02 işleri E1–E6 (`CODEX-IS-EMRI-EGITIM-02.md`). C2, C3, C4 eğitim sonrasına kalır.
 
 Bekleyen:
 
