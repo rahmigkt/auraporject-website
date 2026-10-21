@@ -7,6 +7,7 @@
 import {readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {uygula, SOZLUK, VERSION} from '../studyo-motoru/motor.mjs';
+import {motorDenetimi} from './motor-onbellek.mjs';
 import * as SINAV from '../aura-sinav-01/tasks.mjs';
 
 const arg = (k, d) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : d; };
@@ -41,11 +42,12 @@ if (existsSync(H4)) for (const f of readdirSync(H4).filter(f => f.endsWith('.jso
 
 // ---- süzme
 const sayim = {toplam: kayitlar.length, alinan: 0, neden: {}}, al = [], ret = (k, n) => { sayim.neden[n] = (sayim.neden[n] || 0) + 1; };
+const motor = motorDenetimi(uygula);
 for (const k of kayitlar) {
   const kr = karar(k.id, k.ureten); if (kr !== 'uygun') { ret(k, `karar:${kr}`); continue; }
   if (k.islemler.some(o => o.katman === 'mobilya')) { ret(k, 'kapsam:mobilya-detay'); continue; }
   if (k.mesajlar.some(m => m.rol === 'user' && SINAV_METIN.has(norm(m.metin)))) { ret(k, 'sinav-sizintisi'); continue; }
-  if (k.islemler.length) { const {rapor} = uygula(k.durum, k.islemler); if (rapor.red.length) { ret(k, 'motor:red'); continue; } }
+  if (k.islemler.length && !motor.kabul(k.durum, k.islemler)) { ret(k, 'motor:red'); continue; }
   if (!k.mesajlar.length || k.mesajlar.at(-1).rol !== 'assistant') { ret(k, 'bicim:son-tur-asistan-degil'); continue; }
   al.push(k);
 }
@@ -61,6 +63,6 @@ const tr = al.filter(k => !dev(k.grup)), dv = al.filter(k => dev(k.grup));
 writeFileSync(`${OUT}/train.jsonl`, tr.map(k => JSON.stringify(ornek(k))).join('\n') + (tr.length ? '\n' : ''));
 writeFileSync(`${OUT}/dev.jsonl`, dv.map(k => JSON.stringify(ornek(k))).join('\n') + (dv.length ? '\n' : ''));
 const dagilim = a => a.reduce((o, k) => (o[k.id.split(':')[0]] = (o[k.id.split(':')[0]] || 0) + 1, o), {});
-const rapor = {surum: 'egitim-01', motor: VERSION, tarih: new Date().toISOString(), ...sayim, train: tr.length, dev: dv.length, kume: dagilim(al), dil: al.reduce((o, k) => (o[k.dil] = (o[k.dil] || 0) + 1, o), {})};
+const rapor = {surum: 'egitim-01', motor: VERSION, motor_denetimi: motor.sayim, tarih: new Date().toISOString(), ...sayim, train: tr.length, dev: dv.length, kume: dagilim(al), dil: al.reduce((o, k) => (o[k.dil] = (o[k.dil] || 0) + 1, o), {})};
 writeFileSync(`${OUT}/rapor.json`, JSON.stringify(rapor, null, 1));
 console.log(JSON.stringify(rapor, null, 1));

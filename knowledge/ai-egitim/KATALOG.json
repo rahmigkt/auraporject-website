@@ -1,7 +1,7 @@
 {
   "version": "aura-catalog/1",
   "date": "2026-10-21",
-  "snapshot_base": "326a137276bd0bf4032f38f96183e2ad32befa52",
+  "snapshot_base": "d95f4a82d664f3a823b07f917115ff59dd9c85ac",
   "hash_policy": "Exact tracked Git blob bytes; checkout CRLF does not change catalogue hashes. Aggregate hash includes file paths, sizes and primary/support roles.",
   "counts_policy": "Counts cover tracked primary rows only; sets may overlap, so totals are NOT unique projects. Null is unknown/not applicable, never zero.",
   "datasets": [
@@ -8758,6 +8758,34 @@
       "coverage": []
     },
     {
+      "id": "support-knowledge-ai-egitim-c8-cpu-dogrulama-json",
+      "path": "knowledge/ai-egitim/C8-CPU-DOGRULAMA.json",
+      "summary": "Structured research/support/derived artifacts; primary candidate counts not inferred.",
+      "sha256": "dce0f89aa9508d292627190a6de67918aca42d22838c36422993e5f77d1cc354",
+      "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
+      "sources": [],
+      "license": null,
+      "record_count": null,
+      "record_count_scope": "research/support material; no candidate records asserted",
+      "languages": {},
+      "countries": {},
+      "layer": "genel-sohbet",
+      "status": "yalnizca-arastirma",
+      "known_defects": [
+        "Per-file reuse rights/semantic role must be verified before training"
+      ],
+      "primary_files": [],
+      "files": [
+        {
+          "path": "knowledge/ai-egitim/C8-CPU-DOGRULAMA.json",
+          "sha256": "0e933c8ca7453e4d20efd38c43a6e92dbf01b20541ee6e1a0f8d7332a6b9d349",
+          "bytes": 19896,
+          "role": "support"
+        }
+      ],
+      "coverage": []
+    },
+    {
       "id": "support-knowledge-ai-egitim-islem-sozlugu-1-json",
       "path": "knowledge/ai-egitim/ISLEM-SOZLUGU-1.json",
       "summary": "Structured research/support/derived artifacts; primary candidate counts not inferred.",
@@ -8789,7 +8817,7 @@
       "id": "support-knowledge-ai-egitim-inceleme",
       "path": "knowledge/ai-egitim/inceleme",
       "summary": "Structured research/support/derived artifacts; primary candidate counts not inferred.",
-      "sha256": "835df41d2dd16a110e7cef458adce5d51a64d6e85395c51c6504fb341179a9bf",
+      "sha256": "8f6db45a684a9f7d772ad6cc84de0a44f00527dc12acaa1ca38eafe005655b59",
       "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
       "sources": [],
       "license": null,
@@ -8818,8 +8846,8 @@
         },
         {
           "path": "knowledge/ai-egitim/inceleme/kararlar.json",
-          "sha256": "6b1205ec778c0d1ce590a110fe55e632d42ae99665590033e2e27b5344b221dc",
-          "bytes": 68776,
+          "sha256": "e645a531dfcc9bca912e900ecad5e4b72bd6d09ea237aeb718500859a4c52d96",
+          "bytes": 68000,
           "role": "support"
         }
       ],
@@ -9498,9 +9526,9 @@
         "unknown_count_datasets": 1
       },
       "yalnizca-arastirma": {
-        "datasets": 18,
+        "datasets": 19,
         "records": 1120,
-        "unknown_count_datasets": 16
+        "unknown_count_datasets": 17
       }
     },
     "licenses": {
@@ -9511,7 +9539,7 @@
       "AURA original synthetic research": 2,
       "AURA original": 5,
       "AURA authored text; references keep own rights": 1,
-      "unknown": 19,
+      "unknown": 20,
       "AURA authored": 2,
       "AURA original authored tasks": 1
     },
@@ -10479,8 +10507,8 @@
     ]
   },
   "coverage": {
-    "structured_files": 1203,
-    "inventoried_files": 1203,
+    "structured_files": 1204,
+    "inventoried_files": 1204,
     "unassigned": []
   }
 }

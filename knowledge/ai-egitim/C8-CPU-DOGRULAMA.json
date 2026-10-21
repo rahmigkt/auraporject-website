@@ -1,0 +1,569 @@
+{
+  "version": "C8-CPU-proof/2",
+  "date": "2026-10-21",
+  "source_main": "af8ed63892c321cb9bf3b56af81c245a1a56d8da",
+  "H1_approval": "PR #187 merged; Claude cross-review #202 is suitable; no approval changed by C8",
+  "source_code_sha256": {
+    "tools/qwen-local/train_gpu.py": "ad3b63bbe81cf924e745240f0e81c13ab72891344858963f6069e4473c3e8e65",
+    "tools/qwen-local/egitim01_runner.py": "3915dfee30258fd55c6cf86ae433f1f6723de51a7339e5c715d39f4dd33112c6",
+    "tools/qwen-local/egitim01_features.py": "9d57f593e288df12aebe3bd3442dc05d01ee62872f3efe0c82894aae97d34877",
+    "tools/qwen-local/requirements-egitim01-cpu.txt": "c07567169a6d96f6a81b32d2940edee7b0dd3851e6b0dfd3ac8b7ae7e28dd910",
+    "tests/egitim01-mask-check.py": "f89309d448dcb62b1ad6af63f33735e93835192acdf5ece3b12b6f8a06ee991e",
+    "tools/egitim/derle.mjs": "9bca04b5df5182314d21ec8c6ecd425e055fcb8e4843feb9b6540fb4e8e1498f",
+    "tools/egitim/motor-onbellek.mjs": "daace9aafea5cd1f30ad16fa6402d68c4be69a3ac6f1f2092a9b81958579c408",
+    "tests/egitim-motor-onbellek-check.mjs": "1022c75ad631e3f3d59f28fd304a0c39a69070020361eac6ad0d481c14973c98"
+  },
+  "archived_original": {
+    "git_commit": "128dd93",
+    "path": "tools/qwen-local/archive/train_gpu-before-egitim01.py",
+    "sha256": "c373a3fe4ddbf730c7980dd5d15251c730e06d5bf19cb7735bceb9f1e988e728",
+    "bytes_unchanged": true
+  },
+  "contract_unit_tests": {
+    "passed": 12,
+    "failed": 0
+  },
+  "targeted_checks": [
+    {
+      "command": [
+        "python",
+        "tests/egitim01-mask-check.py"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "............\n----------------------------------------------------------------------\nRan 12 tests in 0.704s\n\nOK\n"
+    },
+    {
+      "command": [
+        "python",
+        "tests/qwen-response-loss-check.py"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS assistant-only loss, target EOS retained, prompt excluded, aligned masks and no silent truncation.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "tests/qwen-training-plan-check.py"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS training-plan arithmetic, partial batches, honest data availability, hypothetical timings and invalid measured values.\nPASS response-only labels, padding/empty/invalid-mask rejection, disabled GPU gate, preserved historical plan\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "tests/qwen-large-gate-check.py"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS fail-closed thresholds, missing evidence, explicit approval and invalid metric types.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "tests/egitim-motor-onbellek-check.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS fresh engine per run; exact-input reuse; state/action mutations; cached rejection\n",
+      "stderr": ""
+    }
+  ],
+  "compiled_dataset": {
+    "surum": "egitim-01",
+    "motor": "studyo-motoru/1",
+    "motor_denetimi": {
+      "kayit": 1535,
+      "benzersiz": 149,
+      "tekrar": 1386
+    },
+    "tarih": "2026-10-21T19:04:01.115Z",
+    "toplam": 1981,
+    "alinan": 1851,
+    "neden": {
+      "karar:duzelt": 47,
+      "karar:bekliyor": 1,
+      "karar:ret": 82
+    },
+    "train": 1759,
+    "dev": 92,
+    "kume": {
+      "ev-sohbet-dk": 1,
+      "ev-sohbet-it": 4,
+      "perde-diyaloglar": 34,
+      "ev-sohbet-arap": 12,
+      "hacim-1-istek": 1800
+    },
+    "dil": {
+      "da": 203,
+      "it": 207,
+      "nl": 203,
+      "fr": 205,
+      "de": 205,
+      "en": 205,
+      "sv": 2,
+      "no": 2,
+      "es": 202,
+      "pt": 2,
+      "tr": 203,
+      "ar": 212
+    }
+  },
+  "final_native_five_example_run": {
+    "contract": "egitim-01/messages/reply-actions",
+    "model": "Qwen/Qwen3.5-9B",
+    "train_rows": 1759,
+    "dev_rows": 92,
+    "data_files_sha256": {
+      "train.jsonl": "7394924f020fadcd39df929835ec4040bbf4bb82bf784a521f339d35f04e6066",
+      "dev.jsonl": "4d468374317b08d7755487da32575e3d09ac6308fe5db2aa27bfe9ab7b92ab04",
+      "rapor.json": "0e8e0bea95d76e47ea965397e6aa7ae6417b419c61987da8653d3194e39be55c"
+    },
+    "max_sequence_length": 4096,
+    "model_loaded": false,
+    "gpu_executed": false,
+    "training_started": false,
+    "status": "dry_run_context_overflow",
+    "samples": 5,
+    "selection": "Evenly spaced training rows only; no dev sampling",
+    "tokenizer_files_sha256": {
+      "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+      "tokenizer_config.json": "490498ee083cd1231edb428ad621829e69d9187a3ff9c4d0ffedfc7d8f95e436",
+      "chat_template.jinja": "a4aee8afcf2e0711942cf848899be66016f8d14a889ff9ede07bca099c28f715"
+    },
+    "tokenizer_packages": {
+      "tokenizers": "0.22.2",
+      "Jinja2": "3.1.6"
+    },
+    "features_sha256": "a0d699e6a7133f2db879f11a321c46325ccecf07694ec5ee098959b0c23465ba",
+    "assistant_payload_and_eos_masks_passed": true,
+    "context_gate_passed": false,
+    "over_context_rows": [
+      "ev-sohbet-dk:ev-sohbet-dk-02"
+    ],
+    "full_dataset_tokenization_checked": false,
+    "framework_modules_loaded": {
+      "torch": false,
+      "transformers": false,
+      "unsloth": false
+    },
+    "rows": [
+      {
+        "id": "ev-sohbet-dk:ev-sohbet-dk-02",
+        "tokens": 35511,
+        "assistant_turns": 8,
+        "supervised_tokens": 888,
+        "supervised_tokens_by_turn": [
+          51,
+          60,
+          58,
+          62,
+          52,
+          56,
+          57,
+          492
+        ],
+        "masked_tokens": 34623,
+        "within_context": false,
+        "leading_system_messages_coalesced": 1,
+        "rendered_sha256": "bfc0af97e96b5dac7a04c7eaba4f1f061b2e5f38599e46b264b38e696581d4b7",
+        "assistant_payloads_sha256": "447f26868b0291a26bf25de232060147ee766df8379a8a62c4377b129774dab0",
+        "decoded_targets_match": true,
+        "prompt_tokens_supervised": 0,
+        "truncated": false
+      },
+      {
+        "id": "hacim-1-istek:hacim-istek-de-011",
+        "tokens": 2400,
+        "assistant_turns": 1,
+        "supervised_tokens": 127,
+        "supervised_tokens_by_turn": [
+          127
+        ],
+        "masked_tokens": 2273,
+        "within_context": true,
+        "leading_system_messages_coalesced": 1,
+        "rendered_sha256": "a5526b19277df01df6f86cbf01077abc5c50f1d64cd15effed83541bd2fba247",
+        "assistant_payloads_sha256": "ff9d6ac1912eaa97422820ff2bfd0279d5f85a3ac28bc474933b1d688995547e",
+        "decoded_targets_match": true,
+        "prompt_tokens_supervised": 0,
+        "truncated": false
+      },
+      {
+        "id": "hacim-1-istek:hacim-istek-es-076",
+        "tokens": 2243,
+        "assistant_turns": 1,
+        "supervised_tokens": 42,
+        "supervised_tokens_by_turn": [
+          42
+        ],
+        "masked_tokens": 2201,
+        "within_context": true,
+        "leading_system_messages_coalesced": 1,
+        "rendered_sha256": "423cca56757b48bafefe8b0dc5fdcd0779b87f98bd7d02d6727fb9eccc8b0f31",
+        "assistant_payloads_sha256": "ce1bff813e2991997eb816d70d7845b5bc26228c7a3c4d2ed24ccad33dc681d7",
+        "decoded_targets_match": true,
+        "prompt_tokens_supervised": 0,
+        "truncated": false
+      },
+      {
+        "id": "hacim-1-istek:hacim-istek-it-140",
+        "tokens": 2465,
+        "assistant_turns": 1,
+        "supervised_tokens": 176,
+        "supervised_tokens_by_turn": [
+          176
+        ],
+        "masked_tokens": 2289,
+        "within_context": true,
+        "leading_system_messages_coalesced": 1,
+        "rendered_sha256": "ca5ed7040cc23c7dbef370bc943a42097acecd683c752d5bc7b3d7ddd2c8203a",
+        "assistant_payloads_sha256": "8efb5a36f23809f804281cbcea3d37ff9558529797bc8abcdb0b34851a0730f0",
+        "decoded_targets_match": true,
+        "prompt_tokens_supervised": 0,
+        "truncated": false
+      },
+      {
+        "id": "hacim-1-istek:hacim-istek-tr-200",
+        "tokens": 2230,
+        "assistant_turns": 1,
+        "supervised_tokens": 32,
+        "supervised_tokens_by_turn": [
+          32
+        ],
+        "masked_tokens": 2198,
+        "within_context": true,
+        "leading_system_messages_coalesced": 1,
+        "rendered_sha256": "8862d9d97d288ccbc6a471bc3e4c0d18c860deec29fa8d42be1a8d7d3d3dd38e",
+        "assistant_payloads_sha256": "aa56fa8153f9a054c8000c21e9d9c928efd384474c767a626e82273c58ad6041",
+        "decoded_targets_match": true,
+        "prompt_tokens_supervised": 0,
+        "truncated": false
+      }
+    ]
+  },
+  "native_repeatability": {
+    "features_byte_identical": true,
+    "report_byte_identical": true,
+    "features_sha256": "a0d699e6a7133f2db879f11a321c46325ccecf07694ec5ee098959b0c23465ba",
+    "report_sha256": "ca5d226d07b47feb9457294dad3e2a617387c2c1fd9d4393e7bcf23cb43e77ac"
+  },
+  "train_context_audit": {
+    "train_rows": 1759,
+    "dev_rows": 92,
+    "dev_tokenization_checked": false,
+    "mask_checks_passed": 1759,
+    "max_sequence_length": 4096,
+    "over_context_rows": [
+      {
+        "id": "ev-sohbet-dk:ev-sohbet-dk-02",
+        "tokens": 35511,
+        "assistant_turns": 8,
+        "supervised_tokens": 888,
+        "supervised_tokens_by_turn": [
+          51,
+          60,
+          58,
+          62,
+          52,
+          56,
+          57,
+          492
+        ],
+        "masked_tokens": 34623,
+        "within_context": false,
+        "leading_system_messages_coalesced": 1,
+        "rendered_sha256": "bfc0af97e96b5dac7a04c7eaba4f1f061b2e5f38599e46b264b38e696581d4b7",
+        "assistant_payloads_sha256": "447f26868b0291a26bf25de232060147ee766df8379a8a62c4377b129774dab0",
+        "decoded_targets_match": true,
+        "prompt_tokens_supervised": 0,
+        "truncated": false
+      },
+      {
+        "id": "ev-sohbet-it:ev-sohbet-it-01",
+        "tokens": 25880,
+        "assistant_turns": 8,
+        "supervised_tokens": 723,
+        "supervised_tokens_by_turn": [
+          47,
+          51,
+          49,
+          67,
+          46,
+          44,
+          41,
+          378
+        ],
+        "masked_tokens": 25157,
+        "within_context": false,
+        "leading_system_messages_coalesced": 1,
+        "rendered_sha256": "101ffdb83a30823c18b236be9019c3e6254f87151e7f95bd1b5d2c5e354eb4f8",
+        "assistant_payloads_sha256": "453f54cd3a5bacc0ecde439a66ad6d79f286fdfc77178ff5489b53e6fdf28a51",
+        "decoded_targets_match": true,
+        "prompt_tokens_supervised": 0,
+        "truncated": false
+      },
+      {
+        "id": "ev-sohbet-it:ev-sohbet-it-02",
+        "tokens": 23695,
+        "assistant_turns": 8,
+        "supervised_tokens": 763,
+        "supervised_tokens_by_turn": [
+          53,
+          57,
+          54,
+          56,
+          53,
+          52,
+          53,
+          385
+        ],
+        "masked_tokens": 22932,
+        "within_context": false,
+        "leading_system_messages_coalesced": 1,
+        "rendered_sha256": "f2314372fd0285cc64fff00ef9021bdb28abfac76844bbe5dc762a9ceffa74ac",
+        "assistant_payloads_sha256": "fde491353ce610a87c457577224f84afec8eea599f876697b5033ec9336a816b",
+        "decoded_targets_match": true,
+        "prompt_tokens_supervised": 0,
+        "truncated": false
+      },
+      {
+        "id": "ev-sohbet-it:ev-sohbet-it-03",
+        "tokens": 29176,
+        "assistant_turns": 8,
+        "supervised_tokens": 720,
+        "supervised_tokens_by_turn": [
+          42,
+          48,
+          51,
+          57,
+          47,
+          51,
+          49,
+          375
+        ],
+        "masked_tokens": 28456,
+        "within_context": false,
+        "leading_system_messages_coalesced": 1,
+        "rendered_sha256": "768a557a8b51e462ceb53238d082d97e63e124a5e6f06a9b0d598db088de252b",
+        "assistant_payloads_sha256": "4ef3d8f5b6607ffa7491a08263259ef186c5f6e6a563b573b4d5218885fab983",
+        "decoded_targets_match": true,
+        "prompt_tokens_supervised": 0,
+        "truncated": false
+      },
+      {
+        "id": "ev-sohbet-it:ev-sohbet-it-04",
+        "tokens": 22102,
+        "assistant_turns": 8,
+        "supervised_tokens": 843,
+        "supervised_tokens_by_turn": [
+          41,
+          48,
+          51,
+          62,
+          45,
+          53,
+          51,
+          492
+        ],
+        "masked_tokens": 21259,
+        "within_context": false,
+        "leading_system_messages_coalesced": 1,
+        "rendered_sha256": "531986df444ede8bbf5a2aa87cd235809d0eb333b2f6e9d87e90e420a0f262d6",
+        "assistant_payloads_sha256": "c56095ed9f1507496f4d31795f37d6a291d351dfd3c0416aaeed421ad2c4b1b5",
+        "decoded_targets_match": true,
+        "prompt_tokens_supervised": 0,
+        "truncated": false
+      }
+    ],
+    "features_sha256": "bb20433aebf309b3fbf9a9d831a6e6456ec4cea709a7b5f3d0a8660d1dd75081",
+    "data_files_sha256": {
+      "train.jsonl": "7394924f020fadcd39df929835ec4040bbf4bb82bf784a521f339d35f04e6066",
+      "dev.jsonl": "4d468374317b08d7755487da32575e3d09ac6308fe5db2aa27bfe9ab7b92ab04",
+      "rapor.json": "0e8e0bea95d76e47ea965397e6aa7ae6417b419c61987da8653d3194e39be55c"
+    }
+  },
+  "known_group_leakage": {
+    "source": "plan:hacim-istek-connected-home-C1-v2",
+    "H1_rows_by_split": {
+      "train": 1710,
+      "dev": 90
+    },
+    "problem": "Compiler source.group is an intent, although H1 uses one synthetic home. G9 must keep the common home in one partition. ID disjointness alone is insufficient."
+  },
+  "full_suite": {
+    "complete": false,
+    "reason": "Stopped after Forma exceeded the suite 180-second limit, while heavy compilation/replay was running. A standalone Forma retry was also interrupted without an assertion result. Separate relevant checks are recorded above. A full green result is not claimed.",
+    "completed_results": [
+      {
+        "id": "tests/ai-workspace-check.mjs",
+        "file": "tests/ai-workspace-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS 3 imported home templates × 14 furniture families: proposals do not mutate rooms, bounds, occupancy, edit exclusion, sliding-door clearance and sanitised restore.\n",
+        "stderr": "",
+        "milliseconds": 1062
+      },
+      {
+        "id": "tests/assistant-contract-check.mjs",
+        "file": "tests/assistant-contract-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS 26 style directions, six categories, response allowlist, explicit avoid context, 52 unreviewed candidates and reviewed-only training export.\n",
+        "stderr": "",
+        "milliseconds": 630
+      },
+      {
+        "id": "tests/brief-pdf-check.mjs",
+        "file": "tests/brief-pdf-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS brief PDF accepts no design and paginates long requests without invoking furniture drawing (mock canvas).\n",
+        "stderr": "",
+        "milliseconds": 1270
+      },
+      {
+        "id": "tests/camera-framing-check.mjs",
+        "file": "tests/camera-framing-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS 243 perspective fits: all 3D envelope corners stay in frame.\n",
+        "stderr": "",
+        "milliseconds": 460
+      },
+      {
+        "id": "tests/catalogue-check.mjs",
+        "file": "tests/catalogue-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS 11 spaces, 14 groups, 88 product types, 62 valid paths; no misleading drawing for unsupported products; saved-state migration and invalid cross-room choices.\n",
+        "stderr": "",
+        "milliseconds": 550
+      },
+      {
+        "id": "tests/catalogue-graph-check.mjs",
+        "file": "tests/catalogue-graph-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS 62 allowed and 13490 rejected space/group/product triples, migrations and context resets.\n",
+        "stderr": "",
+        "milliseconds": 1267
+      },
+      {
+        "id": "tests/choice-flow-check.mjs",
+        "file": "tests/choice-flow-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS 463 option variants across 14 complete family flows; fixed seats, rounded/sloped arms, back variants, chaise, round tops, project hand-off.\nPASS continuous back support for 9 armless seating variants\n",
+        "stderr": "",
+        "milliseconds": 811
+      },
+      {
+        "id": "tests/codesign-check.mjs",
+        "file": "tests/codesign-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS 336 studio geometry combinations and response validation\n",
+        "stderr": "",
+        "milliseconds": 900
+      },
+      {
+        "id": "tests/csg-check.mjs",
+        "file": "tests/csg-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "cut 2525 -> 2336 ok\n",
+        "stderr": "",
+        "milliseconds": 1322
+      },
+      {
+        "id": "tests/egitim01-mask-check.py",
+        "file": "tests/egitim01-mask-check.py",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "",
+        "stderr": "............\r\n----------------------------------------------------------------------\r\nRan 12 tests in 2.980s\r\n\r\nOK\r\n",
+        "milliseconds": 4208
+      },
+      {
+        "id": "tests/ev-arap-olculu-check.mjs",
+        "file": "tests/ev-arap-olculu-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS 12 exact production-solver replays / 24 compiled footprints; requested sizes unchanged, no fallback, no invented upper floor or training approval\n",
+        "stderr": "",
+        "milliseconds": 36882
+      },
+      {
+        "id": "tests/ev-arap-olculu-geometry-check.py",
+        "file": "tests/ev-arap-olculu-geometry-check.py",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS 12 measured-source geometry audits, country/language/8-turn truthfulness, manual-position/source/wall mutations, 12 SVG hashes; native and designer review pending\r\n",
+        "stderr": "",
+        "milliseconds": 19968
+      },
+      {
+        "id": "tests/forma-check.mjs",
+        "file": "tests/forma-check.mjs",
+        "args": [],
+        "code": null,
+        "timedOut": true,
+        "stdout": "",
+        "stderr": "",
+        "milliseconds": 180026
+      },
+      {
+        "id": "tests/hacim-exam-revalidation-policy-check.mjs",
+        "file": "tests/hacim-exam-revalidation-policy-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS strict absent-to-zero leaf normalization policy; nonzero/existing/width/unrelated changes rejected\n",
+        "stderr": "",
+        "milliseconds": 125
+      }
+    ]
+  },
+  "previous_pre_H1_approval_audit": {
+    "source_main": "128dd93",
+    "train_rows": 49,
+    "dev_rows": 2,
+    "mask_checks_passed": 49,
+    "historical_evidence_sha256": "7b030f46e603cc2cb0cdea4b94b259e35188dbb3f0a4ab772cfd6f64a6ebb4d3",
+    "superseded_by_this_report": true
+  },
+  "ready_for_training": false,
+  "remaining_work": "G9 must resolve oversized DURUM contexts and H1 home grouping, then repeat CPU/context/split gates. No rows dropped or truncated.",
+  "gpu_execution": false,
+  "model_weights_loaded_or_downloaded": false,
+  "cuda_compatibility_retested": false,
+  "provider_resources_created": false,
+  "approval": "CPU schema/masks only; no training, model evaluation, or inferred cross-review approval"
+}
