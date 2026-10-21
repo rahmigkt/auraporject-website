@@ -1,5 +1,5 @@
 // Interface text in the eight site languages. Missing keys fall back to English.
-import {AR, AR_P} from './i18n-ar.js?v=20261021b';
+import {AR, AR_P} from './i18n-ar.js?v=20261021c';
 export const UI_LANGS = {tr: 'Türkçe', en: 'English', de: 'Deutsch', fr: 'Français', nl: 'Nederlands', da: 'Dansk', es: 'Español', it: 'Italiano', ar: 'العربية'};
 export const isRTL = lang => lang === 'ar';
 
@@ -391,7 +391,7 @@ Object.assign(T, {
   famStorage:   ['Dolap ve çekmeceli', 'Storage', 'Stauraum', 'Rangement', 'Kasten', 'Opbevaring', 'Almacenaje', 'Contenitori'],
   vanity:       ['Makyaj masası', 'Vanity', 'Schminktisch', 'Coiffeuse', 'Kaptafel', 'Toiletbord', 'Tocador', 'Toeletta'],
   layout:       ['Düzen', 'Layout', 'Aufteilung', 'Disposition', 'Indeling', 'Indretning', 'Distribución', 'Disposizione'],
-  layoutHint:   ['Çizimdeki bir göze dokunun; tipini, iç düzenini ve yüksekliğini aşağıdan değiştirin.', 'Tap a cell on the drawing, then change its type, interior and height below.', 'Tippen Sie auf ein Fach der Zeichnung und ändern Sie unten Typ, Innenaufteilung und Höhe.', 'Touchez une case du dessin, puis changez son type, son aménagement et sa hauteur ci-dessous.', 'Tik op een vak in de tekening en wijzig hieronder type, indeling en hoogte.', 'Tryk på et felt på tegningen, og skift type, indretning og højde herunder.', 'Toque una celda del dibujo y cambie abajo su tipo, interior y altura.', 'Tocca una cella del disegno e cambia sotto tipo, interno e altezza.'],
+  layoutHint:   ['Çizimdeki bir göze dokunun; tipini ve iç düzenini aşağıdan değiştirin. Bölmeler ve gözler arasındaki çizgiyi sürükleyerek istediğiniz yerden bölün ya da ölçüyü mm olarak yazın.', 'Tap a cell to change its type and interior below. Drag the line between bays or cells to divide wherever you want, or type the size in mm.', 'Tippen Sie auf ein Fach, um Typ und Innenaufteilung zu ändern. Ziehen Sie die Linie zwischen Feldern oder Fächern, um beliebig zu teilen, oder geben Sie das Maß in mm ein.', 'Touchez une case pour changer son type et son aménagement. Faites glisser la ligne entre travées ou cases pour diviser où vous voulez, ou saisissez la cote en mm.', 'Tik op een vak om type en indeling te wijzigen. Sleep de lijn tussen vakken om te verdelen waar u wilt, of typ de maat in mm.', 'Tryk på et felt for at skifte type og indretning. Træk linjen mellem sektioner eller felter for at dele hvor du vil, eller skriv målet i mm.', 'Toque una celda para cambiar su tipo e interior. Arrastre la línea entre módulos o celdas para dividir donde quiera, o escriba la medida en mm.', 'Tocca una cella per cambiarne tipo e interno. Trascina la linea tra campate o celle per dividere dove vuoi, oppure scrivi la misura in mm.'],
   cellType:     ['Göz', 'Cell', 'Fach', 'Case', 'Vak', 'Felt', 'Celda', 'Vano'],
   drawerCount:  ['Çekmece sayısı', 'Drawers', 'Schubladen', 'Tiroirs', 'Lades', 'Skuffer', 'Cajones', 'Cassetti'],
   inside:       ['İç düzen', 'Interior', 'Innenausstattung', 'Aménagement', 'Interieur', 'Indretning', 'Interior', 'Interno'],
