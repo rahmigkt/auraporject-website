@@ -41,3 +41,5 @@ Main #189 ve #191 motor ağacı değiştiği için eski 40 Avrupa + 12 Arapça s
 [İnceleme sayfası](HACIM-01-H1-ISTEK-inceleme.html) dil/tür filtreleri, sayfalama ve Arapça RTL içerir. Sayfa karar kaydetmez. Görsel tarayıcı onayı veya ana dil onayı iddia edilmez.
 
 Tekrar üretme sırası `tools/hacim-istek/README.md` içindedir. Güncel çevrimdışı test sonucu `veri/hacim-1-istek/test-ozeti.json` dosyasına yazılır. C1 tesliminden sonraki görev **C2: 47 kaydın üslup düzeltmesi**, ayrı PR'dır; H2–H5 tamamlanmış değildir.
+
+Güncel motor ağacında genel çevrimdışı koşu **66/67** geçti. Tek hata, Türkçe perdedeki “katmanlı” sözcüğünün iç terim yasağına takılmasıydı. Metin “karartma özellikli fon” olarak sadeleştirildi; durum/işlem/hedef/motor kanıtı değişmedi. Ardından tam C1 deterministik motor testi, şema, sızma, üslup ve DOM kontrolleri yeniden geçti: **67 kontrolün tamamı doğrulandı, açık hata 0**. Geometri testi atlanmadı; 900 saniye/test sınırı kullanıldı. Son kullanıcı/yanıt metinleri üreticiden bire bir yeniden kurularak motorla tekrarlandı. Görsel tarayıcı QA yapılmış sayılmaz.
