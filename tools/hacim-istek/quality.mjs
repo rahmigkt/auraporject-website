@@ -1,7 +1,7 @@
 import {L}from'./languages.mjs';
 import {P}from'./phrases-v2.mjs';
 const normal=s=>s.normalize('NFKD').replace(/\p{M}/gu,'').toLocaleLowerCase().replace(/\{\w+\}/g,' value ').replace(/\p{N}+/gu,' number ').replace(/[^\p{L}\p{N}]+/gu,' ').trim().replace(/\s+/g,' ');
-const internal=/duvar çalışma alanı|wall study area|wandstudie|zone réservée aux murs|zone d’étude|studiegebied voor muren|området til vægstudiet|zona de estudio de paredes|area di studio delle pareti|مساحة (?:دراسة|تجربة) الجدران|pos_xy_mm|wall_id|source exception|çözücü|\bsolver\b/iu;
+const internal=/duvar çalışma alanı|wall study area|wandstudie|zone réservée aux murs|zone d’étude|studiegebied voor muren|området til vægstudiet|zona de estudio de paredes|area di studio delle pareti|مساحة (?:دراسة|تجربة) الجدران|pos_xy_mm|wall_id|source exception|çözücü|katman|backRake|armHeight|\bsolver\b/iu;
 export function quality(rows){
  const byLanguage={};
  for(const language of Object.keys(L)){
