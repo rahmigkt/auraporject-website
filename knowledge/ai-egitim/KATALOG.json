@@ -1,7 +1,7 @@
 {
   "version": "aura-catalog/1",
   "date": "2026-10-21",
-  "snapshot_base": "74a9af4b669a4bcebbb34809e8121563076b1a47",
+  "snapshot_base": "9b37b3a5fb898fa0bc54efe9ce907e7608e70181",
   "hash_policy": "Exact tracked Git blob bytes; checkout CRLF does not change catalogue hashes. Aggregate hash includes file paths, sizes and primary/support roles.",
   "counts_policy": "Counts cover tracked primary rows only; sets may overlap, so totals are NOT unique projects. Null is unknown/not applicable, never zero.",
   "datasets": [
@@ -9,7 +9,7 @@
       "id": "hacim-1-istek",
       "path": "knowledge/ai-egitim/veri/hacim-1-istek",
       "summary": "1800 home-project request candidates; furniture detail actions excluded; common projection is support, not additional examples.",
-      "sha256": "fb91f4989488161443329dee4b739018a66cd3f6d6e5509e4e5735f58626b1be",
+      "sha256": "a765df00033bc3bba5a660535992c94bfec0c05981cbd9c0ffbb214a4d2ed448",
       "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
       "sources": [
         "HACIM-01 scope #180 and cross-review policy #185; synthetic independent room studies"
@@ -118,7 +118,7 @@
         },
         {
           "path": "knowledge/ai-egitim/veri/hacim-1-istek/sayim-raporu.json",
-          "sha256": "cf4adc1802a54f9f61d9a75a0979946bd6eee1004338f98df6f666811881e9df",
+          "sha256": "86a6e71224cf6343c7e2a3db0b0ba00833452dd5683aecf9f074babd9e0565d4",
           "bytes": 4512,
           "role": "support"
         },
@@ -132,6 +132,12 @@
           "path": "knowledge/ai-egitim/veri/hacim-1-istek/sizma-denetimi.json",
           "sha256": "568c859cc382612a594c55ff48f38e38b09102e0b480189f232a3624d67ee851",
           "bytes": 2926,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/hacim-1-istek/test-ozeti.json",
+          "sha256": "69a1dbe51879ddc84b068087f90edca18bef90b5ef1ded078dc4b7f90dce9824",
+          "bytes": 12825,
           "role": "support"
         },
         {
@@ -8693,7 +8699,7 @@
       "id": "support-knowledge-ai-egitim-inceleme",
       "path": "knowledge/ai-egitim/inceleme",
       "summary": "Structured research/support/derived artifacts; primary candidate counts not inferred.",
-      "sha256": "909ecae7c8f5be28aa4e4b8734a6641430993a298e060947079d4953aa18dfeb",
+      "sha256": "7df73e305d189e7f4d72633630f8647bde7b37f0f6b5b906570480e2fd3b30f1",
       "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
       "sources": [],
       "license": null,
@@ -8722,8 +8728,8 @@
         },
         {
           "path": "knowledge/ai-egitim/inceleme/kararlar.json",
-          "sha256": "8541ee4fbbf55970e1cf8c3322ae2b233c667f07ce501fd1d5fc08b858adac8c",
-          "bytes": 105,
+          "sha256": "f041457a225844a17d2650ea8267f815c69fb1c8d5fbc00dbe878cb6252b7ef4",
+          "bytes": 66622,
           "role": "support"
         }
       ],
@@ -8815,7 +8821,7 @@
       "id": "support-knowledge-ai-egitim-veri",
       "path": "knowledge/ai-egitim/veri/birlesik",
       "summary": "Structured research/support/derived artifacts; primary candidate counts not inferred.",
-      "sha256": "6f817612c584f25ea4506fff1653b40ad17351a7d780bcd114181d42048e5814",
+      "sha256": "72ba953d8cf32237dd58e702c3ea9501aff3004ca89adaae1d339099fb1f8887",
       "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
       "sources": [],
       "license": null,
@@ -8844,8 +8850,8 @@
         },
         {
           "path": "knowledge/ai-egitim/veri/birlesik/sayim-raporu.json",
-          "sha256": "62ec10deeca162c6c0fb59e2f30afff3e7215e3acbaaa496194a3e65849f22b3",
-          "bytes": 128938,
+          "sha256": "ab665e8fab890072cab623570dcef7376d2d30a36cf9f7634bb3f1d087f9767c",
+          "bytes": 129006,
           "role": "support"
         },
         {
@@ -10383,8 +10389,8 @@
     ]
   },
   "coverage": {
-    "structured_files": 1187,
-    "inventoried_files": 1187,
+    "structured_files": 1188,
+    "inventoried_files": 1188,
     "unassigned": []
   }
 }
