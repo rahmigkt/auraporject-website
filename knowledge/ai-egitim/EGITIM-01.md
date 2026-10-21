@@ -2,6 +2,11 @@
 
 21 Ekim 2026. Hazırlayan: Claude. Kullanıcı kararı: stüdyo işi bitti, eğitime geçiliyor.
 
+**Kararlar (kullanıcı, 21 Ekim 2026):**
+- Model Qwen3.5-9B.
+- GPU sınırı 6 saat / 4 dolar.
+- Perde ve halı yapay zekânın işinde kalır: asistan tür, kumaş, renk ve ölçü seçimini alıp projeye ekler (`tekstil` katmanı). Ürünün ayrıntılı tasarımı stüdyonun ev tekstili ailesindedir.
+
 ## Ne eğitilecek
 
 Qwen, AURA'nın **ev projesi asistanı** olur. Kullanıcıyla kendi dilinde konuşur ve yalnız `{"reply", "actions"}` döndürür. `actions` stüdyo motorunun işlemleridir:
@@ -10,7 +15,7 @@ Qwen, AURA'nın **ev projesi asistanı** olur. Kullanıcıyla kendi dilinde konu
 - `aydinlatma`;
 - `proje`.
 
-Mobilya detayı ve ürün olarak perde/halı tasarımı stüdyonun işidir; asistan yönlendirir. Sistem istemi `tools/egitim/sistem.md`, işlem sözlüğü motordan otomatik gelir.
+Perde ve halı seçimi (`tekstil`) de asistanın işidir. Mobilya detayı stüdyonun işidir; asistan yönlendirir. Sistem istemi `tools/egitim/sistem.md`, işlem sözlüğü motordan otomatik gelir.
 
 ## Kapı: bir kayıt eğitime nasıl girer
 
@@ -37,7 +42,7 @@ Bölme ev ya da grup bazında yapılır; aynı evin kayıtları aynı tarafta ka
 
 | Kaynak | Beklenen | Durum |
 |---|---|---|
-| H1 ev projesi istekleri (#187) | ~1.035 (tekstil dışı) | C1b düzeltmesi, sonra Claude onayı |
+| H1 ev projesi istekleri (#187) | ~1.800 (tekstil dahil) | C1b düzeltmesi, sonra Claude onayı |
 | H4 yerleşim becerisi (G3 verisinden) | ~3.000 çözülen + ~1.200 "sığmıyor" | Codex dönüştürür, Codex denetler (Claude verisi) |
 | 47 eski sohbet (C2) | 47 | Codex düzeltir, Claude denetler |
 | H2 Avrupa sohbetleri | ülke başına 30 | Codex üretir |

@@ -13,7 +13,7 @@ Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sa
   - soru cevapları isteğin kendisini sorar (halı → ölçü/renk/doku);
   - dil başına en az 150 farklı kalıp; ev sahibinin kendi evini anlattığı istekler artar;
   - plana uzakta boş oda ekleme kalıbı azalır.
-- [ ] **C1b · #187 kalan düzeltmeler** (Claude ikinci denetimi, `kararlar.json`): EN/FR/ES/IT/DA'da 'for the furniture' türü yapıştırma bağlacı olan 42 satır yeniden yazılır; asistan açılış kalıpları çeşitlenir. Tekstil satırları kullanıcı kararını bekler. #193 (eski mobilya komutu sürümü) kapsam dışı; kullanıcı onayıyla kapatılır.
+- [ ] **C1b · #187 kalan düzeltmeler** (Claude ikinci denetimi, `kararlar.json`): EN/FR/ES/IT/DA'da 'for the furniture' türü yapıştırma bağlacı olan 42 satır yeniden yazılır; asistan açılış kalıpları çeşitlenir. Tekstil satırları kalır (kullanıcı kararı: perde/halı asistanın işinde). #193 (eski mobilya komutu sürümü) kapsam dışı; kullanıcı onayıyla kapatılır.
 - [ ] **C8 · Eğitim betiğini EGITIM-01 biçimine bağla.** `tools/qwen-local/train_gpu.py` `outputs/egitim-01/{train,dev}.jsonl` (messages; son asistan turu `{"reply","actions"}`) okur, loss yalnız asistan turlarında. CPU'da 5 örnekle kuru koşu (model yüklemeden tokenizasyon + maske denetimi). GPU açılmaz. (`EGITIM-01.md`)
 - [ ] **C2 · 47 kaydın üslup düzeltmesi.** `inceleme/kararlar.json` içindeki `duzelt` kayıtları (ev-sohbet-02, uk-ie, dk 01/03/04, es, arap-olculu):
   - asistan satırlarında iç terim kalmaz ("adsız oda", "hesap", "kayıt", "yerleştirilen eşya sayısı", "elle konum");
@@ -49,7 +49,13 @@ Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sa
 - [ ] **G9 · Eğitim öncesi kararlar:** H1 ve H4 geldikçe denetim, kümeyi derleme, sınav puanlayıcısını yeni biçime bağlama.
 - [ ] **G6 · C2 ve C3 çıktılarının denetimi** (her PR geldikçe).
 
-## Kullanıcı kararları (bekliyor)
+## Kullanıcı kararları
+
+Verildi (21 Ekim 2026): model Qwen3.5-9B; GPU sınırı 6 saat / 4 dolar; perde ve halı asistanın işinde (seçim ve ölçü projeye eklenir). Eğitim sırası `EGITIM-01.md`.
+
+**Codex için öncelik sırası (eğitime giden yol):** C1b → C8 → H4 (C5) → C7 → H5 (C6). C2, C3, C4 eğitim sonrasına kalır.
+
+Bekleyen:
 
 - GPU harcama sınırı.
 - Model boyutu: Qwen3.5-9B ile devam mı.
