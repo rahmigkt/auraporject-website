@@ -62,9 +62,11 @@ def build():
     take('style-training',[f],[f],'genel-sohbet','inceleme-bekliyor','Editorial style preference candidates.',None,['sourceType and referenceGuide per row'],['52 is historical expectation, actual count measured here','Third-party guide attribution/rights need item review'])
     paths=[p for p in contents if p.startswith('knowledge/aura-ses/')]
     take('metin-denemeleri',paths,[p for p in paths if p.endswith('/metinler.jsonl')],'genel-sohbet','inceleme-bekliyor','Founder-voice text trials and supporting design cards.','AURA authored',['AURA'],['Old design normalization fails current text-eval M01; rebase/review required'])
-    paths=[p for p in contents if p.startswith('tests/ai-eval/')]
+    paths=[p for p in contents if p.startswith('tests/ai-eval/') and not p.startswith('tests/ai-eval/aura-sinav-01/')]
     primary=[p for p in paths if re.search(r'/sinav-01(?:b)?-(?:dev|test)\.jsonl$',p)]
     take('tests-ai-eval',paths,primary,'mobilya','yalnizca-arastirma','Frozen assessment only; never export to train/dev/test training partitions.','AURA authored',['SINAV-01 and SINAV-01B freeze manifests'],['Expert approval scope is per record','Must stay isolated from all training exports'])
+    paths=[p for p in contents if p.startswith('tests/ai-eval/aura-sinav-01/')]
+    take('aura-sinav-01',paths,[p for p in paths if p=='tests/ai-eval/aura-sinav-01/gorevler.jsonl'],'genel-sohbet','yalnizca-arastirma','120 held-out tasks; archived pre-model drafts are support, never additional task counts.','AURA original authored tasks',['Independent AURA original exam fixtures'],['Expert/native review pending','No model run','Non-furniture live chat bridge pending','Never export to training partitions'])
     for group,prefixes in [('perde-arastirma',('perde',)),('tekstil-02',('tekstil-02',)),('hali-arastirma',('hali',))]:
         paths=[p for p in contents if p not in used and p.startswith('knowledge/ev-projesi/veri/') and Path(p).name.startswith(prefixes)]
         take(group,paths,[],'tekstil','yalnizca-arastirma','Source-backed material/measurement research; not executable dialogue labels.',None,['Attribution and source IDs inside each research file'],['Source text/image rights differ from AURA-authored summaries','No designer-approved operation targets counted'])
