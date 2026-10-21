@@ -20,6 +20,12 @@ for r in rows:
  assert [{'type':o['tur'],'katman':o['katman'],**o['arguments']} for o in r['islemler']]==raw['assistant']['actions']
 assert len({r['denetim']['grup'] for r in rows})==1
 assert len({r['bolum'] for r in rows})==1
+archive=Path('knowledge/ai-egitim/toparlama-01/archive/hacim-istek-v1/manifest.json')
+for f in json.loads(archive.read_text(encoding='utf8'))['files']:
+ assert hashlib.sha256(Path(f['path']).read_bytes()).hexdigest()==f['sha256'],'Historical H1 bytes changed'
+manifest=json.loads((base/'sayim-raporu.json').read_text(encoding='utf8'))
+assert manifest['cross_review']['dataset_decision']['karar']=='duzelt'
+assert manifest['cross_review']['approval_inferred'] is False
 sys.path.insert(0,str(Path('tools/ev-sohbet').resolve()))
 from uslup_denetim import inspect
 style=inspect([{'id':r['id'],'language':r['language'],'dialogue':[{'role':'user','content':r['user']},{'role':'assistant','content':r['assistant']['reply']}]} for r in originals.values()])

@@ -1,8 +1,8 @@
 {
-  "version": "hacim-istek/2-cross-review",
-  "source_commit": "c6e02ac61f4569029ac4330626ee59c7fc5605a4",
+  "version": "hacim-istek/3-C1",
+  "source_commit": "bb8b65a29acb7e525eb1bd45c9879144ac601113",
   "source_lock": {
-    "git_tree_sha256": "22b89a62147321b2b1bc051d4e1117694cea6c844010a0aac853d7fe50255fed",
+    "git_tree_sha256": "91af97ce319ae6b1e92aaea8a309aaae528bca0ee4bf637c93865fa2f878aa4c",
     "scope": [
       "assets/",
       "tools/studyo-motoru/"
@@ -75,57 +75,75 @@
   "files": [
     {
       "path": "tr.jsonl",
-      "sha256": "eaaac788212922a4d36ba788753be2002c486ef0330036f207f2e426f079d2c5"
+      "sha256": "ca98dbffdb26363fb8b4fbfd7b4458afacd15e73af5fb6015c677d44ee10ad7b"
     },
     {
       "path": "en.jsonl",
-      "sha256": "84c78641766b82acaf0b8e3abef7b8ffb0b84eb19bba220f735111707c7d343a"
+      "sha256": "a56f11a95416e1f578a1facde2edd2cd5646eae35c6ac32bf00a1a2065a65cba"
     },
     {
       "path": "de.jsonl",
-      "sha256": "5e435fd2889243756b34c8684d1e3f2bda1a9ad765f62ecd6e041268e3e8f0cd"
+      "sha256": "7f0a1d7ca72e9e5dd4faa49563c45ab600fd194ab9d8d68ed2d6a2c890a57036"
     },
     {
       "path": "fr.jsonl",
-      "sha256": "7e5c9b5535680744576892b440e3b37f847f63bca2f727eb46ac52c611177d03"
+      "sha256": "3c071d4d1e6c4ee1ad657179826b400fa86b202f7bd14fdecfac8478dac1cebe"
     },
     {
       "path": "nl.jsonl",
-      "sha256": "ccb77a77818d16a8d905038f9dba070216b4ffc5aa7dc89398993e98668d9a76"
+      "sha256": "22fbe47e4dc123cf1a256eee600578239362c99d709c05a0fa58e96ee745cb01"
     },
     {
       "path": "da.jsonl",
-      "sha256": "ab98e0c8a78ae521864a050720aa01d541d83366c226041b827cead1a6547069"
+      "sha256": "49234af59634e3408999dfb3c2f8c868137bb6014d262864cdbcc9054e5dcbae"
     },
     {
       "path": "es.jsonl",
-      "sha256": "5c98b7691b43a5036f53dcd1722854a2c8e4eecc683bf4c511f330055b3e0331"
+      "sha256": "eb8ff1ae18ce1394b060c64fface42fa301a44c5fe046a6642f7dea6eac45cbc"
     },
     {
       "path": "it.jsonl",
-      "sha256": "b480d2e043e9d645b2b7090ce6f6036a935e9a41685460394f54c228d35221aa"
+      "sha256": "86bcd2839bf9a610b5f45da93a8e960dc51bac17dd5083750f6b409c44181590"
     },
     {
       "path": "ar.jsonl",
-      "sha256": "5c630f02d4663a264e2d100be49f8dc33e30da270fba7320c38c1f7f4a4043f3"
+      "sha256": "dccd186367b40bd14826ff75e22700b85aac810b55045391e634ee799acf8720"
     }
   ],
   "limitations": [
-    "Synthetic disconnected room studies; not real building plans or certified architecture",
-    "20 single-intent templates × 6 values; 25 operation pairs × 2; 10 clarification templates × 2 rooms; 10 scope refusals per language. Not 1800 independently sourced intentions.",
-    "No project dispatch or lighting action claimed: project layer only acknowledges operations; lighting absent from motor vocabulary",
-    "Claude cross-review and combined corpus semantic deduplication pending",
-    "Existing combined corpus count/splits and existing frozen exam task bytes are preserved"
+    "One fictional connected five-room home; not a real building or certified architecture",
+    "24 single intent families with five authored paraphrases each; ten coordinated pairs with five frames each; ten clarification topics and ten unsupported requests per language. Surface variation is not independent intent coverage.",
+    "Near/far distances are declared AURA operational interpretations; user utterances do not claim measured clearance",
+    "No project dispatch or lighting action claimed",
+    "Claude re-review and combined corpus semantic deduplication pending; prior duzelt decision remains preserved",
+    "Existing combined corpus count/splits and frozen exam task bytes are preserved"
   ],
+  "revision": "C1/2",
+  "quality_report": "C1-kalite-raporu.json",
   "cross_review": {
     "producer": "Codex",
     "required_reviewer": "Claude",
     "decision_file": "knowledge/ai-egitim/inceleme/kararlar.json",
-    "decision_file_sha256": "6b33221f6e376162bb6ac209930add3e3c523287ad8d6fd4dc09538896b22a20",
+    "decision_file_sha256": "bdc73cc9656fd78c8e0ca18514d2ba04daec5615f320e8e0fed6f3b198bb7bd5",
     "matching_decisions": {},
-    "status": "pending",
+    "status": "C1_resubmitted_previous_duzelt_preserved",
     "human_review_required": false,
-    "approval_inferred": false
+    "approval_inferred": false,
+    "dataset_decision": {
+      "karar": "duzelt",
+      "not": "H1 kümesinin tamamı (1.800). Motor, şema ve sızma geçiyor; içerik eğitime hazır değil:\n1) Asistan cevabı 4 sabit cümle (170/200 'İstenen değişiklikleri proje önizlemesinde hazırladım'). Model cevap yazmayı öğrenmez. Her cevap yapılanı kendi sözüyle söylemeli: 'Yatak odasına 160'lık yatağı ve iki komodini yerleştirdim; yatak başı pencereli duvarın karşısında.'\n2) İç terim sızıyor: 'Duvar çalışma alanı', 'wall study area', 'Wandstudie', 'zona de estudio de paredes', 'مساحة دراسة الجدران'. Bunlar test düzeneğinin adı, kullanıcı böyle konuşmaz. Bu kalıp tamamen çıkmalı.\n3) 'multiple' satırları iki tek isteğin ';' ile yapıştırılması. Gerçek kullanıcı tek cümlede ilişkili şeyler ister ('salona 3+2+1 koy, tekliyi pencere yanına'). Kısıt içeren çoklu istek yok denecek kadar az; 'bakar/yakin/uzak' kısıtları neredeyse hiç kullanılmamış.\n4) Soru (clarify) cevapları isteğe bakmıyor: 'Yatak odası için halı istiyorum' → 'Hangi eşyayı düşünüyorsunuz?' Doğrusu: halının ölçüsünü, rengini ya da dokusunu sormak.\n5) Çeşitlilik düşük: dil başına ~114 kalıp, gerisi yalnız sayı değişimi. 'Seçili oda', 'perdeleri %95 açık bırak' gibi arayüz komutları çok; ev sahibinin kendi evini anlattığı istekler az ('balkon kapısının önü boş kalsın', 'antreye ayakkabılık sığar mı').\n6) 'Yeni dikdörtgen salonu çiz' tipi istekler odayı plana 42 m ötede boşluğa ekliyor; gerçek bir evde oda böyle eklenmez. Ya mevcut odanın ölçüsü değişsin ya da bu kalıp azaltılsın.\nHedef: dil başına en az 150 farklı kalıp, cevaplar isteğe özgü, iç terim 0, kısıtlı istekler en az %20. Düzeltilince yeniden denetime sunulsun.",
+      "denetci": "claude",
+      "zaman": 1792572720588,
+      "veri_seti": "hacim-1-istek",
+      "dil": "9 dil"
+    }
+  },
+  "inventory": {
+    "existing_combined_candidates": 2590,
+    "new_home_request_candidates": 1800,
+    "total_candidate_rows_not_unique_projects": 4390,
+    "qualified_training_rows": 0,
+    "old_furniture_detail_candidates_added_to_this_delivery": 0
   },
   "common_contract": {
     "schema": "AURA-EGITIM-1",
@@ -138,12 +156,5 @@
     "training_exported": 0,
     "policy": "All cases share a synthetic plan: one cluster, no independent dev/test set claimed. Projection is not extra data.",
     "operation_encoding": "tur is the operation name; arguments preserves native room/opening tur without key collision. tools/egitim-donustur/operations.mjs decodes both this nested form and legacy flat operations. Independent quarantine, not exported to training."
-  },
-  "inventory": {
-    "existing_combined_candidates": 2590,
-    "new_home_request_candidates": 1800,
-    "total_candidate_rows_not_unique_projects": 4390,
-    "qualified_training_rows": 0,
-    "old_furniture_detail_candidates_added_to_this_delivery": 0
   }
 }
