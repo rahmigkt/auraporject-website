@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {replay} from '../tools/qwen-local/studio_data.mjs';
+import {assertKnownMigration} from './helpers/legacy-design.mjs';
 const dir='knowledge/ai-egitim/qwen-pilot-01/studio-v1';
 const manifest=JSON.parse(readFileSync(`${dir}/manifest.json`,'utf8'));
 for(const[name,hash]of Object.entries(manifest.files))assert.equal(createHash('sha256').update(readFileSync(`${dir}/${name}`)).digest('hex'),hash);
@@ -15,10 +16,12 @@ for(const family of ['seating','table','storage','kitchen','bath'])for(const typ
  const {after}=replay(before,row.expected.actions);
  assert.equal(after.params[action.key],type==='set'?action.value:before.params[action.key]+action.value);
  assert.equal(JSON.stringify(before),snapshot,'replay mutated original');
- assert.deepEqual(after,row.evidence.afterDesign);
+ const migration=assertKnownMigration('pilot:'+row.id,row.evidence.afterDesign,after);
+ assert.equal(migration.semantic_change,['kitchen','bath'].includes(family));
+ assert.throws(()=>assertKnownMigration('pilot:'+row.id,row.evidence.afterDesign,{...after,seed:-999}));
 }
 assert.throws(()=>replay(rows[0].input.design,[{type:'execute_shell',value:'x'}]),/Non-curriculum/);
 assert.throws(()=>replay(rows[0].input.design,[{type:'set',key:'invented',value:10}]),/Non-curriculum/);
 const sft=readFileSync(`${dir}/sft-unreviewed.jsonl`,'utf8').trim().split('\n').map(JSON.parse);
 assert.equal(sft.length,196);assert(sft.every(r=>rows.find(x=>x.id===r.id)?.split==='train'));
-console.log('PASS frozen studio corpus: 276 rows, group separation, actual action-source replay for 5 families × set/delta, arithmetic, input immutability, unknown actions and train-only export.');
+console.log('PASS immutable historical 276 rows and hashes; 5 families × set/delta, arithmetic and strict pinned compatibility deltas; kitchen/bath semantic changes quarantined; no new training approval.');

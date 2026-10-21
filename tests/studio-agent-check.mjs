@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {runStudioAgent} from '../../services/design/studio-agent.mjs';
+import {runStudioAgent} from '../archive/site-v1/services/design/studio-agent.mjs';
 const original=globalThis.fetch,call=(name,args={})=>({function:{name,arguments:args}});let count=0;
 try{
  const replies=[{tool_calls:[call('update_design',{family:'table',top:'oval'})],content:''},{tool_calls:[call('set_view',{view:'angle'}),call('zoom_view',{direction:'out'}),call('save_draft')],content:''},{content:'Komutlar hazır.'}];
