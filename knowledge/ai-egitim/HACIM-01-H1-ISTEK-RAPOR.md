@@ -44,7 +44,7 @@ Başlangıç motorunda 11 eski kanıt uyuşmazlığı temiz a724690 çalışma k
 
 [1.800 kaydı dil ve türe göre incele](HACIM-01-H1-ISTEK-inceleme.html). Sayfa yalnız inceleme içindir; insan kararını kaydetmez. JavaScript ayrıştırma, dokuz dil sayımı, işlem üretmeyen kartlar, Arapça RTL niteliği ve sayfalama yerel DOM taklidiyle kontrol edildi. Tarayıcı bağlantısı erişim kısıtıyla açılamadığı için görsel/cihaz doğrulaması yapılmış sayılmadı.
 
-Tekrar üretme komutları: `tools/hacim-istek/README.md`. H1 testleri: `node tests/hacim-istek-check.mjs` ve `python tests/hacim-istek-schema-check.py`. Tam depo koşusu ve son kabul sonucu teslimden önce bu rapora eklenecek.
+Tekrar üretme komutları: `tools/hacim-istek/README.md`. H1 testleri: `node tests/hacim-istek-check.mjs` ve `python tests/hacim-istek-schema-check.py`. Güncel b8caa7c motor ağacında **`node tests/hepsi.mjs`: 67/67 geçti**. Uzun geometri testi için bu makinede test başına süre sınırı 900 saniyeydi; hiçbir kontrol atlanmadı. Sonradan yalnız karar dosyası ve denetçi/zaman biçimi uyarlaması geldiği için H1 şema/çapraz denetim testleri ve katalog bütünlüğü ayrıca yeniden çalıştırılıp geçti. Tam koşu ve bu ek kontrollerin kapsamı `veri/hacim-1-istek/test-ozeti.json` içinde.
 
 ## Açık kusurlar ve sıra
 

@@ -41,6 +41,7 @@ def run():
  report.update(source_lock=m.source_lock(),engine_evidence=evidence,warning_counts=dict(collections.Counter(w for r in updated for w in r['denetim']['uyarilar'])))
  report['source_hashes']={p:m.sha((ROOT/p).read_bytes().replace(b'\r\n',b'\n')) for p in report['source_hashes']}
  report['hacim_revalidation']={'conversation_projections_revalidated':len(selected),'native_motor_reports':52,'changed_projection_rows':sum(m.canonical(r)!=before[r['id']] for r in updated),'all_existing_splits_preserved':True,'unrelated_candidate_rows_unchanged':len(rows)-len(selected),'training_started':False}
+ report['approval_policy']='Cross-model suitable decisions require a different declared producer/reviewer, timestamp and exact row digest. Human approval optional; no approval inferred from old or unbound packets.'
  (OUT/'adaylar.jsonl').write_text(''.join(m.canonical(r)+'\n' for r in updated),encoding='utf-8',newline='\n')
  (OUT/'sayim-raporu.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
  print(json.dumps(report['hacim_revalidation']))

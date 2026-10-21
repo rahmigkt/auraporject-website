@@ -4867,7 +4867,7 @@
     ],
     "policy": "Exact Git tree (paths and blob IDs); refuses dirty engine sources"
   },
-  "approval_policy": "Hash-bound approvals require reviewer, language_ok and complete row digest. No approval is inferred from old packets.",
+  "approval_policy": "Cross-model suitable decisions require a different declared producer/reviewer, timestamp and exact row digest. Human approval optional; no approval inferred from old or unbound packets.",
   "target_scope": "Final accepted room requests after the complete conversation; not a per-turn operation alignment claim.",
   "editorial_refresh": {
     "conversations": 40,
