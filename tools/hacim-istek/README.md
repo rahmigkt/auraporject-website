@@ -2,7 +2,7 @@
 
 21 Ekim kapsam kararı (#180) uygulanır. Mobilya detay işlem hedefi yoktur. Eski `hacim-1-komut` çalışması bu teslimin veri kaynağı değildir; o dal ve dosyalar yerinde korunur.
 
-Sıra: `node tools/hacim-istek/build.mjs`, `node tools/hacim-istek/audit.mjs`, `python tools/hacim-istek/common.py`, `node tools/hacim-istek/review.mjs`. `jsonschema` yerel bağımlılığı gereklidir. Dış API/model/eğitim çalıştırılmaz.
+Sıra: `node tools/hacim-istek/build.mjs`, `node tools/hacim-istek/audit.mjs`, `python tools/hacim-istek/common.py`, `python tools/hacim-istek/style.py`, `node tools/hacim-istek/review.mjs`. `jsonschema` yerel bağımlılığı gereklidir. Dış API/model/eğitim çalıştırılmaz.
 
 `build.mjs` sınavı okumaz. `leakage.mjs` yalnız hariç tutma denetimi için kapalı sınavın kullanıcı metnini okur; sınav hedefleri üretilen veriye taşınmaz. Eşikler önceki H1'deki sözcüksel denetimle aynıdır. Anlamsal/çapraz dil sızıntısı için insan incelemesi gerekir.
 

@@ -1,5 +1,6 @@
 from pathlib import Path
 import json,hashlib
+import sys
 from jsonschema import Draft202012Validator
 base=Path('knowledge/ai-egitim/veri/hacim-1-istek')
 v=Draft202012Validator(json.loads(Path('knowledge/ai-egitim/AURA-EGITIM-1.schema.json').read_text(encoding='utf8')))
@@ -17,4 +18,8 @@ for r in rows:
  assert [{'type':o['tur'],'katman':o['katman'],**o['arguments']} for o in r['islemler']]==raw['assistant']['actions']
 assert len({r['denetim']['grup'] for r in rows})==1
 assert len({r['bolum'] for r in rows})==1
+sys.path.insert(0,str(Path('tools/ev-sohbet').resolve()))
+from uslup_denetim import inspect
+style=inspect([{'id':r['id'],'language':r['language'],'dialogue':[{'role':'user','content':r['user']},{'role':'assistant','content':r['assistant']['reply']}]} for r in originals.values()])
+assert style['passed'],'Existing forbidden-term, language-mix and length heuristics must pass'
 print('PASS 1800 unapproved AURA-EGITIM-1 projections, source hashes, one plan cluster and split; no furniture-detail actions')

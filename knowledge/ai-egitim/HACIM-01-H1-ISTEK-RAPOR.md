@@ -30,6 +30,7 @@ Başlangıç motorunda 11 eski kanıt uyuşmazlığı temiz a724690 çalışma k
 
 - 40 Avrupa sohbetinin ve 12 ölçülü Arapça sohbetin yerleşim çıktıları güncel motorla yenilendi. Eski Git dosya baytları arşivdedir. Avrupa'da kullanıcı girdileri, konuşmalar, ölçüler ve sığma kararları eşitlik kontrolüyle korunur. Arapça 39 inceleme çıktısı iki tam üretimde aynı baytları verdi; konuşmalar değişmedi. Güvensiz eski kapı önü seçeneği negatif test olarak arşivden okunmaya devam eder.
 - Eski üslup hash'leri arşivdeki özgün Python verisine karşı kontrol edilir. Yalnız motor çıktıları için yeni hash zinciri eklenir. DK/ES/IT eski tam üretim iddiaları arşivlendi; yeni dosya hash'leri güncellendi, bütün eski üreticinin yeniden aynı çıktıyı verdiği iddia edilmedi.
+- Avrupa kümelerinin eski görüntü/inceleme yakalamaları tarihsel kanıttır; yeni yerleşim görseli sayılmaz. Yenilenen JSON ve bire bir motor geri oynatması bu geçişteki güncel mekanik kanıttır.
 - Birleşik korpusun 64 sohbet izdüşümü incelendi; 52 motorlu izdüşüm yenilendi, diğer 2.526 aday değişmedi. Sayı, kaynak bölmeleri ve boş eğitim dışa aktarımları korunur.
 - Donmuş sınavın **120 görev baytı ve puanlayıcısı aynı**. 100 olumlu hedef hâlâ tam makine puanı alır; 89 çıktı aynı, 11 yerleşim çıktısı yeni motorla farklıdır. Eski kaynak manifesti arşivlendi; yeni kaynak manifesti açık mekanik karşılaştırmaya bağlıdır. Bu model koşusu veya insan onayı değildir. H5'teki yeni kapsam sınavına geçiş ayrıca yapılacaktır.
 
