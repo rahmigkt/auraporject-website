@@ -44,3 +44,6 @@ Kusurlar kapanacak; güncel motor tekrarları, hash bağlı insan/native onaylar
 ## Doğrulama
 
 `tests/qwen-training-plan-check.py`: adım/kısmi batch aritmetiği,0onaylı kayıt, null gerçek süre/maliyet, eski plan hash'i, kapalıGPUkapısı, maske hizası/boş/padding/bozuk ret testleri geçti. `estimate.py` yalnız dosya ölçer, model veya ağ çağırmaz. Tam depo sonuçları ayrı son doğrulama raporunda; yeşil olduğu varsayılmaz.
+
+
+Son takip: hepsi.mjs57/62 geçti; beş eski servis/snapshot hatası açık. Forma148,7sn geçti. Main#156 sonrasında eski studio_data VM çıkarımı ortak üretim actions.js importuna taşındı; yeni beş aile tekrar testi geçti. Tarihsel snapshot hâlâ değişmiş normalizasyon nedeniyle başarısız; geçmiş veri yeniden yazılmadı. Ayrıntı/ham kayıtlar SON-DURUM sayfasında. Maskenin ve estimate testlerinin ilk girişleri geçti. Yeni tekrar testinin ilk fixture'ında mutfak için olmayan genel height alanı aranmıştı; gerçek worktopHeight sözlüğü seçilerek düzeltildi, uygulama kodu gevşetilmedi.

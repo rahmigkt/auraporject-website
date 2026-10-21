@@ -119,7 +119,7 @@ Henüz yeni model turu tamamlanmadı; hiçbir model kusuru kapalı işaretlenmed
 | T01-003 | Ev/yerleşim/tekstil ortak motoru hazır; canlı sohbet köprüsü ve ortak istem tamam değil | Assets/API sorumlusunun ayrı PR'ı; aynı prompt/vocabulary/action sürümüyle uçtan uca test |
 | T01-004 | Arap intake12, ölçülü yerleşim0; meclis/iki kat desteği eksik | İzinli ölçülü kaynak, motor desteği, native tasarımcı denetimi |
 | T01-005 | Kapalı sınav120 motor kontrollü fakat uzman onaysız; temel model koşusu yok | Bağımsız gold/native incelemesi; ayrı yetkilendirilmiş GPU'suz taban, biçim ve gerileme ölçümü |
-| T01-006 | Depo çapında eski services/snapshot hata ve forma süre aşımı açık | Tam hepsi.mjs sonucu ve ayrı sorumluluklu kod düzeltmeleri; sahte services veya sessiz skip yok |
+| T01-006 | Depo çapında eski services/snapshot hataları açık; son koşu57/62,forma148,7sn geçti | Tam hepsi.mjs sonucu ve ayrı sorumluluklu kod düzeltmeleri; sahte services veya sessiz skip yok |
 | T01-007 | Hacim30–40/ülke ve9×200 doğal komut tamam değil | Ülke başına ayrı, denetimli PR; sayılar mevcut geometri ve ön görüşme diye ayrılmalı |
 
 Bu satırlar yeni model başarısızlığı ölçümü değildir; hazırlık eksikleridir. Eğitim veya kiralık GPU kapısı açılmadı.
