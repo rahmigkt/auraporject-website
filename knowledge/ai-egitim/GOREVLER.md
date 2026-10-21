@@ -6,7 +6,13 @@ Tek kaynak bu dosyadır. Her iş başında güncel `main`'den okunur. Biten iş 
 
 Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sayı uydurma yok. Eğitim, GPU, ücretli API, dağıtım yok. Her iş ayrı PR. Merge kullanıcı onayıyla.
 
-- [ ] **C1 · #187 düzeltmeleri.** Claude'un #187 denetim kararlarını uygula.
+- [ ] **C1 · #187 düzeltmeleri.** Karar: `kararlar.json` → `hacim-1-istek:*` = duzelt. Özet:
+  - asistan cevabı isteğe özgü olur, sabit cümle yok;
+  - "duvar çalışma alanı" kalıbı (9 dilde) çıkar;
+  - çoklu istekler `;` yapıştırması değil, tek doğal cümle; en az %20'si kısıtlı (`bakar/yakin/uzak`);
+  - soru cevapları isteğin kendisini sorar (halı → ölçü/renk/doku);
+  - dil başına en az 150 farklı kalıp; ev sahibinin kendi evini anlattığı istekler artar;
+  - plana uzakta boş oda ekleme kalıbı azalır.
 - [ ] **C2 · 47 kaydın üslup düzeltmesi.** `inceleme/kararlar.json` içindeki `duzelt` kayıtları (ev-sohbet-02, uk-ie, dk 01/03/04, es, arap-olculu):
   - asistan satırlarında iç terim kalmaz ("adsız oda", "hesap", "kayıt", "yerleştirilen eşya sayısı", "elle konum");
   - kullanıcı satırları doğal olur, kendi evini anlatır;
@@ -31,7 +37,7 @@ Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sa
 ## Claude
 
 - [x] **G1 · Merdiven doğrulama hataları** (#189) (Codex #187 bulgusu): özel değerlerde rıht 150–190 mm, basamak 250 mm alt sınırı uygulanır; kat yüksekliği pozitif olmalı. Test eklenir.
-- [ ] **G2 · #187 denetimi.** 1.800 istek örneklenerek okunur (her dilden), kararlar `kararlar.json`'a ve inceleme sayfasına yazılır. Uygunsa kullanıcı onayıyla merge.
+- [x] **G2 · #187 denetimi** (karar: düzeltilmeli). 1.800 istek örneklenerek okunur (her dilden), kararlar `kararlar.json`'a ve inceleme sayfasına yazılır. Uygunsa kullanıcı onayıyla merge.
 - [ ] **G3 · Yerleşim verisinin takımlarla yeniden üretimi.** 3+2+1, okuma köşesi, yatak takımı; 2 saatten kısa parçalar, akışlı yazım. `procthor-aura-cozucu.jsonl.gz` yenilenir, rapor güncellenir.
 - [ ] **G4 · Aydınlatma motor sözlüğüne.** `aksesuar.js` ışık kuralları motorda `isik` işlemi olur (H1'de eksik kaldı).
 - [ ] **G5 · Tasarımcıya gönderme hedefi.** `proje` katmanında `tasarimciya_gonder` işleminin motorda kalıcı kaydı.
