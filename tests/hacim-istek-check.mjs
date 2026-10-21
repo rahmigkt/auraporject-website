@@ -11,6 +11,7 @@ for(const l of langs){const rs=rows.filter(r=>r.language===l);assert.equal(rs.le
 assert.equal(rows.filter(r=>r.user_dialect==='gulf').length,40);
 for(const r of rows){assert(!/solver|çözücü|pos_xy_mm|wall_id|katman|backRake|armHeight|source exception|referans plan/iu.test(r.user+' '+r.assistant.reply));if(r.language==='ar')assert(!/[a-z]/i.test(r.user+r.assistant.reply));
  assert(r.review.status==='quarantine'&&!r.review.designer_approved&&!r.review.native_language_approved&&!r.training_started);
+ assert.equal(r.review.producer,'Codex');assert.equal(r.review.required_reviewer,'Claude');assert.equal(r.review.cross_review_status,'pending');assert.equal(r.review.human_review_required,false);
  assert.equal(r.assistant.actions.length,{single:1,multiple:2,clarify:0,unsupported:0}[r.category]);assert(r.motor.report.gecti);assert.deepEqual(r.motor.report.red,[]);assert.deepEqual(r.motor.report.uyari,[]);assert.deepEqual(r.motor.target_mismatches,[]);
  assert(r.assistant.actions.every(a=>['ev','yerlesim','tekstil','proje'].includes(a.katman)));
 }

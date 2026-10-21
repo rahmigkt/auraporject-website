@@ -79,3 +79,16 @@ const livingSets={
 };
 for(const [lang,text]of Object.entries(livingSets))L[lang].single[8]=text;
 L.da.single[8]=L.da.single[8].replace('tres personers','trepersoners');
+// Floors/stairs landed in #184. They must no longer be labelled unsupported.
+const currentUnsupported={
+ tr:['Seçili odanın ışığını yüzde 30 kıs.','Mobilyaları satın al ve ödemeyi tamamla.'],
+ en:['Dim the selected room’s lights by 30 percent.','Buy the furniture and complete the payment.'],
+ de:['Dimme das Licht im ausgewählten Raum um 30 Prozent.','Kaufe die Möbel und schließe die Zahlung ab.'],
+ fr:['Baisse la lumière de la pièce sélectionnée de 30 pour cent.','Achète les meubles et termine le paiement.'],
+ nl:['Dim het licht in de geselecteerde kamer met 30 procent.','Koop de meubels en rond de betaling af.'],
+ da:['Dæmp lyset i det valgte rum med 30 procent.','Køb møblerne og gennemfør betalingen.'],
+ es:['Reduce la luz de la habitación seleccionada un 30 por ciento.','Compra los muebles y completa el pago.'],
+ it:['Abbassa la luce della stanza selezionata del 30 per cento.','Acquista i mobili e completa il pagamento.'],
+ ar:['خفّض إضاءة الغرفة المحددة بنسبة 30 بالمئة.','اشتر الأثاث وأكمل الدفع.']
+};
+for(const [lang,values]of Object.entries(currentUnsupported))L[lang].out.splice(7,2,...values);

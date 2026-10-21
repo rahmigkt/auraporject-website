@@ -26,7 +26,7 @@ for change in report['rows']:
 reportfile.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf8',newline='\n')
 for batch in ['dk','es','it']:
  f=ROOT/f'knowledge/ai-egitim/veri/ev-sohbet-{batch}/yeniden-uretim-sonucu.json'
- relative=f.relative_to(ROOT).as_posix();b=subprocess.check_output(['git','show','HEAD:'+relative],cwd=ROOT)
+ relative=f.relative_to(ROOT).as_posix();b=subprocess.check_output(['git','show','a724690:'+relative],cwd=ROOT)
  target=ARCH/relative;target.parent.mkdir(parents=True,exist_ok=True)
  if target.exists():assert target.read_bytes()==b
  else:target.write_bytes(b)

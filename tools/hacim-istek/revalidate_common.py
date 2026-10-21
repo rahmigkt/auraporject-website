@@ -14,9 +14,14 @@ def run():
  selected=[r for r in rows if r['kaynak']['veri_seti'].startswith('ev-sohbet-')]
  target=ARCH/'combined-conversations-before.jsonl'
  b=''.join(m.canonical(r)+'\n' for r in selected).encode('utf-8')
- if target.exists():assert target.read_bytes()==b,'Archive already exists for another projection state'
+ if target.exists():
+  original=[json.loads(s) for s in target.read_text(encoding='utf8').splitlines()]
+  assert {r['id'] for r in original}=={r['id'] for r in selected}
+  assert all(parts[r['id']]==r['bolum'] for r in original)
+  before.update({r['id']:m.canonical(r) for r in original})
  else:target.write_bytes(b)
- (ARCH/'combined-engine-before.json').write_text(json.dumps({'source_lock':report['source_lock'],'engine_evidence':report['engine_evidence']},ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
+ engine_archive=ARCH/'combined-engine-before.json'
+ if not engine_archive.exists():engine_archive.write_text(json.dumps({'source_lock':report['source_lock'],'engine_evidence':report['engine_evidence']},ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
  evidence=[];contents=m.CAT.blobs();updated=[]
  for row in rows:
   if row not in selected:updated.append(row);continue

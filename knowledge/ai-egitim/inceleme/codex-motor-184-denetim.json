@@ -1,0 +1,738 @@
+{
+  "reviewer": "Codex",
+  "producer": "Claude",
+  "source_main": "b8caa7c",
+  "source_tree_sha256": "22b89a62147321b2b1bc051d4e1117694cea6c844010a0aac853d7fe50255fed",
+  "scope": "Five independent floor/stair probes only; not a blanket review of any training rows or majlis geometries.",
+  "results": [
+    {
+      "id": "default-stair",
+      "expected": "accept",
+      "accepted": true,
+      "pass": true,
+      "operations": [
+        {
+          "katman": "ev",
+          "type": "kat_ekle",
+          "id": "k1",
+          "yukseklik": 2800
+        },
+        {
+          "katman": "ev",
+          "type": "oda_tanimla",
+          "kat": "k1",
+          "id": "upper",
+          "tur": "living",
+          "kose": [
+            [
+              0,
+              0
+            ],
+            [
+              6000,
+              0
+            ],
+            [
+              6000,
+              8000
+            ],
+            [
+              0,
+              8000
+            ]
+          ]
+        },
+        {
+          "katman": "ev",
+          "type": "merdiven",
+          "alt": "k0",
+          "ust": "k1",
+          "konum": [
+            3000,
+            1000
+          ],
+          "en": 900
+        }
+      ],
+      "report": {
+        "surum": "studyo-motoru/1",
+        "kabul": [
+          {
+            "katman": "ev",
+            "op": {
+              "katman": "ev",
+              "type": "kat_ekle",
+              "id": "k1",
+              "yukseklik": 2800
+            }
+          },
+          {
+            "katman": "ev",
+            "op": {
+              "katman": "ev",
+              "type": "oda_tanimla",
+              "kat": "k1",
+              "id": "upper",
+              "tur": "living",
+              "kose": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  6000,
+                  0
+                ],
+                [
+                  6000,
+                  8000
+                ],
+                [
+                  0,
+                  8000
+                ]
+              ]
+            }
+          },
+          {
+            "katman": "ev",
+            "op": {
+              "katman": "ev",
+              "type": "merdiven",
+              "alt": "k0",
+              "ust": "k1",
+              "konum": [
+                3000,
+                1000
+              ],
+              "en": 900
+            },
+            "merdiven": {
+              "id": "merdiven",
+              "alt": "k0",
+              "ust": "k1",
+              "en": 900,
+              "riser_mm": 186.7,
+              "riser_count": 15,
+              "tread_mm": 257,
+              "landing_depth_mm": 900,
+              "width_mm": 900,
+              "boyu_mm": 4498,
+              "poly": [
+                [
+                  2550,
+                  1000
+                ],
+                [
+                  3450,
+                  1000
+                ],
+                [
+                  3450,
+                  5498
+                ],
+                [
+                  2550,
+                  5498
+                ]
+              ],
+              "alt_oda": "room",
+              "ust_oda": "upper"
+            }
+          }
+        ],
+        "red": [],
+        "uyari": [],
+        "olcum": {
+          "ev": {
+            "oda": [
+              {
+                "id": "room",
+                "kat": "k0",
+                "tur": "living",
+                "m2": 48
+              },
+              {
+                "id": "upper",
+                "kat": "k1",
+                "tur": "living",
+                "m2": 48
+              }
+            ],
+            "toplam_m2": 96,
+            "kat": 2,
+            "merdiven": [
+              {
+                "id": "merdiven",
+                "en": 900,
+                "riht": 186.7,
+                "basamak": 257,
+                "adet": 15,
+                "boy": 4498
+              }
+            ]
+          }
+        },
+        "gecti": true
+      },
+      "stairs": [
+        {
+          "id": "merdiven",
+          "alt": "k0",
+          "ust": "k1",
+          "en": 900,
+          "riser_mm": 186.7,
+          "riser_count": 15,
+          "tread_mm": 257,
+          "landing_depth_mm": 900,
+          "width_mm": 900,
+          "boyu_mm": 4498,
+          "poly": [
+            [
+              2550,
+              1000
+            ],
+            [
+              3450,
+              1000
+            ],
+            [
+              3450,
+              5498
+            ],
+            [
+              2550,
+              5498
+            ]
+          ],
+          "alt_oda": "room",
+          "ust_oda": "upper"
+        }
+      ]
+    },
+    {
+      "id": "custom-too-high-riser-and-short-going",
+      "expected": "reject",
+      "accepted": true,
+      "pass": false,
+      "operations": [
+        {
+          "katman": "ev",
+          "type": "kat_ekle",
+          "id": "k1",
+          "yukseklik": 2800
+        },
+        {
+          "katman": "ev",
+          "type": "oda_tanimla",
+          "kat": "k1",
+          "id": "upper",
+          "tur": "living",
+          "kose": [
+            [
+              0,
+              0
+            ],
+            [
+              6000,
+              0
+            ],
+            [
+              6000,
+              8000
+            ],
+            [
+              0,
+              8000
+            ]
+          ]
+        },
+        {
+          "katman": "ev",
+          "type": "merdiven",
+          "alt": "k0",
+          "ust": "k1",
+          "konum": [
+            3000,
+            1000
+          ],
+          "en": 900,
+          "basamak_sayisi": 14,
+          "basamak_derinlik": 230
+        }
+      ],
+      "report": {
+        "surum": "studyo-motoru/1",
+        "kabul": [
+          {
+            "katman": "ev",
+            "op": {
+              "katman": "ev",
+              "type": "kat_ekle",
+              "id": "k1",
+              "yukseklik": 2800
+            }
+          },
+          {
+            "katman": "ev",
+            "op": {
+              "katman": "ev",
+              "type": "oda_tanimla",
+              "kat": "k1",
+              "id": "upper",
+              "tur": "living",
+              "kose": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  6000,
+                  0
+                ],
+                [
+                  6000,
+                  8000
+                ],
+                [
+                  0,
+                  8000
+                ]
+              ]
+            }
+          },
+          {
+            "katman": "ev",
+            "op": {
+              "katman": "ev",
+              "type": "merdiven",
+              "alt": "k0",
+              "ust": "k1",
+              "konum": [
+                3000,
+                1000
+              ],
+              "en": 900,
+              "basamak_sayisi": 14,
+              "basamak_derinlik": 230
+            },
+            "merdiven": {
+              "id": "merdiven",
+              "alt": "k0",
+              "ust": "k1",
+              "en": 900,
+              "riser_mm": 200,
+              "riser_count": 14,
+              "tread_mm": 230,
+              "landing_depth_mm": 900,
+              "width_mm": 900,
+              "boyu_mm": 3890,
+              "poly": [
+                [
+                  2550,
+                  1000
+                ],
+                [
+                  3450,
+                  1000
+                ],
+                [
+                  3450,
+                  4890
+                ],
+                [
+                  2550,
+                  4890
+                ]
+              ],
+              "alt_oda": "room",
+              "ust_oda": "upper"
+            }
+          }
+        ],
+        "red": [],
+        "uyari": [],
+        "olcum": {
+          "ev": {
+            "oda": [
+              {
+                "id": "room",
+                "kat": "k0",
+                "tur": "living",
+                "m2": 48
+              },
+              {
+                "id": "upper",
+                "kat": "k1",
+                "tur": "living",
+                "m2": 48
+              }
+            ],
+            "toplam_m2": 96,
+            "kat": 2,
+            "merdiven": [
+              {
+                "id": "merdiven",
+                "en": 900,
+                "riht": 200,
+                "basamak": 230,
+                "adet": 14,
+                "boy": 3890
+              }
+            ]
+          }
+        },
+        "gecti": true
+      },
+      "stairs": [
+        {
+          "id": "merdiven",
+          "alt": "k0",
+          "ust": "k1",
+          "en": 900,
+          "riser_mm": 200,
+          "riser_count": 14,
+          "tread_mm": 230,
+          "landing_depth_mm": 900,
+          "width_mm": 900,
+          "boyu_mm": 3890,
+          "poly": [
+            [
+              2550,
+              1000
+            ],
+            [
+              3450,
+              1000
+            ],
+            [
+              3450,
+              4890
+            ],
+            [
+              2550,
+              4890
+            ]
+          ],
+          "alt_oda": "room",
+          "ust_oda": "upper"
+        }
+      ]
+    },
+    {
+      "id": "negative-floor-height",
+      "expected": "reject",
+      "accepted": true,
+      "pass": false,
+      "operations": [
+        {
+          "katman": "ev",
+          "type": "kat_ekle",
+          "id": "bad",
+          "yukseklik": -2800
+        }
+      ],
+      "report": {
+        "surum": "studyo-motoru/1",
+        "kabul": [
+          {
+            "katman": "ev",
+            "op": {
+              "katman": "ev",
+              "type": "kat_ekle",
+              "id": "bad",
+              "yukseklik": -2800
+            }
+          }
+        ],
+        "red": [],
+        "uyari": [],
+        "olcum": {
+          "ev": {
+            "oda": [
+              {
+                "id": "room",
+                "kat": "k0",
+                "tur": "living",
+                "m2": 48
+              }
+            ],
+            "toplam_m2": 48,
+            "kat": 2,
+            "merdiven": []
+          }
+        },
+        "gecti": true
+      },
+      "stairs": null
+    },
+    {
+      "id": "narrow-stair",
+      "expected": "reject",
+      "accepted": false,
+      "pass": true,
+      "operations": [
+        {
+          "katman": "ev",
+          "type": "kat_ekle",
+          "id": "k1",
+          "yukseklik": 2800
+        },
+        {
+          "katman": "ev",
+          "type": "oda_tanimla",
+          "kat": "k1",
+          "id": "upper",
+          "tur": "living",
+          "kose": [
+            [
+              0,
+              0
+            ],
+            [
+              6000,
+              0
+            ],
+            [
+              6000,
+              8000
+            ],
+            [
+              0,
+              8000
+            ]
+          ]
+        },
+        {
+          "katman": "ev",
+          "type": "merdiven",
+          "alt": "k0",
+          "ust": "k1",
+          "konum": [
+            3000,
+            1000
+          ],
+          "en": 600
+        }
+      ],
+      "report": {
+        "surum": "studyo-motoru/1",
+        "kabul": [
+          {
+            "katman": "ev",
+            "op": {
+              "katman": "ev",
+              "type": "kat_ekle",
+              "id": "k1",
+              "yukseklik": 2800
+            }
+          },
+          {
+            "katman": "ev",
+            "op": {
+              "katman": "ev",
+              "type": "oda_tanimla",
+              "kat": "k1",
+              "id": "upper",
+              "tur": "living",
+              "kose": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  6000,
+                  0
+                ],
+                [
+                  6000,
+                  8000
+                ],
+                [
+                  0,
+                  8000
+                ]
+              ]
+            }
+          }
+        ],
+        "red": [
+          {
+            "katman": "ev",
+            "op": {
+              "katman": "ev",
+              "type": "merdiven",
+              "alt": "k0",
+              "ust": "k1",
+              "konum": [
+                3000,
+                1000
+              ],
+              "en": 600
+            },
+            "neden": "merdiven eni 600 mm; en az 800 mm"
+          }
+        ],
+        "uyari": [],
+        "olcum": {
+          "ev": {
+            "oda": [
+              {
+                "id": "room",
+                "kat": "k0",
+                "tur": "living",
+                "m2": 48
+              },
+              {
+                "id": "upper",
+                "kat": "k1",
+                "tur": "living",
+                "m2": 48
+              }
+            ],
+            "toplam_m2": 96,
+            "kat": 2,
+            "merdiven": []
+          }
+        },
+        "gecti": false
+      },
+      "stairs": null
+    },
+    {
+      "id": "short-landing",
+      "expected": "reject",
+      "accepted": false,
+      "pass": true,
+      "operations": [
+        {
+          "katman": "ev",
+          "type": "kat_ekle",
+          "id": "k1",
+          "yukseklik": 2800
+        },
+        {
+          "katman": "ev",
+          "type": "oda_tanimla",
+          "kat": "k1",
+          "id": "upper",
+          "tur": "living",
+          "kose": [
+            [
+              0,
+              0
+            ],
+            [
+              6000,
+              0
+            ],
+            [
+              6000,
+              8000
+            ],
+            [
+              0,
+              8000
+            ]
+          ]
+        },
+        {
+          "katman": "ev",
+          "type": "merdiven",
+          "alt": "k0",
+          "ust": "k1",
+          "konum": [
+            3000,
+            1000
+          ],
+          "en": 900,
+          "sahanlik": 500
+        }
+      ],
+      "report": {
+        "surum": "studyo-motoru/1",
+        "kabul": [
+          {
+            "katman": "ev",
+            "op": {
+              "katman": "ev",
+              "type": "kat_ekle",
+              "id": "k1",
+              "yukseklik": 2800
+            }
+          },
+          {
+            "katman": "ev",
+            "op": {
+              "katman": "ev",
+              "type": "oda_tanimla",
+              "kat": "k1",
+              "id": "upper",
+              "tur": "living",
+              "kose": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  6000,
+                  0
+                ],
+                [
+                  6000,
+                  8000
+                ],
+                [
+                  0,
+                  8000
+                ]
+              ]
+            }
+          }
+        ],
+        "red": [
+          {
+            "katman": "ev",
+            "op": {
+              "katman": "ev",
+              "type": "merdiven",
+              "alt": "k0",
+              "ust": "k1",
+              "konum": [
+                3000,
+                1000
+              ],
+              "en": 900,
+              "sahanlik": 500
+            },
+            "neden": "sahanlık merdiven eninden kısa olamaz"
+          }
+        ],
+        "uyari": [],
+        "olcum": {
+          "ev": {
+            "oda": [
+              {
+                "id": "room",
+                "kat": "k0",
+                "tur": "living",
+                "m2": 48
+              },
+              {
+                "id": "upper",
+                "kat": "k1",
+                "tur": "living",
+                "m2": 48
+              }
+            ],
+            "toplam_m2": 96,
+            "kat": 2,
+            "merdiven": []
+          }
+        },
+        "gecti": false
+      },
+      "stairs": null
+    }
+  ]
+}

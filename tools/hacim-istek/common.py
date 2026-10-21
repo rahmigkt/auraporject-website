@@ -12,7 +12,7 @@ for lang in ['tr','en','de','fr','nl','da','es','it','ar']:
   # All variants share the same synthetic five-room plan. Keep every translation,
   # value and intent on that plan in a single cluster. No fake independent splits.
   layer=r['assistant']['actions'][0]['katman'] if r['assistant']['actions'] else 'genel-sohbet'
-  rows.append(dict(id=r['id'],dil=lang,ulke=None,katman='ev-plani' if layer=='ev' else layer,kaynak=dict(veri_seti='hacim-1-istek',kayit=r['id'],lisans='AURA original authored text and synthetic room studies',dosya=file.relative_to(ROOT).as_posix(),sha256=m.sha(raw),gruplar=['plan:hacim-istek-synthetic-room-studies-v1']),durum_once=r['state'],mesajlar=[dict(rol='user',metin=r['user']),dict(rol='assistant',metin=r['assistant']['reply'])],islemler=[{'tur':op['type'],'katman':op['katman'],'arguments':{k:v for k,v in op.items() if k not in ['type','katman']}} for op in r['assistant']['actions']],denetim=dict(gecti=False,uyarilar=['human_review_pending','language_review_pending','combined_corpus_dedup_review_pending'],yasakli_terim=0,dil_tutarli=None,motor_gecti=r['motor']['report']['gecti'] and not r['motor']['target_mismatches'],insan_onayi=False,grup=''),bolum='train'))
+  rows.append(dict(id=r['id'],dil=lang,ulke=None,katman='ev-plani' if layer=='ev' else layer,kaynak=dict(veri_seti='hacim-1-istek',kayit=r['id'],lisans='AURA original authored text and synthetic room studies',dosya=file.relative_to(ROOT).as_posix(),sha256=m.sha(raw),gruplar=['plan:hacim-istek-synthetic-room-studies-v1']),durum_once=r['state'],mesajlar=[dict(rol='user',metin=r['user']),dict(rol='assistant',metin=r['assistant']['reply'])],islemler=[{'tur':op['type'],'katman':op['katman'],'arguments':{k:v for k,v in op.items() if k not in ['type','katman']}} for op in r['assistant']['actions']],denetim=dict(gecti=False,uyarilar=['claude_cross_review_pending','combined_corpus_dedup_review_pending'],yasakli_terim=0,dil_tutarli=None,motor_gecti=r['motor']['report']['gecti'] and not r['motor']['target_mismatches'],insan_onayi=False,grup=''),bolum='train'))
 groups=m.assign(rows,{})
 assert not m.leakage(rows)
 from jsonschema import Draft202012Validator
@@ -20,6 +20,9 @@ v=Draft202012Validator(json.loads((ROOT/'knowledge/ai-egitim/AURA-EGITIM-1.schem
 for r in rows:v.validate(r)
 (BASE/'karantina.jsonl').write_text(''.join(m.canonical(r)+'\n' for r in rows),encoding='utf8',newline='\n')
 manifest=json.loads((BASE/'sayim-raporu.json').read_text(encoding='utf8'))
+decision_file=ROOT/'knowledge/ai-egitim/inceleme/kararlar.json'
+decision_bytes=decision_file.read_bytes();decisions=json.loads(decision_bytes).get('kararlar',{})
+manifest['cross_review']={'producer':'Codex','required_reviewer':'Claude','decision_file':decision_file.relative_to(ROOT).as_posix(),'decision_file_sha256':m.sha(decision_bytes),'matching_decisions':{r['id']:decisions[r['id']] for r in rows if r['id'] in decisions},'status':'pending','human_review_required':False,'approval_inferred':False}
 manifest['common_contract']={'schema':'AURA-EGITIM-1','rows':len(rows),'primary':False,'source_clusters':groups,'split_rows':dict(collections.Counter(r['bolum'] for r in rows)),'training_exported':0,'policy':'All cases share a synthetic plan: one cluster, no independent dev/test set claimed. Projection is not extra data.'}
 manifest['common_contract']['operation_encoding']='tur is the operation name; arguments preserves native room/opening tur without key collision. tools/egitim-donustur/operations.mjs decodes both this nested form and legacy flat operations. Independent quarantine, not exported to training.'
 (BASE/'sayim-raporu.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf8',newline='\n')

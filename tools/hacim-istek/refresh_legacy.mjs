@@ -8,7 +8,7 @@ function invariant(r){r=structuredClone(r);delete r.solver;delete r.layout_resul
 for(const batch of ['02','uk-ie','dk','es','it']){
  const dir=`knowledge/ai-egitim/veri/ev-sohbet-${batch}`;
  for(const f of fs.readdirSync(dir).filter(f=>new RegExp(`^ev-sohbet-${batch}-\\d+\\.json$`).test(f)).sort()){
-  const file=dir+'/'+f,bytes=execFileSync('git',['show','HEAD:'+file],{cwd:root}),original=JSON.parse(bytes),r=structuredClone(original),oldItems=new Map(r.plan.items.map(it=>[it.id,it]));
+  const file=dir+'/'+f,bytes=execFileSync('git',['show',(process.env.AURA_REFRESH_BASE||'a724690')+':'+file],{cwd:root}),original=JSON.parse(bytes),r=structuredClone(original),oldItems=new Map(r.plan.items.map(it=>[it.id,it]));
   const saved=archive+'/'+file;fs.mkdirSync(path.dirname(saved),{recursive:true});if(fs.existsSync(saved))assert.deepEqual(fs.readFileSync(saved),bytes);else fs.writeFileSync(saved,bytes);
   r.plan.items=[];let attempts=0;
   for(let n=0;n<r.layout_requests.length;n++){

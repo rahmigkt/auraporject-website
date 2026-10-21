@@ -2,9 +2,11 @@
 
 Başlangıç: `main` e7a8efc, 21 Ekim 2026 kapsam kararı (#180). Dal: `hacim-1-istek`. Bu teslim H1 grubudur. H2–H5 tamamlanmış değildir. Eğitim, model indirme/koşusu, GPU, ücretli API, dağıtım ve PR birleştirmesi yapılmadı. `assets/`, `api/`, kök HTML ve puanlayıcı değiştirilmedi.
 
+Teslim öncesi gelen `main` b8caa7c (#181–185) dala alındı. Son üretim ve doğrulama bu motor ağacına bağlıdır. Kat/merdiven artık desteklendiği için eski iki "desteklenmiyor" örneği bütün dillerde aydınlatma ve satın alma istekleriyle değiştirildi. Onay kapısı Claude çapraz denetimidir; insan/ana dil onayı zorunluluğu kaldırıldı. `kararlar.json` okundu; H1'e ait karar yok, kendi kayıtlarımıza onay verilmedi.
+
 ## Kapsam ve sayım
 
-TR, EN, DE, FR, NL, DA, ES, IT ve AR'nin **her birinde 200** kayıt: 120 tek işlem, 50 çoklu işlem, 20 netleştirme, 10 kapsam dışı istek. Toplam **1.800**. Arapça kullanıcı satırlarının **40/200'ü Körfez ağzı**, kalanları ve asistan yanıtları Modern Standart Arapça adayıdır. Ana dil onayı bekleniyor.
+TR, EN, DE, FR, NL, DA, ES, IT ve AR'nin **her birinde 200** kayıt: 120 tek işlem, 50 çoklu işlem, 20 netleştirme, 10 kapsam dışı istek. Toplam **1.800**. Arapça kullanıcı satırlarının **40/200'ü Körfez ağzı**, kalanları ve asistan yanıtları Modern Standart Arapça adayıdır. Dil kalitesi için Claude çapraz denetimi bekleniyor; insan incelemesi isteğe bağlıdır.
 
 Hedefler yeni oda sınırı ve türü, bağımsız duvar çalışması, kapı/pencere, toplam eşya ölçüsü ve yerleşim, seçili odada perde/halı ve oda adıdır. Salon 3+2+1, yatak ve iki komodin, çocuk yatağı ve masa, gardırop, ayakkabılık ve yemek masası örnekleri vardır. `mobilya` katmanına işlem yoktur. Kol, ayak, kapak, dikiş ve benzeri istekler stüdyoya yönlendirilir ve `actions: []` döner. Belirsiz istekte de soru sorulur, durum değişmez.
 
@@ -16,7 +18,7 @@ Hedefler yeni oda sınırı ve türü, bağımsız duvar çalışması, kapı/pe
 
 Birincil hedef `state + user → {reply, actions}` biçiminde dokuz JSONL dosyasıdır. `karantina.jsonl` aynı kayıtların `AURA-EGITIM-1` izdüşümüdür; fazladan 1.800 kayıt değildir. Ortak sözleşmedeki `tur` işlem adı ile yerel oda/açıklık `tur` değerinin çakışması `arguments` alanıyla kayıpsız giderildi; ortak adaptör eski düz işlemleri de destekler. Her izdüşüm birincil işlem dizisine bire bir geri çevrilerek denetlenir.
 
-İnsan onayı **0**, eğitime uygun satır **0**, yeni eğitim dışa aktarımı **0**. Mevcut birleşik 2.590 aday ile bu 1.800 aday toplam 4.390 aday satırdır; benzersiz proje sayısı değildir. Eski mobilya detayı odaklı `hacim-1-komut` dalındaki kayıtlar bu teslimin kaynakları değildir; o çalışma yerinde korunmuştur. Birleşik korpusla anlamsal tekrar ve yeni kapsamın eski korpusa uygulanması ayrı inceleme gerektirir.
+Claude çapraz onayı **0**, eğitime uygun satır **0**, yeni eğitim dışa aktarımı **0**. Mevcut birleşik 2.590 aday ile bu 1.800 aday toplam 4.390 aday satırdır; benzersiz proje sayısı değildir. Eski mobilya detayı odaklı `hacim-1-komut` dalındaki kayıtlar bu teslimin kaynakları değildir; o çalışma yerinde korunmuştur. Birleşik korpusla anlamsal tekrar ve yeni kapsamın eski korpusa uygulanması ayrı inceleme gerektirir.
 
 ## Sızma ve dil denetimi
 
@@ -42,6 +44,8 @@ Tekrar üretme komutları: `tools/hacim-istek/README.md`. H1 testleri: `node tes
 
 ## Açık kusurlar ve sıra
 
-İnsan ve tasarımcı incelemesi bekliyor. Yerleşim hedefleri eşya grubu/ölçü odaklıdır; bu pakette yakınlık/bakış gibi ek kısıt çeşitliliği yoktur. Aydınlatma motor sözlüğünde yoktur. Proje gönderme işlemi yalnız kabul kaydı üretir; gerçek gönderim/kalıcılık hedefi olarak kullanılmadı. Tekstil seçili oda çalışmasına aittir; çok odalı bağımsız kalıcılık iddia edilmez. Yeni veri sayısı bu eksikleri kapatmış sayılmaz.
+Claude'un yeni kat/merdiven motoru bağımsız beş probla incelendi: üç kontrol beklenen sonucu verdi, iki kusur kaydedildi. 2800 mm kat / 14 rıht / 230 mm basamak kabul ediliyor; özel girdide 190 mm azami rıht ve 250 mm asgari basamak sınırları uygulanmıyor. Negatif kat yüksekliği de kabul ediliyor. `inceleme/codex-kararlari.json` içinde **düzeltilmeli**, girdiler ve gerçek motor çıktıları `inceleme/codex-motor-184-denetim.json` içinde. Bu kod denetimi herhangi bir eğitim kaydına toplu onay değildir. H1'de kat/merdiven hedefi yoktur; motor kodu bu PR'da değiştirilmedi.
 
-Bir sonraki grup H2-BE: mevcut 8 geometrili sohbeti 30'a tamamlayan 22 yeni sohbet, ayrı tur ve ayrı PR. Devamında iş emrindeki ülke sırası uygulanır. Her grup karantinaya girer; eğitim kapısı insan onayına bağlı kalır.
+Claude çapraz denetimi bekliyor. İnsan/ana dil incelemesi artık zorunlu kapı değildir (#185). Yerleşim hedefleri eşya grubu/ölçü odaklıdır; bu pakette yakınlık/bakış gibi ek kısıt çeşitliliği yoktur. Aydınlatma motor sözlüğünde yoktur. Proje gönderme işlemi yalnız kabul kaydı üretir; gerçek gönderim/kalıcılık hedefi olarak kullanılmadı. Tekstil seçili oda çalışmasına aittir; çok odalı bağımsız kalıcılık iddia edilmez. Yeni veri sayısı bu eksikleri kapatmış sayılmaz.
+
+Bir sonraki grup H2-BE: mevcut 8 geometrili sohbeti 30'a tamamlayan 22 yeni sohbet, ayrı tur ve ayrı PR. Devamında iş emrindeki ülke sırası uygulanır. Her grup karantinaya girer; eğitim kapısı üretenden farklı modelin çapraz denetimine bağlı kalır.

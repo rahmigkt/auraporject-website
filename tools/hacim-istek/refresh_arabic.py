@@ -16,7 +16,7 @@ def run():
   for saved in manifest:assert sha((ROOT/saved['path']).read_bytes())==saved['sha256']
  else:
   for p in paths:
-   b=subprocess.check_output(['git','show','HEAD:'+p],cwd=ROOT)
+   b=subprocess.check_output(['git','show',os.environ.get('AURA_REFRESH_BASE','a724690')+':'+p],cwd=ROOT)
    target=ARCH/p
    target.parent.mkdir(parents=True,exist_ok=True)
    if target.exists():assert target.read_bytes()==b,'Refuse to replace earlier archive'

@@ -13,6 +13,8 @@ for r in rows:
  v.validate(r)
  assert not r['denetim']['gecti'] and not r['denetim']['insan_onayi'] and r['denetim']['dil_tutarli'] is None
  assert all(op['katman']!='mobilya' for op in r['islemler'])
+ assert 'claude_cross_review_pending' in r['denetim']['uyarilar']
+ assert not any(w in r['denetim']['uyarilar'] for w in ['human_review_pending','language_review_pending'])
  assert file_hashes[r['kaynak']['dosya']]==r['kaynak']['sha256']
  raw=originals[r['id']]
  assert [{'type':o['tur'],'katman':o['katman'],**o['arguments']} for o in r['islemler']]==raw['assistant']['actions']
