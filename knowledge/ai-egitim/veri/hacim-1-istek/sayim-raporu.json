@@ -1,0 +1,131 @@
+{
+  "version": "hacim-istek/1",
+  "source_commit": "e7a8efcd85aaf93b029f128e347559aa4dd461ee",
+  "source_lock": {
+    "git_tree_sha256": "4836a096657eb3cd21758ff7533d7cb762caff5fc0782c0402ec5f1738662fe3",
+    "scope": [
+      "assets/",
+      "tools/studyo-motoru/"
+    ]
+  },
+  "rows": 1800,
+  "per_language": {
+    "tr": {
+      "single": 120,
+      "multiple": 50,
+      "clarify": 20,
+      "unsupported": 10
+    },
+    "en": {
+      "single": 120,
+      "multiple": 50,
+      "clarify": 20,
+      "unsupported": 10
+    },
+    "de": {
+      "single": 120,
+      "multiple": 50,
+      "clarify": 20,
+      "unsupported": 10
+    },
+    "fr": {
+      "single": 120,
+      "multiple": 50,
+      "clarify": 20,
+      "unsupported": 10
+    },
+    "nl": {
+      "single": 120,
+      "multiple": 50,
+      "clarify": 20,
+      "unsupported": 10
+    },
+    "da": {
+      "single": 120,
+      "multiple": 50,
+      "clarify": 20,
+      "unsupported": 10
+    },
+    "es": {
+      "single": 120,
+      "multiple": 50,
+      "clarify": 20,
+      "unsupported": 10
+    },
+    "it": {
+      "single": 120,
+      "multiple": 50,
+      "clarify": 20,
+      "unsupported": 10
+    },
+    "ar": {
+      "single": 120,
+      "multiple": 50,
+      "clarify": 20,
+      "unsupported": 10
+    }
+  },
+  "gulf_rows": 40,
+  "accepted": 1800,
+  "rejected": 0,
+  "warnings": 0,
+  "target_mismatches": 0,
+  "qualified_training_rows": 0,
+  "files": [
+    {
+      "path": "tr.jsonl",
+      "sha256": "10a605df0c4ae7f51979b50a9d8146e1282346925a41f34a6a069461fac2e708"
+    },
+    {
+      "path": "en.jsonl",
+      "sha256": "ac012ee5cab065ceef68ab2793f6d19eec3def998646bc6b42dfdc310f4bf3b6"
+    },
+    {
+      "path": "de.jsonl",
+      "sha256": "4a258117d574082d1664fb861d60e5e152f9bfc571cf7ebb398e80f5e8fde1eb"
+    },
+    {
+      "path": "fr.jsonl",
+      "sha256": "1f4f1944176f5c2d66df90c5990b9b18537635ef522c08240edb878fbd14dd32"
+    },
+    {
+      "path": "nl.jsonl",
+      "sha256": "32944f88a5792eef3896c6945a0be2f3217ba4a518441e2cd53584a22a434dc8"
+    },
+    {
+      "path": "da.jsonl",
+      "sha256": "cdc5246644beed0b97887cab951333c79305edcf68990b8c18189678d933d096"
+    },
+    {
+      "path": "es.jsonl",
+      "sha256": "0a7f80490a99bcf6b4faded519c319b21716c234eeaa6cef89956c4a8383cf4f"
+    },
+    {
+      "path": "it.jsonl",
+      "sha256": "2206fb1cc38a1b82cbfb5519a01d2bb5b1e6ac89159e427a75d8626f1faa4810"
+    },
+    {
+      "path": "ar.jsonl",
+      "sha256": "4cfe04b7a1d0d1f03f694663061dd24b2c5cc7fdf82cd49eb3f62596d9cadf67"
+    }
+  ],
+  "limitations": [
+    "Synthetic disconnected room studies; not real building plans or certified architecture",
+    "20 single-intent templates × 6 values; 25 operation pairs × 2; 10 clarification templates × 2 rooms; 10 scope refusals per language. Not 1800 independently sourced intentions.",
+    "No project dispatch or lighting action claimed: project layer only acknowledges operations; lighting absent from motor vocabulary",
+    "Native/designer review and combined corpus semantic deduplication pending",
+    "Existing combined corpus and existing frozen exam task bytes are untouched"
+  ],
+  "common_contract": {
+    "schema": "AURA-EGITIM-1",
+    "rows": 1800,
+    "primary": false,
+    "source_clusters": 1,
+    "split_rows": {
+      "train": 1800
+    },
+    "training_exported": 0,
+    "policy": "All cases share a synthetic plan: one cluster, no independent dev/test set claimed. Projection is not extra data.",
+    "operation_encoding": "tur is the operation name; arguments preserves native fields including room/opening tur without key collision. Decode as {type: tur, katman, ...arguments}. Independent quarantine, not consumed by the legacy flat-operation adapter."
+  }
+}

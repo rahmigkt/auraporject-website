@@ -10633,9 +10633,9 @@
         },
         "pos_xy_mm": [
           4480,
-          2250
+          2400
         ],
-        "rot_deg": 90,
+        "rot_deg": 0,
         "compiled_size_mm": {
           "w": 900,
           "d": 550,
@@ -10643,20 +10643,20 @@
         },
         "footprint_xy_mm": [
           [
-            4205,
-            1800
+            4030,
+            2675
           ],
           [
-            4205,
-            2700
+            4930,
+            2675
           ],
           [
-            4755,
-            2700
+            4930,
+            2125
           ],
           [
-            4755,
-            1800
+            4030,
+            2125
           ]
         ]
       },
@@ -11221,10 +11221,10 @@
     {
       "check": "window_floor_ratio:room-0",
       "passed": false,
-      "actual": 0.0,
+      "actual": 0,
       "scope": "work_order_target",
       "source_exception": true,
-      "source_reference_value": 0.0,
+      "source_reference_value": 0,
       "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
     }
   ],
@@ -11396,7 +11396,7 @@
             "ok": true,
             "alternatives": [
               {
-                "score": 4.99,
+                "score": 6.49,
                 "notes": [],
                 "placements": [
                   {
@@ -11411,9 +11411,9 @@
                     "id": "room-0-coffee",
                     "pos_xy_mm": [
                       4480,
-                      2250
+                      2400
                     ],
-                    "rot_deg": 90
+                    "rot_deg": 0
                   }
                 ]
               }
@@ -11803,7 +11803,7 @@
         "room-0-sofa",
         "room-0-coffee"
       ],
-      "score": 4.99
+      "score": 6.49
     },
     {
       "space_id": "room-4",
@@ -11829,7 +11829,7 @@
   "training_started": false,
   "solver": {
     "module": "assets/ev/yerlesim.js",
-    "sha256": "e60a2b1024785e6ffe10a8dfbc232b61dd9287f395acc27eabbba29573922086",
+    "sha256": "3eabdd0aa6c31dfa72cf3b5a7173d1e1c60bca7affec0c2013b937e299e25ba5",
     "options": {
       "count": 1,
       "beam": 6
@@ -11849,7 +11849,8 @@
       ],
       "wall": 20
     },
-    "manual_item_coordinates": false
+    "manual_item_coordinates": false,
+    "hash_policy": "utf8-lf"
   },
   "scenario_status": "fictional_conversation_on_licensed_reference_not_customer_or_model_transcript",
   "style_revision": {
