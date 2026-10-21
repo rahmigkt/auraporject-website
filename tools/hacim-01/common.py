@@ -29,7 +29,7 @@ def run():
  (BASE/'karantina.jsonl').write_text(''.join(m.canonical(r)+'\n' for r in rows),encoding='utf-8',newline='\n')
  manifest['common_contract']={'schema':'AURA-EGITIM-1','projection':'karantina.jsonl','rows':len(rows),'primary':False,'source_clusters':groups,'split_rows':dict(collections.Counter(r['bolum'] for r in rows)),'leakage':[],'policy':'All translations/value variants sharing a base product stay in one group. Split labels are prospective, not exported training data.'}
  old=json.loads((ROOT/'knowledge/ai-egitim/veri/birlesik/sayim-raporu.json').read_text(encoding='utf-8'))
- manifest['inventory']={'existing_combined_candidates':old['candidate_rows'],'new_h1_candidates':len(rows),'total_candidate_rows_not_unique_projects':old['candidate_rows']+len(rows),'qualified_training_rows':0,'existing_combined_unchanged':True}
+ manifest['inventory']={'existing_combined_candidates':old['candidate_rows'],'new_h1_candidates':len(rows),'total_candidate_rows_not_unique_projects':old['candidate_rows']+len(rows),'qualified_training_rows':0,'existing_combined_count_and_splits_preserved':True}
  (BASE/'sayim-raporu.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
  print(json.dumps(manifest['inventory']))
 if __name__=='__main__':run()

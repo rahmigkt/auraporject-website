@@ -5966,10 +5966,10 @@
           }
         },
         "pos_xy_mm": [
-          8474,
+          8624,
           7204
         ],
-        "rot_deg": 0,
+        "rot_deg": 90,
         "compiled_size_mm": {
           "w": 900,
           "d": 550,
@@ -5977,20 +5977,20 @@
         },
         "footprint_xy_mm": [
           [
-            8024,
-            7479
+            8349,
+            6754
           ],
           [
-            8924,
-            7479
+            8349,
+            7654
           ],
           [
-            8924,
-            6929
+            8899,
+            7654
           ],
           [
-            8024,
-            6929
+            8899,
+            6754
           ]
         ]
       },
@@ -6833,10 +6833,10 @@
     {
       "check": "window_floor_ratio:room-7",
       "passed": false,
-      "actual": 0.0,
+      "actual": 0,
       "scope": "work_order_target",
       "source_exception": true,
-      "source_reference_value": 0.0,
+      "source_reference_value": 0,
       "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
     }
   ],
@@ -7008,7 +7008,7 @@
             "ok": true,
             "alternatives": [
               {
-                "score": 5.77,
+                "score": 7.27,
                 "notes": [],
                 "placements": [
                   {
@@ -7022,10 +7022,10 @@
                   {
                     "id": "room-1-coffee",
                     "pos_xy_mm": [
-                      8474,
+                      8624,
                       7204
                     ],
-                    "rot_deg": 0
+                    "rot_deg": 90
                   }
                 ]
               }
@@ -7600,7 +7600,7 @@
         "room-1-sofa",
         "room-1-coffee"
       ],
-      "score": 5.77
+      "score": 7.27
     },
     {
       "space_id": "room-5",
@@ -7658,7 +7658,7 @@
   },
   "solver": {
     "module": "assets/ev/yerlesim.js",
-    "sha256": "e60a2b1024785e6ffe10a8dfbc232b61dd9287f395acc27eabbba29573922086",
+    "sha256": "3eabdd0aa6c31dfa72cf3b5a7173d1e1c60bca7affec0c2013b937e299e25ba5",
     "options": {
       "count": 1,
       "beam": 6
@@ -7678,7 +7678,8 @@
       ],
       "wall": 20
     },
-    "manual_item_coordinates": false
+    "manual_item_coordinates": false,
+    "hash_policy": "utf8-lf"
   },
   "designer_summary_tr": "Odense: müstakil tek kat ev ve mutfak-yaşam birleşimi isteniyor. Kaynakta mevcut mutfak korunuyor; yemek masası ölçüsü, bryggers ve duvar müdahalesi açık. İsviçre planı yerel parcelhus örneği sayılmıyor.",
   "style_revision": {

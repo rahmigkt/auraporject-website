@@ -3636,10 +3636,10 @@
     {
       "check": "window_floor_ratio:room-6",
       "passed": false,
-      "actual": 0.0,
+      "actual": 0,
       "scope": "work_order_target",
       "source_exception": true,
-      "source_reference_value": 0.0,
+      "source_reference_value": 0,
       "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
     }
   ],
@@ -4181,7 +4181,7 @@
             "ok": true,
             "alternatives": [
               {
-                "score": 4.99,
+                "score": 6.49,
                 "notes": [],
                 "placements": [
                   {
@@ -4238,7 +4238,7 @@
         "room-6-sofa",
         "room-6-coffee"
       ],
-      "score": 4.99
+      "score": 6.49
     }
   ],
   "training_started": false,
@@ -4267,7 +4267,7 @@
   },
   "solver": {
     "module": "assets/ev/yerlesim.js",
-    "sha256": "e60a2b1024785e6ffe10a8dfbc232b61dd9287f395acc27eabbba29573922086",
+    "sha256": "3eabdd0aa6c31dfa72cf3b5a7173d1e1c60bca7affec0c2013b937e299e25ba5",
     "options": {
       "count": 1,
       "beam": 6
@@ -4287,7 +4287,8 @@
       ],
       "wall": 20
     },
-    "manual_item_coordinates": false
+    "manual_item_coordinates": false,
+    "hash_policy": "utf8-lf"
   },
   "designer_summary_tr": "Valencia: iki katlı adosado isteği; yalnız tek katlı İsviçre referansı var. Üst kat, merdiven ve galería uydurulmadı; Katalonya kuralı Valencia kuralı sayılmadı. İki katın gerçek planı gerekiyor.",
   "style_revision": {
