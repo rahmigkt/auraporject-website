@@ -117,6 +117,7 @@ function solveOnce(space, roomItems, ev, {count = 3, beam = 60} = {}) {
   const windowDist = c => winCentres.length ? Math.min(...winCentres.map(w => len(sub(c, w)))) : 9e9;
   // majlis: continuous low seating along two (L) or three (U) walls, placed before everything else
   const mj = roomItems.filter(it => it.design.kind === 'majlis'), pre = [], preNotes = [];
+  for (const e of ev.obstacles || []) pre.push({id: e.id, kind: 'obstacle', c: e.poly[0], ax: [1, 0], az: [0, 1], rot: 0, size: {w: 0, d: 0, h: 0}, body: e.poly, zones: [], run: null}); // stairs, shafts: nothing stands there
   for (const it of mj) { const r = placeMajlis(runs, swings, it, room); if (!r) return {ok: false, failed: it.id, reason: `${it.name || 'meclis'} bu odaya kurallara uyarak kurulamıyor`, alternatives: []}; pre.push(...r.segments); preNotes.push(r.note); }
   const list = roomItems.filter(it => it.design.kind !== 'majlis').map(it => ({it, kind: KIND[it.design.kind] || 'storage', size: it.size || compileItem(it).size}))
     .sort((a, b) => ORDER.indexOf(a.kind) - ORDER.indexOf(b.kind) || b.size.w * b.size.d - a.size.w * a.size.d);
@@ -158,7 +159,7 @@ function solveOnce(space, roomItems, ev, {count = 3, beam = 60} = {}) {
   }
   // distinct alternatives: differ in where the main pieces stand
   const out = []; for (const s of states) { const sig = s.placed.map(q => `${q.run}:${Math.round(q.rot)}:${Math.round(q.c[0] / 900)}:${Math.round(q.c[1] / 900)}`).join('|'); if (!out.some(o => o.sig === sig)) out.push({...s, sig}); if (out.length >= count) break; }
-  return {ok: true, alternatives: out.map(s => ({score: +s.score.toFixed(2), notes: [...new Set(s.notes)], placements: s.placed.map(q => ({id: q.id, pos_xy_mm: q.c.map(Math.round), rot_deg: ((Math.round(q.rot) % 360) + 360) % 360, ...(q.kind === 'majlis' ? {kind: 'majlis', size_mm: {w: Math.round(q.size.w), d: q.size.d, h: q.size.h}} : {})}))}))};
+  return {ok: true, alternatives: out.map(s => ({score: +s.score.toFixed(2), notes: [...new Set(s.notes)], placements: s.placed.filter(q => q.kind !== 'obstacle').map(q => ({id: q.id, pos_xy_mm: q.c.map(Math.round), rot_deg: ((Math.round(q.rot) % 360) + 360) % 360, ...(q.kind === 'majlis' ? {kind: 'majlis', size_mm: {w: Math.round(q.size.w), d: q.size.d, h: q.size.h}} : {})}))}))};
 }
 
 
