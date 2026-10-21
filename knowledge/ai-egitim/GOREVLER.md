@@ -14,6 +14,7 @@ Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sa
   - dil başına en az 150 farklı kalıp; ev sahibinin kendi evini anlattığı istekler artar;
   - plana uzakta boş oda ekleme kalıbı azalır.
 - [ ] **C1b · #187 kalan düzeltmeler** (Claude ikinci denetimi, `kararlar.json`): EN/FR/ES/IT/DA'da 'for the furniture' türü yapıştırma bağlacı olan 42 satır yeniden yazılır; asistan açılış kalıpları çeşitlenir. Tekstil satırları kullanıcı kararını bekler. #193 (eski mobilya komutu sürümü) kapsam dışı; kullanıcı onayıyla kapatılır.
+- [ ] **C8 · Eğitim betiğini EGITIM-01 biçimine bağla.** `tools/qwen-local/train_gpu.py` `outputs/egitim-01/{train,dev}.jsonl` (messages; son asistan turu `{"reply","actions"}`) okur, loss yalnız asistan turlarında. CPU'da 5 örnekle kuru koşu (model yüklemeden tokenizasyon + maske denetimi). GPU açılmaz. (`EGITIM-01.md`)
 - [ ] **C2 · 47 kaydın üslup düzeltmesi.** `inceleme/kararlar.json` içindeki `duzelt` kayıtları (ev-sohbet-02, uk-ie, dk 01/03/04, es, arap-olculu):
   - asistan satırlarında iç terim kalmaz ("adsız oda", "hesap", "kayıt", "yerleştirilen eşya sayısı", "elle konum");
   - kullanıcı satırları doğal olur, kendi evini anlatır;
@@ -44,6 +45,8 @@ Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sa
 - [x] **G4 · Aydınlatma motor sözlüğüne.** `aksesuar.js` ışık kuralları motorda `isik` işlemi olur (H1'de eksik kaldı).
 - [x] **G5 · Tasarımcıya gönderme hedefi.** `proje` katmanında `tasarimciya_gonder` işleminin motorda kalıcı kaydı.
 - [x] **G7 · Ev tekstili ürün araştırması** (`knowledge/ev-projesi/EV-TEKSTILI-URUN-ARASTIRMA-03.md`). Uygulama kullanıcı kararından sonra.
+- [x] **G8 · Eğitim kümesi derleyici** (`tools/egitim/derle.mjs`, `sistem.md`, `EGITIM-01.md`). İlk koşu: 51 uygun kayıt.
+- [ ] **G9 · Eğitim öncesi kararlar:** H1 ve H4 geldikçe denetim, kümeyi derleme, sınav puanlayıcısını yeni biçime bağlama.
 - [ ] **G6 · C2 ve C3 çıktılarının denetimi** (her PR geldikçe).
 
 ## Kullanıcı kararları (bekliyor)
