@@ -1,33 +1,36 @@
 # Arapça ölçülü yerleşim — ilk takip
 
-21 Ekim2026. Önce beş test düzeltmesi: PR#175,63/63PASS. Ardından bu çalışma ayrı dalda yapıldı; eğitim ve PR birleştirme yok.
+21 Ekim 2026. Önce [PR #175](https://github.com/rahmigkt/auraporject-website/pull/175) ile beş test düzeltildi ve 63/63 kontrol geçti. Ardından bu çalışma ayrı dalda yapıldı. Eğitim, model yükleme, GPU, ücretli API, canlı dağıtım veya PR birleştirme yapılmadı.
 
 ## Teslim
 
-12 yeni ve bağımsız kurmaca görüşme: AE3/SA3/QA2/KW2/EG1/MA1, her biri8kullanıcı/asistan turu,192mesaj. Önceki12ölçüsüz ön görüşme aynen korundu ve yeni kayıtlara metin olarak kopyalanmadı. MSA asistanı, yer yer yerel kullanıcı ağzı ve Doğu Arap rakamları korunur. Ana dil onayı yok.
+12 yeni ve bağımsız kurmaca görüşme var: BAE 3, Suudi Arabistan 3, Katar 2, Kuveyt 2, Mısır 1, Fas 1. Her görüşme sekiz kullanıcı/asistan turu; toplam 192 mesaj. Önceki 12 ölçüsüz ön görüşme değiştirilmedi ve metinleri yeni kayıtlara kopyalanmadı. Asistan MSA kullanır; kullanıcıların yerel söyleyişleri ve Doğu Arap rakamları korunur. Ana dil ve tasarımcı onayı bekliyor.
 
-12 farklı mevcut ölçülü Swiss Dwellings3.0.0 planı, kaynağı/atıfı/CCBY4.0 bilgisi ve fixture hash'iyle kullanıldı. [Birincil kaynak](https://zenodo.org/records/7788422). Bu dosyalarda CH birimleri Arap ülkesinde ölçülmüş konut veya villa diye sunulmaz. Doğrudan yeni müşteri fotoğrafı/planı kullanılmadı. Kayıtlar yalnız tek seviye aile salonu çalışmasıdır; tamamlanmış bütün ev0,iki katlı geometri0,meclis0. Üst kat ve merdiven isteyen iki senaryo ile meclis isteyen dört senaryonun bu bölümleri bekler.
+Önceki çalışmalardan 12 farklı Swiss Dwellings 3.0.0 tek seviye planı, kaynak/atıf/CC BY 4.0 bilgisi ve fixture hash'i korunarak kullanıldı. [Birincil kaynak](https://zenodo.org/records/7788422). Bunlar Arap ülkesinde ölçülmüş gerçek konut veya villa olarak sunulmaz. Yeni müşteri fotoğrafı veya planı kullanılmadı; yerel bina mevzuatı onayı verilmez.
 
-12aile salonu / 24parça gerçek solveRoom ile yerleştirildi. Ürün ölçüleri konuşmada seçilir: kanepe1700–2400×820mm,sehpa900×550mm. Tam normalize/derlenmiş boyut ve ayak izi kaydedildi; elle koordinat veya gizli küçültme yok. Her plan için12SVG, kaynak istisnaları ve görüşmeler [inceleme sayfasında](../EV-ARAP-OLCULU-01-inceleme.html).
+12 aile salonunda 24 parça gerçek solveRoom ile yerleştirildi. Konuşmada seçilen kanepe genişlikleri 1700–2400 mm, derinlik 820 mm; sehpa 900 × 550 mm. Normalize edilmiş parametreler, derlenmiş boyutlar ve ayak izleri saklı. Elle koordinat veya gizli küçültme yok. [İnceleme sayfası](../EV-ARAP-OLCULU-01-inceleme.html) 12 SVG planı, ölçüleri, seçilen alternatifi, Arapça görüşmeleri ve kaynak istisnalarını birlikte gösterir.
 
-## Geometri ve seçilen alternatif
+**Tamamlanan bütün ev, iki katlı geometri ve meclis sayısı sıfır.** İki senaryoda üst kat/merdiven, dört senaryoda meclis bekler. Diğer odalar bu turda döşenmedi.
 
-Bağımsız Shapely denetimi12/12planı belgeli kaynak istisnalarıyla kabul ediyor; sıkı geçiş1/12.36kaynak istisnası korunuyor. Bu hedefler önceki iş emrinin boyutsal hedefleridir; Arap ülkelerinin mevzuat onayı değildir. Yeni duvar/oda icat edilmedi; kapı açılımı,oda içi kalma,parça çakışması ve kaynak geometri farkları ayrıca denetlenir.
+## Bağımsız geometri ve alternatif seçimi
 
-04numaralı kayıtta çözücünün ilk iki seçeneği sehpayı kapı açılımına taşıdı. Bu iki seçenek,ham sonuçları ve ret nedenleri kayıtta tutuldu; üçüncü gerçek seçenek kabul edildi. Çözücü tekrar sonucu değiştirilmedi veya yeniden sıralanmadı. selected_alternative indeksi açıkça kaydedilir. Eski denetim aracı yalnız0.seçeneği okuyordu; artık seçilen geçerli indeksi denetler,olmayan/bozuk indeksi reddeder. Eski veride varsayılan0davranışı aynıdır.
+Shapely denetimi 12 planı belgeli kaynak istisnalarıyla kabul ediyor; sıkı geçiş 1/12. Kaynaktan gelen 36 boyutsal istisna korunuyor. Bunlar önceki iş emrinin hedefleridir; yerel yasal sınırlar gibi gösterilmez. Duvar ve oda geometrisi kaynağa karşı, parça konumları gerçek çözücü sonucuna karşı denetlenir. Oda dışına taşma, çakışma ve kapı açılımı ayrıca kontrol edilir.
 
-Ortak motorun12işlem isteği sözleşme denetiminden geçti. **Bu sayı, çizimde seçilen alternatifin tur başına native eylem karşılığı veya koordinat eşitliği kanıtı değildir.** Seçilen alternatif henüz yerleştir isteğine eklenmiş tam native hedef değildir; canlı seçim köprüsü ve secenek_sec fiziksel durum eşlemesi ayrı inceleme ister. Bu eksik adaylarda uyarı olarak durur; eğitim exportu yok.
+04 numaralı kayıtta ilk iki çözücü seçeneği sehpayı kapı açılımına taşıdı. Ham seçenekler ve ret nedenleri korunarak üçüncü gerçek seçenek kullanıldı. Sonuç yeniden sıralanmadı. selected_alternative indeksi açıkça saklıdır. Eski denetleyici yalnız ilk seçeneği okuyordu; artık seçilen indeksi doğrular ve olmayan indeksi reddeder. Eski kayıtlarda varsayılan ilk seçenek davranışı korunur. Kapıyı engelleyen ilk önerinin tekrar reddedildiği ayrıca sınanır.
 
-## İlk taslakta yakalanan hata
+Ortak motor 12 isteği sözleşme bakımından kabul etti. **Bu, seçilen çizim alternatifinin tur başına native eylem karşılığı veya koordinat eşitliği kanıtı değildir.** Canlı seçim köprüsü ve secenek_sec fiziksel durum eşlemesi ayrı inceleme ister. Bu eksik uyarı olarak adaylarda kalır; eğitim hedefi sayılmaz.
 
-İlk donor listesi eski EV-SOHBET-02 öneri üst katlarını da taşıyordu. Kat sayısı testi2!=1ile yakaladı. O taslak silinmedi,toparlama-01/archive/arap-olculu-draft-00 altında SHAmanifestiyle superseded kaldı. Güncel kaynak listesi8UK/IE+4ITtek seviyeli kayıttır; oluşturucu çok katlı donor veya proposed stair gördüğünde hata verir. Sonraki bağımsız denetim kapı sorununu yakaladı ve alternatifler yukarıdaki gibi elendi. Onaysız taslaklar öğrenme verisine sokulmadı.
+## Yakalanan ilk taslak hatası
 
-## Doğrulama ve sınırlar
+İlk donor listesi eski EV-SOHBET-02 çalışmasındaki öneri üst katları da taşıyordu. Kat sayısı testi bunu yakaladı. Taslak silinmedi; archive/arap-olculu-draft-00 altında SHA manifestiyle superseded olarak saklandı. Güncel liste 8 UK/IE ve 4 IT tek seviye kaydıdır. Oluşturucu çok katlı donor veya öneri merdiven görürse hata verir. Sonraki bağımsız denetim kapı sorununu da yakaladı; elenen seçenekler kayıtta kalır.
 
-- ev-arap-olculu-check.mjs:12ham çözücü tekrarında tam eşitlik,24ayak izi,istek ölçülerinin sabitliği,seçenek/scope/doğruluk kontrolleri geçti.
-- ev-arap-olculu-geometry-check.py:12kaynak geometri denetimi,ülke/dil/8tur,ellekonum/kaynakhash/duvar/yanlışseçenek mutasyonlarının reddi,SVGvebytehashleri geçti.
-- İkinci oluşturma:39veri/çizim/inceleme dosyası SHAaynen aynı. byte-tekrar.json kanıtı saklı.
-- Playwright Chrome:1440pxmasaüstü ve390pxmobil,12kart/12yüklenmişSVG,yataytaşma0,RTLdoğru,sayfahatası0. PNGveham QAraporu bu klasörde. SVGleri ayrıca tarayıcıda incelemek mümkün.
-- Üslup:yasaklıterim0,60kelimeüstü0,dilkarışmasısezgisi0,tekrar0; ana dil/tasarımcı onayı değildir.
+## Doğrulama
 
-12yeni aday ortak biçime eklenecek; önceki2578kayıt ve bölmeleri aynen korunacak. Yeni toplam2590karantina,uygun eğitim0. Aynı CHkaynak planı ve bina önceki ülke uyarlamalarıyla aynı bölümde kalır; kapalı120görev ayrı tutulur. Tam toplu sonuç son takip bölümüne yazılacak.
+- ev-arap-olculu-check.mjs: 12 ham çözücü sonucuyla tam eşitlik, 24 ayak izi, istek ölçüleri, seçilen alternatif ve kapsam kontrolleri geçti.
+- ev-arap-olculu-geometry-check.py: kaynak geometrisi, ülke/dil/sekiz tur ve manuel konum/kaynak hash'i/duvar/yanlış seçenek mutasyonları geçti. Güvensiz kapı seçeneği yeniden reddedildi.
+- İkinci oluşturma: 39 veri/çizim/inceleme dosyasının SHA değeri aynı. Kanıt: byte-tekrar.json.
+- Playwright Chrome: masaüstü 1440 px ve mobil 390 px; her ikisinde 12 kart, 12 yüklenmiş SVG, doğru RTL, yatay taşma ve sayfa hatası yok. PNG ve ham QA raporu bu klasörde. Masaüstü görüntüsü görsel olarak da incelendi.
+- Üslup taraması: yasaklı terim, 60 kelimeyi aşan cevap, dil karışması sezgisi ve tekrar sıfır. Bu sonuç ana dil onayı değildir.
+- Ortak dönüşüm: 12 yeni aday eklendi; önceki 2.578 kayıt ve bölmeleri aynen kaldı. Toplam 2.590 kayıt karantinada, 52 motor sözleşme raporu var. Kaynak grubu sızıntısı yok; 242 kaynak kümesi korundu. train/dev/test exportları boş. Aynı fiziksel CH planı ülke uyarlamalarında aynı bölümde kalır; kapalı 120 görev ayrı tutulur.
+
+Son toplu koşu sonucu tamamlanınca aşağıya eklenecek. Assets, api, kök HTML, .htaccess ve eski score.mjs değiştirilmedi.

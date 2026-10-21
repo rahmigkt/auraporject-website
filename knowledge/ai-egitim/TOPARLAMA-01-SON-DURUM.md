@@ -54,3 +54,10 @@ Takipte `toparlama-studio-replay-check.mjs` ayrı geçti:5aile×set/delta,derlen
 Yeni sınav:120görev/100olumlu motor gold kontrolü/119assertion grubu geçti; model koşusu yok. Stil taraması40sohbet/640mesajda yasaklı terim0,60kelimeüstü0,dil karışması sezgisi0,tekrar0; ana dil incelemesi hâlâ bekliyor. Beş ülke kümesinin137yerleşim isteği tekrar karşılaştırıldı;10sığmama korunuyor. Katalog/şema/kaynak bölmesi ve eğitim planı kontrolleri geçti.
 
 İlk46/52 raporu tarihsel olarak saklıdır. Tam yeşil kabul ve5/7aşamalarının tamamlanması iddia edilmez.
+
+
+## 21 Ekim takipleri
+
+[PR #175](https://github.com/rahmigkt/auraporject-website/pull/175): beş test düzeltildi,63/63PASS. Üç dış yol gerçek arşiv servislerine bağlandı; iki tarihsel snapshot sürümlü fark/mutasyon denetimine taşındı. Orijinal pilot/metin kanıtları değişmedi. Yukarıdaki57/62 eski koşu olarak korunur.
+
+Ardından ev-arap-olculu-01 dalında12yeni bağımsız Arapça görüşme ve12ölçülü referans aile salonu yerleşimi eklendi.24parça ve192mesaj;36korunmuş kaynak istisnası, sıkı geçiş1/12. Bütün ev/üst kat/merdiven/meclis tamamlanmadı. [Çizimler ve görüşmeler](EV-ARAP-OLCULU-01-inceleme.html), [ayrıntılı rapor](toparlama-01/ARAP-OLCULU-01-RAPOR.md). Önceki2578aday ve bölmeleri aynen korunarak yeni toplam2590karantina oldu; eğitim0. Yeni dalın son toplu denetimi tamamlanınca rapora eklenecek.
