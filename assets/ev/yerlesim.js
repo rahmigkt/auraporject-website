@@ -50,7 +50,7 @@ export function roomRuns(space, ev) {
       const A = [w.x0 + w.ux * o.a, w.y0 + w.uy * o.a], B = [w.x0 + w.ux * (o.a + o.w), w.y0 + w.uy * (o.a + o.w)], m = mul(add(A, B), 0.5);
       if (Math.abs(dot(sub(m, P), n)) > w.t / 2 + 150 || Math.abs(dot([w.ux, w.uy], u)) < 0.9) continue;
       let s0 = dot(sub(A, P), u), s1 = dot(sub(B, P), u); if (s0 > s1) [s0, s1] = [s1, s0]; if (s1 < 0 || s0 > L) continue;
-      openings.push({kind: o.kind, s0: Math.max(0, s0), s1: Math.min(L, s1), sill: o.sill || 0, h: o.h || 2100, id: o.id}); }
+      openings.push({kind: o.kind, s0: Math.max(0, s0), s1: Math.min(L, s1), sill: o.sill || 0, h: o.h || 2100, id: o.id, full: o.w}); }
     return {i, P, Q, u, n, L, openings, door: openings.some(o => o.kind === 'door'), window: openings.some(o => o.kind === 'window')};
   });
 }
@@ -68,7 +68,7 @@ function shapes(kind, p, size) { // body footprint and the clearance zone it nee
   if (kind === 'dining') { zones.push(rect(add(p.c, mul(p.az, -(size.d / 2 + f / 2))), p.ax, p.az, size.w, f)); zones[0] = rect(add(p.c, mul(p.az, size.d / 2 + f / 2)), p.ax, p.az, size.w, f); for (const k of p.endWall ? [-p.endWall] : [-1, 1]) zones.push(rect(add(p.c, mul(p.ax, k * (size.w / 2 + f / 2))), p.ax, p.az, f, size.d)); }
   return {body, zones};
 }
-function doorSwings(runs) { const z = []; for (const r of runs) for (const o of r.openings) if (o.kind === 'door') { const w = o.s1 - o.s0, d = w > 1000 ? w / 2 : w, c = add(add(r.P, mul(r.u, (o.s0 + o.s1) / 2)), mul(r.n, d / 2)); z.push(rect(c, r.u, r.n, w + 100, d)); } return z; }
+function doorSwings(runs) { const z = []; for (const r of runs) for (const o of r.openings) if (o.kind === 'door') { const w = o.s1 - o.s0, d = (o.full || w) > 1000 ? (o.full || w) / 2 : (o.full || w), c = add(add(r.P, mul(r.u, (o.s0 + o.s1) / 2)), mul(r.n, d / 2)); z.push(rect(c, r.u, r.n, w + 100, d)); } return z; }
 
 // ---- scoring ----------------------------------------------------------------------------------------------
 function blocksWindow(run, s, size, h) { return run.openings.some(o => o.kind === 'window' && s + size.w / 2 > o.s0 - 50 && s - size.w / 2 < o.s1 + 50 && h > o.sill - 30); }
