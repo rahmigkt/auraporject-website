@@ -39,7 +39,7 @@ Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sa
 
 - [x] **G1 · Merdiven doğrulama hataları** (#189) (Codex #187 bulgusu): özel değerlerde rıht 150–190 mm, basamak 250 mm alt sınırı uygulanır; kat yüksekliği pozitif olmalı. Test eklenir.
 - [x] **G2 · #187 denetimi** (karar: düzeltilmeli). 1.800 istek örneklenerek okunur (her dilden), kararlar `kararlar.json`'a ve inceleme sayfasına yazılır. Uygunsa kullanıcı onayıyla merge.
-- [ ] **G3 · Yerleşim verisinin takımlarla yeniden üretimi.** 3+2+1, okuma köşesi, yatak takımı; 2 saatten kısa parçalar, akışlı yazım. `procthor-aura-cozucu.jsonl.gz` yenilenir, rapor güncellenir.
+- [x] **G3 · Yerleşim verisinin takımlarla yeniden üretimi.** 3+2+1, okuma köşesi, yatak takımı; 2 saatten kısa parçalar, akışlı yazım. `procthor-aura-cozucu.jsonl.gz` yenilenir, rapor güncellenir.
 - [x] **G4 · Aydınlatma motor sözlüğüne.** `aksesuar.js` ışık kuralları motorda `isik` işlemi olur (H1'de eksik kaldı).
 - [x] **G5 · Tasarımcıya gönderme hedefi.** `proje` katmanında `tasarimciya_gonder` işleminin motorda kalıcı kaydı.
 - [x] **G7 · Ev tekstili ürün araştırması** (`knowledge/ev-projesi/EV-TEKSTILI-URUN-ARASTIRMA-03.md`). Uygulama kullanıcı kararından sonra.

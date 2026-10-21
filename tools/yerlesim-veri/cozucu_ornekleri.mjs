@@ -23,7 +23,7 @@ function set(kind, area) {
     return s; }
   const dbl = area >= 10, s = [it('yatak', 'bed', dbl ? pick([1600, 1800]) + 100 : 1000, 2100, 1000)];
   if (dbl) s.push(it('komodin1', 'nightstand', 500, 420, 520), it('komodin2', 'nightstand', 500, 420, 520));
-  if (area >= 9) s.push(it('gardirop', 'wardrobe', dbl ? pick([1800, 2200, 2700]) : pick([1000, 1500]), 600, 2300));
+  if (area >= 9) s.push(it('gardirop', 'wardrobe', dbl ? pick(area >= 16 ? [1800, 2200, 2700] : area >= 12 ? [1500, 1800, 2200] : [1200, 1500]) : pick([1000, 1500]), 600, 2300));
   if (area >= 13) s.push(it('sifonyer', 'dresser', pick([1000, 1200]), 450, 850));
   if (!dbl && area >= 8) s.push(it('masa', 'desk', 1100, 550, 750));
   return s;
@@ -34,9 +34,11 @@ function ev(rec) { // each boundary edge becomes a wall; openings map to the edg
     if (d(o.p0) < 60 && d(o.p1) < 60) { const a = Math.min(s(o.p0), s(o.p1)), m = a + o.width / 2; if (m > 0 && m < w.L) { ops.push({id: 'o' + k, wall_id: w.id, a, w: o.width, sill: o.sill, h: o.height, kind: o.kind}); break; } } } });
   return {walls, ops};
 }
+const done = new Set(existsSync(dst) ? readFileSync(dst, 'utf8').split('\n').filter(Boolean).map(l => JSON.parse(l).id) : []);
 const lines = readFileSync(src, 'utf8').split('\n'), out = []; let n = 0, ok = 0, no = 0; const t0 = Date.now();
 for (const l of lines) { if (!l || n >= LIMIT) continue; const rec = JSON.parse(l), k = rec.room.kind;
   if (!AREA[k] || rec.source.house % PN !== PI || rec.room.area_m2 < AREA[k][0] || rec.room.area_m2 > AREA[k][1] || rec.room.boundary_xy_mm.length > 8) continue; n++;
+  if (done.has(`aura-cozucu-${rec.source.split}-${rec.source.house}-${rec.source.room}`)) continue;
   const items = set(k, rec.room.area_m2), E = ev(rec), res = solveRoom({boundary_xy_mm: rec.room.boundary_xy_mm}, items, E, {count: 3, beam: 24});
   const ops = rec.openings.map(o => `${o.kind === 'door' ? 'kapı' : 'pencere'} ${o.width} mm ${JSON.stringify(o.p0)}–${JSON.stringify(o.p1)}${o.kind === 'window' ? `, denizlik ${o.sill}` : ''}`).join('; ');
   const user = `${k === 'living' ? 'Oturma odası' : 'Yatak odası'}, ${rec.room.area_m2} m². Köşeler (mm): ${JSON.stringify(rec.room.boundary_xy_mm)}. Açıklıklar: ${ops || 'yok'}. Yerleştir: ${items.map(i => `${i.name} ${i.size.w}×${i.size.d}`).join('; ')}.`;
