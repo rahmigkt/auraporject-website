@@ -6,7 +6,7 @@ Tek kaynak bu dosyadır. Her iş başında güncel `main`'den okunur. Biten iş 
 
 Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sayı uydurma yok. Eğitim, GPU, ücretli API, dağıtım yok. Her iş ayrı PR. Merge kullanıcı onayıyla.
 
-- [ ] **C1 · #187 düzeltmeleri.** Karar: `kararlar.json` → `hacim-1-istek:*` = duzelt. Özet:
+- [x] **C1 · #187 düzeltmeleri.** PR #187'de C1/2 teslimi: 9 dil × 200 kayıt, dil başına 200 kullanıcı / 190 yanıt kalıbı, çokluda 40/50 kısıtlı istek. Claude yeniden denetimi bekliyor; önceki `duzelt` kararı korunur, onay sayılmaz. Rapor: `HACIM-01-H1-ISTEK-RAPOR.md`. Özet:
   - asistan cevabı isteğe özgü olur, sabit cümle yok;
   - "duvar çalışma alanı" kalıbı (9 dilde) çıkar;
   - çoklu istekler `;` yapıştırması değil, tek doğal cümle; en az %20'si kısıtlı (`bakar/yakin/uzak`);
