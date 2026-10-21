@@ -25,3 +25,7 @@ Okuma: `knowledge/ai-egitim/EV-SOHBET-ARAP-inceleme.html`. Kaynak kod: `tools/ev
 Dokuz ülkenin tam tipoloji/net alan ve madde bazlı mevzuatı, yararlı minder/köşe ölçüleri ve ana dil/designer değerlendirmesi hâlâ açık. Üreticinin dış mekân ürünü iç mekân ergonomi standardı değildir. Dil/üslup kontrolü ana dil onayı sayılmaz. Aşama 1'in tam test yeşili açığı da sürüyor.
 
 Sonraki sınav/hazırlık işi bu açıkları gizlemeyecek; Arap dosyaları eğitime hazır sayılmayacak. Eğitim/GPU/ücretli API, canlı dağıtım veya PR birleştirmesi yapılmadı.
+
+## Birleşik veriye ekleme ve dondurulmuş bölme
+
+12 ön görüşme karantinaya eklendi: toplam 2.578, yeterli eğitim kaydı 0. Önceki 2.566 satırın içeriği ve bölüm ataması birebir korundu; 40 motor raporu kaynak ağacı/girdi hash kontrolüyle kullanıldı, yeni koşu sayılmadı. 242 kaynak bileşeninde 193/24/25 grup, satırlarda 2191/191/196 var. Yeni veri eklendiğinde bütün kaynakları yeniden sıralayan önceki yaklaşım, ileride eski test kaydını train’e taşıyabilirdi. `split-ledger.json` bu atamaları dondurur; yeni dil aynı kaynak grubunda kalır ve eski train/test kaynaklarını bağlayan bir köprü açık hatadır. Yeni kaynaklar kararlı yaklaşık 80/10/10 kovasıyla eklenir. Split-ledger mutasyon/stabilite testi ve 2.578 ortak kayıt denetimi geçti.

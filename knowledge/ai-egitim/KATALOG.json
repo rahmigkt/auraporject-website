@@ -1,7 +1,7 @@
 {
   "version": "aura-catalog/1",
   "date": "2026-10-21",
-  "snapshot_base": "e86521b3446ca5793a8e4e46703b1d8ccf38457c",
+  "snapshot_base": "e9913d22b890b0d2af986262564156063a313477",
   "hash_policy": "Exact tracked Git blob bytes; checkout CRLF does not change catalogue hashes. Aggregate hash includes file paths, sizes and primary/support roles.",
   "counts_policy": "Counts cover tracked primary rows only; sets may overlap, so totals are NOT unique projects. Null is unknown/not applicable, never zero.",
   "datasets": [
@@ -36,8 +36,8 @@
       "known_defects": [
         "Designer/native-language approval pending",
         "Source exceptions retained; strict geometry varies",
-        "Motor 1 not yet replayed; solver hash changed in #156",
-        "Style audit pending"
+        "Motor acceptance does not certify source geometry or turn-by-turn targets",
+        "Native style review pending"
       ],
       "primary_files": [
         "knowledge/ai-egitim/veri/ev-sohbet-02/ev-sohbet-02-01.json",
@@ -385,8 +385,8 @@
       "known_defects": [
         "Designer/native-language approval pending",
         "Source exceptions retained; strict geometry varies",
-        "Motor 1 not yet replayed; solver hash changed in #156",
-        "Style audit pending"
+        "Motor acceptance does not certify source geometry or turn-by-turn targets",
+        "Native style review pending"
       ],
       "primary_files": [
         "knowledge/ai-egitim/veri/ev-sohbet-uk-ie/ev-sohbet-uk-ie-01.json",
@@ -559,8 +559,8 @@
       "known_defects": [
         "Designer/native-language approval pending",
         "Source exceptions retained; strict geometry varies",
-        "Motor 1 not yet replayed; solver hash changed in #156",
-        "Style audit pending"
+        "Motor acceptance does not certify source geometry or turn-by-turn targets",
+        "Native style review pending"
       ],
       "primary_files": [
         "knowledge/ai-egitim/veri/ev-sohbet-dk/ev-sohbet-dk-01.json",
@@ -675,8 +675,8 @@
       "known_defects": [
         "Designer/native-language approval pending",
         "Source exceptions retained; strict geometry varies",
-        "Motor 1 not yet replayed; solver hash changed in #156",
-        "Style audit pending"
+        "Motor acceptance does not certify source geometry or turn-by-turn targets",
+        "Native style review pending"
       ],
       "primary_files": [
         "knowledge/ai-egitim/veri/ev-sohbet-es/ev-sohbet-es-01.json",
@@ -791,8 +791,8 @@
       "known_defects": [
         "Designer/native-language approval pending",
         "Source exceptions retained; strict geometry varies",
-        "Motor 1 not yet replayed; solver hash changed in #156",
-        "Style audit pending"
+        "Motor acceptance does not certify source geometry or turn-by-turn targets",
+        "Native style review pending"
       ],
       "primary_files": [
         "knowledge/ai-egitim/veri/ev-sohbet-it/ev-sohbet-it-01.json",
@@ -880,6 +880,170 @@
           "country": "IT",
           "layer": "yerlesim",
           "records": 4
+        }
+      ]
+    },
+    {
+      "id": "ev-sohbet-arap",
+      "path": "knowledge/ai-egitim/veri/ev-sohbet-arap",
+      "summary": "Arabic intake drafts only; no measured plan or solver placement delivered.",
+      "sha256": "04c62e81761c2e5a9886cfbd4f09abf766b9582376c8a1a262ea0948aa96faf7",
+      "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
+      "sources": [
+        "AURA fictional intake; no customer images"
+      ],
+      "license": "AURA original authored text",
+      "record_count": 12,
+      "record_count_scope": "primary files only; derivatives excluded",
+      "languages": {
+        "ar": 12
+      },
+      "countries": {
+        "AE": 3,
+        "SA": 3,
+        "QA": 2,
+        "KW": 2,
+        "EG": 1,
+        "MA": 1
+      },
+      "layer": "ev-plani",
+      "status": "inceleme-bekliyor",
+      "known_defects": [
+        "Missing measured geometry and verified two-storey source",
+        "Majlis support pending",
+        "Not the completed 12-layout EV-ARAP-01 delivery",
+        "Native/designer review pending"
+      ],
+      "primary_files": [
+        "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-01.json",
+        "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-02.json",
+        "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-03.json",
+        "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-04.json",
+        "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-05.json",
+        "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-06.json",
+        "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-07.json",
+        "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-08.json",
+        "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-09.json",
+        "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-10.json",
+        "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-11.json",
+        "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-12.json"
+      ],
+      "files": [
+        {
+          "path": "knowledge/ai-egitim/veri/ev-sohbet-arap/denetim-sonucu.json",
+          "sha256": "1636e77d1f518f048c584f34aee5e141c057896bce9886557505f22d3de86091",
+          "bytes": 501,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-01.json",
+          "sha256": "16392ef49fcd7ebfac93577410c2d1194e545256045d38f60e1391bb44bf0d65",
+          "bytes": 4472,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-02.json",
+          "sha256": "ac29a3cef27e07c9425be38d5efca07238f3f8d2f5a3798c3c0d46e0dec8c682",
+          "bytes": 4579,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-03.json",
+          "sha256": "49d040e8b4fc3c6dfc1df10d0752655947bef45b076bf16f58f2f2da038b2385",
+          "bytes": 4268,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-04.json",
+          "sha256": "997b015e4c3649992ce9a9700b52a865393f08d75edded2f7a7937326e4b9d8c",
+          "bytes": 4648,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-05.json",
+          "sha256": "463de18c2efcae6ed6b4788a7453c420cd78739b55c1673129174881e355df07",
+          "bytes": 4324,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-06.json",
+          "sha256": "8358383f83e607818d3b38154b3a7a39d97ee16a20497efd11edd4b9e3f60cc7",
+          "bytes": 4273,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-07.json",
+          "sha256": "b5e60be4b4f5a8d64cc42381ee08848bc2f6b4d7fed51edd7726d4dc97a163cc",
+          "bytes": 4247,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-08.json",
+          "sha256": "fed3dc774da5d99d7c6e0fb031a2ed470188eaf58dd28ecf1c3b12ccceed8d08",
+          "bytes": 4339,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-09.json",
+          "sha256": "b78cc6e94e2517b4f835e0774f00432185a0f9f282c3a0cc018ce9734b276eab",
+          "bytes": 4281,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-10.json",
+          "sha256": "0585fa242173632612f8f0a9626c237b00d125d031ea157ee65aae9dcd4d9717",
+          "bytes": 4278,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-11.json",
+          "sha256": "054116ac81928df3baf4eb87d4e6b9e03b001f0e41b4ae5667d836acdda826a3",
+          "bytes": 4390,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/ev-sohbet-arap/ev-sohbet-arap-12.json",
+          "sha256": "8ef8a7795e57fff266c4f0141dc9d86227824e96ace182d7d829b9793eed2fdd",
+          "bytes": 4464,
+          "role": "primary"
+        }
+      ],
+      "coverage": [
+        {
+          "language": "ar",
+          "country": "AE",
+          "layer": "ev-plani",
+          "records": 3
+        },
+        {
+          "language": "ar",
+          "country": "EG",
+          "layer": "ev-plani",
+          "records": 1
+        },
+        {
+          "language": "ar",
+          "country": "KW",
+          "layer": "ev-plani",
+          "records": 2
+        },
+        {
+          "language": "ar",
+          "country": "MA",
+          "layer": "ev-plani",
+          "records": 1
+        },
+        {
+          "language": "ar",
+          "country": "QA",
+          "layer": "ev-plani",
+          "records": 2
+        },
+        {
+          "language": "ar",
+          "country": "SA",
+          "layer": "ev-plani",
+          "records": 3
         }
       ]
     },
@@ -7391,7 +7555,7 @@
       "id": "support-knowledge-ai-egitim-veri",
       "path": "knowledge/ai-egitim/veri/birlesik",
       "summary": "Structured research/support/derived artifacts; primary candidate counts not inferred.",
-      "sha256": "50aad100b8c5f769e8582224287d185ff77dcc98014c63f7300f7ad5a12da4c1",
+      "sha256": "1cef5d34937c49337fe6679635703107c82c6a34a350587b5871a4b4cdb45e7a",
       "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
       "sources": [],
       "license": null,
@@ -7408,8 +7572,8 @@
       "files": [
         {
           "path": "knowledge/ai-egitim/veri/birlesik/adaylar.jsonl",
-          "sha256": "2042ee585f84f9475601dd99f1333612208d7a3c538937612fb7c37b0936d42c",
-          "bytes": 11827776,
+          "sha256": "9588d49c8f63a862176b44823fc4fc08d35e37cbc31a8e1060245e1b1ecf780a",
+          "bytes": 11872741,
           "role": "support"
         },
         {
@@ -7420,8 +7584,14 @@
         },
         {
           "path": "knowledge/ai-egitim/veri/birlesik/sayim-raporu.json",
-          "sha256": "34b53cf721c364a06690aff16cdf1f1fec45a330632fb736b8494806fd7ae27f",
-          "bytes": 113170,
+          "sha256": "38d8a1d3864c420c2d122ae71a5f11cd29a5d74136486aec7100399f858e0045",
+          "bytes": 113905,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/birlesik/split-ledger.json",
+          "sha256": "746b091379602c25e88e1c33580d915c42daaae19ddb0a73c0e1a662363e25ff",
+          "bytes": 461154,
           "role": "support"
         },
         {
@@ -7477,7 +7647,7 @@
       "id": "support-knowledge-ev-projesi-veri",
       "path": "knowledge/ev-projesi/veri",
       "summary": "Structured research/support/derived artifacts; primary candidate counts not inferred.",
-      "sha256": "019d7fae4b0302b620e95152a4667bc71ad6938688e31559b4b41cb282cc8442",
+      "sha256": "2171d56785e6b3a0febbbd2ed8a42f779bedc46092ca385e7d850aa4c2c09663",
       "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
       "sources": [],
       "license": null,
@@ -7496,6 +7666,12 @@
           "path": "knowledge/ev-projesi/veri/aksesuar.json",
           "sha256": "a69df29722b1a4464dc34c67ce4aec9116ed73fd963afe19c0c5917db72628e5",
           "bytes": 6915,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ev-projesi/veri/arap-ulkeleri.json",
+          "sha256": "d65331a5d0d3662eef1f8f4af60f45c65f35b70f07ddedab7f83e9601e774221",
+          "bytes": 17598,
           "role": "support"
         },
         {
@@ -7568,6 +7744,12 @@
           "path": "knowledge/ev-projesi/veri/kurgu-tipleri.json",
           "sha256": "84539888b9152b182de2d71890d68b993a3ee07f8a93e5dc89d3fce391e728cb",
           "bytes": 41021,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ev-projesi/veri/meclis.json",
+          "sha256": "16836038e27bddbe3856a74ffab5916d60b95e2ad42ee214fdb57a42926b2f50",
+          "bytes": 2911,
           "role": "support"
         },
         {
@@ -7944,8 +8126,8 @@
         "unknown_count_datasets": 0
       },
       "inceleme-bekliyor": {
-        "datasets": 12,
-        "records": 2566,
+        "datasets": 13,
+        "records": 2578,
         "unknown_count_datasets": 1
       },
       "superseded": {
@@ -7961,6 +8143,7 @@
     },
     "licenses": {
       "CC-BY-4.0 geometry; AURA-authored dialogue": 5,
+      "AURA original authored text": 1,
       "CC-BY-4.0 geometry; AURA transformation": 2,
       "AURA original synthetic research": 2,
       "AURA original": 5,
@@ -7969,6 +8152,42 @@
       "AURA authored": 2
     },
     "language_country_layer": [
+      {
+        "language": "ar",
+        "country": "AE",
+        "layer": "ev-plani",
+        "records": 3
+      },
+      {
+        "language": "ar",
+        "country": "EG",
+        "layer": "ev-plani",
+        "records": 1
+      },
+      {
+        "language": "ar",
+        "country": "KW",
+        "layer": "ev-plani",
+        "records": 2
+      },
+      {
+        "language": "ar",
+        "country": "MA",
+        "layer": "ev-plani",
+        "records": 1
+      },
+      {
+        "language": "ar",
+        "country": "QA",
+        "layer": "ev-plani",
+        "records": 2
+      },
+      {
+        "language": "ar",
+        "country": "SA",
+        "layer": "ev-plani",
+        "records": 3
+      },
       {
         "language": "da",
         "country": "AT",
@@ -8752,8 +8971,8 @@
     ]
   },
   "coverage": {
-    "structured_files": 1011,
-    "inventoried_files": 1011,
+    "structured_files": 1027,
+    "inventoried_files": 1027,
     "unassigned": []
   }
 }
