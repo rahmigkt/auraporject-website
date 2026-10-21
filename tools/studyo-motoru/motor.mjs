@@ -91,7 +91,7 @@ const CONS = {
   uzak: (P, c) => { const a = P[c.a], b = P[c.b]; if (!a || !b) return null; return Math.hypot(a.pos_xy_mm[0] - b.pos_xy_mm[0], a.pos_xy_mm[1] - b.pos_xy_mm[1]) >= (c.mm || 1500); }
 };
 const KINDS = {kanepe: 'sofa', sofa: 'sofa', tv: 'tvunit', tvunit: 'tvunit', sehpa: 'coffee', coffee: 'coffee', masa: 'dining', dining: 'dining', yatak: 'bed', bed: 'bed', gardirop: 'wardrobe', wardrobe: 'wardrobe',
-  ikili: 'loveseat', loveseat: 'loveseat', tekli: 'armchair', kahve_kosesi: 'reading', reading: 'reading', yan_sehpa: 'side', side: 'side', bufe: 'sideboard', sideboard: 'sideboard', ayakkabilik: 'shoe', shoe: 'shoe', portmanto: 'coatrack', coatrack: 'coatrack', komodin: 'nightstand', nightstand: 'nightstand', calisma: 'desk', desk: 'desk', berjer: 'armchair', armchair: 'armchair', kitaplik: 'bookcase', bookcase: 'bookcase', sifonyer: 'dresser', dresser: 'dresser', mutfak: 'run', run: 'run', lavabo: 'basin', basin: 'basin'};
+  meclis: 'majlis', majlis: 'majlis', ikili: 'loveseat', loveseat: 'loveseat', tekli: 'armchair', kahve_kosesi: 'reading', reading: 'reading', yan_sehpa: 'side', side: 'side', bufe: 'sideboard', sideboard: 'sideboard', ayakkabilik: 'shoe', shoe: 'shoe', portmanto: 'coatrack', coatrack: 'coatrack', komodin: 'nightstand', nightstand: 'nightstand', calisma: 'desk', desk: 'desk', berjer: 'armchair', armchair: 'armchair', kitaplik: 'bookcase', bookcase: 'bookcase', sifonyer: 'dresser', dresser: 'dresser', mutfak: 'run', run: 'run', lavabo: 'basin', basin: 'basin'};
 function yerlesim(state, ops, rep) {
   const P = state.plan;
   for (const op of ops) {
@@ -99,7 +99,7 @@ function yerlesim(state, ops, rep) {
     if (op.type !== 'yerlestir') { rep.red.push({katman: 'yerlesim', op, neden: 'bilinmeyen işlem'}); continue; }
     const sp = P?.spaces.find(s => s.id === op.oda); if (!sp) { rep.red.push({katman: 'yerlesim', op, neden: 'böyle bir oda yok'}); continue; }
     const items = []; let bad = null;
-    for (const e of op.esyalar) { const kind = KINDS[e.tur]; if (!kind || !(e.en > 0 && e.derinlik > 0)) { bad = e; break; } items.push({id: e.id || e.tur, name: e.ad || e.tur, design: {kind}, size: {w: e.en, d: e.derinlik, h: e.yukseklik || 800}}); }
+    for (const e of op.esyalar) { const kind = KINDS[e.tur]; if (!kind || !((e.en > 0 || kind === 'majlis') && e.derinlik > 0)) { bad = e; break; } items.push({id: e.id || e.tur, name: e.ad || e.tur, design: {kind, params: kind === 'majlis' ? {layout: e.duzen || 'U', depth: e.derinlik} : undefined}, size: {w: e.en || 0, d: e.derinlik, h: e.yukseklik || (kind === 'majlis' ? 450 : 800)}}); }
     if (bad) { rep.red.push({katman: 'yerlesim', op, neden: `eşya tanınmadı ya da ölçüsü eksik: ${JSON.stringify(bad)}`}); continue; }
     const walls = P.walls.map(w => { const [x0, y0] = w.from_xy_mm, [x1, y1] = w.to_xy_mm, L = Math.hypot(x1 - x0, y1 - y0) || 1; return {...w, x0, y0, ux: (x1 - x0) / L, uy: (y1 - y0) / L, L, t: val(w.thickness) || 120}; });
     const opsE = P.openings.map(o => ({...o, a: val(o.offset_from_wall_start), w: val(o.width), h: val(o.height) || 2100, sill: val(o.sill_height)}));
@@ -113,7 +113,7 @@ function yerlesim(state, ops, rep) {
     const scored = res.alternatives.map((alt, i) => ({i, alt, r: score(alt)})).sort((a, b) => b.r.filter(x => x.ok).length - a.r.filter(x => x.ok).length || b.alt.score - a.alt.score);
     const best = scored[0]; state.secili = best.i;
     for (const x of best.r) { if (x.ok === null) rep.uyari.push({katman: 'yerlesim', kod: 'kisit_anlasilmadi', kisit: x.c}); else if (!x.ok) rep.uyari.push({katman: 'yerlesim', kod: 'kisit_karsilanmadi', kisit: x.c}); }
-    P.items = [...(P.items || []).filter(i => i.space_id !== sp.id), ...best.alt.placements.map(p => ({id: p.id, space_id: sp.id, pos_xy_mm: p.pos_xy_mm, rot_deg: p.rot_deg, size_mm: items.find(i => i.id === p.id).size}))];
+    P.items = [...(P.items || []).filter(i => i.space_id !== sp.id), ...best.alt.placements.map(p => ({id: p.id, space_id: sp.id, pos_xy_mm: p.pos_xy_mm, rot_deg: p.rot_deg, size_mm: items.find(i => i.id === p.id)?.size || p.size_mm, ...(p.kind ? {kind: p.kind} : {})}))];
     rep.kabul.push({katman: 'yerlesim', op}); rep.olcum.yerlesim = {oda: sp.id, sigdi: true, secenek: res.alternatives.length, secilen: best.i, kisit_karsilanan: best.r.filter(x => x.ok).length, kisit_toplam: best.r.length};
   }
 }
