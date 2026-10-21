@@ -50,7 +50,7 @@ def conversation(r):
 def groups_for(r,dataset,file):
     src=r.get('source',{});src=src if isinstance(src,dict) else {}
     keys=['row:'+dataset+':'+str(r.get('id'))]
-    pid=r.get('source_plan_id') or src.get('id')
+    pid=r.get('source_plan_id') or (src.get('id') if src.get('geometry_source','not-explicitly-missing') is not None else None)
     if pid:keys.append('plan:'+str(pid))
     bg=r.get('source_building_group',r.get('building_group'))
     if src.get('fixture'):
@@ -65,7 +65,11 @@ def groups_for(r,dataset,file):
 def convert(dataset,r,file,file_hash):
     id=dataset['id']+':'+str(r.get('id',sha(canonical(r).encode())[:20]));messages=conversation(r)
     warnings=['human_review_pending','language_review_pending'];state=None;ops=[];engine=None
-    if dataset['id'].startswith('ev-sohbet-'):
+    if dataset['id'].startswith('ev-sohbet-') and r.get('plan') is None:
+        warnings.extend(['awaiting_measured_plan','no_solver_placement_delivered'])
+        if r.get('majlis_requested'):warnings.append('majlis_support_pending')
+        if r.get('requested_floors',1)>1:warnings.append('two_storey_geometry_missing_and_engine_unsupported')
+    elif dataset['id'].startswith('ev-sohbet-'):
         prepared=node({'prepare':True,'record':r})
         if 'error' in prepared:warnings.append('adapter:'+prepared['error'])
         else:
@@ -95,7 +99,18 @@ def convert(dataset,r,file,file_hash):
     result={'id':id,'dil':r.get('language',r.get('lang',r.get('customer_language'))),'ulke':r.get('country'),'katman':dataset['layer'],'kaynak':{'veri_seti':dataset['id'],'kayit':str(r.get('id',id)),'lisans':r.get('license',src.get('license',dataset['license'])),'dosya':file,'sha256':file_hash,'gruplar':groups_for(r,dataset['id'],file)},'durum_once':state,'mesajlar':messages,'islemler':ops,'denetim':{'gecti':False,'uyarilar':sorted(set(warnings)),'yasakli_terim':count,'dil_tutarli':None,'motor_gecti':engine.get('report',{}).get('gecti') if engine else None,'insan_onayi':False,'grup':''},'bolum':'train'}
     return result,engine
 
-def assign(rows):
+def seed_ledger(rows):
+    ledger={}
+    for r in rows:
+        for key in r['kaynak']['gruplar']:
+            value={'bolum':r['bolum'],'grup':r['denetim']['grup']}
+            if key in ledger and ledger[key]['bolum']!=value['bolum']:raise ValueError('Prior split ledger conflict: '+key)
+            ledger[key]=value
+    return ledger
+
+def assign(rows, ledger=None):
+    # Existing assignments are immutable across added languages/countries/data.
+    ledger={} if ledger is None else ledger
     parent={}
     def find(k):
         parent.setdefault(k,k)
@@ -108,12 +123,19 @@ def assign(rows):
             if root!=other:parent[other]=root
     grouped=collections.defaultdict(list)
     for row in rows:grouped[find(row['kaynak']['gruplar'][0])].append(row)
-    ranked=sorted(grouped,key=lambda k:sha(canonical(sorted({x for r in grouped[k] for x in r['kaynak']['gruplar']})).encode()))
-    n=len(ranked);a=int(n*.8);b=int(n*.9)
-    for i,k in enumerate(ranked):
-        gid=sha(canonical(sorted({x for r in grouped[k] for x in r['kaynak']['gruplar']})).encode())
-        for r in grouped[k]:r['bolum']='train' if i<a else 'dev' if i<b else 'test';r['denetim']['grup']=gid
-    return n
+    for records in grouped.values():
+        keys=sorted({k for r in records for k in r['kaynak']['gruplar']})
+        known=[ledger[k] for k in keys if k in ledger]
+        parts={x['bolum'] for x in known}
+        if len(parts)>1:raise ValueError('Source bridge joins frozen train/dev/test groups; quarantine and review instead of reassigning')
+        if known:part=known[0]['bolum'];gid=min(x['grup'] for x in known)
+        else:
+            physical=next(([k for k in keys if k.startswith(prefix)] for prefix in ['building:','plan:','geometry:','studio-group:','style:'] if any(k.startswith(prefix) for k in keys)),keys)
+            identity=min(physical);gid=sha(identity.encode());bucket=int(gid[:16],16)%100
+            part='train' if bucket<80 else 'dev' if bucket<90 else 'test'
+        for r in records:r['bolum']=part;r['denetim']['grup']=gid
+        for key in keys:ledger[key]={'bolum':part,'grup':gid}
+    return len(grouped)
 
 def leakage(rows):
     seen={};errors=[]
@@ -138,7 +160,12 @@ def main():
                 if evidence:engines.append({'id':row['id'],**evidence})
         receipts.append({'dataset':dataset['id'],'status':'quarantined' if converted else 'missing_source','records_converted':converted})
         print(dataset['id'],converted,flush=True)
-    groups=assign(rows);assert not leakage(rows)
+    ledger_path=OUT/'split-ledger.json'
+    if ledger_path.exists():ledger=json.loads(ledger_path.read_text(encoding='utf8'))['keys']
+    else:
+        previous=[json.loads(x) for x in (OUT/'adaylar.jsonl').read_text(encoding='utf8').splitlines()] if (OUT/'adaylar.jsonl').exists() else []
+        ledger=seed_ledger(previous)
+    groups=assign(rows,ledger);assert not leakage(rows)
     approval_path=OUT/'onaylar.json'
     decisions=json.loads(approval_path.read_text(encoding='utf8')) if approval_path.exists() else {}
     rows=[qualify(r,decisions) for r in rows]
@@ -149,7 +176,9 @@ def main():
     for split in ['train','dev','test']:(OUT/(split+'.jsonl')).write_text(''.join(canonical(r)+'\n' for r in eligible if r['bolum']==split),encoding='utf8',newline='\n')
     (OUT/'adaylar.jsonl').write_text(''.join(canonical(r)+'\n' for r in rejected),encoding='utf8',newline='\n')
     report={'version':'aura-conversion/1','candidate_rows':len(rows),'qualified_training_rows':len(eligible),'quarantined_rows':len(rejected),'source_clusters':groups,'candidate_split_rows':dict(collections.Counter(r['bolum'] for r in rows)),'candidate_split_groups':dict(collections.Counter({r['denetim']['grup']:r['bolum'] for r in rows}.values())),'leakage':leakage(rows),'warning_counts':dict(collections.Counter(x for r in rows for x in r['denetim']['uyarilar'])),'datasets':receipts,'engine_evidence':engines,'dictionary':node({'dictionary':True}),'source_hashes':{p:sha((ROOT/p).read_bytes().replace(b'\r\n',b'\n')) for p in ['tools/studyo-motoru/motor.mjs','assets/forma/actions.js','assets/ev/yerlesim.js','assets/ev/tekstil.js']},'training_started':False}
+    (OUT/'split-ledger.json').write_text(json.dumps({'version':'aura-split-ledger/1','keys':ledger},ensure_ascii=False,indent=2)+'\n',encoding='utf8',newline='\n')
     report['source_lock']=source_lock()
+    report['split_policy']='Frozen existing source assignments; new source groups use a stable 80/10/10 hash bucket. Cross-partition source bridges fail.'
     report['approval_policy']='Hash-bound approvals require reviewer, language_ok and complete row digest. No approval is inferred from old packets.'
     report['target_scope']='Final accepted room requests after the complete conversation; not a per-turn operation alignment claim.'
     (OUT/'sayim-raporu.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf8',newline='\n')

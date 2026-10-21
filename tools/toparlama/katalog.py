@@ -36,11 +36,14 @@ def build():
         obj=dict(id=id,path=paths[0] if len(paths)==1 else (str(Path(paths[0]).parent).replace('\\','/') if paths else None),summary=summary,sha256=hashlib.sha256(canonical(files)).hexdigest() if files else None,hash_scope='SHA256(canonical JSON of Git-blob file manifests)',sources=source or [],license=license,record_count=len(records) if primary else None,record_count_scope='primary files only; derivatives excluded' if primary else 'research/support material; no candidate records asserted',languages=dict(langs),countries=dict(countries),layer=layer,status=status,known_defects=defects or [],primary_files=primary,files=files,coverage=[dict(language=k[0],country=k[1],layer=k[2],records=v) for k,v in sorted(matrix.items(),key=lambda x:str(x[0]))])
         entries.append(obj);used.update(paths)
     base='knowledge/ai-egitim/veri/'
-    for batch in ['02','uk-ie','dk','es','it']:
+    for batch in ['02','uk-ie','dk','es','it','arap']:
         prefix=base+'ev-sohbet-'+batch+'/'
         paths=[p for p in contents if p.startswith(prefix)]
         primary=[p for p in paths if re.search(r'/ev-sohbet-[^/]+-\d+\.json$',p)]
-        take('ev-sohbet-'+batch,paths,primary,'yerlesim','inceleme-bekliyor','Hand-authored home conversations; adapted CH reference geometry, not local building certification.','CC-BY-4.0 geometry; AURA-authored dialogue',['Swiss Dwellings 3.0.0; doi:10.5281/zenodo.7788422','AURA authored dialogue'],['Designer/native-language approval pending','Source exceptions retained; strict geometry varies','Motor 1 not yet replayed; solver hash changed in #156','Style audit pending'])
+        if batch=='arap':
+            take('ev-sohbet-arap',paths,primary,'ev-plani','inceleme-bekliyor','Arabic intake drafts only; no measured plan or solver placement delivered.','AURA original authored text',['AURA fictional intake; no customer images'],['Missing measured geometry and verified two-storey source','Majlis support pending','Not the completed 12-layout EV-ARAP-01 delivery','Native/designer review pending'])
+        else:
+            take('ev-sohbet-'+batch,paths,primary,'yerlesim','inceleme-bekliyor','Hand-authored home conversations; adapted CH reference geometry, not local building certification.','CC-BY-4.0 geometry; AURA-authored dialogue',['Swiss Dwellings 3.0.0; doi:10.5281/zenodo.7788422','AURA authored dialogue'],['Designer/native-language approval pending','Source exceptions retained; strict geometry varies','Motor acceptance does not certify source geometry or turn-by-turn targets','Native style review pending'])
     for id,status in [('ev-plan-eu-00c','inceleme-bekliyor'),('ev-plan-reel-00d','inceleme-bekliyor'),('ev-plan-veriseti','superseded'),('ev-plan-veriseti-v2','superseded')]:
         paths=[p for p in contents if p.startswith(base+id+'/')]
         primary=[p for p in paths if '/data/' in p and p.endswith('.jsonl')] if id.endswith('00c') else [p for p in paths if p.endswith('/program-sample.jsonl')] if id.endswith('00d') else [p for p in paths if p.endswith('/sample-chat.jsonl')] if id=='ev-plan-veriseti' else [p for p in paths if p.endswith('/review-data.json')]

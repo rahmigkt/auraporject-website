@@ -1,0 +1,88 @@
+{
+  "version": "aura-majlis-research/1",
+  "status": "research_handoff_not_geometry_ready",
+  "supported_by_current_solver": false,
+  "units": "mm",
+  "sources": [
+    {
+      "id": "UNESCO-MAJLIS",
+      "url": "https://ich.unesco.org/en/RL/majlis-a-cultural-and-social-space-01076",
+      "purpose": "Cultural context for AE,SA,OM,QA; not mandatory household composition or metric dimensions"
+    },
+    {
+      "id": "JH-STRUCTURE",
+      "url": "https://www.jwanahamdan.com/en/products/sofas/majlis-on-structure",
+      "publisher": "Jwana Hamdan",
+      "checked_on": "2026-10-21",
+      "scope": "Manufacturer example of outdoor modular seating, not a Saudi/Gulf indoor seating standard",
+      "data_use": "Factual dimensions with attribution only; no images/CAD copied"
+    }
+  ],
+  "manufacturer_examples": [
+    {
+      "id": "JH-MJLB1",
+      "source": "JH-STRUCTURE",
+      "use": "outdoor",
+      "outer_depth_mm": 1210,
+      "total_height_mm": 560,
+      "seat_height_mm": 280,
+      "usable_seat_depth_mm": null,
+      "seat_cushion_thickness_mm": null,
+      "module_width_mm": null
+    },
+    {
+      "id": "JH-MJLB2",
+      "source": "JH-STRUCTURE",
+      "use": "outdoor",
+      "outer_depth_mm": 1210,
+      "total_height_mm": 660,
+      "seat_height_mm": 380,
+      "usable_seat_depth_mm": null,
+      "seat_cushion_thickness_mm": null,
+      "module_width_mm": null
+    }
+  ],
+  "layout_intents": [
+    {
+      "kind": "L",
+      "sides": 2,
+      "module_dimensions": "must_be_measured",
+      "corner_join_rule": null,
+      "middle_clear_area_mm2": null,
+      "door_routes_mm": null,
+      "can_solve": false
+    },
+    {
+      "kind": "U",
+      "sides": 3,
+      "module_dimensions": "must_be_measured",
+      "corner_join_rule": null,
+      "middle_clear_area_mm2": null,
+      "door_routes_mm": null,
+      "can_solve": false
+    }
+  ],
+  "floor_cushion": {
+    "depth_mm": null,
+    "width_mm": null,
+    "thickness_mm": null,
+    "source": null,
+    "status": "No usable manufacturer drawing verified; do not substitute outdoor seat height for cushion thickness"
+  },
+  "constraints": {
+    "center_clearance": "derive from actual module envelopes, access needs and measured doors; unknown until measured",
+    "circulation_reference": {
+      "proposed_lower_bound_mm": 600,
+      "source": "assets/ev/yerlesim.js RULES.passage",
+      "kind": "AURA design proposal, NOT Gulf building law or accessibility approval"
+    },
+    "accessibility_clearance_mm": null
+  },
+  "integration_requirements": [
+    "Add genuine majlis module kind to authoritative solver; no ordinary sofa relabeling",
+    "Require module width, outer depth, back/corner construction and useful seating depth separately",
+    "L/U joins must not double count corner modules",
+    "Check measured doors, egress/use areas and room containment",
+    "Until then report pending; no invented coordinates"
+  ]
+}
