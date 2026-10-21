@@ -7109,10 +7109,10 @@
     {
       "check": "window_floor_ratio:room-6",
       "passed": false,
-      "actual": 0.0,
+      "actual": 0,
       "scope": "work_order_target",
       "source_exception": true,
-      "source_reference_value": 0.0,
+      "source_reference_value": 0,
       "reason": "Unchanged licensed source value outside project target; not repaired or claimed compliant."
     }
   ],
@@ -7654,7 +7654,7 @@
             "ok": true,
             "alternatives": [
               {
-                "score": 5,
+                "score": 6.5,
                 "notes": [],
                 "placements": [
                   {
@@ -7711,7 +7711,7 @@
         "room-6-sofa",
         "room-6-coffee"
       ],
-      "score": 5
+      "score": 6.5
     }
   ],
   "training_started": false,
@@ -7741,7 +7741,7 @@
   },
   "solver": {
     "module": "assets/ev/yerlesim.js",
-    "sha256": "e60a2b1024785e6ffe10a8dfbc232b61dd9287f395acc27eabbba29573922086",
+    "sha256": "950eff243dd22e8d919d7c2215a6ecb673e7fd00eee539be92f4945899869a51",
     "options": {
       "count": 1,
       "beam": 6
@@ -7761,7 +7761,8 @@
       ],
       "wall": 20
     },
-    "manual_item_coordinates": false
+    "manual_item_coordinates": false,
+    "hash_policy": "utf8-lf"
   },
   "designer_summary_tr": "Bologna: sıra ev; yalnız bilinen kat incelendi, alt kattaki iki oda misafir yatak odası. Üst kat ve merdiven uydurulmadı; iki katın gerçek bağlantısı, kot ve baş mesafesi gerekiyor.",
   "style_revision": {

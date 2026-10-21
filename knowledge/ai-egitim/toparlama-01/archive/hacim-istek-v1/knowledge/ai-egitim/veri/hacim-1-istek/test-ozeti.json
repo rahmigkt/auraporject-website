@@ -1,0 +1,454 @@
+{
+  "scope": "Full offline suite plus targeted checks after final review-ledger/qualifier normalization. No model/training/browser layout run.",
+  "full_suite": {
+    "command": "node tests/hepsi.mjs",
+    "timeout_ms_per_test": 900000,
+    "passed": 67,
+    "failed": 0,
+    "engine_tree_sha256": "22b89a62147321b2b1bc051d4e1117694cea6c844010a0aac853d7fe50255fed",
+    "results": [
+      {
+        "id": "tests/ai-workspace-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 221
+      },
+      {
+        "id": "tests/assistant-contract-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 211
+      },
+      {
+        "id": "tests/brief-pdf-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 286
+      },
+      {
+        "id": "tests/camera-framing-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 178
+      },
+      {
+        "id": "tests/catalogue-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 201
+      },
+      {
+        "id": "tests/catalogue-graph-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 674
+      },
+      {
+        "id": "tests/choice-flow-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 455
+      },
+      {
+        "id": "tests/codesign-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 370
+      },
+      {
+        "id": "tests/csg-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 526
+      },
+      {
+        "id": "tests/ev-arap-olculu-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 26036
+      },
+      {
+        "id": "tests/ev-arap-olculu-geometry-check.py",
+        "exit_code": 0,
+        "milliseconds": 6736
+      },
+      {
+        "id": "tests/forma-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 289231
+      },
+      {
+        "id": "tests/hacim-istek-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 116300
+      },
+      {
+        "id": "tests/hacim-istek-schema-check.py",
+        "exit_code": 0,
+        "milliseconds": 2345
+      },
+      {
+        "id": "tests/kitchen-studies-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 186
+      },
+      {
+        "id": "tests/model-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 131
+      },
+      {
+        "id": "tests/panel-engine-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 286
+      },
+      {
+        "id": "tests/preference-evidence-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 186
+      },
+      {
+        "id": "tests/qwen-atolye-data.mjs",
+        "exit_code": 0,
+        "milliseconds": 2982
+      },
+      {
+        "id": "tests/qwen-current-contract-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 703
+      },
+      {
+        "id": "tests/qwen-geometry-data-check.py",
+        "exit_code": 0,
+        "milliseconds": 1538
+      },
+      {
+        "id": "tests/qwen-large-gate-check.py",
+        "exit_code": 0,
+        "milliseconds": 228
+      },
+      {
+        "id": "tests/qwen-local-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 21232
+      },
+      {
+        "id": "tests/qwen-response-loss-check.py",
+        "exit_code": 0,
+        "milliseconds": 192
+      },
+      {
+        "id": "tests/qwen-studio-data-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 1023
+      },
+      {
+        "id": "tests/qwen-training-plan-check.py",
+        "exit_code": 0,
+        "milliseconds": 2175
+      },
+      {
+        "id": "tests/reference-studies-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 976
+      },
+      {
+        "id": "tests/ritmo-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 804
+      },
+      {
+        "id": "tests/room-family-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 126
+      },
+      {
+        "id": "tests/sectional-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 336
+      },
+      {
+        "id": "tests/sketch-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 6752
+      },
+      {
+        "id": "tests/space-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 162
+      },
+      {
+        "id": "tests/studio-agent-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 265
+      },
+      {
+        "id": "tests/studio-tools-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 261
+      },
+      {
+        "id": "tests/table-geometry.mjs",
+        "exit_code": 0,
+        "milliseconds": 320
+      },
+      {
+        "id": "tests/toparlama-arap-check.py",
+        "exit_code": 0,
+        "milliseconds": 271
+      },
+      {
+        "id": "tests/toparlama-bicim-check.py",
+        "exit_code": 0,
+        "milliseconds": 3461
+      },
+      {
+        "id": "tests/toparlama-hijyen-check.py",
+        "exit_code": 0,
+        "milliseconds": 2312
+      },
+      {
+        "id": "tests/toparlama-katalog-check.py",
+        "exit_code": 0,
+        "milliseconds": 12386
+      },
+      {
+        "id": "tests/toparlama-sinav-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 69334
+      },
+      {
+        "id": "tests/toparlama-sinav-prompt-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 781
+      },
+      {
+        "id": "tests/toparlama-split-ledger-check.py",
+        "exit_code": 0,
+        "milliseconds": 220
+      },
+      {
+        "id": "tests/toparlama-studio-replay-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 969
+      },
+      {
+        "id": "tests/toparlama-uslup-check.py",
+        "exit_code": 0,
+        "milliseconds": 1916
+      },
+      {
+        "id": "tests/upholstery-engine-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 308
+      },
+      {
+        "id": "tests/yerlesim-adversarial-check.mjs",
+        "exit_code": 0,
+        "milliseconds": 181
+      },
+      {
+        "id": "tests/ai-eval/test-01b.mjs",
+        "exit_code": 0,
+        "milliseconds": 161
+      },
+      {
+        "id": "tests/ai-eval/test-uzman-onay.mjs",
+        "exit_code": 0,
+        "milliseconds": 126
+      },
+      {
+        "id": "tests/ai-eval/verify-01b.mjs",
+        "exit_code": 0,
+        "milliseconds": 147
+      },
+      {
+        "id": "tests/text-eval/verify-stage1.mjs",
+        "exit_code": 0,
+        "milliseconds": 415
+      },
+      {
+        "id": "tools/ev-plan/test_eu.py",
+        "exit_code": 0,
+        "milliseconds": 2231
+      },
+      {
+        "id": "tools/ev-plan/test_pipeline.py",
+        "exit_code": 0,
+        "milliseconds": 4231
+      },
+      {
+        "id": "tools/ev-plan/test_real.py",
+        "exit_code": 0,
+        "milliseconds": 1575
+      },
+      {
+        "id": "tools/ev-plan/test_v2.py",
+        "exit_code": 0,
+        "milliseconds": 1178
+      },
+      {
+        "id": "tools/ev-sohbet/test02.py",
+        "exit_code": 0,
+        "milliseconds": 1693
+      },
+      {
+        "id": "tools/ev-sohbet/test_dk.py",
+        "exit_code": 0,
+        "milliseconds": 7948
+      },
+      {
+        "id": "tools/ev-sohbet/test_es.py",
+        "exit_code": 0,
+        "milliseconds": 5376
+      },
+      {
+        "id": "tools/ev-sohbet/test_it.py",
+        "exit_code": 0,
+        "milliseconds": 11428
+      },
+      {
+        "id": "tools/ev-sohbet/test_uk_ie.py",
+        "exit_code": 0,
+        "milliseconds": 11133
+      },
+      {
+        "id": "tools/perde/test_hesap.py",
+        "exit_code": 0,
+        "milliseconds": 905
+      },
+      {
+        "id": "replay-02",
+        "exit_code": 0,
+        "milliseconds": 4224
+      },
+      {
+        "id": "replay-uk-ie",
+        "exit_code": 0,
+        "milliseconds": 2577
+      },
+      {
+        "id": "replay-dk",
+        "exit_code": 0,
+        "milliseconds": 1162
+      },
+      {
+        "id": "replay-es",
+        "exit_code": 0,
+        "milliseconds": 1278
+      },
+      {
+        "id": "replay-it",
+        "exit_code": 0,
+        "milliseconds": 1121
+      },
+      {
+        "id": "tools/studyo-motoru/test.mjs",
+        "exit_code": 0,
+        "milliseconds": 3699
+      },
+      {
+        "id": "tools/ev-sohbet/uslup_denetim.py",
+        "exit_code": 0,
+        "milliseconds": 794
+      }
+    ],
+    "utilities_not_run": [
+      {
+        "file": "tests/ai-eval/aura-sinav-01/score.mjs",
+        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+      },
+      {
+        "file": "tests/ai-eval/build-sinav-01.mjs",
+        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+      },
+      {
+        "file": "tests/ai-eval/iskelet.mjs",
+        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+      },
+      {
+        "file": "tests/ai-eval/report-01b.mjs",
+        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+      },
+      {
+        "file": "tests/ai-eval/report-sinav-01.mjs",
+        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+      },
+      {
+        "file": "tests/ai-eval/run-score-windows.mjs",
+        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+      },
+      {
+        "file": "tests/ai-eval/score.mjs",
+        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+      },
+      {
+        "file": "tests/ai-eval/uzman-onay-01b.mjs",
+        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+      },
+      {
+        "file": "tests/ai-eval/uzman-onay.mjs",
+        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+      },
+      {
+        "file": "tests/ai-eval/vocab.mjs",
+        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+      },
+      {
+        "file": "tests/helpers/legacy-design.mjs",
+        "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+      },
+      {
+        "file": "tests/visual/denetim-01/capture.mjs",
+        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+      },
+      {
+        "file": "tests/visual/denetim-01/inspect.mjs",
+        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+      },
+      {
+        "file": "tests/visual/denetim-02/capture.mjs",
+        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+      },
+      {
+        "file": "tests/visual/foto/atolye-cikti.mjs",
+        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+      },
+      {
+        "file": "tests/visual/foto/atolye.mjs",
+        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+      },
+      {
+        "file": "tests/visual/foto/birlesim.mjs",
+        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+      },
+      {
+        "file": "tests/visual/foto/kasa.mjs",
+        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+      },
+      {
+        "file": "tests/visual/foto/real.mjs",
+        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+      },
+      {
+        "file": "tests/visual/foto/shot.mjs",
+        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+      },
+      {
+        "file": "tests/visual/foto/surum.mjs",
+        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+      },
+      {
+        "file": "tests/visual/gorsel-01/capture.mjs",
+        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+      },
+      {
+        "file": "tests/visual/gorsel-01/serve.py",
+        "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+      }
+    ]
+  },
+  "post_suite_targeted_checks": [
+    {
+      "command": "python tests/hacim-istek-schema-check.py",
+      "exit_code": 0,
+      "scope": "Schema, reviewer names/timestamps, no human requirement, self-review rejection, stale-target revocation"
+    },
+    {
+      "command": "python tests/toparlama-katalog-check.py",
+      "exit_code": 0,
+      "scope": "Current review ledger and committed structured Git blobs, counts and tamper checks"
+    }
+  ],
+  "cross_review": "H1 still awaits Claude; diagnostic motor probes are not training approvals"
+}

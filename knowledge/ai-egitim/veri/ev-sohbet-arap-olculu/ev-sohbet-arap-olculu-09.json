@@ -17,7 +17,7 @@
     "geographic_transfer": "Adapted Swiss single-level measured reference, NOT an Arab local survey, villa or measured upper floor.",
     "donor_document": {
       "path": "knowledge/ai-egitim/veri/ev-sohbet-it/ev-sohbet-it-01.json",
-      "sha256": "19b5b9447443341ebb0193c75991f0c239125a9ace96770724eb21a12ea96d0b"
+      "sha256": "f48c92f6a85c0b8d7aee64a5242bd56bf0eccb67532714e6e9d01e2c00844298"
     }
   },
   "plan": {
@@ -6009,7 +6009,7 @@
             "ok": true,
             "alternatives": [
               {
-                "score": 5.74,
+                "score": 7.24,
                 "notes": [],
                 "placements": [
                   {
@@ -6031,7 +6031,7 @@
                 ]
               },
               {
-                "score": 5.74,
+                "score": 7.24,
                 "notes": [],
                 "placements": [
                   {
@@ -6053,29 +6053,7 @@
                 ]
               },
               {
-                "score": 5.74,
-                "notes": [],
-                "placements": [
-                  {
-                    "id": "room-3-sofa",
-                    "pos_xy_mm": [
-                      3529,
-                      10634
-                    ],
-                    "rot_deg": 0
-                  },
-                  {
-                    "id": "room-3-coffee",
-                    "pos_xy_mm": [
-                      3529,
-                      9394
-                    ],
-                    "rot_deg": 90
-                  }
-                ]
-              },
-              {
-                "score": 5.62,
+                "score": 7.12,
                 "notes": [],
                 "placements": [
                   {
@@ -6093,6 +6071,28 @@
                       9498
                     ],
                     "rot_deg": 0
+                  }
+                ]
+              },
+              {
+                "score": 7.12,
+                "notes": [],
+                "placements": [
+                  {
+                    "id": "room-3-sofa",
+                    "pos_xy_mm": [
+                      2929,
+                      10634
+                    ],
+                    "rot_deg": 0
+                  },
+                  {
+                    "id": "room-3-coffee",
+                    "pos_xy_mm": [
+                      2873,
+                      9498
+                    ],
+                    "rot_deg": 180
                   }
                 ]
               }
@@ -6731,7 +6731,7 @@
             }
           },
           "pos_xy_mm": [
-            3529,
+            2929,
             10634
           ],
           "rot_deg": 0,
@@ -6742,19 +6742,19 @@
           },
           "footprint_xy_mm": [
             [
-              2629,
+              2029,
               11044
             ],
             [
-              4429,
+              3829,
               11044
             ],
             [
-              4429,
+              3829,
               10224
             ],
             [
-              2629,
+              2029,
               10224
             ]
           ]
@@ -6838,10 +6838,10 @@
             }
           },
           "pos_xy_mm": [
-            3529,
-            9394
+            2873,
+            9498
           ],
-          "rot_deg": 90,
+          "rot_deg": 0,
           "compiled_size_mm": {
             "w": 900,
             "d": 550,
@@ -6849,20 +6849,20 @@
           },
           "footprint_xy_mm": [
             [
-              3254,
-              8944
+              2423,
+              9773
             ],
             [
-              3254,
-              9844
+              3323,
+              9773
             ],
             [
-              3804,
-              9844
+              3323,
+              9223
             ],
             [
-              3804,
-              8944
+              2423,
+              9223
             ]
           ]
         }
@@ -7059,7 +7059,7 @@
             2873,
             9498
           ],
-          "rot_deg": 0,
+          "rot_deg": 180,
           "compiled_size_mm": {
             "w": 900,
             "d": 550,
@@ -7067,20 +7067,20 @@
           },
           "footprint_xy_mm": [
             [
-              2423,
-              9773
-            ],
-            [
-              3323,
-              9773
-            ],
-            [
               3323,
               9223
             ],
             [
               2423,
               9223
+            ],
+            [
+              2423,
+              9773
+            ],
+            [
+              3323,
+              9773
             ]
           ]
         }
@@ -7089,7 +7089,7 @@
   ],
   "solver": {
     "module": "assets/ev/yerlesim.js",
-    "sha256": "ba5b0ed112fc3cfc7abec19382d0e3e84333d3c391ce8caf8a1a38d156c1c1c5",
+    "sha256": "8392663e699476471d3a5a2ca0e70c9ec2db31ecba11e487f4e27879b639c6ca",
     "options": {
       "count": 4,
       "beam": 40
@@ -7107,6 +7107,11 @@
         350,
         500
       ],
+      "groupGap": [
+        350,
+        600
+      ],
+      "groupMax": 3000,
       "wall": 20
     },
     "manual_item_coordinates": false
@@ -7152,7 +7157,6 @@
           {
             "katman": "yerlesim",
             "op": {
-              "katman": "yerlesim",
               "oda": "room-3",
               "esyalar": [
                 {
@@ -7171,6 +7175,7 @@
                 }
               ],
               "kisitlar": [],
+              "katman": "yerlesim",
               "type": "yerlestir"
             }
           }

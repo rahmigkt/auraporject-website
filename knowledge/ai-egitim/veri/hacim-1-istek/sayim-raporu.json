@@ -1,0 +1,166 @@
+{
+  "version": "hacim-istek/4-C1b",
+  "source_commit": "461067258e268f57a689a7cc0ae1ff1485e573f7",
+  "source_lock": {
+    "git_tree_sha256": "ba823d3c85d6a097508672988109dd92a25ed6ab457a241e7d06fffea32ebfc8",
+    "scope": [
+      "assets/",
+      "tools/studyo-motoru/"
+    ]
+  },
+  "rows": 1800,
+  "per_language": {
+    "tr": {
+      "single": 120,
+      "multiple": 50,
+      "clarify": 20,
+      "unsupported": 10
+    },
+    "en": {
+      "single": 120,
+      "multiple": 50,
+      "clarify": 20,
+      "unsupported": 10
+    },
+    "de": {
+      "single": 120,
+      "multiple": 50,
+      "clarify": 20,
+      "unsupported": 10
+    },
+    "fr": {
+      "single": 120,
+      "multiple": 50,
+      "clarify": 20,
+      "unsupported": 10
+    },
+    "nl": {
+      "single": 120,
+      "multiple": 50,
+      "clarify": 20,
+      "unsupported": 10
+    },
+    "da": {
+      "single": 120,
+      "multiple": 50,
+      "clarify": 20,
+      "unsupported": 10
+    },
+    "es": {
+      "single": 120,
+      "multiple": 50,
+      "clarify": 20,
+      "unsupported": 10
+    },
+    "it": {
+      "single": 120,
+      "multiple": 50,
+      "clarify": 20,
+      "unsupported": 10
+    },
+    "ar": {
+      "single": 120,
+      "multiple": 50,
+      "clarify": 20,
+      "unsupported": 10
+    }
+  },
+  "gulf_rows": 40,
+  "accepted": 1800,
+  "rejected": 0,
+  "warnings": 0,
+  "target_mismatches": 0,
+  "qualified_training_rows": 0,
+  "approval_policy": "Codex-authored records await Claude cross-review. Human/native review optional, not a required approval gate.",
+  "files": [
+    {
+      "path": "tr.jsonl",
+      "sha256": "e75ff2b18622884341a2867ba61fde7a132d3206b74975007862ec623a5c00e7"
+    },
+    {
+      "path": "en.jsonl",
+      "sha256": "13585330313501249b1cb2e7c00e9064baddb358ad27f97134445e1603ca2bfd"
+    },
+    {
+      "path": "de.jsonl",
+      "sha256": "fe440e8bd9ab8132191f66fda2f342da961da7494093244bc31fb88d602f0e74"
+    },
+    {
+      "path": "fr.jsonl",
+      "sha256": "ee4e079da09c0d1cb0bd55e67b07ad0140dc89f4bf67b4d283bf9592b4f730de"
+    },
+    {
+      "path": "nl.jsonl",
+      "sha256": "28e4e518efa65de3f5700b08b6dc989e60a1eaf75e8d4a3c9226614beb5345f5"
+    },
+    {
+      "path": "da.jsonl",
+      "sha256": "f0d0ac0edeb01bea41af5527a14a247836fe5ad342768f396c86b320a4d9fb6d"
+    },
+    {
+      "path": "es.jsonl",
+      "sha256": "d1df2c2693b2dfbcd8bd8abebb5fb324f895acecba748753080bb3af59b4a3e0"
+    },
+    {
+      "path": "it.jsonl",
+      "sha256": "1f873cea8db6805e71f6caee7b37c65ff05041e42e4f03ae004dc74c5665b01a"
+    },
+    {
+      "path": "ar.jsonl",
+      "sha256": "a95afe672941a274ced8bd1430e8c16e017d00f38d3c1f5038a10e72e8a409d4"
+    }
+  ],
+  "limitations": [
+    "One fictional connected five-room home; not a real building or certified architecture",
+    "24 single intent families with five authored paraphrases each; ten coordinated pairs with five frames each; ten clarification topics and ten unsupported requests per language. Surface variation is not independent intent coverage.",
+    "Near/far distances are declared AURA operational interpretations; user utterances do not claim measured clearance",
+    "Lighting colour-temperature and persisted designer-request targets included; no external delivery. Percentage dimming unsupported",
+    "Claude re-review and combined corpus semantic deduplication pending; prior duzelt decision remains preserved",
+    "Existing combined corpus count/splits and frozen exam task bytes are preserved"
+  ],
+  "revision": "C1b/1",
+  "quality_report": "C1-kalite-raporu.json",
+  "capability_coverage": {
+    "lighting_temperature": 45,
+    "persisted_designer_requests": 45,
+    "external_delivery": false,
+    "percentage_dimming_supported": false
+  },
+  "cross_review": {
+    "producer": "Codex",
+    "required_reviewer": "Claude",
+    "decision_file": "knowledge/ai-egitim/inceleme/kararlar.json",
+    "decision_file_sha256": "fbac714806bab94d4a5807aff66f654f091a824a5394fdcc22b567a3fb470c3d",
+    "matching_decisions": {},
+    "status": "C1b_resubmitted_previous_duzelt_preserved",
+    "human_review_required": false,
+    "approval_inferred": false,
+    "dataset_decision": {
+      "karar": "duzelt",
+      "not": "İkinci denetim (#187 C1 sürümü, 21 Ekim 2026). Büyük ölçüde düzeldi: cevaplar isteğe özgü, iç terim yok, çoklu istekler tek cümle, %40 kısıtlı, soru cevapları isteğin kendisini soruyor, ışık ve tasarımcı talebi eklenmiş. Kalan küçük düzeltmeler:\n1) 'for the furniture / pour les meubles / para los muebles / per i mobili / møblerne' yapıştırma bağlacı EN/FR/ES/IT'de 10'ar, DA'da 2 satırda; bazılarında anlamsız ('for the furniture choose the open linen-effect look for the sheers'). Bu 42 satır yeniden yazılsın.\n2) Asistan açılışları dil başına iki kalıpta 34'er kez ('In the preview,' / 'For your room,'). Açılış çeşitlensin ya da açılışsız doğrudan yapılanı söylesin.\n3) Tekstil satırları: kullanıcı kararı verildi (21 Ekim): perde/halı asistanın işinde kalır, tekstil satırları eğitime girebilir. Önceki not:: perde ve halı stüdyoda ayrı ürün ailesi olacak (EV-TEKSTILI-URUN-ARASTIRMA-03). Yapay zekâ sekmesinde perde/halı isteğinin nasıl karşılanacağı kullanıcı kararından sonra netleşecek; bu satırlar o zamana kadar karantinada kalır, silinmez.\n1 ve 2 düzeltilince bütün satırlar uygun sayılacak.",
+      "denetci": "claude",
+      "zaman": 1792572720588,
+      "veri_seti": "hacim-1-istek",
+      "dil": "9 dil"
+    }
+  },
+  "inventory": {
+    "existing_combined_candidates": 2590,
+    "new_home_request_candidates": 1800,
+    "total_candidate_rows_not_unique_projects": 4390,
+    "qualified_training_rows": 0,
+    "old_furniture_detail_candidates_added_to_this_delivery": 0
+  },
+  "common_contract": {
+    "schema": "AURA-EGITIM-1",
+    "rows": 1800,
+    "primary": false,
+    "source_clusters": 1,
+    "split_rows": {
+      "train": 1800
+    },
+    "training_exported": 0,
+    "policy": "All cases share a synthetic plan: one cluster, no independent dev/test set claimed. Projection is not extra data.",
+    "operation_encoding": "tur is the operation name; arguments preserves native room/opening tur without key collision. tools/egitim-donustur/operations.mjs decodes both this nested form and legacy flat operations. Independent quarantine, not exported to training."
+  }
+}

@@ -2,6 +2,7 @@
 Does not invent executable labels for old program-only or prose-only datasets.
 """
 from pathlib import Path
+from datetime import datetime, timezone
 import collections, copy, hashlib, importlib.util, json, os, re, subprocess, sys
 ROOT=Path(__file__).resolve().parents[2]
 SPEC=importlib.util.spec_from_file_location('aura_catalog',ROOT/'tools/toparlama/katalog.py')
@@ -23,8 +24,30 @@ def qualify(row,decisions):
         row['denetim']['insan_onayi']=True;row['denetim']['dil_tutarli']=True
         row['denetim']['uyarilar']=[w for w in row['denetim']['uyarilar'] if w not in ['human_review_pending','language_review_pending']]
     d=row['denetim']
-    d['gecti']=bool(d['insan_onayi'] and d['dil_tutarli'] is True and not d['uyarilar'] and d['yasakli_terim']==0 and row['dil'] and (not row['islemler'] or d['motor_gecti'] is True))
+    decision=decisions.get(row['id'],{})
+    producer=row.get('kaynak',{}).get('ureten')
+    reviewer={'codex':'Codex','claude':'Claude'}.get(str(decision.get('denetci','')).casefold())
+    if (producer,reviewer) in [('Codex','Claude'),('Claude','Codex')] and decision.get('karar')=='uygun' and decision.get('zaman') and decision.get('row_sha256')==approval_digest(row):
+        d['capraz_onay']={k:decision[k] for k in ['karar','denetci','zaman','row_sha256']}
+        d['capraz_onay']['denetci']=reviewer
+        if isinstance(d['capraz_onay']['zaman'],(int,float)):
+            d['capraz_onay']['zaman']=datetime.fromtimestamp(d['capraz_onay']['zaman']/1000,tz=timezone.utc).isoformat()
+        d['capraz_onay']['ureten']=producer
+        d['dil_tutarli']=True
+        d['uyarilar']=[w for w in d['uyarilar'] if w not in ['claude_cross_review_pending','codex_cross_review_pending','human_review_pending','language_review_pending']]
+    receipt=d.get('capraz_onay',{})
+    cross=bool((receipt.get('ureten'),receipt.get('denetci')) in [('Codex','Claude'),('Claude','Codex')] and receipt.get('ureten')==producer and receipt.get('karar')=='uygun' and receipt.get('zaman') and receipt.get('row_sha256')==approval_digest(row))
+    d['gecti']=bool((d['insan_onayi'] or cross) and d['dil_tutarli'] is True and not d['uyarilar'] and d['yasakli_terim']==0 and row['dil'] and (not row['islemler'] or d['motor_gecti'] is True))
     return row
+
+def review_decisions():
+    """Read legacy receipts and the two cross-review ledgers; no approval inferred."""
+    legacy=OUT/'onaylar.json'
+    decisions=json.loads(legacy.read_text(encoding='utf8')) if legacy.exists() else {}
+    for name in ['kararlar.json','codex-kararlari.json']:
+        file=ROOT/'knowledge/ai-egitim/inceleme'/name
+        if file.exists():decisions.update(json.loads(file.read_text(encoding='utf8')).get('kararlar',{}))
+    return decisions
 def node(payload,timeout=45):
     try:
         r=subprocess.run(['node',str(ROOT/'tools/egitim-donustur/motor.mjs')],input=canonical(payload),cwd=ROOT,text=True,encoding='utf8',capture_output=True,timeout=timeout)
@@ -171,8 +194,7 @@ def main():
         previous=[json.loads(x) for x in (OUT/'adaylar.jsonl').read_text(encoding='utf8').splitlines()] if (OUT/'adaylar.jsonl').exists() else []
         ledger=seed_ledger(previous)
     groups=assign(rows,ledger);assert not leakage(rows)
-    approval_path=OUT/'onaylar.json'
-    decisions=json.loads(approval_path.read_text(encoding='utf8')) if approval_path.exists() else {}
+    decisions=review_decisions()
     rows=[qualify(r,decisions) for r in rows]
     schema=json.loads((ROOT/'knowledge/ai-egitim/AURA-EGITIM-1.schema.json').read_text(encoding='utf8'));v=Draft202012Validator(schema)
     for r in rows:v.validate(r)
@@ -184,7 +206,7 @@ def main():
     (OUT/'split-ledger.json').write_text(json.dumps({'version':'aura-split-ledger/1','keys':ledger},ensure_ascii=False,indent=2)+'\n',encoding='utf8',newline='\n')
     report['source_lock']=source_lock()
     report['split_policy']='Frozen existing source assignments; new source groups use a stable 80/10/10 hash bucket. Cross-partition source bridges fail.'
-    report['approval_policy']='Hash-bound approvals require reviewer, language_ok and complete row digest. No approval is inferred from old packets.'
+    report['approval_policy']='Cross-model approval requires a different declared producer/reviewer, suitable decision, timestamp and complete row digest. Human approval is optional; historical hash-bound human receipts remain supported. No approval inferred from old or unbound packets.'
     report['target_scope']='Final accepted room requests after the complete conversation; not a per-turn operation alignment claim.'
     (OUT/'sayim-raporu.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf8',newline='\n')
     print(json.dumps({k:report[k] for k in ['candidate_rows','qualified_training_rows','source_clusters','candidate_split_rows','candidate_split_groups','leakage']}),flush=True)

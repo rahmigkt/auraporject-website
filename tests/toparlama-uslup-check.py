@@ -6,9 +6,24 @@ from uslup_duzelt import records,body,digest,ARCHIVE
 from uslup_denetim import inspect
 
 old=json.loads(ARCHIVE.read_text(encoding='utf8'));rs=[]
+refresh={r['id']:r for r in json.loads(Path('knowledge/ai-egitim/veri/hacim-1-istek/yerlesim-yenileme.json').read_text(encoding='utf8'))['rows']}
 for p in records():
     r=json.loads(p.read_text(encoding='utf8'));rs.append(r);o=old[r['id']]
-    assert digest(body(r))==o['body_sha256']
+    change=refresh[r['id']];saved=Path(change['archive']).read_bytes()
+    import hashlib
+    assert hashlib.sha256(saved).hexdigest()==change['archive_sha256']
+    before=json.loads(saved)
+    assert digest(body(before))==o['body_sha256']==change['before_body_sha256']
+    assert digest(body(r))==change['after_body_sha256']
+    def invariant(row):
+        row=copy.deepcopy(row)
+        for key in ['solver','layout_results']:row.pop(key)
+        row['plan'].pop('items')
+        for request in row['layout_requests']:
+            for attempt in request['attempts']:attempt.pop('result')
+        return row
+    assert invariant(r)==invariant(before)
+    assert digest(invariant(r))==change['unchanged_input_sha256']
     assert digest(o['dialogue'])==r['style_revision']['old_dialogue_sha256']
     assert digest(r['dialogue'])==r['style_revision']['new_dialogue_sha256']
     assert r['style_revision']['native_review']=='pending'
