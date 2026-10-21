@@ -8,6 +8,7 @@ const LOCAL_ONLY = ['aura-forma-account-skip', 'aura-forma-synced-at', 'aura-for
 
 let client = null, loading = null, user = null, timer = 0;
 const listeners = new Set();
+const pushes = new Map();
 
 function loadScript(src) {
   return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
@@ -89,12 +90,19 @@ export const account = {
   /** Save this browser's work to the account (debounced by schedule()). */
   async push(id = user?.id) {
     if (!id || user?.id !== id) return;
-    const data = snapshot(), c = await sb();
-    if (user?.id !== id) return;
-    const {error} = await c.from('forma_workspaces').upsert({user_id: id, data, updated_at: new Date().toISOString()});
-    if (user?.id !== id) return;
-    if (error) throw error;
-    try { localStorage.setItem('aura-forma-synced-at', new Date().toISOString()); localStorage.setItem('aura-forma-synced-user', id); } catch {}
+    const data = snapshot(), updatedAt = new Date().toISOString();
+    // Keep one account's snapshots in capture order, even when network responses are slow.
+    const pending = (pushes.get(id) || Promise.resolve()).catch(() => {}).then(async () => {
+      if (user?.id !== id) return;
+      const c = await sb();
+      if (user?.id !== id) return;
+      const {error} = await c.from('forma_workspaces').upsert({user_id: id, data, updated_at: updatedAt});
+      if (user?.id !== id) return;
+      if (error) throw error;
+      try { localStorage.setItem('aura-forma-synced-at', new Date().toISOString()); localStorage.setItem('aura-forma-synced-user', id); } catch {}
+    });
+    pushes.set(id, pending);
+    try { await pending; } finally { if (pushes.get(id) === pending) pushes.delete(id); }
   },
   schedule() { try { localStorage.setItem('aura-forma-local-at', new Date().toISOString()); } catch {} const id = user?.id; if (!id) return; clearTimeout(timer); timer = setTimeout(() => { timer = 0; this.push(id).catch(() => {}); }, 1200); },
   async flush() { if (timer) { clearTimeout(timer); timer = 0; await this.push().catch(() => {}); } }

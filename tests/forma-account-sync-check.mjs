@@ -13,6 +13,7 @@ class Storage {
  removeItem(k){this.entries.delete(k);}
 }
 const later=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
+const tick=()=>new Promise(resolve=>setImmediate(resolve));
 async function setup({local={},remote={},remoteAt='2026-02-01T00:00:00Z',query,upsert}={}){
  const writes=[],selects=[],storage=new Storage(local);let onAuth;
  const client={auth:{
@@ -33,6 +34,58 @@ const storeCode=studioSource.match(/^const store = .+;$/m)?.[0];
 assert(storeCode,'studio storage adapter exists');
 const studioStore=account=>runInNewContext(storeCode+'\nstore;',{account,localStorage:globalThis.localStorage,JSON});
 const tests=[
+ ['overlapping saves cannot let an older response overwrite newer work',async()=>{
+  const gates=[later(),later()];let calls=0,server;
+  const e=await setup({local:{'aura-forma-design':'old'},upsert:async data=>{
+   await gates[calls++].promise;server=structuredClone(data);return {error:null};
+  }});
+  const old=e.account.push();await tick();
+  e.storage.setItem('aura-forma-design','new');const current=e.account.push();await tick();
+  // Make the newer request finish first whenever requests are allowed to overlap.
+  if(e.writes.length===2){gates[1].resolve();await current;}
+  gates[0].resolve();await old;await tick();gates[1].resolve();await current;
+  assert.equal(server.data['aura-forma-design'],'new');
+ }],
+ ['a failed save reports its error without blocking the next snapshot',async()=>{
+  const gate=later(),failure=new Error('offline');let calls=0;
+  const e=await setup({local:{'aura-forma-design':'old'},upsert:async()=>{
+   if(calls++===0){await gate.promise;return {error:failure};}return {error:null};
+  }});
+  const old=e.account.push().catch(error=>error);await tick();
+  e.storage.setItem('aura-forma-design','new');const current=e.account.push();
+  gate.resolve();assert.equal(await old,failure);await current;
+  assert.equal(e.writes.length,2);assert.equal(e.writes[1].data['aura-forma-design'],'new');
+  assert.equal(e.storage.getItem('aura-forma-synced-user'),'A');
+ }],
+ ['switching accounts skips queued old work and does not block the new account',async()=>{
+  const gate=later();
+  const e=await setup({local:{'aura-forma-design':'A original'},upsert:async data=>{
+   if(data.user_id==='A')await gate.promise;return {error:null};
+  }});
+  const old=e.account.push();await tick();
+  e.storage.setItem('aura-forma-design','A queued');const queued=e.account.push();
+  e.switchTo('B');e.storage.setItem('aura-forma-design','B work');
+  const current=e.account.push();await tick();
+  assert.equal(e.writes.length,2);assert.equal(e.writes[1].user_id,'B');
+  await current;gate.resolve();await old;await queued;
+  assert.equal(e.writes.length,2);assert.equal(e.writes[1].data['aura-forma-design'],'B work');
+  assert.equal(e.storage.getItem('aura-forma-synced-user'),'B');
+ }],
+ ['queued snapshot keeps its capture time when a later local edit occurs',async()=>{
+  const OriginalDate=globalThis.Date;let now='2026-03-01T00:00:00.000Z';
+  try{
+   globalThis.Date=class extends OriginalDate{constructor(...args){super(...(args.length?args:[now]));}};
+   const gate=later();let calls=0;
+   const e=await setup({upsert:async()=>{if(calls++===0)await gate.promise;return {error:null};}});
+   const old=e.account.push();await tick();now='2026-03-01T00:00:01.000Z';
+   e.storage.setItem('aura-forma-design','queued');const current=e.account.push();
+   now='2026-03-01T00:00:02.000Z';e.storage.setItem('aura-forma-design','later edit');
+   e.storage.setItem('aura-forma-local-at',now);gate.resolve();await old;await current;
+   assert.equal(e.writes[1].data['aura-forma-design'],'queued');
+   assert.equal(e.writes[1].updated_at,'2026-03-01T00:00:01.000Z');
+   assert(e.writes[1].updated_at<e.storage.getItem('aura-forma-local-at'));
+  }finally{globalThis.Date=OriginalDate;}
+ }],
  ['opening unchanged saved work does not make it newer than a remote edit',async()=>{
   const e=await setup({local:{'aura-forma-synced-user':'A','aura-forma-local-at':'2026-01-01T00:00:00Z','aura-forma-family':'"seating"'},remote:{'aura-forma-family':'"storage"'}});
   studioStore(e.account).set('aura-forma-family','seating');
@@ -80,7 +133,7 @@ const tests=[
  }],
  ['old completed push cannot mark the newly signed-in account as synchronized',async()=>{
   const q=later(),e=await setup({upsert:()=>q.promise});
-  const pending=e.account.push();await Promise.resolve();await Promise.resolve();
+  const pending=e.account.push();await tick();
   assert.equal(e.writes.length,1);assert.equal(e.writes[0].user_id,'A');e.switchTo('B');q.resolve({error:null});await pending;
   assert.equal(e.storage.getItem('aura-forma-synced-user'),null);
  }],
