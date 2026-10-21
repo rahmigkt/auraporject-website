@@ -23,8 +23,11 @@ let fail = 0; const ok = (c, m) => { if (!c) { fail++; console.log('✗', m); } 
   const rs = uygula({plan}, [...kat, {katman: 'ev', type: 'merdiven', alt: 'k0', ust: 'k1', konum: [1500, 200], aci: 0, en: 900}]);
   ok(rs.rapor.gecti && rs.state.merdivenler?.[0]?.riser_count === 15, 'merdiven: 15 rıht ' + JSON.stringify(rs.rapor.olcum.ev.merdiven));
   const rs2 = uygula({plan}, [...kat, {katman: 'ev', type: 'merdiven', alt: 'k0', ust: 'k1', konum: [1500, 200], en: 700}]); ok(rs2.rapor.red[0]?.neden.includes('en az 800'), 'dar merdiven reddedilir');
-  const rs3 = uygula({plan}, [...kat, {katman: 'ev', type: 'merdiven', alt: 'k0', ust: 'k1', konum: [1500, 200], en: 900, basamak_derinlik: 150}]); ok(rs3.rapor.red[0]?.neden.includes('adım kuralı'), 'adım kuralına uymayan merdiven reddedilir');
+  const rs3 = uygula({plan}, [...kat, {katman: 'ev', type: 'merdiven', alt: 'k0', ust: 'k1', konum: [1500, 200], en: 900, basamak_derinlik: 330}]); ok(rs3.rapor.red[0]?.neden.includes('adım kuralı'), 'adım kuralına uymayan merdiven reddedilir');
   const rs4 = uygula({plan}, [{katman: 'ev', type: 'merdiven', alt: 'k0', ust: 'k9', konum: [1500, 200], en: 900}]); ok(rs4.rapor.red.length === 1, 'olmayan kata merdiven reddedilir');
+  const rs5 = uygula({plan}, [...kat, {katman: 'ev', type: 'merdiven', alt: 'k0', ust: 'k1', konum: [1500, 200], en: 900, basamak_sayisi: 12}]); ok(rs5.rapor.red[0]?.neden.includes('rıht'), 'yüksek rıht reddedilir');
+  const rs6 = uygula({plan}, [...kat, {katman: 'ev', type: 'merdiven', alt: 'k0', ust: 'k1', konum: [1500, 200], en: 900, basamak_derinlik: 200}]); ok(rs6.rapor.red[0]?.neden.includes('basamak derinliği'), 'sığ basamak reddedilir');
+  const rs7 = uygula({plan}, [{katman: 'ev', type: 'kat_ekle', id: 'k1', yukseklik: -2800}]); ok(rs7.rapor.red[0]?.neden.includes('kat yüksekliği'), 'negatif kat yüksekliği reddedilir');
   ok(uygula({plan}, []).rapor.gecti !== undefined, 'boş işlem listesi'); }
 // tekstil
 { const r = uygula({}, [{katman: 'tekstil', type: 'perde', system: 'tul-fon', drape: {family: 'pamuk-kadife', color: 'zeytin'}}, {katman: 'tekstil', type: 'hali', construction: 'bukle', color: 'kum'}]);
