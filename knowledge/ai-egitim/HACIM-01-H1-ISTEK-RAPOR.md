@@ -4,6 +4,8 @@ Başlangıç: `main` e7a8efc, 21 Ekim 2026 kapsam kararı (#180). Dal: `hacim-1-
 
 Teslim öncesi gelen `main` b8caa7c (#181–185) dala alındı. Son üretim ve doğrulama bu motor ağacına bağlıdır. Kat/merdiven artık desteklendiği için eski iki "desteklenmiyor" örneği bütün dillerde aydınlatma ve satın alma istekleriyle değiştirildi. Onay kapısı Claude çapraz denetimidir; insan/ana dil onayı zorunluluğu kaldırıldı. `kararlar.json` okundu; H1'e ait karar yok, kendi kayıtlarımıza onay verilmedi.
 
+Sonradan gelen `main` 58a77e4 (#186) yalnız karar dosyasını ekledi; motor ağacı aynı. 189 eski karar (51 uygun, 47 düzelt, 91 ret) okundu ve dala alındı; H1 ile eşleşen karar **0**. Eski kayıtların üslubuna verilen 47 düzeltme kararı bu mekanik yerleşim yenilemesiyle kapatılmış sayılmaz; ayrı düzeltme ve yeniden denetim gerektirir. Yeni H1 örnekleri bu kararlardan onay devralmaz. Kaydın tam sürüm digest'ini içermeyen eski karar, değişmiş hedefe otomatik onay olmaz.
+
 ## Kapsam ve sayım
 
 TR, EN, DE, FR, NL, DA, ES, IT ve AR'nin **her birinde 200** kayıt: 120 tek işlem, 50 çoklu işlem, 20 netleştirme, 10 kapsam dışı istek. Toplam **1.800**. Arapça kullanıcı satırlarının **40/200'ü Körfez ağzı**, kalanları ve asistan yanıtları Modern Standart Arapça adayıdır. Dil kalitesi için Claude çapraz denetimi bekleniyor; insan incelemesi isteğe bağlıdır.

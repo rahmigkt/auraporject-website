@@ -2,6 +2,7 @@
 Does not invent executable labels for old program-only or prose-only datasets.
 """
 from pathlib import Path
+from datetime import datetime, timezone
 import collections, copy, hashlib, importlib.util, json, os, re, subprocess, sys
 ROOT=Path(__file__).resolve().parents[2]
 SPEC=importlib.util.spec_from_file_location('aura_catalog',ROOT/'tools/toparlama/katalog.py')
@@ -25,9 +26,12 @@ def qualify(row,decisions):
     d=row['denetim']
     decision=decisions.get(row['id'],{})
     producer=row.get('kaynak',{}).get('ureten')
-    reviewer=decision.get('denetci')
+    reviewer={'codex':'Codex','claude':'Claude'}.get(str(decision.get('denetci','')).casefold())
     if (producer,reviewer) in [('Codex','Claude'),('Claude','Codex')] and decision.get('karar')=='uygun' and decision.get('zaman') and decision.get('row_sha256')==approval_digest(row):
         d['capraz_onay']={k:decision[k] for k in ['karar','denetci','zaman','row_sha256']}
+        d['capraz_onay']['denetci']=reviewer
+        if isinstance(d['capraz_onay']['zaman'],(int,float)):
+            d['capraz_onay']['zaman']=datetime.fromtimestamp(d['capraz_onay']['zaman']/1000,tz=timezone.utc).isoformat()
         d['capraz_onay']['ureten']=producer
         d['dil_tutarli']=True
         d['uyarilar']=[w for w in d['uyarilar'] if w not in ['claude_cross_review_pending','codex_cross_review_pending','human_review_pending','language_review_pending']]
@@ -202,7 +206,7 @@ def main():
     (OUT/'split-ledger.json').write_text(json.dumps({'version':'aura-split-ledger/1','keys':ledger},ensure_ascii=False,indent=2)+'\n',encoding='utf8',newline='\n')
     report['source_lock']=source_lock()
     report['split_policy']='Frozen existing source assignments; new source groups use a stable 80/10/10 hash bucket. Cross-partition source bridges fail.'
-    report['approval_policy']='Hash-bound approvals require reviewer, language_ok and complete row digest. No approval is inferred from old packets.'
+    report['approval_policy']='Cross-model approval requires a different declared producer/reviewer, suitable decision, timestamp and complete row digest. Human approval is optional; historical hash-bound human receipts remain supported. No approval inferred from old or unbound packets.'
     report['target_scope']='Final accepted room requests after the complete conversation; not a per-turn operation alignment claim.'
     (OUT/'sayim-raporu.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf8',newline='\n')
     print(json.dumps({k:report[k] for k in ['candidate_rows','qualified_training_rows','source_clusters','candidate_split_rows','candidate_split_groups','leakage']}),flush=True)

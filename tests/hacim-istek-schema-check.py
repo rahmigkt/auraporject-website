@@ -36,4 +36,8 @@ changed=copy.deepcopy(accepted);changed['mesajlar'][0]['metin']+=' changed'
 assert not m.qualify(changed,{sample['id']:decision})['denetim']['gecti'],'Target edit must revoke cross-review'
 rejected={**decision,'karar':'düzeltilmeli'}
 assert not m.qualify(copy.deepcopy(sample),{sample['id']:rejected})['denetim']['gecti']
+ui_decision={**decision,'denetci':'claude','zaman':1792572720588}
+ui_accepted=m.qualify(copy.deepcopy(sample),{sample['id']:ui_decision});assert ui_accepted['denetim']['gecti'];v.validate(ui_accepted)
+unbound={k:x for k,x in ui_decision.items() if k!='row_sha256'}
+assert not m.qualify(copy.deepcopy(sample),{sample['id']:unbound})['denetim']['gecti'],'Unbound historical decision cannot approve a changed snapshot'
 print('PASS 1800 unapproved AURA-EGITIM-1 projections, source hashes, one plan cluster and split; no furniture-detail actions')
