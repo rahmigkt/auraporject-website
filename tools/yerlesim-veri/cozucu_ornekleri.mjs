@@ -23,7 +23,7 @@ function set(kind, area) {
     return s; }
   const dbl = area >= 10, s = [it('yatak', 'bed', dbl ? pick([1600, 1800]) + 100 : 1000, 2100, 1000)];
   if (dbl) s.push(it('komodin1', 'nightstand', 500, 420, 520), it('komodin2', 'nightstand', 500, 420, 520));
-  if (area >= 9) s.push(it('gardirop', 'wardrobe', dbl ? pick([1800, 2200, 2700]) : pick([1000, 1500]), 600, 2300));
+  if (area >= 9) s.push(it('gardirop', 'wardrobe', dbl ? pick(area >= 16 ? [1800, 2200, 2700] : area >= 12 ? [1500, 1800, 2200] : [1200, 1500]) : pick([1000, 1500]), 600, 2300));
   if (area >= 13) s.push(it('sifonyer', 'dresser', pick([1000, 1200]), 450, 850));
   if (!dbl && area >= 8) s.push(it('masa', 'desk', 1100, 550, 750));
   return s;
