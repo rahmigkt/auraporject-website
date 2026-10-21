@@ -28,7 +28,7 @@ Bu **1.800 bağımsız insan örneği değildir**. Her dil için ayrı yazılmı
 - Her satır canlı `vocabulary(design)`, `sanitizeActions` ve `tools/studyo-motoru` üzerinden geçer. Gerçek `actions.js` çalışır; başsız taklit motor yoktur.
 - Yalnız `rapor.gecti` yeterli sayılmadı: her istenen değer sonuçta bire bir kontrol edildi. Son teslimde **1.800/1.800 kabul, 0 ret, 0 uyarı, 0 hedef farkı**. İlk denemede 52 cm kol yüksekliğinin 56 cm'ye sınırlanması yakalandı; yanlış hedef teslim edilmedi. Sınırlama mutasyon testiyle korunur.
 - `state + user → {reply, actions}` ham hedefidir. `karantina.jsonl`, aynı hedeflerin `AURA-EGITIM-1` izdüşümüdür; ek 1.800 kayıt olarak sayılmaz. Kaynak dosya SHA'sı, motor ağacı SHA'sı ve doğrulama her kayda/rapora bağlıdır.
-- Yeni H1 karantinası mevcut birleşik 2.590 satırı ve donmuş bölüm atamalarını değiştirmez. Envanter: **2.590 + 1.800 = 4.390 aday satır**, benzersiz proje sayısı değil. Birleşik korpusla tekrar incelemesi bekler. Eğitim için uygun satır **0**; mevcut eğitim dışa aktarımları boştur.
+- Yeni H1 karantinası ayrı tutulur; mevcut birleşik 2.590 satıra eklenmez. Aşağıdaki motor bakımında eski sohbet izdüşümleri yeniden doğrulanır; toplam sayıları ve donmuş bölüm atamaları korunur. Envanter: **2.590 + 1.800 = 4.390 aday satır**, benzersiz proje sayısı değil. Birleşik korpusla tekrar incelemesi bekler. Eğitim için uygun satır **0**; mevcut eğitim dışa aktarımları boştur.
 - İnsan onayı, ana dil doğrulaması ve birleşik korpus tekrarı çözülmeden eğitim kapısı açılamaz. Bu H1 izdüşümü bağımsız karantinadır; eski tam dönüştürücünün tüm kümeleri yeniden üretmesi bu teslimin parçası değildir.
 
 ## Kapalı sınavdan ayrım
@@ -54,6 +54,22 @@ node tests/hepsi.mjs
 Python `jsonschema` gerektirir; yerel mevcut bağımlılık kullanılır. Katalog Git bloblarını okur: yeni JSON dosyaları commit edildikten sonra `python tools/toparlama/katalog.py` çalıştırılır. Tekrar üretme onayları devralmaz.
 
 ## Açık işler ve sonraki grup
+
+### Main'den gelen eski motor kanıtlarının yenilenmesi
+
+Başlangıç main a724690 üzerinde ilk tam koşu **56/67** verdi. H1'in iki yeni testi geçti; 11 eski hata aynı başlangıç main'inin ayrı temiz çalışma kopyasında tek tek tekrarlandı: Arapça tekrar/byte kanıtı (2), eski kaynak kilidine bağlı birleşik veri ve maliyet planı (2), donmuş sınavın kaynak kilidi (2), beş Avrupa tekrar koşusu (5). [Başlangıç kanıtı](veri/hacim-1-komut/main-baslangic-hatalari.json). İş emrinin güncel motorla yeniden doğrulama maddesi kapsamında düzeltildi; hiçbir kaynak kilidi doğrulama yapılmadan kaldırılmadı.
+
+- Önceki **40 Avrupa + 12 Arapça** kayıt ve kanıtları arşivlendi. Avrupa'da aynı 137 denemenin gerçek üretim çözücüsü sonuçları yenilendi; istek, ölçü, deneme sayısı ve sığdı/sığmadı sonuçları değişmedi. Ürün çıkarma, yeni küçültme veya elle koordinat yok. 40 bağımsız geometri denetimi kaynak istisnalarıyla kabul edildi.
+- Arapça 12 kayıt iki tam oluşturmada aynı 39 çıktı SHA'sını verdi. 12/12 kaynak istisnalı kabul, sıkı denetim 1/12, korunmuş kaynak istisnası 36; konuşmaların 192 mesajı değişmedi. İlk eski güvensiz kapı seçeneği arşivden negatif test olarak kullanılır; yeni ilk seçeneğin güvenli olması testin gevşetilmesine dönüşmedi.
+- Birleşik kümenin eski 64 sohbet izdüşümü güncel motorla tekrar denetlenir; 52 native motor raporu yenilenir. Diğer 2.526 satır ve bütün eski bölüm atamaları aynen kalır. Kısmi ev/üst kat/meclis ve tur başına etiket kusurları kapandı sayılmaz.
+- Donmuş sınavın **120 görev baytı ve hedef işlemleri değişmedi**. Eski motor da gerçekten çalıştırılarak 100 olumlu hedef karşılaştırıldı: 89 sonuç durumu aynı, 11 yerleşim sonucu değişti. Değişiklikler yalnız çözücü çıktıları ve ürün konumu/dönüşündedir; ölçü veya ilgisiz durum değişimi reddedilir. Bütün 100 hedef mevcut puanlayıcıda yine tam makine puanı alır. Kaynak manifesti 1.3 olarak sürümlendi; eski manifest arşivde, farklar [ayrıntılı raporda](veri/hacim-1-komut/sinav-yeniden-dogrulama.json). Bu bir model koşusu veya uzman onayı değildir; hiçbir `score.mjs` dosyası değiştirilmedi.
+- [52 güncel yerleşimi gör](HACIM-01-YERLESIM-inceleme.html). Önceki 3B inceleme sayfaları tarihî motor görüntüleridir; yeni galeri güncel ayak izlerini gösterir. Önceden kayıtlı ek kat önerileri bu bakımda yeni kaynaklı geometriye dönüşmez.
+
+Tekrar üretme yardımcıları `refresh_legacy.mjs`, `refresh_arabic.py`, `revalidate_common.py` ve `revalidate_exam.mjs` içindedir. Arşivi başka kaynak durumu ile ezmeyi reddederler. Sınav karşılaştırması önceki donmuş kaynak ağacının ayrı çalışma kopyasını gerektirir; sıradan H1 komut üretiminin parçası değildir.
+
+Bu dalın motor kanıtı başlangıç main a724690 ağacına bağlıdır. Paralel main değişiklikleri bu işin ortasında otomatik takip edilmez; başka motor değişikliğiyle birleştirildiğinde kaynak kilidi bilinçli olarak yeniden doğrulama ister.
+
+### Sonraki hacim işleri
 
 Ana dil ve tasarımcı incelemesi yok. Bu ilk 1.800 satır `set`/`material` odaklıdır; göreli `delta`, biçim `enum`, mutfak/banyo ve daha bağımsız söyleyiş kapsamı sonraki veri iyileştirmesidir. Dil karışması/yasaklı terim taraması mekaniktir, ana dil kalitesi onayı değildir. Eski birleşik korpusla anlamsal tekrar incelemesi tamamlanmadı.
 

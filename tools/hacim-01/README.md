@@ -8,4 +8,6 @@ Kapsam ve çalıştırma sırası: [rapor](../../knowledge/ai-egitim/HACIM-01-H1
 `common.py`: ortak şemada, onaysız ayrı karantina. Eski birleşik satırlar/dışa aktarımlar değişmez.
 `review.mjs`: yerel HTML inceleme; insan onayı çıkarmaz.
 
+`refresh_legacy.mjs`, `refresh_arabic.py`: eski kaynakları arşivleyip güncel çözücü çıktılarını doğrular; metin/ölçü değiştirmez. `revalidate_common.py`: commit edilmiş kaynakların mevcut 64 sohbet izdüşümünü, eski bölümleri koruyarak yeniler. `revalidate_exam.mjs <eski-kaynak-kopyası>`: 100 eski/yeni altın hedefi karşılaştırır; yalnız yerleşim çıktı farkına izin verir, görev baytını ve puanlayıcıyı değiştirmez. Bu bakım araçları sıradan komut üretme zincirinden ayrıdır; arşivler başka durumla ezilemez.
+
 Varsayılan ürünler motor ağacına bağlıdır. Motor değişirse veri bayattır; yeniden üretip sonuçları inceleyin. Kaynak kilidini yalnız geçsin diye değiştirmeyin. Dokuz dilin tümü tasarımcı ve ana dil incelemesini bekler.
