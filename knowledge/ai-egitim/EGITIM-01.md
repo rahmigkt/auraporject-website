@@ -52,7 +52,7 @@ Pilotta çalıştığı kanıtlanmış ayar (`QWEN-PILOT-01-RAPOR.md`, `tools/qw
 - loss yalnız yanıt tokenlarında;
 - 2 tur.
 
-**Maliyet tahmini:** Pilot 196 örnek, 50 adımda 227 saniye sürdü ve toplam oturum yaklaşık 0,49 dolardı. 5.000 örnek × 2 tur yaklaşık 1.250 adım eder; tahminen 1,5–3 saat GPU, yani 1–3 dolar. Sınır önerisi 10 dolar ve 6 saat.
+**Maliyet:** A40 saatte yaklaşık 0,59 dolar. Pilot 196 örnek, 50 adımda 227 saniye sürdü ve toplam oturum yaklaşık 0,49 dolardı. 5.000 örnek × 2 tur yaklaşık 1.250 adım eder; tahminen 1,5–3 saat GPU, yani 1–2 dolar. **Sınır: 6 saat, en fazla 4 dolar** (6 × 0,59 ≈ 3,5 dolar + disk). Hangisine önce ulaşılırsa oturum kapatılır ve kaynaklar silinir.
 
 ## Ölçüm
 
