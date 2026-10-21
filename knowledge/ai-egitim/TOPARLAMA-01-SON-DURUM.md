@@ -5,7 +5,7 @@
 | Aşama | PR | Gerçek teslim |
 |---|---|---|
 | 1 Hijyen | [#157](https://github.com/rahmigkt/auraporject-website/pull/157) | Eski çakışmalar/arşiv,45hafif pilot dosyası,gerçek çözücü testleri,toplu denetim komutu |
-| 2 Katalog | [#159](https://github.com/rahmigkt/auraporject-website/pull/159) | Dosya/hash/lisans/kayıt/dil/ülke/katman; güncel son katalog37küme1034dosya |
+| 2 Katalog | [#159](https://github.com/rahmigkt/auraporject-website/pull/159) | Dosya/hash/lisans/kayıt/dil/ülke/katman; güncel son katalog37küme1036dosya |
 | 3 Ortak biçim | [#162](https://github.com/rahmigkt/auraporject-website/pull/162) | Şema/dönüştürücü, kaynak gruplu bölme, onay kapısı; son toplam2578karantina,train/dev/test0 |
 | 4 Üslup | [#165](https://github.com/rahmigkt/auraporject-website/pull/165) | 40sohbet tarandı,38sohbette178mesaj düzenlendi; gövde/geometri korunmuş,old/new inceleme |
 | 5 Arap | [#166](https://github.com/rahmigkt/auraporject-website/pull/166) | **Kısmi:** kaynak profilleri,meclis/UI incelemesi,12ön görüşme/192mesaj. Yeni ölçülü yerleşim0 |

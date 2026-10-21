@@ -1,7 +1,7 @@
 {
   "version": "aura-catalog/1",
   "date": "2026-10-21",
-  "snapshot_base": "05803cfe432e88621513e7a73c062bd47102ec13",
+  "snapshot_base": "78a4b7b8cfb03bb76f4e7f379245ece998410bdb",
   "hash_policy": "Exact tracked Git blob bytes; checkout CRLF does not change catalogue hashes. Aggregate hash includes file paths, sizes and primary/support roles.",
   "counts_policy": "Counts cover tracked primary rows only; sets may overlap, so totals are NOT unique projects. Null is unknown/not applicable, never zero.",
   "datasets": [
@@ -7639,7 +7639,7 @@
       "id": "support-knowledge-ai-egitim-toparlama-01",
       "path": "knowledge/ai-egitim/toparlama-01",
       "summary": "Structured research/support/derived artifacts; primary candidate counts not inferred.",
-      "sha256": "1b296a89f38e8eda42b55a44966ccc7082414f7463dfbdee68d33fe989a2a908",
+      "sha256": "f187d421ba2917fc7bdeeaba6c3bb1236971b9e5c84e6a5583dcf48a56c0ff45",
       "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
       "sources": [],
       "license": null,
@@ -7658,6 +7658,18 @@
           "path": "knowledge/ai-egitim/toparlama-01/archive-manifest.json",
           "sha256": "a2362228066c092c7f6f4816d175b3b013d7a585e3b57936d866e7b12db231b3",
           "bytes": 7310,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/hepsi-sonuc.json",
+          "sha256": "86585b9e88583bc51dced588f8cc6e6d1d39806a615f315ec64d681195a84043",
+          "bytes": 40115,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/toparlama-01/replay-son-denetim.json",
+          "sha256": "c1ad1706d2b27e06ba264ca056e955c83afeb630011fa30a875ca261b8b7d068",
+          "bytes": 4574,
           "role": "support"
         },
         {
@@ -9162,8 +9174,8 @@
     ]
   },
   "coverage": {
-    "structured_files": 1034,
-    "inventoried_files": 1034,
+    "structured_files": 1036,
+    "inventoried_files": 1036,
     "unassigned": []
   }
 }
