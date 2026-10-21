@@ -28,7 +28,7 @@ decision_file=ROOT/'knowledge/ai-egitim/inceleme/kararlar.json'
 decision_bytes=decision_file.read_bytes();decisions=json.loads(decision_bytes).get('kararlar',{})
 manifest['cross_review']={'producer':'Codex','required_reviewer':'Claude','decision_file':decision_file.relative_to(ROOT).as_posix(),'decision_file_sha256':m.sha(decision_bytes),'matching_decisions':{r['id']:decisions[r['id']] for r in rows if r['id'] in decisions},'status':'pending','human_review_required':False,'approval_inferred':False}
 manifest['cross_review']['dataset_decision']=decisions.get('hacim-1-istek:*')
-manifest['cross_review']['status']='C1_resubmitted_previous_duzelt_preserved'
+manifest['cross_review']['status']='C1b_resubmitted_previous_duzelt_preserved'
 old=json.loads((ROOT/'knowledge/ai-egitim/veri/birlesik/sayim-raporu.json').read_text(encoding='utf8'))
 manifest['inventory']={'existing_combined_candidates':old['candidate_rows'],'new_home_request_candidates':len(rows),'total_candidate_rows_not_unique_projects':old['candidate_rows']+len(rows),'qualified_training_rows':0,'old_furniture_detail_candidates_added_to_this_delivery':0}
 manifest['common_contract']={'schema':'AURA-EGITIM-1','rows':len(rows),'primary':False,'source_clusters':groups,'split_rows':dict(collections.Counter(r['bolum'] for r in rows)),'training_exported':0,'policy':'All cases share a synthetic plan: one cluster, no independent dev/test set claimed. Projection is not extra data.'}

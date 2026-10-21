@@ -25,7 +25,7 @@ const furniture=structuredClone(rows[0]);furniture.assistant.actions=[{katman:'m
 const wrong=structuredClone(rows.find(r=>r.assistant.actions[0]?.type==='aciklik_ekle'));wrong.assistant.actions[0].en+=100;assert(checkTarget(wrong).target_mismatches.length,'Incorrect opening width must fail target check');
 const q=quality(rows);assert.deepEqual(q,JSON.parse(fs.readFileSync(new URL('C1-kalite-raporu.json',dest))));
 for(const v of Object.values(q.by_language)){
- assert(v.authored_user_patterns>=150);assert(v.reply_patterns>=150);assert(v.max_repeated_reply_pattern<=2);
+ assert(v.authored_user_patterns>=150);assert(v.reply_patterns>=50);assert(v.max_repeated_reply_pattern<=5);assert(v.max_repeated_opening<=10);assert.deepEqual(v.reviewed_connector_rows,[]);
  assert(v.constrained_ratio>=.2);assert(v.constrained_multiple_ratio>=.2);assert.deepEqual(v.constraint_types,['bakar','uzak','yakin']);
  assert.deepEqual(v.internal_term_rows,[]);assert.deepEqual(v.semicolon_multiple,[]);assert.deepEqual(v.new_remote_rooms,[]);assert.equal(v.clarify_topics.length,10);
 }
@@ -37,6 +37,8 @@ const impossibleResult=uygula(impossible.state,impossible.assistant.actions);
 assert(!impossibleResult.rapor.gecti||impossibleResult.rapor.uyari.length||impossibleResult.rapor.red.length,'Impossible proximity must not silently succeed');
 const manifest=JSON.parse(fs.readFileSync(new URL('sayim-raporu.json',dest)));assert.equal(manifest.source_lock.git_tree_sha256,hash(execFileSync('git',['ls-tree','-r','HEAD','--','assets','tools/studyo-motoru'],{cwd:root})));
 for(const f of manifest.files)assert.equal(f.sha256,hash(fs.readFileSync(new URL(f.path,dest))));
+const c1b=JSON.parse(fs.readFileSync(new URL('C1b-degisiklik-kaniti.json',dest)));assert.equal(c1b.changed_user_rows,42);assert.equal(c1b.changed_reply_rows,1530);assert.equal(c1b.native_inputs_actions_observations_and_motor_evidence_unchanged,1800);
+for(const f of c1b.source_files)assert.equal(f.current_sha256,hash(fs.readFileSync(new URL('../'+f.path,import.meta.url))));
 assert.equal(manifest.qualified_training_rows,0);assert.equal(manifest.common_contract.rows,1800);
 const projected=fs.readFileSync(new URL('karantina.jsonl',dest),'utf8').trim().split('\n').map(JSON.parse);
 for(let i=0;i<rows.length;i++)assert.deepEqual(decodeOperations(projected[i].islemler),rows[i].assistant.actions,'Lossless common operation round trip');

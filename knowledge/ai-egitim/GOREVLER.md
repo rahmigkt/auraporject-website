@@ -6,14 +6,14 @@ Tek kaynak bu dosyadır. Her iş başında güncel `main`'den okunur. Biten iş 
 
 Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sayı uydurma yok. Eğitim, GPU, ücretli API, dağıtım yok. Her iş ayrı PR. Merge kullanıcı onayıyla.
 
-- [x] **C1 · #187 düzeltmeleri.** PR #187'de C1/2 teslimi: 9 dil × 200 kayıt, dil başına 200 kullanıcı / 190 yanıt kalıbı, çokluda 40/50 kısıtlı istek. Claude yeniden denetimi bekliyor; önceki `duzelt` kararı korunur, onay sayılmaz. Rapor: `HACIM-01-H1-ISTEK-RAPOR.md`. Özet:
+- [x] **C1 · #187 düzeltmeleri.** PR #187'de C1/2 teslimi: 9 dil × 200 kayıt, dil başına 200 kullanıcı kalıbı, çokluda 40/50 kısıtlı istek. Claude yeniden denetimi bekliyor; önceki `duzelt` kararı korunur, onay sayılmaz. Rapor: `HACIM-01-H1-ISTEK-RAPOR.md`. Özet:
   - asistan cevabı isteğe özgü olur, sabit cümle yok;
   - "duvar çalışma alanı" kalıbı (9 dilde) çıkar;
   - çoklu istekler `;` yapıştırması değil, tek doğal cümle; en az %20'si kısıtlı (`bakar/yakin/uzak`);
   - soru cevapları isteğin kendisini sorar (halı → ölçü/renk/doku);
   - dil başına en az 150 farklı kalıp; ev sahibinin kendi evini anlattığı istekler artar;
   - plana uzakta boş oda ekleme kalıbı azalır.
-- [ ] **C1b · #187 kalan düzeltmeler** (Claude ikinci denetimi, `kararlar.json`): EN/FR/ES/IT/DA'da 'for the furniture' türü yapıştırma bağlacı olan 42 satır yeniden yazılır; asistan açılış kalıpları çeşitlenir. Tekstil satırları kalır (kullanıcı kararı: perde/halı asistanın işinde). #193 (eski mobilya komutu sürümü) kapsam dışı; kullanıcı onayıyla kapatılır.
+- [x] **C1b · #187 kalan düzeltmeler** (Claude ikinci denetimi, `kararlar.json`): EN/FR/ES/IT/DA'da 'for the furniture' türü yapıştırma bağlacı olan 42 satır yeniden yazılır; asistan açılış kalıpları çeşitlenir. Tekstil satırları kalır (kullanıcı kararı: perde/halı asistanın işinde). #193 (eski mobilya komutu sürümü) kapsam dışı; kullanıcı onayıyla kapatılır.
 - [ ] **C8 · Eğitim betiğini EGITIM-01 biçimine bağla.** `tools/qwen-local/train_gpu.py` `outputs/egitim-01/{train,dev}.jsonl` (messages; son asistan turu `{"reply","actions"}`) okur, loss yalnız asistan turlarında. CPU'da 5 örnekle kuru koşu (model yüklemeden tokenizasyon + maske denetimi). GPU açılmaz. (`EGITIM-01.md`)
 - [ ] **C2 · 47 kaydın üslup düzeltmesi.** `inceleme/kararlar.json` içindeki `duzelt` kayıtları (ev-sohbet-02, uk-ie, dk 01/03/04, es, arap-olculu):
   - asistan satırlarında iç terim kalmaz ("adsız oda", "hesap", "kayıt", "yerleştirilen eşya sayısı", "elle konum");

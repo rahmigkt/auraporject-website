@@ -1,11 +1,12 @@
 {
-  "version": "hacim-exam-revalidation/1",
+  "version": "hacim-exam-revalidation/2",
   "old_source_tree_sha256": "e2371cb5ef8b58a8e14f207c356f258c219ffd3f336688a6a276751efa260203",
-  "new_source_tree_sha256": "79c517eb7248f5efbd89f8f5dd710fc9b16f81e5b0ea1eb50253d87509ccce67",
+  "new_source_tree_sha256": "ba823d3c85d6a097508672988109dd92a25ed6ab457a241e7d06fffea32ebfc8",
   "task_file_sha256": "54db415d5056dcfacc6f351c3fb77807346d190522c77ddafb6e276a9233d0f4",
   "task_bytes_changed": false,
-  "positive_states_identical": 89,
+  "positive_states_identical": 79,
   "solver_output_states_changed": 11,
+  "default_leaf_count_states_changed": 10,
   "positive_frozen_targets_still_pass": 100,
   "no_action_cases_unchanged": 20,
   "evidence": [
@@ -14,6 +15,7 @@
       "original_state_sha256": "a54f8e938fe15cffd40bd8cf1a6470562ed388a03d2dea693811f346e535b96b",
       "current_state_sha256": "a54f8e938fe15cffd40bd8cf1a6470562ed388a03d2dea693811f346e535b96b",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -22,6 +24,7 @@
       "original_state_sha256": "29a3332b9506da1f653f343ed5879fccb826758b425cc0d9304a2c38a49b1f8f",
       "current_state_sha256": "29a3332b9506da1f653f343ed5879fccb826758b425cc0d9304a2c38a49b1f8f",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -30,6 +33,7 @@
       "original_state_sha256": "4152366619b3cdc0a449f90ee7972d5cc695f7d657b6505cbd39f04301f58a1c",
       "current_state_sha256": "4152366619b3cdc0a449f90ee7972d5cc695f7d657b6505cbd39f04301f58a1c",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -38,23 +42,40 @@
       "original_state_sha256": "5b9dd4ac7b8387367a583d034684e3fa60a8c65dbd4bf2faf2364be2aaa2b1e9",
       "current_state_sha256": "5b9dd4ac7b8387367a583d034684e3fa60a8c65dbd4bf2faf2364be2aaa2b1e9",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
     {
       "id": "aura-sinav-005",
       "original_state_sha256": "e411e03e8917aa2a45e841e0d1498359a26a30fea9d36ab6ee7de356154cf998",
-      "current_state_sha256": "e411e03e8917aa2a45e841e0d1498359a26a30fea9d36ab6ee7de356154cf998",
-      "identical": true,
-      "changed_paths": [],
+      "current_state_sha256": "14878fa892123ee10e05cc58784849505d96d11bc1977399d459ee266ddabedf",
+      "identical": false,
+      "change_kind": "default_automatic_leaf_count",
+      "changed_paths": [
+        "/design/params/bays/0/cells/0/lv",
+        "/design/params/bays/0/cells/1/lv",
+        "/design/params/bays/1/cells/0/lv",
+        "/design/params/bays/1/cells/1/lv",
+        "/design/params/bays/2/cells/0/lv",
+        "/design/params/bays/2/cells/1/lv"
+      ],
       "frozen_target_machine_points": 2
     },
     {
       "id": "aura-sinav-006",
       "original_state_sha256": "390f69fac1933167a4e4d1f29e78ba3cea6591d197b588483d971cb15a6554ad",
-      "current_state_sha256": "390f69fac1933167a4e4d1f29e78ba3cea6591d197b588483d971cb15a6554ad",
-      "identical": true,
-      "changed_paths": [],
+      "current_state_sha256": "2747d740c6af7f8a9a88c6fee0ffe9c35aaaa2a0ea15432e4504123d3121d13d",
+      "identical": false,
+      "change_kind": "default_automatic_leaf_count",
+      "changed_paths": [
+        "/design/params/bays/0/cells/0/lv",
+        "/design/params/bays/0/cells/1/lv",
+        "/design/params/bays/1/cells/0/lv",
+        "/design/params/bays/1/cells/1/lv",
+        "/design/params/bays/2/cells/0/lv",
+        "/design/params/bays/2/cells/1/lv"
+      ],
       "frozen_target_machine_points": 2
     },
     {
@@ -62,6 +83,7 @@
       "original_state_sha256": "73970bf12a019805d3738a941d5341c9923e46401b553fa3d3e36c34ee0aa167",
       "current_state_sha256": "73970bf12a019805d3738a941d5341c9923e46401b553fa3d3e36c34ee0aa167",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -70,15 +92,24 @@
       "original_state_sha256": "804a65e75569b2d81bcba6b8a714c535f423e06dc2041b3ea08e06f0006f64c7",
       "current_state_sha256": "804a65e75569b2d81bcba6b8a714c535f423e06dc2041b3ea08e06f0006f64c7",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
     {
       "id": "aura-sinav-009",
       "original_state_sha256": "59b58e71c0310edcd667b4fab0e87560a88d58f516b79b38f5ebed6ca083e842",
-      "current_state_sha256": "59b58e71c0310edcd667b4fab0e87560a88d58f516b79b38f5ebed6ca083e842",
-      "identical": true,
-      "changed_paths": [],
+      "current_state_sha256": "de932714ca6c057f407345ea05e51481940e8fc1004e3bf6db0e7aed60eac540",
+      "identical": false,
+      "change_kind": "default_automatic_leaf_count",
+      "changed_paths": [
+        "/design/params/bays/0/cells/0/lv",
+        "/design/params/bays/0/cells/1/lv",
+        "/design/params/bays/1/cells/0/lv",
+        "/design/params/bays/1/cells/1/lv",
+        "/design/params/bays/2/cells/0/lv",
+        "/design/params/bays/2/cells/1/lv"
+      ],
       "frozen_target_machine_points": 2
     },
     {
@@ -86,6 +117,7 @@
       "original_state_sha256": "5e107fbe08b5f74d8b2e45c72d5ad6ae62d8e4e13b26968c474eb09ab6d818b5",
       "current_state_sha256": "5e107fbe08b5f74d8b2e45c72d5ad6ae62d8e4e13b26968c474eb09ab6d818b5",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -94,6 +126,7 @@
       "original_state_sha256": "e757565328a909de852990e794e9c8665fccf8c8e65382b526a6354dac531797",
       "current_state_sha256": "e757565328a909de852990e794e9c8665fccf8c8e65382b526a6354dac531797",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -102,6 +135,7 @@
       "original_state_sha256": "99da38c39e1e16afca0ce74fcd0433203d37b5c9e4762524c2739d4282dd9411",
       "current_state_sha256": "99da38c39e1e16afca0ce74fcd0433203d37b5c9e4762524c2739d4282dd9411",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -110,6 +144,7 @@
       "original_state_sha256": "771471644b3cd14456e815972ebea296c31379c30d46c0b52fbb6e4a92960246",
       "current_state_sha256": "771471644b3cd14456e815972ebea296c31379c30d46c0b52fbb6e4a92960246",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -118,6 +153,7 @@
       "original_state_sha256": "0b45218e2cdb0d02eb5a5d54c842713d3ffb558dc0ebb2c3061df9e3be6c6d88",
       "current_state_sha256": "0b45218e2cdb0d02eb5a5d54c842713d3ffb558dc0ebb2c3061df9e3be6c6d88",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -126,6 +162,7 @@
       "original_state_sha256": "d88bbb6171bef968b4879f5d44d214b202fc45d6854f79b408acbe0de88ed6f1",
       "current_state_sha256": "d88bbb6171bef968b4879f5d44d214b202fc45d6854f79b408acbe0de88ed6f1",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -134,15 +171,24 @@
       "original_state_sha256": "0279ff508c5ebf02c642dec05686253d6c5e7c5bd7f9ed9864bfce860ba5d416",
       "current_state_sha256": "0279ff508c5ebf02c642dec05686253d6c5e7c5bd7f9ed9864bfce860ba5d416",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
     {
       "id": "aura-sinav-017",
       "original_state_sha256": "1834f3965012b8f298c2daa7784beded439265a5052ca578fe4e5d9958c8f1f7",
-      "current_state_sha256": "1834f3965012b8f298c2daa7784beded439265a5052ca578fe4e5d9958c8f1f7",
-      "identical": true,
-      "changed_paths": [],
+      "current_state_sha256": "6788f5f643892331ffb131f171e266ead92ff27cad2e6b36c792c4c6541f9766",
+      "identical": false,
+      "change_kind": "default_automatic_leaf_count",
+      "changed_paths": [
+        "/design/params/bays/0/cells/0/lv",
+        "/design/params/bays/0/cells/1/lv",
+        "/design/params/bays/1/cells/0/lv",
+        "/design/params/bays/1/cells/1/lv",
+        "/design/params/bays/2/cells/0/lv",
+        "/design/params/bays/2/cells/1/lv"
+      ],
       "frozen_target_machine_points": 2
     },
     {
@@ -150,6 +196,7 @@
       "original_state_sha256": "d1d82c4ca0d9a8160ce0714a6e13c6a040ee9d0727c1b55c59eeb074a0058c3c",
       "current_state_sha256": "d1d82c4ca0d9a8160ce0714a6e13c6a040ee9d0727c1b55c59eeb074a0058c3c",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -158,6 +205,7 @@
       "original_state_sha256": "cdb595c8382367ea952a86e84ca41417189c4964e6b509e36240651e35acd3b5",
       "current_state_sha256": "cdb595c8382367ea952a86e84ca41417189c4964e6b509e36240651e35acd3b5",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -166,15 +214,24 @@
       "original_state_sha256": "04848e719cfa7646f27130a8eacd932847ba14d981babc5991a8243e69dff388",
       "current_state_sha256": "04848e719cfa7646f27130a8eacd932847ba14d981babc5991a8243e69dff388",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
     {
       "id": "aura-sinav-021",
       "original_state_sha256": "5bc5f5871e88aaee2c717c9247f4ca9973fd250bc4ed584cd01f4adc15963248",
-      "current_state_sha256": "5bc5f5871e88aaee2c717c9247f4ca9973fd250bc4ed584cd01f4adc15963248",
-      "identical": true,
-      "changed_paths": [],
+      "current_state_sha256": "2c4c62a7346be6a2fc69022277e5cd08748f536649879f00909dc36bb05e2b2f",
+      "identical": false,
+      "change_kind": "default_automatic_leaf_count",
+      "changed_paths": [
+        "/design/params/bays/0/cells/0/lv",
+        "/design/params/bays/0/cells/1/lv",
+        "/design/params/bays/1/cells/0/lv",
+        "/design/params/bays/1/cells/1/lv",
+        "/design/params/bays/2/cells/0/lv",
+        "/design/params/bays/2/cells/1/lv"
+      ],
       "frozen_target_machine_points": 2
     },
     {
@@ -182,6 +239,7 @@
       "original_state_sha256": "73970bf12a019805d3738a941d5341c9923e46401b553fa3d3e36c34ee0aa167",
       "current_state_sha256": "73970bf12a019805d3738a941d5341c9923e46401b553fa3d3e36c34ee0aa167",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -190,6 +248,7 @@
       "original_state_sha256": "ba96ce51412d5291f1a0097f49580fcc7a0c67ebc56d603c4c0301883e171fd1",
       "current_state_sha256": "ba96ce51412d5291f1a0097f49580fcc7a0c67ebc56d603c4c0301883e171fd1",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -198,6 +257,7 @@
       "original_state_sha256": "c52be18de89833238e7d0b759ba18c607b0820eba6b0ce730bd54b0972179772",
       "current_state_sha256": "c52be18de89833238e7d0b759ba18c607b0820eba6b0ce730bd54b0972179772",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -206,15 +266,24 @@
       "original_state_sha256": "29a239b2c797e14031d2d29e752638fdf7be5d07d75d659085577a26404e94bf",
       "current_state_sha256": "29a239b2c797e14031d2d29e752638fdf7be5d07d75d659085577a26404e94bf",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
     {
       "id": "aura-sinav-026",
       "original_state_sha256": "390f69fac1933167a4e4d1f29e78ba3cea6591d197b588483d971cb15a6554ad",
-      "current_state_sha256": "390f69fac1933167a4e4d1f29e78ba3cea6591d197b588483d971cb15a6554ad",
-      "identical": true,
-      "changed_paths": [],
+      "current_state_sha256": "2747d740c6af7f8a9a88c6fee0ffe9c35aaaa2a0ea15432e4504123d3121d13d",
+      "identical": false,
+      "change_kind": "default_automatic_leaf_count",
+      "changed_paths": [
+        "/design/params/bays/0/cells/0/lv",
+        "/design/params/bays/0/cells/1/lv",
+        "/design/params/bays/1/cells/0/lv",
+        "/design/params/bays/1/cells/1/lv",
+        "/design/params/bays/2/cells/0/lv",
+        "/design/params/bays/2/cells/1/lv"
+      ],
       "frozen_target_machine_points": 2
     },
     {
@@ -222,6 +291,7 @@
       "original_state_sha256": "766b7d1f2ce59192d6e1577bed773da9f5ae04d07acdf4ec3150158d35b32033",
       "current_state_sha256": "766b7d1f2ce59192d6e1577bed773da9f5ae04d07acdf4ec3150158d35b32033",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -230,15 +300,24 @@
       "original_state_sha256": "85643c98ade506682f67a88fff88d4f64fcbfe57d4c93a1b15213db6418a116b",
       "current_state_sha256": "85643c98ade506682f67a88fff88d4f64fcbfe57d4c93a1b15213db6418a116b",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
     {
       "id": "aura-sinav-029",
       "original_state_sha256": "390f69fac1933167a4e4d1f29e78ba3cea6591d197b588483d971cb15a6554ad",
-      "current_state_sha256": "390f69fac1933167a4e4d1f29e78ba3cea6591d197b588483d971cb15a6554ad",
-      "identical": true,
-      "changed_paths": [],
+      "current_state_sha256": "2747d740c6af7f8a9a88c6fee0ffe9c35aaaa2a0ea15432e4504123d3121d13d",
+      "identical": false,
+      "change_kind": "default_automatic_leaf_count",
+      "changed_paths": [
+        "/design/params/bays/0/cells/0/lv",
+        "/design/params/bays/0/cells/1/lv",
+        "/design/params/bays/1/cells/0/lv",
+        "/design/params/bays/1/cells/1/lv",
+        "/design/params/bays/2/cells/0/lv",
+        "/design/params/bays/2/cells/1/lv"
+      ],
       "frozen_target_machine_points": 2
     },
     {
@@ -246,6 +325,7 @@
       "original_state_sha256": "c494054c9434438d7012b06601eeb68fba68c7f5278171aa074886c0b31da788",
       "current_state_sha256": "c494054c9434438d7012b06601eeb68fba68c7f5278171aa074886c0b31da788",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -254,15 +334,24 @@
       "original_state_sha256": "5e107fbe08b5f74d8b2e45c72d5ad6ae62d8e4e13b26968c474eb09ab6d818b5",
       "current_state_sha256": "5e107fbe08b5f74d8b2e45c72d5ad6ae62d8e4e13b26968c474eb09ab6d818b5",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
     {
       "id": "aura-sinav-032",
       "original_state_sha256": "60f870205257aedcef378ecb85ca28427720a111009da3fae63c49d424a74647",
-      "current_state_sha256": "60f870205257aedcef378ecb85ca28427720a111009da3fae63c49d424a74647",
-      "identical": true,
-      "changed_paths": [],
+      "current_state_sha256": "b660682959d68576d7108743f1ba04f82384fb0048dbeaa0898c2bb3b5b03b46",
+      "identical": false,
+      "change_kind": "default_automatic_leaf_count",
+      "changed_paths": [
+        "/design/params/bays/0/cells/0/lv",
+        "/design/params/bays/0/cells/1/lv",
+        "/design/params/bays/1/cells/0/lv",
+        "/design/params/bays/1/cells/1/lv",
+        "/design/params/bays/2/cells/0/lv",
+        "/design/params/bays/2/cells/1/lv"
+      ],
       "frozen_target_machine_points": 2
     },
     {
@@ -270,6 +359,7 @@
       "original_state_sha256": "52ec11dddf9fc72192ae1255b85e4853e232cb3f33d4db3b7d21a0f79409bf39",
       "current_state_sha256": "52ec11dddf9fc72192ae1255b85e4853e232cb3f33d4db3b7d21a0f79409bf39",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -278,15 +368,24 @@
       "original_state_sha256": "5b9dd4ac7b8387367a583d034684e3fa60a8c65dbd4bf2faf2364be2aaa2b1e9",
       "current_state_sha256": "5b9dd4ac7b8387367a583d034684e3fa60a8c65dbd4bf2faf2364be2aaa2b1e9",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
     {
       "id": "aura-sinav-035",
       "original_state_sha256": "2a5cec7548622981a17d1f3935e8eab2d965d01be0c2fecf98f160b08dadaa7e",
-      "current_state_sha256": "2a5cec7548622981a17d1f3935e8eab2d965d01be0c2fecf98f160b08dadaa7e",
-      "identical": true,
-      "changed_paths": [],
+      "current_state_sha256": "63bfa8e43fafaf636b86a39aa048c1835681988ea7b5fee98b992ee46edc50c2",
+      "identical": false,
+      "change_kind": "default_automatic_leaf_count",
+      "changed_paths": [
+        "/design/params/bays/0/cells/0/lv",
+        "/design/params/bays/0/cells/1/lv",
+        "/design/params/bays/1/cells/0/lv",
+        "/design/params/bays/1/cells/1/lv",
+        "/design/params/bays/2/cells/0/lv",
+        "/design/params/bays/2/cells/1/lv"
+      ],
       "frozen_target_machine_points": 2
     },
     {
@@ -294,6 +393,7 @@
       "original_state_sha256": "cdb595c8382367ea952a86e84ca41417189c4964e6b509e36240651e35acd3b5",
       "current_state_sha256": "cdb595c8382367ea952a86e84ca41417189c4964e6b509e36240651e35acd3b5",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -302,15 +402,24 @@
       "original_state_sha256": "4152366619b3cdc0a449f90ee7972d5cc695f7d657b6505cbd39f04301f58a1c",
       "current_state_sha256": "4152366619b3cdc0a449f90ee7972d5cc695f7d657b6505cbd39f04301f58a1c",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
     {
       "id": "aura-sinav-038",
       "original_state_sha256": "390f69fac1933167a4e4d1f29e78ba3cea6591d197b588483d971cb15a6554ad",
-      "current_state_sha256": "390f69fac1933167a4e4d1f29e78ba3cea6591d197b588483d971cb15a6554ad",
-      "identical": true,
-      "changed_paths": [],
+      "current_state_sha256": "2747d740c6af7f8a9a88c6fee0ffe9c35aaaa2a0ea15432e4504123d3121d13d",
+      "identical": false,
+      "change_kind": "default_automatic_leaf_count",
+      "changed_paths": [
+        "/design/params/bays/0/cells/0/lv",
+        "/design/params/bays/0/cells/1/lv",
+        "/design/params/bays/1/cells/0/lv",
+        "/design/params/bays/1/cells/1/lv",
+        "/design/params/bays/2/cells/0/lv",
+        "/design/params/bays/2/cells/1/lv"
+      ],
       "frozen_target_machine_points": 2
     },
     {
@@ -318,6 +427,7 @@
       "original_state_sha256": "73970bf12a019805d3738a941d5341c9923e46401b553fa3d3e36c34ee0aa167",
       "current_state_sha256": "73970bf12a019805d3738a941d5341c9923e46401b553fa3d3e36c34ee0aa167",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -326,6 +436,7 @@
       "original_state_sha256": "bf542b56bdf9930aa8d057e1d1181857c56e8a7accf5948196f5a267319182a0",
       "current_state_sha256": "bf542b56bdf9930aa8d057e1d1181857c56e8a7accf5948196f5a267319182a0",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -334,6 +445,7 @@
       "original_state_sha256": "9dff692fd26030017948ee8004ba344a1cc306435c53306e270c3f0c7a91709b",
       "current_state_sha256": "9dff692fd26030017948ee8004ba344a1cc306435c53306e270c3f0c7a91709b",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -342,6 +454,7 @@
       "original_state_sha256": "3a4a1bed2330d6d44bb73a545e3c74c29e0b0a8ce49db9d86059720be0f3d78d",
       "current_state_sha256": "3a4a1bed2330d6d44bb73a545e3c74c29e0b0a8ce49db9d86059720be0f3d78d",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -350,6 +463,7 @@
       "original_state_sha256": "f614deff9df3e40fee1952fde62bb54b4c591cec39d126dbd0330dfa8bd54451",
       "current_state_sha256": "f614deff9df3e40fee1952fde62bb54b4c591cec39d126dbd0330dfa8bd54451",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -358,6 +472,7 @@
       "original_state_sha256": "9d2e2e11415287a0702368c8aa0ad5f9e9bcadd2ac94a3aa42930fc97fa75ce6",
       "current_state_sha256": "9d2e2e11415287a0702368c8aa0ad5f9e9bcadd2ac94a3aa42930fc97fa75ce6",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -366,6 +481,7 @@
       "original_state_sha256": "a499b33bfabdda03681c9ced57904efc25aa32f6255036113671864dc9068dfc",
       "current_state_sha256": "a499b33bfabdda03681c9ced57904efc25aa32f6255036113671864dc9068dfc",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -374,6 +490,7 @@
       "original_state_sha256": "9280fdd0fc598ebaa26a2f5b0aad1df7d8e9d778397f010bffaf892770af7c7d",
       "current_state_sha256": "9280fdd0fc598ebaa26a2f5b0aad1df7d8e9d778397f010bffaf892770af7c7d",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -382,6 +499,7 @@
       "original_state_sha256": "6fbb2f3e99200aaae8a99563265e796606ea67a644e2f27650fda2f9ba2c91f1",
       "current_state_sha256": "6fbb2f3e99200aaae8a99563265e796606ea67a644e2f27650fda2f9ba2c91f1",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -390,6 +508,7 @@
       "original_state_sha256": "cf9fe4fb866c7e85a525cd25c6832708a3af447e798b6788156f54616ee303da",
       "current_state_sha256": "cf9fe4fb866c7e85a525cd25c6832708a3af447e798b6788156f54616ee303da",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -398,6 +517,7 @@
       "original_state_sha256": "075eee9c73154e4029d3cfb80eb70aade954056d9561d4c490a3df39b0f23b3e",
       "current_state_sha256": "075eee9c73154e4029d3cfb80eb70aade954056d9561d4c490a3df39b0f23b3e",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -406,6 +526,7 @@
       "original_state_sha256": "2fd3c88140323e51a4d0fcc12dc97000c6639415161e80b496499a28831a7e53",
       "current_state_sha256": "2fd3c88140323e51a4d0fcc12dc97000c6639415161e80b496499a28831a7e53",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -414,6 +535,7 @@
       "original_state_sha256": "6a7e6fb9498af99d0bd152698182aa0282a1999f7dde7cf58dc32a717c18c83b",
       "current_state_sha256": "6a7e6fb9498af99d0bd152698182aa0282a1999f7dde7cf58dc32a717c18c83b",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -422,6 +544,7 @@
       "original_state_sha256": "f6342b2181e314fbe9cc594a716b91d661776392f48a2b6c077fb2a35a89dd60",
       "current_state_sha256": "f6342b2181e314fbe9cc594a716b91d661776392f48a2b6c077fb2a35a89dd60",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -430,6 +553,7 @@
       "original_state_sha256": "172f063f4cbab72c2af8062f829ee9cfdc68b16c14379f8709488fd1bac160c9",
       "current_state_sha256": "172f063f4cbab72c2af8062f829ee9cfdc68b16c14379f8709488fd1bac160c9",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -438,6 +562,7 @@
       "original_state_sha256": "bd84227b9fb5f13b151cc157d34d3529a704b9960720389c65ec3fb62e3fc573",
       "current_state_sha256": "bd84227b9fb5f13b151cc157d34d3529a704b9960720389c65ec3fb62e3fc573",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -446,6 +571,7 @@
       "original_state_sha256": "8d2d3b74564d0d2618f9bce97e47b4f4d786b290d113880848cbe2143ba532ec",
       "current_state_sha256": "8d2d3b74564d0d2618f9bce97e47b4f4d786b290d113880848cbe2143ba532ec",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -454,6 +580,7 @@
       "original_state_sha256": "a054e2b69ee2df88fbbb155b44926065132a3cb52870413704daf4b338d2353b",
       "current_state_sha256": "a054e2b69ee2df88fbbb155b44926065132a3cb52870413704daf4b338d2353b",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -462,6 +589,7 @@
       "original_state_sha256": "2ec83b3be64591363225f872c884668b2f4b09d1061ea9a288e079d970fa47c7",
       "current_state_sha256": "2ec83b3be64591363225f872c884668b2f4b09d1061ea9a288e079d970fa47c7",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -470,6 +598,7 @@
       "original_state_sha256": "7280c23d59ba94e02638d97a34e76555eb6570f06e9d519b88ea18e47ecdc67d",
       "current_state_sha256": "7280c23d59ba94e02638d97a34e76555eb6570f06e9d519b88ea18e47ecdc67d",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -478,6 +607,7 @@
       "original_state_sha256": "8f53e2e52bb136e4b362d8bcf86ec1d4967db62bab9a23f8ceb50f19771aa8e7",
       "current_state_sha256": "8f53e2e52bb136e4b362d8bcf86ec1d4967db62bab9a23f8ceb50f19771aa8e7",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -486,6 +616,7 @@
       "original_state_sha256": "d6cae1a17d7ee7d8cb7809b11c36796225abb245ec09bdd235f8b6ada11379c2",
       "current_state_sha256": "d6cae1a17d7ee7d8cb7809b11c36796225abb245ec09bdd235f8b6ada11379c2",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -494,6 +625,7 @@
       "original_state_sha256": "c3bad861233efe78525eb8cd11c472b7f1dbddc0679252d75398bb20e2492e0a",
       "current_state_sha256": "98a608ee24be12dff5338511ec06a148d0a5e9732169f5a022b553cdce56d39b",
       "identical": false,
+      "change_kind": "placement_output",
       "changed_paths": [
         "/plan/items/0/pos_xy_mm/0",
         "/plan/items/0/pos_xy_mm/1",
@@ -554,6 +686,7 @@
       "original_state_sha256": "83d3c4d330f11497ff4d82df646c4fe1cb0a6c36ca77b8354c3bcc5eb4a06476",
       "current_state_sha256": "d1bc16762b754ab6d2e596e52f1e53223bb53c40f51ed259d65c2e1e23bf44bf",
       "identical": false,
+      "change_kind": "placement_output",
       "changed_paths": [
         "/plan/items/0/pos_xy_mm/0",
         "/plan/items/0/pos_xy_mm/1",
@@ -612,6 +745,7 @@
       "original_state_sha256": "bb1d8b5c0b365bd1cc9f45c834e7a94f08469c6ab9dbdb04a87d6f0e080f7544",
       "current_state_sha256": "d7e3b54009dfe9572d96c6ef4a6edd890b1da3a3ff79451204ed696a434fd370",
       "identical": false,
+      "change_kind": "placement_output",
       "changed_paths": [
         "/plan/items/0/pos_xy_mm/0",
         "/plan/items/0/pos_xy_mm/1",
@@ -670,6 +804,7 @@
       "original_state_sha256": "9cdaf579bbdbe5534fa7b92fb42cb6bb4d3e46a793f91ea74bf5529ba07f1b29",
       "current_state_sha256": "5ca5354f94d9df90a0f61991dfd6dc44501fd74cd0d95161027c27714fa5c5eb",
       "identical": false,
+      "change_kind": "placement_output",
       "changed_paths": [
         "/plan/items/0/pos_xy_mm/0",
         "/plan/items/0/pos_xy_mm/1",
@@ -728,6 +863,7 @@
       "original_state_sha256": "28e7bfae9e6923989ed61203a79f5c94a2b05ead177fedaab69a621867904402",
       "current_state_sha256": "8a5e7633a2cd6a51f584010ea602e6ff25fc1ac0e722a3e696cb406693e18bb1",
       "identical": false,
+      "change_kind": "placement_output",
       "changed_paths": [
         "/plan/items/0/pos_xy_mm/0",
         "/plan/items/0/pos_xy_mm/1",
@@ -786,6 +922,7 @@
       "original_state_sha256": "591a58170276ea698307535600cd4847725240ef8698282872cb2c5877d48b5a",
       "current_state_sha256": "43f9f9b07671da710122b1929849626e61192d95f6c4247203d0d6afa90ac3dc",
       "identical": false,
+      "change_kind": "placement_output",
       "changed_paths": [
         "/plan/items/0/pos_xy_mm/0",
         "/plan/items/0/pos_xy_mm/1",
@@ -844,6 +981,7 @@
       "original_state_sha256": "998bb2debc300f3a19f04bf9d302edf6862304a74c401b714fd0321e99c370d0",
       "current_state_sha256": "ca44b52fa2a9e84aab87dd7ccb67bc4e80156797934cde257f9888cb50c6183a",
       "identical": false,
+      "change_kind": "placement_output",
       "changed_paths": [
         "/plan/items/0/pos_xy_mm/0",
         "/plan/items/0/pos_xy_mm/1",
@@ -902,6 +1040,7 @@
       "original_state_sha256": "433a72248837ae3cca695906b2a1c9b911a75764dd706d317f795581e3385a5d",
       "current_state_sha256": "e3348dc378873457550c5d6add375a9c6881f68822feca24a33c68a98e25ecb3",
       "identical": false,
+      "change_kind": "placement_output",
       "changed_paths": [
         "/plan/items/0/pos_xy_mm/0",
         "/plan/items/0/pos_xy_mm/1",
@@ -958,6 +1097,7 @@
       "original_state_sha256": "6da30740883c2d4b9ffbb232e5556ff8cf96338cb16a4c29f8ba5fc16151b0b0",
       "current_state_sha256": "04cbb252fdf427bf18cc90666db545d3def94c98be8980ea6590ef8a3c7479dd",
       "identical": false,
+      "change_kind": "placement_output",
       "changed_paths": [
         "/plan/items/0/pos_xy_mm/0",
         "/plan/items/0/pos_xy_mm/1",
@@ -1014,6 +1154,7 @@
       "original_state_sha256": "5d1867c0f3442e779beb6fbcd8372e2973e2886dd35426f2873b4557f5a2227a",
       "current_state_sha256": "5d1867c0f3442e779beb6fbcd8372e2973e2886dd35426f2873b4557f5a2227a",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1022,6 +1163,7 @@
       "original_state_sha256": "a9fa9aa3dc27fd6e94d6b7e134542ce1545beee27c93e612e0bccd85c27ae52f",
       "current_state_sha256": "a9fa9aa3dc27fd6e94d6b7e134542ce1545beee27c93e612e0bccd85c27ae52f",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1030,6 +1172,7 @@
       "original_state_sha256": "320143e53ff64a3daa2bf5dd723725de454f6cc9191542c91cf0cd52842d46b7",
       "current_state_sha256": "320143e53ff64a3daa2bf5dd723725de454f6cc9191542c91cf0cd52842d46b7",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1038,6 +1181,7 @@
       "original_state_sha256": "e81eeeaad275fdd8eb4505f187717e66e97a352d08fbb2949ce9811d899d8dcb",
       "current_state_sha256": "e81eeeaad275fdd8eb4505f187717e66e97a352d08fbb2949ce9811d899d8dcb",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1046,6 +1190,7 @@
       "original_state_sha256": "e8d8588af8a31b3adf5e309554ab19de573423e3a9401cfedde644d2a36638a5",
       "current_state_sha256": "e8d8588af8a31b3adf5e309554ab19de573423e3a9401cfedde644d2a36638a5",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1054,6 +1199,7 @@
       "original_state_sha256": "51d7c4aefc925ce92d9b82bf9daf57e6e0d7f367ce7041f854167701f2853211",
       "current_state_sha256": "51d7c4aefc925ce92d9b82bf9daf57e6e0d7f367ce7041f854167701f2853211",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1062,6 +1208,7 @@
       "original_state_sha256": "41722077aacc8d3a1e52e8b6bb573cecc6704efa86bbeffb0c592f1fea2aded0",
       "current_state_sha256": "41722077aacc8d3a1e52e8b6bb573cecc6704efa86bbeffb0c592f1fea2aded0",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1070,6 +1217,7 @@
       "original_state_sha256": "8c248ec0ae82ff997481b3231f18b6e8f82069a3d333fe18d7161b6bb1dc299f",
       "current_state_sha256": "8c248ec0ae82ff997481b3231f18b6e8f82069a3d333fe18d7161b6bb1dc299f",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1078,6 +1226,7 @@
       "original_state_sha256": "4d8282b3e1820a24533f7634ee4f491f0f28195a39ed2a84908271fc96b65aa6",
       "current_state_sha256": "4d8282b3e1820a24533f7634ee4f491f0f28195a39ed2a84908271fc96b65aa6",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1086,6 +1235,7 @@
       "original_state_sha256": "a75a7ec5d39a30039789c13ad0d99683e79f0274db7ebb9acb8b067a066e1a38",
       "current_state_sha256": "7cc1d4836af141a0f67194604768bbee6a1a08b7f959ab826d46085a8a4de89d",
       "identical": false,
+      "change_kind": "placement_output",
       "changed_paths": [
         "/plan/items/0/pos_xy_mm/0",
         "/plan/items/0/pos_xy_mm/1",
@@ -1125,6 +1275,7 @@
       "original_state_sha256": "124b2443952fa2269dca7810f3c3323e753f76b0b17d3ad4fe3fde0df6f973ec",
       "current_state_sha256": "b04518b88b4d8fa47ad3fd49ad1a5fe6123f85a271b052bb9e370542d3a7f321",
       "identical": false,
+      "change_kind": "placement_output",
       "changed_paths": [
         "/plan/items/0/pos_xy_mm/0",
         "/plan/items/0/pos_xy_mm/1",
@@ -1164,6 +1315,7 @@
       "original_state_sha256": "2a2108c442853f33a67b3683cfaa9ccc9f60b38f9ecd1007cb0eaea65d2a58fc",
       "current_state_sha256": "2a2108c442853f33a67b3683cfaa9ccc9f60b38f9ecd1007cb0eaea65d2a58fc",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1172,6 +1324,7 @@
       "original_state_sha256": "e50c701719ada3df8765b648bc07aab6fbc801d50777818bf9a1c51b7c5aeb8a",
       "current_state_sha256": "e50c701719ada3df8765b648bc07aab6fbc801d50777818bf9a1c51b7c5aeb8a",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1180,6 +1333,7 @@
       "original_state_sha256": "e3d735d471623215de070662b7d91c8971d9f466346f12a4e726b288e66654cf",
       "current_state_sha256": "e3d735d471623215de070662b7d91c8971d9f466346f12a4e726b288e66654cf",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1188,6 +1342,7 @@
       "original_state_sha256": "8d43cf7e95334b1afe7b7c5e6176d6026faf988b9649ff895d504d6addefbcee",
       "current_state_sha256": "8d43cf7e95334b1afe7b7c5e6176d6026faf988b9649ff895d504d6addefbcee",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1196,6 +1351,7 @@
       "original_state_sha256": "a0b9f7060211facff082f3ba5aab0936281c061916270cdb756af95fda22e398",
       "current_state_sha256": "a0b9f7060211facff082f3ba5aab0936281c061916270cdb756af95fda22e398",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1204,6 +1360,7 @@
       "original_state_sha256": "4773ab7194dfd8d42e825e23661b4062507fc608b3d2daa42eab978ed52832a7",
       "current_state_sha256": "4773ab7194dfd8d42e825e23661b4062507fc608b3d2daa42eab978ed52832a7",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1212,6 +1369,7 @@
       "original_state_sha256": "c5dd1be0d9690ddad30501b7fd57731dd6083cecf0d3389d12069211033d8dac",
       "current_state_sha256": "c5dd1be0d9690ddad30501b7fd57731dd6083cecf0d3389d12069211033d8dac",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1220,6 +1378,7 @@
       "original_state_sha256": "1b22cb374357c0f2c5d1e69adf33ba6eb6dd8669c5fce43f282323adee45fff0",
       "current_state_sha256": "1b22cb374357c0f2c5d1e69adf33ba6eb6dd8669c5fce43f282323adee45fff0",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1228,6 +1387,7 @@
       "original_state_sha256": "bf112aab3e949869690d47115a356d8739fa2cdfc3c226d83697462ab9d8d0fb",
       "current_state_sha256": "bf112aab3e949869690d47115a356d8739fa2cdfc3c226d83697462ab9d8d0fb",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1236,6 +1396,7 @@
       "original_state_sha256": "54733a79cb5f8f1a9e21733fd092d2179ff448c1af9851b325296ca504dcffbc",
       "current_state_sha256": "54733a79cb5f8f1a9e21733fd092d2179ff448c1af9851b325296ca504dcffbc",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1244,6 +1405,7 @@
       "original_state_sha256": "db5b9964589b3ed3709dff6213d270e030eb3a872146d2ed70c4af4f2b6a4918",
       "current_state_sha256": "db5b9964589b3ed3709dff6213d270e030eb3a872146d2ed70c4af4f2b6a4918",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1252,6 +1414,7 @@
       "original_state_sha256": "2a52e0ee78b551c5c76f6c9fe6b3f981ced9426d6e9c67e05ac26c1d44ab5b7f",
       "current_state_sha256": "2a52e0ee78b551c5c76f6c9fe6b3f981ced9426d6e9c67e05ac26c1d44ab5b7f",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1260,6 +1423,7 @@
       "original_state_sha256": "671bae163a52297689841ba617d98a33094ca07d93089a349d44d2c521355e01",
       "current_state_sha256": "671bae163a52297689841ba617d98a33094ca07d93089a349d44d2c521355e01",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1268,6 +1432,7 @@
       "original_state_sha256": "e919ae391286f1c311b8996c60a82e38ce5ee3e95f6117355080d40d41a35ce0",
       "current_state_sha256": "e919ae391286f1c311b8996c60a82e38ce5ee3e95f6117355080d40d41a35ce0",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1276,6 +1441,7 @@
       "original_state_sha256": "4efd108d969c5ba0872931de46eaec0d43cf81b2abdee713731bf8c99cc549f0",
       "current_state_sha256": "4efd108d969c5ba0872931de46eaec0d43cf81b2abdee713731bf8c99cc549f0",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1284,6 +1450,7 @@
       "original_state_sha256": "1353512698e2da41b2c27f40a2f5b50962eb8e2d342a234b9beedde3ce892298",
       "current_state_sha256": "1353512698e2da41b2c27f40a2f5b50962eb8e2d342a234b9beedde3ce892298",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1292,6 +1459,7 @@
       "original_state_sha256": "49c26b63f5439e0266ed774db46bac9143541958ac22f22a41308d90de3d58b2",
       "current_state_sha256": "49c26b63f5439e0266ed774db46bac9143541958ac22f22a41308d90de3d58b2",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1300,6 +1468,7 @@
       "original_state_sha256": "eacee8a5374045ee9274a1bfdb6fdb6ed8445112cdd8d9d52cd689152ea913ab",
       "current_state_sha256": "eacee8a5374045ee9274a1bfdb6fdb6ed8445112cdd8d9d52cd689152ea913ab",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1308,6 +1477,7 @@
       "original_state_sha256": "64be87bb4fe21d61d1714937cac9f2fe92aeb72a3b19a8f86f53f5a414de86a5",
       "current_state_sha256": "64be87bb4fe21d61d1714937cac9f2fe92aeb72a3b19a8f86f53f5a414de86a5",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     },
@@ -1316,6 +1486,7 @@
       "original_state_sha256": "1558be17792545976c4b7ce66f9dddf5b5b0b13dcf2fbb7ed03646e0f82ea5cb",
       "current_state_sha256": "1558be17792545976c4b7ce66f9dddf5b5b0b13dcf2fbb7ed03646e0f82ea5cb",
       "identical": true,
+      "change_kind": null,
       "changed_paths": [],
       "frozen_target_machine_points": 2
     }
@@ -1323,5 +1494,5 @@
   "model_run": false,
   "training_started": false,
   "expert_review": "pending; explicit mechanical comparison only, not human approval",
-  "scope": "New source-manifest version; original 120 task bytes and historical expected state hashes are retained. Current placement output positions may differ, original action targets/constraints still score fully."
+  "scope": "Original 120 task bytes, targets and historical hashes retained. Only verified placement output changes and absent-to-zero automatic leaf-count defaults from main #197 are permitted; frozen observations and scores must still pass."
 }

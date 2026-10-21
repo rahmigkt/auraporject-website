@@ -8,6 +8,7 @@ import{uygula}from'../studyo-motoru/motor.mjs';
 import{encode,layer,get}from'../aura-sinav-01/fixtures.mjs';
 import{root,hash}from'./build.mjs';
 import{grade}from'../../tests/ai-eval/aura-sinav-01/score.mjs';
+import{automaticLeafDefaultsOnly}from'./revalidation-policy.mjs';
 const dir=new URL('../../tests/ai-eval/aura-sinav-01/',import.meta.url),freezePath=new URL('FREEZE.json',dir),before=fs.readFileSync(freezePath),freeze=JSON.parse(before),taskBytes=fs.readFileSync(new URL('gorevler.jsonl',dir));
 assert.equal(hash(taskBytes),freeze.files['gorevler.jsonl'].sha256);
 const tasks=taskBytes.toString('utf8').trim().split('\n').map(JSON.parse),evidence=[];
@@ -21,20 +22,24 @@ for(const t of tasks.filter(t=>t.expected.actions.length)){
  assert.equal(hash(encode(old.state)),t.expected.engine.state_sha256,t.id+' old frozen evidence mismatch');
  assert(r.rapor.gecti,t.id);
  const changes=changedPaths(old.state,r.state);
- if(changes.length){assert.equal(t.group,'ev-yerlesim');assert.equal(t.expected.actions[0].type,'yerlestir');assert(changes.every(p=>p.startsWith('/yerlesim/')||p==='/secili'||/^\/plan\/items\/\d+\/(pos_xy_mm\/\d+|rot_deg)$/.test(p)),t.id+' unrelated state changed: '+changes.join(','));}
+ if(changes.length&&t.group==='mobilya'){
+  // Main #197 adds lv=0 (automatic leaf count) during normalization. Permit
+  // only this exact absent-to-zero addition; no dimensions/targets may change.
+  assert(automaticLeafDefaultsOnly(old.state,r.state,changes),t.id+' unexpected furniture change: '+changes.join(','));
+ }else if(changes.length){assert.equal(t.group,'ev-yerlesim');assert.equal(t.expected.actions[0].type,'yerlestir');assert(changes.every(p=>p.startsWith('/yerlesim/')||p==='/secili'||/^\/plan\/items\/\d+\/(pos_xy_mm\/\d+|rot_deg)$/.test(p)),t.id+' unrelated state changed: '+changes.join(','));}
  assert.deepEqual(r.rapor.uyari.map(w=>w.kod),t.expected.engine.warning_codes,t.id);
  assert.equal(r.rapor.kabul.length,t.expected.engine.accepted,t.id);
  for(const [p,v]of Object.entries(t.expected.observations))assert.deepEqual(get(r.state,p),v,t.id+p);
  assert.equal(grade(t,{reply:t.lang==='ar'?'تم ضبط الخيارات المطلوبة.':'Updated the requested settings.',actions:t.expected.actions}).points,2,t.id+' frozen target no longer meets scorer');
- evidence.push({id:t.id,original_state_sha256:t.expected.engine.state_sha256,current_state_sha256:hash(encode(r.state)),identical:!changes.length,changed_paths:changes,frozen_target_machine_points:2});
+ evidence.push({id:t.id,original_state_sha256:t.expected.engine.state_sha256,current_state_sha256:hash(encode(r.state)),identical:!changes.length,change_kind:!changes.length?null:t.group==='mobilya'?'default_automatic_leaf_count':'placement_output',changed_paths:changes,frozen_target_machine_points:2});
 }
 assert.equal(evidence.length,100);
 const tree=hash(execFileSync('git',['ls-tree','-r','HEAD','--','assets','tools/studyo-motoru'],{cwd:root}));
 const archive=new URL('../../knowledge/ai-egitim/toparlama-01/archive/hacim-01-arap-oncesi/FREEZE-before.json',import.meta.url);
 if(fs.existsSync(archive))assert.deepEqual(fs.readFileSync(archive),before,'Refuse to overwrite existing archive');else fs.writeFileSync(archive,before);
-const report={version:'hacim-exam-revalidation/1',old_source_tree_sha256:freeze.source_tree_sha256,new_source_tree_sha256:tree,task_file_sha256:hash(taskBytes),task_bytes_changed:false,positive_states_identical:evidence.filter(e=>e.identical).length,solver_output_states_changed:evidence.filter(e=>!e.identical).length,positive_frozen_targets_still_pass:100,no_action_cases_unchanged:20,evidence,model_run:false,training_started:false,expert_review:'pending; explicit mechanical comparison only, not human approval',scope:'New source-manifest version; original 120 task bytes and historical expected state hashes are retained. Current placement output positions may differ, original action targets/constraints still score fully.'};
+const report={version:'hacim-exam-revalidation/2',old_source_tree_sha256:freeze.source_tree_sha256,new_source_tree_sha256:tree,task_file_sha256:hash(taskBytes),task_bytes_changed:false,positive_states_identical:evidence.filter(e=>e.identical).length,solver_output_states_changed:evidence.filter(e=>e.change_kind==='placement_output').length,default_leaf_count_states_changed:evidence.filter(e=>e.change_kind==='default_automatic_leaf_count').length,positive_frozen_targets_still_pass:100,no_action_cases_unchanged:20,evidence,model_run:false,training_started:false,expert_review:'pending; explicit mechanical comparison only, not human approval',scope:'Original 120 task bytes, targets and historical hashes retained. Only verified placement output changes and absent-to-zero automatic leaf-count defaults from main #197 are permitted; frozen observations and scores must still pass.'};
 fs.writeFileSync(new URL('../../knowledge/ai-egitim/veri/hacim-1-istek/sinav-yeniden-dogrulama.json',import.meta.url),JSON.stringify(report,null,2)+'\n');
 freeze.version='aura-sinav-01/1.3-source-revalidated';freeze.source_tree_sha256=tree;
-freeze.source_revalidation={report:'knowledge/ai-egitim/veri/hacim-1-istek/sinav-yeniden-dogrulama.json',positive_states_identical:report.positive_states_identical,solver_output_states_changed:report.solver_output_states_changed,positive_frozen_targets_still_pass:100,task_bytes_changed:false,expert_review:'pending'};
+freeze.source_revalidation={report:'knowledge/ai-egitim/veri/hacim-1-istek/sinav-yeniden-dogrulama.json',positive_states_identical:report.positive_states_identical,solver_output_states_changed:report.solver_output_states_changed,default_leaf_count_states_changed:report.default_leaf_count_states_changed,positive_frozen_targets_still_pass:100,task_bytes_changed:false,expert_review:'pending'};
 fs.writeFileSync(freezePath,JSON.stringify(freeze,null,2)+'\n');
 console.log(JSON.stringify({...freeze.source_revalidation,model_run:false}));

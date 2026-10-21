@@ -1,5 +1,7 @@
 # HACIM-01 — H1 / C1 düzeltme teslimi
 
+Bu belge C1/2 ilk tesliminin tarihsel raporudur. Güncel C1b düzeltmesi, sayım yöntemi, main kaynağı ve doğrulama için [C1b raporunu](HACIM-01-C1B-RAPOR.md) okuyun. Aşağıdaki 190 yanıt kalıbı ve 89 aynı sınav durumu sayıları ilk teslim dönemine aittir.
+
 21 Ekim 2026 · PR #187 · main 544d901 (#189–192) dala alındı.
 Görev kaynağı `GOREVLER.md` içindeki C1'dir. Claude'un `hacim-1-istek:* = duzelt` kararı korunur; bu sürüm yeniden incelemeye sunulur. Onaylı/eğitime uygun kayıt: **0**. Eğitim, GPU, ücretli API, dağıtım ve merge yapılmadı.
 

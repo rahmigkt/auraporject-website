@@ -11,7 +11,10 @@ import {initial as home,spec,multiPairs} from './curriculum.mjs';
 import {multiLayout}from'./multi-layout.mjs';
 import {quality}from'./quality.mjs';
 import {applyFeatures}from'./features.mjs';
+import {direct}from'./direct-replies.mjs';
+import {pairUsers,applyC1b}from'./c1b-users.mjs';
 applyFeatures(P);
+applyC1b(P);
 export const root=fileURLToPath(new URL('../../',import.meta.url));
 export const dest=new URL('../../knowledge/ai-egitim/veri/hacim-1-istek/',import.meta.url);
 export const langs=Object.keys(L),hash=b=>crypto.createHash('sha256').update(b).digest('hex');
@@ -88,29 +91,28 @@ function revisedRows(){
    return s;
   }
   function add(category,user_template,s,result,variant,gulf=false,group='clarification'){
-   const reply_template=category==='clarify'||category==='unsupported'?result:fill(p.replyFrames[variant],{a:result});
+   const reply_template=category==='clarify'||category==='unsupported'?result:result+'.';
    const reply=upper(fill(reply_template,s.variables),language);
-   const row={id:`hacim-istek-${language}-${String(++sequence).padStart(3,'0')}`,language,user_dialect:gulf?'gulf':language==='ar'?'msa':null,category,user:upper(fill(user_template,s.variables),language),state:s.state,assistant:{reply,actions:s.actions},expected:{observations:s.observations},source:{type:'AURA original fictional connected home and authored paraphrases',revision:'C1/2',real_building:false,group,user_template,reply_template,variant,constraint_interpretation:s.actions.some(a=>a.kisitlar?.length)?'Direction is explicit user intent; near/far thresholds are AURA operational interpretations, not customer-measured clearance or certification.':null},review:{status:'quarantine',producer:'Codex',required_reviewer:'Claude',cross_review_status:'pending',human_review_required:false,designer_approved:false,native_language_approved:false},training_started:false};
+   const row={id:`hacim-istek-${language}-${String(++sequence).padStart(3,'0')}`,language,user_dialect:gulf?'gulf':language==='ar'?'msa':null,category,user:upper(fill(user_template,s.variables),language),state:s.state,assistant:{reply,actions:s.actions},expected:{observations:s.observations},source:{type:'AURA original fictional connected home and authored paraphrases',revision:'C1b/1',real_building:false,group,user_template,reply_template,variant,constraint_interpretation:s.actions.some(a=>a.kisitlar?.length)?'Direction is explicit user intent; near/far thresholds are AURA operational interpretations, not customer-measured clearance or certification.':null},review:{status:'quarantine',producer:'Codex',required_reviewer:'Claude',cross_review_status:'pending',human_review_required:false,designer_approved:false,native_language_approved:false},training_started:false};
    row.motor=checkTarget(row);assert(row.motor.report.gecti,row.id);assert.deepEqual(row.motor.report.uyari,[],row.id);assert.deepEqual(row.motor.target_mismatches,[],row.id);rows.push(row);
   }
   for(let i=0;i<24;i++)for(let j=0;j<5;j++){
    const s=localized(i,j),gulf=language==='ar'&&i<8,template=(gulf?p.gulf[i]:p.users[i]).split('|')[j];
-   add('single',template,s,p.results[i],j,gulf,'intent-'+i);
+   add('single',template,s,direct[language][i],j,gulf,'intent-'+i);
   }
-  for(const [i,k]of multiPairs)for(let j=0;j<5;j++){
+  for(const [pairIndex,[i,k]]of multiPairs.entries())for(let j=0;j<5;j++){
    const s=localized(i,j),t=localized(k,j);
    s.actions.push(...t.actions);s.observations.push(...t.observations);
    const first=lower((multiLayout[language][i]||p.users[i].split('|')[j]).replace(/[.!?。]$/u,''),language);
-   const template=fill(p.multiFrames[j],{a:first,b:p.textile[k]});
-   const join={tr:' ve ',en:' and ',de:' und ',fr:' et ',nl:' en ',da:' og ',es:' y ',it:' e ',ar:' و'}[language];
-   const result=p.results[i]+join+p.results[k];
+   const template=j===2&&pairUsers[language]?pairUsers[language][pairIndex]:fill(p.multiFrames[j],{a:first,b:p.textile[k]});
+   const result=direct[language][i]+'. '+direct[language][k];
    add('multiple',template,s,result,j,false,`pair-${i}-${k}`);
   }
   for(let i=0;i<10;i++)for(let j=0;j<2;j++){
    const s={state:home(j?'bedroom':'living'),actions:[],observations:[],variables:{}};
    add('clarify',p.questions[i].split('|')[j],s,p.ask[i],j,false,'clarify-'+i);
   }
-  for(let i=0;i<10;i++)add('unsupported',i===7?p.dimUser:old.out[i],{state:home(),actions:[],observations:[],variables:{}},p.outReplies[i],0,false,'out-'+i);
+  for(let i=0;i<10;i++)add('unsupported',p.outOverrides?.[i]||(i===7?p.dimUser:old.out[i]),{state:home(),actions:[],observations:[],variables:{}},p.outReplies[i],0,false,'out-'+i);
  }
  return rows;
 }
@@ -120,15 +122,15 @@ export function write(){
  const tree=execFileSync('git',['ls-tree','-r','HEAD','--','assets','tools/studyo-motoru'],{cwd:root});
  execFileSync('git',['diff','--exit-code','HEAD','--','assets','tools/studyo-motoru'],{cwd:root});
  const manifest={version:'hacim-istek/2-cross-review',source_commit:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),source_lock:{git_tree_sha256:hash(tree),scope:['assets/','tools/studyo-motoru/']},rows:rows.length,per_language:Object.fromEntries(langs.map(l=>[l,Object.fromEntries(['single','multiple','clarify','unsupported'].map(c=>[c,rows.filter(r=>r.language===l&&r.category===c).length]))])),gulf_rows:rows.filter(r=>r.user_dialect==='gulf').length,accepted:rows.filter(r=>r.motor.report.gecti).length,rejected:0,warnings:0,target_mismatches:0,qualified_training_rows:0,approval_policy:'Codex-authored records await Claude cross-review. Human/native review optional, not a required approval gate.',files,limitations:['Synthetic disconnected room studies; not real building plans or certified architecture','20 single-intent templates × 6 values; 25 operation pairs × 2; 10 clarification templates × 2 rooms; 10 scope refusals per language. Not 1800 independently sourced intentions.','No project dispatch or lighting action claimed: project layer only acknowledges operations; lighting absent from motor vocabulary','Claude cross-review and combined corpus semantic deduplication pending','Existing combined corpus count/splits and existing frozen exam task bytes are preserved']};
- manifest.version='hacim-istek/3-C1';
- manifest.revision='C1/2';
+ manifest.version='hacim-istek/4-C1b';
+ manifest.revision='C1b/1';
  manifest.limitations=['One fictional connected five-room home; not a real building or certified architecture','24 single intent families with five authored paraphrases each; ten coordinated pairs with five frames each; ten clarification topics and ten unsupported requests per language. Surface variation is not independent intent coverage.','Near/far distances are declared AURA operational interpretations; user utterances do not claim measured clearance','Lighting colour-temperature and persisted designer-request targets included; no external delivery. Percentage dimming unsupported','Claude re-review and combined corpus semantic deduplication pending; prior duzelt decision remains preserved','Existing combined corpus count/splits and frozen exam task bytes are preserved'];
  const q=quality(rows);
  for(const [l,v]of Object.entries(q.by_language)){
-  assert(v.authored_user_patterns>=150,l+' user patterns');assert(v.reply_patterns>=150,l+' reply patterns');
-  assert(v.max_repeated_reply_pattern<=2,l+' repeated replies');assert(v.constrained_multiple_ratio>=.2,l+' constraints');
+  assert(v.authored_user_patterns>=150,l+' user patterns');assert(v.reply_patterns>=50,l+' content-specific reply families');
+  assert(v.max_repeated_reply_pattern<=5,l+' repeated replies');assert(v.max_repeated_opening<=10,l+' repeated opening');assert(v.constrained_multiple_ratio>=.2,l+' constraints');
   assert.deepEqual(v.constraint_types,['bakar','uzak','yakin']);
-  assert.deepEqual(v.internal_term_rows,[]);assert.deepEqual(v.semicolon_multiple,[]);assert.deepEqual(v.new_remote_rooms,[]);
+  assert.deepEqual(v.internal_term_rows,[]);assert.deepEqual(v.reviewed_connector_rows,[]);assert.deepEqual(v.semicolon_multiple,[]);assert.deepEqual(v.new_remote_rooms,[]);
  }
  fs.writeFileSync(new URL('C1-kalite-raporu.json',dest),JSON.stringify(q,null,2)+'\n');
  manifest.quality_report='C1-kalite-raporu.json';

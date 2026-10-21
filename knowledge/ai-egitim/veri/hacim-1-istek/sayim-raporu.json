@@ -1,8 +1,8 @@
 {
-  "version": "hacim-istek/3-C1",
-  "source_commit": "8d776574a882df9bd95f98cacfab2be1c4ec5d0c",
+  "version": "hacim-istek/4-C1b",
+  "source_commit": "461067258e268f57a689a7cc0ae1ff1485e573f7",
   "source_lock": {
-    "git_tree_sha256": "79c517eb7248f5efbd89f8f5dd710fc9b16f81e5b0ea1eb50253d87509ccce67",
+    "git_tree_sha256": "ba823d3c85d6a097508672988109dd92a25ed6ab457a241e7d06fffea32ebfc8",
     "scope": [
       "assets/",
       "tools/studyo-motoru/"
@@ -75,49 +75,50 @@
   "files": [
     {
       "path": "tr.jsonl",
-      "sha256": "930f7facd350e0dd256fd6465f5b3e55527eec3acf4f7b8e75330348e9bb4233"
+      "sha256": "e75ff2b18622884341a2867ba61fde7a132d3206b74975007862ec623a5c00e7"
     },
     {
       "path": "en.jsonl",
-      "sha256": "100bc6bd8aa0e9f589395517ca152ba45aaf228aefd7fb6e1efef280874df223"
+      "sha256": "13585330313501249b1cb2e7c00e9064baddb358ad27f97134445e1603ca2bfd"
     },
     {
       "path": "de.jsonl",
-      "sha256": "c90faf6654ee760807b26a9cae24b677107a55a03a0e7cd23960804205c1d767"
+      "sha256": "fe440e8bd9ab8132191f66fda2f342da961da7494093244bc31fb88d602f0e74"
     },
     {
       "path": "fr.jsonl",
-      "sha256": "2cec2f9baada2c238136a0568e4b7e92e750c5b3722cf4d556f194c95e369eaf"
+      "sha256": "ee4e079da09c0d1cb0bd55e67b07ad0140dc89f4bf67b4d283bf9592b4f730de"
     },
     {
       "path": "nl.jsonl",
-      "sha256": "2bf71b85a9b529fd307ac71775889f8f326573443622ce01ed3b716c6721d9af"
+      "sha256": "28e4e518efa65de3f5700b08b6dc989e60a1eaf75e8d4a3c9226614beb5345f5"
     },
     {
       "path": "da.jsonl",
-      "sha256": "ea356f3d6db2482256f3f8f7fba2da1a306d59cfccc43cb6d2c3b6d32e7aa934"
+      "sha256": "f0d0ac0edeb01bea41af5527a14a247836fe5ad342768f396c86b320a4d9fb6d"
     },
     {
       "path": "es.jsonl",
-      "sha256": "f0f0f97687d56a80fa00babd335a212d7533aa630d77e5ae1fb67f00f4d74072"
+      "sha256": "d1df2c2693b2dfbcd8bd8abebb5fb324f895acecba748753080bb3af59b4a3e0"
     },
     {
       "path": "it.jsonl",
-      "sha256": "2fe03d75b667cc8c19b0b88f43f4a48ef79b4a2d25c9551e1009e2481a1bdd0d"
+      "sha256": "1f873cea8db6805e71f6caee7b37c65ff05041e42e4f03ae004dc74c5665b01a"
     },
     {
       "path": "ar.jsonl",
-      "sha256": "9de4898e68b8b311a32503d3e7d92da6f1f15bd254495004158949ea55901cc5"
+      "sha256": "a95afe672941a274ced8bd1430e8c16e017d00f38d3c1f5038a10e72e8a409d4"
     }
   ],
   "limitations": [
     "One fictional connected five-room home; not a real building or certified architecture",
     "24 single intent families with five authored paraphrases each; ten coordinated pairs with five frames each; ten clarification topics and ten unsupported requests per language. Surface variation is not independent intent coverage.",
     "Near/far distances are declared AURA operational interpretations; user utterances do not claim measured clearance",
+    "Lighting colour-temperature and persisted designer-request targets included; no external delivery. Percentage dimming unsupported",
     "Claude re-review and combined corpus semantic deduplication pending; prior duzelt decision remains preserved",
     "Existing combined corpus count/splits and frozen exam task bytes are preserved"
   ],
-  "revision": "C1/2",
+  "revision": "C1b/1",
   "quality_report": "C1-kalite-raporu.json",
   "capability_coverage": {
     "lighting_temperature": 45,
@@ -129,14 +130,14 @@
     "producer": "Codex",
     "required_reviewer": "Claude",
     "decision_file": "knowledge/ai-egitim/inceleme/kararlar.json",
-    "decision_file_sha256": "bdc73cc9656fd78c8e0ca18514d2ba04daec5615f320e8e0fed6f3b198bb7bd5",
+    "decision_file_sha256": "fbac714806bab94d4a5807aff66f654f091a824a5394fdcc22b567a3fb470c3d",
     "matching_decisions": {},
     "status": "C1_resubmitted_previous_duzelt_preserved",
     "human_review_required": false,
     "approval_inferred": false,
     "dataset_decision": {
       "karar": "duzelt",
-      "not": "H1 kümesinin tamamı (1.800). Motor, şema ve sızma geçiyor; içerik eğitime hazır değil:\n1) Asistan cevabı 4 sabit cümle (170/200 'İstenen değişiklikleri proje önizlemesinde hazırladım'). Model cevap yazmayı öğrenmez. Her cevap yapılanı kendi sözüyle söylemeli: 'Yatak odasına 160'lık yatağı ve iki komodini yerleştirdim; yatak başı pencereli duvarın karşısında.'\n2) İç terim sızıyor: 'Duvar çalışma alanı', 'wall study area', 'Wandstudie', 'zona de estudio de paredes', 'مساحة دراسة الجدران'. Bunlar test düzeneğinin adı, kullanıcı böyle konuşmaz. Bu kalıp tamamen çıkmalı.\n3) 'multiple' satırları iki tek isteğin ';' ile yapıştırılması. Gerçek kullanıcı tek cümlede ilişkili şeyler ister ('salona 3+2+1 koy, tekliyi pencere yanına'). Kısıt içeren çoklu istek yok denecek kadar az; 'bakar/yakin/uzak' kısıtları neredeyse hiç kullanılmamış.\n4) Soru (clarify) cevapları isteğe bakmıyor: 'Yatak odası için halı istiyorum' → 'Hangi eşyayı düşünüyorsunuz?' Doğrusu: halının ölçüsünü, rengini ya da dokusunu sormak.\n5) Çeşitlilik düşük: dil başına ~114 kalıp, gerisi yalnız sayı değişimi. 'Seçili oda', 'perdeleri %95 açık bırak' gibi arayüz komutları çok; ev sahibinin kendi evini anlattığı istekler az ('balkon kapısının önü boş kalsın', 'antreye ayakkabılık sığar mı').\n6) 'Yeni dikdörtgen salonu çiz' tipi istekler odayı plana 42 m ötede boşluğa ekliyor; gerçek bir evde oda böyle eklenmez. Ya mevcut odanın ölçüsü değişsin ya da bu kalıp azaltılsın.\nHedef: dil başına en az 150 farklı kalıp, cevaplar isteğe özgü, iç terim 0, kısıtlı istekler en az %20. Düzeltilince yeniden denetime sunulsun.",
+      "not": "İkinci denetim (#187 C1 sürümü, 21 Ekim 2026). Büyük ölçüde düzeldi: cevaplar isteğe özgü, iç terim yok, çoklu istekler tek cümle, %40 kısıtlı, soru cevapları isteğin kendisini soruyor, ışık ve tasarımcı talebi eklenmiş. Kalan küçük düzeltmeler:\n1) 'for the furniture / pour les meubles / para los muebles / per i mobili / møblerne' yapıştırma bağlacı EN/FR/ES/IT'de 10'ar, DA'da 2 satırda; bazılarında anlamsız ('for the furniture choose the open linen-effect look for the sheers'). Bu 42 satır yeniden yazılsın.\n2) Asistan açılışları dil başına iki kalıpta 34'er kez ('In the preview,' / 'For your room,'). Açılış çeşitlensin ya da açılışsız doğrudan yapılanı söylesin.\n3) Tekstil satırları: kullanıcı kararı verildi (21 Ekim): perde/halı asistanın işinde kalır, tekstil satırları eğitime girebilir. Önceki not:: perde ve halı stüdyoda ayrı ürün ailesi olacak (EV-TEKSTILI-URUN-ARASTIRMA-03). Yapay zekâ sekmesinde perde/halı isteğinin nasıl karşılanacağı kullanıcı kararından sonra netleşecek; bu satırlar o zamana kadar karantinada kalır, silinmez.\n1 ve 2 düzeltilince bütün satırlar uygun sayılacak.",
       "denetci": "claude",
       "zaman": 1792572720588,
       "veri_seti": "hacim-1-istek",
