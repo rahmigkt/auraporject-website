@@ -15,17 +15,17 @@ const dim=(family,key,values,scale=10)=>({family,key,values,scale});
 const mat=(family,slot,key,lex,values)=>({family,slot,key,lex,values});
 export const specs=[
  dim('seating','width',[201,213,226,239,252,267]),dim('seating','depth',[86,89,93,97,101,105]),
- dim('seating','seatHeight',[40,42,44,46,48,50]),dim('seating','armHeight',[57,59,61,65,69,73]),
+ dim('seating','seatHeight',[40,42,43,46,48,50]),dim('seating','armHeight',[57,59,61,65,69,73]),
  dim('seating','cushionThickness',[11,12,14,15,17,18]),dim('seating','armWidth',[7,9,12,14,16,18]),
  dim('table','length',[171,183,197,211,227,243]),dim('table','width',[82,86,91,96,101,108]),
- dim('table','height',[72,73,74,76,77,78]),dim('table','topThickness',[24,28,32,38,42,46],1),
+ dim('table','height',[71,73,76,77,78,79]),dim('table','topThickness',[24,28,32,38,42,46],1),
  dim('storage','width',[181,193,207,221,237,253]),dim('storage','depth',[54,56,58,62,64,66]),
  dim('storage','height',[201,211,221,231,249,259]),
  mat('seating','fabric','color','colors',['cream','navy','sage','anthracite','sand','rust']),
  mat('seating','fabric','fiber','fibers',['linen','cotton','wool','velvet','boucle','chenille']),
- mat('seating','wood','stain','stains',['lightOak','walnut','darkWalnut','black','white','teak']),
+ mat('seating','wood','stain','stains',['lightOak','cherry','darkWalnut','black','white','teak']),
  mat('table','top','species','woods',['oak','walnut','ash','beech','cherry','teak']),
- mat('table','top','stain','stains',['lightOak','walnut','darkWalnut','black','white','teak']),
+ mat('table','top','stain','stains',['lightOak','cherry','darkWalnut','black','white','teak']),
  mat('storage','front','color','colors',['cream','navy','sage','anthracite','sand','rust']),
  mat('storage','case','species','woods',['oak','walnut','ash','beech','cherry','teak'])
 ];

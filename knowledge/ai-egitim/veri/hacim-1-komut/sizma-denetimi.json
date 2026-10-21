@@ -1,8 +1,9 @@
 {
-  "algorithm": "NFKD, diacritics/punctuation/number masking; char-trigram Dice >= .85 or token containment >= .90 (at least 4 tokens); each semicolon clause audited",
+  "algorithm": "NFKD, diacritics/punctuation/number masking; char-trigram Dice >= .85 or token containment >= .90 (at least 4 tokens); each semicolon clause audited; identical complete action targets excluded across languages for the same family/kind",
   "compared_rows": 1800,
   "held_out_tasks": 120,
   "hits": [],
+  "intent_hits": [],
   "nearest": [
     {
       "row": "h1-es-037",
@@ -106,8 +107,8 @@
     }
   ],
   "limitations": [
-    "Lexical near-duplicate screening only; does not prove absence of all semantic paraphrases or cross-language translation leakage",
-    "Exam is read for exclusion only; no exam expected action is used to author targets"
+    "Lexical screening plus exact executable-target matching does not prove absence of every semantic paraphrase",
+    "Exam text/targets are read for exclusion only, never copied into generated model inputs/labels; generator does not read the exam"
   ],
   "exam_sha256": "54db415d5056dcfacc6f351c3fb77807346d190522c77ddafb6e276a9233d0f4"
 }

@@ -16,7 +16,7 @@ for(const r of rows){
  assert(r.motor.report.gecti);assert.deepEqual(r.motor.report.red,[]);assert.deepEqual(r.motor.report.uyari,[]);assert.deepEqual(r.motor.target_mismatches,[]);
  assert.equal(r.assistant.actions.length,{single:1,multiple:2,clarify:0,unsupported:0}[r.category]);
 }
-const ex=loadExam(),report=audit(rows,ex.tasks);assert.deepEqual(report.hits,[]);
+const ex=loadExam(),report=audit(rows,ex.tasks);assert.deepEqual(report.hits,[]);assert.deepEqual(report.intent_hits,[]);
 const stored=JSON.parse(readFileSync(new URL('sizma-denetimi.json',dest),'utf8'));assert.deepEqual(stored,{...report,exam_sha256:ex.sha256});
 // Exam number substitutions, spelling/punctuation changes, or appending another
 // clause cannot hide copied text from the leakage check.
@@ -24,6 +24,8 @@ for(const t of ex.tasks.filter(t=>t.group==='mobilya')){
  assert(similarity(t.input.text,t.input.text.replace(/[0-9٠-٩]+/g,'399'))>=.85);
  const bad={...rows[0],language:t.lang,user:t.input.text+'; '+rows[0].user};
  assert(audit([bad],ex.tasks).hits.length);
+ const semantic={...structuredClone(rows[0]),language:'da',user:'Et helt andet ordvalg',state:t.input.state,assistant:{reply:'ok',actions:t.expected.actions}};
+ assert(audit([semantic],ex.tasks).intent_hits.length,'Changing prose/language must not hide a complete target copy');
 }
 const invalid=structuredClone(rows[0]);invalid.assistant.actions[0].key='inventedParameter';assert.throws(()=>checkTarget(invalid));
 const clamped=structuredClone(rows[0]);clamped.assistant.actions[0].value=9000;assert(checkTarget(clamped).target_mismatches.length);

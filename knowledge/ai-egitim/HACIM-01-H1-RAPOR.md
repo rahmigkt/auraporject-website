@@ -33,9 +33,9 @@ Bu **1.800 bağımsız insan örneği değildir**. Her dil için ayrı yazılmı
 
 ## Kapalı sınavdan ayrım
 
-Üretici sınav dosyasını okumaz. Ayrı salt okunur denetim, 120 donmuş görevin **kullanıcı metnini** aynı dilde karşılaştırır; hedef işlemler üretime taşınmaz. Sayı/aksan/noktalama normalizasyonu, karakter üçlüleri ve sözcük kapsama kontrolü uygulanır. Çoklu isteklerin her bölümü ayrı taranır. Belirlenen eşiklerde **0 yakın eşleşme**; en yüksek skor yaklaşık 0,784. Tam kopya, sayı değiştirme ve ek cümleyle gizleme negatif testleri geçer.
+Üretici sınav dosyasını okumaz. Ayrı salt okunur denetim, 120 donmuş görevin **kullanıcı metnini** aynı dilde karşılaştırır. Sayı/aksan/noktalama normalizasyonu, karakter üçlüleri ve sözcük kapsama kontrolü uygulanır. Çoklu isteklerin her bölümü ayrı taranır. Ayrıca aynı ürün ailesi/türündeki **tam işlem hedefinin** eşitliği diller arasında da kontrol edilir; farklı cümle veya dil etiketiyle aynı hedef gizlenemez. Sınav hedefleri yalnız dışlama için okunur; üretilmiş etiketlere veya istemlere kopyalanmaz. Çakışan az sayıdaki ölçü ve ton adayı değiştirildi; tekrar taramada **0 metin yakınlığı, 0 tam hedef eşitliği**. En yüksek metin skoru yaklaşık 0,784. Tam kopya, sayı değiştirme, ek cümleyle gizleme ve farklı dilde eşit işlem hedefi negatif testleri geçer.
 
-Bu sözcüksel taramadır; bütün anlamsal benzerlikleri veya çeviri sızıntısını ispatlayan bir model değildir. Aynı stüdyo becerileri sınanacağı için genişlik/renk gibi genel işlem türlerinin ortak olması beklenir. İnsan sızıntı incelemesi hâlâ gereklidir. Sınav dosyaları değişmedi, eğitim girdilerine alınmadı.
+Sözcüksel ve tam hedef taraması, bütün anlamsal benzerlikleri ispatlayan bir model değildir. Aynı stüdyo becerileri sınanacağı için genişlik/renk gibi genel işlem türlerinin ortak olması beklenir. İnsan sızıntı incelemesi hâlâ gereklidir. Sınavın görev baytları değişmedi, eğitim girdilerine alınmadı.
 
 ## İnceleme ve tekrar üretme
 

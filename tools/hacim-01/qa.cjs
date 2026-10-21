@@ -11,5 +11,9 @@ for(const [name,width,height]of [['desktop',1440,1000],['mobile',390,844]]){
  const metrics=await page.evaluate(()=>({cards:document.querySelectorAll('article').length,overflow:document.documentElement.scrollWidth>innerWidth,rtl:document.querySelector('article p').dir,actions:[...document.querySelectorAll('article > pre')].every(p=>p.textContent==='[]'),count:document.getElementById('count').textContent}));
  if(metrics.cards!==10||metrics.overflow||metrics.rtl!=='rtl'||!metrics.actions||errors.length)throw Error(JSON.stringify({metrics,errors}));
  await page.screenshot({path:path.join(out,name+'.png')});results.push({name,...metrics,errors:[...errors]});
+ await page.goto(pathToFileURL(path.resolve('knowledge/ai-egitim/HACIM-01-YERLESIM-inceleme.html')).href);
+ const gallery=await page.evaluate(()=>({cards:document.querySelectorAll('article').length,svg:document.querySelectorAll('svg').length,overflow:document.documentElement.scrollWidth>innerWidth}));
+ if(gallery.cards!==55||gallery.svg!==55||gallery.overflow||errors.length)throw Error(JSON.stringify({gallery,errors}));
+ await page.screenshot({path:path.join(out,name+'-gallery.png')});results.push({name:name+'-gallery',...gallery,errors:[...errors]});
 }fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(results,null,2)+'\n');console.log(JSON.stringify(results));
 }finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1});
