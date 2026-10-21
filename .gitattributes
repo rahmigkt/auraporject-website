@@ -29,3 +29,21 @@ knowledge/ai-egitim/ev-sohbet-es-ornekler/*.json text eol=lf -diff linguist-gene
 knowledge/ai-egitim/veri/ev-sohbet-it/*.json text eol=lf -diff linguist-generated=true
 knowledge/ai-egitim/veri/ev-sohbet-it/kaynaklar/*.json text eol=lf -diff linguist-generated=true
 knowledge/ai-egitim/ev-sohbet-it-ornekler/*.json text eol=lf -diff linguist-generated=true
+
+# TOPARLAMA-01 merged historical rules.
+knowledge/ai-egitim/veri/ev-plan-eu-00c/** -text -diff linguist-generated=true whitespace=cr-at-eol
+outputs/qwen-local/** text eol=lf
+knowledge/ai-egitim/qwen-pilot-01/** -text
+knowledge/ai-egitim/toparlama-01/archive/** -text -diff
+
+# Unified candidate evidence; review authored source and audit reports.
+knowledge/ai-egitim/veri/birlesik/** text eol=lf -diff linguist-generated=true
+
+# Editorial manifests also pin the original 20 conversation records to UTF-8/LF.
+knowledge/ai-egitim/veri/ev-sohbet-02/*.json text eol=lf -diff linguist-generated=true
+
+knowledge/ai-egitim/veri/ev-sohbet-arap/*.json text eol=lf -diff linguist-generated=true
+
+# Frozen closed exam bytes, including pre-model drafts.
+tests/ai-eval/aura-sinav-01/*.json* text eol=lf
+tests/ai-eval/aura-sinav-01/archive/** -text

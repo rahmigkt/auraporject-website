@@ -69,7 +69,7 @@ def plausibility(x,distribution):
     return max(0,1-(x-hi)/max(hi-innerhi,.20*max(abs(hi),.1)))
 
 
-def measure(plan,profile,country='CH',plan_type='single_floor_residential_unit'):
+def measure_real(plan,profile,country='CH',plan_type='single_floor_residential_unit'):
     ft=features(plan);d=profile['distributions'];prefix=country+'|'+plan_type+'|';room_scores=[];evidence=[]
     for room in ft['rooms']:
         scores=[]
@@ -89,6 +89,16 @@ def measure(plan,profile,country='CH',plan_type='single_floor_residential_unit')
                 circulation_ratio=ft['circulation_ratio'],net_area_m2=ft['net_area_m2'],
                 meaning='Empirical CH reference plausibility, not architectural quality or legal approval')
 
+
+
+# Explicit compatibility for historical 00B; not approved training geometry.
+from legacy_v03.metrics import graph, isomorphic, diversity, furniture_fit
+from legacy_v03.metrics import measure as measure_synthetic
+
+def measure(plan, profile=None, country='CH', plan_type='single_floor_residential_unit'):
+    if profile is None or profile.get('version') == '0.3':
+        return measure_synthetic(plan, profile)
+    return measure_real(plan, profile, country, plan_type)
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();s=p.add_subparsers(dest='command',required=True)

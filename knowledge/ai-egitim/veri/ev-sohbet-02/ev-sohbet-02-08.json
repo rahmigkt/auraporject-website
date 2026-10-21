@@ -9035,13 +9035,13 @@
     },
     {
       "role": "user",
-      "content": "Prenez ce plan suisse pour l’instant. L’agent nous parlait de 68 m².",
+      "content": "Voici le plan de notre logement. L’agent nous parlait de 68 m².",
       "language": "fr",
       "turn": 2
     },
     {
       "role": "assistant",
-      "content": "La somme des pièces de cette référence donne 59,8 m² ; le séjour représente 21,2 m². Je ne peux pas faire coïncider les 68 avec ce contour sans une autre mesure ou une autre définition de surface.",
+      "content": "Les pièces donnent ensemble 59,8 m², dont 21,2 m² pour le séjour. Les 68 m² ont peut-être été calculés autrement ; gardons cette différence à vérifier avant de choisir tous les meubles.",
       "language": "fr",
       "turn": 2
     },
@@ -9053,7 +9053,7 @@
     },
     {
       "role": "assistant",
-      "content": "Je conserve les murs et je note votre affectation des chambres. Le fichier source ne permet pas à lui seul de connaître la fonction réelle de ces pièces.",
+      "content": "Je garde les murs et la répartition des chambres que vous souhaitez. Pour les grands-parents et le bébé, cherchons surtout des passages simples et des meubles faciles à contourner.",
       "language": "fr",
       "turn": 3
     },
@@ -9802,5 +9802,13 @@
     },
     "manual_item_coordinates": false
   },
-  "scenario_status": "fictional_conversation_on_licensed_reference_not_customer_or_model_transcript"
+  "scenario_status": "fictional_conversation_on_licensed_reference_not_customer_or_model_transcript",
+  "style_revision": {
+    "version": "toparlama-4/1",
+    "old_dialogue_sha256": "6686ac42c3ae2b0b1217eef319efbd840781401da1bea6ca54343e9bfadf6c63",
+    "new_dialogue_sha256": "57e304ce53ae16e326f016bd31bf36a73892e2a88d95ccd8d070bcdf00cd4ef1",
+    "body_sha256": "06f412a5ec28a3d7424d0c7a91b9986e17e0aa54a6b60554964af28c5f1be8e2",
+    "native_review": "pending",
+    "authorship": "Codex individually authored editorial corrections; no external model/API call"
+  }
 }

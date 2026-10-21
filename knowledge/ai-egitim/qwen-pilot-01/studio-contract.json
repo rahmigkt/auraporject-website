@@ -1,0 +1,2276 @@
+{
+  "schema": "aura.qwen.studio-contract/1",
+  "source": "existing Forma runtime exports",
+  "sources": {
+    "assets/forma/ai.js": "351a8126b27f2bffc13a04e396f68f98755f0466b5c674f5d768facabd729620",
+    "assets/forma/studio.js": "e1f5f84a3ba5f8cbf41ce95b54bf93bc7fdf7f0995820c5e30f7be32eedd2b3e",
+    "assets/forma/generate.js": "ca12dd9b03c986817c302a896383d04d6ea42dfabc5a1b5ad21830790d1a08bc",
+    "assets/forma/families.js": "92a8f23070bce683e750f5d7d5c23a363b64e1e9d36f6f76c52fa7c52d5807e1",
+    "assets/forma/overrides.js": "a14f01929b12e5c4417aabbbea49846420d58dc6d6b09cdbcf6250b90dafed99",
+    "assets/forma/physics.js": "2c31fe0091087bda3ed881fde986f764c05550359926c761dc36a72389f958bf"
+  },
+  "families": {
+    "seating": {
+      "kind": "sofa",
+      "units": "mm",
+      "verifiedAction": {
+        "type": "set",
+        "key": "width",
+        "value": 2570
+      },
+      "schema": {
+        "family": "seating",
+        "params": {
+          "width": [
+            700,
+            3200
+          ],
+          "depth": [
+            720,
+            1200
+          ],
+          "height": [
+            580,
+            1100
+          ],
+          "seatHeight": [
+            360,
+            500
+          ],
+          "armWidth": [
+            40,
+            320
+          ],
+          "armHeight": [
+            480,
+            780
+          ],
+          "armTop": [
+            0,
+            1
+          ],
+          "armFlare": [
+            0,
+            1
+          ],
+          "armSlope": [
+            0,
+            0.4
+          ],
+          "armSet": [
+            0,
+            90
+          ],
+          "backRake": [
+            4,
+            22
+          ],
+          "backThickness": [
+            120,
+            300
+          ],
+          "camel": [
+            0,
+            140
+          ],
+          "channelCount": [
+            3,
+            12
+          ],
+          "tuftSpacing": [
+            110,
+            240
+          ],
+          "cushionThickness": [
+            80,
+            230
+          ],
+          "cushionCrown": [
+            0,
+            45
+          ],
+          "seatCount": [
+            1,
+            4
+          ],
+          "legHeight": [
+            0,
+            340
+          ],
+          "legSize": [
+            10,
+            48
+          ],
+          "legTaper": [
+            0.3,
+            1
+          ],
+          "legSplay": [
+            0,
+            14
+          ],
+          "legInset": [
+            0,
+            140
+          ],
+          "pillows": [
+            0,
+            4
+          ],
+          "pillowSize": [
+            300,
+            600
+          ]
+        },
+        "enums": {
+          "armType": [
+            "track",
+            "square",
+            "slim",
+            "rolled",
+            "scroll",
+            "flare",
+            "slope",
+            "panel",
+            "wood",
+            "none"
+          ],
+          "backType": [
+            "tight",
+            "loose",
+            "channel",
+            "tufted",
+            "camel",
+            "low"
+          ],
+          "seatType": [
+            "split",
+            "bench",
+            "tight"
+          ],
+          "cushionEdge": [
+            "boxed",
+            "knife",
+            "bullnose",
+            "soft"
+          ],
+          "baseType": [
+            "legs",
+            "plinth",
+            "floating",
+            "skirt",
+            "sled",
+            "frame"
+          ],
+          "legType": [
+            "tapered",
+            "cone",
+            "turned",
+            "bun",
+            "cylinder",
+            "block",
+            "squareTaper",
+            "spindle",
+            "castor"
+          ],
+          "welt": [
+            "none",
+            "self",
+            "contrast"
+          ],
+          "stitch": [
+            "none",
+            "single",
+            "double"
+          ],
+          "pillowType": [
+            "square",
+            "lumbar",
+            "mix",
+            "bolster",
+            "boxed"
+          ]
+        },
+        "styles": [
+          "aura",
+          "japandi",
+          "scandinavian_modern",
+          "mid_century_modern",
+          "minimalism",
+          "wabi_sabi",
+          "industrial",
+          "bauhaus",
+          "art_deco",
+          "brutalism"
+        ],
+        "kinds": [
+          "armchair",
+          "loveseat",
+          "sofa"
+        ],
+        "materials": {
+          "fabric": {
+            "fiber": [
+              "linen",
+              "cotton",
+              "wool",
+              "velvet",
+              "boucle",
+              "chenille",
+              "leather",
+              "suede",
+              "nubuck"
+            ],
+            "weave": [
+              "plain",
+              "twill22",
+              "twill31",
+              "satin",
+              "basket",
+              "herringbone",
+              "diamond"
+            ],
+            "color": [
+              "white",
+              "cream",
+              "sand",
+              "mink",
+              "silver",
+              "smoke",
+              "anthracite",
+              "camel",
+              "chocolate",
+              "mustard",
+              "coral",
+              "dustyRose",
+              "cherryRed",
+              "lilac",
+              "mint",
+              "pistachio",
+              "khaki",
+              "emerald",
+              "petrol",
+              "turquoise",
+              "iceBlue",
+              "navy",
+              "greige",
+              "black",
+              "chalk",
+              "oat",
+              "naturalLinen",
+              "stone",
+              "taupe",
+              "ochre",
+              "weld",
+              "rust",
+              "turkeyRed",
+              "cochineal",
+              "tyrian",
+              "mauve",
+              "blush",
+              "sage",
+              "olive",
+              "verdigris",
+              "bottle",
+              "turkishBlue",
+              "woad",
+              "indigo",
+              "kakishibu",
+              "cognac",
+              "charcoal",
+              "bogolan"
+            ],
+            "pattern": [
+              "none",
+              "floral",
+              "polka",
+              "leaf",
+              "geometric",
+              "stripe",
+              "check",
+              "plaid",
+              "houndstooth",
+              "chevron",
+              "damask"
+            ],
+            "color2": [
+              "white",
+              "cream",
+              "sand",
+              "mink",
+              "silver",
+              "smoke",
+              "anthracite",
+              "camel",
+              "chocolate",
+              "mustard",
+              "coral",
+              "dustyRose",
+              "cherryRed",
+              "lilac",
+              "mint",
+              "pistachio",
+              "khaki",
+              "emerald",
+              "petrol",
+              "turquoise",
+              "iceBlue",
+              "navy",
+              "greige",
+              "black",
+              "chalk",
+              "oat",
+              "naturalLinen",
+              "stone",
+              "taupe",
+              "ochre",
+              "weld",
+              "rust",
+              "turkeyRed",
+              "cochineal",
+              "tyrian",
+              "mauve",
+              "blush",
+              "sage",
+              "olive",
+              "verdigris",
+              "bottle",
+              "turkishBlue",
+              "woad",
+              "indigo",
+              "kakishibu",
+              "cognac",
+              "charcoal",
+              "bogolan"
+            ]
+          },
+          "welt": {
+            "color": [
+              "white",
+              "cream",
+              "sand",
+              "mink",
+              "silver",
+              "smoke",
+              "anthracite",
+              "camel",
+              "chocolate",
+              "mustard",
+              "coral",
+              "dustyRose",
+              "cherryRed",
+              "lilac",
+              "mint",
+              "pistachio",
+              "khaki",
+              "emerald",
+              "petrol",
+              "turquoise",
+              "iceBlue",
+              "navy",
+              "greige",
+              "black",
+              "chalk",
+              "oat",
+              "naturalLinen",
+              "stone",
+              "taupe",
+              "ochre",
+              "weld",
+              "rust",
+              "turkeyRed",
+              "cochineal",
+              "tyrian",
+              "mauve",
+              "blush",
+              "sage",
+              "olive",
+              "verdigris",
+              "bottle",
+              "turkishBlue",
+              "woad",
+              "indigo",
+              "kakishibu",
+              "cognac",
+              "charcoal",
+              "bogolan"
+            ]
+          },
+          "wood": {
+            "species": [
+              "gurgen",
+              "oak",
+              "ash",
+              "beech",
+              "walnut",
+              "cherry",
+              "teak",
+              "smoked",
+              "ebonized"
+            ],
+            "stain": [
+              "natural",
+              "lightOak",
+              "oak",
+              "teak",
+              "cherry",
+              "walnut",
+              "darkWalnut",
+              "wenge",
+              "black",
+              "white",
+              "greige",
+              "anthracite"
+            ],
+            "finish": [
+              "matte",
+              "oil",
+              "satin",
+              "lacquer"
+            ]
+          },
+          "metal": {
+            "finish": [
+              "brass",
+              "bronze",
+              "black",
+              "chrome",
+              "nickel"
+            ]
+          }
+        }
+      }
+    },
+    "table": {
+      "kind": "dining",
+      "units": "mm",
+      "verifiedAction": {
+        "type": "set",
+        "key": "width",
+        "value": 810
+      },
+      "schema": {
+        "family": "table",
+        "params": {
+          "length": [
+            380,
+            3400
+          ],
+          "width": [
+            280,
+            1300
+          ],
+          "height": [
+            280,
+            920
+          ],
+          "topThickness": [
+            6,
+            80
+          ],
+          "cornerRadius": [
+            0,
+            400
+          ],
+          "shapeN": [
+            2.5,
+            12
+          ],
+          "boatBow": [
+            0,
+            0.22
+          ],
+          "edgeSize": [
+            0,
+            40
+          ],
+          "overhang": [
+            0,
+            450
+          ],
+          "sideOverhang": [
+            0,
+            250
+          ],
+          "legSize": [
+            16,
+            120
+          ],
+          "legTaper": [
+            0.35,
+            1
+          ],
+          "legSplay": [
+            0,
+            15
+          ],
+          "apronHeight": [
+            0,
+            170
+          ],
+          "apronThickness": [
+            16,
+            40
+          ],
+          "apronSetback": [
+            0,
+            30
+          ],
+          "stretcherHeight": [
+            60,
+            420
+          ],
+          "columnSize": [
+            50,
+            520
+          ],
+          "footSpread": [
+            0.3,
+            0.95
+          ],
+          "panelThickness": [
+            12,
+            90
+          ],
+          "tubeSize": [
+            12,
+            60
+          ],
+          "shelfHeight": [
+            80,
+            420
+          ],
+          "shelfThickness": [
+            12,
+            40
+          ],
+          "drawers": [
+            0,
+            4
+          ],
+          "leaves": [
+            0,
+            2
+          ],
+          "leafLength": [
+            300,
+            600
+          ]
+        },
+        "enums": {
+          "topShape": [
+            "rect",
+            "rounded",
+            "superellipse",
+            "oval",
+            "round",
+            "racetrack",
+            "boat"
+          ],
+          "edge": [
+            "square",
+            "eased",
+            "chamfer",
+            "underbevel",
+            "bullnose",
+            "ogee"
+          ],
+          "baseType": [
+            "legsApron",
+            "legsOnly",
+            "trestle",
+            "pedestal",
+            "doublePedestal",
+            "slabEnds",
+            "sled",
+            "xBase",
+            "tripod",
+            "hairpin",
+            "drum"
+          ],
+          "legType": [
+            "squareTaper",
+            "square",
+            "roundTaper",
+            "round",
+            "turned",
+            "blade",
+            "cone"
+          ],
+          "pedestalType": [
+            "column",
+            "tulip",
+            "tapered",
+            "faceted",
+            "cross",
+            "star"
+          ],
+          "stretcher": [
+            "none",
+            "H",
+            "box"
+          ],
+          "shelf": [
+            "none",
+            "solid",
+            "slatted"
+          ],
+          "drawerPull": [
+            "none",
+            "knob",
+            "bar",
+            "recess"
+          ],
+          "backPanel": [
+            "none",
+            "panel"
+          ],
+          "extended": [
+            "closed",
+            "open"
+          ],
+          "inlay": [
+            "none",
+            "single",
+            "double",
+            "groove"
+          ]
+        },
+        "styles": [
+          "aura",
+          "japandi",
+          "scandinavian_modern",
+          "mid_century_modern",
+          "minimalism",
+          "wabi_sabi",
+          "industrial",
+          "bauhaus",
+          "art_deco",
+          "brutalism"
+        ],
+        "kinds": [
+          "dining",
+          "coffee",
+          "side",
+          "console",
+          "desk"
+        ],
+        "materials": {
+          "top": {
+            "surface": [
+              "wood",
+              "veneer",
+              "stone",
+              "glass",
+              "lacquer",
+              "metal"
+            ],
+            "species": [
+              "gurgen",
+              "oak",
+              "ash",
+              "beech",
+              "walnut",
+              "cherry",
+              "teak",
+              "smoked",
+              "ebonized"
+            ],
+            "stain": [
+              "natural",
+              "lightOak",
+              "oak",
+              "teak",
+              "cherry",
+              "walnut",
+              "darkWalnut",
+              "wenge",
+              "black",
+              "white",
+              "greige",
+              "anthracite"
+            ],
+            "finish": [
+              "matte",
+              "oil",
+              "satin",
+              "lacquer"
+            ],
+            "stone": [
+              "carrara",
+              "calacatta",
+              "nero",
+              "emperador",
+              "verde",
+              "travertine",
+              "terrazzo",
+              "concrete"
+            ],
+            "glass": [
+              "clear",
+              "extra",
+              "smoked",
+              "bronze",
+              "frosted"
+            ],
+            "color": [
+              "white",
+              "cream",
+              "sand",
+              "mink",
+              "silver",
+              "smoke",
+              "anthracite",
+              "camel",
+              "chocolate",
+              "mustard",
+              "coral",
+              "dustyRose",
+              "cherryRed",
+              "lilac",
+              "mint",
+              "pistachio",
+              "khaki",
+              "emerald",
+              "petrol",
+              "turquoise",
+              "iceBlue",
+              "navy",
+              "greige",
+              "black",
+              "chalk",
+              "oat",
+              "naturalLinen",
+              "stone",
+              "taupe",
+              "ochre",
+              "weld",
+              "rust",
+              "turkeyRed",
+              "cochineal",
+              "tyrian",
+              "mauve",
+              "blush",
+              "sage",
+              "olive",
+              "verdigris",
+              "bottle",
+              "turkishBlue",
+              "woad",
+              "indigo",
+              "kakishibu",
+              "cognac",
+              "charcoal",
+              "bogolan"
+            ],
+            "polish": [
+              "honed",
+              "polished"
+            ]
+          },
+          "base": {
+            "surface": [
+              "wood",
+              "veneer",
+              "stone",
+              "glass",
+              "lacquer",
+              "metal"
+            ],
+            "species": [
+              "gurgen",
+              "oak",
+              "ash",
+              "beech",
+              "walnut",
+              "cherry",
+              "teak",
+              "smoked",
+              "ebonized"
+            ],
+            "stain": [
+              "natural",
+              "lightOak",
+              "oak",
+              "teak",
+              "cherry",
+              "walnut",
+              "darkWalnut",
+              "wenge",
+              "black",
+              "white",
+              "greige",
+              "anthracite"
+            ],
+            "finish": [
+              "matte",
+              "oil",
+              "satin",
+              "lacquer"
+            ],
+            "metal": [
+              "brass",
+              "bronze",
+              "black",
+              "chrome",
+              "nickel"
+            ],
+            "color": [
+              "white",
+              "cream",
+              "sand",
+              "mink",
+              "silver",
+              "smoke",
+              "anthracite",
+              "camel",
+              "chocolate",
+              "mustard",
+              "coral",
+              "dustyRose",
+              "cherryRed",
+              "lilac",
+              "mint",
+              "pistachio",
+              "khaki",
+              "emerald",
+              "petrol",
+              "turquoise",
+              "iceBlue",
+              "navy",
+              "greige",
+              "black",
+              "chalk",
+              "oat",
+              "naturalLinen",
+              "stone",
+              "taupe",
+              "ochre",
+              "weld",
+              "rust",
+              "turkeyRed",
+              "cochineal",
+              "tyrian",
+              "mauve",
+              "blush",
+              "sage",
+              "olive",
+              "verdigris",
+              "bottle",
+              "turkishBlue",
+              "woad",
+              "indigo",
+              "kakishibu",
+              "cognac",
+              "charcoal",
+              "bogolan"
+            ]
+          },
+          "hardware": {
+            "metal": [
+              "brass",
+              "bronze",
+              "black",
+              "chrome",
+              "nickel"
+            ]
+          }
+        }
+      }
+    },
+    "storage": {
+      "kind": "wardrobe",
+      "units": "mm",
+      "verifiedAction": {
+        "type": "set",
+        "key": "width",
+        "value": 1200
+      },
+      "schema": {
+        "family": "storage",
+        "params": {
+          "width": [
+            600,
+            6000
+          ],
+          "height": [
+            1800,
+            2700
+          ],
+          "depth": [
+            520,
+            700
+          ],
+          "solidThickness": [
+            20,
+            30
+          ],
+          "plinthHeight": [
+            40,
+            150
+          ],
+          "legHeight": [
+            60,
+            450
+          ],
+          "legSize": [
+            20,
+            60
+          ],
+          "topThickness": [
+            18,
+            40
+          ],
+          "topOverhang": [
+            0,
+            30
+          ],
+          "fluteWidth": [
+            12,
+            60
+          ],
+          "mirrorHeight": [
+            400,
+            1200
+          ],
+          "mirrorWidth": [
+            0.3,
+            1
+          ]
+        },
+        "enums": {
+          "frontFit": [
+            "overlay",
+            "inset"
+          ],
+          "doorType": [
+            "hinged",
+            "sliding"
+          ],
+          "frontStyle": [
+            "flat",
+            "shaker",
+            "grooved",
+            "fluted",
+            "slats",
+            "cane"
+          ],
+          "pull": [
+            "none",
+            "bar",
+            "knob",
+            "edge",
+            "cutout",
+            "leather"
+          ],
+          "base": [
+            "plinth",
+            "legs",
+            "wall"
+          ],
+          "legType": [
+            "round",
+            "taper",
+            "square",
+            "block",
+            "metal"
+          ],
+          "topType": [
+            "flush",
+            "slab"
+          ],
+          "caseEdge": [
+            "square",
+            "eased",
+            "bullnose",
+            "chamfer"
+          ],
+          "caseLine": [
+            "none",
+            "groove",
+            "inlay"
+          ],
+          "backPanel": [
+            "on",
+            "off"
+          ],
+          "led": [
+            "off",
+            "on"
+          ],
+          "mirror": [
+            "none",
+            "rect",
+            "rounded",
+            "arch",
+            "round",
+            "oval",
+            "capsule",
+            "scallop",
+            "stepped",
+            "organic"
+          ],
+          "board": [
+            "mdf",
+            "solid"
+          ],
+          "frontBoard": [
+            "mdf",
+            "solid"
+          ]
+        },
+        "styles": [
+          "aura",
+          "japandi",
+          "scandinavian_modern",
+          "mid_century_modern",
+          "minimalism",
+          "wabi_sabi",
+          "industrial",
+          "bauhaus",
+          "art_deco",
+          "brutalism"
+        ],
+        "kinds": [
+          "wardrobe",
+          "nightstand",
+          "dresser",
+          "vanity",
+          "tvunit",
+          "bookcase",
+          "vitrine",
+          "sideboard"
+        ],
+        "materials": {
+          "case": {
+            "surface": [
+              "wood",
+              "veneer",
+              "stone",
+              "glass",
+              "lacquer",
+              "metal"
+            ],
+            "species": [
+              "gurgen",
+              "oak",
+              "ash",
+              "beech",
+              "walnut",
+              "cherry",
+              "teak",
+              "smoked",
+              "ebonized"
+            ],
+            "stain": [
+              "natural",
+              "lightOak",
+              "oak",
+              "teak",
+              "cherry",
+              "walnut",
+              "darkWalnut",
+              "wenge",
+              "black",
+              "white",
+              "greige",
+              "anthracite"
+            ],
+            "finish": [
+              "matte",
+              "oil",
+              "satin",
+              "lacquer"
+            ],
+            "color": [
+              "white",
+              "cream",
+              "sand",
+              "mink",
+              "silver",
+              "smoke",
+              "anthracite",
+              "camel",
+              "chocolate",
+              "mustard",
+              "coral",
+              "dustyRose",
+              "cherryRed",
+              "lilac",
+              "mint",
+              "pistachio",
+              "khaki",
+              "emerald",
+              "petrol",
+              "turquoise",
+              "iceBlue",
+              "navy",
+              "greige",
+              "black",
+              "chalk",
+              "oat",
+              "naturalLinen",
+              "stone",
+              "taupe",
+              "ochre",
+              "weld",
+              "rust",
+              "turkeyRed",
+              "cochineal",
+              "tyrian",
+              "mauve",
+              "blush",
+              "sage",
+              "olive",
+              "verdigris",
+              "bottle",
+              "turkishBlue",
+              "woad",
+              "indigo",
+              "kakishibu",
+              "cognac",
+              "charcoal",
+              "bogolan"
+            ]
+          },
+          "front": {
+            "surface": [
+              "wood",
+              "veneer",
+              "stone",
+              "glass",
+              "lacquer",
+              "metal"
+            ],
+            "species": [
+              "gurgen",
+              "oak",
+              "ash",
+              "beech",
+              "walnut",
+              "cherry",
+              "teak",
+              "smoked",
+              "ebonized"
+            ],
+            "stain": [
+              "natural",
+              "lightOak",
+              "oak",
+              "teak",
+              "cherry",
+              "walnut",
+              "darkWalnut",
+              "wenge",
+              "black",
+              "white",
+              "greige",
+              "anthracite"
+            ],
+            "finish": [
+              "matte",
+              "oil",
+              "satin",
+              "lacquer"
+            ],
+            "color": [
+              "white",
+              "cream",
+              "sand",
+              "mink",
+              "silver",
+              "smoke",
+              "anthracite",
+              "camel",
+              "chocolate",
+              "mustard",
+              "coral",
+              "dustyRose",
+              "cherryRed",
+              "lilac",
+              "mint",
+              "pistachio",
+              "khaki",
+              "emerald",
+              "petrol",
+              "turquoise",
+              "iceBlue",
+              "navy",
+              "greige",
+              "black",
+              "chalk",
+              "oat",
+              "naturalLinen",
+              "stone",
+              "taupe",
+              "ochre",
+              "weld",
+              "rust",
+              "turkeyRed",
+              "cochineal",
+              "tyrian",
+              "mauve",
+              "blush",
+              "sage",
+              "olive",
+              "verdigris",
+              "bottle",
+              "turkishBlue",
+              "woad",
+              "indigo",
+              "kakishibu",
+              "cognac",
+              "charcoal",
+              "bogolan"
+            ]
+          },
+          "wood": {
+            "species": [
+              "gurgen",
+              "oak",
+              "ash",
+              "beech",
+              "walnut",
+              "cherry",
+              "teak",
+              "smoked",
+              "ebonized"
+            ],
+            "stain": [
+              "natural",
+              "lightOak",
+              "oak",
+              "teak",
+              "cherry",
+              "walnut",
+              "darkWalnut",
+              "wenge",
+              "black",
+              "white",
+              "greige",
+              "anthracite"
+            ],
+            "finish": [
+              "matte",
+              "oil",
+              "satin",
+              "lacquer"
+            ]
+          },
+          "metal": {
+            "finish": [
+              "brass",
+              "bronze",
+              "black",
+              "chrome",
+              "nickel"
+            ]
+          },
+          "glass": {
+            "glass": [
+              "clear",
+              "extra",
+              "smoked",
+              "bronze",
+              "frosted"
+            ]
+          }
+        }
+      }
+    },
+    "kitchen": {
+      "kind": "run",
+      "units": "mm",
+      "verifiedAction": {
+        "type": "set",
+        "key": "worktopHeight",
+        "value": 900
+      },
+      "schema": {
+        "family": "kitchen",
+        "params": {
+          "worktopHeight": [
+            850,
+            950
+          ],
+          "topThickness": [
+            12,
+            60
+          ],
+          "topDepth": [
+            580,
+            700
+          ],
+          "plinthHeight": [
+            80,
+            150
+          ],
+          "wallGap": [
+            450,
+            750
+          ],
+          "wallHeight": [
+            360,
+            960
+          ],
+          "wallDepth": [
+            280,
+            400
+          ],
+          "solidThickness": [
+            20,
+            30
+          ],
+          "fluteWidth": [
+            12,
+            60
+          ]
+        },
+        "enums": {
+          "frontStyle": [
+            "flat",
+            "shaker",
+            "grooved",
+            "fluted",
+            "slats",
+            "cane"
+          ],
+          "pull": [
+            "none",
+            "bar",
+            "knob",
+            "edge",
+            "cutout",
+            "leather"
+          ],
+          "frontFit": [
+            "overlay",
+            "inset"
+          ],
+          "caseEdge": [
+            "square",
+            "eased",
+            "bullnose",
+            "chamfer"
+          ],
+          "caseLine": [
+            "none",
+            "groove",
+            "inlay"
+          ],
+          "sink": [
+            "single",
+            "double",
+            "drainer"
+          ],
+          "sinkMount": [
+            "undermount",
+            "inset"
+          ],
+          "tap": [
+            "arc",
+            "straight",
+            "pullout"
+          ],
+          "hob": [
+            "induction",
+            "gas"
+          ],
+          "hood": [
+            "chimney",
+            "integrated",
+            "none"
+          ],
+          "backsplash": [
+            "none",
+            "low",
+            "full"
+          ],
+          "board": [
+            "mdf",
+            "solid"
+          ],
+          "frontBoard": [
+            "mdf",
+            "solid"
+          ]
+        },
+        "styles": [
+          "aura",
+          "japandi",
+          "scandinavian_modern",
+          "mid_century_modern",
+          "minimalism",
+          "wabi_sabi",
+          "industrial",
+          "bauhaus",
+          "art_deco",
+          "brutalism"
+        ],
+        "kinds": [
+          "run",
+          "island"
+        ],
+        "materials": {
+          "case": {
+            "surface": [
+              "wood",
+              "veneer",
+              "stone",
+              "glass",
+              "lacquer",
+              "metal"
+            ],
+            "species": [
+              "gurgen",
+              "oak",
+              "ash",
+              "beech",
+              "walnut",
+              "cherry",
+              "teak",
+              "smoked",
+              "ebonized"
+            ],
+            "stain": [
+              "natural",
+              "lightOak",
+              "oak",
+              "teak",
+              "cherry",
+              "walnut",
+              "darkWalnut",
+              "wenge",
+              "black",
+              "white",
+              "greige",
+              "anthracite"
+            ],
+            "finish": [
+              "matte",
+              "oil",
+              "satin",
+              "lacquer"
+            ],
+            "color": [
+              "white",
+              "cream",
+              "sand",
+              "mink",
+              "silver",
+              "smoke",
+              "anthracite",
+              "camel",
+              "chocolate",
+              "mustard",
+              "coral",
+              "dustyRose",
+              "cherryRed",
+              "lilac",
+              "mint",
+              "pistachio",
+              "khaki",
+              "emerald",
+              "petrol",
+              "turquoise",
+              "iceBlue",
+              "navy",
+              "greige",
+              "black",
+              "chalk",
+              "oat",
+              "naturalLinen",
+              "stone",
+              "taupe",
+              "ochre",
+              "weld",
+              "rust",
+              "turkeyRed",
+              "cochineal",
+              "tyrian",
+              "mauve",
+              "blush",
+              "sage",
+              "olive",
+              "verdigris",
+              "bottle",
+              "turkishBlue",
+              "woad",
+              "indigo",
+              "kakishibu",
+              "cognac",
+              "charcoal",
+              "bogolan"
+            ]
+          },
+          "front": {
+            "surface": [
+              "wood",
+              "veneer",
+              "stone",
+              "glass",
+              "lacquer",
+              "metal"
+            ],
+            "species": [
+              "gurgen",
+              "oak",
+              "ash",
+              "beech",
+              "walnut",
+              "cherry",
+              "teak",
+              "smoked",
+              "ebonized"
+            ],
+            "stain": [
+              "natural",
+              "lightOak",
+              "oak",
+              "teak",
+              "cherry",
+              "walnut",
+              "darkWalnut",
+              "wenge",
+              "black",
+              "white",
+              "greige",
+              "anthracite"
+            ],
+            "finish": [
+              "matte",
+              "oil",
+              "satin",
+              "lacquer"
+            ],
+            "color": [
+              "white",
+              "cream",
+              "sand",
+              "mink",
+              "silver",
+              "smoke",
+              "anthracite",
+              "camel",
+              "chocolate",
+              "mustard",
+              "coral",
+              "dustyRose",
+              "cherryRed",
+              "lilac",
+              "mint",
+              "pistachio",
+              "khaki",
+              "emerald",
+              "petrol",
+              "turquoise",
+              "iceBlue",
+              "navy",
+              "greige",
+              "black",
+              "chalk",
+              "oat",
+              "naturalLinen",
+              "stone",
+              "taupe",
+              "ochre",
+              "weld",
+              "rust",
+              "turkeyRed",
+              "cochineal",
+              "tyrian",
+              "mauve",
+              "blush",
+              "sage",
+              "olive",
+              "verdigris",
+              "bottle",
+              "turkishBlue",
+              "woad",
+              "indigo",
+              "kakishibu",
+              "cognac",
+              "charcoal",
+              "bogolan"
+            ]
+          },
+          "wood": {
+            "species": [
+              "gurgen",
+              "oak",
+              "ash",
+              "beech",
+              "walnut",
+              "cherry",
+              "teak",
+              "smoked",
+              "ebonized"
+            ],
+            "stain": [
+              "natural",
+              "lightOak",
+              "oak",
+              "teak",
+              "cherry",
+              "walnut",
+              "darkWalnut",
+              "wenge",
+              "black",
+              "white",
+              "greige",
+              "anthracite"
+            ],
+            "finish": [
+              "matte",
+              "oil",
+              "satin",
+              "lacquer"
+            ]
+          },
+          "metal": {
+            "finish": [
+              "brass",
+              "bronze",
+              "black",
+              "chrome",
+              "nickel"
+            ]
+          },
+          "glass": {
+            "glass": [
+              "clear",
+              "extra",
+              "smoked",
+              "bronze",
+              "frosted"
+            ]
+          },
+          "top": {
+            "surface": [
+              "wood",
+              "veneer",
+              "stone",
+              "glass",
+              "lacquer",
+              "metal"
+            ],
+            "stone": [
+              "carrara",
+              "calacatta",
+              "nero",
+              "emperador",
+              "verde",
+              "travertine",
+              "terrazzo",
+              "concrete"
+            ],
+            "polish": [
+              "honed",
+              "polished"
+            ],
+            "species": [
+              "gurgen",
+              "oak",
+              "ash",
+              "beech",
+              "walnut",
+              "cherry",
+              "teak",
+              "smoked",
+              "ebonized"
+            ],
+            "stain": [
+              "natural",
+              "lightOak",
+              "oak",
+              "teak",
+              "cherry",
+              "walnut",
+              "darkWalnut",
+              "wenge",
+              "black",
+              "white",
+              "greige",
+              "anthracite"
+            ],
+            "finish": [
+              "matte",
+              "oil",
+              "satin",
+              "lacquer"
+            ],
+            "color": [
+              "white",
+              "cream",
+              "sand",
+              "mink",
+              "silver",
+              "smoke",
+              "anthracite",
+              "camel",
+              "chocolate",
+              "mustard",
+              "coral",
+              "dustyRose",
+              "cherryRed",
+              "lilac",
+              "mint",
+              "pistachio",
+              "khaki",
+              "emerald",
+              "petrol",
+              "turquoise",
+              "iceBlue",
+              "navy",
+              "greige",
+              "black",
+              "chalk",
+              "oat",
+              "naturalLinen",
+              "stone",
+              "taupe",
+              "ochre",
+              "weld",
+              "rust",
+              "turkeyRed",
+              "cochineal",
+              "tyrian",
+              "mauve",
+              "blush",
+              "sage",
+              "olive",
+              "verdigris",
+              "bottle",
+              "turkishBlue",
+              "woad",
+              "indigo",
+              "kakishibu",
+              "cognac",
+              "charcoal",
+              "bogolan"
+            ]
+          },
+          "sink": {
+            "finish": [
+              "steel",
+              "black",
+              "grey",
+              "white"
+            ]
+          }
+        }
+      }
+    },
+    "bath": {
+      "kind": "basin",
+      "units": "mm",
+      "verifiedAction": {
+        "type": "set",
+        "key": "width",
+        "value": 900
+      },
+      "schema": {
+        "family": "bath",
+        "params": {
+          "width": [
+            500,
+            2400
+          ],
+          "height": [
+            200,
+            700
+          ],
+          "depth": [
+            380,
+            600
+          ],
+          "mountHeight": [
+            780,
+            950
+          ],
+          "topThickness": [
+            12,
+            60
+          ],
+          "mirrorWidth": [
+            300,
+            2000
+          ],
+          "mirrorHeight": [
+            300,
+            1600
+          ],
+          "solidThickness": [
+            20,
+            30
+          ],
+          "fluteWidth": [
+            12,
+            60
+          ],
+          "legHeight": [
+            100,
+            400
+          ]
+        },
+        "enums": {
+          "frontStyle": [
+            "flat",
+            "shaker",
+            "grooved",
+            "fluted",
+            "slats",
+            "cane"
+          ],
+          "pull": [
+            "none",
+            "bar",
+            "knob",
+            "edge",
+            "cutout",
+            "leather"
+          ],
+          "frontFit": [
+            "overlay",
+            "inset"
+          ],
+          "caseEdge": [
+            "square",
+            "eased",
+            "bullnose",
+            "chamfer"
+          ],
+          "caseLine": [
+            "none",
+            "groove",
+            "inlay"
+          ],
+          "base": [
+            "wall",
+            "legs"
+          ],
+          "legType": [
+            "round",
+            "taper",
+            "square",
+            "block",
+            "metal"
+          ],
+          "basinType": [
+            "vessel",
+            "integrated",
+            "undermount"
+          ],
+          "basinShape": [
+            "round",
+            "rect"
+          ],
+          "basins": [
+            "single",
+            "double"
+          ],
+          "tap": [
+            "wall",
+            "deck"
+          ],
+          "mirror": [
+            "rect",
+            "rounded",
+            "arch",
+            "round",
+            "oval",
+            "capsule",
+            "scallop",
+            "stepped",
+            "organic"
+          ],
+          "mirrorLight": [
+            "none",
+            "back",
+            "top"
+          ],
+          "mirrorCabinet": [
+            "none",
+            "cabinet"
+          ],
+          "board": [
+            "mdf",
+            "solid"
+          ],
+          "frontBoard": [
+            "mdf",
+            "solid"
+          ]
+        },
+        "styles": [
+          "aura",
+          "japandi",
+          "scandinavian_modern",
+          "mid_century_modern",
+          "minimalism",
+          "wabi_sabi",
+          "industrial",
+          "bauhaus",
+          "art_deco",
+          "brutalism"
+        ],
+        "kinds": [
+          "basin",
+          "column",
+          "mirror"
+        ],
+        "materials": {
+          "case": {
+            "surface": [
+              "wood",
+              "veneer",
+              "stone",
+              "glass",
+              "lacquer",
+              "metal"
+            ],
+            "species": [
+              "gurgen",
+              "oak",
+              "ash",
+              "beech",
+              "walnut",
+              "cherry",
+              "teak",
+              "smoked",
+              "ebonized"
+            ],
+            "stain": [
+              "natural",
+              "lightOak",
+              "oak",
+              "teak",
+              "cherry",
+              "walnut",
+              "darkWalnut",
+              "wenge",
+              "black",
+              "white",
+              "greige",
+              "anthracite"
+            ],
+            "finish": [
+              "matte",
+              "oil",
+              "satin",
+              "lacquer"
+            ],
+            "color": [
+              "white",
+              "cream",
+              "sand",
+              "mink",
+              "silver",
+              "smoke",
+              "anthracite",
+              "camel",
+              "chocolate",
+              "mustard",
+              "coral",
+              "dustyRose",
+              "cherryRed",
+              "lilac",
+              "mint",
+              "pistachio",
+              "khaki",
+              "emerald",
+              "petrol",
+              "turquoise",
+              "iceBlue",
+              "navy",
+              "greige",
+              "black",
+              "chalk",
+              "oat",
+              "naturalLinen",
+              "stone",
+              "taupe",
+              "ochre",
+              "weld",
+              "rust",
+              "turkeyRed",
+              "cochineal",
+              "tyrian",
+              "mauve",
+              "blush",
+              "sage",
+              "olive",
+              "verdigris",
+              "bottle",
+              "turkishBlue",
+              "woad",
+              "indigo",
+              "kakishibu",
+              "cognac",
+              "charcoal",
+              "bogolan"
+            ]
+          },
+          "front": {
+            "surface": [
+              "wood",
+              "veneer",
+              "stone",
+              "glass",
+              "lacquer",
+              "metal"
+            ],
+            "species": [
+              "gurgen",
+              "oak",
+              "ash",
+              "beech",
+              "walnut",
+              "cherry",
+              "teak",
+              "smoked",
+              "ebonized"
+            ],
+            "stain": [
+              "natural",
+              "lightOak",
+              "oak",
+              "teak",
+              "cherry",
+              "walnut",
+              "darkWalnut",
+              "wenge",
+              "black",
+              "white",
+              "greige",
+              "anthracite"
+            ],
+            "finish": [
+              "matte",
+              "oil",
+              "satin",
+              "lacquer"
+            ],
+            "color": [
+              "white",
+              "cream",
+              "sand",
+              "mink",
+              "silver",
+              "smoke",
+              "anthracite",
+              "camel",
+              "chocolate",
+              "mustard",
+              "coral",
+              "dustyRose",
+              "cherryRed",
+              "lilac",
+              "mint",
+              "pistachio",
+              "khaki",
+              "emerald",
+              "petrol",
+              "turquoise",
+              "iceBlue",
+              "navy",
+              "greige",
+              "black",
+              "chalk",
+              "oat",
+              "naturalLinen",
+              "stone",
+              "taupe",
+              "ochre",
+              "weld",
+              "rust",
+              "turkeyRed",
+              "cochineal",
+              "tyrian",
+              "mauve",
+              "blush",
+              "sage",
+              "olive",
+              "verdigris",
+              "bottle",
+              "turkishBlue",
+              "woad",
+              "indigo",
+              "kakishibu",
+              "cognac",
+              "charcoal",
+              "bogolan"
+            ]
+          },
+          "wood": {
+            "species": [
+              "gurgen",
+              "oak",
+              "ash",
+              "beech",
+              "walnut",
+              "cherry",
+              "teak",
+              "smoked",
+              "ebonized"
+            ],
+            "stain": [
+              "natural",
+              "lightOak",
+              "oak",
+              "teak",
+              "cherry",
+              "walnut",
+              "darkWalnut",
+              "wenge",
+              "black",
+              "white",
+              "greige",
+              "anthracite"
+            ],
+            "finish": [
+              "matte",
+              "oil",
+              "satin",
+              "lacquer"
+            ]
+          },
+          "metal": {
+            "finish": [
+              "brass",
+              "bronze",
+              "black",
+              "chrome",
+              "nickel"
+            ]
+          },
+          "glass": {
+            "glass": [
+              "clear",
+              "extra",
+              "smoked",
+              "bronze",
+              "frosted"
+            ]
+          },
+          "top": {
+            "surface": [
+              "wood",
+              "veneer",
+              "stone",
+              "glass",
+              "lacquer",
+              "metal"
+            ],
+            "stone": [
+              "carrara",
+              "calacatta",
+              "nero",
+              "emperador",
+              "verde",
+              "travertine",
+              "terrazzo",
+              "concrete"
+            ],
+            "polish": [
+              "honed",
+              "polished"
+            ],
+            "species": [
+              "gurgen",
+              "oak",
+              "ash",
+              "beech",
+              "walnut",
+              "cherry",
+              "teak",
+              "smoked",
+              "ebonized"
+            ],
+            "stain": [
+              "natural",
+              "lightOak",
+              "oak",
+              "teak",
+              "cherry",
+              "walnut",
+              "darkWalnut",
+              "wenge",
+              "black",
+              "white",
+              "greige",
+              "anthracite"
+            ],
+            "finish": [
+              "matte",
+              "oil",
+              "satin",
+              "lacquer"
+            ],
+            "color": [
+              "white",
+              "cream",
+              "sand",
+              "mink",
+              "silver",
+              "smoke",
+              "anthracite",
+              "camel",
+              "chocolate",
+              "mustard",
+              "coral",
+              "dustyRose",
+              "cherryRed",
+              "lilac",
+              "mint",
+              "pistachio",
+              "khaki",
+              "emerald",
+              "petrol",
+              "turquoise",
+              "iceBlue",
+              "navy",
+              "greige",
+              "black",
+              "chalk",
+              "oat",
+              "naturalLinen",
+              "stone",
+              "taupe",
+              "ochre",
+              "weld",
+              "rust",
+              "turkeyRed",
+              "cochineal",
+              "tyrian",
+              "mauve",
+              "blush",
+              "sage",
+              "olive",
+              "verdigris",
+              "bottle",
+              "turkishBlue",
+              "woad",
+              "indigo",
+              "kakishibu",
+              "cognac",
+              "charcoal",
+              "bogolan"
+            ]
+          },
+          "sink": {
+            "finish": [
+              "steel",
+              "black",
+              "grey",
+              "white"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "integrationStatus": "vocabulary verified; browser action application and learned adapter not yet integrated",
+  "warning": "sanitizeActions filters vocabulary but does not prove value ranges, geometry or physical safety; normalise, compile and inspect before preview",
+  "excludedLegacyContract": "assets/design-tools.js uses a different cm-based studio tool schema; do not mix with Forma mm actions"
+}

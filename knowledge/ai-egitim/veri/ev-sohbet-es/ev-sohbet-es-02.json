@@ -6423,11 +6423,11 @@
     },
     {
       "role": "user",
-      "content": "Es un piso; necesitamos dos dormitorios. Usa esta referencia suiza, aunque yo había apuntado 85 m²."
+      "content": "Es un piso y necesitamos dos dormitorios. Aquí está nuestro plano; yo había apuntado 85 m²."
     },
     {
       "role": "assistant",
-      "content": "Los polígonos interiores suman 74,4 m² en esta referencia, sin espacio exterior. Los 85 m² podrían responder a otro criterio o a otro inmueble; no ajustaré las paredes para que coincidan con esa cifra."
+      "content": "Las superficies interiores suman 74,4 m², sin espacio exterior. Los 85 m² pueden haberse calculado de otra forma; mantengamos separados los dos datos mientras comprobamos las medidas."
     },
     {
       "role": "user",
@@ -6451,7 +6451,7 @@
     },
     {
       "role": "assistant",
-      "content": "Pido al solucionador esas dos camas y los armarios con sus huellas completas. La anchura del colchón no se usa como si fuese la anchura exterior de la cama."
+      "content": "Tendré en cuenta las camas completas y los armarios. Así podremos comprobar el paso alrededor sin confundir el ancho del colchón con el del mueble."
     },
     {
       "role": "user",
@@ -6475,7 +6475,7 @@
     },
     {
       "role": "assistant",
-      "content": "El diseñador recibe la prioridad de la comida familiar junto con el tamaño pendiente de vuestra mesa y el plano de referencia. Él toma la decisión final cuando pueda revisar el piso real y la circulación completa."
+      "content": "Le transmitiré al diseñador lo importante que es comer juntos y que falta medir vuestra mesa. La decisión final la tomaréis con él, después de revisar el piso y los pasos entre los muebles."
     }
   ],
   "claimed_net_area_m2": 74.4,
@@ -7190,5 +7190,13 @@
     },
     "manual_item_coordinates": false
   },
-  "designer_summary_tr": "Madrid: çift ve bir çocuk; iki yatak odası isteniyor. İlandaki habitación ifadesinden oda sayısı varsayılmadı. Aile yemek masası ölçüsü ve gerçek dolaşım açık; 800 mm ham kapı açıklığı erişilebilirlik onayı değil."
+  "designer_summary_tr": "Madrid: çift ve bir çocuk; iki yatak odası isteniyor. İlandaki habitación ifadesinden oda sayısı varsayılmadı. Aile yemek masası ölçüsü ve gerçek dolaşım açık; 800 mm ham kapı açıklığı erişilebilirlik onayı değil.",
+  "style_revision": {
+    "version": "toparlama-4/1",
+    "old_dialogue_sha256": "b406f0ece8f027da40d634613e89e5b259b0b31893f9988a97ddcf61a4b2e098",
+    "new_dialogue_sha256": "788bbbbcda082d3faca028e39e94a43f0b787cda5eb9e0245cd470e102f5b33a",
+    "body_sha256": "e6bea97d84a3581e1cfc15a0e42f88194007d136aab5d12edb4da75918f58a15",
+    "native_review": "pending",
+    "authorship": "Codex individually authored editorial corrections; no external model/API call"
+  }
 }

@@ -1,52 +1,26 @@
-# AURA yapay zekâ eğitimi — çalışma düzeni
+# AURA eğitim belgeleri — güncel rehber
 
-Başlangıç: 2026-10-18. Bu klasör, AURA stüdyosunun yapay zekâ işlerinin (komut anlama, görselden tasarım, tarz) nasıl
-yürütüleceğini ve denetleneceğini tanımlar.
+21 Ekim 2026. Güncel mimari: Qwen koordinat üretmez, stüdyoya işlem/niyet söyler; stüdyo doğrular. Eğitim bu görevde başlamaz.
 
-Güncel karar (2026-10-19): kiralık sunucu yerine yerel Qwen3.5-9B hazırlığı.
-Mimari, veri pilotu ve sıradaki ölçümler: [QWEN-YEREL-01.md](QWEN-YEREL-01.md).
-SUNUCU-01'in sunucu kiralama önerisi uygulanmayacak. Aşağıdaki eski aşama özeti
-tarihsel bağlamdır; yeni yerel hazırlığın sırası QWEN-YEREL-01'de tanımlıdır.
+| Belge / grup | İşlev ve güncellik |
+|---|---|
+| [EGITIM-PLANI-STUDYO.md](EGITIM-PLANI-STUDYO.md) | Güncel mimari ve motor sorumluluğu; takvim/maliyet öneridir |
+| [TOPARLAMA-01 iş emri](CODEX-IS-EMRI-TOPARLAMA-01.md) | Güncel veri işi, sekiz aşama ve ayrı PR'lar |
+| [Son teslim / PR zinciri](TOPARLAMA-01-SON-DURUM.md) | Sekiz ayrı PR, kısmi/bekleyenler ve son test kanıtı |
+| [KATALOG.html](KATALOG.html) | 37 küme; 2578 aday incelemede, onaylı eğitim0; eski/sınav ayrı |
+| [Aşama8 hazırlığı](toparlama-01/ASAMA-8-HAZIRLIK.md) | Güncel plan2; koşullu maliyet, kapalı eğitim kapısı; eski pilot planı arşivde |
+| [IS-SIRASI.md](IS-SIRASI.md) | Gerçek iş durumu ve bekleyenler |
+| [EV-ULKE-SIRASI.md](EV-ULKE-SIRASI.md) | Ülke bazlı teslim ve açıklar |
+| [QWEN-KUSURLAR.md](QWEN-KUSURLAR.md) | Ev/prototip/pilot kusurları; eski kapanışlar yeni modeli onaylamaz |
+| EV-SOHBET-02, UK-IE, DK, ES, IT raporları ve inceleme HTML'leri | Main'deki 40 sohbet; kaynak ve denetim sınırları kendi raporlarında |
+| EV-QWEN-00B / 00D / 00C raporları | Sırasıyla eski sentetik prototip, gerçek CH planları ve ülke/dil uyarlaması; eğitim başarısı değildir |
+| [Körfez araştırması](../ev-projesi/KORFEZ-KAYNAK-ARASTIRMA-01.md), EV-ARAP-01 | Araştırma ve bekleyen Arapça sohbet/kaynak kapsamı |
+| PERDE-01 ve TEKSTİL-02 (`knowledge/ev-projesi/`) | Kaynak/ölçü/malzeme araştırması; ülke genellemesi değil |
+| [qwen-pilot-01/RECOVERY.json](qwen-pilot-01/RECOVERY.json) | #69'dan byte/hash korunarak kurtarılan 45 hafif dosya; tarihsel, yeni eğitim için bayat |
+| SINAV-01/01B, ONKAYIT ve DENETIM-D* | Tarihsel donmuş komut sınavları/denetimler; yeni birleşik sınav yerine geçmez |
+| QWEN-YEREL-01/02, SUNUCU-01, TASARIM-01, ARAŞTIRMA-01 | Önceki kararlar/iş emirleri; son iki geniş iş beklemede. Güncel emirle çelişen eski takvim/altyapı uygulanmaz |
+| [toparlama-01/](toparlama-01/) | Aşama kanıtları; `archive/` superseded sürümler, silinmedi |
 
-## Roller
+Karar sahibi kullanıcı; Codex veri/denetim hazırlığı, Claude stüdyo motoru ve `assets/` sorumlusu. İnsan onayı ilgili kayıt/hash kapsamındadır. Otomatik geometri denetimi tasarımcı, mevzuat veya üretim onayı değildir. Gerçek müşteri kaydı ancak açık rıza ve ayrı kararla kullanılabilir.
 
-| Rol | Kim | İş |
-|---|---|---|
-| Karar | Hüseyin Rahmi Göktaş | Kapsamı, uzmanı, modeli ve her aşamaya geçişi onaylar. |
-| Yürütücü | Codex | İş emirlerindeki önerileri uygular: veri, değerlendirme koşuları, raporlar. |
-| Denetçi | Claude | Ölçütleri önceden kayda geçirir, main'e gelen işi bağımsız denetler (D0, D1, …), bir sonraki iş emrini önerir. |
-| Uzman | (belirlenecek) | Altın cevapları ve tarz işaretlerini onaylar. Onay olmadan hiçbir kayıt "resmi" sayılmaz. |
-
-İş emirleri öneridir; karar sahibi değiştirebilir. Denetçi, yürütücünün ürettiği altın cevapları kendi yargısını
-görmeden ayrıca okuyabilir (kör ikinci okuma).
-
-## Ilkeler
-
-1. **Önce ölçüm, sonra eğitim.** Donmuş bir sınav seti ve önkayıtlı ölçütler olmadan hiçbir model, kural ya da
-   istem (prompt) değişikliği "iyileşme" diye raporlanmaz.
-2. **Sınav seti donar.** `test` bölümü bir kez dondurulur (`tests/ai-eval/FREEZE.json`, SHA-256). Donmuş dosya
-   değişirse puanlayıcı bunu raporlar ve sonuç geçersizdir. Geliştirme yalnız `dev` bölümüyle yapılır.
-3. **Altın cevap insan onaylıdır.** Codex'in ya da bir modelin ürettiği etiket `unreviewed` kalır; resmi puan yalnız
-   `approved` kayıtlarla hesaplanır. Onaysız puan "ön skor" diye etiketlenir.
-4. **Çok dilli şema, Türkçe ağırlık.** Ürün yalnız Türkçe ile sınırlı kalmayacak. Her kayıt `lang` taşır; sitenin
-   sekiz dili (tr, en, de, fr, nl, da, es, it) aynı şemada. Anadil denetimi olmayan çeviriler `notes` içinde işaretlenir.
-5. **Müşteri verisi yok.** Sınav ve eğitim verisi müşteri sohbeti, iletişim bilgisi ya da fotoğrafı içermez.
-   Tasarımcı onay kayıtları ileride ancak açık rızayla ve ayrı bir karar ile veri olur.
-6. **Yapay zekâ önerir, müşteri onaylar.** Model çıktısı doğrudan uygulanmaz; puanlayıcı da yalnız önerilen eylemleri ölçer.
-
-## Dosyalar
-
-- `CODEX-IS-EMRI-SINAV-01.md` — ilk iş emri önerisi: komut sınav seti ve taban ölçüm.
-- `ONKAYIT-SINAV-01.md` — ölçütler ve karar kuralları (sonuçlar gelmeden önce yazıldı).
-- `DENETIM-D0.md` — başlangıç denetimi: bugünkü kural okuyucunun bilinen hataları.
-- `tests/ai-eval/score.mjs` — puanlayıcı (denetçinin; yürütücü değiştirmez).
-- `tests/ai-eval/ornek.jsonl` — 10 biçim örneği. Sınavın parçası değildir.
-
-## Aşamalar (yol haritası özeti)
-
-1. Komut sınav seti ve taban ölçüm ← **şimdi**
-2. Sunucu yapay zekâsını beş aileye genişletmek; kural okuyucu ile aynı sınavda karşılaştırma
-3. Görsel sınav seti (fotoğraf → parametre) ve ölçüm
-4. Tarz işaretleme (uzman) → tarz başına parametre kuralları
-5. Tasarımcı onaylarından gerçek veri (rıza ile)
-6. Model ince ayarı — yalnız sınav bunu gerektirirse
+Denetimler: depo kökünde `node tests/hepsi.mjs`. Python seçimi gerekirse `AURA_PYTHON`, bağımlılık yolu için `PYTHONPATH` kullanılır; çıktı varsayılan `work/toparlama-tests/results.json`. Başarısız kontrol varsa komut sıfır dönmez. Ekran görüntüsü çekimi/veri üretimi/model koşusu bu komut tarafından başlatılmaz. Önceki README [arşivde](toparlama-01/archive/docs/README.md).

@@ -1,0 +1,1 @@
+Superseded, model çalıştırılmadan önceki ilk taslak. Ham dosya/hash korundu. Güncel 1.1 taslağında küçük oda ölçüsü istekle eşitlendi, niş ve oda ayrıldı, yerleşimlerde giriş kapısı eklendi. Bu taslak hiçbir zaman eğitime veya model ölçümüne girmedi.

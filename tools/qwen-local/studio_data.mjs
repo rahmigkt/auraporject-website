@@ -1,6 +1,6 @@
-// Replay the real studio action function with DOM effects stubbed, without editing assets/.
+// Replay the shared production action function, without editing assets/.
 // Only numeric set/delta actions are in this first curriculum. This is not a browser UI test.
-import vm from 'node:vm';
+import {applyDesignActions,headlessEnv} from '../../assets/forma/actions.js';
 import {readFileSync,writeFileSync,mkdirSync,existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {normalizeDesign,compileDesign,sample} from '../../assets/forma/generate.js';
@@ -10,18 +10,12 @@ import {buildMesh,worldPositions} from '../../assets/forma/build.js';
 import {analyse} from '../../assets/forma/physics.js';
 
 const sha=s=>createHash('sha256').update(s).digest('hex');
-const source=readFileSync(new URL('../../assets/forma/studio.js',import.meta.url),'utf8');
-const start=source.indexOf('function applyActions(actions) {'), end=source.indexOf('/** Bedroom set: which piece',start);
-if(start<0||end<0)throw Error('Studio action boundary changed; review extraction');
-const actionSource=source.slice(start,end);
+const actionSource=readFileSync(new URL('../../assets/forma/actions.js',import.meta.url),'utf8');
 export const SYSTEM='AURA Forma sayısal düzenleme pilotu. Yalnız {"actions":[...]} JSON döndür. set/delta işlemlerini mevcut vocabulary.params alanlarından seç; değerler mm. İstenmeyen alanları, malzemeleri ve aileyi değiştirme. İşlemler kullanıcı onayından önce öneridir.';
 export function replay(design,actions){
   const vocab=vocabulary(design), filtered=sanitizeActions(actions,vocab);
   if(JSON.stringify(filtered)!==JSON.stringify(actions)||actions.some(a=>!['set','delta'].includes(a.type)))throw Error('Non-curriculum action');
-  let after,compiled;
-  const context=vm.createContext({structuredClone,state:{design,lang:'tr'},familyOf,FAMILIES,
-    L:k=>k,partName:(_group,key)=>key,setDesign:d=>{after=normalizeDesign(d);compiled=compileDesign(after);}});
-  new vm.Script(actionSource+'\napplyActions('+JSON.stringify(actions)+');').runInContext(context,{timeout:15000});
+  const after=normalizeDesign(applyDesignActions(design,actions,headlessEnv()).design),compiled=compileDesign(after);
   if(!after||!compiled?.parts.length)throw Error('No compiled studio result');
   for(const part of compiled.parts.filter(p=>!p.line&&!p.planOnly)){
     const mesh=buildMesh(part),world=worldPositions(part);
@@ -53,7 +47,7 @@ export function buildRows(){
           const geometryChecks=familyOf(after).mod.validate(compiled,after.materials,buildMesh);
           rows.push({schema:'aura.studio.numeric/1',id:sha(`${group}/${type}/${key}`).slice(0,24),group,split,review:'unreviewed',lang:'tr',task:'studio_numeric_edit',
             input:{text,design:before,vocabulary:{family,params:Object.fromEntries(keys.map(k=>[k,v.params[k]])),allowedActions:['set','delta']}},
-            expected:{actions},evidence:{executor:'actual studio.js applyActions source in VM; UI side effects stubbed',actionSourceSha256:sha(actionSource.replaceAll('\r\n','\n')),changedParams:changed,partCount:compiled.parts.length,
+            expected:{actions},evidence:{executor:'shared production actions.js applyDesignActions; historical numeric curriculum, not browser UI',actionSourceSha256:sha(actionSource.replaceAll('\r\n','\n')),changedParams:changed,partCount:compiled.parts.length,
               afterDesign:after,geometryChecks,basePhysicsChecks:baseChecks,physicalSafetyApproved:false}});
         }catch(e){rejected.push({family,split,seed,key,type,reason:e.message});}
       }

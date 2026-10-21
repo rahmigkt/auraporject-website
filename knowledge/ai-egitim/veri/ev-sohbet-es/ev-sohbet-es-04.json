@@ -5138,11 +5138,11 @@
     },
     {
       "role": "user",
-      "content": "El patio no está medido; usa este plano suizo como ejemplo. Pensé que eran 80 metros útiles."
+      "content": "El patio no está medido. Aquí está el plano de la casa; pensé que eran 80 metros útiles."
     },
     {
       "role": "assistant",
-      "content": "Los recintos interiores del ejemplo suman 71,5 m², pero no son una superficie útil normativa certificada de vuestra casa. La geometría viene de Suiza y no puedo convertirla en una casa sevillana con patio por el lugar que habéis mencionado."
+      "content": "Las superficies interiores del plano suman 71,5 m². Debemos comprobar cómo se calcularon los 80 m² y medir el patio antes de decidir qué se puede hacer con él."
     },
     {
       "role": "user",
@@ -5182,7 +5182,7 @@
     },
     {
       "role": "assistant",
-      "content": "Sí: hay 6 muebles colocados por el solucionador y 5 desviaciones dimensionales de la referencia documentadas. La entrada, los desniveles, el baño y la posibilidad del patio siguen separados de ese resultado geométrico."
+      "content": "Hay una primera distribución para seis muebles. Quedan cinco medidas por comprobar, además de la entrada, los desniveles, el baño y la posibilidad del patio."
     },
     {
       "role": "user",
@@ -5190,7 +5190,7 @@
     },
     {
       "role": "assistant",
-      "content": "El diseñador recibe esa prioridad y las comprobaciones pendientes junto con la referencia, sin una promesa de accesibilidad ya conseguida. La decisión final sobre la casa, el patio y cualquier fabricación se toma tras estudiar el inmueble real."
+      "content": "Pondré la comodidad de tu madre al principio del resumen para el diseñador. Con él decidiréis la solución final de la casa y el patio después de comprobar el espacio y cómo se mueve ella."
     }
   ],
   "claimed_net_area_m2": 71.5,
@@ -5887,5 +5887,13 @@
     },
     "manual_item_coordinates": false
   },
-  "designer_summary_tr": "Sevilla: yürüteç kullanan anne için müstakil ev ve patio isteği. Patio geometrisi üretilmedi. Giriş, kot farkı, banyo, havalandırma ve transfer alanları açık; halı/perde/ışık henüz belirlenmiş değil."
+  "designer_summary_tr": "Sevilla: yürüteç kullanan anne için müstakil ev ve patio isteği. Patio geometrisi üretilmedi. Giriş, kot farkı, banyo, havalandırma ve transfer alanları açık; halı/perde/ışık henüz belirlenmiş değil.",
+  "style_revision": {
+    "version": "toparlama-4/1",
+    "old_dialogue_sha256": "df18a0b8bb151b67047674c174a8b44b006df657c57b1b31736880c6ef215b5d",
+    "new_dialogue_sha256": "5c86eb4edf8d54f8d0bc824608f44ed554d8b092171dbd4ed94217fbc1f06efa",
+    "body_sha256": "f6b2c4aa1c99ec2539e5abb480ed65a671812e901a66cab49addc797541b63fb",
+    "native_review": "pending",
+    "authorship": "Codex individually authored editorial corrections; no external model/API call"
+  }
 }
