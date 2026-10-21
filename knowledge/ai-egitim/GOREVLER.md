@@ -46,7 +46,7 @@ Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sa
 - [x] **G5 · Tasarımcıya gönderme hedefi.** `proje` katmanında `tasarimciya_gonder` işleminin motorda kalıcı kaydı.
 - [x] **G7 · Ev tekstili ürün araştırması** (`knowledge/ev-projesi/EV-TEKSTILI-URUN-ARASTIRMA-03.md`). Uygulama kullanıcı kararından sonra.
 - [x] **G8 · Eğitim kümesi derleyici** (`tools/egitim/derle.mjs`, `sistem.md`, `EGITIM-01.md`). İlk koşu: 51 uygun kayıt.
-- [ ] **G9 · Eğitim öncesi kararlar:** H1 ve H4 geldikçe denetim, kümeyi derleme, sınav puanlayıcısını yeni biçime bağlama.
+- [ ] **G9 · Eğitim öncesi kararlar:** H1 ve H4 geldikçe denetim, kümeyi derleme, sınav puanlayıcısını yeni biçime bağlama. C8 CPU engeli: beş eski ev sohbetinin `DURUM` girdisi 4096 token sınırını aşıyor (22102–35511); temsil/bağlam bütçesi gözden geçirilmeli ve CPU kapısı tekrar geçmeli. Kaynaklar silinmedi veya kırpılmadı. H1 derlenirken tek evin intent grupları farklı train/dev bölmelerine ayrılmamalı; ortak plan/kaynak grubu korunmalı (C8 yalnız ID çakışmasını denetler). Kanıt: `C8-CPU-DOGRULAMA.json`.
 - [ ] **G6 · C2 ve C3 çıktılarının denetimi** (her PR geldikçe).
 
 ## Kullanıcı kararları
@@ -55,8 +55,8 @@ Verildi (21 Ekim 2026): model Qwen3.5-9B; GPU sınırı 6 saat / 4 dolar; perde 
 
 **Codex için öncelik sırası (eğitime giden yol):** C1b → C8 → H4 (C5) → C7 → H5 (C6). C2, C3, C4 eğitim sonrasına kalır.
 
-Bekleyen:
+Kararların güncel durumu:
 
-- GPU harcama sınırı.
-- Model boyutu: Qwen3.5-9B ile devam mı.
-- Sitede kullanıcı oturumlarının izinle kaydı.
+- [x] GPU harcama sınırı: 6 saat / 4 dolar (#201).
+- [x] Model: Qwen3.5-9B (#201).
+- [ ] Sitede kullanıcı oturumlarının izinle kaydı.

@@ -1,0 +1,399 @@
+{
+  "version": "C8-CPU-proof/1",
+  "date": "2026-10-21",
+  "source_main": "128dd93",
+  "dependency_PR": 187,
+  "dependency_head": "2b3d033",
+  "source_code_sha256": {
+    "tools/qwen-local/train_gpu.py": "ad3b63bbe81cf924e745240f0e81c13ab72891344858963f6069e4473c3e8e65",
+    "tools/qwen-local/egitim01_runner.py": "3915dfee30258fd55c6cf86ae433f1f6723de51a7339e5c715d39f4dd33112c6",
+    "tools/qwen-local/egitim01_features.py": "9d57f593e288df12aebe3bd3442dc05d01ee62872f3efe0c82894aae97d34877",
+    "tools/qwen-local/requirements-egitim01-cpu.txt": "c07567169a6d96f6a81b32d2940edee7b0dd3851e6b0dfd3ac8b7ae7e28dd910",
+    "tests/egitim01-mask-check.py": "f89309d448dcb62b1ad6af63f33735e93835192acdf5ece3b12b6f8a06ee991e"
+  },
+  "archived_original": {
+    "git_commit": "128dd93",
+    "path": "tools/qwen-local/archive/train_gpu-before-egitim01.py",
+    "sha256": "c373a3fe4ddbf730c7980dd5d15251c730e06d5bf19cb7735bceb9f1e988e728",
+    "bytes_unchanged": true
+  },
+  "contract_unit_tests": {
+    "passed": 12,
+    "failed": 0,
+    "log": "............\n----------------------------------------------------------------------\nRan 12 tests in 0.615s\n\nOK\n"
+  },
+  "validation_commands": [
+    {
+      "command": [
+        "python",
+        "tests/egitim01-mask-check.py"
+      ],
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "milliseconds": 1578
+    },
+    {
+      "command": [
+        "python",
+        "tests/qwen-response-loss-check.py"
+      ],
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "milliseconds": 484
+    },
+    {
+      "command": [
+        "python",
+        "tests/qwen-training-plan-check.py"
+      ],
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "milliseconds": 4688
+    },
+    {
+      "command": [
+        "python",
+        "tests/qwen-large-gate-check.py"
+      ],
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "milliseconds": 343
+    },
+    {
+      "command": [
+        "python",
+        "tools/qwen-local/train_gpu.py",
+        "--dry-run",
+        "--samples",
+        "5",
+        "--tokenizer-dir",
+        "<local-tokenizer-dir>",
+        "--output",
+        "work/c8-dry-final"
+      ],
+      "expected_exit_code": 2,
+      "exit_code": 2,
+      "milliseconds": 4375
+    },
+    {
+      "command": [
+        "python",
+        "tools/qwen-local/train_gpu.py",
+        "--dry-run",
+        "--samples",
+        "5",
+        "--tokenizer-dir",
+        "<local-tokenizer-dir>",
+        "--output",
+        "work/c8-dry-repeat"
+      ],
+      "expected_exit_code": 2,
+      "exit_code": 2,
+      "milliseconds": 4485
+    },
+    {
+      "command": [
+        "python",
+        "tools/qwen-local/train_gpu.py",
+        "--dry-run",
+        "--samples",
+        "49",
+        "--tokenizer-dir",
+        "<local-tokenizer-dir>",
+        "--output",
+        "work/c8-train-final"
+      ],
+      "expected_exit_code": 2,
+      "exit_code": 2,
+      "milliseconds": 6797
+    }
+  ],
+  "final_native_five_example_run": {
+    "contract": "egitim-01/messages/reply-actions",
+    "model": "Qwen/Qwen3.5-9B",
+    "train_rows": 49,
+    "dev_rows": 2,
+    "data_files_sha256": {
+      "train.jsonl": "3380d7613a6d9b666592f70b3e12ee75a8fd552a590cdc2d4374577a65045e59",
+      "dev.jsonl": "d3bbabbd9167f0b4f8a6056f4fd2774c290da59fea480dc178c2c1ba80f9bccc",
+      "rapor.json": "d58f52c5dd12061d6c23977e5803e0a85d38345b5cfa0fe17d29bd574f7f9cd0"
+    },
+    "max_sequence_length": 4096,
+    "model_loaded": false,
+    "gpu_executed": false,
+    "training_started": false,
+    "status": "dry_run_context_overflow",
+    "samples": 5,
+    "selection": "Evenly spaced training rows only; no dev sampling",
+    "tokenizer_files_sha256": {
+      "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+      "tokenizer_config.json": "490498ee083cd1231edb428ad621829e69d9187a3ff9c4d0ffedfc7d8f95e436",
+      "chat_template.jinja": "a4aee8afcf2e0711942cf848899be66016f8d14a889ff9ede07bca099c28f715"
+    },
+    "tokenizer_packages": {
+      "tokenizers": "0.22.2",
+      "Jinja2": "3.1.6"
+    },
+    "features_sha256": "597e8b69f30d2e9ba2a98419e22483eeb71797277370e3e4cb9ad7b53fce6caa",
+    "assistant_payload_and_eos_masks_passed": true,
+    "context_gate_passed": false,
+    "over_context_rows": [
+      "ev-sohbet-dk:ev-sohbet-dk-02"
+    ],
+    "full_dataset_tokenization_checked": false,
+    "framework_modules_loaded": {
+      "torch": false,
+      "transformers": false,
+      "unsloth": false
+    },
+    "rows": [
+      {
+        "id": "ev-sohbet-dk:ev-sohbet-dk-02",
+        "tokens": 35511,
+        "assistant_turns": 8,
+        "supervised_tokens": 888,
+        "supervised_tokens_by_turn": [
+          51,
+          60,
+          58,
+          62,
+          52,
+          56,
+          57,
+          492
+        ],
+        "masked_tokens": 34623,
+        "within_context": false,
+        "leading_system_messages_coalesced": 1,
+        "rendered_sha256": "bfc0af97e96b5dac7a04c7eaba4f1f061b2e5f38599e46b264b38e696581d4b7",
+        "assistant_payloads_sha256": "447f26868b0291a26bf25de232060147ee766df8379a8a62c4377b129774dab0",
+        "decoded_targets_match": true,
+        "prompt_tokens_supervised": 0,
+        "truncated": false
+      },
+      {
+        "id": "perde-diyaloglar:perde-008",
+        "tokens": 515,
+        "assistant_turns": 1,
+        "supervised_tokens": 66,
+        "supervised_tokens_by_turn": [
+          66
+        ],
+        "masked_tokens": 449,
+        "within_context": true,
+        "leading_system_messages_coalesced": 0,
+        "rendered_sha256": "93d27321c075c539db45782bb651c42844472fb77cf538bd38c60b4d8941d7bb",
+        "assistant_payloads_sha256": "c85b918b92208a549222a5a1db86c35161415999cc0e6ec1aba27171af5d60f8",
+        "decoded_targets_match": true,
+        "prompt_tokens_supervised": 0,
+        "truncated": false
+      },
+      {
+        "id": "perde-diyaloglar:perde-022",
+        "tokens": 526,
+        "assistant_turns": 1,
+        "supervised_tokens": 74,
+        "supervised_tokens_by_turn": [
+          74
+        ],
+        "masked_tokens": 452,
+        "within_context": true,
+        "leading_system_messages_coalesced": 0,
+        "rendered_sha256": "36ce412ab60f395afc49db5c9b6b373f7545a03827a631963694d0d002b9c526",
+        "assistant_payloads_sha256": "da36ccbcc090c55acdb2402b3789e267c962dc0b185dd5551a00579db7ac3add",
+        "decoded_targets_match": true,
+        "prompt_tokens_supervised": 0,
+        "truncated": false
+      },
+      {
+        "id": "perde-diyaloglar:perde-034",
+        "tokens": 519,
+        "assistant_turns": 1,
+        "supervised_tokens": 64,
+        "supervised_tokens_by_turn": [
+          64
+        ],
+        "masked_tokens": 455,
+        "within_context": true,
+        "leading_system_messages_coalesced": 0,
+        "rendered_sha256": "25e412d5d70392ce4906cdf88f8b071b1e37d9c89ef259a1888094f5d222210f",
+        "assistant_payloads_sha256": "50a5220bdf32b0e8b8dc6ae7c960bc95d5d20747da842189283b2835a9226da9",
+        "decoded_targets_match": true,
+        "prompt_tokens_supervised": 0,
+        "truncated": false
+      },
+      {
+        "id": "ev-sohbet-arap:ev-sohbet-arap-12",
+        "tokens": 1018,
+        "assistant_turns": 8,
+        "supervised_tokens": 390,
+        "supervised_tokens_by_turn": [
+          48,
+          46,
+          51,
+          46,
+          45,
+          52,
+          50,
+          52
+        ],
+        "masked_tokens": 628,
+        "within_context": true,
+        "leading_system_messages_coalesced": 0,
+        "rendered_sha256": "61a4b25cc3de622c66b1b7bb994ea6022b76f2a6135fa667e42115703730e74c",
+        "assistant_payloads_sha256": "479978be8bf65cd2cbe9083b54cea34ed513c857502a9c9de9d8b190385b62d1",
+        "decoded_targets_match": true,
+        "prompt_tokens_supervised": 0,
+        "truncated": false
+      }
+    ]
+  },
+  "native_repeatability": {
+    "features_byte_identical": true,
+    "report_byte_identical": true,
+    "features_sha256": "597e8b69f30d2e9ba2a98419e22483eeb71797277370e3e4cb9ad7b53fce6caa",
+    "report_sha256": "de690d5b3faf100995792c398a783126a70f526de7672ead008d2984b592b21f"
+  },
+  "train_context_audit": {
+    "train_rows": 49,
+    "dev_rows": 2,
+    "dev_tokenization_checked": false,
+    "mask_checks_passed": 49,
+    "max_sequence_length": 4096,
+    "over_context_rows": [
+      {
+        "id": "ev-sohbet-dk:ev-sohbet-dk-02",
+        "tokens": 35511,
+        "assistant_turns": 8,
+        "supervised_tokens": 888,
+        "supervised_tokens_by_turn": [
+          51,
+          60,
+          58,
+          62,
+          52,
+          56,
+          57,
+          492
+        ],
+        "masked_tokens": 34623,
+        "within_context": false,
+        "leading_system_messages_coalesced": 1,
+        "rendered_sha256": "bfc0af97e96b5dac7a04c7eaba4f1f061b2e5f38599e46b264b38e696581d4b7",
+        "assistant_payloads_sha256": "447f26868b0291a26bf25de232060147ee766df8379a8a62c4377b129774dab0",
+        "decoded_targets_match": true,
+        "prompt_tokens_supervised": 0,
+        "truncated": false
+      },
+      {
+        "id": "ev-sohbet-it:ev-sohbet-it-01",
+        "tokens": 25880,
+        "assistant_turns": 8,
+        "supervised_tokens": 723,
+        "supervised_tokens_by_turn": [
+          47,
+          51,
+          49,
+          67,
+          46,
+          44,
+          41,
+          378
+        ],
+        "masked_tokens": 25157,
+        "within_context": false,
+        "leading_system_messages_coalesced": 1,
+        "rendered_sha256": "101ffdb83a30823c18b236be9019c3e6254f87151e7f95bd1b5d2c5e354eb4f8",
+        "assistant_payloads_sha256": "453f54cd3a5bacc0ecde439a66ad6d79f286fdfc77178ff5489b53e6fdf28a51",
+        "decoded_targets_match": true,
+        "prompt_tokens_supervised": 0,
+        "truncated": false
+      },
+      {
+        "id": "ev-sohbet-it:ev-sohbet-it-02",
+        "tokens": 23695,
+        "assistant_turns": 8,
+        "supervised_tokens": 763,
+        "supervised_tokens_by_turn": [
+          53,
+          57,
+          54,
+          56,
+          53,
+          52,
+          53,
+          385
+        ],
+        "masked_tokens": 22932,
+        "within_context": false,
+        "leading_system_messages_coalesced": 1,
+        "rendered_sha256": "f2314372fd0285cc64fff00ef9021bdb28abfac76844bbe5dc762a9ceffa74ac",
+        "assistant_payloads_sha256": "fde491353ce610a87c457577224f84afec8eea599f876697b5033ec9336a816b",
+        "decoded_targets_match": true,
+        "prompt_tokens_supervised": 0,
+        "truncated": false
+      },
+      {
+        "id": "ev-sohbet-it:ev-sohbet-it-03",
+        "tokens": 29176,
+        "assistant_turns": 8,
+        "supervised_tokens": 720,
+        "supervised_tokens_by_turn": [
+          42,
+          48,
+          51,
+          57,
+          47,
+          51,
+          49,
+          375
+        ],
+        "masked_tokens": 28456,
+        "within_context": false,
+        "leading_system_messages_coalesced": 1,
+        "rendered_sha256": "768a557a8b51e462ceb53238d082d97e63e124a5e6f06a9b0d598db088de252b",
+        "assistant_payloads_sha256": "4ef3d8f5b6607ffa7491a08263259ef186c5f6e6a563b573b4d5218885fab983",
+        "decoded_targets_match": true,
+        "prompt_tokens_supervised": 0,
+        "truncated": false
+      },
+      {
+        "id": "ev-sohbet-it:ev-sohbet-it-04",
+        "tokens": 22102,
+        "assistant_turns": 8,
+        "supervised_tokens": 843,
+        "supervised_tokens_by_turn": [
+          41,
+          48,
+          51,
+          62,
+          45,
+          53,
+          51,
+          492
+        ],
+        "masked_tokens": 21259,
+        "within_context": false,
+        "leading_system_messages_coalesced": 1,
+        "rendered_sha256": "531986df444ede8bbf5a2aa87cd235809d0eb333b2f6e9d87e90e420a0f262d6",
+        "assistant_payloads_sha256": "c56095ed9f1507496f4d31795f37d6a291d351dfd3c0416aaeed421ad2c4b1b5",
+        "decoded_targets_match": true,
+        "prompt_tokens_supervised": 0,
+        "truncated": false
+      }
+    ],
+    "features_sha256": "dc788300f030de370bcc0dcc2440ac5c0a04c98c4d36577d903a0a88b19c0879",
+    "data_files_sha256": {
+      "train.jsonl": "3380d7613a6d9b666592f70b3e12ee75a8fd552a590cdc2d4374577a65045e59",
+      "dev.jsonl": "d3bbabbd9167f0b4f8a6056f4fd2774c290da59fea480dc178c2c1ba80f9bccc",
+      "rapor.json": "d58f52c5dd12061d6c23977e5803e0a85d38345b5cfa0fe17d29bd574f7f9cd0"
+    }
+  },
+  "ready_for_training": false,
+  "remaining_work": "G9 must address the five oversized DURUM contexts and repeat the context gate; no rows were dropped, truncated or auto-resized.",
+  "gpu_execution": false,
+  "model_weights_loaded_or_downloaded": false,
+  "cuda_compatibility_retested": false,
+  "provider_resources_created": false,
+  "approval": "CPU masks and schema only; no training, model evaluation, or new cross-review approval inferred"
+}

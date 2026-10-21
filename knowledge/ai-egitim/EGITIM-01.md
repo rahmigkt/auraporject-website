@@ -73,10 +73,12 @@ Temel modelden iyi değilse yayına alınmaz.
 
 1. **Codex:**
    - C1b (#187 kalan düzeltmeler);
+   - C8 (`train_gpu.py` EGITIM-01 biçimi ve model yüklemeden CPU tokenizasyon/maske denetimi);
    - H4 (yerleşim verisini kısıt biçimine çevirmek);
    - C7 (Claude verisini denetlemek);
-   - `train_gpu.py`'yi `outputs/egitim-01` biçimine (messages, yanıt maskesi) bağlamak;
    - H5 (sınav temel ölçümü, CPU).
 2. **Claude:** H1 ve H4 kararlarını vermek; `derle.mjs` ile kümeyi derlemek; sınav puanlayıcısını yeni biçime bağlamak.
-3. **Kullanıcı:** GPU harcama sınırı, model onayı (Qwen3.5-9B), eğitimi başlatma onayı.
+3. **Kullanıcı:** Eğitimi başlatma onayı. Model Qwen3.5-9B ve 6 saat / 4 dolar sınırı zaten verilmiştir (#201).
 4. Eğitim (Codex altyapısı, kiralık GPU). Ardından sınav ve rapor.
+
+Güncel tek iş sırası `GOREVLER.md` içindedir. C8 CPU girişi ve ölçümleri: `tools/qwen-local/EGITIM-01-CPU.md`. Beş örneğin asistan JSON/EOS maskeleri doğru; ek 49 train denetiminde beş eski ev sohbeti 4096 token sınırını aşıyor (22102–35511). Kırpma yapılmadı. Bu bağlam engeli G9'da çözülmeden ve eğitim kapıları açılmadan GPU başlatılmaz; CPU denetimi eğitim yapılmış sayılmaz.
