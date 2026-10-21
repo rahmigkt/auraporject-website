@@ -43,3 +43,6 @@ in `knowledge/AURA-AI-ARCHITECTURE.md`; deterministic evidence guards are requir
 
 The older `/api/design/*` tool experiment remains source-only. Its generic
 geometry is not reintroduced into the active public studio.
+
+
+2026-10-21 compatibility repair: retained modules now import repository-root assets instead of the removed w4 checkout. Root regression tests import these in-repository historical modules; model calls are mocked. The historical server remains archived and is not deployed or started by imports. This repair does not activate any AI service.

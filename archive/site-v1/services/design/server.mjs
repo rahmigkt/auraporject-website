@@ -5,7 +5,7 @@ import http from 'node:http';
 import {readFile} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
-import {FAMILIES,DETAILS,LANGUAGES,normalizeStudio} from '../../w4/assets/design-library.js';
+import {FAMILIES,DETAILS,LANGUAGES,normalizeStudio} from '../../../../assets/design-library.js';
 const ROOT=fileURLToPath(new URL('../../',import.meta.url));
 const HOST=process.env.AURA_BIND||'127.0.0.1',PORT=Number(process.env.PORT||8770),MODEL=process.env.AURA_MODEL||'qwen2.5:7b-instruct';
 // Only the application server talks to Ollama. Never expose Ollama publicly.

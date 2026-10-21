@@ -7,7 +7,8 @@
 | [EGITIM-PLANI-STUDYO.md](EGITIM-PLANI-STUDYO.md) | Güncel mimari ve motor sorumluluğu; takvim/maliyet öneridir |
 | [TOPARLAMA-01 iş emri](CODEX-IS-EMRI-TOPARLAMA-01.md) | Güncel veri işi, sekiz aşama ve ayrı PR'lar |
 | [Son teslim / PR zinciri](TOPARLAMA-01-SON-DURUM.md) | Sekiz ayrı PR, kısmi/bekleyenler ve son test kanıtı |
-| [KATALOG.html](KATALOG.html) | 37 küme; 2578 aday incelemede, onaylı eğitim0; eski/sınav ayrı |
+| [Arapça ölçülü inceleme](EV-ARAP-OLCULU-01-inceleme.html) | 12referans plan/24parça/192mesaj; bütün ev/üst kat/meclis eksik |
+| [KATALOG.html](KATALOG.html) | 38 küme; 2590 aday incelemede, onaylı eğitim0; eski/sınav ayrı |
 | [Aşama8 hazırlığı](toparlama-01/ASAMA-8-HAZIRLIK.md) | Güncel plan2; koşullu maliyet, kapalı eğitim kapısı; eski pilot planı arşivde |
 | [IS-SIRASI.md](IS-SIRASI.md) | Gerçek iş durumu ve bekleyenler |
 | [EV-ULKE-SIRASI.md](EV-ULKE-SIRASI.md) | Ülke bazlı teslim ve açıklar |

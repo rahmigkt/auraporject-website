@@ -83,6 +83,11 @@ def convert(dataset,r,file,file_hash):
                     warnings.extend('motor_reject:'+str(x.get('neden')) for x in rep['red'])
             else:warnings.append('no_supported_layout_operations')
         if r.get('source_exceptions'):warnings.append('retained_source_geometry_exceptions')
+        if r.get('layout_scope'):
+            warnings.extend(['partial_family_room_scope','selected_layout_not_replayed_turn_by_turn'])
+            if r['layout_scope'].get('upper_floor_and_stair_pending'):warnings.append('upper_floor_and_stair_pending')
+            if r['layout_scope'].get('majlis_pending'):warnings.append('majlis_support_pending')
+            if any(q.get('selected_alternative',0)>0 for q in r.get('layout_requests',[])):warnings.append('selected_alternative_not_encoded_in_native_target')
     elif dataset['id'] in ['ev-plan-eu-00c','ev-plan-reel-00d']:
         warnings.append('legacy_program_targets_not_native_studio_operations')
     elif dataset['id']=='sohbet-ornekleri':

@@ -1,1 +1,1 @@
-export * from '../../w4/assets/design-tools.js';
+export * from '../../../../assets/design-tools.js';

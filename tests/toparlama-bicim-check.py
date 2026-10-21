@@ -11,7 +11,7 @@ base=Path('knowledge/ai-egitim/veri/birlesik')
 rows=[json.loads(line) for line in (base/'adaylar.jsonl').read_text(encoding='utf8').splitlines()]
 report=json.loads((base/'sayim-raporu.json').read_text(encoding='utf8'))
 validator=Draft202012Validator(json.loads(Path('knowledge/ai-egitim/AURA-EGITIM-1.schema.json').read_text(encoding='utf8')))
-assert len(rows)==report['candidate_rows']==2578
+assert len(rows)==report['candidate_rows']==2590
 assert len({r['id'] for r in rows})==len(rows)
 for row in rows:
     validator.validate(row)
@@ -24,7 +24,7 @@ for row in rows:
             assert set(item)<={'id','tur','en','derinlik','yukseklik'}
 assert not m.leakage(rows)
 assert report['source_lock']==m.source_lock()
-assert len(report['engine_evidence'])==40
+assert len(report['engine_evidence'])==52
 assert all(e['report']['gecti'] for e in report['engine_evidence'])
 for split in ['train','dev','test']:assert (base/(split+'.jsonl')).read_bytes()==b''
 
@@ -45,4 +45,4 @@ sample=copy.deepcopy(rows[0]);sample['denetim']['uyarilar']=['human_review_pendi
 decision={sample['id']:{'approved':True,'language_ok':True,'reviewer':'unit-fixture-not-human-approval','row_sha256':m.approval_digest(sample)}}
 approved=m.qualify(copy.deepcopy(sample),decision);assert approved['denetim']['gecti'];validator.validate(approved)
 sample['mesajlar'][0]['metin']+=' changed';assert not m.qualify(sample,decision)['denetim']['gecti']
-print('PASS 2578 schema-valid quarantined rows, 40 motor reports, empty exports, source/building split mutations, review-target hash binding')
+print('PASS 2590 schema-valid quarantined rows, 52 motor contract reports, empty exports, source/building split mutations, review-target hash binding')
