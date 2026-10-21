@@ -1,5 +1,5 @@
 // Interface text in the eight site languages. Missing keys fall back to English.
-import {AR, AR_P} from './i18n-ar.js?v=20261021c';
+import {AR, AR_P} from './i18n-ar.js?v=20261021d';
 export const UI_LANGS = {tr: 'Türkçe', en: 'English', de: 'Deutsch', fr: 'Français', nl: 'Nederlands', da: 'Dansk', es: 'Español', it: 'Italiano', ar: 'العربية'};
 export const isRTL = lang => lang === 'ar';
 
@@ -397,6 +397,12 @@ Object.assign(T, {
   inside:       ['İç düzen', 'Interior', 'Innenausstattung', 'Aménagement', 'Interieur', 'Indretning', 'Interior', 'Interno'],
   shelvesN:     ['Raf sayısı', 'Shelves', 'Böden', 'Étagères', 'Planken', 'Hylder', 'Estantes', 'Ripiani'],
   cellHeight:   ['Göz yüksekliği', 'Cell height', 'Fachhöhe', 'Hauteur de la case', 'Vakhoogte', 'Felthøjde', 'Altura de la celda', 'Altezza vano'],
+  leafCountL:   ['Kapak sayısı', 'Doors', 'Türen', 'Portes', 'Deuren', 'Låger', 'Puertas', 'Ante'],
+  leafSingle:   ['Tek kapak', 'Single', 'Einzeln', 'Simple', 'Enkel', 'Enkelt', 'Sencilla', 'Singola'],
+  leafDouble:   ['Çift kapak', 'Double', 'Doppelt', 'Double', 'Dubbel', 'Dobbelt', 'Doble', 'Doppia'],
+  leafTriple:   ['Üç kapak', 'Triple', 'Dreifach', 'Triple', 'Driedubbel', 'Tredobbelt', 'Triple', 'Tripla'],
+  leafTooWide:  ['Bu genişlikte tek kapak olmaz (en fazla ~620 mm)', 'Too wide for one door (max ~620 mm)', 'Zu breit für eine Tür (max. ~620 mm)', 'Trop large pour une porte (max ~620 mm)', 'Te breed voor één deur (max ~620 mm)', 'For bred til én låge (maks. ~620 mm)', 'Demasiado ancho para una puerta (máx. ~620 mm)', 'Troppo largo per un’anta (max ~620 mm)'],
+  leafTooNarrow:['Bu genişlik için kapaklar çok dar kalır (en az 250 mm)', 'Doors would be too narrow (min 250 mm)', 'Türen wären zu schmal (min. 250 mm)', 'Portes trop étroites (min 250 mm)', 'Deuren te smal (min 250 mm)', 'Lågerne bliver for smalle (min. 250 mm)', 'Puertas demasiado estrechas (mín. 250 mm)', 'Ante troppo strette (min 250 mm)'],
   bayWidth:     ['Bölme genişliği', 'Bay width', 'Feldbreite', 'Largeur de la travée', 'Vakbreedte', 'Sektionsbredde', 'Ancho del módulo', 'Larghezza campata'],
   auto:         ['Otomatik', 'Auto', 'Automatisch', 'Auto', 'Automatisch', 'Automatisk', 'Automático', 'Automatico'],
   splitCell:    ['Gözü ikiye böl', 'Split cell', 'Fach teilen', 'Diviser la case', 'Vak splitsen', 'Del felt', 'Dividir celda', 'Dividi vano'],
