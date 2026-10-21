@@ -1,7 +1,7 @@
 {
   "version": "aura-catalog/1",
   "date": "2026-10-21",
-  "snapshot_base": "d95f4a82d664f3a823b07f917115ff59dd9c85ac",
+  "snapshot_base": "422aed1c827057954e8e4e58b592700abb617d96",
   "hash_policy": "Exact tracked Git blob bytes; checkout CRLF does not change catalogue hashes. Aggregate hash includes file paths, sizes and primary/support roles.",
   "counts_policy": "Counts cover tracked primary rows only; sets may overlap, so totals are NOT unique projects. Null is unknown/not applicable, never zero.",
   "datasets": [
@@ -227,6 +227,45 @@
           "records": 200
         }
       ]
+    },
+    {
+      "id": "yerlesim-kisit",
+      "path": "knowledge/ai-egitim/veri/yerlesim-kisit/denetim",
+      "summary": "H4 constraint conversion; CPU replay in progress. Checkpoint samples are support, not a delivered full corpus.",
+      "sha256": "6babf0a14addd168471f31e5e51eacf4fbbd91fd42cc84e99ca260f180ab9cc7",
+      "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
+      "sources": [
+        "procthor-aura-cozucu.jsonl.gz; original Claude source, Codex transformation"
+      ],
+      "license": "ProcTHOR Apache-2.0 geometry; AURA authored transformation",
+      "record_count": null,
+      "record_count_scope": "research/support material; no candidate records asserted",
+      "languages": {},
+      "countries": {},
+      "layer": "yerlesim",
+      "status": "inceleme-bekliyor",
+      "known_defects": [
+        "Full 4340-room engine replay pending; do not count source rows as accepted targets",
+        "New Codex target labels require Claude cross-review",
+        "Procedural geometry is not designer-authored housing",
+        "No training export or full-corpus approval"
+      ],
+      "primary_files": [],
+      "files": [
+        {
+          "path": "knowledge/ai-egitim/veri/yerlesim-kisit/denetim/ilk-kisim.json",
+          "sha256": "6d1028d3049f99a6125632856c1fdde5719ee3d888320ee0b9be7b7e70007591",
+          "bytes": 168342,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/yerlesim-kisit/denetim/yapisal-denetim.json",
+          "sha256": "281591bf023e7c7e022697c1ff42ef97eb31ce3c18450f42b40c2eb179481140",
+          "bytes": 260,
+          "role": "support"
+        }
+      ],
+      "coverage": []
     },
     {
       "id": "ev-sohbet-02",
@@ -8786,6 +8825,34 @@
       "coverage": []
     },
     {
+      "id": "support-knowledge-ai-egitim-h4-g9a-cpu-dogrulama-json",
+      "path": "knowledge/ai-egitim/H4-G9A-CPU-DOGRULAMA.json",
+      "summary": "Structured research/support/derived artifacts; primary candidate counts not inferred.",
+      "sha256": "9721dd5cb3aff93c4cb74d0e055b93c24917f7b5e6517cd77e5d889f13ce93f1",
+      "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
+      "sources": [],
+      "license": null,
+      "record_count": null,
+      "record_count_scope": "research/support material; no candidate records asserted",
+      "languages": {},
+      "countries": {},
+      "layer": "genel-sohbet",
+      "status": "yalnizca-arastirma",
+      "known_defects": [
+        "Per-file reuse rights/semantic role must be verified before training"
+      ],
+      "primary_files": [],
+      "files": [
+        {
+          "path": "knowledge/ai-egitim/H4-G9A-CPU-DOGRULAMA.json",
+          "sha256": "e16010dc74332402452d004713416202b6d56689d089a7820b22e50d8289f4c6",
+          "bytes": 5195,
+          "role": "support"
+        }
+      ],
+      "coverage": []
+    },
+    {
       "id": "support-knowledge-ai-egitim-islem-sozlugu-1-json",
       "path": "knowledge/ai-egitim/ISLEM-SOZLUGU-1.json",
       "summary": "Structured research/support/derived artifacts; primary candidate counts not inferred.",
@@ -9516,9 +9583,9 @@
         "unknown_count_datasets": 0
       },
       "inceleme-bekliyor": {
-        "datasets": 15,
+        "datasets": 16,
         "records": 4390,
-        "unknown_count_datasets": 1
+        "unknown_count_datasets": 2
       },
       "superseded": {
         "datasets": 7,
@@ -9526,20 +9593,21 @@
         "unknown_count_datasets": 1
       },
       "yalnizca-arastirma": {
-        "datasets": 19,
+        "datasets": 20,
         "records": 1120,
-        "unknown_count_datasets": 17
+        "unknown_count_datasets": 18
       }
     },
     "licenses": {
       "AURA original authored text and synthetic room studies": 1,
+      "ProcTHOR Apache-2.0 geometry; AURA authored transformation": 1,
       "CC-BY-4.0 geometry; AURA-authored dialogue": 6,
       "AURA original authored text": 1,
       "CC-BY-4.0 geometry; AURA transformation": 2,
       "AURA original synthetic research": 2,
       "AURA original": 5,
       "AURA authored text; references keep own rights": 1,
-      "unknown": 20,
+      "unknown": 21,
       "AURA authored": 2,
       "AURA original authored tasks": 1
     },
@@ -10507,8 +10575,8 @@
     ]
   },
   "coverage": {
-    "structured_files": 1204,
-    "inventoried_files": 1204,
+    "structured_files": 1207,
+    "inventoried_files": 1207,
     "unassigned": []
   }
 }
