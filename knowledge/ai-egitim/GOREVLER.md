@@ -2,6 +2,8 @@
 
 Tek kaynak bu dosyadır. Her iş başında güncel `main`'den okunur. Biten iş `[x]` yapılır, PR numarası yazılır. Yeni iş buraya eklenir. Kapsam: yapay zekâ yalnızca ev projesi (plan, oda, eşya türü + toplam ölçü, yerleşim, perde/halı/ışık, tasarımcıya gönderme). Onay: çapraz denetim (`EGITIM-PLANI-STUDYO.md`).
 
+**Geçici kullanıcı yetkisi (21 Ekim 2026):** Claude'un beş günlük yokluğunda Codex ikinci geçişte kendi denetimini yaparak H4 → C7 → H5 → E1–E6 sırasını sürdürür. Öz denetim kararları `denetci: Codex`, `review_mode: user_authorized_self_review` ve gerçek kanıtla kaydedilir; Claude incelemesi gibi gösterilmez. İstisna 26 Ekim 2026 23.00 (İstanbul) sonrasında yeni kararlara uygulanmaz. Plan ve denetim ölçütleri: `CODEX-BES-GUN-PLANI.md`. Merge/GPU/ücretli işlem sınırları değişmez.
+
 ## Codex
 
 Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sayı uydurma yok. Eğitim, GPU, ücretli API, dağıtım yok. Her iş ayrı PR. Merge kullanıcı onayıyla.
