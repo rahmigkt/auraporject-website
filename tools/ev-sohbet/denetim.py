@@ -184,7 +184,9 @@ def check(record,fixtures=DIR/'kaynaklar'):
         if not req['attempts']:fail('missing_solver_attempt',req['space_id']);continue
         last=req['attempts'][-1]
         if last['result']['ok']:
-            for p in last['result']['alternatives'][0]['placements']:approved[p['id']]=p
+            index=req.get('selected_alternative',0);alternatives=last['result']['alternatives']
+            if type(index) is not int or not 0<=index<len(alternatives):fail('invalid_selected_alternative',req['space_id']);continue
+            for p in alternatives[index]['placements']:approved[p['id']]=p
     for it in plan['items']:
         p=approved.get(it['id'])
         if p is None or p['pos_xy_mm']!=it['pos_xy_mm'] or p['rot_deg']!=it['rot_deg']:fail('manual_item_position',it['id'])

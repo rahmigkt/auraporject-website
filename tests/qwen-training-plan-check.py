@@ -18,7 +18,7 @@ partial = dict(plan['stages'][0], training_examples=9, epochs=2)
 assert module.estimate_stage(partial, plan, 1)['optimizer_steps'] == 4
 report = json.loads(subprocess.check_output([sys.executable, 'tools/qwen-local/estimate.py'], encoding='utf-8'))
 assert report['available_training_rows'] == 0
-assert report['candidate_rows'] == 2578
+assert report['candidate_rows'] == 2590
 assert report['split_rows'] == dict(train=0,dev=0,test=0)
 assert report['current_training_duration_hours'] is None
 assert report['current_training_cost_usd'] is None

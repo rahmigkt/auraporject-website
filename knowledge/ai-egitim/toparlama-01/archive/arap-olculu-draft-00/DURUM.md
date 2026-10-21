@@ -1,0 +1,1 @@
+Superseded before any model run. First donor selection included historical proposed second floors. The level-count regression caught this. Replaced with verified single-level UK/IE and IT donors; no invented upper floors enter current measured records. No training or approval.

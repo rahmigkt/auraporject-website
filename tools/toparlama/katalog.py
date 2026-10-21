@@ -36,7 +36,7 @@ def build():
         obj=dict(id=id,path=paths[0] if len(paths)==1 else (str(Path(paths[0]).parent).replace('\\','/') if paths else None),summary=summary,sha256=hashlib.sha256(canonical(files)).hexdigest() if files else None,hash_scope='SHA256(canonical JSON of Git-blob file manifests)',sources=source or [],license=license,record_count=len(records) if primary else None,record_count_scope='primary files only; derivatives excluded' if primary else 'research/support material; no candidate records asserted',languages=dict(langs),countries=dict(countries),layer=layer,status=status,known_defects=defects or [],primary_files=primary,files=files,coverage=[dict(language=k[0],country=k[1],layer=k[2],records=v) for k,v in sorted(matrix.items(),key=lambda x:str(x[0]))])
         entries.append(obj);used.update(paths)
     base='knowledge/ai-egitim/veri/'
-    for batch in ['02','uk-ie','dk','es','it','arap']:
+    for batch in ['02','uk-ie','dk','es','it','arap','arap-olculu']:
         prefix=base+'ev-sohbet-'+batch+'/'
         paths=[p for p in contents if p.startswith(prefix)]
         primary=[p for p in paths if re.search(r'/ev-sohbet-[^/]+-\d+\.json$',p)]
