@@ -155,3 +155,34 @@ function solveOnce(space, roomItems, ev, {count = 3, beam = 60} = {}) {
   const out = []; for (const s of states) { const sig = s.placed.map(q => `${q.run}:${Math.round(q.rot)}:${Math.round(q.c[0] / 900)}:${Math.round(q.c[1] / 900)}`).join('|'); if (!out.some(o => o.sig === sig)) out.push({...s, sig}); if (out.length >= count) break; }
   return {ok: true, alternatives: out.map(s => ({score: +s.score.toFixed(2), notes: [...new Set(s.notes)], placements: s.placed.map(q => ({id: q.id, pos_xy_mm: q.c.map(Math.round), rot_deg: ((Math.round(q.rot) % 360) + 360) % 360}))}))};
 }
+
+// ---- shrink to fit: every studio product is parametric, so when the room is tight the assistant may PROPOSE smaller
+// sizes (and apply them only when the customer allows). Limits are usability limits inside the studio ranges:
+// ~600 mm per seat, four diners at a 1200 table, hanging space ≥ 1000 mm wardrobe; beds step through standard mattresses.
+export const SHRINK = {
+  sofa: {w: 1800, d: 800}, loveseat: {w: 1300, d: 800}, armchair: {w: 700, d: 750}, reading: {w: 700, d: 750}, coffee: {w: 700, d: 450}, side: {w: 400, d: 350},
+  dining: {w: 1200, d: 750}, desk: {w: 1000, d: 500}, tvunit: {w: 1200, d: 350}, wardrobe: {w: 1000, d: 560}, dresser: {w: 800, d: 400}, nightstand: {w: 400, d: 350},
+  bookcase: {w: 600, d: 250}, sideboard: {w: 1200, d: 400}, bed: {mattress: [1800, 1600, 1400, 1200, 900], frame: 100}
+};
+const sizeOf = it => it.size || compileItem(it).size;
+function smaller(it) { // one step smaller, or null at the limit
+  const k = it.design.kind, L = SHRINK[k], s = sizeOf(it); if (!L) return null;
+  if (k === 'bed') { const m = L.mattress.find(x => x < s.w - L.frame - 1); return m ? {...s, w: m + L.frame} : null; }
+  if (s.w > L.w) return {...s, w: Math.max(L.w, s.w - 200)};
+  if (s.d > L.d) return {...s, d: Math.max(L.d, s.d - 100)};
+  return null;
+}
+/** Try the room as asked; if it does not fit, shrink the piece that failed (then the largest movable pieces) step by step.
+ *  Returns {ok, result, changes:[{id, name, from:{w,d}, to:{w,d}}]} — changes are a proposal until the customer agrees. */
+export function fitByShrinking(space, roomItems, ev, opts = {}, maxTries = 8) {
+  const quick = o => solveOnce(space, items, ev, {...o, beam: Math.min(o.beam || 60, 40)}); // the search itself stays narrow; the final answer widens
+  let items = roomItems.map(it => ({...it, size: sizeOf(it)})), r = quick(opts); const orig = new Map(items.map(it => [it.id, it.size]));
+  for (let t = 0; !r.ok && t < maxTries; t++) {
+    const order = [items.find(it => it.id === r.failed), ...[...items].sort((a, b) => b.size.w * b.size.d - a.size.w * a.size.d)].filter(Boolean);
+    const target = order.find(it => smaller(it)); if (!target) break;
+    target.size = smaller(target); r = quick(opts);
+  }
+  if (!r.ok) r = solveRoom(space, items, ev, opts);
+  const changes = items.filter(it => { const o = orig.get(it.id); return o.w !== it.size.w || o.d !== it.size.d; }).map(it => ({id: it.id, name: it.name || it.design.kind, from: {w: orig.get(it.id).w, d: orig.get(it.id).d}, to: {w: it.size.w, d: it.size.d}}));
+  return {ok: r.ok, result: r, changes, items};
+}
