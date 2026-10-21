@@ -27,7 +27,7 @@ Perde ve halı seçimi (`tekstil`) de asistanın işidir. Mobilya detayı stüdy
 
 Bölme ev ya da grup bazında yapılır; aynı evin kayıtları aynı tarafta kalır. Dev payı %10. Çıktı `outputs/egitim-01/` altına yazılır ve Git'e girmez.
 
-## Bugünkü durum (ilk koşu)
+## İlk derlemenin durumu (#199, H1 onayı öncesi)
 
 | | Kayıt |
 |---|---|
@@ -38,11 +38,13 @@ Bölme ev ya da grup bazında yapılır; aynı evin kayıtları aynı tarafta ka
 
 `ev-plan-eu-00c` (2.400) ve `ev-plan-reel-00d` ret aldı. İkisi de eski sözleşmede: plan_program JSON'u, motor işlemi yok, kalıp cevaplar.
 
-51 kayıt eğitim için yetmez. Kümeyi dolduracak işler:
+İlk koşudaki 51 kayıt eğitim için yetersizdi. Güncel main `af8ed63` ve C8 derleyici yoluyla yeniden ölçüm: **1851 kayıt (1759 train / 92 dev)**; H1'in 1800 kaydı artık onaylıdır (#187, #202). Bu sayım eğitim hazır demek değildir: bağlam taşmaları ve H1'in ortak planı için train/dev grup izolasyonu G9'da çözülmelidir. Kanıt: `C8-CPU-DOGRULAMA.json`.
+
+Kümeyi dolduracak işler:
 
 | Kaynak | Beklenen | Durum |
 |---|---|---|
-| H1 ev projesi istekleri (#187) | ~1.800 (tekstil dahil) | C1b düzeltmesi, sonra Claude onayı |
+| H1 ev projesi istekleri (#187) | 1.800 (tekstil dahil) | Onaylı ve main'de (#187, #202); derlemeye alındı |
 | H4 yerleşim becerisi (G3 verisinden) | ~3.000 çözülen + ~1.200 "sığmıyor" | Codex dönüştürür, Codex denetler (Claude verisi) |
 | 47 eski sohbet (C2) | 47 | Codex düzeltir, Claude denetler |
 | H2 Avrupa sohbetleri | ülke başına 30 | Codex üretir |

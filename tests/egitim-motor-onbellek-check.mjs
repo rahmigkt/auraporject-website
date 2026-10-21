@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import {motorDenetimi} from '../tools/egitim/motor-onbellek.mjs';
+let calls=0;
+const engine=(state, actions)=>{calls++; return {rapor:{red:state.reject || actions[0]?.bad ? [{}] : []}};};
+const cache=motorDenetimi(engine), state={room:'living'}, actions=[{type:'place',width:2000}];
+assert(cache.kabul(state,actions));
+assert(cache.kabul(structuredClone(state),structuredClone(actions)));
+assert.equal(calls,1,'Identical inputs within the same run may share a replay');
+assert(!cache.kabul({...state,reject:true},actions));
+assert(!cache.kabul(state,[{...actions[0],bad:true}]));
+assert(!cache.kabul(state,[{...actions[0],bad:true}]),'Repeated rejections must stay rejected');
+actions[0].width=2500;
+assert(cache.kabul(state,actions));
+assert.equal(calls,4,'Changed state, changed operation or a mutated input must replay');
+assert.deepEqual(cache.sayim,{kayit:6,benzersiz:4,tekrar:2});
+assert(motorDenetimi(engine).kabul(state,actions));
+assert.equal(calls,5,'A new compilation must not trust a previous run');
+console.log('PASS fresh engine per run; exact-input reuse; state/action mutations; cached rejection');

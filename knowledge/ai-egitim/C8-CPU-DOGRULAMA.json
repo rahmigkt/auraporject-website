@@ -1,15 +1,17 @@
 {
-  "version": "C8-CPU-proof/1",
+  "version": "C8-CPU-proof/2",
   "date": "2026-10-21",
-  "source_main": "128dd93",
-  "dependency_PR": 187,
-  "dependency_head": "2b3d033",
+  "source_main": "af8ed63892c321cb9bf3b56af81c245a1a56d8da",
+  "H1_approval": "PR #187 merged; Claude cross-review #202 is suitable; no approval changed by C8",
   "source_code_sha256": {
     "tools/qwen-local/train_gpu.py": "ad3b63bbe81cf924e745240f0e81c13ab72891344858963f6069e4473c3e8e65",
     "tools/qwen-local/egitim01_runner.py": "3915dfee30258fd55c6cf86ae433f1f6723de51a7339e5c715d39f4dd33112c6",
     "tools/qwen-local/egitim01_features.py": "9d57f593e288df12aebe3bd3442dc05d01ee62872f3efe0c82894aae97d34877",
     "tools/qwen-local/requirements-egitim01-cpu.txt": "c07567169a6d96f6a81b32d2940edee7b0dd3851e6b0dfd3ac8b7ae7e28dd910",
-    "tests/egitim01-mask-check.py": "f89309d448dcb62b1ad6af63f33735e93835192acdf5ece3b12b6f8a06ee991e"
+    "tests/egitim01-mask-check.py": "f89309d448dcb62b1ad6af63f33735e93835192acdf5ece3b12b6f8a06ee991e",
+    "tools/egitim/derle.mjs": "9bca04b5df5182314d21ec8c6ecd425e055fcb8e4843feb9b6540fb4e8e1498f",
+    "tools/egitim/motor-onbellek.mjs": "daace9aafea5cd1f30ad16fa6402d68c4be69a3ac6f1f2092a9b81958579c408",
+    "tests/egitim-motor-onbellek-check.mjs": "1022c75ad631e3f3d59f28fd304a0c39a69070020361eac6ad0d481c14973c98"
   },
   "archived_original": {
     "git_commit": "128dd93",
@@ -19,104 +21,104 @@
   },
   "contract_unit_tests": {
     "passed": 12,
-    "failed": 0,
-    "log": "............\n----------------------------------------------------------------------\nRan 12 tests in 0.615s\n\nOK\n"
+    "failed": 0
   },
-  "validation_commands": [
+  "targeted_checks": [
     {
       "command": [
         "python",
         "tests/egitim01-mask-check.py"
       ],
-      "expected_exit_code": 0,
       "exit_code": 0,
-      "milliseconds": 1578
+      "stdout": "",
+      "stderr": "............\n----------------------------------------------------------------------\nRan 12 tests in 0.704s\n\nOK\n"
     },
     {
       "command": [
         "python",
         "tests/qwen-response-loss-check.py"
       ],
-      "expected_exit_code": 0,
       "exit_code": 0,
-      "milliseconds": 484
+      "stdout": "PASS assistant-only loss, target EOS retained, prompt excluded, aligned masks and no silent truncation.\n",
+      "stderr": ""
     },
     {
       "command": [
         "python",
         "tests/qwen-training-plan-check.py"
       ],
-      "expected_exit_code": 0,
       "exit_code": 0,
-      "milliseconds": 4688
+      "stdout": "PASS training-plan arithmetic, partial batches, honest data availability, hypothetical timings and invalid measured values.\nPASS response-only labels, padding/empty/invalid-mask rejection, disabled GPU gate, preserved historical plan\n",
+      "stderr": ""
     },
     {
       "command": [
         "python",
         "tests/qwen-large-gate-check.py"
       ],
-      "expected_exit_code": 0,
       "exit_code": 0,
-      "milliseconds": 343
+      "stdout": "PASS fail-closed thresholds, missing evidence, explicit approval and invalid metric types.\n",
+      "stderr": ""
     },
     {
       "command": [
-        "python",
-        "tools/qwen-local/train_gpu.py",
-        "--dry-run",
-        "--samples",
-        "5",
-        "--tokenizer-dir",
-        "<local-tokenizer-dir>",
-        "--output",
-        "work/c8-dry-final"
+        "node",
+        "tests/egitim-motor-onbellek-check.mjs"
       ],
-      "expected_exit_code": 2,
-      "exit_code": 2,
-      "milliseconds": 4375
-    },
-    {
-      "command": [
-        "python",
-        "tools/qwen-local/train_gpu.py",
-        "--dry-run",
-        "--samples",
-        "5",
-        "--tokenizer-dir",
-        "<local-tokenizer-dir>",
-        "--output",
-        "work/c8-dry-repeat"
-      ],
-      "expected_exit_code": 2,
-      "exit_code": 2,
-      "milliseconds": 4485
-    },
-    {
-      "command": [
-        "python",
-        "tools/qwen-local/train_gpu.py",
-        "--dry-run",
-        "--samples",
-        "49",
-        "--tokenizer-dir",
-        "<local-tokenizer-dir>",
-        "--output",
-        "work/c8-train-final"
-      ],
-      "expected_exit_code": 2,
-      "exit_code": 2,
-      "milliseconds": 6797
+      "exit_code": 0,
+      "stdout": "PASS fresh engine per run; exact-input reuse; state/action mutations; cached rejection\n",
+      "stderr": ""
     }
   ],
+  "compiled_dataset": {
+    "surum": "egitim-01",
+    "motor": "studyo-motoru/1",
+    "motor_denetimi": {
+      "kayit": 1535,
+      "benzersiz": 149,
+      "tekrar": 1386
+    },
+    "tarih": "2026-10-21T19:04:01.115Z",
+    "toplam": 1981,
+    "alinan": 1851,
+    "neden": {
+      "karar:duzelt": 47,
+      "karar:bekliyor": 1,
+      "karar:ret": 82
+    },
+    "train": 1759,
+    "dev": 92,
+    "kume": {
+      "ev-sohbet-dk": 1,
+      "ev-sohbet-it": 4,
+      "perde-diyaloglar": 34,
+      "ev-sohbet-arap": 12,
+      "hacim-1-istek": 1800
+    },
+    "dil": {
+      "da": 203,
+      "it": 207,
+      "nl": 203,
+      "fr": 205,
+      "de": 205,
+      "en": 205,
+      "sv": 2,
+      "no": 2,
+      "es": 202,
+      "pt": 2,
+      "tr": 203,
+      "ar": 212
+    }
+  },
   "final_native_five_example_run": {
     "contract": "egitim-01/messages/reply-actions",
     "model": "Qwen/Qwen3.5-9B",
-    "train_rows": 49,
-    "dev_rows": 2,
+    "train_rows": 1759,
+    "dev_rows": 92,
     "data_files_sha256": {
-      "train.jsonl": "3380d7613a6d9b666592f70b3e12ee75a8fd552a590cdc2d4374577a65045e59",
-      "dev.jsonl": "d3bbabbd9167f0b4f8a6056f4fd2774c290da59fea480dc178c2c1ba80f9bccc",
-      "rapor.json": "d58f52c5dd12061d6c23977e5803e0a85d38345b5cfa0fe17d29bd574f7f9cd0"
+      "train.jsonl": "7394924f020fadcd39df929835ec4040bbf4bb82bf784a521f339d35f04e6066",
+      "dev.jsonl": "4d468374317b08d7755487da32575e3d09ac6308fe5db2aa27bfe9ab7b92ab04",
+      "rapor.json": "0e8e0bea95d76e47ea965397e6aa7ae6417b419c61987da8653d3194e39be55c"
     },
     "max_sequence_length": 4096,
     "model_loaded": false,
@@ -134,7 +136,7 @@
       "tokenizers": "0.22.2",
       "Jinja2": "3.1.6"
     },
-    "features_sha256": "597e8b69f30d2e9ba2a98419e22483eeb71797277370e3e4cb9ad7b53fce6caa",
+    "features_sha256": "a0d699e6a7133f2db879f11a321c46325ccecf07694ec5ee098959b0c23465ba",
     "assistant_payload_and_eos_masks_passed": true,
     "context_gate_passed": false,
     "over_context_rows": [
@@ -172,76 +174,69 @@
         "truncated": false
       },
       {
-        "id": "perde-diyaloglar:perde-008",
-        "tokens": 515,
+        "id": "hacim-1-istek:hacim-istek-de-011",
+        "tokens": 2400,
         "assistant_turns": 1,
-        "supervised_tokens": 66,
+        "supervised_tokens": 127,
         "supervised_tokens_by_turn": [
-          66
+          127
         ],
-        "masked_tokens": 449,
+        "masked_tokens": 2273,
         "within_context": true,
-        "leading_system_messages_coalesced": 0,
-        "rendered_sha256": "93d27321c075c539db45782bb651c42844472fb77cf538bd38c60b4d8941d7bb",
-        "assistant_payloads_sha256": "c85b918b92208a549222a5a1db86c35161415999cc0e6ec1aba27171af5d60f8",
+        "leading_system_messages_coalesced": 1,
+        "rendered_sha256": "a5526b19277df01df6f86cbf01077abc5c50f1d64cd15effed83541bd2fba247",
+        "assistant_payloads_sha256": "ff9d6ac1912eaa97422820ff2bfd0279d5f85a3ac28bc474933b1d688995547e",
         "decoded_targets_match": true,
         "prompt_tokens_supervised": 0,
         "truncated": false
       },
       {
-        "id": "perde-diyaloglar:perde-022",
-        "tokens": 526,
+        "id": "hacim-1-istek:hacim-istek-es-076",
+        "tokens": 2243,
         "assistant_turns": 1,
-        "supervised_tokens": 74,
+        "supervised_tokens": 42,
         "supervised_tokens_by_turn": [
-          74
+          42
         ],
-        "masked_tokens": 452,
+        "masked_tokens": 2201,
         "within_context": true,
-        "leading_system_messages_coalesced": 0,
-        "rendered_sha256": "36ce412ab60f395afc49db5c9b6b373f7545a03827a631963694d0d002b9c526",
-        "assistant_payloads_sha256": "da36ccbcc090c55acdb2402b3789e267c962dc0b185dd5551a00579db7ac3add",
+        "leading_system_messages_coalesced": 1,
+        "rendered_sha256": "423cca56757b48bafefe8b0dc5fdcd0779b87f98bd7d02d6727fb9eccc8b0f31",
+        "assistant_payloads_sha256": "ce1bff813e2991997eb816d70d7845b5bc26228c7a3c4d2ed24ccad33dc681d7",
         "decoded_targets_match": true,
         "prompt_tokens_supervised": 0,
         "truncated": false
       },
       {
-        "id": "perde-diyaloglar:perde-034",
-        "tokens": 519,
+        "id": "hacim-1-istek:hacim-istek-it-140",
+        "tokens": 2465,
         "assistant_turns": 1,
-        "supervised_tokens": 64,
+        "supervised_tokens": 176,
         "supervised_tokens_by_turn": [
-          64
+          176
         ],
-        "masked_tokens": 455,
+        "masked_tokens": 2289,
         "within_context": true,
-        "leading_system_messages_coalesced": 0,
-        "rendered_sha256": "25e412d5d70392ce4906cdf88f8b071b1e37d9c89ef259a1888094f5d222210f",
-        "assistant_payloads_sha256": "50a5220bdf32b0e8b8dc6ae7c960bc95d5d20747da842189283b2835a9226da9",
+        "leading_system_messages_coalesced": 1,
+        "rendered_sha256": "ca5ed7040cc23c7dbef370bc943a42097acecd683c752d5bc7b3d7ddd2c8203a",
+        "assistant_payloads_sha256": "8efb5a36f23809f804281cbcea3d37ff9558529797bc8abcdb0b34851a0730f0",
         "decoded_targets_match": true,
         "prompt_tokens_supervised": 0,
         "truncated": false
       },
       {
-        "id": "ev-sohbet-arap:ev-sohbet-arap-12",
-        "tokens": 1018,
-        "assistant_turns": 8,
-        "supervised_tokens": 390,
+        "id": "hacim-1-istek:hacim-istek-tr-200",
+        "tokens": 2230,
+        "assistant_turns": 1,
+        "supervised_tokens": 32,
         "supervised_tokens_by_turn": [
-          48,
-          46,
-          51,
-          46,
-          45,
-          52,
-          50,
-          52
+          32
         ],
-        "masked_tokens": 628,
+        "masked_tokens": 2198,
         "within_context": true,
-        "leading_system_messages_coalesced": 0,
-        "rendered_sha256": "61a4b25cc3de622c66b1b7bb994ea6022b76f2a6135fa667e42115703730e74c",
-        "assistant_payloads_sha256": "479978be8bf65cd2cbe9083b54cea34ed513c857502a9c9de9d8b190385b62d1",
+        "leading_system_messages_coalesced": 1,
+        "rendered_sha256": "8862d9d97d288ccbc6a471bc3e4c0d18c860deec29fa8d42be1a8d7d3d3dd38e",
+        "assistant_payloads_sha256": "aa56fa8153f9a054c8000c21e9d9c928efd384474c767a626e82273c58ad6041",
         "decoded_targets_match": true,
         "prompt_tokens_supervised": 0,
         "truncated": false
@@ -251,14 +246,14 @@
   "native_repeatability": {
     "features_byte_identical": true,
     "report_byte_identical": true,
-    "features_sha256": "597e8b69f30d2e9ba2a98419e22483eeb71797277370e3e4cb9ad7b53fce6caa",
-    "report_sha256": "de690d5b3faf100995792c398a783126a70f526de7672ead008d2984b592b21f"
+    "features_sha256": "a0d699e6a7133f2db879f11a321c46325ccecf07694ec5ee098959b0c23465ba",
+    "report_sha256": "ca5d226d07b47feb9457294dad3e2a617387c2c1fd9d4393e7bcf23cb43e77ac"
   },
   "train_context_audit": {
-    "train_rows": 49,
-    "dev_rows": 2,
+    "train_rows": 1759,
+    "dev_rows": 92,
     "dev_tokenization_checked": false,
-    "mask_checks_passed": 49,
+    "mask_checks_passed": 1759,
     "max_sequence_length": 4096,
     "over_context_rows": [
       {
@@ -382,18 +377,193 @@
         "truncated": false
       }
     ],
-    "features_sha256": "dc788300f030de370bcc0dcc2440ac5c0a04c98c4d36577d903a0a88b19c0879",
+    "features_sha256": "bb20433aebf309b3fbf9a9d831a6e6456ec4cea709a7b5f3d0a8660d1dd75081",
     "data_files_sha256": {
-      "train.jsonl": "3380d7613a6d9b666592f70b3e12ee75a8fd552a590cdc2d4374577a65045e59",
-      "dev.jsonl": "d3bbabbd9167f0b4f8a6056f4fd2774c290da59fea480dc178c2c1ba80f9bccc",
-      "rapor.json": "d58f52c5dd12061d6c23977e5803e0a85d38345b5cfa0fe17d29bd574f7f9cd0"
+      "train.jsonl": "7394924f020fadcd39df929835ec4040bbf4bb82bf784a521f339d35f04e6066",
+      "dev.jsonl": "4d468374317b08d7755487da32575e3d09ac6308fe5db2aa27bfe9ab7b92ab04",
+      "rapor.json": "0e8e0bea95d76e47ea965397e6aa7ae6417b419c61987da8653d3194e39be55c"
     }
   },
+  "known_group_leakage": {
+    "source": "plan:hacim-istek-connected-home-C1-v2",
+    "H1_rows_by_split": {
+      "train": 1710,
+      "dev": 90
+    },
+    "problem": "Compiler source.group is an intent, although H1 uses one synthetic home. G9 must keep the common home in one partition. ID disjointness alone is insufficient."
+  },
+  "full_suite": {
+    "complete": false,
+    "reason": "Stopped after Forma exceeded the suite 180-second limit, while heavy compilation/replay was running. Separate relevant checks are recorded above. A full green result is not claimed.",
+    "completed_results": [
+      {
+        "id": "tests/ai-workspace-check.mjs",
+        "file": "tests/ai-workspace-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS 3 imported home templates × 14 furniture families: proposals do not mutate rooms, bounds, occupancy, edit exclusion, sliding-door clearance and sanitised restore.\n",
+        "stderr": "",
+        "milliseconds": 1062
+      },
+      {
+        "id": "tests/assistant-contract-check.mjs",
+        "file": "tests/assistant-contract-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS 26 style directions, six categories, response allowlist, explicit avoid context, 52 unreviewed candidates and reviewed-only training export.\n",
+        "stderr": "",
+        "milliseconds": 630
+      },
+      {
+        "id": "tests/brief-pdf-check.mjs",
+        "file": "tests/brief-pdf-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS brief PDF accepts no design and paginates long requests without invoking furniture drawing (mock canvas).\n",
+        "stderr": "",
+        "milliseconds": 1270
+      },
+      {
+        "id": "tests/camera-framing-check.mjs",
+        "file": "tests/camera-framing-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS 243 perspective fits: all 3D envelope corners stay in frame.\n",
+        "stderr": "",
+        "milliseconds": 460
+      },
+      {
+        "id": "tests/catalogue-check.mjs",
+        "file": "tests/catalogue-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS 11 spaces, 14 groups, 88 product types, 62 valid paths; no misleading drawing for unsupported products; saved-state migration and invalid cross-room choices.\n",
+        "stderr": "",
+        "milliseconds": 550
+      },
+      {
+        "id": "tests/catalogue-graph-check.mjs",
+        "file": "tests/catalogue-graph-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS 62 allowed and 13490 rejected space/group/product triples, migrations and context resets.\n",
+        "stderr": "",
+        "milliseconds": 1267
+      },
+      {
+        "id": "tests/choice-flow-check.mjs",
+        "file": "tests/choice-flow-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS 463 option variants across 14 complete family flows; fixed seats, rounded/sloped arms, back variants, chaise, round tops, project hand-off.\nPASS continuous back support for 9 armless seating variants\n",
+        "stderr": "",
+        "milliseconds": 811
+      },
+      {
+        "id": "tests/codesign-check.mjs",
+        "file": "tests/codesign-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS 336 studio geometry combinations and response validation\n",
+        "stderr": "",
+        "milliseconds": 900
+      },
+      {
+        "id": "tests/csg-check.mjs",
+        "file": "tests/csg-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "cut 2525 -> 2336 ok\n",
+        "stderr": "",
+        "milliseconds": 1322
+      },
+      {
+        "id": "tests/egitim01-mask-check.py",
+        "file": "tests/egitim01-mask-check.py",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "",
+        "stderr": "............\r\n----------------------------------------------------------------------\r\nRan 12 tests in 2.980s\r\n\r\nOK\r\n",
+        "milliseconds": 4208
+      },
+      {
+        "id": "tests/ev-arap-olculu-check.mjs",
+        "file": "tests/ev-arap-olculu-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS 12 exact production-solver replays / 24 compiled footprints; requested sizes unchanged, no fallback, no invented upper floor or training approval\n",
+        "stderr": "",
+        "milliseconds": 36882
+      },
+      {
+        "id": "tests/ev-arap-olculu-geometry-check.py",
+        "file": "tests/ev-arap-olculu-geometry-check.py",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS 12 measured-source geometry audits, country/language/8-turn truthfulness, manual-position/source/wall mutations, 12 SVG hashes; native and designer review pending\r\n",
+        "stderr": "",
+        "milliseconds": 19968
+      },
+      {
+        "id": "tests/forma-check.mjs",
+        "file": "tests/forma-check.mjs",
+        "args": [],
+        "code": null,
+        "timedOut": true,
+        "stdout": "",
+        "stderr": "",
+        "milliseconds": 180026
+      },
+      {
+        "id": "tests/hacim-exam-revalidation-policy-check.mjs",
+        "file": "tests/hacim-exam-revalidation-policy-check.mjs",
+        "args": [],
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "PASS strict absent-to-zero leaf normalization policy; nonzero/existing/width/unrelated changes rejected\n",
+        "stderr": "",
+        "milliseconds": 125
+      }
+    ]
+  },
+  "previous_pre_H1_approval_audit": {
+    "source_main": "128dd93",
+    "train_rows": 49,
+    "dev_rows": 2,
+    "mask_checks_passed": 49,
+    "historical_evidence_sha256": "7b030f46e603cc2cb0cdea4b94b259e35188dbb3f0a4ab772cfd6f64a6ebb4d3",
+    "superseded_by_this_report": true
+  },
   "ready_for_training": false,
-  "remaining_work": "G9 must address the five oversized DURUM contexts and repeat the context gate; no rows were dropped, truncated or auto-resized.",
+  "remaining_work": "G9 must resolve oversized DURUM contexts and H1 home grouping, then repeat CPU/context/split gates. No rows dropped or truncated.",
   "gpu_execution": false,
   "model_weights_loaded_or_downloaded": false,
   "cuda_compatibility_retested": false,
   "provider_resources_created": false,
-  "approval": "CPU masks and schema only; no training, model evaluation, or new cross-review approval inferred"
+  "approval": "CPU schema/masks only; no training, model evaluation, or inferred cross-review approval"
 }
