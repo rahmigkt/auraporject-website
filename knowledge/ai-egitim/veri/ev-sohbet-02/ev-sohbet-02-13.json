@@ -9505,13 +9505,13 @@
     },
     {
       "role": "user",
-      "content": "Eine Ebene. Wir nehmen vorerst diesen Schweizer Referenzplan, ich hatte 82 Quadratmeter angenommen.",
+      "content": "Es geht um eine Etage. Hier ist unser Grundriss; ich hatte mit 82 Quadratmetern gerechnet.",
       "language": "de",
       "turn": 2
     },
     {
       "role": "assistant",
-      "content": "Die Innenflächen der Referenz ergeben 70,4 m², davon 22,9 m² im vorhandenen Wohnzimmer. Die 82 passen nicht zu dieser Flächengrenze; welche Maße lagen Ihrer Schätzung zugrunde?",
+      "content": "Die Innenräume ergeben zusammen 70,4 m²; das vorhandene Wohnzimmer hat 22,9 m². Wissen Sie noch, ob die 82 m² auch Außenflächen enthalten?",
       "language": "de",
       "turn": 2
     },
@@ -9571,7 +9571,7 @@
     },
     {
       "role": "assistant",
-      "content": "Die Bauordnung nennt im Regelfall ein Achtel der Raumgrundfläche als Rohbaumaß, also eine andere Schwelle und Bezugsgröße. Unsere 3 dokumentierten Quellenabweichungen und die gesonderte NRW-Vorprüfung ersetzen keine rechtliche Bestandsprüfung.",
+      "content": "Die Anforderungen hängen von der konkreten Wohnung und dem Vorhaben ab. Ich halte die drei offenen Maße fest, damit der Designer die Fenster und den Bestand fachlich prüfen lassen kann.",
       "language": "de",
       "turn": 7
     },
@@ -9583,7 +9583,7 @@
     },
     {
       "role": "assistant",
-      "content": "Der Designer kann die Referenz mit dem vermessenen Bestand abgleichen und die Fensterbedingungen bewerten. Für die Familie bleibt der übersichtliche Wohnraum wichtiger als zusätzliche Möbel auf Verdacht.",
+      "content": "Ich gebe dem Designer Ihre Wünsche und die noch offenen Maße mit. Gemeinsam können Sie entscheiden, wie der Wohnraum für die Familie übersichtlich bleibt und welche Möbel dafür wirklich gebraucht werden.",
       "language": "de",
       "turn": 8
     }
@@ -10242,5 +10242,13 @@
     },
     "manual_item_coordinates": false
   },
-  "scenario_status": "fictional_conversation_on_licensed_reference_not_customer_or_model_transcript"
+  "scenario_status": "fictional_conversation_on_licensed_reference_not_customer_or_model_transcript",
+  "style_revision": {
+    "version": "toparlama-4/1",
+    "old_dialogue_sha256": "499ce859b128c33cf886a15d0a3634f12e98458b77efa0a3bab451d5be1dff33",
+    "new_dialogue_sha256": "f0f2620725a4bb4a39bf57eabe5b1efa914d3eb24affb95cf06f1b579212928a",
+    "body_sha256": "2d63c74ed0baa834e2bbdc1e8c4f8053b527058e2c9ae1b960f460a4444472a8",
+    "native_review": "pending",
+    "authorship": "Codex individually authored editorial corrections; no external model/API call"
+  }
 }

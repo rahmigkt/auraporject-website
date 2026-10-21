@@ -1,0 +1,31 @@
+# SINAV-01B is a separate frozen exam; preserve its exact bytes on Windows.
+tests/ai-eval/sinav-01b-*.jsonl text eol=lf
+
+# EV-QWEN-00D evidence manifests hash the exact exported bytes, including newlines.
+# Review generated evidence through HTML, images and manifests instead of huge diffs.
+knowledge/ai-egitim/veri/ev-plan-reel-00d/** -text -diff linguist-generated=true whitespace=cr-at-eol
+
+# EV-SOHBET-02 generated plan fixtures are reviewed through the HTML, report and
+# three ev.html examples. Keep the implementation and authored conversations visible.
+knowledge/ai-egitim/veri/ev-sohbet-02/*.json -diff linguist-generated=true
+knowledge/ai-egitim/veri/ev-sohbet-02/kaynaklar/*.json -diff linguist-generated=true
+
+# UK/IE continuation: authored conversations remain visible in the Python source.
+knowledge/ai-egitim/veri/ev-sohbet-uk-ie/*.json text eol=lf -diff linguist-generated=true
+knowledge/ai-egitim/veri/ev-sohbet-uk-ie/kaynaklar/*.json text eol=lf -diff linguist-generated=true
+knowledge/ai-egitim/ev-sohbet-uk-ie-ornekler/*.json text eol=lf -diff linguist-generated=true
+
+# Denmark continuation, reproducible UTF-8/LF evidence.
+knowledge/ai-egitim/veri/ev-sohbet-dk/*.json text eol=lf -diff linguist-generated=true
+knowledge/ai-egitim/veri/ev-sohbet-dk/kaynaklar/*.json text eol=lf -diff linguist-generated=true
+knowledge/ai-egitim/ev-sohbet-dk-ornekler/*.json text eol=lf -diff linguist-generated=true
+
+# Spain continuation: raw UTF-8/LF hashes stay valid in Windows checkouts.
+knowledge/ai-egitim/veri/ev-sohbet-es/*.json text eol=lf -diff linguist-generated=true
+knowledge/ai-egitim/veri/ev-sohbet-es/kaynaklar/*.json text eol=lf -diff linguist-generated=true
+knowledge/ai-egitim/ev-sohbet-es-ornekler/*.json text eol=lf -diff linguist-generated=true
+
+# Italy continuation, deterministic evidence bytes.
+knowledge/ai-egitim/veri/ev-sohbet-it/*.json text eol=lf -diff linguist-generated=true
+knowledge/ai-egitim/veri/ev-sohbet-it/kaynaklar/*.json text eol=lf -diff linguist-generated=true
+knowledge/ai-egitim/ev-sohbet-it-ornekler/*.json text eol=lf -diff linguist-generated=true

@@ -1,0 +1,235 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "0.3"
+    },
+    "typology": {
+      "enum": [
+        "kapali",
+        "acik",
+        "yari_acik",
+        "hol",
+        "kose",
+        "cift_cephe",
+        "derin",
+        "dubleks",
+        "mustakil",
+        "avlulu"
+      ]
+    },
+    "dwelling": {
+      "enum": [
+        "apartment",
+        "duplex",
+        "detached"
+      ]
+    },
+    "bedrooms": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "floors": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 3
+    },
+    "kitchen": {
+      "enum": [
+        "closed",
+        "semi_open",
+        "open"
+      ]
+    },
+    "envelope": {
+      "enum": [
+        "rectangle",
+        "l",
+        "u",
+        "notched"
+      ]
+    },
+    "entry": {
+      "enum": [
+        "north",
+        "south",
+        "east",
+        "west"
+      ]
+    },
+    "living_face": {
+      "enum": [
+        "north",
+        "south",
+        "east",
+        "west"
+      ]
+    },
+    "circulation": {
+      "enum": [
+        "spine",
+        "segmented",
+        "foyer"
+      ]
+    },
+    "stair": {
+      "enum": [
+        "none",
+        "straight",
+        "l",
+        "u",
+        "gallery"
+      ]
+    },
+    "setback_m": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "rooms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]{0,40}$"
+          },
+          "kind": {
+            "enum": [
+              "living",
+              "bedroom",
+              "kitchen",
+              "bath",
+              "wc",
+              "hall",
+              "study",
+              "utility",
+              "balcony",
+              "terrace",
+              "stair"
+            ]
+          },
+          "zone": {
+            "enum": [
+              "day",
+              "night",
+              "wet",
+              "service"
+            ]
+          },
+          "level": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2
+          },
+          "target_m2": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 120
+          },
+          "face": {
+            "enum": [
+              "any",
+              "north",
+              "south",
+              "east",
+              "west"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "zone",
+          "level",
+          "target_m2",
+          "face"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 5,
+      "maxItems": 50
+    },
+    "adjacency": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 2,
+        "maxItems": 2
+      },
+      "maxItems": 100
+    },
+    "forbidden": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 2,
+        "maxItems": 2
+      },
+      "maxItems": 100
+    },
+    "fixed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "wall",
+              "shaft",
+              "column"
+            ]
+          },
+          "evidence_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "evidence_id"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 30
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100000
+    }
+  },
+  "required": [
+    "version",
+    "typology",
+    "dwelling",
+    "bedrooms",
+    "floors",
+    "kitchen",
+    "envelope",
+    "entry",
+    "living_face",
+    "circulation",
+    "stair",
+    "setback_m",
+    "rooms",
+    "adjacency",
+    "forbidden",
+    "fixed",
+    "revision"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AURA plan program 0.3 — synthetic research contract"
+}

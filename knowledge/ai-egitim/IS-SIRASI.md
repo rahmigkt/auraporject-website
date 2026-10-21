@@ -1,21 +1,20 @@
-# İş sırası (2026-10-18, güncel)
+# İş sırası — 21 Ekim 2026
 
-**2026-10-19 karar sahibi güncellemesi:** Şimdiki AI işi, sürekli sunucu/API
-yerine tek yerel Qwen3.5-9B için mimari ve doğrulanabilir veri/ölçüm hazırlığıdır.
-[QWEN-YEREL-01](QWEN-YEREL-01.md) bu dar pilotun sırasını belirler. Eski
-TASARIM-01 ve ARAŞTIRMA-01 iş emirlerinin geniş kapsamı beklemede kalır.
-Aşağıdaki tablo önceki ürün işleri sırasını korur; bu PR onları başlatmaz.
+Güncel emir: [TOPARLAMA-01](CODEX-IS-EMRI-TOPARLAMA-01.md). Eğitim/GPU/ücretli API/canlı dağıtım yok. Stüdyo motoru ve assets Claude'un sorumluluğunda.
 
-| Sıra | İş | Durum |
+| Sıra | İş | Gerçek durum |
 |---|---|---|
-| 0 | **SERBEST-01 — Tasarımcı Atölyesi (dokunmatik serbest biçim + fizik denetimi)** | **Acil; ATMOSFER ile paralel** |
-| 1 | GÖRSEL-01 PR 1 — eskiz temizliği (#58) | Karar sahibi bakıp birleştirir |
-| 2 | **ATMOSFER-01** — proje sonu son görüntüleri (genel + yakın plan) | **En önemli; şimdi** |
-| 3 | METİN-01 — 2–3 cümlelik tanık metni, yalnız son görüntünün altında | ATMOSFER-01'den sonra |
-| 4 | GÖRSEL-01 PR 3 — arayüz dili | Sonra |
-| 5 | SINAV-01B onayı, TASARIM-01, ARAŞTIRMA-01 | Beklemede |
+| 1 | Toparlama 1: hijyen | PR #157 açık; son birleşik koşu57/62, beş hata raporlu; forma148,7sn geçti |
+| 2 | Toparlama 2: katalog | PR #159 açık; kaynak/hash/dil/ülke/katman kataloğu |
+| 3 | Toparlama 3: birleşik biçim | PR #162 altyapısı; Arap ekinden sonra 2.578 aday karantinada, onaylı eğitim kaydı 0 |
+| 4 | Toparlama 4: üslup | PR #165 açık; 40 sohbet tarandı, 178 mesaj düzeltildi; geometri sabit |
+| 5 | Toparlama 5: Arap dünyası | PR #166 açık, kısmi: 12 ön görüşme / 192 mesaj; yeni ölçülü yerleşim 0. Meclis ve iki katlı kaynak/motor desteği açık |
+| 6 | Toparlama 6: 120 kapalı görev | PR #167 açık: 120 görev; 100 motor gold kontrolü; model koşusu yok, uzman onayı bekliyor |
+| 7 | Toparlama 7: ülke başına hacim | PR #168 yalnız durum raporu; 1–4 kabul kapıları açık; 18 ülke açığı ASAMA-7-HACIM-DURUM.md içinde. Yeni kayıt teslimi yok |
+| 8 | Toparlama 8: eğitim hazırlığı | PR #170 açık: plan2, cevap maskesi ve koşullu süre/maliyet raporu; uygun train0, başlatma kapalı |
+| Paralel | Stüdyo motoru | Claude; bu veri dalı uygulama kodunu değiştirmez |
+| Beklemede | TASARIM-01, ARAŞTIRMA-01, SINAV-01B bağımsız onayı | Bu görev tarafından başlatılmadı |
 
-METİN-01 notu (karar sahibi, 2026-10-18): metin **2–3 kısa cümle**; ürünü ve atmosferi birlikte, net söyler.
-Örnek: "Dişbudak kollar ve keten döşeme. El koltuğa önce gelir, beden sonra yerleşir. Tek kişilik koltuk,
-konuşmanın içinde kendi yerini bulur." Kullanıcı metinle tasarım sürecinde karşılaşmaz; yalnız proje sonunda
-son görüntünün altında. PR #57 (1b) bu ölçüye göre yeniden kısaltılacak.
+Main'de: #138 (20 sohbet), #146 (UK/IE 8), #151 (DK/ES/IT 12), #152 (Körfez kaynakları), #154 (eski dalların çakışmasız içerikleri), #155 (iş emri). #119/#127/#69 içerikleri #154'e taşınarak kapandı; çakışan sürümler hijyen aşamasında korunur. #132 taşınmadan kapandı; ikinci yerleşim çözücüsü alınmaz. Eski ürün işleri tablosu [arşivde](toparlama-01/archive/docs/IS-SIRASI.md); tarihsel bekleme notları bugünkü tamamlanma iddiası değildir.
+
+Toplu teslim: [TOPARLAMA-01-SON-DURUM.md](TOPARLAMA-01-SON-DURUM.md). Açıklar teslim edildiği için kapanmış sayılmaz.

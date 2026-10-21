@@ -1,0 +1,24 @@
+[
+  {
+    "id": "3799232e3c487a40ea79b28d",
+    "text": "width ölçüsünü 920 mm yap. Diğer değerleri koru.",
+    "expected": {
+      "actions": [
+        {
+          "type": "set",
+          "key": "width",
+          "value": 920
+        }
+      ]
+    },
+    "actual": {
+      "actions": [
+        {
+          "type": "delta",
+          "key": "width",
+          "value": 100
+        }
+      ]
+    }
+  }
+]

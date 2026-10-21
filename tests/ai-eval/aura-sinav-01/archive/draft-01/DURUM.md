@@ -1,0 +1,1 @@
+Superseded, model koşusu yapılmadan önceki ikinci taslak. Güncel 1.2 sürümünde değerlendirme gerekçesi model girdisinden çıkarıldı, dil değiştirme örneğinde başlangıç dili ayrı tutuldu ve kısmi/sıfır rubriği netleştirildi. Veri ve eski hash korundu; eğitime/model ölçümüne girmedi.

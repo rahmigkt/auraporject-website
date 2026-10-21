@@ -1,23 +1,8 @@
 {
-  "schema": "aura.qwen.training-plan/1",
+  "schema": "aura.qwen.training-plan/2",
   "model": "Qwen/Qwen3.5-9B",
-  "execution": "temporary-single-gpu-training-then-local-inference",
+  "execution": "preparation-only-no-model-no-training-no-provisioning",
   "method": "bf16-lora",
-  "first_gpu_session": {
-    "data": "outputs/qwen-local/studio-v1",
-    "train_rows": 196,
-    "dev_rows": 40,
-    "test_rows": 40,
-    "maximum_optimizer_steps": 50,
-    "loss": "assistant response tokens only; input prompt masked",
-    "purpose": "numeric studio-action schema adaptation and training-pipeline validation; not aesthetic training",
-    "comparison": "base and adapter on identical dev prompts, plus exploratory explicit-schema prompt control",
-    "approved_max_hours": 4,
-    "approved_max_usd": 3,
-    "gpu": "NVIDIA A40",
-    "gpu_hourly_usd_read": 0.59,
-    "cleanup": "retrieve and verify local artifacts, then remove temporary pod and volume"
-  },
   "gpu_target_vram_gb": 48,
   "host_ram_target_gb": 64,
   "disk_target_gb": 100,
@@ -31,44 +16,77 @@
   "gradient_checkpointing": true,
   "packing": false,
   "studio_evolution": {
-    "status": "planned_not_implemented",
+    "status": "shared_headless_motor_implemented_live_multilayer_bridge_pending",
     "principle": "Evolve the studio and local model together; existing tools are a starting point, not a permanent capability ceiling",
     "first_implementation": "Extract shared testable action application and browser replay before introducing a tool registry",
-    "shared_tool_descriptor": ["id", "version", "supported_parts_and_families", "parameter_schema", "units", "constraints", "apply", "validate"],
-    "compatibility": ["Version design documents and tools separately", "Explicit migrations for saved projects", "Record motor and tool versions in datasets", "Reject unsupported operations"],
-    "new_tool_gate": ["Runtime implementation", "Preview and undo/redo", "Save/load compatibility", "Geometry checks", "Production export checks when affected", "Synthetic edit and repair examples", "Base model evaluation before any new training"],
+    "shared_tool_descriptor": [
+      "id",
+      "version",
+      "supported_parts_and_families",
+      "parameter_schema",
+      "units",
+      "constraints",
+      "apply",
+      "validate"
+    ],
+    "compatibility": [
+      "Version design documents and tools separately",
+      "Explicit migrations for saved projects",
+      "Record motor and tool versions in datasets",
+      "Reject unsupported operations"
+    ],
+    "new_tool_gate": [
+      "Runtime implementation",
+      "Preview and undo/redo",
+      "Save/load compatibility",
+      "Geometry checks",
+      "Production export checks when affected",
+      "Synthetic edit and repair examples",
+      "Base model evaluation before any new training"
+    ],
     "retraining": "Only if measured capability gap remains; short adaptation with old-skill regression checks",
     "runtime_code_modification_by_model": false
-  },
-  "curriculum_priority": {
-    "primary": "existing AURA Forma design schema, vocabulary and actions; compiled studio edits and atelier overrides",
-    "auxiliary_only": "geometry-v1 rounded-plate exercises",
-    "before_gpu_pilot": "Build and replay real Forma edit examples through runtime validation; geometry-v1 alone is not an AURA training readiness gate",
-    "contract": "outputs/qwen-local/studio-contract.json",
-    "units": "Forma mm; legacy design-tools cm schema kept separate"
   },
   "vision_encoder_training_in_first_text_pilot": false,
   "benchmark": {
     "warmup_optimizer_steps": 10,
     "timed_optimizer_steps": 20,
-    "collect": ["step_seconds", "peak_vram_gb", "actual_input_tokens", "padding_tokens", "package_versions", "model_revision", "dataset_sha256"],
+    "collect": [
+      "step_seconds",
+      "peak_vram_gb",
+      "actual_input_tokens",
+      "padding_tokens",
+      "package_versions",
+      "model_revision",
+      "dataset_sha256"
+    ],
     "note": "Full optimizer step includes all 8 micro batches; exclude kernel compilation and 10 warmup steps from steady-state timing."
   },
-  "planning_seconds_per_optimizer_step": [10, 20, 40],
+  "planning_seconds_per_optimizer_step": [
+    10,
+    20,
+    40
+  ],
   "planning_note": "Hypothetical sensitivity inputs, NOT measured GPU benchmarks or performance guarantees.",
   "stages": [
-    {"id": "geometry-pilot", "training_examples": 1000, "epochs": 2, "available": true, "data": "outputs/qwen-local/geometry-v1/sft-unreviewed.jsonl", "scope": "unreviewed exercise DSL; not AURA/CAD integration or aesthetics", "setup_eval_export_hours": 0.5, "runtime_overhead_fraction": 0.25},
-    {"id": "first-mixed-text", "training_examples": 6000, "epochs": 2, "available": false, "setup_eval_export_hours": 1, "runtime_overhead_fraction": 0.25}
+    {
+      "id": "reviewed-small-text",
+      "training_examples": 200,
+      "epochs": 2,
+      "available": false,
+      "setup_eval_export_hours": 1,
+      "runtime_overhead_fraction": 0.25
+    },
+    {
+      "id": "reviewed-expanded-text",
+      "training_examples": 1000,
+      "epochs": 2,
+      "available": false,
+      "setup_eval_export_hours": 1,
+      "runtime_overhead_fraction": 0.25
+    }
   ],
   "vision_stage": "Separate benchmark required; image tokens/resolution change memory and speed. Not included in text-stage duration.",
-  "progression": {
-    "automatic_advance": false,
-    "max_pilot_epochs": 2,
-    "pilot_training_step_limit": 250,
-    "scale_up_only_if": ["No invalid geometry rate increase on dev", "Exact edit and repair accuracy improves versus base on held-out groups", "Existing command and vision evaluation shows no material regression", "Kernel/memory benchmark and revised duration logged"],
-    "if_no_gain": "Inspect labels/format and run at most one corrected pilot; do not launch the 6000-example run automatically.",
-    "no_gain_warning": "Thresholds and independent human-reviewed evaluation must be fixed before reading model results; current exercise labels remain provisional."
-  },
   "gates": [
     "Exact local tokenization: no silent truncation; split or reject sequences longer than context",
     "Source/license checks; group-held-out split; no dev/test examples in training",
@@ -76,6 +94,73 @@
     "Record base dev result before adaptation and compare after adaptation",
     "No unsafe-pass increase; command and vision regression evaluation before release",
     "Copy adapter, base revision, processor/template and training logs locally before releasing GPU",
-    "Validate merged model and local quantized export independently"
-  ]
+    "Validate merged model and local quantized export independently",
+    "Human/native approvals bound to exact record digest",
+    "All-layer live contract alignment and assistant-turn action labels",
+    "Closed 120 tasks never enter train/dev/test exports",
+    "No old GPU spending approval carried into this preparation",
+    "No training command emitted or executed by preflight"
+  ],
+  "history": {
+    "superseded_plan": "knowledge/ai-egitim/toparlama-01/archive/training-plan-pre-toparlama.json",
+    "sha256": "2ddf97812de190ec84024fa51610151de7bce984ab96bb8be54cc345a24d3ee5",
+    "prior_gpu_approval_not_reused": true
+  },
+  "data": {
+    "schema": "knowledge/ai-egitim/AURA-EGITIM-1.schema.json",
+    "directory": "knowledge/ai-egitim/veri/birlesik",
+    "candidate_rows": 2578,
+    "qualified_training_rows": 0,
+    "train_rows": 0,
+    "dev_rows": 0,
+    "test_rows": 0,
+    "candidate_policy": "quarantine; never treat candidates or historical pilot as approved training",
+    "closed_exam": "tests/ai-eval/aura-sinav-01",
+    "closed_exam_training_forbidden": true
+  },
+  "contract": {
+    "outer_output": [
+      "reply",
+      "actions"
+    ],
+    "furniture_prompt": "api/forma-ai.php via tools/qwen-local/live_contract.php",
+    "multilayer_prompt": "tools/aura-sinav-01/prompts.mjs draft; live integration pending",
+    "source_lock": "assets + tools/studyo-motoru Git tree; fresh replay after change",
+    "turn_action_alignment": "required before SFT export; aggregate final layout alone cannot label earlier turns",
+    "status": "not_training_ready"
+  },
+  "loss": {
+    "mode": "assistant_response_only",
+    "user_system_tool_pad_labels": -100,
+    "assistant_mask": "exact tokenizer chat-template assistant-token mask; never substring matching",
+    "require_nonempty_assistant_mask": true,
+    "truncate": "reject or split at complete turn boundary; no silent truncation",
+    "vision_encoder": "frozen; no image training in text pilot"
+  },
+  "large_training_gate": {
+    "enabled": false,
+    "defects_closed": false,
+    "current_source_replayed": false,
+    "human_native_approval": false,
+    "format_robustness_min": 0.98,
+    "closed_exam_min": 0.95,
+    "natural_turkish_min": 0.9,
+    "clarify_refuse_min": 0.95,
+    "no_regression_required": true,
+    "metrics_measured": false,
+    "written_cost_required": true,
+    "new_explicit_owner_approval_required": true
+  },
+  "pricing": {
+    "checked": "2026-10-21",
+    "source": "https://www.runpod.io/pricing",
+    "not_quote_or_stock_check": true,
+    "pod_hourly_usd": {
+      "A40": 0.59,
+      "RTX_A6000": 0.59,
+      "L40S": 1.09
+    },
+    "serverless_A40_A6000_hourly_equivalent_usd": 1.22,
+    "tax_storage_network_extra": true
+  }
 }
