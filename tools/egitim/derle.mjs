@@ -53,9 +53,24 @@ for (const k of kayitlar) {
 }
 sayim.alinan = al.length;
 
+// ---- modelin gördüğü durum özeti: yalnız işlemlerin başvurduğu kimlikler ve ölçüler (kanıt, şema ve meta alanları yok).
+// Motor tam durumu ayrıca kullanır; özet yalnız istem içindir. Ölçüler mm, tam sayı.
+const mm = v => Math.round(typeof v === 'object' && v ? v.value : v);
+const pt = p => Array.isArray(p) ? p.map(mm) : p;
+function ozet(d) {
+  const P = d.plan || {}, o = {};
+  if (P.walls?.length) o.duvar = P.walls.map(w => [w.id, pt(w.from_xy_mm ?? w.from), pt(w.to_xy_mm ?? w.to), mm(w.thickness)]);
+  if (P.openings?.length) o.aciklik = P.openings.map(a => [a.id, a.wall_id, a.kind ?? a.tur, mm(a.offset_from_wall_start ?? a.konum), mm(a.width ?? a.en)]);
+  if (P.spaces?.length) o.oda = P.spaces.map(s => [s.id, s.kind ?? s.tur, s.name ?? s.ad ?? null]);
+  if (P.items?.length) o.esya = P.items.map(i => [i.id, i.space_id, i.kind ?? i.design?.kind ?? null, i.size_mm ? [mm(i.size_mm.w), mm(i.size_mm.d)] : null]);
+  if (d.katlar) o.kat = Object.entries(d.katlar).map(([id, k]) => [id, mm(k.yukseklik)]);
+  if (d.tekstil) o.tekstil = d.tekstil;
+  return o;
+}
+
 // ---- sohbet biçimi: son asistan turu işlemleri taşır, önceki asistan turları yalnız cevap
 const ornek = k => ({id: k.id, dil: k.dil, messages: [{role: 'system', content: SISTEM},
-  ...(Object.keys(k.durum).length ? [{role: 'system', content: 'DURUM ' + JSON.stringify(k.durum)}] : []),
+  ...(Object.keys(k.durum).length ? [{role: 'system', content: 'DURUM ' + JSON.stringify(ozet(k.durum))}] : []),
   ...k.mesajlar.map((m, i, a) => ({role: m.rol, content: m.rol === 'assistant' ? JSON.stringify({reply: m.metin, actions: i === a.length - 1 ? k.islemler : []}) : m.metin}))]});
 const dev = g => parseInt(createHash('sha256').update(String(g)).digest('hex').slice(0, 8), 16) / 0xffffffff < DEV; // grup bazında, aynı evin kayıtları aynı bölmede
 mkdirSync(OUT, {recursive: true});

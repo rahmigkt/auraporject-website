@@ -53,6 +53,7 @@ Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sa
 - [x] **G5 · Tasarımcıya gönderme hedefi.** `proje` katmanında `tasarimciya_gonder` işleminin motorda kalıcı kaydı.
 - [x] **G7 · Ev tekstili ürün araştırması** (`knowledge/ev-projesi/EV-TEKSTILI-URUN-ARASTIRMA-03.md`). Uygulama kullanıcı kararından sonra.
 - [x] **G8 · Eğitim kümesi derleyici** (`tools/egitim/derle.mjs`, `sistem.md`, `EGITIM-01.md`). İlk koşu: 51 uygun kayıt.
+- [x] **G9a · C8 engelleri (#204):** (1) Uzun sohbetler: istemdeki durum artık özet (`derle.mjs` `ozet()`: duvar, açıklık, oda, eşya kimlik ve ölçüleri; kanıt/meta yok). DK-02 durumu 92.829 → 6.709 karakter; en uzun örnek 11.051 karakter. `max_sequence_length` 4096 → 6144 (A40 için yeterli). Codex gerçek tokenizer ile 5 kaydın sınır içinde kaldığını doğrular. (2) H1 tek kurgusal evde: dev bölmesi niyet grubuna göre kalır; bu "yeni ev" genellemesini ölçmez, onu kapalı sınav ve H4 (4.340 farklı gerçek oda) ölçer. Kabul.
 - [ ] **G9 · Eğitim öncesi kararlar:** H1 ve H4 geldikçe denetim, kümeyi derleme, sınav puanlayıcısını yeni biçime bağlama.
   - C8: eski ev sohbetlerinde 4096 token sınırını aşan `DURUM` girdileri var; metin kırpılmadan temsil/bağlam bütçesi gözden geçirilmeli. H1 tek sentetik plan kullanırken derleyicinin intent grubu train/dev'i ayırıyor; ortak plan grubu korunmalı. C8'in ID çakışması denetimi, ev/grup izolasyonu kanıtı değildir. İki engel çözülmeden eğitim hazır sayılmaz.
 - [ ] **G10 · Ev tekstili ürün ailesi** (stüdyoda perde ve halı; E6 kataloğu gelince).
