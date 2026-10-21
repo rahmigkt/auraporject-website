@@ -19,7 +19,7 @@ export const RULES = {
   groupMax: 3000,           // furthest seat of a conversation group from its centre (8–10 ft between seats, Ballard Designs)
   wall: 20             // gap to the wall finish
 };
-const KIND = {
+const KIND = {majlis: 'majlis', 
   run: 'kitchen', island: 'kitchen', bed: 'bed', wardrobe: 'wardrobe', dresser: 'storage', bookcase: 'storage', sideboard: 'storage', vitrine: 'storage',
   tvunit: 'tv', sofa: 'sofa', loveseat: 'second', armchair: 'chair', reading: 'corner', shoe: 'storage', coatrack: 'storage', coffee: 'coffee', side: 'side', dining: 'dining', desk: 'desk', console: 'storage', basin: 'basin', column: 'storage', nightstand: 'night', vanity: 'desk'
 };
@@ -88,6 +88,8 @@ function scoreItem(kind, p, run, size, ctx) {
     if (ctx.roomA > 20) { const mid = mul(add(p.c, ctx.tv.c), 0.5); sc += ctx.kitchen ? Math.min(2, len(sub(mid, ctx.kitchen.c)) / 2000) : 1.5 * (1 - len(sub(mid, ctx.roomC)) / ctx.roomR); } }
   if (kind === 'sofa' && !ctx.tv) { sc += run ? 1 + centred : 0; if (ctx.windowRuns.some(r => dot(r.n, p.az) > 0.9)) sc += 1; }
   if (kind === 'sofa' && run && run.window && blocksWindow(run, p.s, size, size.h)) sc -= 1.5; // back to the window: glare and draught
+  if (kind === 'coffee' && !ctx.sofa && ctx.majlis.length) { const m = ctx.majlis.reduce((a, q) => add(a, mul(add(q.c, mul(q.az, q.size.d / 2 + 450)), 1 / ctx.majlis.length)), [0, 0]), near = Math.min(...ctx.majlis.map(q => len(sub(p.c, q.c)) - q.size.d / 2));
+    if (near < 400 + Math.min(size.w, size.d) / 2) return null; sc += 3 - len(sub(p.c, m)) / 800; notes.push('sehpa meclisin ortasında'); return {sc, notes}; }
   if (kind === 'coffee') { const so = ctx.sofa; if (!so) return null; const ext = Math.abs(dot(p.az, so.az)) > 0.7 ? size.d : size.w, gap = dot(sub(p.c, so.c), so.az) - so.size.d / 2 - ext / 2, lat = Math.abs(dot(sub(p.c, so.c), so.ax));
     if (gap < RULES.coffeeGap[0] - 5 || gap > RULES.coffeeGap[1] + 5 || lat > 150) return null; sc += 3 + (Math.abs(dot(p.az, so.az)) > 0.7 ? 1.5 : 0); }
   if (kind === 'second' || kind === 'chair') { const co = ctx.coffee, so = ctx.sofa;
@@ -113,13 +115,16 @@ function solveOnce(space, roomItems, ev, {count = 3, beam = 60} = {}) {
   const roomA = Math.abs(area2(room)) / 2e6, roomR = Math.sqrt(roomA) * 1000 / 2, roomC = room.reduce((m, q) => [m[0] + q[0] / room.length, m[1] + q[1] / room.length], [0, 0]);
   const winCentres = runs.flatMap(r => r.openings.filter(o => o.kind === 'window').map(o => add(add(r.P, mul(r.u, (o.s0 + o.s1) / 2)), mul(r.n, 50))));
   const windowDist = c => winCentres.length ? Math.min(...winCentres.map(w => len(sub(c, w)))) : 9e9;
-  const list = roomItems.map(it => ({it, kind: KIND[it.design.kind] || 'storage', size: it.size || compileItem(it).size}))
+  // majlis: continuous low seating along two (L) or three (U) walls, placed before everything else
+  const mj = roomItems.filter(it => it.design.kind === 'majlis'), pre = [], preNotes = [];
+  for (const it of mj) { const r = placeMajlis(runs, swings, it, room); if (!r) return {ok: false, failed: it.id, reason: `${it.name || 'meclis'} bu odaya kurallara uyarak kurulamıyor`, alternatives: []}; pre.push(...r.segments); preNotes.push(r.note); }
+  const list = roomItems.filter(it => it.design.kind !== 'majlis').map(it => ({it, kind: KIND[it.design.kind] || 'storage', size: it.size || compileItem(it).size}))
     .sort((a, b) => ORDER.indexOf(a.kind) - ORDER.indexOf(b.kind) || b.size.w * b.size.d - a.size.w * a.size.d);
-  let states = [{placed: [], score: 0, notes: []}];
+  let states = [{placed: pre, score: 0, notes: preNotes}];
   for (const L of list) {
     const next = [];
     for (const st of states) {
-      const ctx = {runs, windowDist, windowRuns: runs.filter(r => r.window), roomA, roomC, roomR, room}; for (const q of st.placed) { if (q.kind === 'tv') ctx.tv = q; if (q.kind === 'sofa') ctx.sofa = q; if (q.kind === 'kitchen') ctx.kitchen = q; if (q.kind === 'bed') ctx.bed = q; if (q.kind === 'coffee') ctx.coffee = q; if (q.kind === 'second') ctx.second = q; if (q.kind === 'corner') ctx.corner = q; if (q.kind === 'chair') ctx.chair = q; }
+      const ctx = {runs, windowDist, windowRuns: runs.filter(r => r.window), roomA, roomC, roomR, room, majlis: []}; for (const q of st.placed) { if (q.kind === 'tv') ctx.tv = q; if (q.kind === 'sofa') ctx.sofa = q; if (q.kind === 'kitchen') ctx.kitchen = q; if (q.kind === 'bed') ctx.bed = q; if (q.kind === 'majlis') ctx.majlis.push(q); if (q.kind === 'coffee') ctx.coffee = q; if (q.kind === 'second') ctx.second = q; if (q.kind === 'corner') ctx.corner = q; if (q.kind === 'chair') ctx.chair = q; }
       const cands = [];
       const floating = ['sofa', 'coffee', 'dining', 'chair', 'side', 'night'].includes(L.kind) || (L.kind === 'desk');
       for (const run of runs) { if (run.L < L.size.w + 2 * RULES.wall) continue;
@@ -153,6 +158,34 @@ function solveOnce(space, roomItems, ev, {count = 3, beam = 60} = {}) {
   }
   // distinct alternatives: differ in where the main pieces stand
   const out = []; for (const s of states) { const sig = s.placed.map(q => `${q.run}:${Math.round(q.rot)}:${Math.round(q.c[0] / 900)}:${Math.round(q.c[1] / 900)}`).join('|'); if (!out.some(o => o.sig === sig)) out.push({...s, sig}); if (out.length >= count) break; }
-  return {ok: true, alternatives: out.map(s => ({score: +s.score.toFixed(2), notes: [...new Set(s.notes)], placements: s.placed.map(q => ({id: q.id, pos_xy_mm: q.c.map(Math.round), rot_deg: ((Math.round(q.rot) % 360) + 360) % 360}))}))};
+  return {ok: true, alternatives: out.map(s => ({score: +s.score.toFixed(2), notes: [...new Set(s.notes)], placements: s.placed.map(q => ({id: q.id, pos_xy_mm: q.c.map(Math.round), rot_deg: ((Math.round(q.rot) % 360) + 360) % 360, ...(q.kind === 'majlis' ? {kind: 'majlis', size_mm: {w: Math.round(q.size.w), d: q.size.d, h: q.size.h}} : {})}))}))};
 }
 
+
+// ---- majlis (Gulf sitting room): seat modules run along the walls, the middle stays free. Seat depth comes from the
+// customer's measured modules; when unknown the AURA proposal of 800 mm is used and marked as such (Codex meclis.json:
+// no verified indoor standard). Doors and their swing are left open; windows are fine above a low seat (≤ 450 mm).
+export function placeMajlis(runs, swings, it, room) {
+  const D = it.size?.d || it.design.params?.depth || 800, H = it.size?.h || 450, layout = it.design.params?.layout || 'U', minRun = it.design.params?.minRun || 1200;
+  const free = run => { let segs = [[RULES.wall, run.L - RULES.wall]]; // wall stretches without doors (and their swing) or low windows
+    for (const o of run.openings) if (o.kind === 'door' || o.sill < H + 50) { const a = o.s0 - 100, b = o.s1 + 100; segs = segs.flatMap(([x, y]) => b <= x || a >= y ? [[x, y]] : [[x, Math.min(y, a)], [Math.max(x, b), y]].filter(([p, q]) => q - p >= 400)); }
+    return segs; };
+  const n = runs.length, corner = (i, j) => Math.abs(dot(runs[i].u, runs[j].u)) < 0.1 && dot(runs[i].n, runs[j].u) > 0.5 || dot(runs[j].n, runs[i].u) > 0.5;
+  let best = null;
+  for (let i = 0; i < n; i++) {
+    const back = runs[i], prev = runs[(i - 1 + n) % n], next = runs[(i + 1) % n];
+    if (Math.abs(dot(back.u, prev.u)) > 0.1 || Math.abs(dot(back.u, next.u)) > 0.1) continue;
+    const segments = [], add2 = (run, s0, s1, tag) => { if (s1 - s0 < 400) return; const c = add(add(run.P, mul(run.u, (s0 + s1) / 2)), mul(run.n, D / 2 + RULES.wall)), rot = Math.atan2(run.n[0], -run.n[1]) * 180 / Math.PI;
+      const body = rect(c, run.u, run.n, s1 - s0, D); if (!within(body, room) || swings.some(z => sat(z, body))) return; segments.push({id: `${it.id}-${tag}${segments.length + 1}`, kind: 'majlis', c, ax: run.u, az: run.n, rot, size: {w: s1 - s0, d: D, h: H}, body, zones: [], run: run.i}); };
+    for (const [x, y] of free(back)) add2(back, x, y, 'a');
+    // side walls: start after the back seats so the corner is counted once
+    for (const [run, end] of (layout === 'L' ? [[next, 'start']] : [[prev, 'end'], [next, 'start']])) for (const [x, y] of free(run)) {
+      const s0 = end === 'start' ? Math.max(x, D + RULES.wall) : x, s1 = end === 'end' ? Math.min(y, run.L - D - RULES.wall) : y; add2(run, s0, s1, 'b'); }
+    const total = segments.reduce((t, q) => t + q.size.w, 0); if (!segments.length || total < minRun) continue;
+    // the middle must stay usable: at least 1200 mm between facing seat rows
+    if (layout === 'U' && back.L < 2 * D + 1200) continue;
+    if (!best || total > best.total) best = {segments, total};
+  }
+  if (!best) return null;
+  return {segments: best.segments, note: `meclis ${layout} düzeni, ${(best.total / 1000).toFixed(1)} m oturma, derinlik ${D} mm${it.size?.d || it.design.params?.depth ? '' : ' (AURA önerisi)'}`};
+}

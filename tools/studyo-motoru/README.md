@@ -15,7 +15,7 @@ Stüdyonun tarayıcısız hâli. Eğitim verisi ve sınav seti buradan geçer (`
 |---|---|
 | mobilya | `set`, `delta`, `enum`, `material`, `style`, `kind`, `family`, `seats`, `drawers`, `mattress` |
 | ev | `duvar_ekle`, `duvar_sil`, `duvar_tasi`, `aciklik_ekle`, `oda_tanimla`. `kat_ekle`, `merdiven` ve `oda_birlestir` henüz yok; dürüstçe reddedilir |
-| yerlesim | `yerlestir {oda, esyalar[{tur, en, derinlik}], kisitlar[{tur: bakar, yakin, uzak; a; b; mm}]}`, `secenek_sec` |
+| yerlesim | `yerlestir {oda, esyalar[{tur, en, derinlik}]` (meclis: `{tur: meclis, duzen: U|L, derinlik}` — duvar boyunca oturma, kapılar açık kalır, derinlik bilinmiyorsa 800 mm AURA önerisi)`,, kisitlar[{tur: bakar, yakin, uzak; a; b; mm}]}`, `secenek_sec` |
 | tekstil | `perde {...}`, `hali {...}` (tekstil.js sürüm 2 alanları) |
 | proje | `projeye_ekle`, `tasarimciya_gonder` |
 
