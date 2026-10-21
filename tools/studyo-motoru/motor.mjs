@@ -10,6 +10,7 @@ import {applyDesignActions, headlessEnv} from '../../assets/forma/actions.js';
 import {analyse} from '../../assets/forma/physics.js';
 import {solveRoom} from '../../assets/ev/yerlesim.js';
 import {migrate} from '../../assets/ev/tekstil.js';
+import {accessories} from '../../assets/ev/aksesuar.js';
 
 export const VERSION = 'studyo-motoru/1';
 // ---- operation vocabulary (versioned). layer → op → required fields --------------------------------------------
@@ -18,6 +19,7 @@ export const SOZLUK = {
   ev: {duvar_ekle: ['from', 'to'], duvar_sil: ['id'], duvar_tasi: ['id', 'dx', 'dy'], aciklik_ekle: ['wall_id', 'tur', 'konum', 'en'], oda_tanimla: ['id'], kat_ekle: ['id'], merdiven: ['alt', 'ust', 'konum', 'en'], oda_birlestir: ['a', 'b']},
   yerlesim: {yerlestir: ['oda', 'esyalar'], secenek_sec: ['index']},
   tekstil: {perde: [], hali: []},
+  aydinlatma: {isik: ['oda']},
   proje: {projeye_ekle: [], tasarimciya_gonder: []}
 };
 const NOT_YET = {oda_birlestir: 'oda birleştirme motorda henüz yok'};
@@ -156,6 +158,36 @@ function tekstil(state, ops, rep) {
   state.tekstil = t;
 }
 
+// Lighting: the site derives lights from placed furniture (aksesuar.js: ceiling per room, pendant over the dining table,
+// floor lamp at the sofa end, desk lamp). The user can switch a kind off, ask for more of it, or set colour temperature.
+const ISIK_TUR = {tavan: 'ceiling', sarkit: 'pendant', lambader: 'floor', masa: 'desk', aplik: 'wall'};
+function aydinlatma(state, ops, rep) {
+  const spaces = state.plan?.spaces || [];
+  for (const op of ops) { const sp = spaces.find(s => s.id === op.oda);
+    if (!sp) { rep.red.push({katman: 'aydinlatma', op, neden: `oda yok: ${op.oda}`}); continue; }
+    if (op.tur != null && !ISIK_TUR[op.tur]) { rep.red.push({katman: 'aydinlatma', op, neden: `ışık türü ${op.tur}; ${Object.keys(ISIK_TUR).join(', ')} olmalı`}); continue; }
+    if (op.renk_k != null && !(op.renk_k >= 2200 && op.renk_k <= 5000)) { rep.red.push({katman: 'aydinlatma', op, neden: `renk sıcaklığı ${op.renk_k} K; 2200–5000 K olmalı`}); continue; }
+    if (op.adet != null && !(Number.isInteger(op.adet) && op.adet >= 0 && op.adet <= 12)) { rep.red.push({katman: 'aydinlatma', op, neden: 'adet 0–12 arasında tam sayı olmalı'}); continue; }
+    const o = (state.aydinlatma ??= {})[op.oda] ??= {};
+    if (op.renk_k != null) o.renk_k = op.renk_k;
+    if (op.tur) (o.tur ??= {})[op.tur] = op.kapat ? 0 : (op.adet ?? 1);
+    rep.kabul.push({katman: 'aydinlatma', op}); }
+  let auto = []; try { auto = accessories(state.plan).lights; } catch {}
+  rep.olcum.aydinlatma = spaces.map(sp => { const o = state.aydinlatma?.[sp.id] || {}, c = {};
+    for (const l of auto.filter(l => l.space === sp.id)) { const k = Object.keys(ISIK_TUR).find(k => ISIK_TUR[k] === l.kind); c[k] = (c[k] || 0) + 1; }
+    Object.assign(c, o.tur || {}); return {oda: sp.id, isik: c, renk_k: o.renk_k || 2700}; }).filter(r => state.aydinlatma?.[r.oda] || Object.keys(r.isik).length);
+}
+
+// Project: sending to the designer needs at least one defined room; the request is kept on the state with its note.
+function proje(state, ops, rep) {
+  for (const op of ops) {
+    if (op.type === 'tasarimciya_gonder' && !(state.plan?.spaces || []).length) { rep.red.push({katman: 'proje', op, neden: 'projede tanımlı oda yok; gönderilecek bir şey yok'}); continue; }
+    const P = state.proje ??= {gonderimler: []};
+    if (op.type === 'tasarimciya_gonder') P.gonderimler.push({not: op.not || '', oda: (state.plan.spaces || []).map(s => s.id), sira: P.gonderimler.length + 1});
+    else P.eklendi = true;
+    rep.kabul.push({katman: 'proje', op}); }
+}
+
 // ---- entry point -----------------------------------------------------------------------------------------------
 // state: {design?, plan?, tekstil?}; ops: [{katman, type, ...}] — order kept within each layer
 export function uygula(state0, ops) {
@@ -167,7 +199,8 @@ export function uygula(state0, ops) {
   if (by.ev) ev(state, by.ev, rep);
   if (by.yerlesim) yerlesim(state, by.yerlesim, rep);
   if (by.tekstil) tekstil(state, by.tekstil, rep);
-  for (const o of by.proje || []) rep.kabul.push({katman: 'proje', op: o});
+  if (by.aydinlatma) aydinlatma(state, by.aydinlatma, rep);
+  if (by.proje) proje(state, by.proje, rep);
   rep.gecti = rep.red.length === 0 && !rep.uyari.some(u => u.seviye === 'error' || u.kod === 'oda_kendini_kesiyor');
   return {state, rapor: rep};
 }
