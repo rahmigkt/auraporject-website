@@ -1,13 +1,13 @@
 {
   "version": "aura-conversion/1",
-  "candidate_rows": 2578,
+  "candidate_rows": 2590,
   "qualified_training_rows": 0,
-  "quarantined_rows": 2578,
+  "quarantined_rows": 2590,
   "source_clusters": 242,
   "candidate_split_rows": {
-    "test": 196,
+    "test": 197,
     "dev": 191,
-    "train": 2191
+    "train": 2202
   },
   "candidate_split_groups": {
     "test": 25,
@@ -16,9 +16,9 @@
   },
   "leakage": [],
   "warning_counts": {
-    "human_review_pending": 2578,
-    "language_review_pending": 2578,
-    "retained_source_geometry_exceptions": 39,
+    "human_review_pending": 2590,
+    "language_review_pending": 2590,
+    "retained_source_geometry_exceptions": 50,
     "legacy_program_targets_not_native_studio_operations": 2409,
     "no_recorded_native_operation_sequence": 1,
     "prose_only_no_measured_textile_operation_target": 34,
@@ -28,8 +28,12 @@
     "text_trial_not_studio_action_target": 30,
     "awaiting_measured_plan": 12,
     "no_solver_placement_delivered": 12,
-    "majlis_support_pending": 4,
-    "two_storey_geometry_missing_and_engine_unsupported": 2
+    "majlis_support_pending": 8,
+    "two_storey_geometry_missing_and_engine_unsupported": 2,
+    "partial_family_room_scope": 12,
+    "selected_layout_not_replayed_turn_by_turn": 12,
+    "upper_floor_and_stair_pending": 2,
+    "selected_alternative_not_encoded_in_native_target": 1
   },
   "datasets": [
     {
@@ -195,6 +199,11 @@
     {
       "dataset": "ev-sohbet-arap",
       "status": "quarantined_intake_no_geometry",
+      "records_converted": 12
+    },
+    {
+      "dataset": "ev-sohbet-arap-olculu",
+      "status": "quarantined_measured_family_room_only",
       "records_converted": 12
     }
   ],
@@ -4190,6 +4199,570 @@
         },
         "gecti": true
       }
+    },
+    {
+      "id": "ev-sohbet-arap-olculu:ev-sohbet-arap-olculu-01",
+      "engine": "studyo-motoru/1",
+      "report": {
+        "surum": "studyo-motoru/1",
+        "kabul": [
+          {
+            "katman": "yerlesim",
+            "op": {
+              "esyalar": [
+                {
+                  "derinlik": 820,
+                  "en": 1800,
+                  "id": "room-4-sofa",
+                  "tur": "sofa",
+                  "yukseklik": 800
+                },
+                {
+                  "derinlik": 550,
+                  "en": 900,
+                  "id": "room-4-coffee",
+                  "tur": "coffee",
+                  "yukseklik": 380
+                }
+              ],
+              "katman": "yerlesim",
+              "kisitlar": [],
+              "oda": "room-4",
+              "type": "yerlestir"
+            }
+          }
+        ],
+        "red": [],
+        "uyari": [],
+        "olcum": {
+          "yerlesim": {
+            "oda": "room-4",
+            "sigdi": true,
+            "secenek": 4,
+            "secilen": 0,
+            "kisit_karsilanan": 0,
+            "kisit_toplam": 0
+          }
+        },
+        "gecti": true
+      }
+    },
+    {
+      "id": "ev-sohbet-arap-olculu:ev-sohbet-arap-olculu-02",
+      "engine": "studyo-motoru/1",
+      "report": {
+        "surum": "studyo-motoru/1",
+        "kabul": [
+          {
+            "katman": "yerlesim",
+            "op": {
+              "esyalar": [
+                {
+                  "derinlik": 820,
+                  "en": 1900,
+                  "id": "room-3-sofa",
+                  "tur": "sofa",
+                  "yukseklik": 800
+                },
+                {
+                  "derinlik": 550,
+                  "en": 900,
+                  "id": "room-3-coffee",
+                  "tur": "coffee",
+                  "yukseklik": 380
+                }
+              ],
+              "katman": "yerlesim",
+              "kisitlar": [],
+              "oda": "room-3",
+              "type": "yerlestir"
+            }
+          }
+        ],
+        "red": [],
+        "uyari": [],
+        "olcum": {
+          "yerlesim": {
+            "oda": "room-3",
+            "sigdi": true,
+            "secenek": 4,
+            "secilen": 0,
+            "kisit_karsilanan": 0,
+            "kisit_toplam": 0
+          }
+        },
+        "gecti": true
+      }
+    },
+    {
+      "id": "ev-sohbet-arap-olculu:ev-sohbet-arap-olculu-03",
+      "engine": "studyo-motoru/1",
+      "report": {
+        "surum": "studyo-motoru/1",
+        "kabul": [
+          {
+            "katman": "yerlesim",
+            "op": {
+              "esyalar": [
+                {
+                  "derinlik": 820,
+                  "en": 2000,
+                  "id": "room-5-sofa",
+                  "tur": "sofa",
+                  "yukseklik": 800
+                },
+                {
+                  "derinlik": 550,
+                  "en": 900,
+                  "id": "room-5-coffee",
+                  "tur": "coffee",
+                  "yukseklik": 380
+                }
+              ],
+              "katman": "yerlesim",
+              "kisitlar": [],
+              "oda": "room-5",
+              "type": "yerlestir"
+            }
+          }
+        ],
+        "red": [],
+        "uyari": [],
+        "olcum": {
+          "yerlesim": {
+            "oda": "room-5",
+            "sigdi": true,
+            "secenek": 4,
+            "secilen": 0,
+            "kisit_karsilanan": 0,
+            "kisit_toplam": 0
+          }
+        },
+        "gecti": true
+      }
+    },
+    {
+      "id": "ev-sohbet-arap-olculu:ev-sohbet-arap-olculu-04",
+      "engine": "studyo-motoru/1",
+      "report": {
+        "surum": "studyo-motoru/1",
+        "kabul": [
+          {
+            "katman": "yerlesim",
+            "op": {
+              "esyalar": [
+                {
+                  "derinlik": 820,
+                  "en": 1800,
+                  "id": "room-3-sofa",
+                  "tur": "sofa",
+                  "yukseklik": 800
+                },
+                {
+                  "derinlik": 550,
+                  "en": 900,
+                  "id": "room-3-coffee",
+                  "tur": "coffee",
+                  "yukseklik": 380
+                }
+              ],
+              "katman": "yerlesim",
+              "kisitlar": [],
+              "oda": "room-3",
+              "type": "yerlestir"
+            }
+          }
+        ],
+        "red": [],
+        "uyari": [],
+        "olcum": {
+          "yerlesim": {
+            "oda": "room-3",
+            "sigdi": true,
+            "secenek": 4,
+            "secilen": 0,
+            "kisit_karsilanan": 0,
+            "kisit_toplam": 0
+          }
+        },
+        "gecti": true
+      }
+    },
+    {
+      "id": "ev-sohbet-arap-olculu:ev-sohbet-arap-olculu-05",
+      "engine": "studyo-motoru/1",
+      "report": {
+        "surum": "studyo-motoru/1",
+        "kabul": [
+          {
+            "katman": "yerlesim",
+            "op": {
+              "esyalar": [
+                {
+                  "derinlik": 820,
+                  "en": 1700,
+                  "id": "room-2-sofa",
+                  "tur": "sofa",
+                  "yukseklik": 800
+                },
+                {
+                  "derinlik": 550,
+                  "en": 900,
+                  "id": "room-2-coffee",
+                  "tur": "coffee",
+                  "yukseklik": 380
+                }
+              ],
+              "katman": "yerlesim",
+              "kisitlar": [],
+              "oda": "room-2",
+              "type": "yerlestir"
+            }
+          }
+        ],
+        "red": [],
+        "uyari": [],
+        "olcum": {
+          "yerlesim": {
+            "oda": "room-2",
+            "sigdi": true,
+            "secenek": 4,
+            "secilen": 0,
+            "kisit_karsilanan": 0,
+            "kisit_toplam": 0
+          }
+        },
+        "gecti": true
+      }
+    },
+    {
+      "id": "ev-sohbet-arap-olculu:ev-sohbet-arap-olculu-06",
+      "engine": "studyo-motoru/1",
+      "report": {
+        "surum": "studyo-motoru/1",
+        "kabul": [
+          {
+            "katman": "yerlesim",
+            "op": {
+              "esyalar": [
+                {
+                  "derinlik": 820,
+                  "en": 2100,
+                  "id": "room-2-sofa",
+                  "tur": "sofa",
+                  "yukseklik": 800
+                },
+                {
+                  "derinlik": 550,
+                  "en": 900,
+                  "id": "room-2-coffee",
+                  "tur": "coffee",
+                  "yukseklik": 380
+                }
+              ],
+              "katman": "yerlesim",
+              "kisitlar": [],
+              "oda": "room-2",
+              "type": "yerlestir"
+            }
+          }
+        ],
+        "red": [],
+        "uyari": [],
+        "olcum": {
+          "yerlesim": {
+            "oda": "room-2",
+            "sigdi": true,
+            "secenek": 4,
+            "secilen": 0,
+            "kisit_karsilanan": 0,
+            "kisit_toplam": 0
+          }
+        },
+        "gecti": true
+      }
+    },
+    {
+      "id": "ev-sohbet-arap-olculu:ev-sohbet-arap-olculu-07",
+      "engine": "studyo-motoru/1",
+      "report": {
+        "surum": "studyo-motoru/1",
+        "kabul": [
+          {
+            "katman": "yerlesim",
+            "op": {
+              "esyalar": [
+                {
+                  "derinlik": 820,
+                  "en": 1900,
+                  "id": "room-1-sofa",
+                  "tur": "sofa",
+                  "yukseklik": 800
+                },
+                {
+                  "derinlik": 550,
+                  "en": 900,
+                  "id": "room-1-coffee",
+                  "tur": "coffee",
+                  "yukseklik": 380
+                }
+              ],
+              "katman": "yerlesim",
+              "kisitlar": [],
+              "oda": "room-1",
+              "type": "yerlestir"
+            }
+          }
+        ],
+        "red": [],
+        "uyari": [],
+        "olcum": {
+          "yerlesim": {
+            "oda": "room-1",
+            "sigdi": true,
+            "secenek": 4,
+            "secilen": 0,
+            "kisit_karsilanan": 0,
+            "kisit_toplam": 0
+          }
+        },
+        "gecti": true
+      }
+    },
+    {
+      "id": "ev-sohbet-arap-olculu:ev-sohbet-arap-olculu-08",
+      "engine": "studyo-motoru/1",
+      "report": {
+        "surum": "studyo-motoru/1",
+        "kabul": [
+          {
+            "katman": "yerlesim",
+            "op": {
+              "esyalar": [
+                {
+                  "derinlik": 820,
+                  "en": 2000,
+                  "id": "room-7-sofa",
+                  "tur": "sofa",
+                  "yukseklik": 800
+                },
+                {
+                  "derinlik": 550,
+                  "en": 900,
+                  "id": "room-7-coffee",
+                  "tur": "coffee",
+                  "yukseklik": 380
+                }
+              ],
+              "katman": "yerlesim",
+              "kisitlar": [],
+              "oda": "room-7",
+              "type": "yerlestir"
+            }
+          }
+        ],
+        "red": [],
+        "uyari": [],
+        "olcum": {
+          "yerlesim": {
+            "oda": "room-7",
+            "sigdi": true,
+            "secenek": 4,
+            "secilen": 0,
+            "kisit_karsilanan": 0,
+            "kisit_toplam": 0
+          }
+        },
+        "gecti": true
+      }
+    },
+    {
+      "id": "ev-sohbet-arap-olculu:ev-sohbet-arap-olculu-09",
+      "engine": "studyo-motoru/1",
+      "report": {
+        "surum": "studyo-motoru/1",
+        "kabul": [
+          {
+            "katman": "yerlesim",
+            "op": {
+              "esyalar": [
+                {
+                  "derinlik": 820,
+                  "en": 1800,
+                  "id": "room-3-sofa",
+                  "tur": "sofa",
+                  "yukseklik": 800
+                },
+                {
+                  "derinlik": 550,
+                  "en": 900,
+                  "id": "room-3-coffee",
+                  "tur": "coffee",
+                  "yukseklik": 380
+                }
+              ],
+              "katman": "yerlesim",
+              "kisitlar": [],
+              "oda": "room-3",
+              "type": "yerlestir"
+            }
+          }
+        ],
+        "red": [],
+        "uyari": [],
+        "olcum": {
+          "yerlesim": {
+            "oda": "room-3",
+            "sigdi": true,
+            "secenek": 4,
+            "secilen": 0,
+            "kisit_karsilanan": 0,
+            "kisit_toplam": 0
+          }
+        },
+        "gecti": true
+      }
+    },
+    {
+      "id": "ev-sohbet-arap-olculu:ev-sohbet-arap-olculu-10",
+      "engine": "studyo-motoru/1",
+      "report": {
+        "surum": "studyo-motoru/1",
+        "kabul": [
+          {
+            "katman": "yerlesim",
+            "op": {
+              "esyalar": [
+                {
+                  "derinlik": 820,
+                  "en": 2400,
+                  "id": "room-1-sofa",
+                  "tur": "sofa",
+                  "yukseklik": 800
+                },
+                {
+                  "derinlik": 550,
+                  "en": 900,
+                  "id": "room-1-coffee",
+                  "tur": "coffee",
+                  "yukseklik": 380
+                }
+              ],
+              "katman": "yerlesim",
+              "kisitlar": [],
+              "oda": "room-1",
+              "type": "yerlestir"
+            }
+          }
+        ],
+        "red": [],
+        "uyari": [],
+        "olcum": {
+          "yerlesim": {
+            "oda": "room-1",
+            "sigdi": true,
+            "secenek": 4,
+            "secilen": 0,
+            "kisit_karsilanan": 0,
+            "kisit_toplam": 0
+          }
+        },
+        "gecti": true
+      }
+    },
+    {
+      "id": "ev-sohbet-arap-olculu:ev-sohbet-arap-olculu-11",
+      "engine": "studyo-motoru/1",
+      "report": {
+        "surum": "studyo-motoru/1",
+        "kabul": [
+          {
+            "katman": "yerlesim",
+            "op": {
+              "esyalar": [
+                {
+                  "derinlik": 820,
+                  "en": 1700,
+                  "id": "room-6-sofa",
+                  "tur": "sofa",
+                  "yukseklik": 800
+                },
+                {
+                  "derinlik": 550,
+                  "en": 900,
+                  "id": "room-6-coffee",
+                  "tur": "coffee",
+                  "yukseklik": 380
+                }
+              ],
+              "katman": "yerlesim",
+              "kisitlar": [],
+              "oda": "room-6",
+              "type": "yerlestir"
+            }
+          }
+        ],
+        "red": [],
+        "uyari": [],
+        "olcum": {
+          "yerlesim": {
+            "oda": "room-6",
+            "sigdi": true,
+            "secenek": 4,
+            "secilen": 0,
+            "kisit_karsilanan": 0,
+            "kisit_toplam": 0
+          }
+        },
+        "gecti": true
+      }
+    },
+    {
+      "id": "ev-sohbet-arap-olculu:ev-sohbet-arap-olculu-12",
+      "engine": "studyo-motoru/1",
+      "report": {
+        "surum": "studyo-motoru/1",
+        "kabul": [
+          {
+            "katman": "yerlesim",
+            "op": {
+              "esyalar": [
+                {
+                  "derinlik": 820,
+                  "en": 1900,
+                  "id": "room-3-sofa",
+                  "tur": "sofa",
+                  "yukseklik": 800
+                },
+                {
+                  "derinlik": 550,
+                  "en": 900,
+                  "id": "room-3-coffee",
+                  "tur": "coffee",
+                  "yukseklik": 380
+                }
+              ],
+              "katman": "yerlesim",
+              "kisitlar": [],
+              "oda": "room-3",
+              "type": "yerlestir"
+            }
+          }
+        ],
+        "red": [],
+        "uyari": [],
+        "olcum": {
+          "yerlesim": {
+            "oda": "room-3",
+            "sigdi": true,
+            "secenek": 4,
+            "secilen": 0,
+            "kisit_karsilanan": 0,
+            "kisit_toplam": 0
+          }
+        },
+        "gecti": true
+      }
     }
   ],
   "dictionary": {
@@ -4314,5 +4887,12 @@
     "retained_engine_reports": 40,
     "unchanged_prior_rows_and_splits": 2566,
     "method": "Exact source document hashes and unchanged complete engine source tree verified; new records have no operations or plans."
+  },
+  "measured_arabic_append": {
+    "new_rows": 12,
+    "new_motor_contract_checks": 12,
+    "unchanged_prior_rows_and_splits": 2578,
+    "qualified_rows": 0,
+    "selected_geometry_not_native_turn_label": true
   }
 }

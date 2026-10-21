@@ -18,3 +18,6 @@
 | Avusturya / İsviçre | Ülkeye özel yeni sohbet yok | CH kaynak planı kullanmak ülke sohbeti değildir |
 
 Geometrili eski sohbet toplamı 40; ayrıca 12 Arapça ön görüşme taslağı var. Geometri kaynağı CH tek kat birimleri; ülke bağlamı uyarlamadır. Arap grubu tamamlandı sayılmadı. Hacim hedefi ayrı aşamadır; otomatik geometri testinin geçmesi insan/onay/model başarısı değildir. Önceki tablo [arşivde](toparlama-01/archive/docs/EV-ULKE-SIRASI.md).
+
+
+21Ekim ölçülü takip (henüz birleşmedi):AE3/SA3/QA2/KW2/EG1/MA1olmak üzere12yeni tek seviye uyarlanmış referans aile salonu. Ön görüşme12taslak aynen kalır. KaynaklarCH,yerel gerçek ev değil; bütün ev0/üst kat0/meclis0. İnceleme: [EV-ARAP-OLCULU-01](EV-ARAP-OLCULU-01-inceleme.html).

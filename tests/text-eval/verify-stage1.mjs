@@ -6,6 +6,8 @@ import path from 'node:path';
 import {FAMILIES} from '../../assets/forma/families.js';
 import {normalizeDesign} from '../../assets/forma/generate.js';
 import {buildMesh} from '../../assets/forma/build.js';
+import * as legacyBedroom from '../../assets/forma/bedroom.js';
+import {assertKnownMigration} from '../helpers/legacy-design.mjs';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
 const dir=path.join(root,'knowledge/aura-ses');
@@ -58,9 +60,11 @@ assert.equal(new Set(designs.map(x=>x.design.family)).size,6);
 assert.equal(new Set(designs.map(x=>x.design.style)).size,10);
 const byId=new Map(designs.map(x=>[x.id,x.design]));
 for(const {id,design:d} of designs){
-  assert.ok(FAMILIES[d.family].kinds[d.kind],id);
-  assert.deepEqual(normalizeDesign(d),d,`${id}: noncanonical design`);
-  const mod=FAMILIES[d.family].mod;
+  assert.ok(Object.hasOwn(vocab.families[d.family].kinds,d.kind),id+': invalid historical kind');
+  const migration=assertKnownMigration('text:'+id,d,normalizeDesign(d));
+  assert.equal(migration.semantic_change,['M02','M09'].includes(id));
+  assert.throws(()=>assertKnownMigration('text:'+id,{...d,seed:-999},normalizeDesign(d)));
+  const mod=d.family==='bedroom'?legacyBedroom:FAMILIES[d.family].mod;
   const issues=mod.validate(mod.compile(d.params),d.materials,buildMesh);
   assert.deepEqual(issues.filter(x=>x.level==='error'),[],`${id}: engine errors`);
 }

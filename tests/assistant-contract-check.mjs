@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {CATEGORIES,STYLE_DIRECTIONS} from '../assets/style-directions.js';
 import {normalizeTaste,validateAssistantReply,assistantPrompt} from '../assets/assistant-contract.js';
-import {trainingCandidates,approvedTrainingRows} from '../../services/design/style-training.mjs';
+import {trainingCandidates,approvedTrainingRows} from '../archive/site-v1/services/design/style-training.mjs';
 assert.equal(CATEGORIES.length,6);assert.equal(STYLE_DIRECTIONS.length,26);assert.equal(new Set(STYLE_DIRECTIONS.map(p=>p.id)).size,26);
 assert.equal(STYLE_DIRECTIONS.filter(p=>p.status==='source-profile').length,5);
 assert.deepEqual(normalizeTaste({category:'kitchen-sofa',styles:['__proto__','japandi','japandi']}).styles,['japandi']);

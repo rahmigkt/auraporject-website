@@ -1,5 +1,5 @@
-import {STYLE_DIRECTIONS} from '../../w4/assets/style-directions.js';
-import {validateTasteAnalysis} from '../../w4/assets/assistant-classifier.js';
+import {STYLE_DIRECTIONS} from '../../../../assets/style-directions.js';
+import {validateTasteAnalysis} from '../../../../assets/assistant-classifier.js';
 import {writeFile,readFile} from 'node:fs/promises';
 import {pathToFileURL} from 'node:url';
 export function trainingCandidates(){return STYLE_DIRECTIONS.flatMap(p=>[

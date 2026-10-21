@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {FAMILIES,DETAILS,normalizeStudio,compileStudio,changeFamily} from '../assets/design-library.js';
-import {validateModelReply} from '../../services/design/server.mjs';
+import {validateModelReply} from '../archive/site-v1/services/design/server.mjs';
 let n=0;
 for(const family of Object.keys(FAMILIES))for(const legs of ['straight','tapered','sled','plinth'])for(const arms of ['square','rolled','none'])for(const edge of [false,true]){
  const state=normalizeStudio({family,legs,arms,...(edge?{width:35,height:30,depth:35}:{})});const out=compileStudio(state);
