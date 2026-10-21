@@ -126,3 +126,6 @@ Bu satırlar yeni model başarısızlığı ölçümü değildir; hazırlık eks
 
 
 21 Ekim takip: T01-006 test altyapısı kapanışı: test-duzeltme-sonuc.json,63/63 PASS. Üç gerçek arşiv servisi taşınabilir importla sınandı; eski snapshotlar sürümlü fark/mutasyon denetimiyle korunuyor. Mutfak/banyo ve M02/M09 semantik uyumsuzluğu eğitim veri onayı değildir; T01-001/002/003/004/005/007 açık.
+
+
+Arapça ölçülü takip:12yeni tek seviye referans aile salonu/24parça/192mesaj,12motor sözleşme kabulü. T01-004kısmen ilerledi; gerçek yerel çok kat/meclis desteği kapanmadı. T01-008açık:solver ilk iki önerisi kapı açılımını engelleyebiliyor; bağımsız filtre üçüncüyü seçti,retler saklı. Native seçimin fiziksel durum/koordinat eşliği ve tur başı etiketi tamamlanmadan eğitim hedefi sayılmaz. İnsan/native onayı yok.
