@@ -33,4 +33,4 @@ Ortak motor 12 isteği sözleşme bakımından kabul etti. **Bu, seçilen çizim
 - Üslup taraması: yasaklı terim, 60 kelimeyi aşan cevap, dil karışması sezgisi ve tekrar sıfır. Bu sonuç ana dil onayı değildir.
 - Ortak dönüşüm: 12 yeni aday eklendi; önceki 2.578 kayıt ve bölmeleri aynen kaldı. Toplam 2.590 kayıt karantinada, 52 motor sözleşme raporu var. Kaynak grubu sızıntısı yok; 242 kaynak kümesi korundu. train/dev/test exportları boş. Aynı fiziksel CH planı ülke uyarlamalarında aynı bölümde kalır; kapalı 120 görev ayrı tutulur.
 
-Son toplu koşu sonucu tamamlanınca aşağıya eklenecek. Assets, api, kök HTML, .htaccess ve eski score.mjs değiştirilmedi.
+Son toplu koşu: `node tests/hepsi.mjs` **65/65 PASS**, çıkış 0. Ham kayıt: ARAP-OLCULU-01-test-sonuc.json. Kapı açılımı negatif kontrolü ve satır sonu taşınabilirliği eklendikten sonra etkilenen iki Arapça denetim ayrıca tekrar geçti. Yerleştirme kaynağının özeti LF/CRLF checkoutlarda aynı hesaplanır; mevcut veri baytları ve 39 dosyalık tekrar kanıtı değişmedi. Assets, api, kök HTML, .htaccess ve eski score.mjs değiştirilmedi.

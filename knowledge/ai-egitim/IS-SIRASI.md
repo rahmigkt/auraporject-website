@@ -4,7 +4,7 @@ Güncel emir: [TOPARLAMA-01](CODEX-IS-EMRI-TOPARLAMA-01.md). Eğitim/GPU/ücretl
 
 | Sıra | İş | Gerçek durum |
 |---|---|---|
-| 1 | Toparlama 1: hijyen | PR #157 açık; PR#175takip63/63PASS; beş test hatası düzeltildi |
+| 1 | Toparlama 1: hijyen | PR #157 açık; PR #175: 63/63; Arapça ekli son dal: 65/65 PASS; beş hata düzeltildi |
 | 2 | Toparlama 2: katalog | PR #159 açık; kaynak/hash/dil/ülke/katman kataloğu |
 | 3 | Toparlama 3: birleşik biçim | PR #162 altyapısı; Arap ekinden sonra 2.590 aday karantinada, onaylı eğitim kaydı 0 |
 | 4 | Toparlama 4: üslup | PR #165 açık; 40 sohbet tarandı, 178 mesaj düzeltildi; geometri sabit |

@@ -3,6 +3,8 @@ import fs from 'node:fs';import path from 'node:path';import {createHash} from '
 import {solveRoom,RULES} from '../../../assets/ev/yerlesim.js';
 import {normalizeDesign} from '../../../assets/forma/generate.js';
 import {compileItem,footprint} from '../../../assets/ev/items.js';
+// Retain the original Windows evidence digest while making it independent of checkout EOLs.
+export const sourceDigest=text=>createHash('sha256').update(text.replaceAll('\r\n','\n').replaceAll('\n','\r\n')).digest('hex');
 export function environment(plan,room){
  const walls=plan.walls.filter(w=>w.level_id===room.level_id).map(w=>{const[x0,y0]=w.from_xy_mm,[x1,y1]=w.to_xy_mm,L=Math.hypot(x1-x0,y1-y0);return {...w,x0,y0,L,ux:(x1-x0)/L,uy:(y1-y0)/L,t:w.thickness.value};}),ops=[],groups=new Map();
  for(const o of plan.openings.filter(o=>o.level_id===room.level_id))if(!groups.has(o.source_opening_id))groups.set(o.source_opening_id,o);
@@ -19,7 +21,7 @@ export function place(r){
  r.plan.items=structuredClone(r.layout_candidates[0]?.items||[]);
  r.layout_requests=[{space_id:room.id,attempts:[{items,result}],selected_alternative:0,requires_user_acceptance_of_reduced_set:false}];
  r.layout_results=[{space_id:room.id,ok:result.ok,failed:result.failed||null,items_placed:r.plan.items.map(i=>i.id)}];
- r.solver={module:'assets/ev/yerlesim.js',sha256:createHash('sha256').update(fs.readFileSync(new URL('../../../assets/ev/yerlesim.js',import.meta.url))).digest('hex'),options,rules:RULES,manual_item_coordinates:false};return r;
+ r.solver={module:'assets/ev/yerlesim.js',sha256:sourceDigest(fs.readFileSync(new URL('../../../assets/ev/yerlesim.js',import.meta.url),'utf8')),options,rules:RULES,manual_item_coordinates:false};return r;
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===path.resolve(import.meta.filename)){
  const dir=process.argv[2];if(!dir)throw Error('Output directory required');
