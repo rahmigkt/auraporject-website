@@ -1,6 +1,6 @@
 # Arapça ölçülü yerleşim — ilk takip
 
-21 Ekim 2026. Önce [PR #175](https://github.com/rahmigkt/auraporject-website/pull/175) ile beş test düzeltildi ve 63/63 kontrol geçti. Ardından bu çalışma ayrı dalda yapıldı. Eğitim, model yükleme, GPU, ücretli API, canlı dağıtım veya PR birleştirme yapılmadı.
+21 Ekim 2026. Önce [PR #175](https://github.com/rahmigkt/auraporject-website/pull/175) ile beş test düzeltildi ve 63/63 kontrol geçti. Ardından bu çalışma [PR #176](https://github.com/rahmigkt/auraporject-website/pull/176) olarak ayrı dalda yapıldı. Eğitim, model yükleme, GPU, ücretli API, canlı dağıtım veya PR birleştirme yapılmadı.
 
 ## Teslim
 
