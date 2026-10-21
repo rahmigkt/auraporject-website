@@ -1117,7 +1117,13 @@ function bindShell() {
     if (!(hi > lo)) return;
     const gap = vertical ? g.bays[i + 1].x0 - g.bays[i].x1 : g.bays[i].cells[j + 1].y0 - g.bays[i].cells[j].y1;
     let at = null;
+    // Horizontal lines snap to the cell lines of the other bays (within 30 mm) so shelves and fronts line up across bays.
+    const snaps = vertical ? [] : g.bays.flatMap((bb, k) => k === i ? [] : bb.cells.slice(0, -1).map((cg, m) => (cg.y1 + bb.cells[m + 1].y0) / 2));
     const move = ev => { const q = toSvg(ev); at = Math.round(Math.min(hi, Math.max(lo, vertical ? q.x : -q.y)) / 5) * 5;
+      const near = snaps.filter(y => y > lo && y < hi).sort((a, b) => Math.abs(a - at) - Math.abs(b - at))[0], snapped = near != null && Math.abs(near - at) <= 30;
+      if (snapped) at = near;
+      if (!vertical) { h.setAttribute('x1', snapped ? -g.W / 2 : g.bays[i].x0); h.setAttribute('x2', snapped ? g.W / 2 : g.bays[i].x1); }
+      h.setAttribute('stroke-dasharray', snapped ? `${g.W / 80} ${g.W / 120}` : '');
       if (vertical) { h.setAttribute('x1', at); h.setAttribute('x2', at); } else { h.setAttribute('y1', -at); h.setAttribute('y2', -at); }
       h.setAttribute('stroke', '#a24a2a'); h.setAttribute('stroke-width', Math.max(g.W, g.H) / 160);
       const tip = panel.querySelector('.f-drag-tip'); if (tip) tip.textContent = `${Math.round(at - a0 - gap / 2)} mm · ${Math.round(a1 - at - gap / 2)} mm`; };
