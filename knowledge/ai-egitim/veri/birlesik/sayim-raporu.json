@@ -1,23 +1,23 @@
 {
   "version": "aura-conversion/1",
-  "candidate_rows": 2566,
+  "candidate_rows": 2578,
   "qualified_training_rows": 0,
-  "quarantined_rows": 2566,
-  "source_clusters": 230,
+  "quarantined_rows": 2578,
+  "source_clusters": 242,
   "candidate_split_rows": {
-    "test": 194,
-    "dev": 190,
-    "train": 2182
+    "test": 196,
+    "dev": 191,
+    "train": 2191
   },
   "candidate_split_groups": {
-    "test": 23,
-    "dev": 23,
-    "train": 184
+    "test": 25,
+    "dev": 24,
+    "train": 193
   },
   "leakage": [],
   "warning_counts": {
-    "human_review_pending": 2566,
-    "language_review_pending": 2566,
+    "human_review_pending": 2578,
+    "language_review_pending": 2578,
     "retained_source_geometry_exceptions": 39,
     "legacy_program_targets_not_native_studio_operations": 2409,
     "no_recorded_native_operation_sequence": 1,
@@ -25,7 +25,11 @@
     "license_unverified": 52,
     "style_reply_not_studio_action_target": 52,
     "missing_messages": 30,
-    "text_trial_not_studio_action_target": 30
+    "text_trial_not_studio_action_target": 30,
+    "awaiting_measured_plan": 12,
+    "no_solver_placement_delivered": 12,
+    "majlis_support_pending": 4,
+    "two_storey_geometry_missing_and_engine_unsupported": 2
   },
   "datasets": [
     {
@@ -187,6 +191,11 @@
       "dataset": "yerlesim-veri-procthor",
       "status": "missing_source",
       "records_converted": 0
+    },
+    {
+      "dataset": "ev-sohbet-arap",
+      "status": "quarantined_intake_no_geometry",
+      "records_converted": 12
     }
   ],
   "engine_evidence": [
@@ -4297,5 +4306,13 @@
     "approval_reused": false,
     "qualification_changed": false,
     "method": "Verified body hashes + current-source exact request/result replay; only messages and source document hashes refreshed."
+  },
+  "split_policy": "Frozen existing source assignments; new source groups use stable 80/10/10 hash buckets. Cross-partition bridges fail.",
+  "arabic_append": {
+    "new_intake_rows": 12,
+    "fresh_engine_runs": 0,
+    "retained_engine_reports": 40,
+    "unchanged_prior_rows_and_splits": 2566,
+    "method": "Exact source document hashes and unchanged complete engine source tree verified; new records have no operations or plans."
   }
 }

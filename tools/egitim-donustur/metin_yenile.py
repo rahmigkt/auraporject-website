@@ -13,7 +13,9 @@ def run():
     contents=m.CAT.blobs();rows=[json.loads(x) for x in (out/'adaylar.jsonl').read_text(encoding='utf8').splitlines()];updated=[]
     for r in rows:
         if not r['kaynak']['veri_seti'].startswith('ev-sohbet-'):continue
-        src=json.loads(contents[r['kaynak']['dosya']].decode('utf8'));saved=old[src['id']]
+        src=json.loads(contents[r['kaynak']['dosya']].decode('utf8'))
+        if 'style_revision' not in src:continue # New intake drafts have no old geometry/text approval to reuse.
+        saved=old[src['id']]
         assert digest(body(src))==saved['body_sha256']
         before=m.conversation({'dialogue':saved['dialogue']});after=m.conversation(src)
         assert r['mesajlar'] in [before,after]
