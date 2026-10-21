@@ -2,7 +2,7 @@
 // examples whose placements follow AURA's interior rules, not ProcTHOR's procedural ones. Furniture sets use common
 // European sizes and vary per room; when the solver finds no rule-abiding layout the example says so honestly.
 // Usage: node cozucu_ornekleri.mjs <yerlesim-tum-odalar.jsonl> <out.jsonl> [limit]
-import {readFileSync, writeFileSync} from 'node:fs';
+import {readFileSync, writeFileSync, appendFileSync, existsSync} from 'node:fs';
 const {solveRoom} = await import('../../assets/ev/yerlesim.js');
 const [src, dst, lim, part] = process.argv.slice(2), LIMIT = +lim || Infinity, [PI, PN] = (part || '0/1').split('/').map(Number);
 let seed = 7; const R = () => (seed = (seed * 16807) % 2147483647) / 2147483647, pick = a => a[Math.floor(R() * a.length)];
@@ -43,6 +43,6 @@ for (const l of lines) { if (!l || n >= LIMIT) continue; const rec = JSON.parse(
   let assistant;
   if (res.ok) { ok++; const a = res.alternatives[0]; assistant = JSON.stringify({yerlesim: a.placements.map(p => ({parca: items.find(i => i.id === p.id).name, merkez_mm: p.pos_xy_mm, on_derece: p.rot_deg})), gerekce: a.notes, secenek_sayisi: res.alternatives.length}); }
   else { no++; assistant = JSON.stringify({yerlesim: null, gerekce: [res.reason + '. Kapı açılımını, geçiş paylarını ve pencereyi koruyarak yer yok; daha küçük ölçü ya da parçayı çıkarmayı öneririm.']}); }
-  out.push(JSON.stringify({id: `aura-cozucu-${rec.source.split}-${rec.source.house}-${rec.source.room}`, source: {...rec.source, placements: 'AURA yerlesim.js', note: 'oda geometrisi ProcTHOR-10K (Apache-2.0); yerleşim AURA kuralları'}, ok: res.ok, messages: [{role: 'user', content: user}, {role: 'assistant', content: assistant}]}));
+  appendFileSync(dst, JSON.stringify({id: `aura-cozucu-${rec.source.split}-${rec.source.house}-${rec.source.room}`, source: {...rec.source, placements: 'AURA yerlesim.js', note: 'oda geometrisi ProcTHOR-10K (Apache-2.0); yerleşim AURA kuralları'}, ok: res.ok, messages: [{role: 'user', content: user}, {role: 'assistant', content: assistant}]}) + '\n');
 }
-writeFileSync(dst, out.join('\n') + '\n'); console.log(JSON.stringify({oda: n, cozuldu: ok, sigmadi: no, sn: (Date.now() - t0) / 1000}));
+console.log(JSON.stringify({oda: n, cozuldu: ok, sigmadi: no, sn: (Date.now() - t0) / 1000}));
