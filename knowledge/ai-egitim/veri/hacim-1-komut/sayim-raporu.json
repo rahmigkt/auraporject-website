@@ -1,0 +1,99 @@
+{
+  "version": "hacim-1-komut/1",
+  "rows": 1800,
+  "qualified": 0,
+  "quarantined": 1800,
+  "source_lock": {
+    "git_tree_sha256": "4836a096657eb3cd21758ff7533d7cb762caff5fc0782c0402ec5f1738662fe3",
+    "scope": [
+      "assets/",
+      "tools/studyo-motoru/"
+    ]
+  },
+  "language_counts": {
+    "tr": 200,
+    "en": 200,
+    "de": 200,
+    "fr": 200,
+    "nl": 200,
+    "da": 200,
+    "es": 200,
+    "it": 200,
+    "ar": 200
+  },
+  "category_counts": {
+    "single": 1080,
+    "multiple": 450,
+    "clarify": 180,
+    "unsupported": 90
+  },
+  "gulf_user_rows": 40,
+  "motor_accepted": 1800,
+  "target_mismatches": [],
+  "motor_rejected": [],
+  "warning_codes": {},
+  "files": [
+    {
+      "path": "tr.jsonl",
+      "sha256": "e10ce80ba5e5c5c5ab734e171f12d2e04102937a6e6d93734fb0b05794ad8b29"
+    },
+    {
+      "path": "en.jsonl",
+      "sha256": "9d4c7d48284b2810a58ecf47394c71728c48b6aadf4ec85d2f7fade5d55175a3"
+    },
+    {
+      "path": "de.jsonl",
+      "sha256": "af28fab07128320744b50808dacf2f637140453b9430b42816396b46aabc3094"
+    },
+    {
+      "path": "fr.jsonl",
+      "sha256": "306f644eb289d091c80966d38fad56be3eab05e9c32a639d95f6534b4c80dd58"
+    },
+    {
+      "path": "nl.jsonl",
+      "sha256": "95480aa0a4ed023f844e658811ca50b1c289c34383140ab994dc045a3a6160ec"
+    },
+    {
+      "path": "da.jsonl",
+      "sha256": "203a991e908a4b5866504ba45cbfb24cb6ad6788a48785c6650d807082b09e33"
+    },
+    {
+      "path": "es.jsonl",
+      "sha256": "3cde4a9a8d8c6efec340282071f37766de62df4679eeeb5c7fc3b5d0ae36798d"
+    },
+    {
+      "path": "it.jsonl",
+      "sha256": "7ccea68fce3eb43d4b9c690c4da88c101bfe54a610c96349af189a6ee9f3df39"
+    },
+    {
+      "path": "ar.jsonl",
+      "sha256": "7d13898ec3048e1d0ebd89d5f791024ae45ab897f570ace410cca1797c7148dd"
+    }
+  ],
+  "limitations": [
+    "Template families with six grounded values, not 1800 independently collected human utterances",
+    "Designer and native-language reviews pending; heuristic language checks are not approval",
+    "Three furniture families; kitchen/bath and enum/delta changes are not covered in H1 v1",
+    "Existing combined 2590 rows remain unchanged; H1 quarantine is separate, never a training export"
+  ],
+  "common_contract": {
+    "schema": "AURA-EGITIM-1",
+    "projection": "karantina.jsonl",
+    "rows": 1800,
+    "primary": false,
+    "source_clusters": 3,
+    "split_rows": {
+      "dev": 936,
+      "train": 864
+    },
+    "leakage": [],
+    "policy": "All translations/value variants sharing a base product stay in one group. Split labels are prospective, not exported training data."
+  },
+  "inventory": {
+    "existing_combined_candidates": 2590,
+    "new_h1_candidates": 1800,
+    "total_candidate_rows_not_unique_projects": 4390,
+    "qualified_training_rows": 0,
+    "existing_combined_unchanged": true
+  }
+}
