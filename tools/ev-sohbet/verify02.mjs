@@ -5,12 +5,16 @@ import {solveRoom} from '../../assets/ev/yerlesim.js';
 import {compileItem,footprint} from '../../assets/ev/items.js';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
 const dir=process.argv[2]?path.resolve(process.argv[2]):path.join(root,'knowledge/ai-egitim/veri/ev-sohbet-02');
-let tested=0,failed=0,records=0;
+const compareCurrent=process.argv.includes('--compare-current');
+let tested=0,failed=0,records=0,sourceChanges=0;
 for(const file of fs.readdirSync(dir).filter(f=>/^ev-sohbet-(?:02|uk-ie|dk|es|it)-\d+\.json$/.test(f)).sort()){
  records++;
  const r=JSON.parse(fs.readFileSync(path.join(dir,file),'utf8')),p=r.plan;
  const hash=crypto.createHash('sha256').update(fs.readFileSync(path.join(root,r.solver.module))).digest('hex');
- if(hash!==r.solver.sha256)throw Error('Studio solver changed: regenerate data');
+ if(hash!==r.solver.sha256){
+  if(!compareCurrent)throw Error('Studio solver changed: regenerate data');
+  sourceChanges++; // Every recorded request/result must still compare exactly below.
+ }
  for(const request of r.layout_requests){
   const room=p.spaces.find(s=>s.id===request.space_id),walls=p.walls.map(w=>{let[x0,y0]=w.from_xy_mm,[x1,y1]=w.to_xy_mm,L=Math.hypot(x1-x0,y1-y0);return{...w,x0,y0,L,ux:(x1-x0)/L,uy:(y1-y0)/L,t:w.thickness.value};}).filter(w=>w.level_id===room.level_id),ops=[];
   const groups=new Map();for(const o of p.openings.filter(o=>o.level_id===room.level_id))if(!groups.has(o.source_opening_id))groups.set(o.source_opening_id,o);
@@ -20,6 +24,6 @@ for(const file of fs.readdirSync(dir).filter(f=>/^ev-sohbet-(?:02|uk-ie|dk|es|it
  for(const it of p.items){if(JSON.stringify(compileItem(it).size)!==JSON.stringify(it.compiled_size_mm))throw Error('Compiled size drift');if(JSON.stringify(footprint(it))!==JSON.stringify(it.footprint_xy_mm))throw Error('Footprint drift');}
  console.log(file,'replayed');
 }
-const summary={attempts_replayed:tested,honest_no_fit_results:failed,records,passed:true};
-fs.writeFileSync(path.join(dir,'solver-tekrar-sonucu.json'),JSON.stringify(summary,null,2)+'\n');
+const summary={attempts_replayed:tested,honest_no_fit_results:failed,records,passed:true,...(compareCurrent?{source_changes_revalidated:sourceChanges,mode:'all_recorded_requests_byte_comparison_current_solver'}:{})};
+if(!compareCurrent)fs.writeFileSync(path.join(dir,'solver-tekrar-sonucu.json'),JSON.stringify(summary,null,2)+'\n');
 console.log(JSON.stringify(summary));

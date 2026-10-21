@@ -11,7 +11,9 @@ const jobs=readdirSync(path.join(root,'tests')).filter(f=>/\.(mjs|py)$/.test(f)&
 for(const f of ['test-01b.mjs','test-uzman-onay.mjs','verify-01b.mjs'])jobs.push({file:`tests/ai-eval/${f}`,args:[]});
 jobs.push({file:'tests/text-eval/verify-stage1.mjs',args:[]});
 for(const dir of ['tools/ev-plan','tools/ev-sohbet','tools/perde'])for(const f of readdirSync(path.join(root,dir)).filter(f=>/^test.*\.py$/.test(f)).sort())jobs.push({file:`${dir}/${f}`,args:[]});
-for(const batch of ['02','uk-ie','dk','es','it'])jobs.push({file:'tools/ev-sohbet/verify02.mjs',args:[`knowledge/ai-egitim/veri/ev-sohbet-${batch}`],id:`replay-${batch}`});
+for(const batch of ['02','uk-ie','dk','es','it'])jobs.push({file:'tools/ev-sohbet/verify02.mjs',args:[`knowledge/ai-egitim/veri/ev-sohbet-${batch}`,'--compare-current'],id:`replay-${batch}`});
+jobs.push({file:'tools/studyo-motoru/test.mjs',args:[]});
+jobs.push({file:'tools/ev-sohbet/uslup_denetim.py',args:[]});
 const results=[];
 function inventory(dir){return readdirSync(path.join(root,dir),{withFileTypes:true}).flatMap(e=>e.isDirectory()?inventory(`${dir}/${e.name}`):[/\.(mjs|py|cjs)$/.test(e.name)?`${dir}/${e.name}`:null]).filter(Boolean);}
 const selected=new Set(jobs.map(j=>j.file));

@@ -9327,13 +9327,13 @@
     },
     {
       "role": "user",
-      "content": "Voici une référence suisse pour discuter. On peut partir sur 55 m² ?",
+      "content": "Voici le plan du logement. Je pensais avoir environ 55 m².",
       "language": "fr",
       "turn": 2
     },
     {
       "role": "assistant",
-      "content": "Cette référence totalise 46,0 m² intérieurs, pas 55. Je préfère corriger maintenant le périmètre du calcul plutôt que répartir une surface qui n’existe pas dans le fichier.",
+      "content": "Les pièces donnent 46,0 m² à l’intérieur, au lieu des 55 annoncés. Cela peut venir d’une autre façon de compter ; commençons par l’espace que montrent vos mesures.",
       "language": "fr",
       "turn": 2
     },
@@ -9393,7 +9393,7 @@
     },
     {
       "role": "assistant",
-      "content": "Non ; notre objectif de pièce ne suffit pas à établir la décence d’un logement, dont le texte traite notamment une pièce principale de neuf mètres carrés ou un volume défini. Les 2 écarts conservés dans la source restent des points à examiner.",
+      "content": "Pas encore : la surface seule ne suffit pas pour se prononcer sur le logement. Deux mesures restent à vérifier, et le designer devra faire examiner les conditions applicables avant de confirmer le projet.",
       "language": "fr",
       "turn": 7
     },
@@ -9988,5 +9988,13 @@
     },
     "manual_item_coordinates": false
   },
-  "scenario_status": "fictional_conversation_on_licensed_reference_not_customer_or_model_transcript"
+  "scenario_status": "fictional_conversation_on_licensed_reference_not_customer_or_model_transcript",
+  "style_revision": {
+    "version": "toparlama-4/1",
+    "old_dialogue_sha256": "1e7803e1d101470de86330fd1d95207105696f52855d57d8e4ec959c5a0c811b",
+    "new_dialogue_sha256": "15d8d5bc8e7018d0533b1df45bbd9f3f397a9cee1ee699a70377a0281023c3ce",
+    "body_sha256": "50286a11b3a1cc42df801c2ea348a899b08c8c7ce6be1f260eb1256eb16846ec",
+    "native_review": "pending",
+    "authorship": "Codex individually authored editorial corrections; no external model/API call"
+  }
 }

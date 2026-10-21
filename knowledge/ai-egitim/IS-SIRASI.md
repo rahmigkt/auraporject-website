@@ -4,10 +4,10 @@ Güncel emir: [TOPARLAMA-01](CODEX-IS-EMRI-TOPARLAMA-01.md). Eğitim/GPU/ücretl
 
 | Sıra | İş | Gerçek durum |
 |---|---|---|
-| 1 | Toparlama 1: hijyen | Bu dalda teslim; 46/52 geçti, 5 hata + 1 süre aşımı. Açıklar ASAMA-1-RAPOR.md içinde |
-| 2 | Toparlama 2: katalog | Sıradaki; bütün aday ve eski kaynaklar ayrı sayılacak |
-| 3 | Toparlama 3: birleşik biçim | Katalogdan sonra; yeni motor hazır değilse mevcut denetimler |
-| 4 | Toparlama 4: üslup | 40 sohbetin yalnız metin değişikliği, geometri sabit |
+| 1 | Toparlama 1: hijyen | PR #157 açık; 46/52, beş hata ve bir süre aşımı raporlu |
+| 2 | Toparlama 2: katalog | PR #159 açık; kaynak/hash/dil/ülke/katman kataloğu |
+| 3 | Toparlama 3: birleşik biçim | PR #162 açık; 2.566 aday karantinada, onaylı eğitim kaydı 0 |
+| 4 | Toparlama 4: üslup | Bu dalda: 40 sohbet tarandı, 38 sohbette 178 mesaj düzeltildi; geometri sabit. PR incelemesi bekliyor |
 | 5 | Toparlama 5: Arap dünyası | EV-ARAP-01; #152 araştırması temel, izin ve meclis açıkları korunacak |
 | 6 | Toparlama 6: 120 kapalı görev | Eğitimden ayrı kaynak/örnekler; koşu yapılmayacak |
 | 7 | Toparlama 7: ülke başına hacim | Önce 1–4; her ülke ayrı PR, onay/denetim eksikleri saklanmayacak |
