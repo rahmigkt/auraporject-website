@@ -13,6 +13,7 @@ Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sa
   - soru cevapları isteğin kendisini sorar (halı → ölçü/renk/doku);
   - dil başına en az 150 farklı kalıp; ev sahibinin kendi evini anlattığı istekler artar;
   - plana uzakta boş oda ekleme kalıbı azalır.
+- [ ] **C1b · #187 kalan düzeltmeler** (Claude ikinci denetimi, `kararlar.json`): EN/FR/ES/IT/DA'da 'for the furniture' türü yapıştırma bağlacı olan 42 satır yeniden yazılır; asistan açılış kalıpları çeşitlenir. Tekstil satırları kullanıcı kararını bekler. #193 (eski mobilya komutu sürümü) kapsam dışı; kullanıcı onayıyla kapatılır.
 - [ ] **C2 · 47 kaydın üslup düzeltmesi.** `inceleme/kararlar.json` içindeki `duzelt` kayıtları (ev-sohbet-02, uk-ie, dk 01/03/04, es, arap-olculu):
   - asistan satırlarında iç terim kalmaz ("adsız oda", "hesap", "kayıt", "yerleştirilen eşya sayısı", "elle konum");
   - kullanıcı satırları doğal olur, kendi evini anlatır;
