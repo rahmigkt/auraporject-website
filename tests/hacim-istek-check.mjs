@@ -4,6 +4,7 @@ import {execFileSync}from'node:child_process';
 import{dest,langs,hash,root,make,checkTarget}from'../tools/hacim-istek/build.mjs';
 import{load}from'../tools/hacim-istek/audit.mjs';
 import{audit,loadExam,similarity}from'../tools/hacim-istek/leakage.mjs';
+import{decodeOperations}from'../tools/egitim-donustur/operations.mjs';
 const rows=load();assert.equal(rows.length,1800);assert.equal(new Set(rows.map(r=>r.id)).size,1800);
 assert.deepEqual(rows,make(),'Inputs, labels or exact motor replay changed');
 for(const l of langs){const rs=rows.filter(r=>r.language===l);assert.equal(rs.length,200);assert.equal(new Set(rs.map(r=>r.user)).size,200);for(const [k,n]of Object.entries({single:120,multiple:50,clarify:20,unsupported:10}))assert.equal(rs.filter(r=>r.category===k).length,n);}
@@ -21,4 +22,8 @@ const fallback=structuredClone(rows.find(r=>r.assistant.actions[0]?.type==='perd
 const manifest=JSON.parse(fs.readFileSync(new URL('sayim-raporu.json',dest)));assert.equal(manifest.source_lock.git_tree_sha256,hash(execFileSync('git',['ls-tree','-r','HEAD','--','assets','tools/studyo-motoru'],{cwd:root})));
 for(const f of manifest.files)assert.equal(f.sha256,hash(fs.readFileSync(new URL(f.path,dest))));
 assert.equal(manifest.qualified_training_rows,0);assert.equal(manifest.common_contract.rows,1800);
+const projected=fs.readFileSync(new URL('karantina.jsonl',dest),'utf8').trim().split('\n').map(JSON.parse);
+for(let i=0;i<rows.length;i++)assert.deepEqual(decodeOperations(projected[i].islemler),rows[i].assistant.actions,'Lossless common operation round trip');
+assert.deepEqual(decodeOperations([{tur:'yerlestir',katman:'yerlesim',oda:'living',esyalar:[]}]),[{type:'yerlestir',katman:'yerlesim',oda:'living',esyalar:[]}]);
+assert.throws(()=>decodeOperations([{tur:'oda_tanimla',katman:'ev',arguments:{type:'set'}}]));
 console.log('PASS 1800 deterministic targets, exact motor results, scope rejection, wrong geometry/textile mutations, nine-language mix, Gulf40, lexical held-out exclusion; native review pending');

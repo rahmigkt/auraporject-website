@@ -8,6 +8,8 @@ Sıra: `node tools/hacim-istek/build.mjs`, `node tools/hacim-istek/audit.mjs`, `
 
 Her işlem dizisi gerçek motorla çalışır. Tam aynı başlangıç ve işlem baytları tekrarlandığında aynı motor kanıtı önbellekten paylaşılır; dil değişince gereksiz aynı geometrinin tekrar çözülmesi sayıca yeni kanıt diye sunulmaz. Hedef gözlemleri ve bütün eşya ölçüleri ayrı denetlenir. Ret/uyarı/hedef farkı üretimi durdurur.
 
-Ortak şema izdüşümü ayrı karantinadır. Aynı sentetik oda planını paylaşan bütün diller ve değerler aynı bölmede tutulur; bağımsız doğrulama/sınav kümesi olduğu iddia edilmez. Mevcut birleşik veri ve eğitim dışa aktarımlarına ekleme yapılmaz.
+Ortak şema izdüşümü ayrı karantinadır. Aynı sentetik oda planını paylaşan bütün diller ve değerler aynı bölmede tutulur; bağımsız doğrulama/sınav kümesi olduğu iddia edilmez. `tur` işlem adı ile oda/açıklık türünün çakışmaması için yerel alanlar `arguments` içine alınır; ortak motor adaptörü eski düz işlemleri de destekler. Mevcut birleşik veri sayısı ve bölmeleri korunur; 52 eski sohbet izdüşümünün motor kanıtı yenilenir. Eğitim dışa aktarımları boş kalır.
+
+Eski yerleşimlerin yenilenmesi: eski kaynak sürümündeyken `refresh_legacy.mjs`, `finalize_legacy.py`, `refresh_arabic.py`, `revalidate_exam.mjs <eski-donmuş-kaynak-klasörü>` sırası. Kaynak JSON'ları commit edildikten sonra `revalidate_common.py`. Bunlar bir kerelik geçiş araçlarıdır; eski Git arşivinin üzerine yazmayı reddederler. Yeni başta çalıştırmak için Git'teki kaynak sürümü doğru seçilmelidir. `finalize_legacy.py`, Python'daki eski `1.0` sayılarının JS'de `1` yazılmasından doğan hash farklarını eski Python kanıtıyla karşılaştırır; geometrik ya da metinsel değişikliği saklamaz.
 
 Proje gönderme motoru yalnız kabul kaydı üretir; gerçek teslim/kayıt etkisi yoktur. Aydınlatma için işlem yoktur. Bu sürüm bunları başarı hedefi olarak üretmez. Tekstil durumu seçili oda çalışmasına aittir; çok odalı bağımsız tekstil kalıcılığı iddia edilmez.

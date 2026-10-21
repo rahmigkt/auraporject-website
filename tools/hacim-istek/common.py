@@ -21,6 +21,6 @@ for r in rows:v.validate(r)
 (BASE/'karantina.jsonl').write_text(''.join(m.canonical(r)+'\n' for r in rows),encoding='utf8',newline='\n')
 manifest=json.loads((BASE/'sayim-raporu.json').read_text(encoding='utf8'))
 manifest['common_contract']={'schema':'AURA-EGITIM-1','rows':len(rows),'primary':False,'source_clusters':groups,'split_rows':dict(collections.Counter(r['bolum'] for r in rows)),'training_exported':0,'policy':'All cases share a synthetic plan: one cluster, no independent dev/test set claimed. Projection is not extra data.'}
-manifest['common_contract']['operation_encoding']='tur is the operation name; arguments preserves native fields including room/opening tur without key collision. Decode as {type: tur, katman, ...arguments}. Independent quarantine, not consumed by the legacy flat-operation adapter.'
+manifest['common_contract']['operation_encoding']='tur is the operation name; arguments preserves native room/opening tur without key collision. tools/egitim-donustur/operations.mjs decodes both this nested form and legacy flat operations. Independent quarantine, not exported to training.'
 (BASE/'sayim-raporu.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf8',newline='\n')
 print(json.dumps(manifest['common_contract']))
