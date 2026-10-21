@@ -6,9 +6,9 @@ Güncel emir: [TOPARLAMA-01](CODEX-IS-EMRI-TOPARLAMA-01.md). Eğitim/GPU/ücretl
 |---|---|---|
 | 1 | Toparlama 1: hijyen | PR #157 açık; 46/52, beş hata ve bir süre aşımı raporlu |
 | 2 | Toparlama 2: katalog | PR #159 açık; kaynak/hash/dil/ülke/katman kataloğu |
-| 3 | Toparlama 3: birleşik biçim | PR #162 açık; 2.566 aday karantinada, onaylı eğitim kaydı 0 |
-| 4 | Toparlama 4: üslup | Bu dalda: 40 sohbet tarandı, 38 sohbette 178 mesaj düzeltildi; geometri sabit. PR incelemesi bekliyor |
-| 5 | Toparlama 5: Arap dünyası | EV-ARAP-01; #152 araştırması temel, izin ve meclis açıkları korunacak |
+| 3 | Toparlama 3: birleşik biçim | PR #162 altyapısı; Arap ekinden sonra 2.578 aday karantinada, onaylı eğitim kaydı 0 |
+| 4 | Toparlama 4: üslup | PR #165 açık; 40 sohbet tarandı, 178 mesaj düzeltildi; geometri sabit |
+| 5 | Toparlama 5: Arap dünyası | Bu dalda kısmi: 12 ön görüşme / 192 mesaj; yeni ölçülü yerleşim 0. Meclis ve iki katlı kaynak/motor desteği açık |
 | 6 | Toparlama 6: 120 kapalı görev | Eğitimden ayrı kaynak/örnekler; koşu yapılmayacak |
 | 7 | Toparlama 7: ülke başına hacim | Önce 1–4; her ülke ayrı PR, onay/denetim eksikleri saklanmayacak |
 | 8 | Toparlama 8: eğitim hazırlığı | Ölçülen veri hacmine göre plan; eğitim başlatılmaz |
