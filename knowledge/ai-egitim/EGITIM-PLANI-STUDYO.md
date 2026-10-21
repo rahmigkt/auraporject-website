@@ -2,6 +2,18 @@
 
 21 Ekim 2026. Hazırlayan: Claude. Kararlar kullanıcının; bu belge eldeki işleri toplar ve sırayı önerir.
 
+## Kapsam kararı (21 Ekim 2026)
+
+Yapay zekâ yalnızca **ev projesi** üzerinde çalışır:
+- plan;
+- odalar;
+- hangi eşyanın hangi toplam ölçüyle nereye gireceği;
+- yerleşim kısıtları;
+- perde, halı ve ışık;
+- tasarımcıya gönderme.
+
+Mobilyanın detay tasarımı (kol, ayak, dikiş, kapak düzeni, malzeme ayrıntısı) stüdyoda kullanıcının işidir. Yapay zekâ buna işlem üretmez, kullanıcıyı stüdyoya yönlendirir. Aşağıda "mobilya" katmanından söz edilen yerlerde yalnızca ürün türü ve toplam ölçü kastedilir; Codex #69'un mobilya detay örnekleri eğitim kapsamı dışındadır.
+
 ## İlke
 
 Qwen çizim yapmaz, koordinat ezberlemez. **Stüdyoyu kullanır.**
@@ -57,7 +69,7 @@ tools/studyo-motoru/
 
 ## Ölçüm: ayrı sınav seti
 
-Eğitime hiç girmeyen 120 görev: 40 mobilya düzenleme, 40 ev ve yerleşim, 20 tekstil, 20 zor durum (sığmayan, belirsiz, kural dışı istek). Ölçütler:
+Eğitime hiç girmeyen 120 görev: 40 ev projesi isteği (5'i mobilya detayı → stüdyoya yönlendirme), 40 ev ve yerleşim, 20 tekstil, 20 zor durum (sığmayan, belirsiz, kural dışı istek). Ölçütler:
 
 - **İşlem geçerliliği:** Motor kabul ediyor mu (%).
 - **Kural ihlali:** Fizik uyarısı, kapı veya pencere önü, alan sapması (sayı).
