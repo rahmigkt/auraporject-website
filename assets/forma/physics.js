@@ -19,7 +19,7 @@ function matClass(q, materials = {}) {
   if (['fabric', 'welt', 'leather', 'linen'].includes(m)) return 'fabric';
   if (['cushion', 'foam'].includes(q.role)) return 'foam';
   if (['led', 'line'].includes(m)) return 'light';
-  const spec = materials[m] || (m === 'base' ? (materials.base?.surface === 'same' ? materials.top : materials.base) : null);
+  const spec = m === 'base' && materials.base?.surface === 'same' ? materials.top : materials[m];
   if (spec?.surface === 'stone' || m === 'sink') return 'stone';
   if (spec?.surface === 'glass') return 'glass';
   if (spec?.surface === 'metal') return 'metal';
