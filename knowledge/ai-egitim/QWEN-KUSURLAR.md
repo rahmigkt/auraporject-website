@@ -123,3 +123,6 @@ Henüz yeni model turu tamamlanmadı; hiçbir model kusuru kapalı işaretlenmed
 | T01-007 | Hacim30–40/ülke ve9×200 doğal komut tamam değil | Ülke başına ayrı, denetimli PR; sayılar mevcut geometri ve ön görüşme diye ayrılmalı |
 
 Bu satırlar yeni model başarısızlığı ölçümü değildir; hazırlık eksikleridir. Eğitim veya kiralık GPU kapısı açılmadı.
+
+
+21 Ekim takip: T01-006 test altyapısı kapanışı: test-duzeltme-sonuc.json,63/63 PASS. Üç gerçek arşiv servisi taşınabilir importla sınandı; eski snapshotlar sürümlü fark/mutasyon denetimiyle korunuyor. Mutfak/banyo ve M02/M09 semantik uyumsuzluğu eğitim veri onayı değildir; T01-001/002/003/004/005/007 açık.

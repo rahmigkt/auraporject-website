@@ -1,0 +1,807 @@
+{
+  "scope": "offline-unit-and-replay",
+  "not_run": [
+    {
+      "file": "tests/ai-eval/aura-sinav-01/score.mjs",
+      "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+    },
+    {
+      "file": "tests/ai-eval/build-sinav-01.mjs",
+      "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+    },
+    {
+      "file": "tests/ai-eval/iskelet.mjs",
+      "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+    },
+    {
+      "file": "tests/ai-eval/report-01b.mjs",
+      "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+    },
+    {
+      "file": "tests/ai-eval/report-sinav-01.mjs",
+      "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+    },
+    {
+      "file": "tests/ai-eval/run-score-windows.mjs",
+      "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+    },
+    {
+      "file": "tests/ai-eval/score.mjs",
+      "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+    },
+    {
+      "file": "tests/ai-eval/uzman-onay-01b.mjs",
+      "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+    },
+    {
+      "file": "tests/ai-eval/uzman-onay.mjs",
+      "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+    },
+    {
+      "file": "tests/ai-eval/vocab.mjs",
+      "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+    },
+    {
+      "file": "tests/helpers/legacy-design.mjs",
+      "reason": "Scorer, report builder, approval importer or shared utility; not an executable assertion suite."
+    },
+    {
+      "file": "tests/visual/denetim-01/capture.mjs",
+      "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+    },
+    {
+      "file": "tests/visual/denetim-01/inspect.mjs",
+      "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+    },
+    {
+      "file": "tests/visual/denetim-02/capture.mjs",
+      "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+    },
+    {
+      "file": "tests/visual/foto/atolye-cikti.mjs",
+      "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+    },
+    {
+      "file": "tests/visual/foto/atolye.mjs",
+      "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+    },
+    {
+      "file": "tests/visual/foto/birlesim.mjs",
+      "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+    },
+    {
+      "file": "tests/visual/foto/kasa.mjs",
+      "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+    },
+    {
+      "file": "tests/visual/foto/real.mjs",
+      "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+    },
+    {
+      "file": "tests/visual/foto/shot.mjs",
+      "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+    },
+    {
+      "file": "tests/visual/foto/surum.mjs",
+      "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+    },
+    {
+      "file": "tests/visual/gorsel-01/capture.mjs",
+      "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+    },
+    {
+      "file": "tests/visual/gorsel-01/serve.py",
+      "reason": "Interactive capture/render utility; needs browser/server, not an offline assertion suite."
+    }
+  ],
+  "results": [
+    {
+      "id": "tests/ai-workspace-check.mjs",
+      "file": "tests/ai-workspace-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 3 imported home templates × 14 furniture families: proposals do not mutate rooms, bounds, occupancy, edit exclusion, sliding-door clearance and sanitised restore.\n",
+      "stderr": "",
+      "milliseconds": 189
+    },
+    {
+      "id": "tests/assistant-contract-check.mjs",
+      "file": "tests/assistant-contract-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 26 style directions, six categories, response allowlist, explicit avoid context, 52 unreviewed candidates and reviewed-only training export.\n",
+      "stderr": "",
+      "milliseconds": 110
+    },
+    {
+      "id": "tests/brief-pdf-check.mjs",
+      "file": "tests/brief-pdf-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS brief PDF accepts no design and paginates long requests without invoking furniture drawing (mock canvas).\n",
+      "stderr": "",
+      "milliseconds": 262
+    },
+    {
+      "id": "tests/camera-framing-check.mjs",
+      "file": "tests/camera-framing-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 243 perspective fits: all 3D envelope corners stay in frame.\n",
+      "stderr": "",
+      "milliseconds": 86
+    },
+    {
+      "id": "tests/catalogue-check.mjs",
+      "file": "tests/catalogue-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 11 spaces, 14 groups, 88 product types, 62 valid paths; no misleading drawing for unsupported products; saved-state migration and invalid cross-room choices.\n",
+      "stderr": "",
+      "milliseconds": 136
+    },
+    {
+      "id": "tests/catalogue-graph-check.mjs",
+      "file": "tests/catalogue-graph-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 62 allowed and 13490 rejected space/group/product triples, migrations and context resets.\n",
+      "stderr": "",
+      "milliseconds": 339
+    },
+    {
+      "id": "tests/choice-flow-check.mjs",
+      "file": "tests/choice-flow-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 463 option variants across 14 complete family flows; fixed seats, rounded/sloped arms, back variants, chaise, round tops, project hand-off.\nPASS continuous back support for 9 armless seating variants\n",
+      "stderr": "",
+      "milliseconds": 225
+    },
+    {
+      "id": "tests/codesign-check.mjs",
+      "file": "tests/codesign-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 336 studio geometry combinations and response validation\n",
+      "stderr": "",
+      "milliseconds": 212
+    },
+    {
+      "id": "tests/csg-check.mjs",
+      "file": "tests/csg-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "cut 2525 -> 2336 ok\n",
+      "stderr": "",
+      "milliseconds": 369
+    },
+    {
+      "id": "tests/forma-check.mjs",
+      "file": "tests/forma-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS forma: 37 bathroom pieces (vanity units with top and basin, columns, mirrors, mirror cabinets) valid;\nPASS forma: designer workshop layer (silhouette, turned profile, link, DXF) and physics checks (tipping, section, CNC radius);\nPASS forma: production — 98 cut sheets (guillotine, kerf, grain, banding) and assembly booklets;\nPASS forma: 30 kitchens (runs and islands) valid: modules, worktop, sink, hob, hood, appliances, open view, cut list, drawings;\nPASS forma: 222 RİTMO case goods valid (13385 parts; 18 mm MDF / solid panels, 8 mm back, 2 mm reveals, modules ≤ 1200, cut list, drawings, commands, design link);\nPASS forma: 15 room layouts (living, dining, bedroom × 3) without overlaps;\nPASS forma: 240 curated starting models (10 styles incl. AURA) valid;\nPASS forma: 213 line-detail parts (stitch, inlay, groove) on seating, tables and the bedroom set;\nPASS forma: 200 table designs valid; patterns, stain and stone maps;\nPASS forma: 360 style/kind/seed designs valid; 4 styles × 12 diverse proposals; 7 weave drafts; 8-language commands; drawings, DXF, BOM, ZIP, PDF; AI output sanitised.\n",
+      "stderr": "",
+      "milliseconds": 137263
+    },
+    {
+      "id": "tests/kitchen-studies-check.mjs",
+      "file": "tests/kitchen-studies-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 9 kitchen studies, finite parts, 27 drawings, sink openings, fluting and waterfall ends.\n",
+      "stderr": "",
+      "milliseconds": 153
+    },
+    {
+      "id": "tests/model-check.mjs",
+      "file": "tests/model-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS: 192 boundary configurations, positive geometry, overall bounds, share/JSON round trips and invalid inputs.\n",
+      "stderr": "",
+      "milliseconds": 112
+    },
+    {
+      "id": "tests/panel-engine-check.mjs",
+      "file": "tests/panel-engine-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 48 panel constructions, clearances, internal drawer components and BOM consistency.\n",
+      "stderr": "",
+      "milliseconds": 226
+    },
+    {
+      "id": "tests/preference-evidence-check.mjs",
+      "file": "tests/preference-evidence-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS exact named-style evidence in TR/EN/FR/DA and source-grounded correction of a semantically wrong model result.\n",
+      "stderr": "",
+      "milliseconds": 102
+    },
+    {
+      "id": "tests/qwen-atolye-data.mjs",
+      "file": "tests/qwen-atolye-data.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 238 in-memory workshop fixtures; 210 edits and 28 rejects; no dataset export.\n",
+      "stderr": "",
+      "milliseconds": 1450
+    },
+    {
+      "id": "tests/qwen-current-contract-check.mjs",
+      "file": "tests/qwen-current-contract-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS live PHP prompt extraction, batch parity, strict outer JSON and action types, key order independence, stale marking.\n",
+      "stderr": "",
+      "milliseconds": 355
+    },
+    {
+      "id": "tests/qwen-geometry-data-check.py",
+      "file": "tests/qwen-geometry-data-check.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 1400 geometry examples; exact boundary/curved-corner checks; all repair targets; one-field edits; group isolation; training-only SFT; deterministic frozen artifacts.\r\n",
+      "stderr": "",
+      "milliseconds": 736
+    },
+    {
+      "id": "tests/qwen-large-gate-check.py",
+      "file": "tests/qwen-large-gate-check.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS fail-closed thresholds, missing evidence, explicit approval and invalid metric types.\r\n",
+      "stderr": "",
+      "milliseconds": 120
+    },
+    {
+      "id": "tests/qwen-local-check.mjs",
+      "file": "tests/qwen-local-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS: 45 engine-audited rows; grouped splits; raw invalid input; no eval in SFT; deterministic build; frozen-file integrity; missing/duplicate/unsafe predictions.\n",
+      "stderr": "",
+      "milliseconds": 16157
+    },
+    {
+      "id": "tests/qwen-response-loss-check.py",
+      "file": "tests/qwen-response-loss-check.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS assistant-only loss, target EOS retained, prompt excluded, aligned masks and no silent truncation.\r\n",
+      "stderr": "",
+      "milliseconds": 169
+    },
+    {
+      "id": "tests/qwen-studio-data-check.mjs",
+      "file": "tests/qwen-studio-data-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS immutable historical 276 rows and hashes; 5 families × set/delta, arithmetic and strict pinned compatibility deltas; kitchen/bath semantic changes quarantined; no new training approval.\n",
+      "stderr": "",
+      "milliseconds": 1712
+    },
+    {
+      "id": "tests/qwen-training-plan-check.py",
+      "file": "tests/qwen-training-plan-check.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS training-plan arithmetic, partial batches, honest data availability, hypothetical timings and invalid measured values.\r\nPASS response-only labels, padding/empty/invalid-mask rejection, disabled GPU gate, preserved historical plan\r\n",
+      "stderr": "",
+      "milliseconds": 1601
+    },
+    {
+      "id": "tests/reference-studies-check.mjs",
+      "file": "tests/reference-studies-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 528 reference study variants, positive parts, rotated bounds, source-specific features, SVG views and camera fit.\n",
+      "stderr": "",
+      "milliseconds": 765
+    },
+    {
+      "id": "tests/ritmo-check.mjs",
+      "file": "tests/ritmo-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 324 cabinet assemblies: part bounds, positive dimensions, stable identities, 2–5 bays, BOM, save/restore and independent compartment changes.\n",
+      "stderr": "",
+      "milliseconds": 810
+    },
+    {
+      "id": "tests/room-family-check.mjs",
+      "file": "tests/room-family-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS room-specific family lists, incompatible restored/changed selection reset, compatible selection and direct product room inference.\n",
+      "stderr": "",
+      "milliseconds": 134
+    },
+    {
+      "id": "tests/sectional-check.mjs",
+      "file": "tests/sectional-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 216 sectional bounds/support variants, mirrored layouts, real tool contract and seat/back variants.\n",
+      "stderr": "",
+      "milliseconds": 269
+    },
+    {
+      "id": "tests/sketch-check.mjs",
+      "file": "tests/sketch-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS sketch: overlap/reversal/collinearity, genuine gaps/reveals, detail classes, six-family finite/non-mutating geometry.\nseating: 1644 → 1154\ntable: 1665 → 380\nstorage: 24204 → 3072\nkitchen: 21890 → 4362\nbath: 3204 → 778\nbedroom: 1463 → 923\n",
+      "stderr": "",
+      "milliseconds": 5969
+    },
+    {
+      "id": "tests/space-check.mjs",
+      "file": "tests/space-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS home room counts, retained dimensions, rotation, bounds, overlaps, door swing, obstacles, JSON round trip, size limits and SVG sanitisation.\n",
+      "stderr": "",
+      "milliseconds": 101
+    },
+    {
+      "id": "tests/studio-agent-check.mjs",
+      "file": "tests/studio-agent-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS agent loop incorporates tool results, preserves command order, bounds rounds and rejects unknown tools. Mock tests are not model capability evidence.\n",
+      "stderr": "",
+      "milliseconds": 100
+    },
+    {
+      "id": "tests/studio-tools-check.mjs",
+      "file": "tests/studio-tools-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS all 14 families, option enums, drawing geometry, action allowlist, invalid calls, prototype keys and dimension adjustments.\n",
+      "stderr": "",
+      "milliseconds": 106
+    },
+    {
+      "id": "tests/table-geometry.mjs",
+      "file": "tests/table-geometry.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "",
+      "milliseconds": 139
+    },
+    {
+      "id": "tests/toparlama-arap-check.py",
+      "file": "tests/toparlama-arap-check.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 12 Arabic intake drafts/192 messages; correct country allocation; 0 fabricated plans, 2 pending two-storey requests; numeral and fake-layout mutations\r\n",
+      "stderr": "",
+      "milliseconds": 166
+    },
+    {
+      "id": "tests/toparlama-bicim-check.py",
+      "file": "tests/toparlama-bicim-check.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 2578 schema-valid quarantined rows, 40 motor reports, empty exports, source/building split mutations, review-target hash binding\r\n",
+      "stderr": "",
+      "milliseconds": 1386
+    },
+    {
+      "id": "tests/toparlama-hijyen-check.py",
+      "file": "tests/toparlama-hijyen-check.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS immutable conflict archive and lightweight pilot recovery hashes\r\n",
+      "stderr": "",
+      "milliseconds": 855
+    },
+    {
+      "id": "tests/toparlama-katalog-check.py",
+      "file": "tests/toparlama-katalog-check.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 37 groups; 1036 Git-blob hashes; counts, completeness, tamper/count mutations, frozen-exam exclusion\r\n",
+      "stderr": "",
+      "milliseconds": 5577
+    },
+    {
+      "id": "tests/toparlama-sinav-check.mjs",
+      "file": "tests/toparlama-sinav-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "{\"tasks\":120,\"gold_engine_unit_cases\":100,\"assertion_groups\":119,\"model_run\":false,\"expert_review\":\"pending\"}\n",
+      "stderr": "",
+      "milliseconds": 33990
+    },
+    {
+      "id": "tests/toparlama-sinav-prompt-check.mjs",
+      "file": "tests/toparlama-sinav-prompt-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 3 prompt contracts; expected/rubric mutation cannot leak to model; no inference\n",
+      "stderr": "",
+      "milliseconds": 738
+    },
+    {
+      "id": "tests/toparlama-split-ledger-check.py",
+      "file": "tests/toparlama-split-ledger-check.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS immutable prior splits under new language/country; shared-source clustering; train/test bridge rejected\r\n",
+      "stderr": "",
+      "milliseconds": 189
+    },
+    {
+      "id": "tests/toparlama-studio-replay-check.mjs",
+      "file": "tests/toparlama-studio-replay-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS shared production replay: 5 families × set/delta arithmetic, compiled geometry, immutability, unknown-key rejection; historical snapshots remain separate\n",
+      "stderr": "",
+      "milliseconds": 655
+    },
+    {
+      "id": "tests/toparlama-uslup-check.py",
+      "file": "tests/toparlama-uslup-check.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 40 non-dialogue invariants and old/new hashes; 640 messages; 9-language forbidden, mixed-language, repetition and length mutations\r\n",
+      "stderr": "",
+      "milliseconds": 794
+    },
+    {
+      "id": "tests/upholstery-engine-check.mjs",
+      "file": "tests/upholstery-engine-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS 72 independent upholstery assemblies, part bounds, BOM totals, distinct topology, actual tuft mesh and style constraints.\n",
+      "stderr": "",
+      "milliseconds": 271
+    },
+    {
+      "id": "tests/yerlesim-adversarial-check.mjs",
+      "file": "tests/yerlesim-adversarial-check.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "PASS authoritative solver: impossible placement, empty room, immutability, deterministic rejection. No second solver imported.\n",
+      "stderr": "",
+      "milliseconds": 198
+    },
+    {
+      "id": "tests/ai-eval/test-01b.mjs",
+      "file": "tests/ai-eval/test-01b.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "✔ numeric and courtesy variants share a skeleton (2.5685ms)\n✔ audit exposes duplicate count and split leakage (0.6529ms)\n✔ actual CSV has 400 unique, blank decisions with exact source text (6.5271ms)\n✔ 01B decisions can be staged in memory without changing either frozen file (10.4926ms)\n✔ 01B manifest pins the actual test bytes and only the POSIX repository path (1.9826ms)\nℹ tests 5\nℹ suites 0\nℹ pass 5\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 29.561\n",
+      "stderr": "",
+      "milliseconds": 157
+    },
+    {
+      "id": "tests/ai-eval/test-uzman-onay.mjs",
+      "file": "tests/ai-eval/test-uzman-onay.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "✔ BOM, CRLF, quoted commas/newlines/quotes (2.0714ms)\n✔ blank decisions preserve approvals; no record mutation (1.1488ms)\n✔ approval and rejection are explicit and attributed (2.1593ms)\n✔ corrections require notes and never approve (0.431ms)\n✔ reject unknown, duplicate, altered records and invalid decisions (0.4583ms)\n✔ reject malformed quoting (0.2361ms)\nℹ tests 6\nℹ suites 0\nℹ pass 6\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 14.2511\n",
+      "stderr": "",
+      "milliseconds": 121
+    },
+    {
+      "id": "tests/ai-eval/verify-01b.mjs",
+      "file": "tests/ai-eval/verify-01b.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "01B frozen hash matches (separate manifest; only Linux path).\nPASS: 400 manually authored records; all composition/context/gold checks; 400 skeletons; no split leakage.\n",
+      "stderr": "",
+      "milliseconds": 139
+    },
+    {
+      "id": "tests/text-eval/verify-stage1.mjs",
+      "file": "tests/text-eval/verify-stage1.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "{\n  \"status\": \"artifact_integrity_passed\",\n  \"founder_gate\": \"owner_approved_for_30_trials\",\n  \"philosophy_sources\": 15,\n  \"material_sources\": 17,\n  \"material_cards\": 67,\n  \"material_inventory\": 130,\n  \"designs\": 10,\n  \"families\": 6,\n  \"styles\": 10,\n  \"trials\": 30,\n  \"languages\": {\n    \"tr\": 20,\n    \"en\": 10\n  },\n  \"word_range\": [\n    68,\n    84\n  ],\n  \"semantic_claim_checker\": \"PR2_pending\",\n  \"voice_review\": \"pending\",\n  \"blind_owner_selection\": \"pending\",\n  \"training\": \"not_started\"\n}\n",
+      "stderr": "",
+      "milliseconds": 416
+    },
+    {
+      "id": "tools/ev-plan/test_eu.py",
+      "file": "tools/ev-plan/test_eu.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "....................\r\n----------------------------------------------------------------------\r\nRan 20 tests in 0.797s\r\n\r\nOK\r\n",
+      "milliseconds": 1633
+    },
+    {
+      "id": "tools/ev-plan/test_pipeline.py",
+      "file": "tools/ev-plan/test_pipeline.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "...................\r\n----------------------------------------------------------------------\r\nRan 19 tests in 3.770s\r\n\r\nOK\r\n",
+      "milliseconds": 4470
+    },
+    {
+      "id": "tools/ev-plan/test_real.py",
+      "file": "tools/ev-plan/test_real.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": ".......................\r\n----------------------------------------------------------------------\r\nRan 23 tests in 0.546s\r\n\r\nOK\r\n",
+      "milliseconds": 1140
+    },
+    {
+      "id": "tools/ev-plan/test_v2.py",
+      "file": "tools/ev-plan/test_v2.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "...................\r\n----------------------------------------------------------------------\r\nRan 19 tests in 0.339s\r\n\r\nOK\r\n",
+      "milliseconds": 952
+    },
+    {
+      "id": "tools/ev-sohbet/test02.py",
+      "file": "tools/ev-sohbet/test02.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "..............\r\n----------------------------------------------------------------------\r\nRan 14 tests in 1.273s\r\n\r\nOK\r\n",
+      "milliseconds": 1725
+    },
+    {
+      "id": "tools/ev-sohbet/test_dk.py",
+      "file": "tools/ev-sohbet/test_dk.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": ".......\r\n----------------------------------------------------------------------\r\nRan 7 tests in 8.058s\r\n\r\nOK\r\n",
+      "milliseconds": 8577
+    },
+    {
+      "id": "tools/ev-sohbet/test_es.py",
+      "file": "tools/ev-sohbet/test_es.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "........\r\n----------------------------------------------------------------------\r\nRan 8 tests in 3.743s\r\n\r\nOK\r\n",
+      "milliseconds": 4140
+    },
+    {
+      "id": "tools/ev-sohbet/test_it.py",
+      "file": "tools/ev-sohbet/test_it.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "..........\r\n----------------------------------------------------------------------\r\nRan 10 tests in 9.142s\r\n\r\nOK\r\n",
+      "milliseconds": 9527
+    },
+    {
+      "id": "tools/ev-sohbet/test_uk_ie.py",
+      "file": "tools/ev-sohbet/test_uk_ie.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "........\r\n----------------------------------------------------------------------\r\nRan 8 tests in 9.542s\r\n\r\nOK\r\n",
+      "milliseconds": 9947
+    },
+    {
+      "id": "tools/perde/test_hesap.py",
+      "file": "tools/perde/test_hesap.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "",
+      "stderr": "..................\r\n----------------------------------------------------------------------\r\nRan 18 tests in 0.249s\r\n\r\nOK\r\n",
+      "milliseconds": 460
+    },
+    {
+      "id": "replay-02",
+      "file": "tools/ev-sohbet/verify02.mjs",
+      "args": [
+        "knowledge/ai-egitim/veri/ev-sohbet-02",
+        "--compare-current"
+      ],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "ev-sohbet-02-01.json replayed\nev-sohbet-02-02.json replayed\nev-sohbet-02-03.json replayed\nev-sohbet-02-04.json replayed\nev-sohbet-02-05.json replayed\nev-sohbet-02-06.json replayed\nev-sohbet-02-07.json replayed\nev-sohbet-02-08.json replayed\nev-sohbet-02-09.json replayed\nev-sohbet-02-10.json replayed\nev-sohbet-02-11.json replayed\nev-sohbet-02-12.json replayed\nev-sohbet-02-13.json replayed\nev-sohbet-02-14.json replayed\nev-sohbet-02-15.json replayed\nev-sohbet-02-16.json replayed\nev-sohbet-02-17.json replayed\nev-sohbet-02-18.json replayed\nev-sohbet-02-19.json replayed\nev-sohbet-02-20.json replayed\n{\"attempts_replayed\":74,\"honest_no_fit_results\":10,\"records\":20,\"passed\":true,\"source_changes_revalidated\":20,\"mode\":\"all_recorded_requests_byte_comparison_current_solver\"}\n",
+      "stderr": "",
+      "milliseconds": 3060
+    },
+    {
+      "id": "replay-uk-ie",
+      "file": "tools/ev-sohbet/verify02.mjs",
+      "args": [
+        "knowledge/ai-egitim/veri/ev-sohbet-uk-ie",
+        "--compare-current"
+      ],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "ev-sohbet-uk-ie-01.json replayed\nev-sohbet-uk-ie-02.json replayed\nev-sohbet-uk-ie-03.json replayed\nev-sohbet-uk-ie-04.json replayed\nev-sohbet-uk-ie-05.json replayed\nev-sohbet-uk-ie-06.json replayed\nev-sohbet-uk-ie-07.json replayed\nev-sohbet-uk-ie-08.json replayed\n{\"attempts_replayed\":23,\"honest_no_fit_results\":0,\"records\":8,\"passed\":true,\"source_changes_revalidated\":8,\"mode\":\"all_recorded_requests_byte_comparison_current_solver\"}\n",
+      "stderr": "",
+      "milliseconds": 1822
+    },
+    {
+      "id": "replay-dk",
+      "file": "tools/ev-sohbet/verify02.mjs",
+      "args": [
+        "knowledge/ai-egitim/veri/ev-sohbet-dk",
+        "--compare-current"
+      ],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "ev-sohbet-dk-01.json replayed\nev-sohbet-dk-02.json replayed\nev-sohbet-dk-03.json replayed\nev-sohbet-dk-04.json replayed\n{\"attempts_replayed\":14,\"honest_no_fit_results\":0,\"records\":4,\"passed\":true,\"source_changes_revalidated\":4,\"mode\":\"all_recorded_requests_byte_comparison_current_solver\"}\n",
+      "stderr": "",
+      "milliseconds": 1103
+    },
+    {
+      "id": "replay-es",
+      "file": "tools/ev-sohbet/verify02.mjs",
+      "args": [
+        "knowledge/ai-egitim/veri/ev-sohbet-es",
+        "--compare-current"
+      ],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "ev-sohbet-es-01.json replayed\nev-sohbet-es-02.json replayed\nev-sohbet-es-03.json replayed\nev-sohbet-es-04.json replayed\n{\"attempts_replayed\":13,\"honest_no_fit_results\":0,\"records\":4,\"passed\":true,\"source_changes_revalidated\":4,\"mode\":\"all_recorded_requests_byte_comparison_current_solver\"}\n",
+      "stderr": "",
+      "milliseconds": 1206
+    },
+    {
+      "id": "replay-it",
+      "file": "tools/ev-sohbet/verify02.mjs",
+      "args": [
+        "knowledge/ai-egitim/veri/ev-sohbet-it",
+        "--compare-current"
+      ],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "ev-sohbet-it-01.json replayed\nev-sohbet-it-02.json replayed\nev-sohbet-it-03.json replayed\nev-sohbet-it-04.json replayed\n{\"attempts_replayed\":13,\"honest_no_fit_results\":0,\"records\":4,\"passed\":true,\"source_changes_revalidated\":4,\"mode\":\"all_recorded_requests_byte_comparison_current_solver\"}\n",
+      "stderr": "",
+      "milliseconds": 1377
+    },
+    {
+      "id": "tools/studyo-motoru/test.mjs",
+      "file": "tools/studyo-motoru/test.mjs",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "✓ kanepe +100 mm ve ceviz kabul\n✓ 9 m kanepe sınıra takıldı diye raporlanır\n✓ olmayan kol tipi reddedilir\n✓ masa, 6 kişilik\n✓ salon: kanepe TV'ye bakar, sehpa yakın — çözücü yerleştirdi, kısıtlar tuttu\n✓ WC'ye çift kişilik yatak: sığmıyor\n✓ duvar dışına taşan kapı reddedilir\n✓ merdiven: motorda henüz yok diye dürüst ret\n✓ boş işlem listesi\n✓ perde kadife, halı bukle\n✓ sözlükte olmayan katman reddedilir\nhepsi geçti\n",
+      "stderr": "",
+      "milliseconds": 2196
+    },
+    {
+      "id": "tools/ev-sohbet/uslup_denetim.py",
+      "file": "tools/ev-sohbet/uslup_denetim.py",
+      "args": [],
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdout": "{\r\n  \"conversations\": 40,\r\n  \"messages\": 640,\r\n  \"forbidden\": [],\r\n  \"over_60_words\": [],\r\n  \"language_mix_heuristic\": [],\r\n  \"repeated_assistant_sentences\": [],\r\n  \"native_review\": \"pending_not_a_language_identification_proof\",\r\n  \"passed\": true\r\n}\r\n",
+      "stderr": "",
+      "milliseconds": 424
+    }
+  ]
+}
