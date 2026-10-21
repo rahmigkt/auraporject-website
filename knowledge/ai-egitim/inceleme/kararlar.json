@@ -1516,10 +1516,26 @@
   },
   "hacim-1-istek:*": {
    "karar": "duzelt",
-   "not": "H1 kümesinin tamamı (1.800). Motor, şema ve sızma geçiyor; içerik eğitime hazır değil:\n1) Asistan cevabı 4 sabit cümle (170/200 'İstenen değişiklikleri proje önizlemesinde hazırladım'). Model cevap yazmayı öğrenmez. Her cevap yapılanı kendi sözüyle söylemeli: 'Yatak odasına 160'lık yatağı ve iki komodini yerleştirdim; yatak başı pencereli duvarın karşısında.'\n2) İç terim sızıyor: 'Duvar çalışma alanı', 'wall study area', 'Wandstudie', 'zona de estudio de paredes', 'مساحة دراسة الجدران'. Bunlar test düzeneğinin adı, kullanıcı böyle konuşmaz. Bu kalıp tamamen çıkmalı.\n3) 'multiple' satırları iki tek isteğin ';' ile yapıştırılması. Gerçek kullanıcı tek cümlede ilişkili şeyler ister ('salona 3+2+1 koy, tekliyi pencere yanına'). Kısıt içeren çoklu istek yok denecek kadar az; 'bakar/yakin/uzak' kısıtları neredeyse hiç kullanılmamış.\n4) Soru (clarify) cevapları isteğe bakmıyor: 'Yatak odası için halı istiyorum' → 'Hangi eşyayı düşünüyorsunuz?' Doğrusu: halının ölçüsünü, rengini ya da dokusunu sormak.\n5) Çeşitlilik düşük: dil başına ~114 kalıp, gerisi yalnız sayı değişimi. 'Seçili oda', 'perdeleri %95 açık bırak' gibi arayüz komutları çok; ev sahibinin kendi evini anlattığı istekler az ('balkon kapısının önü boş kalsın', 'antreye ayakkabılık sığar mı').\n6) 'Yeni dikdörtgen salonu çiz' tipi istekler odayı plana 42 m ötede boşluğa ekliyor; gerçek bir evde oda böyle eklenmez. Ya mevcut odanın ölçüsü değişsin ya da bu kalıp azaltılsın.\nHedef: dil başına en az 150 farklı kalıp, cevaplar isteğe özgü, iç terim 0, kısıtlı istekler en az %20. Düzeltilince yeniden denetime sunulsun.",
+   "not": "İkinci denetim (#187 C1 sürümü, 21 Ekim 2026). Büyük ölçüde düzeldi: cevaplar isteğe özgü, iç terim yok, çoklu istekler tek cümle, %40 kısıtlı, soru cevapları isteğin kendisini soruyor, ışık ve tasarımcı talebi eklenmiş. Kalan küçük düzeltmeler:\n1) 'for the furniture / pour les meubles / para los muebles / per i mobili / møblerne' yapıştırma bağlacı EN/FR/ES/IT'de 10'ar, DA'da 2 satırda; bazılarında anlamsız ('for the furniture choose the open linen-effect look for the sheers'). Bu 42 satır yeniden yazılsın.\n2) Asistan açılışları dil başına iki kalıpta 34'er kez ('In the preview,' / 'For your room,'). Açılış çeşitlensin ya da açılışsız doğrudan yapılanı söylesin.\n3) Tekstil satırları: kullanıcı kararı verildi (21 Ekim): perde/halı asistanın işinde kalır, tekstil satırları eğitime girebilir. Önceki not:: perde ve halı stüdyoda ayrı ürün ailesi olacak (EV-TEKSTILI-URUN-ARASTIRMA-03). Yapay zekâ sekmesinde perde/halı isteğinin nasıl karşılanacağı kullanıcı kararından sonra netleşecek; bu satırlar o zamana kadar karantinada kalır, silinmez.\n1 ve 2 düzeltilince bütün satırlar uygun sayılacak.",
    "denetci": "claude",
    "zaman": 1792572720588,
    "veri_seti": "hacim-1-istek",
+   "dil": "9 dil"
+  },
+  "ev-plan-eu-00c:*": {
+   "karar": "ret",
+   "not": "2.400 kayıt, eski sözleşme: İngilizce sistem istemi, plan_program JSON'u, stüdyo motoru işlemi yok; cevapların çoğu kalıp ret/soru ('Ülke, bölge, oda kullanımları ve ölçüleri teyit eder misiniz?'). Yeni sözleşmeye (reply + actions, motor işlemleri) uymuyor; eğitime girmez. Gerçek plan referansları (Swiss Dwellings) H2 sohbetlerinde kullanılır.",
+   "denetci": "claude",
+   "zaman": 1792572720588,
+   "veri_seti": "ev-plan-eu-00c",
+   "dil": "9 dil"
+  },
+  "ev-plan-reel-00d:*": {
+   "karar": "ret",
+   "not": "Eski sözleşme, diyalog değil (sistem istemi + JSON). Eğitime girmez.",
+   "denetci": "claude",
+   "zaman": 1792572720588,
+   "veri_seti": "ev-plan-reel-00d",
    "dil": "9 dil"
   }
  }

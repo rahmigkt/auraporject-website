@@ -1,5 +1,5 @@
 // Interface text in the eight site languages. Missing keys fall back to English.
-import {AR, AR_P} from './i18n-ar.js?v=20261021b';
+import {AR, AR_P} from './i18n-ar.js?v=20261021d';
 export const UI_LANGS = {tr: 'Türkçe', en: 'English', de: 'Deutsch', fr: 'Français', nl: 'Nederlands', da: 'Dansk', es: 'Español', it: 'Italiano', ar: 'العربية'};
 export const isRTL = lang => lang === 'ar';
 
@@ -391,12 +391,18 @@ Object.assign(T, {
   famStorage:   ['Dolap ve çekmeceli', 'Storage', 'Stauraum', 'Rangement', 'Kasten', 'Opbevaring', 'Almacenaje', 'Contenitori'],
   vanity:       ['Makyaj masası', 'Vanity', 'Schminktisch', 'Coiffeuse', 'Kaptafel', 'Toiletbord', 'Tocador', 'Toeletta'],
   layout:       ['Düzen', 'Layout', 'Aufteilung', 'Disposition', 'Indeling', 'Indretning', 'Distribución', 'Disposizione'],
-  layoutHint:   ['Çizimdeki bir göze dokunun; tipini, iç düzenini ve yüksekliğini aşağıdan değiştirin.', 'Tap a cell on the drawing, then change its type, interior and height below.', 'Tippen Sie auf ein Fach der Zeichnung und ändern Sie unten Typ, Innenaufteilung und Höhe.', 'Touchez une case du dessin, puis changez son type, son aménagement et sa hauteur ci-dessous.', 'Tik op een vak in de tekening en wijzig hieronder type, indeling en hoogte.', 'Tryk på et felt på tegningen, og skift type, indretning og højde herunder.', 'Toque una celda del dibujo y cambie abajo su tipo, interior y altura.', 'Tocca una cella del disegno e cambia sotto tipo, interno e altezza.'],
+  layoutHint:   ['Çizimdeki bir göze dokunun; tipini ve iç düzenini aşağıdan değiştirin. Bölmeler ve gözler arasındaki çizgiyi sürükleyerek istediğiniz yerden bölün ya da ölçüyü mm olarak yazın.', 'Tap a cell to change its type and interior below. Drag the line between bays or cells to divide wherever you want, or type the size in mm.', 'Tippen Sie auf ein Fach, um Typ und Innenaufteilung zu ändern. Ziehen Sie die Linie zwischen Feldern oder Fächern, um beliebig zu teilen, oder geben Sie das Maß in mm ein.', 'Touchez une case pour changer son type et son aménagement. Faites glisser la ligne entre travées ou cases pour diviser où vous voulez, ou saisissez la cote en mm.', 'Tik op een vak om type en indeling te wijzigen. Sleep de lijn tussen vakken om te verdelen waar u wilt, of typ de maat in mm.', 'Tryk på et felt for at skifte type og indretning. Træk linjen mellem sektioner eller felter for at dele hvor du vil, eller skriv målet i mm.', 'Toque una celda para cambiar su tipo e interior. Arrastre la línea entre módulos o celdas para dividir donde quiera, o escriba la medida en mm.', 'Tocca una cella per cambiarne tipo e interno. Trascina la linea tra campate o celle per dividere dove vuoi, oppure scrivi la misura in mm.'],
   cellType:     ['Göz', 'Cell', 'Fach', 'Case', 'Vak', 'Felt', 'Celda', 'Vano'],
   drawerCount:  ['Çekmece sayısı', 'Drawers', 'Schubladen', 'Tiroirs', 'Lades', 'Skuffer', 'Cajones', 'Cassetti'],
   inside:       ['İç düzen', 'Interior', 'Innenausstattung', 'Aménagement', 'Interieur', 'Indretning', 'Interior', 'Interno'],
   shelvesN:     ['Raf sayısı', 'Shelves', 'Böden', 'Étagères', 'Planken', 'Hylder', 'Estantes', 'Ripiani'],
   cellHeight:   ['Göz yüksekliği', 'Cell height', 'Fachhöhe', 'Hauteur de la case', 'Vakhoogte', 'Felthøjde', 'Altura de la celda', 'Altezza vano'],
+  leafCountL:   ['Kapak sayısı', 'Doors', 'Türen', 'Portes', 'Deuren', 'Låger', 'Puertas', 'Ante'],
+  leafSingle:   ['Tek kapak', 'Single', 'Einzeln', 'Simple', 'Enkel', 'Enkelt', 'Sencilla', 'Singola'],
+  leafDouble:   ['Çift kapak', 'Double', 'Doppelt', 'Double', 'Dubbel', 'Dobbelt', 'Doble', 'Doppia'],
+  leafTriple:   ['Üç kapak', 'Triple', 'Dreifach', 'Triple', 'Driedubbel', 'Tredobbelt', 'Triple', 'Tripla'],
+  leafTooWide:  ['Bu genişlikte tek kapak olmaz (en fazla ~620 mm)', 'Too wide for one door (max ~620 mm)', 'Zu breit für eine Tür (max. ~620 mm)', 'Trop large pour une porte (max ~620 mm)', 'Te breed voor één deur (max ~620 mm)', 'For bred til én låge (maks. ~620 mm)', 'Demasiado ancho para una puerta (máx. ~620 mm)', 'Troppo largo per un’anta (max ~620 mm)'],
+  leafTooNarrow:['Bu genişlik için kapaklar çok dar kalır (en az 250 mm)', 'Doors would be too narrow (min 250 mm)', 'Türen wären zu schmal (min. 250 mm)', 'Portes trop étroites (min 250 mm)', 'Deuren te smal (min 250 mm)', 'Lågerne bliver for smalle (min. 250 mm)', 'Puertas demasiado estrechas (mín. 250 mm)', 'Ante troppo strette (min 250 mm)'],
   bayWidth:     ['Bölme genişliği', 'Bay width', 'Feldbreite', 'Largeur de la travée', 'Vakbreedte', 'Sektionsbredde', 'Ancho del módulo', 'Larghezza campata'],
   auto:         ['Otomatik', 'Auto', 'Automatisch', 'Auto', 'Automatisch', 'Automatisk', 'Automático', 'Automatico'],
   splitCell:    ['Gözü ikiye böl', 'Split cell', 'Fach teilen', 'Diviser la case', 'Vak splitsen', 'Del felt', 'Dividir celda', 'Dividi vano'],

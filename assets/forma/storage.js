@@ -110,7 +110,7 @@ export function normalizeBays(raw, kind) {
       let inside = INSIDE.includes(c?.inside) ? c.inside : 'shelves';
       if (kind !== 'wardrobe' && ['hang', 'double', 'hangDrawers'].includes(inside)) inside = 'shelves';
       if (inside === 'glassShelves' && !['glass', 'open', 'mirror'].includes(type)) inside = 'shelves';
-      return {id: `b${i + 1}c${j + 1}`, joined: !!c?.joined && j > 0, color: COLOR_KEYS.includes(c?.color) ? c.color : null, type, h: num(c?.h, 0.2, 8, 1), mm: c?.mm ? num(c.mm, 60, 2600, 0, 1) : 0, n: Math.round(num(c?.n, 1, 6, 1)), inside, k: Math.round(num(c?.k, 0, 8, 0))};
+      return {id: `b${i + 1}c${j + 1}`, joined: !!c?.joined && j > 0, color: COLOR_KEYS.includes(c?.color) ? c.color : null, type, h: num(c?.h, 0.2, 8, 1), mm: c?.mm ? num(c.mm, 60, 2600, 0, 1) : 0, n: Math.round(num(c?.n, 1, 6, 1)), lv: Math.round(num(c?.lv, 0, 3, 0)), inside, k: Math.round(num(c?.k, 0, 8, 0))};
     });
     return {id: `b${i + 1}`, w: num(b?.w, 0.3, 4, 1), mm: b?.mm ? num(b.mm, 150, 2000, 0, 1) : 0, cells};
   });
@@ -141,6 +141,10 @@ function pnl(parts, id, role, mat, [x0, x1], [y0, y1], [z0, z1], extra = {}, r =
 }
 /** Hinged leaves for a front width: leaves stay at about 600 mm (up to 620 before a second leaf is added). */
 export const leafCount = w => Math.max(1, Math.ceil((w - 1) / (RULES.leafMax + 20)));
+/** Leaves the customer asked for (lv: 0 = automatic, 1 = single, 2 = double, 3 = triple), kept within a hinged leaf's
+ *  limits: no leaf wider than ~620 mm, none narrower than 250 mm. */
+export const leafMin = 250;
+export const leafFor = (w, lv) => { const auto = leafCount(w); if (!lv) return auto; return Math.max(auto, Math.min(lv, Math.max(1, Math.floor(w / leafMin)))); };
 const pickBar = len => BAR_PITCH.filter(v => v <= len).at(-1) || 96;
 
 // ---- Layout across the width: bays, dividers and transport modules ------------------------------------------
@@ -253,7 +257,7 @@ export function compile(raw) {
       const innerZ1 = inset ? zF - TF - 2 : zF; // front of the usable interior
       const tint = k0 => { if (c.color) for (const q of parts.slice(k0)) if (q.mat === 'front') q.mat = 'lac:' + c.color; };
       if (!sliding && ['door', 'glass', 'mirror'].includes(c.type)) {
-        const n = leafCount(f.x1 - f.x0), lw = (f.x1 - f.x0 - (n - 1) * rv) / n;
+        const n = leafFor(f.x1 - f.x0, c.lv), lw = (f.x1 - f.x0 - (n - 1) * rv) / n;
         for (let l = 0; l < n; l++) {
           const lx0 = f.x0 + l * (lw + rv), side = n === 1 ? (p.bays.length === 1 || i % 2 === 0 ? 1 : -1) : l % 2 === 0 ? 1 : -1; // handle side
           const leaf = {x0: lx0, x1: lx0 + lw, y0: f.y0, y1: f.y1, z0: f.z0, z1: f.z1};

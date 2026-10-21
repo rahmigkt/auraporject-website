@@ -63,10 +63,10 @@ Tarih: 21 Ekim 2026. Hazırlayan: Claude. Amaç: Qwen eğitimi için yerleşim v
   - çakışma: 327;
   - sehpa: 120.
 - Bu kayıtlar "kurala uygun" örneklerdir; "iyi tasarım" örneği sayılmaz. Görsel: `ornek-procthor-yerlesimi.png`.
-- **AURA çözücüsü** (`veri/yerlesim/procthor-aura-cozucu.jsonl.gz`): 5.000 oda.
-  - 4.401 oda çözüldü (oturma 3.070, yatak 1.331).
-  - 599 oda "sığmıyor" (yatak 487, oturma 112); bunlar dürüst cevap örneğidir.
-  - Görsel: `ornek-aura-cozucu.png`. Kanepe TV'ye bakıyor, sehpa arada; yatak başı duvarda, komodinler yanında.
+- **AURA çözücüsü** (`veri/yerlesim/procthor-aura-cozucu.jsonl.gz`, 21 Ekim 2026 ikinci üretim, gerçek takımlarla): 4.340 oda.
+  - Takımlar: salon 3+2+1 (16 m² üstünde ikili, 20 m² üstünde berjer), 24 m² üstünde kahve köşesi ve yan sehpalar, büyük salonda yemek masası ve büfe; yatak odasında yatak, iki komodin, gardırop (ölçüsü oda alanına göre), 13 m² üstünde şifonyer; tek kişilik odada çalışma masası.
+  - 3.074 oda çözüldü (oturma 2.084, yatak 990). Çözülenlerde: ikili 1.779, berjer 1.311, kahve köşesi 814, şifonyer 926.
+  - 1.266 oda "sığmıyor" (oturma 687, yatak 579); bunlar asistanın dürüstçe söylediği cevap örneğidir. Otomatik küçültme yok.
 - **Bilinen sınırlar:**
   - Büyük salonlarda eşyalar odanın bir ucunda toplanabiliyor.
   - Eşya setleri rastgele seçilmiş Avrupa ölçüleri.

@@ -12,7 +12,7 @@ import {STARTS} from './starts.js';
 import {HIDES, COLORS, FIBERS, WEAVES, WEAVE_NAMES, PATTERNS, MOTIF_CHOICES, MOTIF_NAMES, WOODS, FINISHES, STAINS, METALS, STONES, GLASS, SURFACES, LINEN_COLORS, colorGroup, name as nm} from './catalog.js';
 import {MATTRESS} from './bedroom.js';
 import {harmonize} from './set.js';
-import {EDIT_TYPES as CELL_TYPES, INSIDE, leafCount} from './storage.js';
+import {EDIT_TYPES as CELL_TYPES, INSIDE, leafCount, leafFor, leafMin} from './storage.js';
 import {designLink, projectLink, readLink, linkPage, urlShortcut} from './link.js';
 import {account} from './account.js';
 import {ROOM_TYPES, suggestRoom, misfits, itemKind, footprint, arrange, worldCenter, shell as roomShell} from './room.js';
@@ -27,7 +27,7 @@ import {drawingSheet, drawingDxf} from './drawing.js';
 import {bom, bomCsv} from './bom.js';
 import {zip, jpegPdf, svgToJpeg, dataUrlJpeg, download} from './package.js';
 const designKey = d => JSON.stringify({p: d.params, m: d.materials, k: d.kind, f: d.family});
-import {t, partName, UI_LANGS} from './i18n.js?v=20261021h';
+import {t, partName, UI_LANGS} from './i18n.js?v=20261021j';
 import {migrate, chooserHTML, applyChoice, TEXTILE_CSS, TEXTILE_KEY, SHEERS, DRAPES, HEADINGS, SYSTEMS, RUGS, PATTERNS as RUG_PATTERNS, colorName} from '../ev/tekstil.js?v=20261021e';
 
 const $ = (sel, root = document) => root.querySelector(sel);
@@ -349,7 +349,7 @@ function layoutEditor(p) {
     out.push(`<g data-cell="${i}:${j}" style="cursor:pointer"><rect x="${x0}" y="${-y1}" width="${w}" height="${h}" fill="${fill === 'none' ? 'rgba(0,0,0,0)' : fill}" stroke="#1f2420" stroke-width="${sw}" ${c.type === 'knee' ? `stroke-dasharray="${sw * 6} ${sw * 4}"` : ''}/>`);
     if (c.type === 'drawers') for (let m = 1; m < c.n; m++) out.push(`<line x1="${x0}" y1="${-(y0 + h * m / c.n)}" x2="${x1}" y2="${-(y0 + h * m / c.n)}" stroke="#1f2420" stroke-width="${sw}"/>`);
     if (['door', 'glass', 'mirror'].includes(c.type)) {
-      const leaves = leafCount(w + g.T), lw = w / leaves;
+      const leaves = leafFor(w + g.T, c.lv), lw = w / leaves;
       for (let l = 0; l < leaves; l++) { const a = x0 + l * lw, side = leaves === 1 ? (p.bays.length === 1 || i % 2 === 0 ? 1 : -1) : l % 2 === 0 ? 1 : -1, hx = side > 0 ? a : a + lw, ox = side > 0 ? a + lw : a;
         if (l) out.push(`<line x1="${a}" y1="${-y0}" x2="${a}" y2="${-y1}" stroke="#1f2420" stroke-width="${sw}"/>`);
         out.push(`<polyline points="${hx},${-y1} ${ox},${-(y0 + h / 2)} ${hx},${-y0}" fill="none" stroke="#8b8577" stroke-width="${sw * 0.8}" stroke-dasharray="${sw * 5} ${sw * 3}"/>`); }
@@ -361,6 +361,12 @@ function layoutEditor(p) {
     if (on) out.push(`<rect x="${x0 + sw * 2}" y="${-y1 + sw * 2}" width="${w - sw * 4}" height="${h - sw * 4}" fill="none" stroke="#a24a2a" stroke-width="${sw * 3}" style="pointer-events:none"/>`);
     out.push('</g>');
   }));
+  // Drag handles: the line between two bays moves sideways, the line between two cells of a bay moves up and down.
+  const grab = Math.max(W, H) / 40;
+  g.bays.slice(0, -1).forEach((bay, i) => { const x = (bay.x1 + g.bays[i + 1].x0) / 2;
+    out.push(`<line class="f-drag f-drag-x" data-vdiv="${i}" x1="${x}" y1="${-g.top}" x2="${x}" y2="${-(g.yB + g.T)}" stroke="rgba(0,0,0,0)" stroke-width="${grab}"/>`); });
+  g.bays.forEach((bay, i) => bay.cells.slice(0, -1).forEach((cg, j) => { const y = (cg.y1 + bay.cells[j + 1].y0) / 2;
+    out.push(`<line class="f-drag f-drag-y" data-hdiv="${i}:${j}" x1="${bay.x0}" y1="${-y}" x2="${bay.x1}" y2="${-y}" stroke="rgba(0,0,0,0)" stroke-width="${grab}"/>`); }));
   const svg = `<svg class="f-layout-svg" viewBox="${-W / 2 - pad} ${-H - pad} ${W + 2 * pad} ${H + 2 * pad}" role="img" aria-label="${esc(L('layout'))}">${out.join('')}</svg>`;
   // Controls of the selected cell / bay.
   const k = state.design.kind, bay = p.bays[sb], c = bay.cells[sc], gb = g.bays[sb], cellH = Math.round(gb.cells[sc].y1 - gb.cells[sc].y0), bayW = Math.round(gb.x1 - gb.x0);
@@ -368,12 +374,13 @@ function layoutEditor(p) {
   const insides = (k === 'wardrobe' ? INSIDE : ['shelves', 'glassShelves', 'empty']).filter(t => t !== 'glassShelves' || ['glass', 'open', 'mirror'].includes(c.type));
   const interiorH = Math.round(g.top - (bay.cells[0].type === 'knee' ? 0 : g.yB + g.T)), maxCell = Math.max(120, interiorH - (bay.cells.length - 1) * (120 + g.T));
   const maxBay = Math.max(260, Math.round(W - (p.bays.length - 1) * 260 - (p.bays.length + 1) * g.T));
-  const slider = (attr, label, lo, hi, v, autoAttr, isAuto) => `<div class="f-slider"><label>${esc(label)}${isAuto ? ` · <small>${L('auto')}</small>` : ''}</label><input type="range" ${attr} min="${lo}" max="${hi}" step="5" value="${Math.min(hi, Math.max(lo, v))}"><span class="f-num">${v} mm</span></div>${isAuto ? '' : `<div class="f-actions f-actions-tight"><button class="f-link" ${autoAttr}>${L('auto')}</button></div>`}`;
+  const slider = (attr, label, lo, hi, v, autoAttr, isAuto) => `<div class="f-slider"><label>${esc(label)}${isAuto ? ` · <small>${L('auto')}</small>` : ''}</label><input type="range" ${attr} min="${lo}" max="${hi}" step="5" value="${Math.min(hi, Math.max(lo, v))}"><span class="f-num"><input type="number" class="f-mm" ${attr} min="${lo}" max="${hi}" step="1" value="${v}"> mm</span></div>${isAuto ? '' : `<div class="f-actions f-actions-tight"><button class="f-link" ${autoAttr}>${L('auto')}</button></div>`}`;
   const nb = p.bays.length;
   return `<section class="f-layoutbox"><h3>${L('layout')}</h3>
-  <div class="f-seg">${L('bayCount')}: ${chip('data-baycount="' + Math.max(1, nb - 1) + '"', '−', false, nb <= 1 ? 'disabled' : '')}<b class="f-count">${nb}</b>${chip('data-baycount="' + Math.min(12, nb + 1) + '"', '+', false, nb >= 12 ? 'disabled' : '')}</div>${svg}<p class="f-note">${L('layoutHint')}</p>
+  <div class="f-seg">${L('bayCount')}: ${chip('data-baycount="' + Math.max(1, nb - 1) + '"', '−', false, nb <= 1 ? 'disabled' : '')}<b class="f-count">${nb}</b>${chip('data-baycount="' + Math.min(12, nb + 1) + '"', '+', false, nb >= 12 ? 'disabled' : '')}</div>${svg}<p class="f-note f-drag-tip">${L('layoutHint')}</p>
   <h3>${L('bayN')} ${sb + 1} · ${L('cellType')} ${sc + 1}</h3>
   <div class="f-chips">${types.map(t => chip(`data-celltype="${t}"`, partName('cellType', t, state.lang), c.type === t)).join('')}</div>
+  ${['door', 'glass', 'mirror'].includes(c.type) && p.doorType !== 'sliding' ? `<h3>${L('leafCountL')}</h3><div class="f-seg">${[[0, L('auto')], [1, L('leafSingle')], [2, L('leafDouble')], [3, L('leafTriple')]].map(([n, t]) => { const fw = bayW + g.T, ok = !n || leafFor(fw, n) === n; return chip(`data-cellset="lv" data-value="${n}"`, t, (c.lv || 0) === n, ok ? '' : `disabled title="${esc(L(n === 1 ? 'leafTooWide' : 'leafTooNarrow'))}"`); }).join('')}</div>` : ''}
   ${c.type === 'drawers' ? `<h3>${L('drawerCount')}</h3><div class="f-seg">${[1, 2, 3, 4, 5, 6].map(n => chip(`data-cellset="n" data-value="${n}"`, String(n), c.n === n)).join('')}</div>` : ''}
   ${['door', 'drawers', 'mirror'].includes(c.type) ? `<h3>${L('cellColor')}</h3><div class="f-swatches"><button class="f-swatch f-swatch-none" data-cellcolor="" aria-pressed="${!c.color}" title="${esc(L('frontMat'))}">∅</button>${CELL_COLORS.map(k => `<button class="f-swatch" data-cellcolor="${k}" style="--c:${COLORS[k].hex}" aria-pressed="${c.color === k}" title="${esc(N(COLORS[k]))}"><span class="sr">${esc(N(COLORS[k]))}</span></button>`).join('')}</div>` : ''}
   ${['door', 'glass', 'mirror', 'open'].includes(c.type) ? `<h3>${L('inside')}</h3><div class="f-chips">${insides.map(t => chip(`data-cellset="inside" data-value="${t}"`, partName('inside', t, state.lang), c.inside === t)).join('')}</div>
@@ -1096,6 +1103,37 @@ function bindShell() {
     else if (d.mat) { const [slot, key] = d.mat.split('.'); setDesign(withMaterial(slot, {[key]: d.value})); }
     else if (d.color !== undefined) { const [slot, key] = d.color.split('.'); setDesign(withMaterial(slot, {[key]: d.value || null})); }
     else if (d.dl) downloadAs(d.dl);
+  });
+  // Dragging a bay or cell boundary on the layout drawing: the two neighbours get exact widths (heights); others keep theirs.
+  panel.addEventListener('pointerdown', e => {
+    const h = e.target.closest('[data-vdiv],[data-hdiv]'); if (!h) return;
+    const svgEl = h.ownerSVGElement, g = state.compiled.meta.grid; if (!svgEl || !g) return;
+    e.preventDefault(); h.setPointerCapture?.(e.pointerId);
+    const toSvg = ev => { const pt = svgEl.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY; return pt.matrixTransform(svgEl.getScreenCTM().inverse()); };
+    const vertical = h.dataset.vdiv !== undefined;
+    let i, j, lo, hi, a0, a1;
+    if (vertical) { i = +h.dataset.vdiv; a0 = g.bays[i].x0; a1 = g.bays[i + 1].x1; lo = a0 + 260; hi = a1 - 260; }
+    else { [i, j] = h.dataset.hdiv.split(':').map(Number); a0 = g.bays[i].cells[j].y0; a1 = g.bays[i].cells[j + 1].y1; lo = a0 + 100; hi = a1 - 100; }
+    if (!(hi > lo)) return;
+    const gap = vertical ? g.bays[i + 1].x0 - g.bays[i].x1 : g.bays[i].cells[j + 1].y0 - g.bays[i].cells[j].y1;
+    let at = null;
+    // Horizontal lines snap to the cell lines of the other bays (within 30 mm) so shelves and fronts line up across bays.
+    const snaps = vertical ? [] : g.bays.flatMap((bb, k) => k === i ? [] : bb.cells.slice(0, -1).map((cg, m) => (cg.y1 + bb.cells[m + 1].y0) / 2));
+    const move = ev => { const q = toSvg(ev); at = Math.round(Math.min(hi, Math.max(lo, vertical ? q.x : -q.y)) / 5) * 5;
+      const near = snaps.filter(y => y > lo && y < hi).sort((a, b) => Math.abs(a - at) - Math.abs(b - at))[0], snapped = near != null && Math.abs(near - at) <= 30;
+      if (snapped) at = near;
+      if (!vertical) { h.setAttribute('x1', snapped ? -g.W / 2 : g.bays[i].x0); h.setAttribute('x2', snapped ? g.W / 2 : g.bays[i].x1); }
+      h.setAttribute('stroke-dasharray', snapped ? `${g.W / 80} ${g.W / 120}` : '');
+      if (vertical) { h.setAttribute('x1', at); h.setAttribute('x2', at); } else { h.setAttribute('y1', -at); h.setAttribute('y2', -at); }
+      h.setAttribute('stroke', '#a24a2a'); h.setAttribute('stroke-width', Math.max(g.W, g.H) / 160);
+      const tip = panel.querySelector('.f-drag-tip'); if (tip) tip.textContent = `${Math.round(at - a0 - gap / 2)} mm · ${Math.round(a1 - at - gap / 2)} mm`; };
+    const up = () => { h.removeEventListener('pointermove', move); h.removeEventListener('pointerup', up); h.removeEventListener('pointercancel', up);
+      if (at == null) return;
+      const bays = structuredClone(state.design.params.bays), first = Math.round(at - a0 - gap / 2), second = Math.round(a1 - at - gap / 2);
+      if (vertical) { bays[i].mm = first; bays[i + 1].mm = second; state.sel = {b: i, c: 0}; }
+      else { bays[i].cells[j].mm = first; bays[i].cells[j + 1].mm = second; state.sel = {b: i, c: j}; }
+      setDesign(withParams({bays})); };
+    h.addEventListener('pointermove', move); h.addEventListener('pointerup', up); h.addEventListener('pointercancel', up);
   });
   panel.addEventListener('change', e => {
     const el = e.target;

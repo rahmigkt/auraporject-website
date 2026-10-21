@@ -13,6 +13,8 @@ Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sa
   - soru cevapları isteğin kendisini sorar (halı → ölçü/renk/doku);
   - dil başına en az 150 farklı kalıp; ev sahibinin kendi evini anlattığı istekler artar;
   - plana uzakta boş oda ekleme kalıbı azalır.
+- [ ] **C1b · #187 kalan düzeltmeler** (Claude ikinci denetimi, `kararlar.json`): EN/FR/ES/IT/DA'da 'for the furniture' türü yapıştırma bağlacı olan 42 satır yeniden yazılır; asistan açılış kalıpları çeşitlenir. Tekstil satırları kalır (kullanıcı kararı: perde/halı asistanın işinde). #193 (eski mobilya komutu sürümü) kapsam dışı; kullanıcı onayıyla kapatılır.
+- [ ] **C8 · Eğitim betiğini EGITIM-01 biçimine bağla.** `tools/qwen-local/train_gpu.py` `outputs/egitim-01/{train,dev}.jsonl` (messages; son asistan turu `{"reply","actions"}`) okur, loss yalnız asistan turlarında. CPU'da 5 örnekle kuru koşu (model yüklemeden tokenizasyon + maske denetimi). GPU açılmaz. (`EGITIM-01.md`)
 - [ ] **C2 · 47 kaydın üslup düzeltmesi.** `inceleme/kararlar.json` içindeki `duzelt` kayıtları (ev-sohbet-02, uk-ie, dk 01/03/04, es, arap-olculu):
   - asistan satırlarında iç terim kalmaz ("adsız oda", "hesap", "kayıt", "yerleştirilen eşya sayısı", "elle konum");
   - kullanıcı satırları doğal olur, kendi evini anlatır;
@@ -39,13 +41,21 @@ Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sa
 
 - [x] **G1 · Merdiven doğrulama hataları** (#189) (Codex #187 bulgusu): özel değerlerde rıht 150–190 mm, basamak 250 mm alt sınırı uygulanır; kat yüksekliği pozitif olmalı. Test eklenir.
 - [x] **G2 · #187 denetimi** (karar: düzeltilmeli). 1.800 istek örneklenerek okunur (her dilden), kararlar `kararlar.json`'a ve inceleme sayfasına yazılır. Uygunsa kullanıcı onayıyla merge.
-- [ ] **G3 · Yerleşim verisinin takımlarla yeniden üretimi.** 3+2+1, okuma köşesi, yatak takımı; 2 saatten kısa parçalar, akışlı yazım. `procthor-aura-cozucu.jsonl.gz` yenilenir, rapor güncellenir.
+- [x] **G3 · Yerleşim verisinin takımlarla yeniden üretimi.** 3+2+1, okuma köşesi, yatak takımı; 2 saatten kısa parçalar, akışlı yazım. `procthor-aura-cozucu.jsonl.gz` yenilenir, rapor güncellenir.
 - [x] **G4 · Aydınlatma motor sözlüğüne.** `aksesuar.js` ışık kuralları motorda `isik` işlemi olur (H1'de eksik kaldı).
 - [x] **G5 · Tasarımcıya gönderme hedefi.** `proje` katmanında `tasarimciya_gonder` işleminin motorda kalıcı kaydı.
 - [x] **G7 · Ev tekstili ürün araştırması** (`knowledge/ev-projesi/EV-TEKSTILI-URUN-ARASTIRMA-03.md`). Uygulama kullanıcı kararından sonra.
+- [x] **G8 · Eğitim kümesi derleyici** (`tools/egitim/derle.mjs`, `sistem.md`, `EGITIM-01.md`). İlk koşu: 51 uygun kayıt.
+- [ ] **G9 · Eğitim öncesi kararlar:** H1 ve H4 geldikçe denetim, kümeyi derleme, sınav puanlayıcısını yeni biçime bağlama.
 - [ ] **G6 · C2 ve C3 çıktılarının denetimi** (her PR geldikçe).
 
-## Kullanıcı kararları (bekliyor)
+## Kullanıcı kararları
+
+Verildi (21 Ekim 2026): model Qwen3.5-9B; GPU sınırı 6 saat / 4 dolar; perde ve halı asistanın işinde (seçim ve ölçü projeye eklenir). Eğitim sırası `EGITIM-01.md`.
+
+**Codex için öncelik sırası (eğitime giden yol):** C1b → C8 → H4 (C5) → C7 → H5 (C6). C2, C3, C4 eğitim sonrasına kalır.
+
+Bekleyen:
 
 - GPU harcama sınırı.
 - Model boyutu: Qwen3.5-9B ile devam mı.
