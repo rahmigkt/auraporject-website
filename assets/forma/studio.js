@@ -27,7 +27,7 @@ import {drawingSheet, drawingDxf} from './drawing.js';
 import {bom, bomCsv} from './bom.js';
 import {zip, jpegPdf, svgToJpeg, dataUrlJpeg, download} from './package.js';
 const designKey = d => JSON.stringify({p: d.params, m: d.materials, k: d.kind, f: d.family});
-import {t, partName, UI_LANGS} from './i18n.js?v=20261021g';
+import {t, partName, UI_LANGS} from './i18n.js?v=20261021h';
 import {migrate, chooserHTML, applyChoice, TEXTILE_CSS, TEXTILE_KEY, SHEERS, DRAPES, HEADINGS, SYSTEMS, RUGS, PATTERNS as RUG_PATTERNS, colorName} from '../ev/tekstil.js?v=20261021e';
 
 const $ = (sel, root = document) => root.querySelector(sel);
@@ -128,17 +128,17 @@ const UI = {
   kitchen: {
     brand: 'MUTFAK', kinds: ['run', 'island'],
     dims: c => `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height} mm · ${L('worktopHeightL').toLowerCase()} ${c.params.worktopHeight}`,
-    readout: m => [[L('kModules'), String(m.moduleCount)], [L('carcassBoard'), `${m.board} mm`], [L('drawerCount'), String(m.drawers)], [L('leaves'), String(m.leaves)], [L('hingesN'), String(m.hinges)], [L('weight'), `~${weightOf()} kg`]]
+    readout: m => [[L('kModules'), String(m.moduleCount)], [L('carcassBoard'), `${m.board} mm`], [L('drawerCount'), String(m.drawers)], [L('doorLeaves'), String(m.leaves)], [L('hingesN'), String(m.hinges)], [L('weight'), `~${weightOf()} kg`]]
   },
   bath: {
     brand: 'BANYO', kinds: ['basin', 'column', 'mirror'],
     dims: c => `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height} mm${c.meta.basinRim ? ` · ${partName('bParams', 'mountHeight', state.lang).toLowerCase()} ${c.meta.basinRim}` : ''}`,
-    readout: m => [[L('carcassBoard'), `${m.board} mm`], [L('drawerCount'), String(m.drawers)], [L('leaves'), String(m.leaves)], [L('weight'), `~${weightOf()} kg`]]
+    readout: m => [[L('carcassBoard'), `${m.board} mm`], [L('drawerCount'), String(m.drawers)], [L('doorLeaves'), String(m.leaves)], [L('weight'), `~${weightOf()} kg`]]
   },
   storage: {
     brand: 'RİTMO', kinds: ['wardrobe', 'nightstand', 'dresser', 'vanity', 'tvunit', 'bookcase', 'vitrine', 'sideboard'],
     dims: c => `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height} mm · ${c.meta.board} mm ${L(c.params.board === 'solid' ? 'boardSolid' : 'boardMdf')}`,
-    readout: m => [[L('carcassBoard'), `${m.board} mm`], [L('innerDepth'), `${m.innerDepth} mm`], [L('drawerCount'), String(m.drawers)], [L('leaves'), String(m.leaves)], [L('hingesN'), String(m.hinges)], [L('modulesN'), `${m.modules} · ${m.moduleWidths.join(' + ')} mm`], [L('weight'), `~${weightOf()} kg`]]
+    readout: m => [[L('carcassBoard'), `${m.board} mm`], [L('innerDepth'), `${m.innerDepth} mm`], [L('drawerCount'), String(m.drawers)], [L('doorLeaves'), String(m.leaves)], [L('hingesN'), String(m.hinges)], [L('modulesN'), `${m.modules} · ${m.moduleWidths.join(' + ')} mm`], [L('weight'), `~${weightOf()} kg`]]
   }
 };
 const ui = () => UI[state.design.family];
@@ -693,7 +693,7 @@ function specRows(b) {
       [L('construction'), `${mm.board} mm ${L(p.board === 'solid' ? 'boardSolid' : 'boardMdf')} · 8 mm · 2 mm`], [L('kModules'), `${p.modules.length} · ${p.modules.map(x => x.w).join(' + ')}`],
       [L('frontStyle'), `${pn('frontStyle', p.frontStyle)} · ${pn('pull', p.pull)}`], [L('carcassMat'), surfaceShort(m.case)], [L('frontMat'), surfaceShort(m.front)],
       [L('sinkL'), `${pn('sink', p.sink)} · ${pn('sinkMount', p.sinkMount)} · ${pn('tap', p.tap)}`], [L('appliances'), mm.appliances.map(a => pn('appliance', a.kind)).join(', ')],
-      [L('drawerCount'), `${mm.drawers}`], [L('leaves'), `${mm.leaves} · ${mm.hinges} ${L('hingesN').toLowerCase()}`], [L('weight'), `~${b.totals.weightKg} kg`]
+      [L('drawerCount'), `${mm.drawers}`], [L('doorLeaves'), `${mm.leaves} · ${mm.hinges} ${L('hingesN').toLowerCase()}`], [L('weight'), `~${b.totals.weightKg} kg`]
     ];
   }
   if (d.family === 'bath') {
@@ -702,7 +702,7 @@ function specRows(b) {
       [L('overall'), `${o.width} × ${o.depth} × ${o.height}`],
       ...(p.kind === 'basin' ? [[L('bBasinType'), `${pn('bBasinType', p.basinType)} · ${pn('bBasinShape', p.basinShape)} · ${pn('bBasins', p.basins)} · ${pn('bTap', p.tap)}`], [partName('bParams', 'mountHeight', state.lang), `${p.mountHeight}`], [L('worktopMat'), `${surfaceShort(m.top)} · ${p.topThickness} mm`]] : []),
       ...(p.kind === 'mirror' ? [[L('mirror'), `${pn('mirror', p.mirror)} · ${pn('bMirrorLight', p.mirrorLight)} · ${pn('bMirrorCabinet', p.mirrorCabinet)}`]] : []),
-      ...(mm.bays ? [[L('construction'), `${mm.board} mm ${L(p.board === 'solid' ? 'boardSolid' : 'boardMdf')} · 8 mm · 2 mm`], [L('frontStyle'), `${pn('frontStyle', p.frontStyle)} · ${pn('pull', p.pull)}`], [L('carcassMat'), surfaceShort(m.case)], [L('frontMat'), surfaceShort(m.front)], [L('drawerCount'), `${mm.drawers}`], [L('leaves'), `${mm.leaves} · ${mm.hinges} ${L('hingesN').toLowerCase()}`]] : []),
+      ...(mm.bays ? [[L('construction'), `${mm.board} mm ${L(p.board === 'solid' ? 'boardSolid' : 'boardMdf')} · 8 mm · 2 mm`], [L('frontStyle'), `${pn('frontStyle', p.frontStyle)} · ${pn('pull', p.pull)}`], [L('carcassMat'), surfaceShort(m.case)], [L('frontMat'), surfaceShort(m.front)], [L('drawerCount'), `${mm.drawers}`], [L('doorLeaves'), `${mm.leaves} · ${mm.hinges} ${L('hingesN').toLowerCase()}`]] : []),
       [L('weight'), `~${b.totals.weightKg} kg`]
     ];
   }
@@ -715,7 +715,7 @@ function specRows(b) {
       [L('frontStyle'), `${pn('frontStyle', p.frontStyle)} · ${pn('pull', p.pull)}`], [L('frontFit'), pn('frontFit', p.frontFit)],
       [L('caseBase'), `${pn('sBase', p.base)}${p.base === 'legs' ? ' · ' + pn('sLegType', p.legType) : ''}`],
       [L('carcassMat'), surfaceShort(m.case)], [L('frontMat'), surfaceShort(m.front)],
-      [L('drawerCount'), `${mm.drawers}${mm.runner ? ` · ${mm.runner} mm` : ''}`], [L('leaves'), `${mm.leaves} · ${mm.hinges} ${L('hingesN').toLowerCase()}`],
+      [L('drawerCount'), `${mm.drawers}${mm.runner ? ` · ${mm.runner} mm` : ''}`], [L('doorLeaves'), `${mm.leaves} · ${mm.hinges} ${L('hingesN').toLowerCase()}`],
       [L('innerDepth'), `${mm.innerDepth}`], [L('weight'), `~${b.totals.weightKg} kg`]
     ];
   }
