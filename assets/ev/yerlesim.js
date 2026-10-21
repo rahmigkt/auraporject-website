@@ -102,7 +102,13 @@ function scoreItem(kind, p, run, size, ctx) {
 }
 
 // ---- search ------------------------------------------------------------------------------------------------
-export function solveRoom(space, roomItems, ev, {count = 3, beam = 60} = {}) {
+// A narrow beam can drop the arrangement a later piece needs; before answering "does not fit" the search widens.
+export function solveRoom(space, roomItems, ev, opts = {}) {
+  let r = solveOnce(space, roomItems, ev, opts);
+  for (let b = (opts.beam || 60) * 3; !r.ok && b <= 400; b *= 3) r = solveOnce(space, roomItems, ev, {...opts, beam: b});
+  return r;
+}
+function solveOnce(space, roomItems, ev, {count = 3, beam = 60} = {}) {
   const runs = roomRuns(space, ev), room = space.boundary_xy_mm, swings = doorSwings(runs);
   const roomA = Math.abs(area2(room)) / 2e6, roomR = Math.sqrt(roomA) * 1000 / 2, roomC = room.reduce((m, q) => [m[0] + q[0] / room.length, m[1] + q[1] / room.length], [0, 0]);
   const winCentres = runs.flatMap(r => r.openings.filter(o => o.kind === 'window').map(o => add(add(r.P, mul(r.u, (o.s0 + o.s1) / 2)), mul(r.n, 50))));

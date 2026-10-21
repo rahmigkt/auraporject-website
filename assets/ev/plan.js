@@ -330,7 +330,7 @@ function layoutPanel() {
 }
 async function layoutAction(b) { try { await layoutRun(b); } catch (err) { console.error('layout', err); LAY.res = {ok: false, reason: 'Yerleşim hesaplanamadı: ' + err.message}; side(); } }
 async function layoutRun(b) {
-  const {solveRoom} = await import('./yerlesim.js?v=20261021d');
+  const {solveRoom} = await import('./yerlesim.js?v=20261021e');
   if (b.dataset.lay === 'solve') { const r = D.spaces.find(x => x.id === S.room); LAY.room = r.id; LAY.pick = 0; LAY.res = solveRoom(r, D.items.filter(i => i.design && i.space_id === r.id), {walls, ops}, {beam: 60}); }
   if (b.dataset.lay === 'alt') LAY.pick = +b.dataset.i;
   if (LAY.res?.ok) for (const pl of LAY.res.alternatives[LAY.pick].placements) Object.assign(D.items.find(i => i.id === pl.id), {pos_xy_mm: pl.pos_xy_mm, rot_deg: pl.rot_deg});
