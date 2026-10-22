@@ -84,7 +84,10 @@ def build(page, text):
     block = '<!-- AURA module versions --><script type="importmap">' + json.dumps({'imports': mapping}, separators=(',', ':')) + '</script><!-- /AURA module versions -->\n'
     # Maps must precede any module script. They are relative to this document,
     # so previews in a subdirectory and nested Mizan pages resolve correctly.
-    text = re.sub(r'(<head\b[^>]*>)', lambda m: m[1] + block, text, count=1, flags=re.I)
+    # Keep the encoding declaration inside the first 1024 bytes. Large maps
+    # placed immediately after <head> would push that declaration too far back.
+    first_module = SCRIPTS.search(text)
+    text = text[:first_module.start()] + block + text[first_module.start():]
     return text, len(mapping)
 
 
