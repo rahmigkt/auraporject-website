@@ -1,0 +1,26 @@
+import assert from 'node:assert/strict';import fs from 'node:fs';
+import {build} from '../tools/h5-exam/build.mjs';
+import {validate,encode,sha} from '../tools/h5-exam/contract.mjs';
+import {formatInput} from '../tools/h5-exam/prompts.mjs';
+const rows=build();assert.equal(rows.length,40);assert.equal(new Set(rows.map(r=>r.id)).size,40);
+assert.equal(rows.filter(r=>r.expected.intent==='studio_redirect').length,5);assert.equal(new Set(rows.map(r=>r.lang)).size,9);
+let positive=0,negative=0;
+for(const row of rows){validate(row);positive++;const p=formatInput(row),body=JSON.parse(p.messages[1].content);assert.deepEqual(body,row.input);assert(!Object.hasOwn(body,'expected'));assert(!Object.hasOwn(body,'review_summary_tr'));assert(!Object.hasOwn(body.context,'layout_constraints'));}
+const mutate=(n,change)=>{const r=structuredClone(rows[n-1]);change(r);assert.throws(()=>validate(r),`mutation ${n} should fail`);negative++;};
+mutate(7,r=>r.expected.actions[0].en=901);
+mutate(8,r=>r.expected.actions[0].konum=901);
+mutate(1,r=>r.expected.actions[0].ad='Different');
+mutate(1,r=>r.expected.actions[0].kose=[[0,0],[5000,0],[5000,4000],[0,4000]]);
+mutate(13,r=>r.expected.actions[0].renk_k=2800);
+mutate(17,r=>r.expected.actions[0].sheer.color='kum');
+mutate(21,r=>r.expected.actions[0].esyalar[0].en--);
+mutate(21,r=>r.expected.actions[0].kisitlar=[]);
+mutate(21,r=>r.expected.actions[0].kisitlar[1].mm=1);
+mutate(29,r=>r.expected.actions[0].not='Already sent email');
+mutate(30,r=>r.expected.actions[0].yukseklik=2800);
+mutate(31,r=>r.expected.actions=[{type:'oda_tanimla',id:'R',ad:'Invented'}]);
+mutate(36,r=>r.expected.actions=[{type:'set',key:'backRake',value:14}]);
+mutate(36,r=>r.expected.route.url='api/forma-submit.php');
+const root=new URL('../',import.meta.url),archive=JSON.parse(fs.readFileSync(new URL('tests/ai-eval/aura-sinav-01/archive/pre-h5-20261022/ARCHIVE.json',root)));
+for(const f of archive.files)assert.equal(sha(fs.readFileSync(new URL(f.source,root),'utf8').replace(/\r\n/g,'\n')),f.sha256_lf,'old exam/source was changed');
+console.log(JSON.stringify({new_tasks:40,gold_positive_controls:positive,negative_mutations_rejected:negative,prompt_inputs_only:40,old_archive_sources_unchanged:archive.files.length,model_run:false,official:false}));
