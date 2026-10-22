@@ -151,6 +151,10 @@ export function install(ev) {
   };
   hooks.change = e => {
     const f = e.target.dataset?.f; if (!f) return false; const v = +e.target.value;
+    const bounds = {len: [100, Infinity], thick: [50, 600], ow: [400, Infinity], oh: [300, Infinity], os: [0, Infinity], oa: [0, Infinity], wallT: [50, 600]};
+    if (Object.hasOwn(bounds, f) && (!String(e.target.value ?? '').trim() || !Number.isFinite(v) || v < bounds[f][0] || v > bounds[f][1])) {
+      E.msg = 'Geçerli aralıkta bir ölçü girin.'; ev.side(); return true;
+    }
     if (f === 'wallT') { E.wallT = v; return true; }
     push();
     if (f === 'len' || f === 'thick') { const w = ev.D.walls.find(x => x.id === E.sel.id);
