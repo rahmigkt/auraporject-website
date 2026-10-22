@@ -668,7 +668,13 @@ export function createViewer(host, {onRotate} = {}) {
       };
       const exportMats = Object.fromEntries(Object.entries(mats).filter(([, m]) => m?.isMaterial).map(([k, m]) => { const c = m.clone(); for (const slot of ['map', 'normalMap', 'roughnessMap']) c[slot] = toCanvas(m[slot]); return [k, c]; }));
       const exportGroup = buildGroup(compiled, exportMats, {structure: false});
-      return new Promise((resolve, reject) => new GLTFExporter().parse(exportGroup, r => { disposeGroup(exportGroup); for (const m of Object.values(exportMats)) m.dispose(); for (const t of conv.values()) t.dispose(); resolve(r); }, reject, {binary: true}));
+      try {
+        return await new Promise((resolve, reject) => new GLTFExporter().parse(exportGroup, resolve, reject, {binary: true}));
+      } finally {
+        disposeGroup(exportGroup);
+        for (const m of Object.values(exportMats)) m.dispose();
+        for (const t of conv.values()) t.dispose();
+      }
     },
     texturesReady: () => matsReady,
     dispose() { ro.disconnect(); mats?.dispose(); roomMats?.dispose(); for (const m of itemMats.values()) m.dispose(); disposeGroup(group); composer.dispose(); renderer.dispose(); canvas.remove(); }
