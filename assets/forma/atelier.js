@@ -166,7 +166,7 @@ function insertPoint(p) {
   const t = S.target, pts = S.pts, mm = handlesMm(); let best = 0, bd = Infinity;
   const n = pts.length, segs = t.tool === 'silhouette' ? n : n - 1;
   for (let i = 0; i < segs; i++) { const a = mm[i], b = mm[(i + 1) % n], ex = b[0] - a[0], ey = b[1] - a[1], L = ex * ex + ey * ey || 1, k = Math.max(0, Math.min(1, ((p.x - a[0]) * ex + (p.y - a[1]) * ey) / L)), d = Math.hypot(a[0] + ex * k - p.x, a[1] + ey * k - p.y); if (d < bd) { bd = d; best = i; } }
-  const np = fromMm(p.x, p.y, -1);
+  const np = t.tool === 'silhouette' ? fromMm(p.x, p.y, -1) : null;
   if (t.tool === 'profile') { const tt = Math.min(0.995, Math.max(0.005, -p.y / S.base.height)); pts.splice(best + 1, 0, [Math.round(tt * 1000) / 1000, Math.max(3, Math.round(Math.abs(p.x) / XS * 2) / 2)]); pts.sort((a, b) => a[0] - b[0]); }
   else { pts.splice(best + 1, 0, np); if (S.sym && Math.abs(np[0]) > 0.004) insertMirror(np); }
   S.sel = -1; writeOverride(); drawEditor(); renderToolState();
