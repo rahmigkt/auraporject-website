@@ -1,7 +1,7 @@
 {
   "version": "aura-catalog/1",
   "date": "2026-10-21",
-  "snapshot_base": "422aed1c827057954e8e4e58b592700abb617d96",
+  "snapshot_base": "73eb52c2e07116497d80ac047b3844c91d957238",
   "hash_policy": "Exact tracked Git blob bytes; checkout CRLF does not change catalogue hashes. Aggregate hash includes file paths, sizes and primary/support roles.",
   "counts_policy": "Counts cover tracked primary rows only; sets may overlap, so totals are NOT unique projects. Null is unknown/not applicable, never zero.",
   "datasets": [
@@ -230,32 +230,68 @@
     },
     {
       "id": "yerlesim-kisit",
-      "path": "knowledge/ai-egitim/veri/yerlesim-kisit/denetim",
-      "summary": "H4 constraint conversion; CPU replay in progress. Checkpoint samples are support, not a delivered full corpus.",
-      "sha256": "6babf0a14addd168471f31e5e51eacf4fbbd91fd42cc84e99ca260f180ab9cc7",
+      "path": "knowledge/ai-egitim/veri/yerlesim-kisit",
+      "summary": "H4 completed 4340 source replays: 4282 quarantined candidates, 58 exclusions. Checkpoints and CPU evidence are support, not extra records.",
+      "sha256": "4437d197da27a0f0e2b7836f0884faa1e278b318fdb87426f9d5df916ff1fbf4",
       "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
       "sources": [
         "procthor-aura-cozucu.jsonl.gz; original Claude source, Codex transformation"
       ],
       "license": "ProcTHOR Apache-2.0 geometry; AURA authored transformation",
-      "record_count": null,
-      "record_count_scope": "research/support material; no candidate records asserted",
-      "languages": {},
+      "record_count": 4282,
+      "record_count_scope": "primary files only; derivatives excluded",
+      "languages": {
+        "tr": 451,
+        "fr": 491,
+        "nl": 501,
+        "en": 505,
+        "de": 448,
+        "da": 444,
+        "ar": 489,
+        "it": 455,
+        "es": 498
+      },
       "countries": {},
       "layer": "yerlesim",
       "status": "inceleme-bekliyor",
       "known_defects": [
-        "Full 4340-room engine replay pending; do not count source rows as accepted targets",
-        "New Codex target labels require Claude cross-review",
+        "Mechanical replay and all-candidate CPU token/mask gate passed; native language/designer admission remains pending",
+        "New Codex target labels remain quarantined; no independent Claude approval claimed",
         "Procedural geometry is not designer-authored housing",
-        "No training export or full-corpus approval"
+        "Prior full-suite Forma 180-second timeout unresolved; no training export or full-corpus admission approval"
       ],
-      "primary_files": [],
+      "primary_files": [
+        "knowledge/ai-egitim/veri/yerlesim-kisit/adaylar.jsonl"
+      ],
       "files": [
         {
+          "path": "knowledge/ai-egitim/veri/yerlesim-kisit/adaylar.jsonl",
+          "sha256": "0cf1bb677b225de0b741cf40efec5ee6ec649514f0f5f69661649b670d3cf43d",
+          "bytes": 23764136,
+          "role": "primary"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/yerlesim-kisit/denetim/cpu-token-tam.json",
+          "sha256": "6191e24f152da31749b7575892cd4db41eb0794e317b8491ae6cf9cb085eee6b",
+          "bytes": 2635240,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/yerlesim-kisit/denetim/dislanan.jsonl",
+          "sha256": "2913f9b07304acd733952b97082798b3ab489e87e4a49247bca80955a74d4c62",
+          "bytes": 5674,
+          "role": "support"
+        },
+        {
           "path": "knowledge/ai-egitim/veri/yerlesim-kisit/denetim/ilk-kisim.json",
-          "sha256": "6d1028d3049f99a6125632856c1fdde5719ee3d888320ee0b9be7b7e70007591",
-          "bytes": 168342,
+          "sha256": "d133e761c8124e82bab55c7b7ab25e7b4fdc2ad67ca416c56fd4593316f881ff",
+          "bytes": 190664,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/yerlesim-kisit/denetim/tam-denetim.json",
+          "sha256": "f22c1dc06daaad0d5a3cc90b2fcc091ced5726f6f475cb7b541a4cbb55015015",
+          "bytes": 2333,
           "role": "support"
         },
         {
@@ -263,9 +299,70 @@
           "sha256": "281591bf023e7c7e022697c1ff42ef97eb31ce3c18450f42b40c2eb179481140",
           "bytes": 260,
           "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/veri/yerlesim-kisit/rapor.json",
+          "sha256": "0576dc0fd0fcb5795cf0e93f92319da31a13e0523234713fa0180b1316f33c2a",
+          "bytes": 2343,
+          "role": "support"
         }
       ],
-      "coverage": []
+      "coverage": [
+        {
+          "language": "ar",
+          "country": null,
+          "layer": "yerlesim",
+          "records": 489
+        },
+        {
+          "language": "da",
+          "country": null,
+          "layer": "yerlesim",
+          "records": 444
+        },
+        {
+          "language": "de",
+          "country": null,
+          "layer": "yerlesim",
+          "records": 448
+        },
+        {
+          "language": "en",
+          "country": null,
+          "layer": "yerlesim",
+          "records": 505
+        },
+        {
+          "language": "es",
+          "country": null,
+          "layer": "yerlesim",
+          "records": 498
+        },
+        {
+          "language": "fr",
+          "country": null,
+          "layer": "yerlesim",
+          "records": 491
+        },
+        {
+          "language": "it",
+          "country": null,
+          "layer": "yerlesim",
+          "records": 455
+        },
+        {
+          "language": "nl",
+          "country": null,
+          "layer": "yerlesim",
+          "records": 501
+        },
+        {
+          "language": "tr",
+          "country": null,
+          "layer": "yerlesim",
+          "records": 451
+        }
+      ]
     },
     {
       "id": "ev-sohbet-02",
@@ -7372,7 +7469,10 @@
       "license": "AURA authored",
       "record_count": 30,
       "record_count_scope": "primary files only; derivatives excluded",
-      "languages": {},
+      "languages": {
+        "tr": 20,
+        "en": 10
+      },
       "countries": {},
       "layer": "genel-sohbet",
       "status": "inceleme-bekliyor",
@@ -7404,10 +7504,16 @@
       ],
       "coverage": [
         {
-          "language": null,
+          "language": "en",
           "country": null,
           "layer": "genel-sohbet",
-          "records": 30
+          "records": 10
+        },
+        {
+          "language": "tr",
+          "country": null,
+          "layer": "genel-sohbet",
+          "records": 20
         }
       ]
     },
@@ -9584,8 +9690,8 @@
       },
       "inceleme-bekliyor": {
         "datasets": 16,
-        "records": 4390,
-        "unknown_count_datasets": 2
+        "records": 8672,
+        "unknown_count_datasets": 1
       },
       "superseded": {
         "datasets": 7,
@@ -9697,6 +9803,12 @@
         "records": 14
       },
       {
+        "language": "ar",
+        "country": null,
+        "layer": "yerlesim",
+        "records": 489
+      },
+      {
         "language": "da",
         "country": "AT",
         "layer": "ev-plani",
@@ -9791,6 +9903,12 @@
         "country": null,
         "layer": "mobilya",
         "records": 41
+      },
+      {
+        "language": "da",
+        "country": null,
+        "layer": "yerlesim",
+        "records": 444
       },
       {
         "language": "de",
@@ -9901,6 +10019,12 @@
         "records": 45
       },
       {
+        "language": "de",
+        "country": null,
+        "layer": "yerlesim",
+        "records": 448
+      },
+      {
         "language": "en",
         "country": "AT",
         "layer": "ev-plani",
@@ -10006,13 +10130,19 @@
         "language": "en",
         "country": null,
         "layer": "genel-sohbet",
-        "records": 19
+        "records": 29
       },
       {
         "language": "en",
         "country": null,
         "layer": "mobilya",
         "records": 150
+      },
+      {
+        "language": "en",
+        "country": null,
+        "layer": "yerlesim",
+        "records": 505
       },
       {
         "language": "es",
@@ -10109,6 +10239,12 @@
         "country": null,
         "layer": "mobilya",
         "records": 41
+      },
+      {
+        "language": "es",
+        "country": null,
+        "layer": "yerlesim",
+        "records": 498
       },
       {
         "language": "fr",
@@ -10225,6 +10361,12 @@
         "records": 41
       },
       {
+        "language": "fr",
+        "country": null,
+        "layer": "yerlesim",
+        "records": 491
+      },
+      {
         "language": "it",
         "country": "AT",
         "layer": "ev-plani",
@@ -10325,6 +10467,12 @@
         "country": null,
         "layer": "mobilya",
         "records": 41
+      },
+      {
+        "language": "it",
+        "country": null,
+        "layer": "yerlesim",
+        "records": 455
       },
       {
         "language": "nl",
@@ -10435,6 +10583,12 @@
         "records": 41
       },
       {
+        "language": "nl",
+        "country": null,
+        "layer": "yerlesim",
+        "records": 501
+      },
+      {
         "language": "no",
         "country": "NO",
         "layer": "tekstil",
@@ -10540,7 +10694,7 @@
         "language": "tr",
         "country": null,
         "layer": "genel-sohbet",
-        "records": 26
+        "records": 46
       },
       {
         "language": "tr",
@@ -10552,7 +10706,7 @@
         "language": "tr",
         "country": null,
         "layer": "yerlesim",
-        "records": 1
+        "records": 452
       },
       {
         "language": null,
@@ -10564,7 +10718,7 @@
         "language": null,
         "country": null,
         "layer": "genel-sohbet",
-        "records": 82
+        "records": 52
       },
       {
         "language": null,
@@ -10575,8 +10729,8 @@
     ]
   },
   "coverage": {
-    "structured_files": 1207,
-    "inventoried_files": 1207,
+    "structured_files": 1212,
+    "inventoried_files": 1212,
     "unassigned": []
   }
 }
