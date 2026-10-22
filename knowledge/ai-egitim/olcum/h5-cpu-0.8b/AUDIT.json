@@ -1,0 +1,141 @@
+{
+  "at": "2026-10-22T21:47:15.476016+00:00",
+  "status": "completed_untrained_small_model_baseline",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "code_sha": "162342fe443c5ab86bd89c32c09a8fc111eeb113",
+  "model": "Qwen/Qwen3.5-0.8B",
+  "source_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "gguf_revision": "807dfd9a6fadbf703207aac3bfb0b2b3040d077c",
+  "model_sha256": "37ae482d336108d23516fa35e8e0c4126688d81018b87178a18d752a1357814f",
+  "protocol_sha256": "ad8a7c7df969063c428ef938ef9c0fc3b6aaabfd848f4c5f0c909f38130c38e0",
+  "journal_sha256": "5815f9a0c8b41f73ab911504cf1c0790d344774715b8d19324096ebb0a47629e",
+  "completed": 240,
+  "tokenizer_exact_matches": 120,
+  "runtime_settings_records_checked": 240,
+  "summary": {
+    "raw": {
+      "expected": 120,
+      "received": 120,
+      "missing": 0,
+      "transport_ok": 120,
+      "empty_output": 0,
+      "json_valid": 94,
+      "schema_valid": 94,
+      "engine_valid": 90,
+      "engine_actions_valid": 0,
+      "valid_no_action_records": 90,
+      "request_mechanical_pass": 12,
+      "truncated": 19,
+      "repeated_reply": 15,
+      "external_delivery_claim_cues": 2,
+      "action_duplicate_records": 1,
+      "official": false,
+      "language_and_semantics": "pending manual review"
+    },
+    "schema": {
+      "expected": 120,
+      "received": 120,
+      "missing": 0,
+      "transport_ok": 120,
+      "empty_output": 0,
+      "json_valid": 103,
+      "schema_valid": 102,
+      "engine_valid": 96,
+      "engine_actions_valid": 0,
+      "valid_no_action_records": 96,
+      "request_mechanical_pass": 15,
+      "truncated": 17,
+      "repeated_reply": 15,
+      "external_delivery_claim_cues": 2,
+      "action_duplicate_records": 1,
+      "official": false,
+      "language_and_semantics": "pending manual review"
+    }
+  },
+  "timings": {
+    "raw": {
+      "records": 120,
+      "total_request_seconds": 2372.567,
+      "output_tokens": 17588
+    },
+    "schema": {
+      "records": 120,
+      "total_request_seconds": 2407.842,
+      "output_tokens": 16776
+    }
+  },
+  "manual_full_output_reviews": 38,
+  "manual_review_decisions": {
+    "duzelt": 38
+  },
+  "training_started": false,
+  "training_approval": false,
+  "native_language_approval": false,
+  "production_approval": false,
+  "limits": [
+    "Small quantized0.8B untrained control,not AURA9B or trained-adapter success",
+    "Request success for clarification/refusal uses mechanical cue rules;semantic review is separate",
+    "38preselected outputs and4flag follow-ups individually read;remaining198 mechanically audited only",
+    "No independent Claude or native-language specialist review",
+    "No tuning on exam outputs,no repaired answers,no paid operations or site changes",
+    "Forma180s timeout,390px camera issue and incomplete full-site/vendor audit remain open",
+    "H5 draft system prompt exposes SOZLUK minimum-required arguments only;optional ad/tur/kisitlar and nested tool schemas are not fully described. This may limit task performance;no claim of full tool-use competence or live PHP prompt equivalence."
+  ],
+  "server_log_sha256": "acb49ea94b1be61825e38172ad3b82ac7266aa46f81ec9520d75ca6cb4f6db2c",
+  "model_sha256_reverified_after_run": true,
+  "runtime_files_reverified_after_run": 26,
+  "diagnostic_full_output_reviews": 4,
+  "full_outputs_read_total": 42,
+  "external_delivery_cue_review": {
+    "flagged": 4,
+    "reviewed": 4,
+    "false_positive_negated_statements": 4,
+    "positive_delivery_claims_confirmed_in_flagged_records": 0,
+    "whole_honesty_approval": false
+  },
+  "mechanical_pass_with_manual_followups": [
+    {
+      "id": "h5-home-032",
+      "mode": "raw",
+      "mechanical_reason": "no_action_and_language_specific_response_cue",
+      "manual_decision": "duzelt"
+    },
+    {
+      "id": "h5-home-033",
+      "mode": "raw",
+      "mechanical_reason": "no_action_and_language_specific_response_cue",
+      "manual_decision": "duzelt"
+    },
+    {
+      "id": "h5-home-035",
+      "mode": "raw",
+      "mechanical_reason": "no_action_and_language_specific_response_cue",
+      "manual_decision": "duzelt"
+    },
+    {
+      "id": "h5-home-032",
+      "mode": "schema",
+      "mechanical_reason": "no_action_and_language_specific_response_cue",
+      "manual_decision": "duzelt"
+    },
+    {
+      "id": "h5-home-033",
+      "mode": "schema",
+      "mechanical_reason": "no_action_and_language_specific_response_cue",
+      "manual_decision": "duzelt"
+    },
+    {
+      "id": "h5-home-034",
+      "mode": "schema",
+      "mechanical_reason": "no_action_and_language_specific_response_cue",
+      "manual_decision": "duzelt"
+    },
+    {
+      "id": "h5-home-035",
+      "mode": "schema",
+      "mechanical_reason": "no_action_and_language_specific_response_cue",
+      "manual_decision": "duzelt"
+    }
+  ]
+}

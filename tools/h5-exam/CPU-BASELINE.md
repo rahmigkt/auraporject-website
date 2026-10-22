@@ -60,3 +60,24 @@ cevabının90'ı geçti. Bu, model cevabı veya anadil incelemesi değildir.
 Soru/ret dil işaretleri ve stüdyo URL'si yalnız mekanik sinyallerdir; doğal dil,
 dürüstlük ve anlamsal doğruluk resmi onay sayılmaz. Eksik çıktı başarı sayılmaz.
 Tarihsel sınav veya motor fingerprint kapısı bu araçta gevşetilmez.
+
+## İlk koşunun sonucu
+
+120ham+120şemalı üretim tamamlandı. Kanıt ve özgün yanıtlar:
+`knowledge/ai-egitim/olcum/h5-cpu-0.8b/`. `AUDIT.json` sayımları ve sınırları,
+`manual-review.jsonl` önceden seçilmiş38yanıtın gerçek Codex öz denetimini içerir.
+Araç istemi yalnız `SOZLUK` asgari argümanlarını açıklar;isteğe bağlı `ad`,
+`tur`, `kisitlar` ve iç içe araç şemaları bütünüyle tanımlanmaz. Bu sınırlama
+koşu sırasında değiştirilmedi;bu deney genel araç yeterliliği veya canlı PHP
+istemi eşdeğerliği sayılmaz. Eğitim/üretim onayı yoktur.
+
+Yalnız yeniden puanlama ve kanıt kontrolü (yeni çıkarım çalıştırmaz):
+
+```powershell
+python tools/h5-exam/audit-baseline.py --repo . --run knowledge/ai-egitim/olcum/h5-cpu-0.8b
+```
+
+`--verify-model` seçeneği yerel özgün model/tokenizer/CPU binarylerinin SHA
+kontrolünü de ister;teslimde bu kontrol gerçek koşu klasöründe yapıldı.
+Frozen manifestteki `model_run:false`,dondurma anının korunmuş metadatasıdır;
+son üretim durumu ayrı `H5-DURUM.json` ve `RUN-COMPLETE.json` dosyalarındadır.

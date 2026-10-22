@@ -1,0 +1,32 @@
+H5 — Küçük model CPU temel ölçümü
+
+Ölçüm ve sonuç denetimi tamamlandı. Sonuç üretime hazır kabul edilmedi.
+Qwen3.5-0.8B / Q8_0 kullanıldı; AURA için ek eğitim veya adaptör uygulanmadı.
+Aynı 120 istem önce ham, sonra JSON şeması zorlamasıyla çalıştırıldı.
+240 yanıt alındı; aktarım hatası ve eksik kayıt yok. Üretim döngüsü yaklaşık 80 dakika sürdü.
+
+Ölçüt | Ham (120 kayıt) | Şemalı (120 kayıt)
+Geçerli JSON | 94 | 103
+Dış yanıt sözleşmesi | 94 | 102
+Motorun kabul ettiği gerçek işlem içeren yanıt | 0 | 0
+Geçerli boş işlem listesi | 90 | 96
+İsteğin mekanik ön puanından geçen | 12 | 15
+Token sınırında kesilen | 19 | 17
+Tekrar işareti | 15 | 15
+
+Geçerli boş işlem listesi, istenen işlemin yapıldığı anlamına gelmez.
+Soru ve retlerdeki mekanik dil işaretleri tam anlamsal doğruluk onayı değildir.
+Önceden seçilmiş 19 örneğin iki koşuldaki 38 yanıtı tam okundu. Ayrıca 4 işaretli yanıt okundu; kalan 198 yanıt yalnız mekanik denetlendi.
+Mesaj gönderme regex işaretleri bu 4 yanıtta olumsuz ifadelerden doğan yanlış alarmdı; işaretli yanıtlarda olumlu bir gönderim iddiası doğrulanmadı. Bu, bütün dürüstlük özelliklerinin onayı değildir.
+
+Ölçüm sınırı: İstem, SOZLUK asgari parametrelerini açıklıyor; isteğe bağlı ad/tur/kisitlar ve iç içe araç şemaları eksik. Koşu sırasında değiştirilmedi. Sonuç bu sınırlı taslak isteme aittir; genel araç kullanımı, AURA9B veya canlı PHP istemi eşdeğerliği değildir.
+Gerçek bölücü ile çalışma zamanı token kimlikleri 120/120 eşleşti. Model dosyası, 26 CPU bileşeni, kod, istem ve günlük hash bağları koşu sonunda doğrulandı.
+Denetçi: Codex; review_mode=user_authorized_self_review. Bağımsız Claude veya anadil uzmanı onayı verilmedi.
+Kapalı sınav çıktıları eğitim verisi değildir. Ücretli API, GPU, eğitim, site yayını veya merge yapılmadı.
+Önceki Forma 180 saniye zaman aşımı, 390px kamera takibi ve kalan site/vendor/mobil denetimi açıktır.
+
+Ayrıntılar: AUDIT.json, scores.json, breakdown.json, PROTOCOL.json, özgün predictions.jsonl ve inceleme kayıtları.
+Çalışan kod SHA: 162342fe443c5ab86bd89c32c09a8fc111eeb113
+Model SHA256: 37ae482d336108d23516fa35e8e0c4126688d81018b87178a18d752a1357814f
+
+Sıradaki iş: E1 ortak puanlayıcı; biçim, motor, istek, dürüstlük, dil ve kısalık ayrı değerlendirilecek.
