@@ -695,6 +695,15 @@ function sheetLabels() {
 }
 function specRows(b) {
   const d = state.design, c = state.compiled, m = d.materials;
+  if (d.family === 'table') return [
+    [L('overall'), `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height}`],
+    [L('topMat'), `${surfaceShort(m.top)} · ${c.params.topThickness} mm`],
+    [L('baseMat'), m.base.surface === 'metal' ? N(METALS[m.base.metal]) : surfaceShort(m.base)],
+    [L('topShape'), partName('topShape', c.params.topShape, state.lang)],
+    [L('baseType'), partName('tBaseType', c.params.baseType, state.lang)],
+    [L('edge'), partName('edge', c.params.edge, state.lang)],
+    [L('hardware'), N(METALS[m.hardware.metal])], [L('weight'), `~${b.totals.weightKg} kg`]
+  ];
   if (d.family === 'kitchen') {
     const p = c.params, mm = c.meta, o = mm.overall, pn = (g, v) => partName(g, v, state.lang);
     return [
