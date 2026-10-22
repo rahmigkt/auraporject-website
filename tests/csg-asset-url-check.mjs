@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import vm from 'node:vm';
+import assert from 'node:assert/strict';
+const s=fs.readFileSync(new URL('../assets/forma/csg.js',import.meta.url),'utf8');
+const line=s.split('\n').find(x=>x.startsWith('function csgAsset('));
+const asset=vm.runInNewContext(line+';csgAsset');
+assert.equal(asset('manifold.wasm','https://example.test/assets/'),'https://example.test/assets/manifold.wasm?v=20261022-mime');
+assert.equal(asset('manifold.wasm','http://127.0.0.1:8885/preview/'),'http://127.0.0.1:8885/preview/manifold.wasm?v=20261022-mime');
+for(const prefix of ['file:///tmp/','C:/local/','/tmp/'])assert.equal(asset('manifold.wasm',prefix),prefix+'manifold.wasm');
+assert.equal(asset('other.data','https://example.test/'),'https://example.test/other.data');
+console.log('PASS 6 WASM HTTP cache/native path controls');

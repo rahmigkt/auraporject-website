@@ -4,8 +4,11 @@ import {boxUV} from './mesh.js';
 
 let W = null, loading = null; const ready = new Set();
 export const csgReady = () => !!W;
+// Refresh browser responses cached before the server's application/wasm fix.
+// Native Node paths stay unchanged for offline geometry checks.
+function csgAsset(file, prefix) { return prefix + file + (/^https?:/.test(prefix) && file.endsWith('.wasm') ? '?v=20261022-mime' : ''); }
 export function loadCsg() {
-  if (!loading) loading = import('../vendor/manifold/manifold.js').then(m => m.default()).then(w => { w.setup(); W = w; for (const f of ready) f(); }).catch(() => { loading = null; });
+  if (!loading) loading = import('../vendor/manifold/manifold.js').then(m => m.default({locateFile: csgAsset})).then(w => { w.setup(); W = w; for (const f of ready) f(); }).catch(() => { loading = null; });
   return loading;
 }
 export const onCsgReady = f => { ready.add(f); if (W) f(); return () => ready.delete(f); };
