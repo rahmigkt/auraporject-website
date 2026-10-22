@@ -28,7 +28,7 @@ def build():
         langs=collections.Counter();countries=collections.Counter();matrix=collections.Counter()
         for r in records:
             if not isinstance(r,dict):continue
-            lang=r.get('language',r.get('lang',r.get('customer_language')));country=r.get('country')
+            lang=r.get('language',r.get('lang',r.get('dil',r.get('customer_language'))));country=r.get('country')
             if lang:langs[str(lang)]+=1
             if country:countries[str(country)]+=1
             matrix[(str(lang) if lang else None,str(country) if country else None,layer)]+=1
@@ -40,6 +40,9 @@ def build():
     paths=[p for p in contents if p.startswith(prefix)]
     primary=[p for p in paths if re.search(r'/(tr|en|de|fr|nl|da|es|it|ar)\.jsonl$',p)]
     take('hacim-1-istek',paths,primary,'ev-plani','inceleme-bekliyor','1800 home-project request candidates; furniture detail actions excluded; common projection is support, not additional examples.','AURA original authored text and synthetic room studies',['HACIM-01 scope #180 and cross-review policy #185; fictional connected five-room home'],['C1b: 24 intent families; 200 normalized user patterns and 54 content-specific reply families per language; no global preambles','C1b resubmitted after Claude second duzelt; no training export; human/native review optional','Single synthetic-plan split cluster; no independent evaluation split','Lighting colour temperature and persisted designer request covered; no external delivery; percentage dimming unsupported','Combined corpus semantic deduplication pending'])
+    paths=[p for p in contents if p.startswith(base+'yerlesim-kisit/')]
+    primary=[p for p in paths if p.endswith('/adaylar.jsonl')]
+    take('yerlesim-kisit',paths,primary,'yerlesim','inceleme-bekliyor','H4 completed 4340 source replays: 4282 quarantined candidates, 58 exclusions. Checkpoints and CPU evidence are support, not extra records.','ProcTHOR Apache-2.0 geometry; AURA authored transformation',['procthor-aura-cozucu.jsonl.gz; original Claude source, Codex transformation'],['Mechanical replay and all-candidate CPU token/mask gate passed; native language/designer admission remains pending','New Codex target labels remain quarantined; no independent Claude approval claimed','Procedural geometry is not designer-authored housing','Prior full-suite Forma 180-second timeout unresolved; no training export or full-corpus admission approval'])
     for batch in ['02','uk-ie','dk','es','it','arap','arap-olculu']:
         prefix=base+'ev-sohbet-'+batch+'/'
         paths=[p for p in contents if p.startswith(prefix)]

@@ -2,6 +2,8 @@
 
 Tek kaynak bu dosyadır. Her iş başında güncel `main`'den okunur. Biten iş `[x]` yapılır, PR numarası yazılır. Yeni iş buraya eklenir. Kapsam: yapay zekâ yalnızca ev projesi (plan, oda, eşya türü + toplam ölçü, yerleşim, perde/halı/ışık, tasarımcıya gönderme). Onay: çapraz denetim (`EGITIM-PLANI-STUDYO.md`).
 
+**Geçici kullanıcı yetkisi (21 Ekim 2026):** Claude'un beş günlük yokluğunda Codex ikinci geçişte kendi denetimini yaparak H4 → C7 → H5 → E1–E6 sırasını sürdürür. Öz denetim kararları `denetci: Codex`, `review_mode: user_authorized_self_review` ve gerçek kanıtla kaydedilir; Claude incelemesi gibi gösterilmez. İstisna 26 Ekim 2026 23.00 (İstanbul) sonrasında yeni kararlara uygulanmaz. Plan ve denetim ölçütleri: `CODEX-BES-GUN-PLANI.md`. Merge/GPU/ücretli işlem sınırları değişmez.
+
 ## Codex
 
 Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sayı uydurma yok. Eğitim, GPU, ücretli API, dağıtım yok. Her iş ayrı PR. Merge kullanıcı onayıyla.
@@ -15,7 +17,7 @@ Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sa
   - plana uzakta boş oda ekleme kalıbı azalır.
 - [x] **C1b · #187 kalan düzeltmeler** (Claude ikinci denetimi, `kararlar.json`): EN/FR/ES/IT/DA'da 'for the furniture' türü yapıştırma bağlacı olan 42 satır yeniden yazılır; asistan açılış kalıpları çeşitlenir. Tekstil satırları kalır (kullanıcı kararı: perde/halı asistanın işinde). #193 (eski mobilya komutu sürümü) kapsam dışı; kullanıcı onayıyla kapatılır.
 - [x] **C8 · Eğitim betiğini EGITIM-01 biçimine bağla — PR #204.** `tools/qwen-local/train_gpu.py` `outputs/egitim-01/{train,dev}.jsonl` (messages; son asistan turu `{"reply","actions"}`) okur, loss yalnız asistan turlarında. CPU'da 5 örnekle kuru koşu (model yüklemeden tokenizasyon + maske denetimi). GPU açılmaz. (`EGITIM-01.md`)
-  - Uygulama ve CPU teslimi kullanıcı gönderim onayıyla PR #204'te (`egitim-01-cpu-mask`, taban main `af8ed63`). PR taslak; çapraz denetim ve tam test paketi sonucu bekliyor, merge yapılmadı. 12 maske testi ve aynı koşuda bire bir aynı motor girdilerinin tekrar kullanım testi geçti. Güncel derleme: H1 dahil 1851 kayıt, 1759 train / 92 dev. Beş bağlam taşması ve H1 ev/grup izolasyonu G9'da açık; eğitim hazır değil. Eğitim hazırlığı ve CPU ölçümleri: `C8-CPU-DOGRULAMA.json`; kullanım: `tools/qwen-local/EGITIM-01-CPU.md`.
+  - PR #204 main'de; G9a (#205) sonrasında eski beş uzun kayıt gerçek tokenizer ile yeniden kontrol edildi: 6131 / 4515 / 4313 / 5232 / 3920 token, hepsi 6144 içinde; yanıt maskeleri doğru, kırpma yok. Kanıt: `H4-G9A-CPU-DOGRULAMA.json`. Bu beş kayıt kontrolüdür; tüm küme veya H4 token kapısı sayılmaz. H1 intent bölmesi G9a kararıyla aynı ev içindeki niyet ölçümüdür, yeni ev genellemesi değildir. Eğitim başlatılmadı.
 - [ ] **E1 · Ortak puanlayıcı** `tools/egitim/puanla.mjs` (biçim, motor, istek, dürüstlük, dil, kısalık; hile testleri).
 - [ ] **E2 · Süzerek öğrenme döngüsü** `tools/egitim/ornekle.py`; CPU kuru koşu.
 - [ ] **E3 · Pekiştirmeli öğrenme hazırlığı** (GRPO yapılandırması, KL, sınav aralığı; CPU kuru koşu).
@@ -40,7 +42,8 @@ Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sa
   - meclis senaryoları (meclis main'de, #183);
   - villa/dubleks (kat ve merdiven main'de, #184); gerçek Körfez planı yoksa "uyarlanmış referans" yazılır;
   - ağır perde, katmanlı tül, büyük halı (`tekstil.js` sürüm 2).
-- [ ] **C5 · H4 yerleşim verisi kısıt biçimine.** ProcTHOR çözücü kayıtları → girdi (oda JSON + eşya listesi + kısa istek, 9 dil), hedef (`yerlestir` + `kisitlar`). Kısıtlar sonuçtan çıkarılır, motorda yeniden çözülür; tutmayan kayıt girmez. Claude'un yeni takımlı verisi (G3) gelince aynı araçla işlenir.
+- [x] **C5 · H4 yerleşim verisi kısıt biçimine — PR #206.** ProcTHOR çözücü kayıtları → girdi (oda JSON + eşya listesi + kısa istek, 9 dil), hedef (`yerlestir` + `kisitlar`). 4340/4340 kaynak güncel motorda tamamlandı: 4282 karantina adayı, 58 dışlama (42 sonuç değişimi, 16 motor uyarısı). Claude'un yeni takımlı verisi (G3) gelince aynı araçla işlenir.
+  - Dönüşüm teslimidir; eğitim veya dil/tasarımcı onayı değildir. 3058 yerleşim, 1224 sınırlı aramada çözüm bulunamaması; 2799 kabul edilen kaynak ev grubu. Bütün 4282 hedefte 26660 eşyanın tam ölçüsü/kimliği ve 10444 kaynak ilişkisi denetlendi. Üç H4 test grubu geçti. Gerçek EGITIM-01 CPU yolunda bütün adaylar: 940–2319 token / 6144, sıfır taşma, asistan+EOS maskeleri doğru; model/GPU/eğitim yok. Kanıt: `veri/yerlesim-kisit/denetim/tam-denetim.json`, `cpu-token-tam.json`. Önceki Forma 180 saniye zaman aşımı açık; tam test paketi yeşil sayılmaz. Yeni hedefler `quarantine`, `training_eligible:false`; C7 kaynak Claude verisinin ayrı incelemesidir. Kullanım: `tools/yerlesim-veri/H4.md`.
 - [ ] **C6 · H5 sınav.** `aura-sinav-01`'deki 40 mobilya düzenleme görevini arşivle; yerine 40 ev projesi isteği koy (5'i mobilya detayı → stüdyoya yönlendirme). Yeni sürümü dondur. Küçük yerel Qwen ile CPU'da uçtan uca ilk koşu; sonuç "eğitimsiz temel ölçüm" olarak kaydedilir.
 - [ ] **C7 · Claude verisinin denetimi.** sohbet-001, yerleşim kayıtları, motor örnekleri. Kararlar `inceleme/codex-kararlari.json`.
 
@@ -55,7 +58,7 @@ Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sa
 - [x] **G8 · Eğitim kümesi derleyici** (`tools/egitim/derle.mjs`, `sistem.md`, `EGITIM-01.md`). İlk koşu: 51 uygun kayıt.
 - [x] **G9a · C8 engelleri (#204):** (1) Uzun sohbetler: istemdeki durum artık özet (`derle.mjs` `ozet()`: duvar, açıklık, oda, eşya kimlik ve ölçüleri; kanıt/meta yok). DK-02 durumu 92.829 → 6.709 karakter; en uzun örnek 11.051 karakter. `max_sequence_length` 4096 → 6144 (A40 için yeterli). Codex gerçek tokenizer ile 5 kaydın sınır içinde kaldığını doğrular. (2) H1 tek kurgusal evde: dev bölmesi niyet grubuna göre kalır; bu "yeni ev" genellemesini ölçmez, onu kapalı sınav ve H4 (4.340 farklı gerçek oda) ölçer. Kabul.
 - [ ] **G9 · Eğitim öncesi kararlar:** H1 ve H4 geldikçe denetim, kümeyi derleme, sınav puanlayıcısını yeni biçime bağlama.
-  - C8: eski ev sohbetlerinde 4096 token sınırını aşan `DURUM` girdileri var; metin kırpılmadan temsil/bağlam bütçesi gözden geçirilmeli. H1 tek sentetik plan kullanırken derleyicinin intent grubu train/dev'i ayırıyor; ortak plan grubu korunmalı. C8'in ID çakışması denetimi, ev/grup izolasyonu kanıtı değildir. İki engel çözülmeden eğitim hazır sayılmaz.
+  - G9a sonrası Codex CPU doğrulaması: eski beş bağlam taşması 6144 sınırı içinde (`H4-G9A-CPU-DOGRULAMA.json`). H1'in aynı evde intent bölmesi kararı korunur; yeni ev genellemesi iddia edilmez. H4'te aynı kaynak evin odaları ortak `split + house` grubu taşır. Tam H4 motor koşusu, çapraz denetim ve son küme/sınav kapıları hâlâ bekler.
 - [ ] **G10 · Ev tekstili ürün ailesi** (stüdyoda perde ve halı; E6 kataloğu gelince).
 - [ ] **G11 · Serbest çizim araçlarının stüdyoda uygulanması** (E5 sözleşmesinden sonra).
 - [ ] **G6 · C2 ve C3 çıktılarının denetimi** (her PR geldikçe).

@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-22T11:18:02.994Z",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "scope": "Mechanical identity/structure/target/provenance audit of every accepted row; no native-language or designer approval",
+  "source_sha256": "749845b2b8b4280741df5f7d80c0621b8af35e42a3aa3ee5dc03fd2176f68502",
+  "candidates_sha256": "0cf1bb677b225de0b741cf40efec5ee6ec649514f0f5f69661649b670d3cf43d",
+  "code_sha": "0284ec113defde14a9e5dd7812edbc9cd8fa278b",
+  "journal_fingerprint": "3133c02823a178f15eb678f7d76febc72771ab516fae24cd4109637fd7df3461",
+  "source_rows": 4340,
+  "accepted": 4282,
+  "excluded": 58,
+  "verified_target_items": 26660,
+  "verified_source_relations": 10444,
+  "languages": {
+    "tr": 451,
+    "fr": 491,
+    "nl": 501,
+    "en": 505,
+    "de": 448,
+    "da": 444,
+    "ar": 489,
+    "it": 455,
+    "es": 498
+  },
+  "three_h4_test_groups": "passed 2026-10-22 after replay completion",
+  "full_suite": "Prior Forma 180-second timeout remains unresolved",
+  "pending": [
+    "catalogue refresh/check before push",
+    "C7 original Claude source review separate",
+    "No new target language/designer admission decision; all candidates quarantined"
+  ],
+  "training_exported": 0,
+  "cpu_gate": {
+    "rows": 4282,
+    "all_candidates_checked": true,
+    "min_tokens": 940,
+    "max_tokens": 2319,
+    "limit": 6144,
+    "overflow": 0,
+    "model_loaded": false,
+    "training_started": false,
+    "path": "egitim01_runner.main -> egitim01_features.prepare_features",
+    "input_method": "Quarantine probes use exact ornek/ozet expressions extracted from tools/egitim/derle.mjs; no approval filter bypass in real compiler",
+    "runner_full_dataset_flag_note": "Runner emits full_dataset_tokenization_checked=false for all dry runs; this invocation selected all 4282 unique quarantine train probes and had no dev probes",
+    "evidence_sha256": "80adc80e52e271827fa7babf749dcf14e1e67235159230710b1918870f406295"
+  },
+  "tests": [
+    "node tests/h4-contract-check.mjs: PASS",
+    "node tests/h4-journal-check.mjs: PASS",
+    "node tests/h4-dataset-check.mjs: PASS",
+    "node work/h4-final-audit.mjs: PASS all 4282 targets, 26660 exact item triples and 10444 source relations",
+    "node tools/yerlesim-veri/h4-durum.mjs work/h4-full.jsonl: current source/code/exam fingerprint matches"
+  ]
+}

@@ -1,0 +1,165 @@
+{
+  "contract": "egitim-01/messages/reply-actions",
+  "model": "Qwen/Qwen3.5-9B",
+  "train_rows": 5,
+  "dev_rows": 0,
+  "data_files_sha256": {
+    "train.jsonl": "fe0ed29c79c286082f6235357b2510276083a1aa6ec30b934a35ffc9caa57c4a",
+    "dev.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "max_sequence_length": 6144,
+  "model_loaded": false,
+  "gpu_executed": false,
+  "training_started": false,
+  "status": "dry_run_passed",
+  "samples": 5,
+  "selection": "Evenly spaced training rows only; no dev sampling",
+  "tokenizer_files_sha256": {
+    "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+    "tokenizer_config.json": "490498ee083cd1231edb428ad621829e69d9187a3ff9c4d0ffedfc7d8f95e436",
+    "chat_template.jinja": "a4aee8afcf2e0711942cf848899be66016f8d14a889ff9ede07bca099c28f715"
+  },
+  "tokenizer_packages": {
+    "tokenizers": "0.22.2",
+    "Jinja2": "3.1.6"
+  },
+  "features_sha256": "02df466feb81d44970e7dc4379fdfef99b9b923bbb92645583cc4e70a861c7d7",
+  "assistant_payload_and_eos_masks_passed": true,
+  "context_gate_passed": true,
+  "over_context_rows": [],
+  "full_dataset_tokenization_checked": false,
+  "framework_modules_loaded": {
+    "torch": false,
+    "transformers": false,
+    "unsloth": false
+  },
+  "rows": [
+    {
+      "id": "ev-sohbet-dk:ev-sohbet-dk-02",
+      "tokens": 6131,
+      "assistant_turns": 8,
+      "supervised_tokens": 888,
+      "supervised_tokens_by_turn": [
+        51,
+        60,
+        58,
+        62,
+        52,
+        56,
+        57,
+        492
+      ],
+      "masked_tokens": 5243,
+      "within_context": true,
+      "leading_system_messages_coalesced": 1,
+      "rendered_sha256": "46ae88c728887a350e1ce154144155e8dbb7651bfbe468dcdd5c567fb91e4755",
+      "assistant_payloads_sha256": "447f26868b0291a26bf25de232060147ee766df8379a8a62c4377b129774dab0",
+      "decoded_targets_match": true,
+      "prompt_tokens_supervised": 0,
+      "truncated": false
+    },
+    {
+      "id": "ev-sohbet-it:ev-sohbet-it-01",
+      "tokens": 4515,
+      "assistant_turns": 8,
+      "supervised_tokens": 723,
+      "supervised_tokens_by_turn": [
+        47,
+        51,
+        49,
+        67,
+        46,
+        44,
+        41,
+        378
+      ],
+      "masked_tokens": 3792,
+      "within_context": true,
+      "leading_system_messages_coalesced": 1,
+      "rendered_sha256": "391e39426d61c1eb6f939bb47fa56204ac0bcd298f026e3346d3b1a5f2d50686",
+      "assistant_payloads_sha256": "453f54cd3a5bacc0ecde439a66ad6d79f286fdfc77178ff5489b53e6fdf28a51",
+      "decoded_targets_match": true,
+      "prompt_tokens_supervised": 0,
+      "truncated": false
+    },
+    {
+      "id": "ev-sohbet-it:ev-sohbet-it-02",
+      "tokens": 4313,
+      "assistant_turns": 8,
+      "supervised_tokens": 763,
+      "supervised_tokens_by_turn": [
+        53,
+        57,
+        54,
+        56,
+        53,
+        52,
+        53,
+        385
+      ],
+      "masked_tokens": 3550,
+      "within_context": true,
+      "leading_system_messages_coalesced": 1,
+      "rendered_sha256": "c31c0f7d61de4226863fabcba0d65477b06f0f9d8b2f7a18f3ac0386eccabd37",
+      "assistant_payloads_sha256": "fde491353ce610a87c457577224f84afec8eea599f876697b5033ec9336a816b",
+      "decoded_targets_match": true,
+      "prompt_tokens_supervised": 0,
+      "truncated": false
+    },
+    {
+      "id": "ev-sohbet-it:ev-sohbet-it-03",
+      "tokens": 5232,
+      "assistant_turns": 8,
+      "supervised_tokens": 720,
+      "supervised_tokens_by_turn": [
+        42,
+        48,
+        51,
+        57,
+        47,
+        51,
+        49,
+        375
+      ],
+      "masked_tokens": 4512,
+      "within_context": true,
+      "leading_system_messages_coalesced": 1,
+      "rendered_sha256": "5a2d2f26f1f217a8d1f08dbcaa74c1b780f3bb4c3380e429f8d45f4afd98431b",
+      "assistant_payloads_sha256": "4ef3d8f5b6607ffa7491a08263259ef186c5f6e6a563b573b4d5218885fab983",
+      "decoded_targets_match": true,
+      "prompt_tokens_supervised": 0,
+      "truncated": false
+    },
+    {
+      "id": "ev-sohbet-it:ev-sohbet-it-04",
+      "tokens": 3920,
+      "assistant_turns": 8,
+      "supervised_tokens": 843,
+      "supervised_tokens_by_turn": [
+        41,
+        48,
+        51,
+        62,
+        45,
+        53,
+        51,
+        492
+      ],
+      "masked_tokens": 3077,
+      "within_context": true,
+      "leading_system_messages_coalesced": 1,
+      "rendered_sha256": "7b1a3ede35ac1da1251ff17dcea05d3057e8d23e1788ee5c684958b6adf54881",
+      "assistant_payloads_sha256": "c56095ed9f1507496f4d31795f37d6a291d351dfd3c0416aaeed421ad2c4b1b5",
+      "decoded_targets_match": true,
+      "prompt_tokens_supervised": 0,
+      "truncated": false
+    }
+  ],
+  "source_main": "0de8f67",
+  "selection_note": "Exactly five previously oversized records; original JSONL lines copied unchanged from compiled train/dev. Separate CPU test input, no training export or full-dataset check.",
+  "reproducer": "tools/yerlesim-veri/g9a-cpu.mjs",
+  "compiled_data_files_sha256": {
+    "train.jsonl": "c4de469235641c577acbce801b4d7f6513bb60b9f6ccbfe6cca33c29f11e4919",
+    "dev.jsonl": "3929601975fd4fad16198ff8f31176252369bcc4d81798fce16ff08405893141"
+  }
+}
