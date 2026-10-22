@@ -1188,16 +1188,16 @@ async function readImage(file) {
   if (!file) return;
   if (!state.ai.vision) { feedback(L('aiOff'), 'warn'); return; }
   feedback(L('reading'));
-  const url = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(file); });
-  const small = await shrink(url, 1400);
   try {
+    const url = await new Promise((resolve, reject) => { const fr = new FileReader(); fr.onload = () => resolve(fr.result); fr.onerror = () => reject(fr.error || new Error('Image read failed')); fr.onabort = () => reject(new Error('Image read cancelled')); fr.readAsDataURL(file); });
+    const small = await shrink(url, 1400);
     const res = await designFromImage(small, state.lang);
     setDesign(res.design);
     feedback(`${L('applied')} · ${L('estimated')}: ${res.estimated.map(k => partName('params', k, state.lang)).join(', ')}${res.notes ? ' · ' + res.notes : ''}`);
   } catch (e) { feedback(String(e.message || e), 'error'); }
 }
 async function shrink(url, max) {
-  const img = new Image(); await new Promise(r => { img.onload = r; img.src = url; });
+  const img = new Image(); await new Promise((resolve, reject) => { img.onload = resolve; img.onerror = () => reject(new Error('Image decode failed')); img.src = url; });
   const k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight)), c = document.createElement('canvas');
   c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
   return c.toDataURL('image/jpeg', 0.88);
