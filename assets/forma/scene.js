@@ -703,7 +703,7 @@ export function createViewer(host, {onRotate} = {}) {
       }
     },
     texturesReady: () => matsReady,
-    dispose() { if (disposed) return; disposed = true; cancelAnimationFrame(raf); offCsg(); ro.disconnect(); mats?.dispose(); roomMats?.dispose(); for (const m of itemMats.values()) m.dispose(); disposeGroup(group); composer.dispose(); disposeEnvironment(); renderer.dispose(); canvas.remove(); }
+    dispose() { if (disposed) return; disposed = true; cancelAnimationFrame(raf); offCsg(); ro.disconnect(); mats?.dispose(); roomMats?.dispose(); for (const m of itemMats.values()) m.dispose(); disposeGroup(group); for (const pass of composer.passes) pass.dispose(); composer.dispose(); disposeEnvironment(); renderer.dispose(); canvas.remove(); }
   };
 }
 
