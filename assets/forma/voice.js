@@ -39,7 +39,9 @@ function whisper(lang, onText, onState) {
   worker ??= new Worker(new URL('./whisper-worker.js?v=20261016a', import.meta.url), {type: 'module'});
   worker.postMessage({type: 'warm'}); // start the one-time model download while the person speaks
   navigator.mediaDevices.getUserMedia({audio: {channelCount: 1, noiseSuppression: true, echoCancellation: true}}).then(s => {
-    stream = s; const chunks = [];
+    stream = s;
+    if (stopped) { stream.getTracks().forEach(t => t.stop()); if (active?.stop === stop) { active = null; onState('done'); } return; }
+    const chunks = [];
     recorder = new MediaRecorder(stream);
     recorder.ondataavailable = e => e.data.size && chunks.push(e.data);
     recorder.onstop = async () => {
@@ -58,7 +60,7 @@ function whisper(lang, onText, onState) {
     };
     recorder.start(); onState('recording');
     timer = setTimeout(stop, 8000); // a command is short; the second click also stops
-  }).catch(e => { active = null; onState('error', {error: String(e.message || e)}); });
+  }).catch(e => { stream?.getTracks().forEach(t => t.stop()); if (active?.stop === stop) { active = null; onState('error', {error: String(e.message || e)}); } });
   // While loading the model on the first run, report progress.
   worker.onmessage = ({data}) => { if (data.type === 'progress') onState('loading', data); };
   return stop;
