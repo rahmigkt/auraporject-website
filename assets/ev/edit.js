@@ -126,7 +126,7 @@ export function install(ev) {
       return `<h3>${win ? 'Pencere' : 'Kapı'}</h3>${field('Genişlik mm', 'ow', val(o.width), 'step="10" min="400"')}${field('Yükseklik mm', 'oh', val(o.height), 'step="10" min="300"')}${win ? field('Denizlik mm', 'os', val(o.sill_height), 'step="10" min="0"') : ''}${field('Duvar başından mm', 'oa', val(o.offset_from_wall_start), 'step="10" min="0"')}
       <div class="ev-row"><button data-e="del" class="ev-del">Sil</button></div>`; }
     if (s.type === 'room') { const r = ev.D.spaces.find(x => x.id === s.id); if (!r) return '';
-      return `<h3>Oda</h3><label class="ev-f"><span>Ad</span><input data-f="rname" value="${(r.name || '').replace(/"/g, '&quot;')}"></label>
+      return `<h3>Oda</h3><label class="ev-f"><span>Ad</span><input data-f="rname" value="${(r.name || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;')}"></label>
       <label class="ev-f"><span>İşlev</span><select data-f="rkind">${Object.entries(ev.NAMES).map(([k, n]) => `<option value="${k}" ${r.kind === k ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
       <p class="note">${ev.area(r.boundary_xy_mm).toFixed(1)} m² · sınırı köşeleri taşıyarak değişir.</p>`; }
     return '';
