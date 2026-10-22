@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import {snapshot,sync,query} from '../tools/ruflo/aura-index.mjs';
+const pilot=process.argv[2];assert(pilot,'Pass isolated pilot directory');
+const fixtures=path.join(path.resolve(pilot),'adapter-fixtures');fs.mkdirSync(fixtures,{recursive:true});
+for(const [file,value]of [['H5-runtime.json',{stage:'CPU_pending',training_started:false}],['C7-runtime.json',{status:'complete_with_rejections',training_approvals:0}],['site-release-runtime.json',{state:'published'}]])fs.writeFileSync(path.join(fixtures,file),JSON.stringify(value));
+const sourceFiles=['H5-runtime.json','C7-runtime.json','site-release-runtime.json'],before=sourceFiles.map(f=>fs.readFileSync(path.join(fixtures,f),'utf8'));
+assert.throws(()=>snapshot(fixtures,'../H5'));assert.throws(()=>query(fixtures,pilot,'unknown'));
+const result=sync(fixtures,pilot);assert.equal(result.receipts.length,3);
+assert.equal(query(fixtures,pilot,'H5').data.stage,'CPU_pending');
+assert.deepEqual(sourceFiles.map(f=>fs.readFileSync(path.join(fixtures,f),'utf8')),before);
+fs.writeFileSync(path.join(fixtures,'H5-runtime.json'),JSON.stringify({stage:'changed_after_snapshot',training_started:false}));
+assert.throws(()=>query(fixtures,pilot,'H5'),/Stale or altered/);
+const missingRoot=path.join(fixtures,'missing');fs.mkdirSync(missingRoot,{recursive:true});assert.throws(()=>snapshot(missingRoot,'H5'));
+console.log(JSON.stringify({round_trips:3,canonical_files_unchanged:true,stale_snapshot_rejected:true,unknown_key_rejected:true,missing_source_rejected:true,no_agents:true}));

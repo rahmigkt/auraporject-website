@@ -1,0 +1,62 @@
+{
+  "at": "2026-10-22T19:34:54.815Z",
+  "version": "3.59.17+aura-local",
+  "sqlite_package": "12.9.0",
+  "results": [
+    {
+      "name": "patched-task-tests",
+      "checks": 18,
+      "pass": true,
+      "agents_created": 0,
+      "parent_id": "task-1792697665286-4jj77i",
+      "child_id": "task-1792697665298-1kb4tt"
+    },
+    {
+      "name": "patched-backup-tests",
+      "pass": true,
+      "method": "native-online-backup",
+      "active_wal_snapshot": true,
+      "metadata_round_trip": true,
+      "rows": 1,
+      "integrity_check": "ok",
+      "sqlite": "3.53.0"
+    },
+    {
+      "name": "duplicate",
+      "exit": 1,
+      "clean_failure": true
+    },
+    {
+      "name": "missing",
+      "exit": 1,
+      "clean_failure": true
+    },
+    {
+      "name": "duplicate",
+      "exit": 1,
+      "clean_failure": true
+    },
+    {
+      "name": "missing",
+      "exit": 1,
+      "clean_failure": true
+    },
+    {
+      "name": "duplicate",
+      "exit": 1,
+      "clean_failure": true
+    },
+    {
+      "name": "missing",
+      "exit": 1,
+      "clean_failure": true
+    }
+  ],
+  "existing_data_preserved": true,
+  "cli_rejects_missing_prerequisite": true,
+  "fresh_process_retains_dependencies": true,
+  "real_memory_backup": true,
+  "no_agents": true,
+  "no_paid_services": true,
+  "no_site_change": true
+}

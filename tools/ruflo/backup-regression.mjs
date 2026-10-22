@@ -1,0 +1,11 @@
+import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import Database from 'better-sqlite3';import {backupMemoryDb} from './node_modules/@claude-flow/cli/dist/src/services/memory-backup.js';
+const root=path.resolve('native-tests');fs.mkdirSync(root,{recursive:true});
+const source=path.join(root,'wal-source.db'),db=new Database(source);db.pragma('journal_mode = WAL');
+db.exec('CREATE TABLE IF NOT EXISTS evidence(id INTEGER PRIMARY KEY, value TEXT, provenance TEXT, created INTEGER)');
+db.prepare('INSERT INTO evidence(value,provenance,created) VALUES(?,?,?)').run('Türkçe kanıt; H5 pending','tool_result',1792690000000);
+const rows=db.prepare('SELECT * FROM evidence ORDER BY id').all();
+assert(fs.statSync(source+'-wal').size>0);
+const r=await backupMemoryDb({dbPath:source,destDir:path.join(root,'snapshots'),keep:7});
+assert(r.backedUp);assert.equal(r.method,'native-online-backup');
+const restored=new Database(r.path,{readonly:true});assert.deepEqual(restored.prepare('SELECT * FROM evidence ORDER BY id').all(),rows);assert.equal(restored.pragma('integrity_check',{simple:true}),'ok');restored.close();db.close();
+console.log(JSON.stringify({pass:true,method:r.method,active_wal_snapshot:true,metadata_round_trip:true,rows:rows.length,integrity_check:'ok',sqlite:new Database(':memory:').prepare('select sqlite_version() as v').get().v}));

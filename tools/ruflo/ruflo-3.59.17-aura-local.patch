@@ -1,0 +1,210 @@
+--- a/index.js
++++ b/index.js
+@@ -251,7 +251,7 @@
+                     const availableCommands = Array.from(new Set([...commands.map(c => c.name), ...getCommandNames()]));
+                     const { message } = suggestCommand(attemptedCommand, availableCommands);
+                     this.output.writeln(this.output.dim(`  ${message}`));
+-                    process.exit(1);
++                    process.exitCode = 1; return;
+                 }
+                 else {
+                     await this.showHelp();
+@@ -273,7 +273,7 @@
+                 const availableCommands = Array.from(new Set([...commands.map(c => c.name), ...getCommandNames()]));
+                 const { message } = suggestCommand(commandName, availableCommands);
+                 this.output.writeln(this.output.dim(`  ${message}`));
+-                process.exit(1);
++                process.exitCode = 1; return;
+             }
+             // Handle subcommands at any depth (#4157): walk the parsed command path, or the
+             // positional arguments when the path only names the top-level command.
+@@ -286,7 +286,7 @@
+                 for (const error of validationErrors) {
+                     this.output.printError(error);
+                 }
+-                process.exit(1);
++                process.exitCode = 1; return;
+             }
+             // Build context
+             const ctx = {
+@@ -307,7 +307,7 @@
+                     this.output.printDebug(`Completed in ${Date.now() - startTime}ms`);
+                 }
+                 if (result && !result.success) {
+-                    process.exit(result.exitCode || 1);
++                    process.exitCode = result.exitCode || 1; return;
+                 }
+             }
+             else {
+@@ -562,7 +562,7 @@
+             if (cliError.details) {
+                 this.output.writeln(this.output.dim(JSON.stringify(cliError.details, null, 2)));
+             }
+-            process.exit(cliError.exitCode);
++            process.exitCode = cliError.exitCode; return;
+         }
+         else {
+             // Generic error
+@@ -571,7 +571,7 @@
+                 this.output.writeln();
+                 this.output.writeln(this.output.dim(error.stack || ''));
+             }
+-            process.exit(1);
++            process.exitCode = 1; return;
+         }
+     }
+ }
+--- a/mcp-tools/task-tools.js
++++ b/mcp-tools/task-tools.js
+@@ -93,6 +93,31 @@
+         }
+     });
+ }
++// AURA pilot dependency contract: persist edges and refuse premature work.
++function validateDependencies(store, dependencies, taskId) {
++    if (!Array.isArray(dependencies) || dependencies.some(id => !validateIdentifier(id, 'dependency').valid))
++        return 'dependencies must be an array of task ids';
++    const visit = (id, seen) => {
++        if (id === taskId || seen.has(id)) return 'Cyclic task dependencies';
++        const node = store.tasks[id];
++        if (!node) return `Dependency not found: ${id}`;
++        const next = new Set(seen); next.add(id);
++        if (!Array.isArray(node.dependencies ?? [])) return 'Invalid stored dependencies';
++        for (const parent of node.dependencies ?? []) {
++            const error = visit(parent, next); if (error) return error;
++        }
++        return null;
++    };
++    for (const id of dependencies) { const error = visit(id, new Set()); if (error) return error; }
++    return null;
++}
++function pendingDependencyError(store, task) {
++    const error = validateDependencies(store, task.dependencies ?? [], task.taskId);
++    if (error) return error;
++    const pending = (task.dependencies ?? []).filter(id => store.tasks[id].status !== 'completed');
++    return pending.length ? `Dependencies not completed: ${pending.join(', ')}` : null;
++}
++
+ export const taskTools = [
+     {
+         name: 'task_create',
+@@ -104,6 +129,7 @@
+                 type: { type: 'string', description: 'Task type (feature, bugfix, research, refactor)' },
+                 description: { type: 'string', description: 'Task description' },
+                 priority: { type: 'string', description: 'Task priority (low, normal, high, critical)' },
++                dependencies: { type: 'array', items: { type: 'string' }, description: 'Prerequisite task IDs' },
+                 assignTo: { type: 'array', items: { type: 'string' }, description: 'Agent IDs to assign' },
+                 tags: { type: 'array', items: { type: 'string' }, description: 'Task tags' },
+             },
+@@ -118,6 +144,11 @@
+             if (!vDesc.valid)
+                 return { success: false, error: vDesc.error };
+             const store = loadTaskStore();
++            const dependencies = input.dependencies ?? [];
++            const depError = validateDependencies(store, dependencies);
++            if (depError) return { success: false, error: depError };
++            if (input.assignTo?.length && dependencies.some(id => store.tasks[id].status !== 'completed'))
++                return { success: false, error: 'Dependencies not completed' };
+             const taskId = `task-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+             const task = {
+                 taskId,
+@@ -127,6 +158,7 @@
+                 status: 'pending',
+                 progress: 0,
+                 assignedTo: input.assignTo || [],
++                dependencies: [...new Set(dependencies)],
+                 tags: input.tags || [],
+                 createdAt: new Date().toISOString(),
+                 startedAt: null,
+@@ -142,6 +174,7 @@
+                 status: task.status,
+                 createdAt: task.createdAt,
+                 assignedTo: task.assignedTo,
++                dependencies: task.dependencies ?? [],
+                 tags: task.tags,
+             };
+         },
+@@ -174,6 +207,7 @@
+                     progress: task.progress,
+                     priority: task.priority,
+                     assignedTo: task.assignedTo,
++                dependencies: task.dependencies ?? [],
+                     tags: task.tags,
+                     createdAt: task.createdAt,
+                     startedAt: task.startedAt,
+@@ -238,6 +272,7 @@
+                     progress: t.progress,
+                     priority: t.priority,
+                     assignedTo: t.assignedTo,
++                    dependencies: t.dependencies ?? [],
+                     createdAt: t.createdAt,
+                 })),
+                 total,
+@@ -271,6 +306,8 @@
+             const taskId = input.taskId;
+             const task = store.tasks[taskId];
+             if (task) {
++                const depError = pendingDependencyError(store, task);
++                if (depError) return { success: false, taskId, error: depError };
+                 if (task.status === 'completed') {
+                     return { taskId: task.taskId, status: task.status, completedAt: task.completedAt, result: task.result };
+                 }
+@@ -337,6 +374,10 @@
+             const taskId = input.taskId;
+             const task = store.tasks[taskId];
+             if (task) {
++                if (['in_progress', 'completed'].includes(status) || input.assignTo?.length) {
++                    const depError = pendingDependencyError(store, task);
++                    if (depError) return { success: false, taskId, error: depError };
++                }
+                 // Worker effects run AFTER the task store is saved, as task_complete does: a failed save must not leave
+                 // workers freed and counted against a task that still reads unfinished.
+                 let afterSave;
+@@ -404,6 +445,7 @@
+                     status: task.status,
+                     progress: task.progress,
+                     assignedTo: task.assignedTo,
++                dependencies: task.dependencies ?? [],
+                 };
+             }
+             return {
+@@ -436,6 +478,10 @@
+             const task = store.tasks[taskId];
+             if (!task) {
+                 return { taskId, error: 'Task not found' };
++            }
++            if (!input.unassign && input.agentIds?.length) {
++                const depError = pendingDependencyError(store, task);
++                if (depError) return { success: false, taskId, error: depError };
+             }
+             const previouslyAssigned = [...task.assignedTo];
+             // Load agent store to sync worker state
+@@ -468,6 +514,7 @@
+             return {
+                 taskId: task.taskId,
+                 assignedTo: task.assignedTo,
++                dependencies: task.dependencies ?? [],
+                 previouslyAssigned,
+                 status: task.status,
+             };
+@@ -565,6 +612,7 @@
+                 status: 'pending',
+                 progress: 0,
+                 assignedTo: [...original.assignedTo],
++                dependencies: [...(original.dependencies ?? [])],
+                 tags: [...original.tags, 'retry-of:' + taskId],
+                 createdAt: new Date().toISOString(),
+                 startedAt: null,
+--- a/commands/task.js
++++ b/commands/task.js
+@@ -165,6 +165,10 @@
+                 }
+             });
+             output.writeln();
++            if (result.success === false || result.error) {
++                output.printError(result.error || 'Task creation rejected');
++                return { success: false, exitCode: 1, data: result };
++            }
+             output.printSuccess(`Task created: ${result.taskId}`);
+             output.writeln();
+             output.printTable({
