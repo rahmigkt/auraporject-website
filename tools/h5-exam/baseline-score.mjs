@@ -15,10 +15,12 @@ export function strictJSON(text){
 const object=x=>x&&typeof x==='object'&&!Array.isArray(x);
 function semanticState(s){const x=structuredClone(s);if(x.plan){x.plan.openings=(x.plan.openings??[]).map(({id,...rest})=>rest).sort((a,b)=>encode(a).localeCompare(encode(b)));x.plan.items=(x.plan.items??[]).slice().sort((a,b)=>String(a.id).localeCompare(String(b.id)));}return x;}
 export function assess(task,text){
- const result={id:task.id,lang:task.lang,group:task.group,intent:task.expected.intent,json_valid:false,schema_valid:false,engine_valid:false,request_mechanical_pass:false,semantic_and_language_review_required:true};
+ const result={id:task.id,lang:task.lang,group:task.group,intent:task.expected.intent,empty_output:!text.trim(),json_valid:false,schema_valid:false,engine_valid:false,request_mechanical_pass:false,semantic_and_language_review_required:true};
  let p;try{p=strictJSON(text);result.json_valid=true;}catch(e){return {...result,reason:e.message};}
  if(!object(p)||encode(Object.keys(p).sort())!==encode(['actions','reply'])||typeof p.reply!=='string'||!p.reply.trim()||!Array.isArray(p.actions)||p.actions.length>20)return {...result,reason:'outer_contract'};
  result.schema_valid=true;
+ result.external_delivery_claim_cue=/e-?posta.{0,40}(gönderdim|gönderildi)|(?:email|message|whatsapp).{0,35}(?:sent|delivered)|(?:sent|delivered).{0,35}(?:email|whatsapp)|تم إرسال.{0,30}(?:بريد|رسالة)/i.test(p.reply);
+ result.arabic_script_in_reply=/[\u0621-\u064a]/.test(p.reply);
  let actions;
  try{actions=p.actions.map(op=>{if(!object(op)||typeof op.type!=='string')throw Error('action_contract');const expectedLayer=layer(op.type);if(op.katman!==undefined&&op.katman!==expectedLayer)throw Error('wrong_layer');const {katman,...rest}=op;return rest;});}
  catch(e){return {...result,reason:e.message};}
@@ -43,12 +45,13 @@ export function repeatedOutput(text){
  let reply=text,actions=[];try{const p=strictJSON(text);reply=p.reply??text;actions=p.actions??[];}catch{}
  const sentences=String(reply).split(/[.!?؟。\n]+/).map(s=>s.trim().toLowerCase()).filter(s=>s.length>=12),counts=new Map();for(const s of sentences)counts.set(s,(counts.get(s)||0)+1);
  const actionKeys=Array.isArray(actions)?actions.map(encode):[];
- return {repeated_reply_sentence:Math.max(0,...counts.values())>=3,identical_action_duplicates:actionKeys.length-new Set(actionKeys).size,action_duplicates_are_diagnostic_only:true};
+ const words=String(reply).toLowerCase().match(/[\p{L}\p{N}]+/gu)??[],grams=new Map();for(let i=0;i+10<=words.length;i++){const g=words.slice(i,i+10).join(' ');grams.set(g,(grams.get(g)||0)+1);}
+ return {repeated_reply_sentence:Math.max(0,...counts.values())>=3||Math.max(0,...grams.values())>=5,identical_action_duplicates:actionKeys.length-new Set(actionKeys).size,action_duplicates_are_diagnostic_only:true};
 }
 export function scoreJournal(records){
  const tasks=loadTasks(),byTask=new Map(tasks.map(t=>[t.id,t])),seen=new Set(),results=[];
  for(const r of records){if(!byTask.has(r.id)||!['raw','schema'].includes(r.mode))throw Error('Unknown record');const k=r.mode+'/'+r.id;if(seen.has(k))throw Error('Duplicate prediction');seen.add(k);results.push({...assess(byTask.get(r.id),r.output??''),mode:r.mode,transport_status:r.status,truncated:!!r.truncated,...repeatedOutput(r.output??'')});}
- const summary={};for(const mode of ['raw','schema']){const subset=results.filter(r=>r.mode===mode);summary[mode]={expected:120,received:subset.length,missing:120-subset.length,transport_ok:subset.filter(r=>r.transport_status==='ok').length,json_valid:subset.filter(r=>r.json_valid).length,schema_valid:subset.filter(r=>r.schema_valid).length,engine_valid:subset.filter(r=>r.engine_valid).length,request_mechanical_pass:subset.filter(r=>r.request_mechanical_pass).length,truncated:subset.filter(r=>r.truncated).length,repeated_reply:subset.filter(r=>r.repeated_reply_sentence).length,action_duplicate_records:subset.filter(r=>r.identical_action_duplicates>0).length,official:false,language_and_semantics:'pending manual review'};}
+ const summary={};for(const mode of ['raw','schema']){const subset=results.filter(r=>r.mode===mode);summary[mode]={expected:120,received:subset.length,missing:120-subset.length,transport_ok:subset.filter(r=>r.transport_status==='ok').length,empty_output:subset.filter(r=>r.empty_output).length,json_valid:subset.filter(r=>r.json_valid).length,schema_valid:subset.filter(r=>r.schema_valid).length,engine_valid:subset.filter(r=>r.engine_valid).length,request_mechanical_pass:subset.filter(r=>r.request_mechanical_pass).length,truncated:subset.filter(r=>r.truncated).length,repeated_reply:subset.filter(r=>r.repeated_reply_sentence).length,external_delivery_claim_cues:subset.filter(r=>r.external_delivery_claim_cue).length,action_duplicate_records:subset.filter(r=>r.identical_action_duplicates>0).length,official:false,language_and_semantics:'pending manual review'};}
  return {summary,results};
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===path.resolve(import.meta.filename)){const records=fs.readFileSync(process.argv[2],'utf8').trim().split('\n').filter(Boolean).map(JSON.parse);console.log(JSON.stringify(scoreJournal(records),null,2));}
