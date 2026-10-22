@@ -1,0 +1,37 @@
+DOLAP VE DİĞER AİLELER — KAPSAM VE KAYNAKLAR
+22 Ekim 2026
+
+Uygulanan değişiklikler
+- Storage, kitchen ve bath derleyicilerindeki ahşap ayarlı raflar artık dört gerçek Ø5 konsept pim içerir. Önceden yalnız donanım listesinde sayılıyorlardı. Pimler 8 mm gövdeye girer, 6 mm çıkıntı yapar; bu bir imalat/delik dosyası veya ürün kapasitesi değildir.
+- Gerçek derlenmiş ve tasarımcı değişiklikleri uygulanmış meshlerin sınır kutularında raf–pim ve pim–yan panel/bölücü yakınlığı kontrol edilir (0,6 mm tolerans). Bu potansiyel temas kanıtıdır; birleşim, kopma veya yatay kuvvet hesabı değildir.
+- Silinen, kimliği bilinen otomatik pimler tasarımcı ekranındaki Otomatik düzelt ile kopyada geri kurulabilir. Taşınmış/değiştirilmiş elemanlar sessizce sıfırlanmaz. Özgün model ve inceleme notları korunur.
+- Menteşe/çekmece donanımı, cam raf tutucusu, devrilme önlemleri, raf sehimi, erişim ve kullanım boşluğu ayrı açık inceleme konularıdır. Mutfakta cihaz montajı; mutfak/banyoda su, nem ve tesisat notları eklenir.
+- Banyo donanım listesindeki gerekçesiz genel 100 kg taşıma ifadesi kaldırıldı.
+- Perde/halı ayrı seçim aracı olmaya devam eder: montaj, kordon ve halı geçiş/kayma notları ile TXT/JSON içeren ayrı değerlendirme ZIP'i indirilebilir. Mobilya projesine gönderildiği iddia edilmez.
+- Rapor şeması v3: eski rapor yeni kontrolü geçmiş sayılmaz. Türkçe ve İngilizce yeni metinler; diğer diller mevcut İngilizce geri dönüşünü kullanır.
+
+Birincil kaynaklar ve gerçek okuma kapsamı
+1. CPSC Clothing Storage Units iş rehberi, web metni satır16–42 okundu:
+https://www.cpsc.gov/Business--Manufacturing/Business-Education/Business-Guidance/Clothing-Storage-Units
+ABD giyim depolama ürünlerinin kapsamı ve stabilite deneyleri anlatılır. Bütün dolaplara/ülkelere evrensel şart gibi uygulanmadı. Sabitleme notu tek başına bu deneylerin yerine geçmez. Doğrudan indirme403; web aracıyla okundu, dosya indirilmiş sayılmadı.
+2. Blum CLIP top BLUMOTION menteşe seçimi, web metni satır11–40 okundu:
+https://ea.blum.com/en/number-of-hinges/
+Kapak ağırlığı, ölçüsü ve malzemesi seçimi etkiler. Ürüne özgü çizelge genel menteşe kapasitesine çevrilmedi. HTML yerel araştırma klasörüne indirildi; tüm site okundu iddiası yok.
+3. Häfele metal raf desteği, resmî ürün arama metni okundu (doğrudan web açma403):
+https://www.hafele.com/us/en/product/metal-shelf-supports-5-mm/P-00862164/
+Ø5 delik ve8 mm pim boyu üretici örneğidir. Bizim14 mm yuvarlak konsept geometrimiz bu köşeli üretici ürününün kopyası değildir. Başka bir modelin kg kapasitesi buna aktarılmadı;6 mm çıkıntı bir konsept tercihidir.
+4. Kohler1533268-2-A montaj belgesi indirildi.20 sayfanın yalnız3 ve6. sayfa metinleri okundu:
+https://techcomm.kohler.com/techcomm/pdf/1533268-2.pdf
+Duvar desteği ve bağlantı elemanları ürün montajının parçasıdır. Bu ürünün cıvata kapasitesi veya duvar ölçüleri AURA'nın genel banyo modellerine aktarılmadı. Belgenin tümü görsel/satır denetiminden geçmedi.
+5. CPSC Window Covering Cords, web satır29–48 okundu:
+https://www.cpsc.gov/gocordless
+Çocuklar için erişilebilir kordon riski ve kordonsuz seçenek tavsiyesi. Seçilen AURA görselinin gerçek mekanizmayı doğruladığı iddia edilmez. Doğrudan indirme403; web metni okundu.
+6. Hazır üretici planlama aracı (yalnız servis kapsamı incelendi):
+https://www.blum.com/gb/en/services/planning-construction-product-selection/cabinet-configurator/index.html
+Blum Cabinet Configurator çalışır bir üretici seçeneğidir. API bağlantısı/kurulum yapılmadı, canlı donanım verisi alınmadı.
+
+Ek araç kararı
+Önceki çalışma PyNite/EurocodePy ve MIT Woodworking incelemesini içerir. Bu teslim yeni harici yazılım veya ücretli servis kurmaz. Donanım kodu ve gerçek montaj verisi olmadan bir çözücü eklemek güvenilir ürün kapasitesi sağlamayacağından küçük yerel geometri kontrolü eklendi. Üretici çizimleri/kodları veya açık lisanslı ürün projeleri bağlandığında ilave hesap kapsamı ayrı doğrulanmalıdır.
+
+Açık kapsam
+Cam rafların fiziksel tutucuları henüz üretilmedi. Menteşe/ray hareket çakışması, gerçek erişim mesafeleri, bütün ürün devrilme/yük/yorulma/uzun süreli sehim, vida çekilmesi, duvar ankrajları, tesisat/elektrik ve uluslararası uygunluk henüz doğrulanmış değildir. Bunlar uyarı konusudur; geçen sayısal test değildir. Başlangıç modelleri test edildi; serbest kullanıcı geometrilerinin tamamı geçti iddiası yok. Site/vendor/mobil tam denetim bitmedi; önceki Forma180 saniye tam paket zaman aşımı açık.

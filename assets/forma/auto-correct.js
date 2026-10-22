@@ -10,6 +10,12 @@ export function reviewDesign(d){
 /** A reversible proposal, never a production approval. Unknowns remain explicit. */
 export function autoCorrectDesign(input){
  const original=structuredClone(input),d=normalizeDesign(input),changes=[];
+ if(['storage','kitchen','bath'].includes(d.family)&&d.overrides?.some(o=>o.tool==='remove'&&/-pin-/.test(o.id||''))){
+  const generated=new Set(compileDesign({...d,overrides:[]}).parts.filter(p=>p.role==='shelf-pin').map(p=>p.id));
+  const before=d.overrides.length;
+  d.overrides=d.overrides.filter(o=>!(o.tool==='remove'&&generated.has(o.id)));
+  if(d.overrides.length!==before)changes.push('restoreShelfSupports');
+ }
  // Restore only removed generated frame members. Never discard custom shape,
  // machining, material or transform overrides to manufacture a passing result.
  if(d.overrides?.some(o=>o.tool==='remove'&&o.id?.startsWith('frame-'))){

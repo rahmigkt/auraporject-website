@@ -204,7 +204,7 @@ export function bathBom(compiled, materials, lang, buildMesh, text) {
     add(kind[0], kind[1], n, `${text('sink')}; ${p.basinShape === 'round' ? 'yuvarlak' : 'dikdörtgen'}`, `${text('sink')}; ${p.basinShape}`);
     add(p.tap === 'wall' ? 'Ankastre duvar bataryası' : 'Lavabo bataryası', p.tap === 'wall' ? 'Concealed wall mixer' : 'Basin mixer', n, p.tap === 'wall' ? 'Gömme ankastre gövde, duvar kaplamasından önce' : 'Tezgah delikli', p.tap === 'wall' ? 'Concealed body, fitted before tiling' : 'Through the top');
     add('Sifon ve süzgeç', 'Trap and waste', n, 'Çekmecede U kesimi ile', 'With a U-cut in the drawer');
-    if (p.base === 'wall') add('Asma dolap taşıyıcısı', 'Wall-hung bracket', 2, 'Ayarlı, 100 kg taşıma; dolu duvara', 'Adjustable, 100 kg; solid wall');
+    if (p.base === 'wall') add('Asma dolap taşıyıcısı', 'Wall-hung bracket', 2, 'Yük sınıfı, bağlantı ve duvar yapısı seçilen donanımla doğrulanmalı', 'Verify load rating, fixings and wall construction for the selected hardware');
   }
   if (p.kind === 'mirror' && p.mirrorLight !== 'none') add('Ayna aydınlatması', 'Mirror light', 1, 'IP44, 3000 K, trafo duvar içinde', 'IP44, 3000 K, driver in the wall');
   return b;

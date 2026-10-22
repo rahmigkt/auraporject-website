@@ -11,7 +11,8 @@ import {styleName} from './styles.js';
 import {STARTS} from './starts.js';
 import {technicalReview, reviewMatches} from './technical-review.js';
 import {reviewDesign} from './auto-correct.js';
-import {findingText,reviewDocument} from './review-document.js';
+import {findingText,reviewDocument,textileAssessmentFiles} from './review-document.js';
+import {textileReview} from './case-review.js';
 import {HIDES, COLORS, FIBERS, WEAVES, WEAVE_NAMES, PATTERNS, MOTIF_CHOICES, MOTIF_NAMES, WOODS, FINISHES, STAINS, METALS, STONES, GLASS, SURFACES, LINEN_COLORS, colorGroup, name as nm} from './catalog.js';
 import {MATTRESS} from './bedroom.js';
 import {harmonize} from './set.js';
@@ -1307,9 +1308,11 @@ function textileView() {
     <aside class="f-editor"><nav class="f-tabs" role="tablist"><button role="tab" data-txt="curtain" aria-selected="true"><span>01</span>Perde</button><button role="tab" data-txt="rug" aria-selected="false"><span>02</span>Halı</button></nav>
       <div class="f-panel f-tx-panel"><div class="tx" id="txPanel"></div><p class="f-note">${esc(L('textileNote'))}</p><div class="f-actions"><a class="f-primary" href="ev.html">${esc(L('textileHome'))} →</a></div></div></aside>`;
   let tab = 'curtain'; const stage = $('#txStage');
-  const draw = () => { $('#txPanel').innerHTML = chooserHTML(tx, tab); $('#txSum').textContent = summary(); main.querySelectorAll('[data-txt]').forEach(b => b.setAttribute('aria-selected', b.dataset.txt === tab)); textileScene(stage, tx).catch(err => { stage.innerHTML = `<p class="f-nogl">WebGL: ${esc(err.message)}</p>`; }); };
+  const draw = () => { $('#txPanel').innerHTML = chooserHTML(tx, tab)+`<section><h3>${esc(L('technicalTitle'))}</h3><ul>${textileReview(tx).findings.map(f=>`<li>${esc(findingText(f,state.lang))}</li>`).join('')}</ul><p class="f-note">${esc(L('textileReviewScope'))}</p><p class="f-note">${esc(L('technicalLimits'))}</p><button data-txreview>${esc(L('reviewDownload'))} ↓</button></section>`; $('#txSum').textContent = summary(); main.querySelectorAll('[data-txt]').forEach(b => b.setAttribute('aria-selected', b.dataset.txt === tab)); textileScene(stage, tx).catch(err => { stage.innerHTML = `<p class="f-nogl">WebGL: ${esc(err.message)}</p>`; }); };
   const change = el => { if (applyChoice(tx, el)) { store.set(TEXTILE_KEY, tx); draw(); } };
-  main.onclick = e => { if (!state.textileView) return; const t = e.target.closest('[data-txt]'); if (t) { tab = t.dataset.txt; return draw(); }
+  main.onclick = e => { if (!state.textileView) return;
+    if(e.target.closest('[data-txreview]')){download('AURA-textile-assessment.zip',zip(textileAssessmentFiles(tx,state.lang)),'application/zip');return;}
+    const t = e.target.closest('[data-txt]'); if (t) { tab = t.dataset.txt; return draw(); }
     const v = e.target.closest('[data-txv]'); if (v && txScene) { const k = v.dataset.txv; if (k === 'genel' || k === 'yakin') txScene.close = k === 'yakin'; else txScene.night = k === 'gece';
       main.querySelectorAll('[data-txv]').forEach(b => b.setAttribute('aria-pressed', b.dataset.txv === (txScene.close ? 'yakin' : 'genel') || b.dataset.txv === (txScene.night ? 'gece' : 'gun'))); return txScene.render(); }
     const b = e.target.closest('button[data-p]'); if (b) change(b); };
