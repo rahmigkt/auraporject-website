@@ -83,6 +83,8 @@ export function normalize(input = {}) {
     if (p.bedBase === 'platform' && p.legType === 'sled') p.legType = 'hidden';
     if (['frame', 'fourPoster'].includes(p.bedBase) && p.legType === 'hidden') p.legType = 'square';
     if (p.bedBase === 'fourPoster') { p.legType = p.legType === 'sled' ? 'square' : p.legType; p.headExtend = 0; }
+    // A sled must fit its 25 mm floor rail before the upright can have positive height.
+    if (p.legType === 'sled') p.legHeight = Math.max(25, p.legHeight);
     if (p.storage === 'lift' && !['baza', 'upholsteredFrame', 'platform'].includes(p.bedBase)) p.storage = 'drawers';
     if (p.storage === 'drawers' && ['baza'].includes(p.bedBase)) p.storage = 'lift';
     if (p.storage !== 'none') p.railHeight = Math.max(p.railHeight, 260);
@@ -104,6 +106,8 @@ export function normalize(input = {}) {
     if (p.caseBase === 'wall') p.baseHeight = 0;
     if (p.caseBase === 'legs' && ['hidden', 'sled'].includes(p.legType)) p.legType = 'roundTaper';
     if (p.caseBase === 'legs' && p.baseHeight < 60) p.baseHeight = 60;
+    // The 18 mm case sled needs at least the next 5 mm grid position.
+    if (p.caseBase === 'sled') p.baseHeight = Math.max(20, p.baseHeight);
     p.cornerRadius = Math.min(p.cornerRadius, p.depth / 2 - 2, p.width / 2 - 2);
     p.rows = Math.max(p.caseLayout === 'niche' ? 1 : 1, Math.min(p.rows, Math.floor((p.height - p.baseHeight - p.topThickness) / 110)));
     if (p.height > 1000 && p.mirror !== 'none') p.mirror = 'none';
