@@ -1,0 +1,32 @@
+[
+  {
+    "command": [
+      "node",
+      "tests/h5-home-check.mjs"
+    ],
+    "exit_code": 0,
+    "seconds": 15.078,
+    "stdout": "{\"new_tasks\":40,\"gold_positive_controls\":40,\"negative_mutations_rejected\":14,\"prompt_inputs_only\":40,\"old_archive_sources_unchanged\":8,\"model_run\":false,\"official\":false}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "tests/h5-freeze-check.mjs"
+    ],
+    "exit_code": 0,
+    "seconds": 0.953,
+    "stdout": "{\"frozen_tasks\":120,\"new_home\":40,\"new_furniture_tasks\":0,\"modified_task_rejected\":true,\"changed_engine_rejected\":true,\"changed_authoring_tool_rejected\":true,\"historical_gate_preserved\":true,\"model_run\":false}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "tests/h5-baseline-score-check.mjs"
+    ],
+    "exit_code": 0,
+    "seconds": 0.406,
+    "stdout": "{\"positive_controls\":2,\"negative_controls\":10,\"reply_repetition_control\":true,\"legitimate_distinct_actions_not_duplicate\":true,\"model_run\":false}\n",
+    "stderr": ""
+  }
+]

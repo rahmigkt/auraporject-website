@@ -1,0 +1,114 @@
+{
+  "status": "completed_limited_draft_prompt_untrained_CPU_baseline",
+  "source_code_sha": "d15678527094f3720671b1ded5870cb99b913597",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "new_tasks": 40,
+  "languages": [
+    "tr",
+    "en",
+    "nl",
+    "fr",
+    "de",
+    "ar",
+    "da",
+    "es",
+    "it"
+  ],
+  "new_behaviour_counts": {
+    "motor_operations": 30,
+    "clarify_missing_measurements": 3,
+    "refuse_unsafe_or_secrets": 2,
+    "studio_redirect": 5
+  },
+  "full_new_exam": {
+    "records": 120,
+    "new_furniture_editing": 0,
+    "historical_other_records_retained": 80,
+    "historical_positive_gold_replays": 60,
+    "historical_no_action_records": 20,
+    "historical80_new_semantic_approval": false
+  },
+  "verification": {
+    "new40_gold_validations": 40,
+    "negative_mutations_rejected": 14,
+    "all120_prompts_input_only": true,
+    "old_exam_and_sources_preserved": 8,
+    "new_frozen_file_engine_tool_tamper_rejections": true,
+    "old_frozen_engine_gate_still_rejects_changed_source": true,
+    "exact_text_screen_source_rows": 19757,
+    "user_texts_checked": 20659,
+    "exact_text_matches": 0,
+    "exact_shape_screen_source_rows": 17167,
+    "exact_shape_matches": 0
+  },
+  "limits": [
+    "Small quantized0.8B untrained control,not AURA9B or trained-adapter success",
+    "Request success for clarification/refusal uses mechanical cue rules;semantic review is separate",
+    "38preselected outputs and4flag follow-ups individually read;remaining198 mechanically audited only",
+    "No independent Claude or native-language specialist review",
+    "No tuning on exam outputs,no repaired answers,no paid operations or site changes",
+    "Forma180s timeout,390px camera issue and incomplete full-site/vendor audit remain open",
+    "H5 draft system prompt exposes SOZLUK minimum-required arguments only;optional ad/tur/kisitlar and nested tool schemas are not fully described. This may limit task performance;no claim of full tool-use competence or live PHP prompt equivalence."
+  ],
+  "freeze_sha256": "0c03f9fac1da4eef7da4d563583237c39d73bec273aa2df108a7969d1fa6bb48",
+  "at": "2026-10-22T21:47:15.476016+00:00",
+  "pre_generation_history": {
+    "status": "40_new_tasks_authored_reviewed_and_frozen;CPU_baseline_pending",
+    "at": "2026-10-22T18:38:00.547069+00:00",
+    "limits": [
+      "No model generation or CPU baseline yet;gold replays are not model performance",
+      "Real tokenizer usage-prefix/EOS comparison pending",
+      "Native-language specialist review not performed",
+      "Historical80 mechanically replayed,not individually semantically reapproved",
+      "Exact overlap checks do not prove semantic/paraphrase/solution leakage absence",
+      "No training/production/physical approval;no site deployment"
+    ]
+  },
+  "C6_complete": true,
+  "model_run": true,
+  "training_started": false,
+  "training_approval": false,
+  "cpu_baseline": "knowledge/ai-egitim/olcum/h5-cpu-0.8b/AUDIT.json",
+  "cpu_code_sha": "162342fe443c5ab86bd89c32c09a8fc111eeb113",
+  "cpu_summary": {
+    "raw": {
+      "expected": 120,
+      "received": 120,
+      "missing": 0,
+      "transport_ok": 120,
+      "empty_output": 0,
+      "json_valid": 94,
+      "schema_valid": 94,
+      "engine_valid": 90,
+      "engine_actions_valid": 0,
+      "valid_no_action_records": 90,
+      "request_mechanical_pass": 12,
+      "truncated": 19,
+      "repeated_reply": 15,
+      "external_delivery_claim_cues": 2,
+      "action_duplicate_records": 1,
+      "official": false,
+      "language_and_semantics": "pending manual review"
+    },
+    "schema": {
+      "expected": 120,
+      "received": 120,
+      "missing": 0,
+      "transport_ok": 120,
+      "empty_output": 0,
+      "json_valid": 103,
+      "schema_valid": 102,
+      "engine_valid": 96,
+      "engine_actions_valid": 0,
+      "valid_no_action_records": 96,
+      "request_mechanical_pass": 15,
+      "truncated": 17,
+      "repeated_reply": 15,
+      "external_delivery_claim_cues": 2,
+      "action_duplicate_records": 1,
+      "official": false,
+      "language_and_semantics": "pending manual review"
+    }
+  }
+}
