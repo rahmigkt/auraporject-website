@@ -59,6 +59,9 @@ def prepare(args):
     for p in [runtime_src/'llama-server.exe',*runtime_src.glob('*.dll')]:shutil.copy2(p,runtime/p.name)
     runtime_hashes={p.name:file_sha(p) for p in runtime.iterdir() if p.is_file()}
     protocol={'schema':'aura.h5.cpu-baseline/1','created_at':now(),'model':'Qwen/Qwen3.5-0.8B','source_revision':q['sha'],'gguf_repository':g['id'],'gguf_revision':g['sha'],'model_file':str(pin/'gguf'/meta['rfilename']),'model_size':meta['size'],'model_sha256':meta['lfs']['sha256'],'tokenizer_dir':str(pin/'tokenizer'),'tokenizer_files_sha256':t.file_hashes,'prompt_file_sha256':file_sha(prompt_file),'exam_freeze_sha256':file_sha(ROOT/'tests/ai-eval/h5-ev-01/FREEZE.json'),'runtime_hashes':runtime_hashes,'runtime_version':subprocess.check_output([str(runtime/'llama-server.exe'),'--version'],text=True,stderr=subprocess.STDOUT).strip(),'runtime_origin':'CPU binaries supplied by installed Ollama0.40.7; no GPU backend directories','settings':SETTINGS,'schema_constraint':SCHEMA,'threads':6,'context':8192,'expected_per_mode':120,'modes':['raw','schema'],'model_loaded':False,'training_started':False,'adapter':False,'draft_model':False,'code_sha':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'source_files_sha256':{name:file_sha(ROOT/name) for name in ['tools/h5-exam/cpu-baseline.py','tools/h5-exam/baseline-score.mjs','tools/h5-exam/prompts.mjs','tools/qwen-local/egitim01_features.py']},'limits':['Small Q8 CPU model, not trained AURA9B performance','GGUF maintainer artifact is hash-pinned; not an independent tensor-by-tensor quantization audit','H5 prompts are draft, not live PHP integration','No official semantic/native-language/training approval']}
+    for name in ['tests/ai-eval/aura-sinav-01/score.mjs','tools/h5-exam/contract.mjs','tools/h5-exam/load.mjs']:
+        protocol['source_files_sha256'][name]=file_sha(ROOT/name)
+    protocol['source_card_sha256']={name:file_sha(pin/name) for name in ['source-README.md','gguf-README.md','source-api.json','gguf-api.json']}
     save(out/'PROTOCOL.json',protocol);print(rawjson({'prepared':120,'maximum_prompt_tokens':max(len(x['token_ids']) for x in rows),'runtime_files':len(runtime_hashes),'protocol_sha256':file_sha(out/'PROTOCOL.json')}),flush=True)
 
 @contextlib.contextmanager
@@ -79,7 +82,9 @@ class Server:
     def __enter__(self):
         p=self.protocol
         assert file_sha(p['model_file'])==p['model_sha256'] and Path(p['model_file']).stat().st_size==p['model_size']
+        assert set(x.name for x in (self.out/'cpu-runtime').iterdir())==set(p['runtime_hashes']),'Unexpected runtime file/directory'
         for name,h in p['runtime_hashes'].items():assert file_sha(self.out/'cpu-runtime'/name)==h
+        for name,h in p['tokenizer_files_sha256'].items():assert file_sha(Path(p['tokenizer_dir'])/name)==h
         for name,h in p['source_files_sha256'].items():assert file_sha(ROOT/name)==h,'Baseline code changed; use reviewed new protocol'
         assert file_sha(ROOT/'tests/ai-eval/h5-ev-01/FREEZE.json')==p['exam_freeze_sha256']
         node_prompts()  # All frozen data/source gates still execute.
@@ -132,6 +137,7 @@ def execute(args):
                 begin=time.monotonic();r=server.http('/completion',body)
                 measurements.append({'mode':mode,'seconds':time.monotonic()-begin,'response':r})
             save(out/'calibration.json',{'synthetic_not_exam':True,'measurements':measurements,'no_settings_changed_from_results':True});print(rawjson({'calibration_seconds':[round(x['seconds'],2) for x in measurements],'timings':[x['response'].get('timings') for x in measurements]}),flush=True);return
+        assert (out/'calibration.json').exists(),'Run synthetic calibration first'
         verify_runtime_tokenizer(server,rows,out)
         journal=out/'predictions.jsonl';existing=[json.loads(line) for line in journal.read_text(encoding='utf8').splitlines()] if journal.exists() else []
         seen={(r['mode'],r['id']) for r in existing};assert len(seen)==len(existing)
@@ -141,11 +147,13 @@ def execute(args):
             for mode in p['modes']:
                 for row in rows:
                     if (mode,row['id']) in seen:continue
+                    if server.process.poll() is not None:raise RuntimeError('CPU runtime stopped; preserve journal and inspect before resuming')
                     body={**p['settings'],'prompt':row['prompt']}
                     if mode=='schema':body['json_schema']=p['schema_constraint']
                     begin=time.monotonic()
                     try:
                         response=server.http('/completion',body,timeout=180)
+                        if response.get('error') or not isinstance(response.get('content'),str):raise ValueError('Runtime response error or missing text content')
                         record={'id':row['id'],'mode':mode,'status':'ok','output':response.get('content',''),'truncated':bool(response.get('truncated') or response.get('stop_type')=='limit' or response.get('stopped_limit')),'response':response}
                     except Exception as e:record={'id':row['id'],'mode':mode,'status':'transport_error','output':'','truncated':False,'error':str(e)}
                     record.update(at=now(),seconds=round(time.monotonic()-begin,3),prompt_sha256=row['prompt_sha256'],protocol_sha256=file_sha(out/'PROTOCOL.json'))
