@@ -246,6 +246,8 @@ const SEAT_UNITS = L('kisilik|kisi|oturumlu|oturum|seater|seats|seat|sitzer|sitz
 function has(text, stem) {
   if (stem.includes(' ')) return (' ' + text + ' ').includes(' ' + stem + ' ') || (stem.length > 6 && text.includes(stem));
   const words = text.split(' ');
+  // Danish table noun forms; compounds and colour words (bordplade, bordo, bordeaux) are not tables.
+  if (stem === 'bord') return words.some(w => /^bord(?:et|e|ene|s|ets|enes)?$/.test(w));
   return stem.length <= 3 ? words.includes(stem) : words.some(w => w.startsWith(stem));
 }
 const any = (text, list) => list.find(s => has(text, s));
