@@ -671,7 +671,7 @@ export function createViewer(host, {onRotate} = {}) {
       return new Promise((resolve, reject) => new GLTFExporter().parse(exportGroup, r => { disposeGroup(exportGroup); for (const m of Object.values(exportMats)) m.dispose(); for (const t of conv.values()) t.dispose(); resolve(r); }, reject, {binary: true}));
     },
     texturesReady: () => matsReady,
-    dispose() { ro.disconnect(); mats?.dispose(); roomMats?.dispose(); for (const m of itemMats.values()) m.dispose(); disposeGroup(group); composer.dispose(); renderer.dispose(); canvas.remove(); }
+    dispose() { ro.disconnect(); mats?.dispose(); roomMats?.dispose(); for (const m of itemMats.values()) m.dispose(); disposeGroup(group); for (const pass of composer.passes) pass.dispose(); composer.dispose(); renderer.dispose(); canvas.remove(); }
   };
 }
 
