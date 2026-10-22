@@ -1,6 +1,6 @@
 # E2: yerel CPU süzme kuru koşusu
 
-Bu dal E1 taslak PR #261 üzerine kuruludur; `main`e merge veya canlı siteye yayın değildir. Çalışan motor ve E1 puanlayıcı değiştirilmez. H5 sınavı yeniden çalıştırılmaz. `ornekle.py` eğitim/optimizer içermez.
+Teslim dalı E1 taslak PR #261 ve kabul düzeltmeleri PR #262 üzerine kuruludur; `main`e merge veya canlı siteye yayın değildir. Gerçek üretim ilk E1 tabanındaki `05f5412` koduyla tamamlandı; bu kod ayrı Git referansı ve kaynak baytlarıyla korunur. Çalışan motor ve E1 puanlayıcı değiştirilmez. H5 sınavı yeniden çalıştırılmaz. `ornekle.py` eğitim/optimizer içermez.
 
 ## Veri ve model sınırı
 

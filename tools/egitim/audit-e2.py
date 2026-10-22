@@ -61,6 +61,18 @@ def main(a):
   'model_run_repeated':False,'training_started':False,'gpu':False,'paid_service':False,'site_changed':False,
   'limits':['20 new Turkish H4-room development requests; no unused H1 rows remained.','Only placement and lighting subset; not general AURA9B, multilingual or live PHP performance.',
    'No trained EGITIM-01 checkpoint; actual producer is untrained0.8B CPU.','20x4 prototype,not activated k8/9B or automatic training integration.','Human review subset is separately bound; mechanical audit is not native/designer approval.']}
+ review_file=out/'manual-review.jsonl'
+ if review_file.exists():
+  reviews=lines(review_file);by={(r['id'],r['sample']):(r,s) for r,s in zip(records,scores)};seen=set()
+  for review in reviews:
+   key=(review['id'],review['sample']);assert key in by and key not in seen;seen.add(key);r,s=by[key]
+   assert review['output_sha256']==hashlib.sha256(r['output'].encode()).hexdigest()
+   assert review['input_sha256']==s['input_sha256'] and review['decision'] in ['duzelt','ret','review']
+   assert review['training_approved'] is False
+  audit['manual_review']={'fully_read_unique_outputs':len(seen),'mechanical_only_outputs':len(records)-len(seen),
+   'rule':'Stored hash-bound review notes; first sample per20requests,all4contract-passing outputs,and1extra malformed example. Post-run selection,not a blinded statistical estimate.',
+   'decisions':{v:sum(r['decision']==v for r in reviews) for v in ['duzelt','ret','review']},'independent_Claude_review':False,'native_expert_approval':False,
+   'review_file_sha256':sha(review_file)}
  save(out/'termination-audit.json',termination);save(out/'AUDIT.json',audit)
  assert sha(out/'predictions.jsonl')==done['journal_sha256']
  print(json.dumps({k:audit[k] for k in ['attempts','strict_json_syntax_valid','outer_contract_pass','generation_token_limit','context_truncated','mechanical_candidates','hard_requests']}))
