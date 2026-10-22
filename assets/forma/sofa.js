@@ -32,7 +32,7 @@ export const ENUMS = {
 
 export const DEFAULTS = {
   width: 2100, depth: 920, height: 820, seatHeight: 430,
-  armType: 'track', armWidth: 160, armHeight: 600, armTop: 0.4, armFlare: 0.3, armSlope: 0.15, armSet: 0,
+  armType: 'track', armWidth: 160, armHeight: 600, armTop: 0.4, armFlare: 0.3, armSlope: 0.16, armSet: 0,
   backType: 'loose', backRake: 12, backThickness: 190, camel: 60, channelCount: 6, tuftSpacing: 170,
   seatType: 'split', seatCount: 3, cushionThickness: 150, cushionCrown: 14, cushionEdge: 'boxed', seatFront: 'inside',
   baseType: 'legs', legType: 'tapered', legHeight: 140, legSize: 22, legTaper: 0.6, legSplay: 0, legInset: 60, caseHeight: 150, bodyInset: 0, bodyInsetZ: 0, bodyRadius: 18,
@@ -70,7 +70,10 @@ export function normalize(input = {}) {
   const deckTop = p.seatHeight - p.cushionThickness * 0.88;
   if (deckTop - p.legHeight < 30) p.legHeight = Math.max(0, Math.round((deckTop - 30) / 5) * 5);
   p.caseHeight = Math.round(deckTop - p.legHeight); // derived: shown as its own control, set through the seat height (studio)
-  p.height = Math.max(p.height, p.seatHeight + (p.backType === 'low' ? 200 : 260));
+  // A derived minimum must already lie on the height grid, or JSON reload adds
+  // another rounding step (e.g. 625 -> 630) and changes the compiled shape.
+  const heightStep = RANGES.height[2], minHeight = p.seatHeight + (p.backType === 'low' ? 200 : 260);
+  p.height = Math.max(p.height, Math.ceil(minHeight / heightStep) * heightStep);
   if (p.backType === 'low') p.height = Math.min(p.height, p.seatHeight + 340);
   return p;
 }
