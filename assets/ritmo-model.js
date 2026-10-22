@@ -1,3 +1,4 @@
+import {componentDimensions} from './component-dimensions.js';
 // AURA Ritmo 01. Reference-led construction, not recovered manufacturing data.
 import {drawerFit} from './vendor/woodworkingshop/drawer-fit.js?v=20261016n';
 export const FINISHES={oxblood:{name:'Oksit kırmızısı',en:'Oxide red',hex:'#9e241d'},sand:{name:'Kum',en:'Sand',hex:'#d3c7b0'},olive:{name:'Zeytin',en:'Olive',hex:'#686d51'},graphite:{name:'Grafit',en:'Graphite',hex:'#343c3c'},clay:{name:'Kil',en:'Clay',hex:'#b97959'},ivory:{name:'Kırık beyaz',en:'Ivory',hex:'#e6e2d6'}};
@@ -56,4 +57,4 @@ export function compileRitmo(raw={},view={}){
  const minZ=Math.min(...parts.map(p=>p.position[2]-p.size[2]/2)),maxZ=Math.max(...parts.map(p=>p.position[2]+p.size[2]/2)),centreZ=(minZ+maxZ)/2;for(const p of parts)p.position[2]-=centreZ;const depth=maxZ-minZ;
  return {engine:'aura-ritmo-v1',state:{family:'shelf',width:W/10,height:H/10,depth:Math.round(depth*1000)/10,wood:config.wood,fabric:'linen',pattern:'none',weave:'plain'},config,width:W/1000,height:H/1000,depth,parts,cells,bays,warnings,classification:{name:'AURA Ritmo 01',style:'Çağdaş modüler',category:'Kitaplık ve depolama',referenceDimensions:'assumed-not-measured'}};
 }
-export function ritmoProject(config){const m=compileRitmo(config);return {format:'aura-guided-design',version:1,engine:'aura-ritmo-v1',createdAt:new Date().toISOString(),language:'tr',design:m.config,parts:m.parts,stage:'concept',dimensionsStatus:'customer-entered-or-assumed-unverified',materialsRepresentative:true,designerReviewRequired:true,paymentStatus:'not_collected',submitted:false};}
+export function ritmoProject(config){const m=compileRitmo(config);return {format:'aura-guided-design',version:1,engine:'aura-ritmo-v1',createdAt:new Date().toISOString(),language:'tr',design:m.config,parts:m.parts,units:{design_dimensions:'mm',part_size:'m',part_position:'m'},component_dimensions:componentDimensions(m),stage:'concept',dimensionsStatus:'customer-entered-or-assumed-unverified',materialsRepresentative:true,designerReviewRequired:true,paymentStatus:'not_collected',submitted:false};}

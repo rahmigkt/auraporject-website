@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {motorDenetimi} from '../tools/egitim/motor-onbellek.mjs';
 let calls=0;
-const engine=(state, actions)=>{calls++; return {rapor:{red:state.reject || actions[0]?.bad ? [{}] : []}};};
+const engine=(state, actions)=>{calls++;const bad=!!(state.reject||actions[0]?.bad);return {rapor:{gecti:!bad,red:bad?[{}]:[],uyari:[]}};};
 const cache=motorDenetimi(engine), state={room:'living'}, actions=[{type:'place',width:2000}];
 assert(cache.kabul(state,actions));
 assert(cache.kabul(structuredClone(state),structuredClone(actions)));
@@ -15,4 +15,7 @@ assert.equal(calls,4,'Changed state, changed operation or a mutated input must r
 assert.deepEqual(cache.sayim,{kayit:6,benzersiz:4,tekrar:2});
 assert(motorDenetimi(engine).kabul(state,actions));
 assert.equal(calls,5,'A new compilation must not trust a previous run');
+assert(!motorDenetimi(()=>({rapor:{gecti:true,red:[],uyari:[{kod:'kisit_karsilanmadi'}]}})).kabul({},[]),'Warnings are not positive target verification');
+assert(!motorDenetimi(()=>({rapor:{gecti:false,red:[],uyari:[]}})).kabul({},[]),'A failed engine report cannot pass through an empty rejection array');
+assert(!motorDenetimi(()=>({rapor:{red:[]}})).kabul({},[]),'Incomplete reports fail closed');
 console.log('PASS fresh engine per run; exact-input reuse; state/action mutations; cached rejection');

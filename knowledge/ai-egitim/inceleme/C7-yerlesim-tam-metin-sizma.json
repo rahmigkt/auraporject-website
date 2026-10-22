@@ -1,0 +1,37 @@
+{
+  "at": "2026-10-22T15:48:23.103Z",
+  "scope": "All17167 original placement rows compared to current exam using the actual compiler normalization. Exact user-text equality only; not semantic/paraphrase leakage clearance.",
+  "source_code_sha": "1c708b8b5e348d0968157266d58ca7972c377eb4",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "training_approved": false,
+  "exam_tasks": 120,
+  "unique_normalized_exam_texts": 120,
+  "files": [
+    {
+      "file": "knowledge/ai-egitim/veri/yerlesim/procthor-denetimli.jsonl.gz",
+      "compressed_source_sha256": "7424022ea97ecf789fbf557ba7c83a00e62409d74d28ecd90caa3b6a1fb8de9c",
+      "rows": 12827,
+      "user_turns": 12827,
+      "exact_normalized_overlaps": []
+    },
+    {
+      "file": "knowledge/ai-egitim/veri/yerlesim/procthor-aura-cozucu.jsonl.gz",
+      "compressed_source_sha256": "749845b2b8b4280741df5f7d80c0621b8af35e42a3aa3ee5dc03fd2176f68502",
+      "rows": 4340,
+      "user_turns": 4340,
+      "exact_normalized_overlaps": []
+    }
+  ],
+  "sources_sha256_lf": {
+    "tools/egitim/derle.mjs": "d850ae2d4bebc680516704d900ed39f0d4c6e3c32e2e11620debe5b39961cb27",
+    "tools/aura-sinav-01/tasks.mjs": "4fd1caef7309ee163b7e445cc34fad408bae46c7b64d420be5dfac5354dff582",
+    "tools/c7-audit/placement-exact-leakage.mjs": "30d1e0acb4a0d085706e300a212ab9fcf6a764d92044b6196d830abe6daff058"
+  },
+  "controls": "PASS numeric/accent-compatible compiler normalization;known-exam positive;unrelated-sentence negative;17167 source row count",
+  "limits": [
+    "No approval or decision is written for unread rows.",
+    "No semantic, paraphrase, plan-group or target-solution leakage clearance.",
+    "H5 changes the exam; this receipt is bound to the current exam hash and must not be reused as evidence for another version."
+  ]
+}

@@ -5,6 +5,7 @@ declare(strict_types=1);
 // Cost control: local parsing first (in the browser), a fast small model for commands, a larger one only for
 // images, per-address rate limit and a daily cap.
 $config = require __DIR__.'/forma-config.php';
+require_once __DIR__.'/forma-rate-limit.php';
 header('Content-Type: application/json; charset=utf-8'); header('Cache-Control: no-store'); header('X-Content-Type-Options: nosniff');
 function out(int $status, array $body): void { http_response_code($status); echo json_encode($body, JSON_UNESCAPED_UNICODE); exit; }
 $qwen = ($config['ai_provider'] ?? 'anthropic') === 'qwen';
@@ -20,13 +21,11 @@ if ((int)($_SERVER['CONTENT_LENGTH'] ?? 0) > 6_000_000) out(413, ['error' => 'Re
 // Rate limit per client address (hashed) and a site-wide daily cap; file-based for shared hosting.
 $tmp = sys_get_temp_dir();
 $bucket = $tmp.'/aura-forma-'.hash('sha256', ($_SERVER['REMOTE_ADDR'] ?? '').date('YmdH').intdiv((int)date('i'), 10));
-$count = is_file($bucket) ? (int)file_get_contents($bucket) : 0;
-if ($count >= (int)$config['ai_rate_per_10min']) out(429, ['error' => 'Too many requests']);
-file_put_contents($bucket, (string)($count + 1));
 $day = $tmp.'/aura-forma-day-'.date('Ymd');
-$daily = is_file($day) ? (int)file_get_contents($day) : 0;
-if ($daily >= (int)$config['ai_daily_limit']) out(429, ['error' => 'Daily limit reached']);
-file_put_contents($day, (string)($daily + 1));
+try {
+  if (!forma_rate_slot($bucket, (int)$config['ai_rate_per_10min'])) out(429, ['error' => 'Too many requests']);
+  if (!forma_rate_slot($day, (int)$config['ai_daily_limit'])) out(429, ['error' => 'Daily limit reached']);
+} catch (RuntimeException $e) { out(503, ['error' => 'Request limit storage unavailable']); }
 
 $in = json_decode(file_get_contents('php://input') ?: '', true);
 if (!is_array($in)) out(400, ['error' => 'Invalid JSON']);

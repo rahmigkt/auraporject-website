@@ -1,0 +1,48 @@
+{
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "base_code_sha": "de0ad8406ec1e10f90c01cea4320dff057df3ad5",
+  "source_sha": "a768cdf95f94836ab6c847cef966e785fc9ffdcd",
+  "code_sha256": {
+    "assets/forma/studio.js": "d4efc548144ee435bf2dc72b198abfbcd3fad3260cc22827baf7727de70e234e",
+    "assets/forma/i18n.js": "8258f63cf4cac3b6e70f008bcdfefe1df4a6a4f5d342a4eeb831b7dc94a30d75",
+    "assets/forma/seating-screen.js": "a3f9ea9e69dfbcbd1673f63eef063301425a0f89f6763308f5e50bf46358345e",
+    "assets/forma/seating-screen-data.js": "da47f4ad7b4d57117b19a8e3ab900b5ebe9c6ef8d9f3c1f347dbfe2cdc448517",
+    "assets/forma/technical-review.js": "5afdfac120527095e78918bc7cc52cd1872b282a19911be4a8ff0026c54e202d",
+    "tests/technical-review-check.mjs": "248a712335ff5ad6ecd3111c232250afa8cd90cdb7096af70646d86c167ae69e",
+    "tests/technical-package-check.mjs": "6826e6ec41286754dffeac8c342ce35e32d40c1274851159163be5560b5fc10b",
+    "tests/seating-screen-check.mjs": "1ef74f02c5608ffc7f1e8be8d9df2f31cf4e7640be49e8eeee3c208d778b4b3c",
+    "tools/engineering/build-seating-screen.py": "f743d95784dd2581fbccc047d22881cea052da67eb15bb6c88a29289f7ec3cc4",
+    "tools/engineering/verify-native.py": "0fe98bfbf111e8a6e9ef6c502991602ce706c4d5fcc9e9dc8c7910f6d862023d"
+  },
+  "native": {
+    "pynite_repo": "https://github.com/JWock82/Pynite",
+    "pynite_sha": "88f62a5857be375be051d69855d6e6726be32c70",
+    "cantilever": {
+      "computed_mm": 0.38352272727272685,
+      "textbook_mm": 0.3835227272727273,
+      "reaction_N": -99.99999999999996,
+      "status": "PASS"
+    },
+    "native_accepted_member_grade_checks": 276,
+    "curated_models": 90,
+    "product_certified": false,
+    "limitations": [
+      "minimum-section prism screening",
+      "ideal rigid upper joint",
+      "scenario loads not furniture standard test",
+      "supplier grade not verified",
+      "full product/joints/fatigue/impact not assessed"
+    ]
+  },
+  "tests": [
+    "seating-leg-section-check PASS",
+    "seating-screen-check PASS",
+    "technical-review-check PASS",
+    "technical-package-check PASS",
+    "node --check studio.js PASS",
+    "git diff --check PASS"
+  ],
+  "browser": "local save/reload; desktop and390x844; no external send",
+  "full_suite": "prior Forma180s timeout OPEN; not rerun"
+}

@@ -111,15 +111,16 @@ function sweepGeom(q, s) {
 export function normalizeOverrides(list) {
   if (!Array.isArray(list)) return [];
   const num = v => Number.isFinite(+v) ? +v : 0, out = [];
+  const pairs = (pts, min, limit) => Array.isArray(pts) && pts.length >= min && Array.from(pts.slice(0, limit)).every(p => Array.isArray(p) && p.length >= 2);
   for (const o of list.slice(0, 120)) {
     if (!o || typeof o !== 'object') continue;
-    if (o.tool === 'silhouette' && typeof o.id === 'string' && Array.isArray(o.points) && o.points.length >= 3)
+    if (o.tool === 'silhouette' && typeof o.id === 'string' && pairs(o.points, 3, 80))
       out.push({tool: 'silhouette', id: o.id.slice(0, 60), symmetric: !!o.symmetric, points: o.points.slice(0, 80).map(p => [Math.max(-1, Math.min(1, num(p[0]))), Math.max(-1, Math.min(1, num(p[1])))])});
-    else if (o.tool === 'profile' && typeof o.role === 'string' && Array.isArray(o.points) && o.points.length >= 2)
+    else if (o.tool === 'profile' && typeof o.role === 'string' && pairs(o.points, 2, 40))
       out.push({tool: 'profile', role: o.role.slice(0, 40), points: o.points.slice(0, 40).map(p => [Math.max(0, Math.min(1, num(p[0]))), Math.max(0.5, Math.min(400, num(p[1])))]).sort((a, b) => a[0] - b[0])});
     else if (o.tool === 'remove' && typeof o.id === 'string') out.push({tool: 'remove', id: o.id.slice(0, 60)});
     else if (o.tool === 'duplicate' && typeof o.id === 'string' && typeof o.as === 'string') out.push({tool: 'duplicate', id: o.id.slice(0, 60), as: o.as.slice(0, 60), mirror: o.mirror === 'z' ? 'z' : o.mirror ? 'x' : false});
-    else if (o.tool === 'add' && typeof o.id === 'string' && ADD_SHAPES.includes(o.shape)) {
+    else if (o.tool === 'add' && typeof o.id === 'string' && ADD_SHAPES.includes(o.shape) && (o.size == null || Array.isArray(o.size))) {
       const sz = (o.size || []).slice(0, 3).map(v => Math.max(2, Math.min(4000, num(v))));
       out.push({tool: 'add', id: o.id.slice(0, 60), shape: o.shape, size: [sz[0] || 400, sz[1] || 40, sz[2] || 400], mat: typeof o.mat === 'string' ? o.mat.slice(0, 30) : 'wood', pos: v3(o.pos, 5000), radius: Math.max(0, Math.min(200, num(o.radius ?? 3)))});
     }

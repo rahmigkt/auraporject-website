@@ -466,7 +466,14 @@ function drawerBox(parts, id, x0, x1, y0, pitch, zFront, runner, counts) {
 /** Shelves, hanging rails and inner drawers inside an opening. */
 function interior(parts, id, c, x0, x1, y0, y1, zBack, zFront, T, p, counts, info, hidden) {
   const shelfZ1 = zFront - (c.type === 'open' ? 2 : RULES.setback), mk = {internal: hidden};
-  const shelf = (sid, y) => { pnl(parts, sid, 'shelf-adj', 'case', [x0 + 1, x1 - 1], [y, y + T], [zBack + 2, shelfZ1], {...mk, band: 'front'}); counts.shelves++; info.spans.push(x1 - x0); };
+  const shelf = (sid, y) => {
+    pnl(parts, sid, 'shelf-adj', 'case', [x0 + 1, x1 - 1], [y, y + T], [zBack + 2, shelfZ1], {...mk, band: 'front'});
+    // Concept Ø5 support pins:8mm insertion and6mm projection. Hardware capacity
+    // remains supplier-specific; geometry is not a load rating or a drilling file.
+    for(const side of [-1,1])for(const [j,z] of [zBack+22,shelfZ1-20].entries())
+      parts.push(part(`${sid}-pin-${side}-${j}`,'shelf-pin','metal',{fn:'lathe',profile:[[0,2.5],[14,2.5]]},[side<0?x0-8:x1+8,y-2.5,z],[0,0,side<0?-Math.PI/2:Math.PI/2],{internal:true,nocut:true}));
+    counts.shelves++; info.spans.push(x1 - x0);
+  };
   const rail = (rid, y) => {
     const z = (zBack + zFront) / 2;
     parts.push(part(rid, 'rail', 'metal', {fn: 'tube', points: [[x0 + 8, y, z], [x1 - 8, y, z]], r: 12}, [0, 0, 0], [0, 0, 0], {...mk, nocut: true, length: x1 - x0 - 16}));

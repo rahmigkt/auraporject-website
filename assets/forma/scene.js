@@ -46,7 +46,13 @@ function dataTexture(data, w, h, srgb) {
 const hexColor = h => new THREE.Color(h);
 
 /** Material set for one design. Starts with flat colours; textures arrive asynchronously. */
-function materialSet(materials, opts = {}) { return materials.front ? storageMaterialSet(materials, opts) : materials.top ? tableMaterialSet(materials, opts) : materials.case ? bedroomMaterialSet(materials, opts) : seatingMaterialSet(materials, opts); }
+function disposePartMaterials(set) { for (const m of set.perPart?.values() || []) m.dispose(); set.perPart?.clear(); }
+function materialSet(materials, opts = {}) {
+  const set = materials.front ? storageMaterialSet(materials, opts) : materials.top ? tableMaterialSet(materials, opts) : materials.case ? bedroomMaterialSet(materials, opts) : seatingMaterialSet(materials, opts);
+  const dispose = set.dispose;
+  set.dispose = () => { disposePartMaterials(set); dispose(); };
+  return set;
+}
 /** Room for a project view: walls, floor, rug, LED, window glass. */
 function roomMaterialSet(spec, {onReady} = {}) {
   const set = {textures: []}, jobs = [];
@@ -54,7 +60,7 @@ function roomMaterialSet(spec, {onReady} = {}) {
   set.glass = new THREE.MeshPhysicalMaterial({color: '#e4edf1', roughness: 0.04, transparent: true, opacity: 0.18, depthWrite: false});
   set.fabric = set.wall;
   Promise.all(jobs).then(() => { if (!set.disposed) onReady?.(); });
-  set.dispose = () => { set.disposed = true; for (const m of new Set([...(set.extra || []), set.glass])) m.dispose(); for (const t of set.textures) t.dispose(); };
+  set.dispose = () => { set.disposed = true; disposePartMaterials(set); for (const m of new Set([...(set.extra || []), set.glass])) m.dispose(); for (const t of set.textures) t.dispose(); };
   return set;
 }
 /** Room shell and room textiles on top of the bedroom set. */
@@ -147,9 +153,9 @@ function woodMaterial(w) {
 function partMaterial(spec, mats) {
   const key = JSON.stringify(spec); mats.perPart ??= new Map();
   if (!mats.perPart.has(key)) {
-    const jobs = [], m = surfaceMaterial(spec, mats, jobs); mats.perPart.set(key, m); (mats.extra ??= []).push(m);
+    const jobs = [], m = surfaceMaterial(spec, mats, jobs); mats.perPart.set(key, m);
     mats.pendingParts = (mats.pendingParts || 0) + 1;
-    Promise.all(jobs).then(() => { mats.pendingParts--; mats.onPart?.(); });
+    Promise.all(jobs).then(() => { mats.pendingParts--; if (!mats.disposed) mats.onPart?.(); });
   }
   return mats.perPart.get(key);
 }
@@ -413,7 +419,18 @@ const SHEET = [4.894, 4.236, 2.486]; // studio sheet #fbfaf6
 function makeStage(renderer, bg = PAPER) {
   const scene = new THREE.Scene(); scene.background = new THREE.Color().setRGB(...bg, THREE.LinearSRGBColorSpace);
   const pmrem = new THREE.PMREMGenerator(renderer);
-  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture; scene.environmentIntensity = 0.55;
+  const roomEnvironment = new RoomEnvironment();
+  let environmentTarget;
+  try { environmentTarget = pmrem.fromScene(roomEnvironment, 0.04); }
+  finally { roomEnvironment.dispose(); pmrem.dispose(); }
+  scene.environment = environmentTarget.texture; scene.environmentIntensity = 0.55;
+  let environmentDisposed = false;
+  const disposeEnvironment = () => {
+    if (environmentDisposed) return;
+    environmentDisposed = true;
+    scene.environment = null;
+    environmentTarget.dispose();
+  };
   scene.add(new THREE.HemisphereLight('#ffffff', '#cfc7b8', 0.55));
   const sun = new THREE.DirectionalLight('#fff3e2', 2.3); sun.position.set(-1.6, 4.2, 3.2); sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048); sun.shadow.radius = 9; sun.shadow.blurSamples = 16; sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.01;
@@ -427,7 +444,7 @@ function makeStage(renderer, bg = PAPER) {
   const grad = g.createRadialGradient(64, 64, 6, 64, 64, 64); grad.addColorStop(0, 'rgba(30,26,20,.42)'); grad.addColorStop(1, 'rgba(30,26,20,0)'); g.fillStyle = grad; g.fillRect(0, 0, 128, 128);
   const contact = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({map: new THREE.CanvasTexture(c), transparent: true, depthWrite: false}));
   contact.rotation.x = -Math.PI / 2; contact.position.y = 0.001; scene.add(contact);
-  return {scene, sun, contact, pmrem};
+  return {scene, sun, contact, disposeEnvironment};
 }
 
 /** Interactive viewer bound to a host element. */
@@ -436,7 +453,7 @@ export function createViewer(host, {onRotate} = {}) {
   host.appendChild(canvas);
   let renderer;
   try { renderer = makeRenderer(canvas, {alpha: false}); } catch { host.dataset.webgl = 'off'; return null; }
-  const {scene, contact, sun} = makeStage(renderer, SHEET);
+  const {scene, contact, sun, disposeEnvironment} = makeStage(renderer, SHEET);
   // A calm, untextured sheet: dimensions supply scale without a receding grid behind every part.
   const persp = new THREE.PerspectiveCamera(30, 1, 0.05, 60), ortho = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.05, 60);
   let userMoved = false, sketch = true, dims = null, camera = persp, view = 'angle', yaw = 0.62, pitch = 0.2, zoom = 1, group = null, mats = null, compiled = null, materials = null, structure = false, size = [1, 1, 1], baseY = 0, focus = null, matsReady = false;
@@ -444,9 +461,9 @@ export function createViewer(host, {onRotate} = {}) {
   const renderPass = new RenderPass(scene, camera), ao = new GTAOPass(scene, camera, 1, 1), smaa = new SMAAPass(), out = new OutputPass();
   ao.blendIntensity = 0.85; ao.updateGtaoMaterial({radius: 0.35, distanceExponent: 1.4, thickness: 1.2, scale: 1.0, samples: 16});
   composer.addPass(renderPass); composer.addPass(ao); composer.addPass(smaa); composer.addPass(out);
-  let raf = 0;
+  let raf = 0, disposed = false;
   let snapCfg = [5, 5], shooting = false, gizmo = null, gizmoId = null, gizmoCb = null, selBox = null, selId = null; // while a photo accumulates, nothing else may touch camera, size or scene
-  const draw = () => { if (shooting) return; cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { place(); if (gizmo) gizmo.camera = camera; sketchResolution(); renderPass.camera = camera; ao.camera = camera; composer.render(); }); };
+  const draw = () => { if (disposed || shooting) return; cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { place(); if (gizmo) gizmo.camera = camera; sketchResolution(); renderPass.camera = camera; ao.camera = camera; composer.render(); }); };
   function sketchResolution() { const r = host.getBoundingClientRect(); SKETCH.hull.uniforms.resolution.value.set(Math.max(1, r.width), Math.max(1, r.height)); }
   function place() {
     const rect = host.getBoundingClientRect(), aspect = Math.max(0.2, rect.width / Math.max(1, rect.height));
@@ -513,6 +530,7 @@ export function createViewer(host, {onRotate} = {}) {
   }
   let pendingRebuild = false;
   function rebuild() {
+    if (disposed) return;
     if (shooting) { pendingRebuild = true; return; }
     if (!compiled && !room) return;
     if (group) { scene.remove(group); disposeGroup(group); }
@@ -540,13 +558,14 @@ export function createViewer(host, {onRotate} = {}) {
   async function studioPhoto({width = 2400, height = 1600, samples = 48, yaw: y = yaw, pitch: pt = 0.16, lens = 24, zoom: zm = 1.04, focus: fc = null} = {}) {
     for (let t = 0; (!matsReady || mats?.pendingParts) && t < 200; t++) await new Promise(r => setTimeout(r, 100)); // full-resolution maps first (incl. per-part materials)
     if (shooting) return null; shooting = true; cancelAnimationFrame(raf);
-    try {
-    const keep = {bg: scene.background, env: scene.environmentIntensity, tm: renderer.toneMapping, exp: renderer.toneMappingExposure, sun: sun.position.clone(), si: sun.intensity, fov: persp.fov, yaw, pitch, view, zoom, pr: renderer.getPixelRatio()};
+    const keep = {bg: scene.background, env: scene.environmentIntensity, tm: renderer.toneMapping, exp: renderer.toneMappingExposure, sun: sun.position.clone(), si: sun.intensity, fov: persp.fov, yaw, pitch, view, zoom, focus, co: contact.material.opacity, pr: renderer.getPixelRatio(), hostRect: host.getBoundingClientRect};
     const floor = scene.children.find(o => o.material?.isShadowMaterial), fo = floor?.material.opacity;
+    let wall = null;
+    try {
     scene.background = new THREE.Color('#ebe6dc'); renderer.toneMapping = THREE.NeutralToneMapping; renderer.toneMappingExposure = 1.0;
     scene.environmentIntensity = 0.75; sun.intensity = 2.6; if (floor) floor.material.opacity = 0.34; contact.material.opacity = 0.75;
     // Wall-hung pieces (wall cabinets, wall taps, mirrors) get the wall they hang on, so nothing floats.
-    let wall = null; const bb = new THREE.Box3().setFromObject(group);
+    const bb = new THREE.Box3().setFromObject(group);
     const hung = bb.min.y > 0.04 || compiled.params?.base === 'wall' || compiled.parts.some(q => ['mirror', 'mirror-frame'].includes(q.role));
     if (hung || compiled.parts.some(q => ['tap', 'wall-rail', 'hood', 'mirror'].includes(q.role) && q.pos?.[1] > 900)) {
       wall = new THREE.Mesh(new THREE.PlaneGeometry(40, 12), new THREE.MeshStandardMaterial({color: '#efeae1', roughness: 0.95}));
@@ -577,17 +596,21 @@ export function createViewer(host, {onRotate} = {}) {
       for (let j = 0; j < 3; j++) img.data[k + j] = acc[k + j] / samples * v; img.data[k + 3] = 255;
     }
     g.putImageData(img, 0, 0);
+    return c2.toDataURL('image/jpeg', 0.92);
+    } finally {
+    host.getBoundingClientRect = keep.hostRect;
+    persp.clearViewOffset();
     if (wall) { scene.remove(wall); wall.geometry.dispose(); wall.material.dispose(); }
     Object.assign(scene, {background: keep.bg, environmentIntensity: keep.env}); renderer.toneMapping = keep.tm; renderer.toneMappingExposure = keep.exp;
-    sun.position.copy(keep.sun); sun.intensity = keep.si; if (floor) floor.material.opacity = fo; contact.material.opacity = 1;
-    persp.fov = keep.fov; focus = null; ({yaw, pitch, view, zoom} = keep); ao.updateGtaoMaterial({samples: 16}); renderer.setPixelRatio(keep.pr);
-    return c2.toDataURL('image/jpeg', 0.92);
-    } finally { shooting = false; if (pendingRebuild) { pendingRebuild = false; rebuild(); } resize(); }
+    sun.position.copy(keep.sun); sun.intensity = keep.si; if (floor) floor.material.opacity = fo; contact.material.opacity = keep.co;
+    persp.fov = keep.fov; ({yaw, pitch, view, zoom, focus} = keep); ao.updateGtaoMaterial({samples: 16}); renderer.setPixelRatio(keep.pr);
+    shooting = false; if (pendingRebuild) { pendingRebuild = false; rebuild(); } resize();
+    }
   }
   return {
     setDesign(next, nextMaterials) {
       const matKey = JSON.stringify(nextMaterials);
-      if (!mats || matKey !== JSON.stringify(materials)) { mats?.perPart?.forEach(m => m.dispose()); mats?.dispose(); matsReady = false; mats = materialSet(nextMaterials, {onReady: () => { matsReady = true; rebuild(); }}); mats.onPart = () => rebuild(); materials = structuredClone(nextMaterials); }
+      if (!mats || matKey !== JSON.stringify(materials)) { mats?.dispose(); matsReady = false; mats = materialSet(nextMaterials, {onReady: () => { matsReady = true; rebuild(); }}); mats.onPart = () => rebuild(); materials = structuredClone(nextMaterials); }
       compiled = next; room = null; rebuild();
     },
     /** Project room: {shell (compiled room shell), roomMaterials, items: [{compiled, materials, x, z, rot}]}; null leaves it. */
@@ -642,11 +665,14 @@ export function createViewer(host, {onRotate} = {}) {
     async photo(scale = 2, opts = {}) {
       if (!room && !sketch && compiled && !compiled.meta?.room && opts.studio !== false) return studioPhoto(opts);
       const r = host.getBoundingClientRect(), w = Math.round(r.width * scale), h = Math.round(r.height * scale);
-      const pr = renderer.getPixelRatio(); renderer.setPixelRatio(1); renderer.setSize(w, h, false); composer.setPixelRatio(1); composer.setSize(w, h);
+      const pr = renderer.getPixelRatio();
+      try {
+      renderer.setPixelRatio(1); renderer.setSize(w, h, false); composer.setPixelRatio(1); composer.setSize(w, h);
       ao.updateGtaoMaterial({samples: 32}); place(); sketchResolution(); renderPass.camera = camera; ao.camera = camera; composer.render();
-      const url = canvas.toDataURL('image/jpeg', 0.92);
+      return canvas.toDataURL('image/jpeg', 0.92);
+      } finally {
       ao.updateGtaoMaterial({samples: 16}); renderer.setPixelRatio(pr); resize();
-      return url;
+      }
     },
     capture() { place(); sketchResolution(); composer.render(); return canvas; },
     /** Binary STL of what is shown, in millimetres. */
@@ -668,10 +694,16 @@ export function createViewer(host, {onRotate} = {}) {
       };
       const exportMats = Object.fromEntries(Object.entries(mats).filter(([, m]) => m?.isMaterial).map(([k, m]) => { const c = m.clone(); for (const slot of ['map', 'normalMap', 'roughnessMap']) c[slot] = toCanvas(m[slot]); return [k, c]; }));
       const exportGroup = buildGroup(compiled, exportMats, {structure: false});
-      return new Promise((resolve, reject) => new GLTFExporter().parse(exportGroup, r => { disposeGroup(exportGroup); for (const m of Object.values(exportMats)) m.dispose(); for (const t of conv.values()) t.dispose(); resolve(r); }, reject, {binary: true}));
+      try {
+        return await new Promise((resolve, reject) => new GLTFExporter().parse(exportGroup, resolve, reject, {binary: true}));
+      } finally {
+        disposeGroup(exportGroup);
+        for (const m of Object.values(exportMats)) m.dispose();
+        for (const t of conv.values()) t.dispose();
+      }
     },
     texturesReady: () => matsReady,
-    dispose() { ro.disconnect(); mats?.dispose(); roomMats?.dispose(); for (const m of itemMats.values()) m.dispose(); disposeGroup(group); composer.dispose(); renderer.dispose(); canvas.remove(); }
+    dispose() { if (disposed) return; disposed = true; cancelAnimationFrame(raf); offCsg(); ro.disconnect(); mats?.dispose(); roomMats?.dispose(); for (const m of itemMats.values()) m.dispose(); disposeGroup(group); for (const pass of composer.passes) pass.dispose(); composer.dispose(); disposeEnvironment(); renderer.dispose(); canvas.remove(); }
   };
 }
 

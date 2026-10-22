@@ -1,0 +1,26 @@
+{
+  "at": "2026-10-22T14:17:30.050451+00:00",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "code_author": "Codex",
+  "scope": "C7 evidence tooling only; Claude source decision is separately cross_review",
+  "tests": [
+    {
+      "command": "node tools/c7-audit/test.mjs",
+      "exit_code": 0,
+      "stdout": "PASS original preservation;40proposals/0native actions;3900vs3000actual compile;corrected-claim control;projection drift;assumed provenance;missing plan rejection;compiler-normalized leakage positive/negative controls\n",
+      "stderr": ""
+    },
+    {
+      "command": "node tools/studyo-motoru/test.mjs",
+      "exit_code": 0,
+      "stdout": "✓ kanepe +100 mm ve ceviz kabul\n✓ 9 m kanepe sınıra takıldı diye raporlanır\n✓ olmayan kol tipi reddedilir\n✓ masa, 6 kişilik\n✓ salon: kanepe TV'ye bakar, sehpa yakın — çözücü yerleştirdi, kısıtlar tuttu\n✓ WC'ye çift kişilik yatak: sığmıyor\n✓ meclis U: 3 duvar boyunca oturma, sehpa ortada\n✓ meclis L: 2 duvar boyunca oturma, sehpa ortada\n✓ duvar dışına taşan kapı reddedilir\n✓ merdiven: 15 rıht [{\"id\":\"merdiven\",\"en\":900,\"riht\":186.7,\"basamak\":257,\"adet\":15,\"boy\":4498}]\n✓ dar merdiven reddedilir\n✓ adım kuralına uymayan merdiven reddedilir\n✓ olmayan kata merdiven reddedilir\n✓ yüksek rıht reddedilir\n✓ sığ basamak reddedilir\n✓ negatif kat yüksekliği reddedilir\n✓ boş işlem listesi\n✓ ışık: iki lambader, tavan kapalı {\"oda\":\"salon\",\"isik\":{\"tavan\":0,\"lambader\":2},\"renk_k\":2700}\n✓ aşırı renk sıcaklığı reddedilir\n✓ olmayan odaya ışık reddedilir\n✓ tasarımcıya gönderim kaydedilir\n✓ boş proje gönderilmez\n✓ perde kadife, halı bukle\n✓ sözlükte olmayan katman reddedilir\nhepsi geçti\n",
+      "stderr": ""
+    }
+  ],
+  "prior_decisions_preserved": true,
+  "source_files_sha256_lf": {
+    "tools/c7-audit/sohbet-001.mjs": "b033d84500cbbf09e5cc7b7bc27af40e2479e634db632136125ea42660425cb2",
+    "tools/c7-audit/test.mjs": "b81c76e6ae2a380c3480eeca7b3bb1e2ca0cc4ce6cf5957b52961d496c445120"
+  }
+}

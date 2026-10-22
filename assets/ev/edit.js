@@ -1,3 +1,4 @@
+import {projectWithDimensions} from './project-dimensions.js';
 // AURA ev planı — plan editor: draw walls, move corners, add doors and windows, rename rooms. Edits the same
 // EV record the plan, maquette and 3D views read, so every change shows everywhere. Undo/redo and a local draft.
 const SNAP_PX = 14, GRID = 10, ANGLE = 6 * Math.PI / 180;
@@ -5,6 +6,7 @@ const DEF = {door: {w: 900, h: 2100, sill: 0}, window: {w: 1200, h: 1400, sill: 
 const r1 = v => Math.round(v);
 const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
 const meas = v => ({value: r1(v), unit: 'mm', status: 'designer_edit', evidence_ids: [], uncertainty: null});
+const val = q => (q && typeof q === 'object' ? q.value : q) ?? 0;
 const fmt = v => r1(v).toLocaleString('tr-TR');
 
 export function install(ev) {
@@ -44,8 +46,8 @@ export function install(ev) {
   }
   function fitOpenings() { // openings stay on their wall: clamp offset, drop the ones that no longer fit
     const L = Object.fromEntries(ev.D.walls.map(w => [w.id, Math.hypot(w.to_xy_mm[0] - w.from_xy_mm[0], w.to_xy_mm[1] - w.from_xy_mm[1])]));
-    ev.D.openings = ev.D.openings.filter(o => L[o.wall_id] >= (o.width?.value ?? 0) + 20);
-    for (const o of ev.D.openings) o.offset_from_wall_start = meas(Math.max(10, Math.min(L[o.wall_id] - o.width.value - 10, o.offset_from_wall_start.value)));
+    ev.D.openings = ev.D.openings.filter(o => L[o.wall_id] >= val(o.width) + 20);
+    for (const o of ev.D.openings) o.offset_from_wall_start = meas(Math.max(10, Math.min(L[o.wall_id] - val(o.width) - 10, val(o.offset_from_wall_start))));
   }
   function addWall(a, b) {
     if (dist(a, b) < 100) return;
@@ -110,8 +112,8 @@ export function install(ev) {
     if (!dragging || !E.drag) return;
     if (E.drag.type === 'node') { const s = snapPoint(p); if (dist(s.p, E.drag.at) < 1) return; moveNode(E.drag.at, s.p); E.drag.at = s.p; E.drag.moved = true; ev.refresh(false); }
     if (E.drag.type === 'op') { const o = opOf(E.drag.id), w = o && wallOf(o.wall_id); if (!w) return; const at = project(w, p);
-      E.drag.grab ??= at - o.offset_from_wall_start.value; const a = Math.max(10, Math.min(w.L - o.width.value - 10, at - E.drag.grab));
-      if (Math.abs(a - o.offset_from_wall_start.value) < 1) return; o.offset_from_wall_start = meas(Math.round(a / GRID) * GRID); E.drag.moved = true; ev.refresh(false); }
+      E.drag.grab ??= at - val(o.offset_from_wall_start); const a = Math.max(10, Math.min(w.L - val(o.width) - 10, at - E.drag.grab));
+      if (Math.abs(a - val(o.offset_from_wall_start)) < 1) return; o.offset_from_wall_start = meas(Math.round(a / GRID) * GRID); E.drag.moved = true; ev.refresh(false); }
   };
   hooks.up = () => { if (E.drag && !E.drag.moved) E.undo.pop(); E.drag = null; commit(); };
 
@@ -122,10 +124,10 @@ export function install(ev) {
     if (s.type === 'wall') { const w = wallOf(s.id); if (!w) return ''; return `<h3>Duvar</h3>${field('Uzunluk mm', 'len', w.L, 'step="10" min="100"')}${field('Kalınlık mm', 'thick', w.t, 'step="10" min="50" max="600"')}
       <div class="ev-row"><button data-e="addDoor">+ Kapı</button><button data-e="addWin">+ Pencere</button><button data-e="del" class="ev-del">Sil</button></div>`; }
     if (s.type === 'op') { const o = opOf(s.id); if (!o) return ''; const win = o.kind === 'window';
-      return `<h3>${win ? 'Pencere' : 'Kapı'}</h3>${field('Genişlik mm', 'ow', o.width.value, 'step="10" min="400"')}${field('Yükseklik mm', 'oh', o.height.value, 'step="10" min="300"')}${win ? field('Denizlik mm', 'os', o.sill_height.value, 'step="10" min="0"') : ''}${field('Duvar başından mm', 'oa', o.offset_from_wall_start.value, 'step="10" min="0"')}
+      return `<h3>${win ? 'Pencere' : 'Kapı'}</h3>${field('Genişlik mm', 'ow', val(o.width), 'step="10" min="400"')}${field('Yükseklik mm', 'oh', val(o.height), 'step="10" min="300"')}${win ? field('Denizlik mm', 'os', val(o.sill_height), 'step="10" min="0"') : ''}${field('Duvar başından mm', 'oa', val(o.offset_from_wall_start), 'step="10" min="0"')}
       <div class="ev-row"><button data-e="del" class="ev-del">Sil</button></div>`; }
     if (s.type === 'room') { const r = ev.D.spaces.find(x => x.id === s.id); if (!r) return '';
-      return `<h3>Oda</h3><label class="ev-f"><span>Ad</span><input data-f="rname" value="${(r.name || '').replace(/"/g, '&quot;')}"></label>
+      return `<h3>Oda</h3><label class="ev-f"><span>Ad</span><input data-f="rname" value="${(r.name || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;')}"></label>
       <label class="ev-f"><span>İşlev</span><select data-f="rkind">${Object.entries(ev.NAMES).map(([k, n]) => `<option value="${k}" ${r.kind === k ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
       <p class="note">${ev.area(r.boundary_xy_mm).toFixed(1)} m² · sınırı köşeleri taşıyarak değişir.</p>`; }
     return '';
@@ -146,12 +148,20 @@ export function install(ev) {
     if (a === 'redo' && E.redo.length) { E.undo.push(snap()); restore(E.redo.pop()); }
     if (a === 'del') del();
     if (a === 'addDoor' || a === 'addWin') { const w = wallOf(E.sel.id); push(); const o = addOpening(w, w.L / 2, a === 'addDoor' ? 'door' : 'window'); if (o) E.sel = {type: 'op', id: o.id}; else E.undo.pop(); commit(); }
-    if (a === 'save') { const u = URL.createObjectURL(new Blob([JSON.stringify(ev.D, null, 1)], {type: 'application/json'})), l = document.createElement('a'); l.href = u; l.download = `aura-ev-plani-${new Date().toISOString().slice(0, 10)}.json`; l.click(); setTimeout(() => URL.revokeObjectURL(u), 1000); }
+    if (a === 'save') { const u = URL.createObjectURL(new Blob([JSON.stringify(projectWithDimensions(ev.D), null, 1)], {type: 'application/json'})), l = document.createElement('a'); l.href = u; l.download = `aura-ev-plani-${new Date().toISOString().slice(0, 10)}.json`; l.click(); setTimeout(() => URL.revokeObjectURL(u), 1000); }
     return true;
   };
   hooks.change = e => {
     const f = e.target.dataset?.f; if (!f) return false; const v = +e.target.value;
+    const bounds = {len: [100, Infinity], thick: [50, 600], ow: [400, Infinity], oh: [300, Infinity], os: [0, Infinity], oa: [0, Infinity], wallT: [50, 600]};
+    if (Object.hasOwn(bounds, f) && (!String(e.target.value ?? '').trim() || !Number.isFinite(v) || v < bounds[f][0] || v > bounds[f][1])) {
+      E.msg = 'Geçerli aralıkta bir ölçü girin.'; ev.side(); return true;
+    }
     if (f === 'wallT') { E.wallT = v; return true; }
+    if (f === 'ow') {
+      const o = opOf(E.sel?.id), w = o && wallOf(o.wall_id);
+      if (!w || v > w.L - 20) { E.msg = 'Açıklık bu duvara sığmıyor.'; ev.side(); return true; }
+    }
     push();
     if (f === 'len' || f === 'thick') { const w = ev.D.walls.find(x => x.id === E.sel.id);
       if (f === 'thick') w.thickness = meas(Math.max(50, Math.min(600, v)));

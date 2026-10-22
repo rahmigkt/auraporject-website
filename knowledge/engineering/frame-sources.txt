@@ -1,0 +1,94 @@
+AURA frame and designer workflow research — 2026-10-22
+
+Implemented scope
+Original AURA construction.js generates actual raked rear posts and lower/mid/upper
+rails for sofa/loveseat/armchair, mounts reaching real leg axes or sled tube ends,
+and concealed floor glides when a skirt/zero-leg concept has no structural feet.
+Existing seat stretchers now reach the perimeter rails. Frame-base rear timber is
+visible; internal members are visible in the studio/designer structure view and BOM.
+This is original assembly code, not imported/certified Opendesk furniture.
+
+World mesh bounding boxes form a2mm-tolerance POSSIBLE-contact graph, starting from
+floor contacts. It detects removed/moved/broken members. Bounding-box contact is a
+broad-phase approximation; it can overestimate contact and cannot establish joint
+stiffness, valid fastening, moment transfer, fiber direction or assembly capacity.
+
+Actual rectangular horizontal member dimensions also feed isolated simply-supported
+beam scenarios: central1000N; assumed longitudinal E=9000MPa; I=b*h^3/12;
+delta=P*L^3/(48*E*I); sigma=(P*L/4)*(h/2)/I. These are declared example assumptions,
+not normative furniture loads or measured material properties.24 actual generated
+members were independently checked against native PyNite displacement and reaction.
+The complete sofa/table assembly was NOT solved by FEA or tested in a laboratory.
+
+Research register / reuse decisions
+1. Purdue University, Carl A. Eckelman and Yusuf Z. Erdil, FNR-170,
+Joint Design Manual for Furniture Frames Constructed of Plywood and Oriented Strand
+Board: https://extension.purdue.edu/extmedia/FNR/FNR-170.pdf
+35-page scanned PDF downloaded completely; pages1-5 visually read including Tables1-3.
+The material/joint-dependent nature of strength, workmanship variability and the
+distinction between cyclic and static conditions are relevant. Historical GSA loads
+were NOT imported as current worldwide limits. No capacity formula for a particular
+plywood/dowel/glue was transferred to unidentified solid-wood joints in AURA. Remaining
+pages and joint geometries remain to be reviewed; no complete-source-review claim.
+First host reset, next transfer timed out at6307840bytes, official alternate host
+resume completed; pypdf then opened all35pages. No TLS checks disabled.
+
+2. Matwiej et al.,2022, Elements of Designing Upholstered Furniture Sandwich Frames
+Using Finite Element Method, Materials15(17),6084, DOI10.3390/ma15176084:
+https://pmc.ncbi.nlm.nih.gov/articles/PMC9458000/ (CC BY4.0).
+Methods and relevant frame/material/connection discussion read; not all tables/results.
+Its frame/connection characterization supports recording material and joint unknowns
+separately. Its specimen geometry and measured stiffness were not copied as universal
+sofa specifications, nor its outcomes claimed for our model.
+
+3. OpenDesk design-playground (software MIT), downloaded source:
+https://github.com/opendesk/design-playground
+SHA b1e9727cbe5fd3c30d5bee68b56fc8ccff95cde4.
+Read repository overview and copyright-and-license.md. Overview explicitly describes
+some assembled examples as guesses with missing/incorrect rotations/parts. It is not
+a validated structural solver. No complete software audit, no installation/run, and
+no physical design-file rights or performance inferred from the software MIT notice.
+No Opendesk shape/code copied into the live asset tree.
+
+4. FreeCAD Woodworking workbench:
+https://github.com/dprojects/Woodworking (README overview and MIT LICENSE inspected).
+Useful CAD/mounting/cut-list tools, primarily cabinet creation; not evidence that all
+sofa/table structural issues are solved. License downloaded; workbench not installed,
+no FreeCAD binary deployment, no full source audit or production integration claimed.
+
+5. Native tool dependencies used, already pinned by PR247:
+https://github.com/JWock82/Pynite SHA88f62a5857be375be051d69855d6e6726be32c70, MIT.
+https://github.com/pcachim/eurocodepy SHAa768cdf95f94836ab6c847cef966e785fc9ffdcd,
+LGPL-3.0-or-later at root; example D24 member screen uses2004 implementation with
+unverified national annex. Upstream not bundled into browser; generated data carries
+source and assumptions. PR247 technical-review.txt retains the earlier exact scope.
+
+Workflow
+Customer assessment dialog is shown before POST, includes readable assessment.txt
+and original designs/reports in assessment.json ZIP. A changed item/quantity requires
+fresh confirmation; disabled backend never sends. Download is allowed while backend
+is unavailable. Original contact data is not included in this assessment download.
+Designer auto-correct produces a separate browser-local revision, keeps original,
+supports restore/compare and persists later edits separately from customer project.
+Known proposals: restore removed generated frame parts; increase seating leg radius
+within existing limits until assumed D24 scenario is met; wooden-only legs-only table
+gets60mm-high/25mm-thick concept aprons. These are proposals, not normative dimensions.
+Custom geometry/transform/cut overrides are never discarded to fabricate a pass.
+Unknown material grading, real joints, all-age fit, fatigue/impact/tipping, aesthetics
+remain explicit. All reports keep production_approved=false; no all-issues-fixed claim.
+Legacy physics “all checks passed” summary is suppressed in designer view; its other
+outputs are visibly labeled assumed scenarios. Previous PR220 material fix remains
+separate and must be preserved on integration. No merge/deploy/production submission.
+
+Validation
+240 actual starts (90 seating/150 table): finite generated members and potential graph
+checked.6 seating base variants checked. Missing/moved/invalid geometry negatives;
+original preservation, second-pass idempotence, wood vs metal table controls; report
+version2 invalidates old version1. Actual send handler tested with mocked networking:
+first click sends0, confirmed unchanged model sends1, stale key asks again, offline0.
+Actual projectPackage tested with local rendering/link mocks. Browser assessment ZIP
+downloaded and reopened; designer correction→reload→restore→reapply observed.
+Desktop and390x844 visuals captured. Mobile camera fitting still needs additional
+review: left scene can crop the sofa at390px; controls/notes remain accessible.
+Full suite not run; previous Forma180s timeout OPEN. No physical phone/touch test.
+Reviewer=Codex; review_mode=user_authorized_self_review; not independent Claude review.

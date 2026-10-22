@@ -2,7 +2,7 @@
 // this module places them at true size with interior-design rules: walls and corners, doors and their swing,
 // windows and light, focal relations (sofa ↔ TV, table ↔ kitchen, desk ↔ window), clearances. Returns several
 // scored alternatives; it never bends a rule to make something fit.
-import {compileItem} from './items.js?v=20261020u';
+import {compileItem} from './items.js?v=20261022a';
 
 // Clearances in mm. Sources: Neufert (Architects' Data) furniture spacing tables and common manufacturer guidance;
 // AURA proposals where marked. They are design targets, not building law.
@@ -159,7 +159,7 @@ function solveOnce(space, roomItems, ev, {count = 3, beam = 60} = {}) {
   }
   // distinct alternatives: differ in where the main pieces stand
   const out = []; for (const s of states) { const sig = s.placed.map(q => `${q.run}:${Math.round(q.rot)}:${Math.round(q.c[0] / 900)}:${Math.round(q.c[1] / 900)}`).join('|'); if (!out.some(o => o.sig === sig)) out.push({...s, sig}); if (out.length >= count) break; }
-  return {ok: true, alternatives: out.map(s => ({score: +s.score.toFixed(2), notes: [...new Set(s.notes)], placements: s.placed.filter(q => q.kind !== 'obstacle').map(q => ({id: q.id, pos_xy_mm: q.c.map(Math.round), rot_deg: ((Math.round(q.rot) % 360) + 360) % 360, ...(q.kind === 'majlis' ? {kind: 'majlis', size_mm: {w: Math.round(q.size.w), d: q.size.d, h: q.size.h}} : {})}))}))};
+  return {ok: true, alternatives: out.map(s => ({score: +s.score.toFixed(2), notes: [...new Set(s.notes)], placements: s.placed.filter(q => q.kind !== 'obstacle').map(q => ({id: q.id, pos_xy_mm: q.c.map(Math.round), rot_deg: ((Math.round(q.rot) % 360) + 360) % 360, ...(q.kind === 'majlis' ? {kind: 'majlis', source_id: q.source_id, size_mm: {w: Math.round(q.size.w), d: q.size.d, h: q.size.h}} : {})}))}))};
 }
 
 
@@ -177,7 +177,7 @@ export function placeMajlis(runs, swings, it, room) {
     const back = runs[i], prev = runs[(i - 1 + n) % n], next = runs[(i + 1) % n];
     if (Math.abs(dot(back.u, prev.u)) > 0.1 || Math.abs(dot(back.u, next.u)) > 0.1) continue;
     const segments = [], add2 = (run, s0, s1, tag) => { if (s1 - s0 < 400) return; const c = add(add(run.P, mul(run.u, (s0 + s1) / 2)), mul(run.n, D / 2 + RULES.wall)), rot = Math.atan2(run.n[0], -run.n[1]) * 180 / Math.PI;
-      const body = rect(c, run.u, run.n, s1 - s0, D); if (!within(body, room) || swings.some(z => sat(z, body))) return; segments.push({id: `${it.id}-${tag}${segments.length + 1}`, kind: 'majlis', c, ax: run.u, az: run.n, rot, size: {w: s1 - s0, d: D, h: H}, body, zones: [], run: run.i}); };
+      const body = rect(c, run.u, run.n, s1 - s0, D); if (!within(body, room) || swings.some(z => sat(z, body))) return; segments.push({id: `${it.id}-${tag}${segments.length + 1}`, source_id: it.id, kind: 'majlis', c, ax: run.u, az: run.n, rot, size: {w: s1 - s0, d: D, h: H}, body, zones: [], run: run.i}); };
     for (const [x, y] of free(back)) add2(back, x, y, 'a');
     // side walls: start after the back seats so the corner is counted once
     for (const [run, end] of (layout === 'L' ? [[next, 'start']] : [[prev, 'end'], [next, 'start']])) for (const [x, y] of free(run)) {

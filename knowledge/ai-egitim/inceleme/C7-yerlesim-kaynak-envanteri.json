@@ -1,0 +1,36 @@
+{
+  "scope": "Parse/count and compressed source fingerprints only. No row-wise semantic, motor, language or leakage approval. Original Claude sources; separate from new Codex H4 targets.",
+  "sources": [
+    {
+      "file": "knowledge/ai-egitim/veri/yerlesim/procthor-denetimli.jsonl.gz",
+      "bytes": 1361697,
+      "sha256": "7424022ea97ecf789fbf557ba7c83a00e62409d74d28ecd90caa3b6a1fb8de9c",
+      "rows": 12827,
+      "schemas": {
+        "unspecified": 12827
+      },
+      "first_row_fields": [
+        "id",
+        "source",
+        "messages"
+      ],
+      "scope": "Streaming parse/count only; not semantic approval of all rows"
+    },
+    {
+      "file": "knowledge/ai-egitim/veri/yerlesim/procthor-aura-cozucu.jsonl.gz",
+      "bytes": 490906,
+      "sha256": "749845b2b8b4280741df5f7d80c0621b8af35e42a3aa3ee5dc03fd2176f68502",
+      "rows": 4340,
+      "schemas": {
+        "unspecified": 4340
+      },
+      "first_row_fields": [
+        "id",
+        "source",
+        "ok",
+        "messages"
+      ],
+      "scope": "Streaming parse/count only; not semantic approval of all rows"
+    }
+  ]
+}

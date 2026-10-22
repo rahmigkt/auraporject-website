@@ -3,13 +3,15 @@
 // blue windows across the wall, light door gaps, red entrance mark, north up (plan y grows to the north).
 import * as THREE from '../vendor/three.module.js?v=20261016b';
 import {PAINTS, FLOORS, SCHEMES, paintHex, floorTexture} from './finishes.js?v=20261020r';
-import {compileItem, footprint, itemName} from './items.js?v=20261020u';
+import {compileItem, footprint, itemName} from './items.js?v=20261022a';
+import {applyRoomLayout, placedItems} from './layout-state.js?v=20261022a';
 import {accessories} from './aksesuar.js?v=20261021e';
 import {rugMesh} from './hali.js?v=20261021e';
 import {migrate, merged, chooserHTML, applyChoice, TEXTILE_CSS, TEXTILE_KEY} from './tekstil.js?v=20261021e';
 import {curtains, STATES as PSTATES} from './perde.js?v=20261021e';
 
 const $ = s => document.querySelector(s), NS = 'http://www.w3.org/2000/svg';
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
 const val = q => (q && typeof q === 'object' ? q.value : q) ?? 0;
 const S = {view: 'plan', room: null, name: ''}, hooks = {};
 const COLORS = {living: '#ecd7ae', kitchen: '#cddbbf', bath: '#bbdce1', wc: '#a9cfd7', hall: '#eee9df', bedroom: '#ccdae7', utility: '#ded5e3', other: '#d4e0e5', balcony: '#d3e4bf', terrace: '#d3e4bf', stair: '#d5cce4', study: '#e4dccb', dining: '#ecd7ae'};
@@ -72,7 +74,7 @@ function drawPlan() {
   for (const o of ops) { const w = W[o.wall_id]; if (!w) continue; el('polygon', {points: pts(band(w, o.a, o.a + o.w)), fill: o.kind === 'window' ? INK.window : INK.door, 'data-op': o.id, 'data-wall': w.id}); }
   const ACC = accessories(D);
   for (const r of ACC.rugs) el('polygon', {points: pts(r.poly), fill: r.color, 'fill-opacity': 0.35, stroke: r.color, 'stroke-width': 14, 'stroke-dasharray': '60 40', style: 'pointer-events:none'});
-  for (const it of D.items || []) { if (!it.design) continue; const f = footprint(it), k = Math.max(vb[2], vb[3]) / 900;
+  for (const it of placedItems(D.items)) { if (!it.design) continue; const f = footprint(it), k = Math.max(vb[2], vb[3]) / 900;
     el('polygon', {points: pts(f), fill: 'rgba(255,253,248,.78)', stroke: '#6b645a', 'stroke-width': 14, 'data-item': it.id});
     const fr = [(f[2][0] + f[3][0]) / 2, (f[2][1] + f[3][1]) / 2], c = centroid(f); el('line', {x1: c[0], y1: -c[1], x2: fr[0], y2: -fr[1], stroke: '#b9b1a3', 'stroke-width': 10});
     const t = el('text', {x: c[0], y: -c[1] + 50, 'text-anchor': 'middle', 'font-size': 120, fill: '#5d574e', style: 'pointer-events:none'}); t.textContent = itemName(it); }
@@ -167,12 +169,12 @@ let house = null, productObject = null; const products = new Map();
 function build(cut) {
   if (house) { scene.remove(house); house.traverse(o => { if (o.geometry && !o.userData.keep) o.geometry.dispose(); }); }
   house = new THREE.Group(); scene.add(house); if (S.view === 'room') house.add(ground); ground.userData.keep = true;
-  if ((D.items || []).some(i => i.design)) { if (!productObject) import('../forma/scene.js').then(m => { productObject = m.productObject; if (S.view !== 'plan') show(S.view); });
-    else for (const it of D.items) { if (!it.design) continue; const key = it.id + JSON.stringify(it.design); let o = products.get(key);
+  if (placedItems(D.items).some(i => i.design)) { if (!productObject) import('../forma/scene.js').then(m => { productObject = m.productObject; if (S.view !== 'plan') show(S.view); });
+    else for (const it of placedItems(D.items)) { if (!it.design) continue; const key = it.id + JSON.stringify([it.design, it.size_mm]); let o = products.get(key);
       if (!o) { const {compiled, materials} = compileItem(it); o = productObject(compiled, materials, {onReady: () => render()}); o.traverse(x => { x.userData.keep = true; }); products.set(key, o); }
       o.position.set(it.pos_xy_mm[0] / 1000, 0, -it.pos_xy_mm[1] / 1000); o.rotation.y = (it.rot_deg || 0) * Math.PI / 180; house.add(o); } }
   const hs = D.spaces.find(x => x.id === S.room); if (A.human && hs && S.view !== 'maket') { // stand where nothing is placed: free floor point closest to the room centre
-    const b = bbox(hs.boundary_xy_mm), [cx0, cy0] = centroid(hs.boundary_xy_mm), feet = (D.items || []).filter(i => i.design).map(i => footprint(i)); let best = [cx0, cy0], bd = Infinity;
+    const b = bbox(hs.boundary_xy_mm), [cx0, cy0] = centroid(hs.boundary_xy_mm), feet = placedItems(D.items).filter(i => i.design).map(i => footprint(i)); let best = [cx0, cy0], bd = Infinity;
     for (let x = b.x0 + 400; x < b.x1 - 400; x += 200) for (let y = b.y0 + 400; y < b.y1 - 400; y += 200) { const p = [x, y]; if (!inside(p, hs.boundary_xy_mm) || feet.some(f => inside(p, f) || f.some(q => Math.hypot(q[0] - x, q[1] - y) < 450))) continue; const d = Math.hypot(x - cx0, y - cy0); if (d < bd) { bd = d; best = p; } }
     human.position.set(best[0] / 1000, 0, -best[1] / 1000); human.traverse(o => { o.userData.keep = true; }); house.add(human); }
   for (const s of D.spaces) {
@@ -288,7 +290,7 @@ const DEC = {tab: 'curtain'};
 function decorUI() {
   const el = $('#dekor'); el.hidden = S.view === 'plan'; if (el.hidden) return;
   const sp = D.spaces.find(x => x.id === S.room), t = merged(D.decor, sp?.decor);
-  el.innerHTML = `<div class="dk-tabs"><button data-dt="curtain" aria-pressed="${DEC.tab === 'curtain'}">Perde</button><button data-dt="rug" aria-pressed="${DEC.tab === 'rug'}">Halı</button><span>${sp ? (sp.name || NAMES[sp.kind] || 'Oda').replace(/\s+\d+$/, '') + (sp.decor ? ' · odaya özel' : ' · ev geneli') : 'Bütün ev'}</span></div>
+  el.innerHTML = `<div class="dk-tabs"><button data-dt="curtain" aria-pressed="${DEC.tab === 'curtain'}">Perde</button><button data-dt="rug" aria-pressed="${DEC.tab === 'rug'}">Halı</button><span>${sp ? esc((sp.name || NAMES[sp.kind] || 'Oda').replace(/\s+\d+$/, '')) + (sp.decor ? ' · odaya özel' : ' · ev geneli') : 'Bütün ev'}</span></div>
   <div class="tx">${chooserHTML(t, DEC.tab, {compact: true})}</div>${sp?.decor ? '<button data-dr="1" class="dk-reset">Ev geneline dön</button>' : ''}`;
 }
 { const D0 = $('#dekor'), st = document.createElement('style'); st.textContent = TEXTILE_CSS; document.head.append(st);
@@ -326,30 +328,30 @@ function layoutPanel() {
   return `<h2>Mobilya yerleşimi</h2><p class="note">${its.length} ürün · kurallar: kapı açılışı, pencere, geçiş payları, TV–kanepe, masa–mutfak.</p>
   <div class="ev-row" style="display:flex;gap:6px;flex-wrap:wrap"><button data-lay="solve">Yerleşim önerileri</button></div>
   <p class="note">Proje katmanı: ${rr.length ? rr.map(x => `halı ${x.size[0] / 10}×${x.size[1] / 10}`).join(', ') : 'halı yok'} · ${ll.map(x => LN[x.kind]).join(', ') || 'ışık yok'}</p>
-  ${res ? (res.ok ? `${''}<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">${res.alternatives.map((a, i) => `<button data-lay="alt" data-i="${i}" aria-pressed="${LAY.pick === i}">Seçenek ${i + 1}</button>`).join('')}</div><p class="note">${res.alternatives[LAY.pick].notes.join(' · ')}</p>` : `<p class="note" style="color:#a63030">${res.reason}.</p>`) : ''}`;
+  ${res ? (res.ok ? `${''}<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">${res.alternatives.map((a, i) => `<button data-lay="alt" data-i="${i}" aria-pressed="${LAY.pick === i}">Seçenek ${i + 1}</button>`).join('')}</div><p class="note">${res.alternatives[LAY.pick].notes.map(esc).join(' · ')}</p>` : `<p class="note" style="color:#a63030">${esc(res.reason)}.</p>`) : ''}`;
 }
 async function layoutAction(b) { try { await layoutRun(b); } catch (err) { console.error('layout', err); LAY.res = {ok: false, reason: 'Yerleşim hesaplanamadı: ' + err.message}; side(); } }
 async function layoutRun(b) {
-  const {solveRoom} = await import('./yerlesim.js?v=20261021j');
+  const {solveRoom} = await import('./yerlesim.js?v=20261022a');
   if (b.dataset.lay === 'solve') { const r = D.spaces.find(x => x.id === S.room); LAY.room = r.id; LAY.pick = 0; LAY.res = solveRoom(r, D.items.filter(i => i.design && i.space_id === r.id), {walls, ops}, {beam: 60}); }
   if (b.dataset.lay === 'alt') LAY.pick = +b.dataset.i;
-  if (LAY.res?.ok) for (const pl of LAY.res.alternatives[LAY.pick].placements) Object.assign(D.items.find(i => i.id === pl.id), {pos_xy_mm: pl.pos_xy_mm, rot_deg: pl.rot_deg});
+  if (LAY.res?.ok) D.items = applyRoomLayout(D.items, LAY.res.alternatives[LAY.pick].placements, LAY.room);
   side(); if (S.view === 'plan') drawPlan(); else show(S.view);
 }
 function finishPanel() {
   const r = D.spaces.find(x => x.id === S.room), f = r && finishOf(r);
   return `<h2>Renk ve zemin · öneri</h2><select id="scheme">${Object.entries(SCHEMES).map(([k, v]) => `<option value="${k}" ${(D.scheme || 'iskandinav') === k ? 'selected' : ''}>${v.name}</option>`).join('')}</select>
   <p class="note">Bütün eve uygulanır; odayı seçip ayrıca değiştirebilirsiniz. Boya ve kaplamayı AURA yapmaz, önerir.</p>
-  ${r ? `<p class="note"><b>${(r.name || NAMES[r.kind] || 'Oda').replace(/\s+\d+$/, '')}</b> · duvar</p><div class="sw">${PAINTS.map(([id, n, hex]) => `<button data-paint="${id}" title="${n}" aria-pressed="${f.wall === id}" style="background:${hex}"></button>`).join('')}</div>
+  ${r ? `<p class="note"><b>${esc((r.name || NAMES[r.kind] || 'Oda').replace(/\s+\d+$/, ''))}</b> · duvar</p><div class="sw">${PAINTS.map(([id, n, hex]) => `<button data-paint="${id}" title="${n}" aria-pressed="${f.wall === id}" style="background:${hex}"></button>`).join('')}</div>
   <label class="note" style="display:block;margin:8px 0">Zemin <select id="floorPick">${Object.entries(FLOORS).map(([id, v]) => `<option value="${id}" ${f.floor === id ? 'selected' : ''}>${v.name}</option>`).join('')}</select></label>` : '<p class="note">Bir oda seçin.</p>'}`;
 }
 function pick(id) { S.room = id; side(); decorUI(); if (S.view === 'plan') drawPlan(); else show(S.view); }
 function side() {
   const tot = D.spaces.reduce((s, x) => s + area(x.boundary_xy_mm), 0), real = /gercek-|licensed|plan_import/.test(S.name + JSON.stringify(D.walls[0] || {}));
-  $('#side').innerHTML = `<h2>Plan</h2><select id="pickPlan">${EXAMPLES.map(([f, t]) => `<option value="${f}" ${f === S.name ? 'selected' : ''}>${t}</option>`).join('')}${EXAMPLES.some(e => e[0] === S.name) ? '' : `<option selected>${S.name}</option>`}</select>
+  $('#side').innerHTML = `<h2>Plan</h2><select id="pickPlan">${EXAMPLES.map(([f, t]) => `<option value="${f}" ${f === S.name ? 'selected' : ''}>${t}</option>`).join('')}${EXAMPLES.some(e => e[0] === S.name) ? '' : `<option selected>${esc(S.name)}</option>`}</select>
   <label class="note" style="display:block;margin-top:8px">Plan dosyası aç (EV JSON) <input type="file" id="openFile" accept=".json,application/json"></label>
   <p class="note">${real ? 'Gerçek konut planı: Swiss Dwellings (Archilyse AG), CC BY 4.0. Ölçüye uyarlanmış; tasarımcı onayı gerekir.' : 'Sentetik örnek (gerçek ev değil).'} Ölçüler mm, alanlar net iç ölçüden. Kuzey yukarı.</p>
-  <h2>Odalar · ${tot.toFixed(1)} m²</h2>${D.spaces.map(s => `<div class="room ${S.room === s.id ? 'on' : ''}" data-pick="${s.id}"><b><i style="display:inline-block;width:10px;height:10px;background:${COLORS[s.kind] || '#ddd'};margin-right:6px;border:1px solid #b7bab8"></i>${(s.name || NAMES[s.kind] || 'Oda').replace(/\s+\d+$/, '')}</b><span>${area(s.boundary_xy_mm).toFixed(1)} m²</span></div>`).join('')}
+  <h2>Odalar · ${tot.toFixed(1)} m²</h2>${D.spaces.map(s => `<div class="room ${S.room === s.id ? 'on' : ''}" data-pick="${esc(s.id)}"><b><i style="display:inline-block;width:10px;height:10px;background:${COLORS[s.kind] || '#ddd'};margin-right:6px;border:1px solid #b7bab8"></i>${esc((s.name || NAMES[s.kind] || 'Oda').replace(/\s+\d+$/, ''))}</b><span>${area(s.boundary_xy_mm).toFixed(1)} m²</span></div>`).join('')}
   ${layoutPanel()}
   ${finishPanel()}
   ${hooks.panel?.() || ''}

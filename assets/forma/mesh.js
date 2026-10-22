@@ -198,7 +198,11 @@ export function tube(points, radius, {sides = 14} = {}) {
   const b = new Builder(), rings = [];
   for (let k = 0; k < points.length; k++) {
     const p = points[k], q = points[Math.min(points.length - 1, k + 1)], o = points[Math.max(0, k - 1)];
-    let tx = q[0] - o[0], ty = q[1] - o[1], tz = q[2] - o[2]; const tl = Math.hypot(tx, ty, tz) || 1; tx /= tl; ty /= tl; tz /= tl;
+    let tx = q[0] - o[0], ty = q[1] - o[1], tz = q[2] - o[2];
+    // At a retraced corner the neighbours coincide: use the outgoing segment
+    // instead of dividing a zero tangent's cross product by zero.
+    if (Math.hypot(tx, ty, tz) < 1e-9) { tx = q[0] - p[0]; ty = q[1] - p[1]; tz = q[2] - p[2]; }
+    const tl = Math.hypot(tx, ty, tz) || 1; tx /= tl; ty /= tl; tz /= tl;
     let ux = 0, uy = 1, uz = 0; if (Math.abs(ty) > 0.9) { ux = 1; uy = 0; }
     let ax = ty * uz - tz * uy, ay = tz * ux - tx * uz, az = tx * uy - ty * ux; const al = Math.hypot(ax, ay, az); ax /= al; ay /= al; az /= al;
     const bx = ty * az - tz * ay, by = tz * ax - tx * az, bz = tx * ay - ty * ax, ring = [];

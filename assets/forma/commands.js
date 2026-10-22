@@ -246,6 +246,8 @@ const SEAT_UNITS = L('kisilik|kisi|oturumlu|oturum|seater|seats|seat|sitzer|sitz
 function has(text, stem) {
   if (stem.includes(' ')) return (' ' + text + ' ').includes(' ' + stem + ' ') || (stem.length > 6 && text.includes(stem));
   const words = text.split(' ');
+  // Danish table noun forms; compounds and colour words (bordplade, bordo, bordeaux) are not tables.
+  if (stem === 'bord') return words.some(w => /^bord(?:et|e|ene|s|ets|enes)?$/.test(w));
   return stem.length <= 3 ? words.includes(stem) : words.some(w => w.startsWith(stem));
 }
 const any = (text, list) => list.find(s => has(text, s));
@@ -630,7 +632,13 @@ function parseKitchen(text) {
   const r = parseStorage(text), actions = r.actions.filter(a => a.type !== 'kind' && !(a.type === 'family' && a.value === 'kitchen'));
   for (const [key, map] of Object.entries(KITCHEN_WORDS)) { const v = pickMap(text, map); if (v) actions.push(key === 'kind' ? {type: 'kind', value: v} : {type: 'enum', key, value: v}); }
   // Worktop words move material actions to the worktop.
-  if (/(tezgah|worktop|countertop|arbeitsplatte|plan de travail|werkblad|bordplade|encimera|piano di lavoro)/.test(text)) for (const a of actions) if (a.type === 'material' && a.slot === 'case') a.slot = 'top';
+  const worktop = /(tezgah|worktop|countertop|arbeitsplatte|plan de travail|werkblad|bordplade|encimera|piano di lavoro)/.test(text);
+  if (worktop) for (const a of actions) if (a.type === 'material' && a.slot === 'case') a.slot = 'top';
+  if (worktop && pickMap(text, SURFACE_WORDS) === 'stone') {
+    // Stone names describe the surface here, not the heritage fabric colour "stone".
+    for (let i = actions.length - 1; i >= 0; i--) if (actions[i].type === 'material' && actions[i].slot === 'top' && actions[i].key === 'color') actions.splice(i, 1);
+    actions.push({type: 'material', slot: 'top', key: 'surface', value: 'stone'});
+  }
   const stone = pickMap(text, STONE_WORDS); if (stone) actions.push({type: 'material', slot: 'top', key: 'stone', value: stone});
   return {actions: dedupe(actions), understood: actions.length > 0};
 }

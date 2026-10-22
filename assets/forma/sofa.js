@@ -5,6 +5,7 @@ import {linePart, densify, rows} from './lines.js';
 import {buildMesh} from './build.js';
 import {armSection, armOverhang, legProfile, isSquareLeg, ARM_TYPES, LEG_TYPES} from './profiles.js';
 import {clamp} from './rng.js';
+import {backFrame,seatMounts} from './construction.js';
 
 export const FAMILY = 'seating';
 
@@ -32,7 +33,7 @@ export const ENUMS = {
 
 export const DEFAULTS = {
   width: 2100, depth: 920, height: 820, seatHeight: 430,
-  armType: 'track', armWidth: 160, armHeight: 600, armTop: 0.4, armFlare: 0.3, armSlope: 0.15, armSet: 0,
+  armType: 'track', armWidth: 160, armHeight: 600, armTop: 0.4, armFlare: 0.3, armSlope: 0.16, armSet: 0,
   backType: 'loose', backRake: 12, backThickness: 190, camel: 60, channelCount: 6, tuftSpacing: 170,
   seatType: 'split', seatCount: 3, cushionThickness: 150, cushionCrown: 14, cushionEdge: 'boxed', seatFront: 'inside',
   baseType: 'legs', legType: 'tapered', legHeight: 140, legSize: 22, legTaper: 0.6, legSplay: 0, legInset: 60, caseHeight: 150, bodyInset: 0, bodyInsetZ: 0, bodyRadius: 18,
@@ -70,7 +71,10 @@ export function normalize(input = {}) {
   const deckTop = p.seatHeight - p.cushionThickness * 0.88;
   if (deckTop - p.legHeight < 30) p.legHeight = Math.max(0, Math.round((deckTop - 30) / 5) * 5);
   p.caseHeight = Math.round(deckTop - p.legHeight); // derived: shown as its own control, set through the seat height (studio)
-  p.height = Math.max(p.height, p.seatHeight + (p.backType === 'low' ? 200 : 260));
+  // A derived minimum must already lie on the height grid, or JSON reload adds
+  // another rounding step (e.g. 625 -> 630) and changes the compiled shape.
+  const heightStep = RANGES.height[2], minHeight = p.seatHeight + (p.backType === 'low' ? 200 : 260);
+  p.height = Math.max(p.height, Math.ceil(minHeight / heightStep) * heightStep);
   if (p.backType === 'low') p.height = Math.min(p.height, p.seatHeight + 340);
   return p;
 }
@@ -299,9 +303,10 @@ export function compile(raw) {
   const nStretch = Math.max(1, Math.round(innerW / 600));
   for (let i = 1; i <= nStretch; i++) {
     const x = -hw + 20 + (W - 40) * i / (nStretch + 1);
-    if (Math.abs(x) < hw - 60) parts.push(part(`frame-stretcher-${i}`, 'frame-stretcher', 'frame', {fn: 'box', w: 22, h: 60, d: p.baseType === 'frame' ? D - 56 : D - 120}, [x, fy + 10, 0], [0, 0, 0], {internal: true}));
+    if (Math.abs(x) < hw - 60) parts.push(part(`frame-stretcher-${i}`, 'frame-stretcher', 'frame', {fn: 'box', w: 22, h: 60, d: p.baseType === 'frame' ? D - 28 : D - 80}, [x, fy + 10, 0], [0, 0, 0], {internal: true}));
   }
 
+  parts.push(...seatMounts(p,parts,deckTop),...backFrame(p,parts,deckTop));
   const meta = derive(p, {deckTop, seatD, seatBackZ, innerW});
   return {family: FAMILY, params: p, parts, meta};
 }
@@ -339,7 +344,13 @@ export function validate(design) {
   if (p.armType !== 'none' && p.armHeight - p.seatHeight > 360) add('warn', 'armHigh', p.armHeight - p.seatHeight);
   if (p.height - p.seatHeight < 230 && p.backType !== 'low') add('warn', 'backLow', p.height - p.seatHeight);
   if (p.width > 2600) add('warn', 'transportSplit', p.width);
-  if (p.baseType === 'legs' && p.legHeight > 0 && p.legSize < 16 && p.width > 1500) add('warn', 'thinLegs', p.legSize);
+  // Both bases use legGeom below. Compare the actual narrowest profile section,
+  // not its nominal top radius. This retains the existing concept warning
+  // threshold; absence of a warning is not structural/load-capacity approval.
+  if (['legs', 'frame'].includes(p.baseType) && p.legHeight > 0 && p.width > 1500) {
+    const minRadius = Math.min(...legProfile(p.legType, p.legHeight, p.legSize, p.legTaper).map(([, r]) => r));
+    if (minRadius < 16) add('warn', 'thinLegs', minRadius);
+  }
   for (const q of parts) {
     const g = q.geom;
     for (const k of ['w', 'h', 'd']) if (g[k] !== undefined && !(g[k] > 0)) add('error', 'nonPositive', `${q.id}.${k}`);

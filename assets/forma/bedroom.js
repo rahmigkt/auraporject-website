@@ -83,6 +83,8 @@ export function normalize(input = {}) {
     if (p.bedBase === 'platform' && p.legType === 'sled') p.legType = 'hidden';
     if (['frame', 'fourPoster'].includes(p.bedBase) && p.legType === 'hidden') p.legType = 'square';
     if (p.bedBase === 'fourPoster') { p.legType = p.legType === 'sled' ? 'square' : p.legType; p.headExtend = 0; }
+    // A sled must fit its 25 mm floor rail before the upright can have positive height.
+    if (p.legType === 'sled') p.legHeight = Math.max(25, p.legHeight);
     if (p.storage === 'lift' && !['baza', 'upholsteredFrame', 'platform'].includes(p.bedBase)) p.storage = 'drawers';
     if (p.storage === 'drawers' && ['baza'].includes(p.bedBase)) p.storage = 'lift';
     if (p.storage !== 'none') p.railHeight = Math.max(p.railHeight, 260);
@@ -104,6 +106,8 @@ export function normalize(input = {}) {
     if (p.caseBase === 'wall') p.baseHeight = 0;
     if (p.caseBase === 'legs' && ['hidden', 'sled'].includes(p.legType)) p.legType = 'roundTaper';
     if (p.caseBase === 'legs' && p.baseHeight < 60) p.baseHeight = 60;
+    // The 18 mm case sled needs at least the next 5 mm grid position.
+    if (p.caseBase === 'sled') p.baseHeight = Math.max(20, p.baseHeight);
     p.cornerRadius = Math.min(p.cornerRadius, p.depth / 2 - 2, p.width / 2 - 2);
     p.rows = Math.max(p.caseLayout === 'niche' ? 1 : 1, Math.min(p.rows, Math.floor((p.height - p.baseHeight - p.topThickness) / 110)));
     if (p.height > 1000 && p.mirror !== 'none') p.mirror = 'none';
@@ -196,7 +200,7 @@ export function compileBed(p) {
     parts.push(part('rail-foot', 'rail', rm, {fn: 'cushion', w: BW, h: p.railHeight, d: railT, r: rr}, [0, legH + p.railHeight / 2, zFoot - railT / 2]));
     parts.push(box('slat-deck', 'slat-deck', 'frame', W0, 25, L0, [0, deckTop - 12.5, zHead + railT / 2 + 5 + L0 / 2], {internal: true}, 2));
     parts.push(box('centre-rail', 'centre-rail', 'frame', 50, 70, L0, [0, deckTop - 60, zHead + L0 / 2], {internal: true}, 2));
-    if (W0 >= 1400 && legH > 30) parts.push(box('centre-leg', 'centre-leg', 'dark', 40, deckTop - 95, 40, [0, (deckTop - 95) / 2, 0], {internal: true}));
+    if (W0 >= 1400 && legH > 30 && deckTop > 95) parts.push(box('centre-leg', 'centre-leg', 'dark', 40, deckTop - 95, 40, [0, (deckTop - 95) / 2, 0], {internal: true}));
     if (p.storage === 'drawers') for (const s of [-1, 1]) for (let i = 0; i < 2; i++) parts.push(box(`bed-drawer-${s}-${i}`, 'drawer-front', rm, 3, p.railHeight - 40, L0 * 0.4, [s * (BW / 2 + 1.5), legH + p.railHeight / 2, -L0 * 0.22 + i * L0 * 0.44]));
   }
   // Legs / plinth

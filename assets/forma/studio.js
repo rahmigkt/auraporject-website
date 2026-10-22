@@ -9,6 +9,13 @@ import {FAMILIES, familyOf} from './families.js';
 import {buildMesh} from './build.js';
 import {styleName} from './styles.js';
 import {STARTS} from './starts.js';
+import {technicalReview, reviewMatches} from './technical-review.js';
+import {reviewDesign} from './auto-correct.js';
+import {partDimensions,partDimensionsCsv} from './part-dimensions.js';
+import {dimensionProjectFiles} from './dimension-package.js';
+import {findingText,reviewDocument,textileAssessmentFiles} from './review-document.js';
+import {textileReview} from './case-review.js';
+import {TEXTILE_PREVIEW} from './textile-preview.js';
 import {HIDES, COLORS, FIBERS, WEAVES, WEAVE_NAMES, PATTERNS, MOTIF_CHOICES, MOTIF_NAMES, WOODS, FINISHES, STAINS, METALS, STONES, GLASS, SURFACES, LINEN_COLORS, colorGroup, name as nm} from './catalog.js';
 import {MATTRESS} from './bedroom.js';
 import {harmonize} from './set.js';
@@ -33,7 +40,7 @@ import {migrate, chooserHTML, applyChoice, TEXTILE_CSS, TEXTILE_KEY, SHEERS, DRA
 const $ = (sel, root = document) => root.querySelector(sel);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
 // Browser storage; with an account every change is also saved to it (debounced), so work survives other devices.
-const store = {get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} account.schedule(); }};
+const store = {get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }, set(k, v) { try { const next = JSON.stringify(v); if (localStorage.getItem(k) === next) return; localStorage.setItem(k, next); account.schedule(); } catch {} }};
 
 const params = new URLSearchParams(location.search);
 const browserLang = (navigator.language || 'en').slice(0, 2);
@@ -166,7 +173,7 @@ function shell() {
       <div class="f-caption"><div><p class="f-eyebrow" id="eyebrow"></p><h1 id="designTitle"></h1><p class="f-dims" id="dims"></p></div><p class="f-status" id="status"></p></div>
       <div class="f-stage" id="stage" aria-label="${esc(L('perspective'))}"></div>
       <div class="f-toolbar" role="toolbar">
-        <button data-view="angle" aria-pressed="true">${L('perspective')}</button><button data-view="front">${L('front')}</button><button data-view="side">${L('side')}</button><button data-view="top">${L('top')}</button>
+        <button data-view="angle" aria-pressed="true">${L('perspective')}</button><button data-view="front">${L('front')}</button><button data-view="side">${L('sideDirection')}</button><button data-view="top">${L('top')}</button>
         <button id="modeBtn" aria-pressed="${!state.sketch}">${L(state.sketch ? 'modeRender' : 'modeSketch')}</button><button id="structureBtn" aria-pressed="false">${L('structure')}</button><button id="openBtn" aria-pressed="${!!state.openFronts}" ${['storage', 'kitchen', 'bath'].includes(state.design.family) ? '' : 'hidden'}>${L('openFronts')}</button><button id="photoBtn">${L('photo')} ↓</button>
         <button data-zoom="1.12" aria-label="+">+</button><button data-zoom="0.9" aria-label="−">−</button>
         <button id="undoBtn">↶ ${L('undo')}</button><button id="redoBtn">↷ ${L('redo')}</button>
@@ -186,7 +193,9 @@ function shell() {
   </main>`;
   viewer?.dispose(); viewer = null;
   const host = $('#stage');
-  import('./scene.js?v=20261020k').then(mod => { sceneModule = mod; const {createViewer} = mod;
+  import('./scene.js?v=20261020k').then(mod => {
+    if (host !== $('#stage')) return;
+    sceneModule = mod; const {createViewer} = mod;
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(shown(), state.design.materials); if (state.room) showRoom(); }
@@ -205,11 +214,16 @@ function renderCaption() {
   $('#eyebrow').textContent = `F-${String(d.seed % 100000).padStart(5, '0')} · ${L(state.sketch ? 'modeSketch' : 'modeRender')}`;
   renderStartLabel();
   $('#designTitle').textContent = d.family === 'bedroom' ? (d.params.view === 'set' ? L('bedroomSet') : L(d.kind)) : L(d.family === 'seating' ? c.meta.kind : d.kind);
-  $('#dims').textContent = ui().dims(c);
+  $('#dims').textContent = L('designDimensions')+': '+ui().dims(c);
   const err = issues.filter(i => i.level === 'error'), warn = issues.filter(i => i.level === 'warn');
   const st = $('#status');
   st.dataset.level = err.length ? 'error' : warn.length ? 'warn' : 'ok';
   st.textContent = err.length || warn.length ? [...err, ...warn].map(i => L('issues.' + i.code).replace('{v}', Math.round(i.value))).join(' · ') : L('ok');
+  const saved=state.project.items.find(i=>i.id===state.editing);
+  if(saved && reviewMatches(saved.technicalReview,d)) {
+    if(!err.length)st.dataset.level='warn';
+    st.textContent += ' · '+L('technicalPending');
+  }
   $('#undoBtn').disabled = !state.history.length; $('#redoBtn').disabled = !state.future.length;
 }
 function feedback(text, level = 'info') { const f = $('#feedback'); f.textContent = text; f.dataset.level = level; }
@@ -693,6 +707,15 @@ function sheetLabels() {
 }
 function specRows(b) {
   const d = state.design, c = state.compiled, m = d.materials;
+  if (d.family === 'table') return [
+    [L('overall'), `${c.meta.overall.width} × ${c.meta.overall.depth} × ${c.meta.overall.height}`],
+    [L('topMat'), `${surfaceShort(m.top)} · ${c.params.topThickness} mm`],
+    [L('baseMat'), m.base.surface === 'metal' ? N(METALS[m.base.metal]) : surfaceShort(m.base)],
+    [L('topShape'), partName('topShape', c.params.topShape, state.lang)],
+    [L('baseType'), partName('tBaseType', c.params.baseType, state.lang)],
+    [L('edge'), partName('edge', c.params.edge, state.lang)],
+    [L('hardware'), N(METALS[m.hardware.metal])], [L('weight'), `~${b.totals.weightKg} kg`]
+  ];
   if (d.family === 'kitchen') {
     const p = c.params, mm = c.meta, o = mm.overall, pn = (g, v) => partName(g, v, state.lang);
     return [
@@ -776,11 +799,12 @@ const projectKey = () => state.project.items.map(i => designKey(i.design) + '×'
 function saveProject() { store.set('aura-forma-project', state.project); store.set('aura-forma-editing', state.editing); }
 function addToProject() {
   const items = state.project.items, d = structuredClone(state.design), i = items.findIndex(x => x.id === state.editing);
-  if (i >= 0) items[i] = {...items[i], design: d};
-  else { const id = 'U' + (1 + Math.max(0, ...items.map(x => +x.id.slice(1) || 0))); items.push({id, design: d}); state.editing = id; }
+  const c=compileOf(d), report=technicalReview(d,c,issuesOf(d,c));
+  if (i >= 0) items[i] = {...items[i], design: d, technicalReview:report};
+  else { const id = 'U' + (1 + Math.max(0, ...items.map(x => +x.id.slice(1) || 0))); items.push({id, design: d, technicalReview:report}); state.editing = id; }
   state.justAdded = true; saveProject();
   feedback(`${itemName(d)} · ${L(i >= 0 ? 'projectUpdated' : 'projectAdded')}`);
-  renderPanel();
+  renderCaption(); renderPanel();
 }
 /** The same design language in another size of the family (sofa → loveseat / armchair; dining → coffee table …). */
 function sameDesign(d, kind) {
@@ -829,6 +853,7 @@ function projectPanel() {
     <div class="f-nextrow"><b>${L('anotherProduct')}</b><span>${FAMILY_NAV.map(([f, k]) => `<button class="f-link" data-act="family" data-family="${f}">${esc(L(k))}</button>`).join('')}</span></div></section>` : '';
   const list = items.length ? `<h3>${L('projectItems')} · ${items.length}</h3><ol class="f-items">${items.map((it, n) => `<li ${it.id === state.editing ? 'aria-current="true"' : ''}><span class="f-n">${String(n + 1).padStart(2, '0')}</span><span><b>${esc(itemName(it.design))}</b><small>${esc(styleName(it.design.style, state.lang))} · ${esc(itemDims(it.design))}</small>
     <span class="f-qty">${L('quantity')} <button class="f-link" data-act="qty" data-item="${it.id}" data-d="-1" ${(it.qty || 1) <= 1 ? 'disabled' : ''}>−</button><b>${it.qty || 1}</b><button class="f-link" data-act="qty" data-item="${it.id}" data-d="1">+</button></span></span><span class="f-itemacts"><button class="f-link" data-act="edit" data-item="${it.id}">${L('edit')}</button><button class="f-link" data-act="remove" data-item="${it.id}">${L('remove')}</button></span></li>`).join('')}</ol>` : `<p class="f-note">${L('projectEmpty')}</p>`;
+  const dimensions = items.length ? `<section><button data-act="dimensions">${esc(L('dimensionsDownload'))} ↓</button><p class="f-note">${esc(L('dimensionsScope'))}</p></section>` : '';
   const room = items.length ? roomSection() : '';
   const sent = state.sent, sentChanged = sent && sent.key !== projectKey();
   const send = `<h2 class="f-h2-sub">${L('sendDesigner')}</h2><p class="f-lead">${L('sendIntro')}</p>
@@ -838,11 +863,38 @@ function projectPanel() {
     <label>${L('phone')}<input name="phone" type="tel" maxlength="40"></label><label>${L('city')}<input name="city" maxlength="120"></label>
     <label class="full">${L('note')}<textarea name="note" rows="3" maxlength="1500"></textarea></label>
     <label class="f-check full"><input type="checkbox" name="consent" required><span>${L('consent')} <a href="proje-gizlilik.html?lang=${state.lang}" target="_blank" rel="noopener">↗</a></span></label>
+    <button type="button" data-act="assessment" ${items.length ? '' : 'disabled'}>${L('technicalTitle')} ↓</button>
     <button class="f-primary" type="submit" ${items.length ? '' : 'disabled'}>${L('sendProject')} →</button></form>` : ''}`;
   return `<h2>${L('tabProject')}</h2><p class="f-lead">${L('projectIntro')}</p>
+  ${editing && !changed ? technicalReviewHTML(editing) : ''}
   <div class="f-current"><div><b>${esc(itemName(d))}</b><small>${esc(styleName(d.style, state.lang))} · ${esc(fam === 'bedroom' ? L('setPiecesList') : itemDims(d))}</small></div>
   <button class="f-primary" data-act="add" ${editing && !changed ? 'disabled' : ''}>${editing ? (changed ? L('saveChanges') : L('inProject')) : L('addContinue')} ${editing && !changed ? '✓' : '+'}</button></div>
-  ${next}${list}${room}${send}`;
+  ${next}${list}${dimensions}${room}${send}`;
+}
+
+function technicalReviewHTML(item) {
+  const r=item.technicalReview;
+  if(!reviewMatches(r,item.design))return `<p class="f-note">${L('technicalOnSend')}</p>`;
+  return `<section class="f-next" aria-label="${esc(L('technicalTitle'))}"><h3>${L('technicalTitle')}</h3><p class="f-note">${L('technicalReturn')}</p><ul>${r.findings.map(x=>`<li>${esc(findingText(x,state.lang))}</li>`).join('')}</ul><p class="f-note">${L('technicalLimits')}</p></section>`;
+}
+
+const assessmentKey=()=>JSON.stringify(state.project.items.map(i=>({id:i.id,qty:i.qty||1,design:i.design})));
+function openAssessment(forSend=false){
+ const items=state.project.items;if(!items.length)return;
+ items.forEach(i=>{i.technicalReview=reviewDesign(i.design);});saveProject();
+ const key=assessmentKey(),focus=document.activeElement;
+ document.querySelector('.f-modal')?.remove();
+ const m=document.createElement('div');m.className='f-modal';m.setAttribute('role','dialog');m.setAttribute('aria-modal','true');m.setAttribute('aria-label',L('reviewBeforeSend'));
+ m.innerHTML=`<div class="f-modal-box"><h2>${esc(L('technicalTitle'))}</h2><p>${esc(L('technicalReturn'))}</p>${items.map(i=>`<h3>${esc(itemName(i.design))}</h3><ul>${i.technicalReview.findings.map(f=>`<li>${esc(findingText(f,state.lang))}</li>`).join('')}</ul>`).join('')}<p class="f-note">${esc(L('technicalLimits'))}</p><div class="f-actions"><button data-review="download">${esc(L('reviewDownload'))} ↓</button><button data-review="close">${esc(L('reviewClose'))}</button>${forSend?`<button data-review="send" ${state.canSend?'':'disabled'}>${esc(L('reviewContinue'))}</button>`:''}</div></div>`;
+ const close=()=>{m.remove();focus?.focus();};
+ m.addEventListener('click',e=>{
+  const act=e.target.closest('[data-review]')?.dataset.review;
+  if(act==='close')close();
+  if(act==='download')download('AURA-design-assessment.zip',zip([{name:'assessment.txt',data:reviewDocument(items,state.lang)},{name:'assessment.json',data:JSON.stringify({schema:'aura.assessment/1',items},null,2)}]),'application/zip');
+  if(act==='send'&&state.canSend){if(key!==assessmentKey()){close();openAssessment(true);return;}state.reviewPermit=key;close();$('#sendForm')?.requestSubmit();}
+ });
+ m.addEventListener('keydown',e=>{if(e.key==='Escape')close();if(e.key==='Tab'){const bs=[...m.querySelectorAll('button:not(:disabled)')],first=bs[0],last=bs.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
+ document.body.append(m);m.querySelector('button')?.focus();
 }
 
 // ---- Room: the whole project placed in a lit room ---------------------------------------------------
@@ -875,6 +927,8 @@ function showRoom() {
   $('#dims').textContent = `${(plan.W / 1000).toFixed(1)} × ${(plan.D / 1000).toFixed(1)} m · ${L('layout')} ${r.layout + 1} / 3`;
 }
 function projectAction(el) {
+  if(el.dataset.act==='assessment')return openAssessment();
+  if(el.dataset.act==='dimensions'){download('AURA-project-dimensions.zip',zip(dimensionProjectFiles(state.project.items,compileOf)),'application/zip');return;}
   const a = el.dataset.act, items = state.project.items;
   if (a === 'add') addToProject();
   else if (a === 'same') startNew(sameDesign(state.design, el.dataset.kind), `${L(el.dataset.kind)} · ${L('withThisDesign')}`);
@@ -951,7 +1005,7 @@ function authError(err) {
 /** The whole project for the designer: per product a folder (design, drawings, parts list, render), one PDF with
  * the room view (when shown), every render and every drawing sheet, and a project summary. */
 async function projectPackage() {
-  const items = state.project.items, files = [], pages = [], summary = [], keep = {design: state.design, compiled: state.compiled, cache: state.drawingCache};
+  const items = state.project.items, files = [], pages = [], summary = [], dimensionItems = [], keep = {design: state.design, compiled: state.compiled, cache: state.drawingCache};
   // Links that open the work again in the studio: one for the whole project, one per product.
   const pLink = await projectLink(items, state.room, state.lang), links = [];
   const sheetLink = [12 / 420, (297 - 12 - 6) / 297, 0.62, (297 - 12 + 1) / 297];
@@ -961,7 +1015,13 @@ async function projectPackage() {
       const link = await designLink(it.design, state.lang); links.push(link);
       state.design = it.design; state.compiled = compileOf(it.design); state.drawingCache = null; state.sheetLink = link;
       const dv = deliverables(), dir = `${String(n + 1).padStart(2, '0')}-${it.design.family}-${it.design.kind}/`, title = `AURA · ${itemName(it.design)}`;
-      files.push({name: dir + 'design.json', data: JSON.stringify({schema: SCHEMA, link, quantity: it.qty || 1, design: it.design, derived: state.compiled.meta, issues: issuesOf(it.design, state.compiled), bom: dv.bom}, null, 2)});
+      const review=technicalReview(it.design,state.compiled,issuesOf(it.design,state.compiled));
+      it.technicalReview=review;
+      const dimensions=partDimensions(state.compiled);
+      dimensionItems.push({id:it.id,quantity:it.qty||1,dimensions});
+      files.push({name:dir+'part-dimensions.json',data:JSON.stringify(dimensions,null,2)},{name:dir+'part-dimensions.csv',data:partDimensionsCsv(dimensions,it.qty||1)});
+      files.push({name: dir + 'technical-review.json',data:JSON.stringify(review,null,2)});
+      files.push({name: dir + 'design.json', data: JSON.stringify({schema: SCHEMA, link, quantity: it.qty || 1, design: it.design, derived: state.compiled.meta, issues: issuesOf(it.design, state.compiled), technicalReview:review, dimensions, bom: dv.bom}, null, 2)});
       files.push({name: dir + 'drawings.svg', data: dv.sheet.svg}, {name: dir + 'drawings.dxf', data: drawingDxf(state.compiled)}, {name: dir + 'parts.csv', data: bomCsv(dv.bom)});
       files.push({name: dir + 'open-design.html', data: linkPage(link, title)}, {name: dir + 'open-design.url', data: urlShortcut(link)});
       const url = sceneModule?.renderThumbnail(state.compiled, it.design.materials, {width: 1600, height: 1000});
@@ -970,11 +1030,14 @@ async function projectPackage() {
       summary.push(`${n + 1}. ${itemName(it.design)} × ${it.qty || 1} — ${specRows(dv.bom).map(r => r.join(': ')).join(' | ')}\n   ${link}`);
     }
   } finally { state.design = keep.design; state.compiled = keep.compiled; state.drawingCache = keep.cache; state.sheetLink = null; }
-  files.push({name: 'project.json', data: JSON.stringify({schema: SCHEMA, created: new Date().toISOString(), language: state.lang, link: pLink, items: items.map((i, n) => ({id: i.id, qty: i.qty || 1, family: i.design.family, kind: i.design.kind, style: i.design.style, link: links[n]})), room: state.room, note: 'Concept project generated by AURA Forma. Requires review by an AURA designer before production.'}, null, 2)});
+  files.push({name: 'project.json', data: JSON.stringify({schema: SCHEMA, created: new Date().toISOString(), language: state.lang, link: pLink, items: items.map((i, n) => ({id: i.id, qty: i.qty || 1, family: i.design.family, kind: i.design.kind, style: i.design.style, link: links[n],design:i.design,dimensions:dimensionItems[n].dimensions})), units:'mm', room: state.room, note: 'Concept project generated by AURA Forma. Requires review by an AURA designer before production.'}, null, 2)});
+  files.push({name:'part-dimensions.json',data:JSON.stringify({schema:'aura.project-dimensions/1',units:'mm',items:dimensionItems,production_approved:false},null,2)});
   files.push({name: 'drawings.pdf', data: jpegPdf(pages)});
   files.push({name: 'open-project.html', data: linkPage(pLink, `AURA · ${items.length} ${L('pieces')}`)}, {name: 'open-project.url', data: urlShortcut(pLink)});
-  files.push({name: state.lang === 'tr' ? 'BENIOKU.txt' : 'README.txt', data: state.lang === 'tr' ? `AURA Forma projesi (${items.length} ürün)\n\nProjenin tamamını stüdyoda açmak için:\n${pLink}\n\n${items.map((it, n) => `${n + 1}. ${itemName(it.design)} × ${it.qty || 1}\n   ${links[n]}`).join('\n')}\n\ndrawings.pdf          önce bunu açın: görseller ve her ürünün ölçülü A3 çizimi (sayfadaki bağlantı tasarımı açar)\nopen-project.html     projeyi stüdyoda açar (çift tıklayın)\nroom.jpg              ürünler odada (oda kullanıldıysa)\nNN-aile-tür/          her ürün için: parts.csv (parça ve ölçü listesi, Excel), drawings.svg (çizim, tarayıcıda açılır), drawings.dxf (CAD/CNC), render.jpg, design.json, open-design.html\nproject.json          ürün listesi, bağlantılar ve oda yerleşimi\n\nKonsept tasarımdır. Ölçü, yapı ve yapım önerileri üretimden önce tasarımcı tarafından kontrol edilmelidir.\n` : `AURA Forma project (${items.length} products)\n\nOpen the whole project in the studio:\n${pLink}\n\n${items.map((it, n) => `${n + 1}. ${itemName(it.design)} × ${it.qty || 1}\n   ${links[n]}`).join('\n')}\n\nopen-project.html     opens the whole project in the studio (double-click)\nroom.jpg              the products placed in a room (if shown)\nNN-family-kind/       per product: design.json, drawings.svg/.dxf, parts.csv (cut list), render.jpg, open-design.html\ndrawings.pdf          room view, renders and A3 drawing sheets of every product (the link on each sheet opens that design)\nproject.json          list of products, links and the room layout\n\nConcept design. Dimensions, structure and build suggestions must be checked by the designer before production.\n`});
-  return {files, summary: `${summary.join('\n')}\n\n${L('designLink')}: ${pLink}`};
+  files.push({name: state.lang === 'tr' ? 'BENIOKU.txt' : 'README.txt', data: state.lang === 'tr' ? `AURA Forma projesi (${items.length} ürün)\n\nProjenin tamamını stüdyoda açmak için:\n${pLink}\n\n${items.map((it, n) => `${n + 1}. ${itemName(it.design)} × ${it.qty || 1}\n   ${links[n]}`).join('\n')}\n\ndrawings.pdf          önce bunu açın: görseller ve her ürünün ölçülü A3 çizimi (sayfadaki bağlantı tasarımı açar)\nopen-project.html     projeyi stüdyoda açar (çift tıklayın)\nroom.jpg              ürünler odada (oda kullanıldıysa)\nNN-aile-tür/          her ürün için: parts.csv (parça ve ölçü listesi, Excel), drawings.svg (çizim, tarayıcıda açılır), drawings.dxf (CAD/CNC), render.jpg, design.json, open-design.html\npart-dimensions.json  her parçanın kimliği, yerel ve yerleştirilmiş X/Y/Z ölçüleri (mm); ürün klasöründe CSV de var\nproject.json          ürünler, tasarımlar, parça ölçüleri, bağlantılar ve oda yerleşimi\n\nKonsept tasarımdır. Ölçü, yapı ve yapım önerileri üretimden önce tasarımcı tarafından kontrol edilmelidir.\n` : `AURA Forma project (${items.length} products)\n\nOpen the whole project in the studio:\n${pLink}\n\n${items.map((it, n) => `${n + 1}. ${itemName(it.design)} × ${it.qty || 1}\n   ${links[n]}`).join('\n')}\n\nopen-project.html     opens the whole project in the studio (double-click)\nroom.jpg              the products placed in a room (if shown)\nNN-family-kind/       per product: design.json, drawings.svg/.dxf, parts.csv (cut list), render.jpg, open-design.html\ndrawings.pdf          room view, renders and A3 drawing sheets of every product (the link on each sheet opens that design)\npart-dimensions.json  every part ID and local/placed XYZ dimensions (mm); per-product CSV also included\nproject.json          products, designs, component dimensions, links and room layout\n\nConcept design. Dimensions, structure and build suggestions must be checked by the designer before production.\n`});
+  saveProject();
+  files.push({name:'technical-reviews.json',data:JSON.stringify({status:'designer_review_required',automatic_changes:false,items:items.map(i=>({id:i.id,review:i.technicalReview}))},null,2)});
+  return {files, summary: `${summary.join('\n')}\n\n${L('technicalReturn')}\n${L('technicalLimits')}\n\n${L('designLink')}: ${pLink}`};
 }
 async function downloadAs(kind) {
   // The only file a customer can take is the PDF of a design already sent to the designer.
@@ -999,7 +1062,7 @@ function applyActions(actions) {
   if (r.changed) setDesign(r.design);
   for (const a of r.effects) {
     const v = {viewFront: 'front', viewSide: 'side', viewTop: 'top', viewAngle: 'angle'}[a.name];
-    if (v) { viewer?.view(v); markView(v); notes.push(L(v === 'angle' ? 'perspective' : v)); }
+    if (v) { viewer?.view(v); markView(v); notes.push(L(v === 'angle' ? 'perspective' : v === 'side' ? 'sideDirection' : v)); }
     else if (a.name === 'colour') { if (state.sketch) setSketch(false); }
     else if (a.name === 'structure') toggleStructure();
     else if (a.name === 'photo') savePhoto();
@@ -1089,7 +1152,7 @@ function bindShell() {
     const el = e.target.closest('button, [data-load]'); if (!el) return;
     const d = el.dataset;
     if (d.act) { projectAction(el); return; }
-    if (isStorage() && (d.baycount || d.cellcolor !== undefined || d.celltype || d.cellset || d.cellop || d.bayop || d.cellauto || d.bayauto)) { layoutAction(d); return; }
+    if ((isStorage() || isBath()) && (d.baycount || d.cellcolor !== undefined || d.celltype || d.cellset || d.cellop || d.bayop || d.cellauto || d.bayauto)) { layoutAction(d); return; }
     if (d.frontSame) { setDesign({...state.design, materials: {...state.design.materials, front: {...state.design.materials.case}}}); return; }
     if (isKitchen() && (d.mtype || d.mw || d.mwall || d.mop)) { kitchenAction(d); return; }
     if (isPanel() && d.mat?.startsWith('case.') && sameFront(state.design.materials)) { const [, key] = d.mat.split('.'); const c = {...state.design.materials.case, [key]: d.value}; setDesign({...state.design, materials: {...state.design.materials, case: c, front: {...c}}}); return; }
@@ -1157,6 +1220,8 @@ function bindShell() {
   panel.addEventListener('submit', async e => {
     if (e.target.id !== 'sendForm') return; e.preventDefault();
     const fd = new FormData(e.target), ss = $('#sendState');
+    if(state.project.items.length&&state.reviewPermit!==assessmentKey()){openAssessment(true);return;}
+    state.reviewPermit=null;
     if (!state.canSend) { ss.textContent = L('sendOff'); return; }
     ss.textContent = L('working');
     try {
@@ -1177,16 +1242,16 @@ async function readImage(file) {
   if (!file) return;
   if (!state.ai.vision) { feedback(L('aiOff'), 'warn'); return; }
   feedback(L('reading'));
-  const url = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(file); });
-  const small = await shrink(url, 1400);
   try {
+    const url = await new Promise((resolve, reject) => { const fr = new FileReader(); fr.onload = () => resolve(fr.result); fr.onerror = () => reject(fr.error || new Error('Image read failed')); fr.onabort = () => reject(new Error('Image read cancelled')); fr.readAsDataURL(file); });
+    const small = await shrink(url, 1400);
     const res = await designFromImage(small, state.lang);
     setDesign(res.design);
     feedback(`${L('applied')} · ${L('estimated')}: ${res.estimated.map(k => partName('params', k, state.lang)).join(', ')}${res.notes ? ' · ' + res.notes : ''}`);
   } catch (e) { feedback(String(e.message || e), 'error'); }
 }
 async function shrink(url, max) {
-  const img = new Image(); await new Promise(r => { img.onload = r; img.src = url; });
+  const img = new Image(); await new Promise((resolve, reject) => { img.onload = resolve; img.onerror = () => reject(new Error('Image decode failed')); img.src = url; });
   const k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight)), c = document.createElement('canvas');
   c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
   return c.toDataURL('image/jpeg', 0.88);
@@ -1234,8 +1299,8 @@ async function textileScene(host, tx) {
     S.dispose = () => r.dispose(); txScene = S; addEventListener('resize', () => txScene === S && S.render());
   }
   const S = txScene; S.dyn.clear();
-  const g = P.windowTreatment({w: 1800, sill: 900, h: 1500}, 2600, tx.curtain); S.dyn.add(g);
-  if (tx.rug.on) { const rug = Hl.rugMesh(1700, 2400, tx.rug); rug.rotation.y = Math.PI / 2; rug.position.set(0.1, 0, 1.45); S.dyn.add(rug); }
+  const g = P.windowTreatment(TEXTILE_PREVIEW.window, TEXTILE_PREVIEW.ceiling_height, tx.curtain); S.dyn.add(g);
+  if (tx.rug.on) { const rug = Hl.rugMesh(TEXTILE_PREVIEW.rug.w, TEXTILE_PREVIEW.rug.d, tx.rug); rug.rotation.y = Math.PI / 2; rug.position.set(0.1, 0, 1.45); S.dyn.add(rug); }
   S.render();
 }
 function textileView() {
@@ -1252,9 +1317,11 @@ function textileView() {
     <aside class="f-editor"><nav class="f-tabs" role="tablist"><button role="tab" data-txt="curtain" aria-selected="true"><span>01</span>Perde</button><button role="tab" data-txt="rug" aria-selected="false"><span>02</span>Halı</button></nav>
       <div class="f-panel f-tx-panel"><div class="tx" id="txPanel"></div><p class="f-note">${esc(L('textileNote'))}</p><div class="f-actions"><a class="f-primary" href="ev.html">${esc(L('textileHome'))} →</a></div></div></aside>`;
   let tab = 'curtain'; const stage = $('#txStage');
-  const draw = () => { $('#txPanel').innerHTML = chooserHTML(tx, tab); $('#txSum').textContent = summary(); main.querySelectorAll('[data-txt]').forEach(b => b.setAttribute('aria-selected', b.dataset.txt === tab)); textileScene(stage, tx).catch(err => { stage.innerHTML = `<p class="f-nogl">WebGL: ${esc(err.message)}</p>`; }); };
+  const draw = () => { $('#txPanel').innerHTML = chooserHTML(tx, tab)+`<section><h3>${esc(L('technicalTitle'))}</h3><ul>${textileReview(tx).findings.map(f=>`<li>${esc(findingText(f,state.lang))}</li>`).join('')}</ul><p class="f-note">${esc(L('textileReviewScope'))}</p><p class="f-note">${esc(L('technicalLimits'))}</p><button data-txreview>${esc(L('reviewDownload'))} ↓</button></section>`; $('#txSum').textContent = summary(); main.querySelectorAll('[data-txt]').forEach(b => b.setAttribute('aria-selected', b.dataset.txt === tab)); textileScene(stage, tx).catch(err => { stage.innerHTML = `<p class="f-nogl">WebGL: ${esc(err.message)}</p>`; }); };
   const change = el => { if (applyChoice(tx, el)) { store.set(TEXTILE_KEY, tx); draw(); } };
-  main.onclick = e => { if (!state.textileView) return; const t = e.target.closest('[data-txt]'); if (t) { tab = t.dataset.txt; return draw(); }
+  main.onclick = e => { if (!state.textileView) return;
+    if(e.target.closest('[data-txreview]')){download('AURA-textile-assessment.zip',zip(textileAssessmentFiles(tx,state.lang)),'application/zip');return;}
+    const t = e.target.closest('[data-txt]'); if (t) { tab = t.dataset.txt; return draw(); }
     const v = e.target.closest('[data-txv]'); if (v && txScene) { const k = v.dataset.txv; if (k === 'genel' || k === 'yakin') txScene.close = k === 'yakin'; else txScene.night = k === 'gece';
       main.querySelectorAll('[data-txv]').forEach(b => b.setAttribute('aria-pressed', b.dataset.txv === (txScene.close ? 'yakin' : 'genel') || b.dataset.txv === (txScene.night ? 'gece' : 'gun'))); return txScene.render(); }
     const b = e.target.closest('button[data-p]'); if (b) change(b); };
