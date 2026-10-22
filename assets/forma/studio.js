@@ -1100,7 +1100,7 @@ function bindShell() {
     const el = e.target.closest('button, [data-load]'); if (!el) return;
     const d = el.dataset;
     if (d.act) { projectAction(el); return; }
-    if (isStorage() && (d.baycount || d.cellcolor !== undefined || d.celltype || d.cellset || d.cellop || d.bayop || d.cellauto || d.bayauto)) { layoutAction(d); return; }
+    if ((isStorage() || isBath()) && (d.baycount || d.cellcolor !== undefined || d.celltype || d.cellset || d.cellop || d.bayop || d.cellauto || d.bayauto)) { layoutAction(d); return; }
     if (d.frontSame) { setDesign({...state.design, materials: {...state.design.materials, front: {...state.design.materials.case}}}); return; }
     if (isKitchen() && (d.mtype || d.mw || d.mwall || d.mop)) { kitchenAction(d); return; }
     if (isPanel() && d.mat?.startsWith('case.') && sameFront(state.design.materials)) { const [, key] = d.mat.split('.'); const c = {...state.design.materials.case, [key]: d.value}; setDesign({...state.design, materials: {...state.design.materials, case: c, front: {...c}}}); return; }
