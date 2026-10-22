@@ -10,6 +10,7 @@ import {migrate, merged, chooserHTML, applyChoice, TEXTILE_CSS, TEXTILE_KEY} fro
 import {curtains, STATES as PSTATES} from './perde.js?v=20261021e';
 
 const $ = s => document.querySelector(s), NS = 'http://www.w3.org/2000/svg';
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
 const val = q => (q && typeof q === 'object' ? q.value : q) ?? 0;
 const S = {view: 'plan', room: null, name: ''}, hooks = {};
 const COLORS = {living: '#ecd7ae', kitchen: '#cddbbf', bath: '#bbdce1', wc: '#a9cfd7', hall: '#eee9df', bedroom: '#ccdae7', utility: '#ded5e3', other: '#d4e0e5', balcony: '#d3e4bf', terrace: '#d3e4bf', stair: '#d5cce4', study: '#e4dccb', dining: '#ecd7ae'};
@@ -288,7 +289,7 @@ const DEC = {tab: 'curtain'};
 function decorUI() {
   const el = $('#dekor'); el.hidden = S.view === 'plan'; if (el.hidden) return;
   const sp = D.spaces.find(x => x.id === S.room), t = merged(D.decor, sp?.decor);
-  el.innerHTML = `<div class="dk-tabs"><button data-dt="curtain" aria-pressed="${DEC.tab === 'curtain'}">Perde</button><button data-dt="rug" aria-pressed="${DEC.tab === 'rug'}">Halı</button><span>${sp ? (sp.name || NAMES[sp.kind] || 'Oda').replace(/\s+\d+$/, '') + (sp.decor ? ' · odaya özel' : ' · ev geneli') : 'Bütün ev'}</span></div>
+  el.innerHTML = `<div class="dk-tabs"><button data-dt="curtain" aria-pressed="${DEC.tab === 'curtain'}">Perde</button><button data-dt="rug" aria-pressed="${DEC.tab === 'rug'}">Halı</button><span>${sp ? esc((sp.name || NAMES[sp.kind] || 'Oda').replace(/\s+\d+$/, '')) + (sp.decor ? ' · odaya özel' : ' · ev geneli') : 'Bütün ev'}</span></div>
   <div class="tx">${chooserHTML(t, DEC.tab, {compact: true})}</div>${sp?.decor ? '<button data-dr="1" class="dk-reset">Ev geneline dön</button>' : ''}`;
 }
 { const D0 = $('#dekor'), st = document.createElement('style'); st.textContent = TEXTILE_CSS; document.head.append(st);
@@ -326,7 +327,7 @@ function layoutPanel() {
   return `<h2>Mobilya yerleşimi</h2><p class="note">${its.length} ürün · kurallar: kapı açılışı, pencere, geçiş payları, TV–kanepe, masa–mutfak.</p>
   <div class="ev-row" style="display:flex;gap:6px;flex-wrap:wrap"><button data-lay="solve">Yerleşim önerileri</button></div>
   <p class="note">Proje katmanı: ${rr.length ? rr.map(x => `halı ${x.size[0] / 10}×${x.size[1] / 10}`).join(', ') : 'halı yok'} · ${ll.map(x => LN[x.kind]).join(', ') || 'ışık yok'}</p>
-  ${res ? (res.ok ? `${''}<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">${res.alternatives.map((a, i) => `<button data-lay="alt" data-i="${i}" aria-pressed="${LAY.pick === i}">Seçenek ${i + 1}</button>`).join('')}</div><p class="note">${res.alternatives[LAY.pick].notes.join(' · ')}</p>` : `<p class="note" style="color:#a63030">${res.reason}.</p>`) : ''}`;
+  ${res ? (res.ok ? `${''}<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">${res.alternatives.map((a, i) => `<button data-lay="alt" data-i="${i}" aria-pressed="${LAY.pick === i}">Seçenek ${i + 1}</button>`).join('')}</div><p class="note">${res.alternatives[LAY.pick].notes.map(esc).join(' · ')}</p>` : `<p class="note" style="color:#a63030">${esc(res.reason)}.</p>`) : ''}`;
 }
 async function layoutAction(b) { try { await layoutRun(b); } catch (err) { console.error('layout', err); LAY.res = {ok: false, reason: 'Yerleşim hesaplanamadı: ' + err.message}; side(); } }
 async function layoutRun(b) {
@@ -340,16 +341,16 @@ function finishPanel() {
   const r = D.spaces.find(x => x.id === S.room), f = r && finishOf(r);
   return `<h2>Renk ve zemin · öneri</h2><select id="scheme">${Object.entries(SCHEMES).map(([k, v]) => `<option value="${k}" ${(D.scheme || 'iskandinav') === k ? 'selected' : ''}>${v.name}</option>`).join('')}</select>
   <p class="note">Bütün eve uygulanır; odayı seçip ayrıca değiştirebilirsiniz. Boya ve kaplamayı AURA yapmaz, önerir.</p>
-  ${r ? `<p class="note"><b>${(r.name || NAMES[r.kind] || 'Oda').replace(/\s+\d+$/, '')}</b> · duvar</p><div class="sw">${PAINTS.map(([id, n, hex]) => `<button data-paint="${id}" title="${n}" aria-pressed="${f.wall === id}" style="background:${hex}"></button>`).join('')}</div>
+  ${r ? `<p class="note"><b>${esc((r.name || NAMES[r.kind] || 'Oda').replace(/\s+\d+$/, ''))}</b> · duvar</p><div class="sw">${PAINTS.map(([id, n, hex]) => `<button data-paint="${id}" title="${n}" aria-pressed="${f.wall === id}" style="background:${hex}"></button>`).join('')}</div>
   <label class="note" style="display:block;margin:8px 0">Zemin <select id="floorPick">${Object.entries(FLOORS).map(([id, v]) => `<option value="${id}" ${f.floor === id ? 'selected' : ''}>${v.name}</option>`).join('')}</select></label>` : '<p class="note">Bir oda seçin.</p>'}`;
 }
 function pick(id) { S.room = id; side(); decorUI(); if (S.view === 'plan') drawPlan(); else show(S.view); }
 function side() {
   const tot = D.spaces.reduce((s, x) => s + area(x.boundary_xy_mm), 0), real = /gercek-|licensed|plan_import/.test(S.name + JSON.stringify(D.walls[0] || {}));
-  $('#side').innerHTML = `<h2>Plan</h2><select id="pickPlan">${EXAMPLES.map(([f, t]) => `<option value="${f}" ${f === S.name ? 'selected' : ''}>${t}</option>`).join('')}${EXAMPLES.some(e => e[0] === S.name) ? '' : `<option selected>${S.name}</option>`}</select>
+  $('#side').innerHTML = `<h2>Plan</h2><select id="pickPlan">${EXAMPLES.map(([f, t]) => `<option value="${f}" ${f === S.name ? 'selected' : ''}>${t}</option>`).join('')}${EXAMPLES.some(e => e[0] === S.name) ? '' : `<option selected>${esc(S.name)}</option>`}</select>
   <label class="note" style="display:block;margin-top:8px">Plan dosyası aç (EV JSON) <input type="file" id="openFile" accept=".json,application/json"></label>
   <p class="note">${real ? 'Gerçek konut planı: Swiss Dwellings (Archilyse AG), CC BY 4.0. Ölçüye uyarlanmış; tasarımcı onayı gerekir.' : 'Sentetik örnek (gerçek ev değil).'} Ölçüler mm, alanlar net iç ölçüden. Kuzey yukarı.</p>
-  <h2>Odalar · ${tot.toFixed(1)} m²</h2>${D.spaces.map(s => `<div class="room ${S.room === s.id ? 'on' : ''}" data-pick="${s.id}"><b><i style="display:inline-block;width:10px;height:10px;background:${COLORS[s.kind] || '#ddd'};margin-right:6px;border:1px solid #b7bab8"></i>${(s.name || NAMES[s.kind] || 'Oda').replace(/\s+\d+$/, '')}</b><span>${area(s.boundary_xy_mm).toFixed(1)} m²</span></div>`).join('')}
+  <h2>Odalar · ${tot.toFixed(1)} m²</h2>${D.spaces.map(s => `<div class="room ${S.room === s.id ? 'on' : ''}" data-pick="${esc(s.id)}"><b><i style="display:inline-block;width:10px;height:10px;background:${COLORS[s.kind] || '#ddd'};margin-right:6px;border:1px solid #b7bab8"></i>${esc((s.name || NAMES[s.kind] || 'Oda').replace(/\s+\d+$/, ''))}</b><span>${area(s.boundary_xy_mm).toFixed(1)} m²</span></div>`).join('')}
   ${layoutPanel()}
   ${finishPanel()}
   ${hooks.panel?.() || ''}
