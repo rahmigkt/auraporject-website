@@ -46,7 +46,7 @@ function home(){
  document.getElementById('main').innerHTML=siteHeader(lang,{switcher:true})+`<section class="h-hero"><div class="h-text"><p class="h-eye">${t('eye',lang)}</p><h1>${t('h1',lang)}</h1><p class="h-lead">${t('lead',lang)}</p>
  <ol class="h-steps">${t('steps',lang).map((s,i)=>`<li><span>0${i+1}</span>${esc(s)}</li>`).join('')}</ol></div>
  <figure class="h-sheet"><a href="tasarla.html?lang=${lang}" aria-label="${esc(t('design',lang))}"><div id="homeSketch" class="h-sketch" aria-hidden="true"></div></a><figcaption>${t('note',lang)}</figcaption></figure></section>
- <section class="h-pick"><h2>${t('pick',lang)}</h2><ul>${fams.map(([f,href],i)=>`<li><a href="${href}${href.includes('?')?'&':'?'}lang=${lang}"><span class="h-n">0${i+1}</span><b>${t(f,lang)}</b><small>${t(f+'Sub',lang)}</small><span class="h-go">→</span></a></li>`).join('')}</ul></section>
+ <section id="kategoriler" class="h-pick"><h2>${t('pick',lang)}</h2><ul>${fams.map(([f,href],i)=>`<li><a href="${href}${href.includes('?')?'&':'?'}lang=${lang}"><span class="h-n">0${i+1}</span><b>${t(f,lang)}</b><small>${t(f+'Sub',lang)}</small><span class="h-go">→</span></a></li>`).join('')}</ul></section>
  <section class="h-ai"><div><h2>${t('aiTitle',lang)}</h2><p>${t('aiText',lang)}</p></div><a href="sohbet.html">${t('aiCta',lang)}</a></section>`+siteFooter(lang);
  document.getElementById('homeLang').onchange=e=>{try{localStorage.setItem('aura-forma-lang',JSON.stringify(e.target.value));}catch{}const u=new URL(location.href);u.searchParams.set('lang',e.target.value);history.replaceState(null,'',u);home();};
  drawSketch(document.getElementById('homeSketch')).catch(()=>{});
