@@ -1,0 +1,81 @@
+{
+  "status": "implementation_delivered_draft;full_acceptance_open",
+  "at": "2026-10-22T22:14:24.918611+00:00",
+  "pr": 261,
+  "url": "https://github.com/rahmigkt/auraporject-website/pull/261",
+  "source_code_commit": "001846a231bbd12c88fff684f0206bb597d5dacc",
+  "base": "abb449189fe4f359d2c234a8e8771e42db93798d",
+  "source_files": {
+    "tools/egitim/puanla.mjs": {
+      "sha256": "bc097a21e921cdd5b21863b12dd4b69f1e88f6ef81519ac7c22d063d4e16248a",
+      "lines": 183
+    },
+    "tools/egitim/strict-json.mjs": {
+      "sha256": "6ab8d9878e8eec2d54c47ccbb03fed690040ffb9f2ec97575fedcad514d136d6",
+      "lines": 53
+    },
+    "tools/egitim/PUANLAYICI.md": {
+      "sha256": "148e134c0f41741241be5181c61d9f87b70ebc56df446d523f76903f47f2a8f1",
+      "lines": 61
+    },
+    "tests/egitim-puanla-check.mjs": {
+      "sha256": "4a7c5e05d1c71fcb41ff7596869e4ffa59241cd4c9b44e57000898444bcf4e6b",
+      "lines": 122
+    }
+  },
+  "engine_tree_sha256": "192cdba46c1d288b556de1b822b565581a18b4896d93d296648ca9629d64c701",
+  "engine_tree_unchanged_from_main": true,
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "independent_Claude_review": false,
+  "review_scope": "Second pass of four new E1 files, fresh synthetic control results and full-suite failures; not native-language or real model output approval.",
+  "targeted_checks": 51,
+  "existing_motor_checks": 24,
+  "full_suite": {
+    "initial_pass": 97,
+    "total": 117,
+    "exit_code": 1,
+    "dependency_reruns": 12,
+    "dependency_recovered": 11,
+    "latest_pass": 108,
+    "unresolved": [
+      "tests/ev-arap-olculu-check.mjs",
+      "tests/hacim-istek-check.mjs",
+      "tests/qwen-studio-data-check.mjs",
+      "tests/qwen-training-plan-check.py",
+      "tests/toparlama-bicim-check.py",
+      "tests/toparlama-katalog-check.py",
+      "tests/toparlama-sinav-check.mjs",
+      "tests/toparlama-sinav-prompt-check.mjs",
+      "tests/text-eval/verify-stage1.mjs"
+    ],
+    "environment_fix": "Existing C:/Users/User/Documents/Codex/ev-plan-deps supplied via PYTHONPATH; no installation or gate modification.",
+    "source_timing": "Full suite started before final E1 edits: its E1 job covered 39 controls. The final committed E1 source was separately rerun with 51 controls. Other tested source files are unchanged by E1."
+  },
+  "forma": {
+    "current_run_pass": true,
+    "current_ms": 90768,
+    "prior_180s_timeout_preserved_as_historical_evidence": true
+  },
+  "acceptance": "Not all green. Do not mark E1 full acceptance complete or erase stale source/catalogue/review gates.",
+  "limits": [
+    "Language lexicons only identify some wrong-language cues; native confirmation pending.",
+    "Factual prose and no-action intent semantics require trusted review; delivery mention/negation is not an automated verdict.",
+    "SOZLUK format check covers minimum fields, not complete optional/nested schema.",
+    "Full reference replay may conservatively reject alternate equivalent layouts; no model or training readiness claim.",
+    "Review SHA binds content but does not authenticate reviewer identity; caller owns authorization.",
+    "Frozen H5 graders, outputs and source gates unchanged; no closed-exam tuning or rescoring.",
+    "Full site/vendor/mobile audit, 390px camera clipping, materials/joints and Postiz external setup remain incomplete."
+  ],
+  "model_run": false,
+  "training_started": false,
+  "gpu": false,
+  "paid_operations": false,
+  "merge": false,
+  "deployment": false,
+  "next": [
+    "E2 filtering CPU dry-run preparation using this shared scorer; candidates stay quarantined.",
+    "Track the nine unresolved full-suite source/evidence/catalogue gates separately without silently refreshing approval.",
+    "Continue independent remaining site/vendor/mobile review."
+  ]
+}
