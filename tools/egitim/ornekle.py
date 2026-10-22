@@ -23,6 +23,9 @@ def save(p,x):Path(p).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n',
 def rows(p):return [json.loads(x) for x in Path(p).read_text(encoding='utf-8').splitlines() if x]
 def dump(x):return json.dumps(x,ensure_ascii=False,separators=(',',':'))
 def now():return datetime.now(timezone.utc).isoformat()
+def generation_truncated(response):
+ # Native `truncated` refers to context; token-limit completion is stop_type.
+ return bool(response.get('truncated') or response.get('stop_type')=='limit' or response.get('stopped_limit'))
 def code_files():return ['tools/egitim/ornekle.py','tools/egitim/e2-istekler.mjs','tools/egitim/puanla.mjs','tools/egitim/strict-json.mjs','tools/qwen-local/egitim01_features.py']
 def engine():
  names=subprocess.check_output(['git','ls-files','-z','--','assets','tools/studyo-motoru'],cwd=ROOT).decode().split('\0')
@@ -51,8 +54,8 @@ def prepare(a):
   'required_model_sha256':MODEL_SHA,
   'model_identity':'Qwen/Qwen3.5-0.8B Q8_0; untrained AURA control, not Qwen-EGITIM-01',
   'tokenizer':str(a.tokenizer.resolve()),'tokenizer_files':tok.file_hashes,'runtime':str(runtime),
-  'runtime_files':{f.name:sha(f) for f in runtime.iterdir() if f.is_file()},'settings':SETTINGS,'samples_per_request':4,
-  'production_samples_per_request':8,'expected_requests':20,'expected_attempts':80,'seeds':[20261023+i for i in range(4)],
+  'runtime_files':{f.name:sha(f) for f in runtime.iterdir() if f.is_file()},'settings':SETTINGS,'samples_per_request':a.samples,
+  'production_samples_per_request':8,'expected_requests':20,'expected_attempts':20*a.samples,'seeds':[20261023+i for i in range(a.samples)],
   'threads':6,'context':8192,'condition':'raw_sampled','selection_threshold':THRESHOLD,
   'files':{f:sha(out/f) for f in ['tasks.jsonl','prompts.jsonl']},'source_files':{f:sha(ROOT/f) for f in code_files()},
   'input_files':{str(Path(f).resolve()):sha(f) for f in [c['h4'],c['train'],c['dev'],*c['exams']]},
@@ -60,7 +63,7 @@ def prepare(a):
   'engine_working_files_sha256':engine(),'code_sha':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
   'data_checks':build['checks'],'model_run':False,'training_started':False,'training_approved':False,'no_schema_constraint':True}
  assert p['model_sha256']==p['required_model_sha256']
- save(out/'PROTOCOL.json',p);print(dump({'prepared':20,'attempts':80,'tokenizer_masks_checked':20,'max_prompt_tokens':max(len(x['token_ids']) for x in prompts)}),flush=True)
+ save(out/'PROTOCOL.json',p);print(dump({'prepared':20,'attempts':p['expected_attempts'],'tokenizer_masks_checked':20,'max_prompt_tokens':max(len(x['token_ids']) for x in prompts)}),flush=True)
 def verify(out,p):
  assert sha(p['model'])==p['model_sha256']==p['required_model_sha256']==MODEL_SHA
  for base,table in [(out,p['files']),(ROOT,p['source_files']),(Path(p['runtime']),p['runtime_files']),(Path(p['tokenizer']),p['tokenizer_files'])]:
@@ -112,7 +115,7 @@ def run(a):
  with exclusive(out):
   verify(out,p);prompts=rows(out/'prompts.jsonl');journal=out/'predictions.jsonl';prior=rows(journal) if journal.exists() else []
   seen={(r['id'],r['sample']) for r in prior};assert len(seen)==len(prior)
-  valid={(r['id'],s) for r in prompts for s in range(4)};assert seen<=valid
+  valid={(r['id'],s) for r in prompts for s in range(p['samples_per_request'])};assert seen<=valid
   with Server(out,p) as server:
    for r in prompts:assert server.http('/tokenize',{'content':r['prompt'],'add_special':False,'parse_special':True})['tokens']==r['token_ids']
    save(out/'runtime-tokenizer-match.json',{'checked':20,'exact_matches':20,'at':now()})
@@ -123,21 +126,21 @@ def run(a):
       begin=time.monotonic();record={'id':r['id'],'sample':sample,'seed':seed,'at':now()}
       try:
        response=server.http('/completion',{**p['settings'],'seed':seed,'prompt':r['prompt']})
-       record.update(status='ok',output=response.get('content',''),truncated=bool(response.get('truncated') or response.get('stopped_limit')),response=response)
+       record.update(status='ok',output=response.get('content',''),truncated=generation_truncated(response),response=response)
       except Exception as e:record.update(status='error',output='',error=str(e),truncated=False)
       record['seconds']=time.monotonic()-begin;f.write(dump(record)+'\n');f.flush();os.fsync(f.fileno());seen.add((r['id'],sample))
-      print(dump({'completed':len(seen),'total':80,'id':r['id'],'sample':sample,'status':record['status']}),flush=True)
-  verify(out,p);assert len(seen)==80
-  save(out/'RUN-COMPLETE.json',{'at':now(),'attempts':80,'journal_sha256':sha(journal),'protocol_sha256':sha(out/'PROTOCOL.json'),'server_closed':True,'training_started':False})
+      print(dump({'completed':len(seen),'total':p['expected_attempts'],'id':r['id'],'sample':sample,'status':record['status']}),flush=True)
+  verify(out,p);assert len(seen)==p['expected_attempts']
+  save(out/'RUN-COMPLETE.json',{'at':now(),'attempts':len(seen),'journal_sha256':sha(journal),'protocol_sha256':sha(out/'PROTOCOL.json'),'server_closed':True,'training_started':False})
 def score(a):
  out=a.output.resolve();p=json.loads((out/'PROTOCOL.json').read_text(encoding='utf-8'));verify(out,p)
  assert a.protocol_sha==sha(out/'PROTOCOL.json'),'Explicit reviewed protocol SHA required'
  done=json.loads((out/'RUN-COMPLETE.json').read_text(encoding='utf-8'));assert sha(out/'predictions.jsonl')==done['journal_sha256']
- tasks={r['id']:r for r in rows(out/'tasks.jsonl')};predictions=rows(out/'predictions.jsonl');assert len(predictions)==80
+ tasks={r['id']:r for r in rows(out/'tasks.jsonl')};predictions=rows(out/'predictions.jsonl');assert len(predictions)==p['expected_attempts']
  inputs=[{**tasks[r['id']],'text':r['output'],'generation':{'condition':'raw_sampled','status':r['status'],'truncated':r['truncated']}} for r in predictions]
  (out/'score-input.jsonl').write_text(''.join(dump(x)+'\n' for x in inputs),encoding='utf-8',newline='\n')
  scores=[json.loads(x) for x in subprocess.check_output(['node','tools/egitim/puanla.mjs',str(out/'score-input.jsonl')],cwd=ROOT,text=True,encoding='utf-8').splitlines()]
- assert len(scores)==80
+ assert len(scores)==p['expected_attempts']
  candidates=[];hard=[]
  for id,t in tasks.items():
   subset=[(r,s) for r,s in zip(predictions,scores) if r['id']==id]
@@ -147,10 +150,10 @@ def score(a):
    candidates.append({'id':id,'producer':'Qwen3.5-0.8B-untrained-CPU','intended_future_producer':'Qwen-EGITIM-01',
     'source':t['source'],'state':t['state'],'user':t['user'],'output':r['output'],'score':s,'sample':r['sample'],
     'review':{'status':'quarantine','required_reviewer':'Claude or explicitly authorized reviewer','training_approved':False}})
-  else:hard.append({'id':id,'user':t['user'],'source':t['source'],'attempts':4,'reasons':[s['components'] for _,s in subset]})
+  else:hard.append({'id':id,'user':t['user'],'source':t['source'],'attempts':p['samples_per_request'],'reasons':[s['components'] for _,s in subset]})
  for name,data in [('scores.jsonl',scores),('candidates.jsonl',candidates),('hard-requests.jsonl',hard)]:
   (out/name).write_text(''.join(dump(x)+'\n' for x in data),encoding='utf-8',newline='\n')
- report={'attempts':80,'requests':20,'mechanical_candidates':len(candidates),'hard_requests':len(hard),'training_approved':0,
+ report={'attempts':p['expected_attempts'],'requests':len(tasks),'mechanical_candidates':len(candidates),'hard_requests':len(hard),'training_approved':0,
   'transport_errors':sum(r['status']!='ok' for r in predictions),'truncated':sum(r['truncated'] for r in predictions),
   'components':{k:{v:sum(s['components'][k]['status']==v for s in scores) for v in ['pass','fail','review']} for k in scores[0]['components']},
   'score_lower_bounds':[s['score_lower_bound'] for s in scores],'threshold':THRESHOLD,'threshold_selected_before_sampling':True,
@@ -159,4 +162,4 @@ def score(a):
 if __name__=='__main__':
  p=argparse.ArgumentParser();p.add_argument('command',choices=['prepare','run','score']);p.add_argument('--output',type=Path,required=True)
  for name in ['config','model','tokenizer','runtime']:p.add_argument('--'+name,type=Path)
- p.add_argument('--protocol-sha');a=p.parse_args();{'prepare':prepare,'run':run,'score':score}[a.command](a)
+ p.add_argument('--samples',type=int,choices=[4,8],default=8);p.add_argument('--protocol-sha');a=p.parse_args();{'prepare':prepare,'run':run,'score':score}[a.command](a)

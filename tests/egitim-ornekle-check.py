@@ -14,7 +14,7 @@ for i in range(20):
   pred.append({'id':f'unit-{i}','sample':n,'output':json.dumps({'reply':'Işık sıcaklığını değiştirdim.','actions':[op] if good else []},ensure_ascii=False),'status':'ok','truncated':False})
 def lines(f,a):f.write_text(''.join(json.dumps(x,ensure_ascii=False)+'\n' for x in a),encoding='utf-8')
 lines(out/'tasks.jsonl',tasks);lines(out/'predictions.jsonl',pred)
-m.save(out/'PROTOCOL.json',{'model_identity':'fabricated unit test','data_checks':{}})
+m.save(out/'PROTOCOL.json',{'model_identity':'fabricated unit test','data_checks':{},'samples_per_request':4,'expected_attempts':80})
 m.save(out/'RUN-COMPLETE.json',{'journal_sha256':m.sha(out/'predictions.jsonl')})
 # Bypass heavyweight file verification only for this isolated test double. The
 # production CLI has no bypass switch; the real run must verify every pin.
@@ -27,6 +27,19 @@ candidates=m.rows(out/'candidates.jsonl');assert all(r['sample']==1 for r in can
 assert all(r['review']['status']=='quarantine' and not r['review']['training_approved'] for r in candidates)
 assert all(r['producer']=='Qwen3.5-0.8B-untrained-CPU' for r in candidates)
 assert len(m.rows(out/'scores.jsonl'))==80
+# Production-size sampling loop selection is tested with fabricated responses;
+# this does NOT start another model run or imply trained-checkpoint readiness.
+more=[]
+for r in pred:
+ more.append(r);more.append({**r,'sample':r['sample']+4})
+lines(out/'predictions.jsonl',more)
+m.save(out/'PROTOCOL.json',{'model_identity':'fabricated k8 test','data_checks':{},'samples_per_request':8,'expected_attempts':160})
+m.save(out/'RUN-COMPLETE.json',{'journal_sha256':m.sha(out/'predictions.jsonl')})
+args.protocol_sha=m.sha(out/'PROTOCOL.json')
+with contextlib.redirect_stdout(io.StringIO()):m.score(args)
+assert len(m.rows(out/'scores.jsonl'))==160
+assert len(m.rows(out/'candidates.jsonl'))==10 and len(m.rows(out/'hard-requests.jsonl'))==10
+assert all(r['sample']==1 for r in m.rows(out/'candidates.jsonl'))
 try:m.score(types.SimpleNamespace(output=out,protocol_sha='0'*64))
 except AssertionError:pass
 else:raise AssertionError('Protocol tamper accepted')
@@ -36,4 +49,4 @@ except AssertionError:pass
 else:raise AssertionError('Journal mutation accepted')
 m.verify=original
 assert m.SETTINGS['temperature']==0.8 and m.THRESHOLD==4/6
-print('PASS E2 fabricated 80-attempt selection:10 candidates/10 hard;stable tie,empty-action rejection,quarantine,actual producer,protocol/journal mutation rejection;no model inference')
+print('PASS E2 fabricated k4/k8 selection (80/160 attempts):10 candidates/10 hard;stable tie,empty-action rejection,quarantine,actual producer,protocol/journal mutation rejection;no model inference')
