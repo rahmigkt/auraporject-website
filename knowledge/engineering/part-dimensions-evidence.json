@@ -1,0 +1,92 @@
+{
+  "at": "2026-10-22T14:46:02.913Z",
+  "base_sha": "6055e12020a653576250e5cc00d83868d640e8a6",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "scope": "Dimension extraction/export and unit contracts only; full-site audit and whole-product engineering remain incomplete",
+  "tests": [
+    {
+      "command": "node tests/part-dimensions-check.mjs",
+      "exit_code": 0,
+      "stdout": "{\"status\":\"PASS\",\"models\":{\"seating\":90,\"table\":150,\"storage\":142,\"kitchen\":30,\"bath\":33},\"parts\":21546,\"unavailable\":[],\"controls\":[\"rotated axes\",\"designer scaling/removal\",\"explicit missing geometry\",\"button members\",\"source preservation\",\"10home products with bedroom compatibility\",\"room/wall/opening measures\",\"unsupported design\",\"re-export refresh\"]}",
+      "stderr": ""
+    },
+    {
+      "command": "node tests/legacy-dimensions-check.mjs",
+      "exit_code": 0,
+      "stdout": "PASS14guided families + Ritmo part-unit mapping; m-to-mm conversion; rotated extents; source preservation; invalid size; textile preview explicitly separate from real site measurements",
+      "stderr": ""
+    },
+    {
+      "command": "node tests/dimension-package-check.mjs",
+      "exit_code": 0,
+      "stdout": "PASS actual project-dimension ZIP route;5families;quantity2;complete per-part rows;real ZIP bytes;actual EV save handler adds10products and wall/opening/room summaries;no mutation/send",
+      "stderr": ""
+    },
+    {
+      "command": "node tests/technical-package-check.mjs",
+      "exit_code": 0,
+      "stdout": "PASS actual package function: two models, fresh per-model+aggregate reports, original model/editor preserved, render failure restoration; no external send",
+      "stderr": ""
+    },
+    {
+      "command": "node tests/assessment-send-check.mjs",
+      "exit_code": 0,
+      "stdout": "PASS actual submit handler with mocks: first click no send; current confirmed assessment sends once; edited design requires new assessment; backend unavailable blocks network",
+      "stderr": ""
+    },
+    {
+      "command": "node tests/choice-flow-check.mjs",
+      "exit_code": 0,
+      "stdout": "PASS 463 option variants across 14 complete family flows; fixed seats, rounded/sloped arms, back variants, chaise, round tops, project hand-off.\nPASS continuous back support for 9 armless seating variants",
+      "stderr": ""
+    },
+    {
+      "command": "node tests/ritmo-check.mjs",
+      "exit_code": 0,
+      "stdout": "PASS 324 cabinet assemblies: part bounds, positive dimensions, stable identities, 2–5 bays, BOM, save/restore and independent compartment changes.",
+      "stderr": ""
+    },
+    {
+      "command": "node tests/textile-assessment-check.mjs",
+      "exit_code": 0,
+      "stdout": "PASS actual textile download handler; selected configuration + advisory notes; explicit separate scope; no mutation or external submission",
+      "stderr": ""
+    }
+  ],
+  "code_sha256_lf": {
+    "assets/choice-flow.js": "f62f32314185149588df5983fcd073bbf5d3d6b25cfcda861780208eb80e7a61",
+    "assets/ev/edit.js": "43c50bc382df593e01d51a5df0f7c80a9427067023d47a251a597bbb31f65181",
+    "assets/forma/atelier.js": "85a24bb143fb444ede73dda650e1d6c67be1fc395e2092cfd40b6010af6b85f2",
+    "assets/forma/i18n.js": "e8a2e48428a2619a8679830a6ec1a0b8eaaaebd07343f1eff8907a9fb3b2dd91",
+    "assets/forma/review-document.js": "1ae04ea7a5d2436f8380ec9cbfa68828215c369aa7031a5eacf4faecf98981a9",
+    "assets/forma/studio.js": "60d57b10c2743c00b57d3dcef308eb3cefec05d9ff3c64889370c66a0ac40927",
+    "assets/ritmo-model.js": "63478b6fbbc105866f1b92960d8e35cd2ad25ffb58c642162f124b453608f494",
+    "tests/technical-package-check.mjs": "24504fa3dd917381634f55034472640d5cd12933846ab66833223c6904c33b65",
+    "assets/component-dimensions.js": "efd5c8237f1cf838c78116815b543139048cba23c132b75767d4bf6383e801d0",
+    "assets/ev/project-dimensions.js": "91c5dcae51d2630d0cd17f81b68e2b77372324dee0a5885c10248b72a4149aee",
+    "assets/forma/dimension-package.js": "7be3378f36fa5f5a6aa0e55e467747882339a6017d41e9ff0e54fffd5ae87123",
+    "assets/forma/part-dimensions.js": "eba5208bac34e6eb8af1d53594490582b2a93ecb3868bd4cffacdd2715da1f1a",
+    "assets/forma/textile-preview.js": "825d1e1723c4b8072f7710411fa42c27dec1545a4a7e202a4322c23eabb1cb74",
+    "tests/dimension-package-check.mjs": "1e971c269097971578ef943453dd3a509e48fe1e031e427373c19059ff96350d",
+    "tests/legacy-dimensions-check.mjs": "f90e6e5bf5a4d5785d4971b0d3474a017dfa6630d11fe650b3005f545dac3690",
+    "tests/part-dimensions-check.mjs": "3d6b5635361615ab3906617cf55a81de62416ed94cb6292ab180073705910003"
+  },
+  "browser": {
+    "origin": "http://127.0.0.1:8885/dimension-preview/",
+    "observed": [
+      "Designer shows Part dimensions mm CSV button",
+      "Studio design dimension caption and saved-project measurement download button",
+      "390x844project measurement button + explanation readable",
+      "EV plan loads with imported measurement export module"
+    ],
+    "limitations": [
+      "No completed native browser-download file receipt; actual handlers and real ZIP generation verified locally",
+      "No production form/send/WhatsApp actions",
+      "No full physical mobile/touch audit"
+    ],
+    "viewport_reset": true
+  },
+  "prior_full_suite_timeout": "Forma180s open",
+  "production_approved": false
+}

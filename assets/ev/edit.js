@@ -1,3 +1,4 @@
+import {projectWithDimensions} from './project-dimensions.js';
 // AURA ev planı — plan editor: draw walls, move corners, add doors and windows, rename rooms. Edits the same
 // EV record the plan, maquette and 3D views read, so every change shows everywhere. Undo/redo and a local draft.
 const SNAP_PX = 14, GRID = 10, ANGLE = 6 * Math.PI / 180;
@@ -146,7 +147,7 @@ export function install(ev) {
     if (a === 'redo' && E.redo.length) { E.undo.push(snap()); restore(E.redo.pop()); }
     if (a === 'del') del();
     if (a === 'addDoor' || a === 'addWin') { const w = wallOf(E.sel.id); push(); const o = addOpening(w, w.L / 2, a === 'addDoor' ? 'door' : 'window'); if (o) E.sel = {type: 'op', id: o.id}; else E.undo.pop(); commit(); }
-    if (a === 'save') { const u = URL.createObjectURL(new Blob([JSON.stringify(ev.D, null, 1)], {type: 'application/json'})), l = document.createElement('a'); l.href = u; l.download = `aura-ev-plani-${new Date().toISOString().slice(0, 10)}.json`; l.click(); setTimeout(() => URL.revokeObjectURL(u), 1000); }
+    if (a === 'save') { const u = URL.createObjectURL(new Blob([JSON.stringify(projectWithDimensions(ev.D), null, 1)], {type: 'application/json'})), l = document.createElement('a'); l.href = u; l.download = `aura-ev-plani-${new Date().toISOString().slice(0, 10)}.json`; l.click(); setTimeout(() => URL.revokeObjectURL(u), 1000); }
     return true;
   };
   hooks.change = e => {

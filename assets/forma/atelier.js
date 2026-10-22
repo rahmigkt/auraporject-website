@@ -13,6 +13,7 @@ import {drawingSheet} from './drawing.js';
 import {t} from './i18n.js';
 import {autoCorrectDesign,reviewDesign} from './auto-correct.js';
 import {findingText} from './review-document.js';
+import {partDimensions,partDimensionsCsv} from './part-dimensions.js';
 
 const $ = s => document.querySelector(s);
 const NAMES = {top: 'Tabla', 'back-panel': 'Arka panel', apron: 'Kayıt', leg: 'Ayak', 'case-top': 'Üst tabla', 'vanity-top': 'Lavabo tezgahı', 'mirror-frame': 'Ayna arkalığı', mirror: 'Ayna camı', 'arm-post': 'Kol dikmesi',
@@ -533,7 +534,7 @@ function renderPanel() {
   <p class="a-note">Noktayı sürükleyin; eğriye dokunarak nokta ekleyin; noktaya uzun basarak silin. İki parmakla yakınlaştırın. Kesik çizgi özgün biçimdir.</p>` : '<p class="a-note">Biçimlendirmek için bir parça seçin.</p>'}
   ${versionPanel()}
   <h2>Fizik ve üretim</h2><ul class="a-checks" id="checks"></ul>
-  <h2>Teslim</h2><div class="a-acts"><button class="f-primary" data-act="prod">Üretime gönder →</button><button data-act="link">Bağlantıyı kopyala</button><button data-act="dxf">CNC (DXF) ↓</button><button data-act="pdf">Sunum PDF ↓</button><button data-act="glb">3B model (GLB) ↓</button><button data-act="stl">STL (3B yazıcı) ↓</button><button data-act="cut">Kesim listesi ↓</button><button data-act="json">design.json ↓</button></div>
+  <h2>Teslim</h2><div class="a-acts"><button class="f-primary" data-act="prod">Üretime gönder →</button><button data-act="link">Bağlantıyı kopyala</button><button data-act="dxf">CNC (DXF) ↓</button><button data-act="pdf">Sunum PDF ↓</button><button data-act="glb">3B model (GLB) ↓</button><button data-act="stl">STL (3B yazıcı) ↓</button><button data-act="cut">Kesim listesi ↓</button><button data-act="dimensions">Parça ölçüleri (mm) ↓</button><button data-act="json">design.json ↓</button></div>
   <input id="linkOut" readonly hidden>`;
   if (S.target) { drawEditor(); bindEditor(); renderToolState(); }
   renderChecks();
@@ -611,7 +612,8 @@ $('#panel').addEventListener('click', async e => {
     } finally { b.disabled = false; }
   }
   if (act === 'cut') download(`AURA-${design().kind}-kesim-listesi.csv`, cutList(), 'text/csv');
-  if (act === 'json') download(`AURA-${design().kind}-design.json`, JSON.stringify(design(), null, 2), 'application/json');
+  if (act === 'dimensions') download(`AURA-${design().kind}-parca-olculeri.csv`,partDimensionsCsv(partDimensions(S.compiled)), 'text/csv');
+  if (act === 'json') download(`AURA-${design().kind}-design.json`, JSON.stringify({...design(),dimensions:partDimensions(S.compiled)}, null, 2), 'application/json');
 });
 $('#panel').addEventListener('toggle', e => { const k = e.target.dataset?.sec; if (k) e.target.open ? S.open.add(k) : S.open.delete(k); }, true);
 $('#panel').addEventListener('change', e => {
