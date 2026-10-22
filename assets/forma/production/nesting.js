@@ -49,7 +49,7 @@ export function cuttingList(compiled, design, qty = 1, rules = CUT_RULES) {
   return {rows: list, extra: [...extra.values()]};
 }
 
-/** Guillotine packing of one board's parts on sheets. Returns [{sheet, placed:[{code,x,y,l,w,rot}], used}]. */
+/** Guillotine packing of one board's parts on sheets. Returns [{sheet, trim, placed:[{code,x,y,l,w,rot}], used}]. */
 export function packBoard(rows, sheet, rules = CUT_RULES) {
   const items = [];
   for (const r of rows) for (let i = 0; i < r.qty; i++) items.push({code: r.code, l: r.l, w: r.w, grain: r.board.grain, role: r.role});
@@ -72,7 +72,7 @@ export function packBoard(rows, sheet, rules = CUT_RULES) {
     if (f.w - pw < f.h - ph) { if (rw > 0) s.free.push({x: f.x + pw + k, y: f.y, w: rw, h: ph}); if (rh > 0) s.free.push({x: f.x, y: f.y + ph + k, w: f.w, h: rh}); }
     else { if (rh > 0) s.free.push({x: f.x, y: f.y + ph + k, w: pw, h: rh}); if (rw > 0) s.free.push({x: f.x + pw + k, y: f.y, w: rw, h: f.h}); }
   }
-  return sheets.map(s => ({sheet, placed: s.placed, used: s.placed.reduce((a, p) => a + p.l * p.w, 0) / (sheet.l * sheet.w)})).concat(sheets.oversize ? [{sheet, placed: [], oversize: sheets.oversize, used: 0}] : []);
+  return sheets.map(s => ({sheet, trim: rules.trim, placed: s.placed, used: s.placed.reduce((a, p) => a + p.l * p.w, 0) / (sheet.l * sheet.w)})).concat(sheets.oversize ? [{sheet, trim: rules.trim, placed: [], oversize: sheets.oversize, used: 0}] : []);
 }
 
 /** Whole cutting plan: per board the list rows, sheets and yield. */
@@ -102,7 +102,7 @@ export function sheetSvg(b, s, index, info = {}) {
   const PW = 297, PH = 210, m = 12, scale = Math.min((PW - 2 * m) / s.sheet.l, (PH - 2 * m - 22) / s.sheet.w), ox = m, oy = m + 16;
   const esc = t => String(t).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
   const out = [`<rect x="${ox}" y="${oy}" width="${s.sheet.l * scale}" height="${s.sheet.w * scale}" fill="#f4efe6" stroke="#1f2420" stroke-width="0.4"/>`];
-  const t = CUT_RULES.trim * scale;
+  const t = (s.trim ?? CUT_RULES.trim) * scale;
   for (const p of s.placed) {
     const x = ox + t + p.x * scale, y = oy + t + p.y * scale, w = p.l * scale, h = p.w * scale, fs = Math.max(1.6, Math.min(3.2, w / 9, h / 3));
     out.push(`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#fff" stroke="#1f2420" stroke-width="0.25"/>`);
