@@ -231,7 +231,7 @@ const T = {
   sent:         ['Gönderildi. Proje numarası:', 'Sent. Project number:', 'Gesendet. Projektnummer:', 'Envoyé. Numéro de projet :', 'Verstuurd. Projectnummer:', 'Sendt. Projektnummer:', 'Enviado. Número de proyecto:', 'Inviato. Numero progetto:'],
   perspective:  ['Perspektif', 'Perspective', 'Perspektive', 'Perspective', 'Perspectief', 'Perspektiv', 'Perspectiva', 'Prospettiva'],
   front:        ['Önden', 'Front', 'Vorne', 'Face', 'Voor', 'Forfra', 'Frente', 'Fronte'],
-  side:         ['Yandan', 'Side', 'Seite', 'Côté', 'Zij', 'Side', 'Lado', 'Lato'],
+  sideDirection:['Yandan', 'Side', 'Seite', 'Côté', 'Zij', 'Side', 'Lado', 'Lato'],
   top:          ['Üstten', 'Top', 'Oben', 'Dessus', 'Boven', 'Oppefra', 'Planta', 'Pianta'],
   structure:    ['İskelet', 'Structure', 'Gestell', 'Structure', 'Structuur', 'Struktur', 'Estructura', 'Struttura'],
   photo:        ['Fotoğraf', 'Photo', 'Foto', 'Photo', 'Foto', 'Foto', 'Foto', 'Foto'],
