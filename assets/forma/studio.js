@@ -10,6 +10,8 @@ import {buildMesh} from './build.js';
 import {styleName} from './styles.js';
 import {STARTS} from './starts.js';
 import {technicalReview, reviewMatches} from './technical-review.js';
+import {reviewDesign} from './auto-correct.js';
+import {findingText,reviewDocument} from './review-document.js';
 import {HIDES, COLORS, FIBERS, WEAVES, WEAVE_NAMES, PATTERNS, MOTIF_CHOICES, MOTIF_NAMES, WOODS, FINISHES, STAINS, METALS, STONES, GLASS, SURFACES, LINEN_COLORS, colorGroup, name as nm} from './catalog.js';
 import {MATTRESS} from './bedroom.js';
 import {harmonize} from './set.js';
@@ -845,6 +847,7 @@ function projectPanel() {
     <label>${L('phone')}<input name="phone" type="tel" maxlength="40"></label><label>${L('city')}<input name="city" maxlength="120"></label>
     <label class="full">${L('note')}<textarea name="note" rows="3" maxlength="1500"></textarea></label>
     <label class="f-check full"><input type="checkbox" name="consent" required><span>${L('consent')} <a href="proje-gizlilik.html?lang=${state.lang}" target="_blank" rel="noopener">↗</a></span></label>
+    <button type="button" data-act="assessment" ${items.length ? '' : 'disabled'}>${L('technicalTitle')} ↓</button>
     <button class="f-primary" type="submit" ${items.length ? '' : 'disabled'}>${L('sendProject')} →</button></form>` : ''}`;
   return `<h2>${L('tabProject')}</h2><p class="f-lead">${L('projectIntro')}</p>
   ${editing && !changed ? technicalReviewHTML(editing) : ''}
@@ -856,8 +859,26 @@ function projectPanel() {
 function technicalReviewHTML(item) {
   const r=item.technicalReview;
   if(!reviewMatches(r,item.design))return `<p class="f-note">${L('technicalOnSend')}</p>`;
-  const specific={materialGradeUnknown:'technicalMaterial',memberScreenUnknown:'technicalUnsupported',memberScreenReview:'technicalLeg',olderAdultSeatDepth:'technicalErgo'};
-  return `<section class="f-next" aria-label="${esc(L('technicalTitle'))}"><h3>${L('technicalTitle')}</h3><p class="f-note">${L('technicalReturn')}</p><ul>${r.findings.map(x=>`<li>${esc(L(specific[x.code]||'issues.'+x.code).replace('{v}',Math.round(x.value||0)))}</li>`).join('')}</ul><p class="f-note">${L('technicalLimits')}</p></section>`;
+  return `<section class="f-next" aria-label="${esc(L('technicalTitle'))}"><h3>${L('technicalTitle')}</h3><p class="f-note">${L('technicalReturn')}</p><ul>${r.findings.map(x=>`<li>${esc(findingText(x,state.lang))}</li>`).join('')}</ul><p class="f-note">${L('technicalLimits')}</p></section>`;
+}
+
+const assessmentKey=()=>JSON.stringify(state.project.items.map(i=>({id:i.id,qty:i.qty||1,design:i.design})));
+function openAssessment(forSend=false){
+ const items=state.project.items;if(!items.length)return;
+ items.forEach(i=>{i.technicalReview=reviewDesign(i.design);});saveProject();
+ const key=assessmentKey(),focus=document.activeElement;
+ document.querySelector('.f-modal')?.remove();
+ const m=document.createElement('div');m.className='f-modal';m.setAttribute('role','dialog');m.setAttribute('aria-modal','true');m.setAttribute('aria-label',L('reviewBeforeSend'));
+ m.innerHTML=`<div class="f-modal-box"><h2>${esc(L('technicalTitle'))}</h2><p>${esc(L('technicalReturn'))}</p>${items.map(i=>`<h3>${esc(itemName(i.design))}</h3><ul>${i.technicalReview.findings.map(f=>`<li>${esc(findingText(f,state.lang))}</li>`).join('')}</ul>`).join('')}<p class="f-note">${esc(L('technicalLimits'))}</p><div class="f-actions"><button data-review="download">${esc(L('reviewDownload'))} ↓</button><button data-review="close">${esc(L('reviewClose'))}</button>${forSend?`<button data-review="send" ${state.canSend?'':'disabled'}>${esc(L('reviewContinue'))}</button>`:''}</div></div>`;
+ const close=()=>{m.remove();focus?.focus();};
+ m.addEventListener('click',e=>{
+  const act=e.target.closest('[data-review]')?.dataset.review;
+  if(act==='close')close();
+  if(act==='download')download('AURA-design-assessment.zip',zip([{name:'assessment.txt',data:reviewDocument(items,state.lang)},{name:'assessment.json',data:JSON.stringify({schema:'aura.assessment/1',items},null,2)}]),'application/zip');
+  if(act==='send'&&state.canSend){if(key!==assessmentKey()){close();openAssessment(true);return;}state.reviewPermit=key;close();$('#sendForm')?.requestSubmit();}
+ });
+ m.addEventListener('keydown',e=>{if(e.key==='Escape')close();if(e.key==='Tab'){const bs=[...m.querySelectorAll('button:not(:disabled)')],first=bs[0],last=bs.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
+ document.body.append(m);m.querySelector('button')?.focus();
 }
 
 // ---- Room: the whole project placed in a lit room ---------------------------------------------------
@@ -890,6 +911,7 @@ function showRoom() {
   $('#dims').textContent = `${(plan.W / 1000).toFixed(1)} × ${(plan.D / 1000).toFixed(1)} m · ${L('layout')} ${r.layout + 1} / 3`;
 }
 function projectAction(el) {
+  if(el.dataset.act==='assessment')return openAssessment();
   const a = el.dataset.act, items = state.project.items;
   if (a === 'add') addToProject();
   else if (a === 'same') startNew(sameDesign(state.design, el.dataset.kind), `${L(el.dataset.kind)} · ${L('withThisDesign')}`);
@@ -1177,6 +1199,8 @@ function bindShell() {
   panel.addEventListener('submit', async e => {
     if (e.target.id !== 'sendForm') return; e.preventDefault();
     const fd = new FormData(e.target), ss = $('#sendState');
+    if(state.project.items.length&&state.reviewPermit!==assessmentKey()){openAssessment(true);return;}
+    state.reviewPermit=null;
     if (!state.canSend) { ss.textContent = L('sendOff'); return; }
     ss.textContent = L('working');
     try {
