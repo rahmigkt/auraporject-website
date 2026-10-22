@@ -444,9 +444,9 @@ export function createViewer(host, {onRotate} = {}) {
   const renderPass = new RenderPass(scene, camera), ao = new GTAOPass(scene, camera, 1, 1), smaa = new SMAAPass(), out = new OutputPass();
   ao.blendIntensity = 0.85; ao.updateGtaoMaterial({radius: 0.35, distanceExponent: 1.4, thickness: 1.2, scale: 1.0, samples: 16});
   composer.addPass(renderPass); composer.addPass(ao); composer.addPass(smaa); composer.addPass(out);
-  let raf = 0;
+  let raf = 0, disposed = false;
   let snapCfg = [5, 5], shooting = false, gizmo = null, gizmoId = null, gizmoCb = null, selBox = null, selId = null; // while a photo accumulates, nothing else may touch camera, size or scene
-  const draw = () => { if (shooting) return; cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { place(); if (gizmo) gizmo.camera = camera; sketchResolution(); renderPass.camera = camera; ao.camera = camera; composer.render(); }); };
+  const draw = () => { if (disposed || shooting) return; cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { place(); if (gizmo) gizmo.camera = camera; sketchResolution(); renderPass.camera = camera; ao.camera = camera; composer.render(); }); };
   function sketchResolution() { const r = host.getBoundingClientRect(); SKETCH.hull.uniforms.resolution.value.set(Math.max(1, r.width), Math.max(1, r.height)); }
   function place() {
     const rect = host.getBoundingClientRect(), aspect = Math.max(0.2, rect.width / Math.max(1, rect.height));
@@ -513,6 +513,7 @@ export function createViewer(host, {onRotate} = {}) {
   }
   let pendingRebuild = false;
   function rebuild() {
+    if (disposed) return;
     if (shooting) { pendingRebuild = true; return; }
     if (!compiled && !room) return;
     if (group) { scene.remove(group); disposeGroup(group); }
@@ -671,7 +672,7 @@ export function createViewer(host, {onRotate} = {}) {
       return new Promise((resolve, reject) => new GLTFExporter().parse(exportGroup, r => { disposeGroup(exportGroup); for (const m of Object.values(exportMats)) m.dispose(); for (const t of conv.values()) t.dispose(); resolve(r); }, reject, {binary: true}));
     },
     texturesReady: () => matsReady,
-    dispose() { ro.disconnect(); mats?.dispose(); roomMats?.dispose(); for (const m of itemMats.values()) m.dispose(); disposeGroup(group); composer.dispose(); renderer.dispose(); canvas.remove(); }
+    dispose() { if (disposed) return; disposed = true; cancelAnimationFrame(raf); offCsg(); ro.disconnect(); mats?.dispose(); roomMats?.dispose(); for (const m of itemMats.values()) m.dispose(); disposeGroup(group); composer.dispose(); renderer.dispose(); canvas.remove(); }
   };
 }
 
