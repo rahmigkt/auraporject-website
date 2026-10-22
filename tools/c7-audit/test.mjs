@@ -1,0 +1,21 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import vm from 'node:vm';
+import {auditConversation,exactLeakage} from './sohbet-001.mjs';
+const read=f=>JSON.parse(fs.readFileSync(f,'utf8'));
+const raw=read('knowledge/ai-egitim/veri/sohbet-ornekleri/sohbet-001.json'),plan=read(raw.result_plan),row=fs.readFileSync('knowledge/ai-egitim/veri/birlesik/adaylar.jsonl','utf8').trim().split('\n').map(JSON.parse).find(r=>r.id==='sohbet-ornekleri:sohbet-001');
+const before=JSON.stringify({raw,plan,row}),a=auditConversation(raw,plan,row);
+assert.equal(JSON.stringify({raw,plan,row}),before,'Review must not mutate source/candidate');
+assert.equal(a.raw_proposals,40);assert.equal(a.coordinate_placement_proposals,10);assert.equal(a.native_operations,0);assert(a.message_projection_exact);
+const mismatch=a.findings.find(f=>f.code==='kitchen_width_claim_mismatch');assert.equal(mismatch.stated_mm,3000);assert.equal(mismatch.compiled_mm,3900);
+assert(a.findings.find(f=>f.code==='no_recorded_native_operation_sequence').existing_quarantine);
+assert(a.findings.some(f=>f.code==='assumptions_labeled_customer_stated'));
+const changed=structuredClone(raw);changed.turns.find(t=>t.text.includes('Mutfak 3 m')).text=changed.turns.find(t=>t.text.includes('Mutfak 3 m')).text.replace('Mutfak 3 m','Mutfak 3,9 m');
+const b=auditConversation(changed,plan,row);assert(!b.findings.some(f=>f.code==='kitchen_width_claim_mismatch'));assert(b.findings.some(f=>f.code==='message_projection_mismatch'));assert.equal(b.training_approved,false);
+const calibrated=structuredClone(plan);for(const s of calibrated.spaces)s.ceiling_height.status='assumed';for(const w of calibrated.walls)w.thickness.status='assumed';
+assert(!auditConversation(raw,calibrated,row).findings.some(f=>f.code==='assumptions_labeled_customer_stated'));
+assert.throws(()=>auditConversation(raw,null,row),/Missing/);
+// Use the actual compiler normalization definition to test number/accent equivalence.
+const src=fs.readFileSync('tools/egitim/derle.mjs','utf8'),def=src.match(/const norm = [^\n]+/)[0],sandbox={};vm.createContext(sandbox);vm.runInContext(def+';globalThis.normalizeExam=norm;',sandbox);
+const task=sandbox.normalizeExam('Genişliği 220 santimetre yap.');assert.equal(exactLeakage([{role:'user',text:'Genişliği 180 santimetre yap!'}],[task]).length,1);
+assert.equal(exactLeakage([{role:'assistant',text:'Genişliği 180 santimetre yap!'}],[task]).length,0);
+assert.equal(exactLeakage([{role:'user',text:'Başka bir oda istiyorum.'}],[task]).length,0);
+console.log('PASS original preservation;40proposals/0native actions;3900vs3000actual compile;corrected-claim control;projection drift;assumed provenance;missing plan rejection;compiler-normalized leakage positive/negative controls');

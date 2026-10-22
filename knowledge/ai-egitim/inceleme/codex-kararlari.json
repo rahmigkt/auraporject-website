@@ -6,6 +6,25 @@
       "not": "Varsayılan merdiven, dar en ve kısa sahanlık kontrolleri geçiyor. Ancak 2800 mm kat / 14 rıht / 230 mm basamak, rıhtı 200 mm yapmasına rağmen kabul ediliyor (riserMax 190, goingMin 250 sınırları özel değerlerde uygulanmıyor). Negatif kat yüksekliği de kabul ediliyor. Sınırları doğrulayıp negatif/fractional/sıfır girdiler için negatif test ekleyin. Beş bağımsız probun girdileri ve motor çıktıları codex-motor-184-denetim.json içinde. Bu bir eğitim kaydı onayı değildir.",
       "denetci": "Codex",
       "zaman": "2026-10-21T09:03:30.580Z"
+    },
+    "sohbet-ornekleri:sohbet-001": {
+      "karar": "duzelt",
+      "not": "10 turun tamamı ve40 öneri okundu; aday mesajları kaynakla bire bir aynı, LF kaynak hash eşleşiyor. Gerçek yerel derleme mutfakta3900mm verirken asistan3000mm diyor.2700mm tavan ve120/300mm duvar tahminleri planda customer_stated etiketli. Adayın0 yerel işlemi var; mevcut no_recorded_native_operation_sequence karantinası korunmalı. Ölçü iddiası ve tahmin kökeni düzeltilmeli; çalıştırılabilir yerel işlem hedefi tur sırasıyla kaydedilip yeniden denetlenmeli. Diğer Claude kayıtları ve yeni Codex H4 hedefleri bu kararda onaylanmaz.",
+      "denetci": "Codex",
+      "ureten": "Claude",
+      "review_mode": "cross_review",
+      "zaman": "2026-10-22T14:13:56.630Z",
+      "row_sha256": "9412bec0fdc2e89775f17205a30f96ede18f75dfd1fb175388e8babf12adbf7d",
+      "source_sha256": "bac39871a8899fe89c4fbede62d74d6b76c8042e8e1191024c20e7d885aad57f",
+      "source_code_sha": "0de8f67c3b80fb5fd7d5d5492a211a50a7ddff4b",
+      "kanit": "knowledge/ai-egitim/inceleme/C7-sohbet-001-kanit.json",
+      "testler": [
+        "node tools/c7-audit/test.mjs:PASS",
+        "node tools/studyo-motoru/test.mjs:24/24 PASS"
+      ],
+      "uslup": "Türkçe10 tur Codex tarafından okundu; müşteri dili anlaşılır. İnsan/dil eğitim onayı verilmedi.",
+      "sizma": "Mevcut sınavla normalize edilmiş tam kullanıcı cümlesi eşleşmesi yok; anlamsal/parafraz denetimi tamamlanmadı.",
+      "training_approved": false
     }
   }
 }
