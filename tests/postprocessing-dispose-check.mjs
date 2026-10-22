@@ -11,7 +11,7 @@ const src=fs.readFileSync(new URL('../assets/forma/scene.js',import.meta.url),'u
 const body=src.match(/    dispose\(\) \{([^\n]+)\}/)[1];
 const order=[];const pass=(name)=>({dispose(){order.push(name)}});
 const noop=()=>{};vm.runInNewContext('(function(){'+body+'})()',{
- ro:{disconnect:noop},mats:null,roomMats:null,itemMats:new Map(),disposeGroup:noop,group:null,disposeEnvironment:noop,
+ disposed:false,raf:0,cancelAnimationFrame:noop,offCsg:noop,ro:{disconnect:noop},mats:null,roomMats:null,itemMats:new Map(),disposeGroup:noop,group:null,disposeEnvironment:noop,
  composer:{passes:[pass('ao'),pass('smaa'),pass('output')],dispose(){order.push('composer')}},renderer:{dispose(){order.push('renderer')}},canvas:{remove:noop},
 });
 console.log(JSON.stringify({materialAndTargetDisposals:counts,missing,viewerDisposeOrder:order}));

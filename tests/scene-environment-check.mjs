@@ -21,7 +21,7 @@ function fixture(fail=false){
  const stage=makeStage({});assert.equal(temporaryDisposes,sourceResources,'temporary RoomEnvironment resources must be freed after PMREM generation');assert.equal(generatorDisposes,1,'PMREM generator intermediates must be freed');assert.equal(targetDisposes,0,'output remains live');assert.equal(stage.scene.environment,texture);assert.equal(stage.scene.environmentIntensity,.55);
  const disposeMatch=source.match(/    dispose\(\) \{([^\n]+)\}/);assert(disposeMatch,'viewer disposal method found');
  vm.runInNewContext('(function(){'+disposeMatch[1]+'})()',{
-  ro:{disconnect(){}},mats:null,roomMats:null,itemMats:new Map(),disposeGroup(){},group:null,composer:{dispose(){}},renderer:{dispose(){}},canvas:{remove(){}},disposeEnvironment:stage.disposeEnvironment,
+  disposed:false,raf:0,cancelAnimationFrame(){},offCsg(){},ro:{disconnect(){}},mats:null,roomMats:null,itemMats:new Map(),disposeGroup(){},group:null,composer:{passes:[],dispose(){}},renderer:{dispose(){}},canvas:{remove(){}},disposeEnvironment:stage.disposeEnvironment,
  });
  assert.equal(targetDisposes,1,'viewer shutdown disposes environment render target');assert.equal(stage.scene.environment,null);stage.disposeEnvironment();assert.equal(targetDisposes,1,'environment cleanup is idempotent');
 }
