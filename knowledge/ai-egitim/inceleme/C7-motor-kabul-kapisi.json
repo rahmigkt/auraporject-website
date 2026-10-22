@@ -1,0 +1,1298 @@
+{
+  "at": "2026-10-22T17:18:42.899957+00:00",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "scope": "Positive motor admission only; no training approval. Warnings/failed/incomplete reports are not verified positive targets. Honest negative-outcome data requires its own explicit reviewed contract.",
+  "before": {
+    "scope": "Positive training motor admission gate only. Honest no-fit examples require a separate reviewed negative-outcome contract; they must not be admitted as successful placements.",
+    "source_code_sha": "844ebc6fedae5d74b6bf237b1afd8cbb2e2a5161",
+    "reviewer": "Codex",
+    "review_mode": "user_authorized_self_review",
+    "training_approved": false,
+    "hashes": {
+      "tools/egitim/motor-onbellek.mjs": "daace9aafea5cd1f30ad16fa6402d68c4be69a3ac6f1f2092a9b81958579c408",
+      "tools/studyo-motoru/motor.mjs": "201786935880c0463fc9a7f3f04879f9dc8024010a9cb23d1a4858a30c1a499f",
+      "tools/c7-audit/admission.mjs": "6b3e9b0928f25035b98763069bb1d7f5c8399cb75211af2db3587c58f1818da4"
+    },
+    "results": [
+      {
+        "id": "valid-layout",
+        "state": {
+          "plan": {
+            "walls": [],
+            "openings": [],
+            "spaces": [
+              {
+                "id": "room",
+                "kind": "living",
+                "boundary_xy_mm": [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    6000,
+                    0
+                  ],
+                  [
+                    6000,
+                    5000
+                  ],
+                  [
+                    0,
+                    5000
+                  ]
+                ]
+              }
+            ],
+            "items": []
+          }
+        },
+        "ops": [
+          {
+            "katman": "yerlesim",
+            "type": "yerlestir",
+            "oda": "room",
+            "esyalar": [
+              {
+                "id": "sofa",
+                "tur": "sofa",
+                "en": 1900,
+                "derinlik": 850
+              },
+              {
+                "id": "tv",
+                "tur": "tv",
+                "en": 1400,
+                "derinlik": 400
+              }
+            ]
+          }
+        ],
+        "expect": true,
+        "admitted": true,
+        "pass": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "room",
+                "esyalar": [
+                  {
+                    "id": "sofa",
+                    "tur": "sofa",
+                    "en": 1900,
+                    "derinlik": 850
+                  },
+                  {
+                    "id": "tv",
+                    "tur": "tv",
+                    "en": 1400,
+                    "derinlik": 400
+                  }
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [],
+          "olcum": {
+            "yerlesim": {
+              "oda": "room",
+              "sigdi": true,
+              "secenek": 4,
+              "secilen": 0,
+              "kisit_karsilanan": 0,
+              "kisit_toplam": 0
+            }
+          },
+          "gecti": true
+        }
+      },
+      {
+        "id": "unmet-distance",
+        "state": {
+          "plan": {
+            "walls": [],
+            "openings": [],
+            "spaces": [
+              {
+                "id": "room",
+                "kind": "living",
+                "boundary_xy_mm": [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    6000,
+                    0
+                  ],
+                  [
+                    6000,
+                    5000
+                  ],
+                  [
+                    0,
+                    5000
+                  ]
+                ]
+              }
+            ],
+            "items": []
+          }
+        },
+        "ops": [
+          {
+            "katman": "yerlesim",
+            "type": "yerlestir",
+            "oda": "room",
+            "esyalar": [
+              {
+                "id": "sofa",
+                "tur": "sofa",
+                "en": 1900,
+                "derinlik": 850
+              },
+              {
+                "id": "tv",
+                "tur": "tv",
+                "en": 1400,
+                "derinlik": 400
+              }
+            ],
+            "kisitlar": [
+              {
+                "tur": "uzak",
+                "a": "sofa",
+                "b": "tv",
+                "mm": 1000000000
+              }
+            ]
+          }
+        ],
+        "expect": false,
+        "admitted": true,
+        "pass": false,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "room",
+                "esyalar": [
+                  {
+                    "id": "sofa",
+                    "tur": "sofa",
+                    "en": 1900,
+                    "derinlik": 850
+                  },
+                  {
+                    "id": "tv",
+                    "tur": "tv",
+                    "en": 1400,
+                    "derinlik": 400
+                  }
+                ],
+                "kisitlar": [
+                  {
+                    "tur": "uzak",
+                    "a": "sofa",
+                    "b": "tv",
+                    "mm": 1000000000
+                  }
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [
+            {
+              "katman": "yerlesim",
+              "kod": "kisit_karsilanmadi",
+              "kisit": {
+                "tur": "uzak",
+                "a": "sofa",
+                "b": "tv",
+                "mm": 1000000000
+              }
+            }
+          ],
+          "olcum": {
+            "yerlesim": {
+              "oda": "room",
+              "sigdi": true,
+              "secenek": 4,
+              "secilen": 0,
+              "kisit_karsilanan": 0,
+              "kisit_toplam": 1
+            }
+          },
+          "gecti": true
+        }
+      },
+      {
+        "id": "unknown-constraint",
+        "state": {
+          "plan": {
+            "walls": [],
+            "openings": [],
+            "spaces": [
+              {
+                "id": "room",
+                "kind": "living",
+                "boundary_xy_mm": [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    6000,
+                    0
+                  ],
+                  [
+                    6000,
+                    5000
+                  ],
+                  [
+                    0,
+                    5000
+                  ]
+                ]
+              }
+            ],
+            "items": []
+          }
+        },
+        "ops": [
+          {
+            "katman": "yerlesim",
+            "type": "yerlestir",
+            "oda": "room",
+            "esyalar": [
+              {
+                "id": "sofa",
+                "tur": "sofa",
+                "en": 1900,
+                "derinlik": 850
+              },
+              {
+                "id": "tv",
+                "tur": "tv",
+                "en": 1400,
+                "derinlik": 400
+              }
+            ],
+            "kisitlar": [
+              {
+                "tur": "unknown",
+                "a": "sofa",
+                "b": "tv"
+              }
+            ]
+          }
+        ],
+        "expect": false,
+        "admitted": true,
+        "pass": false,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "room",
+                "esyalar": [
+                  {
+                    "id": "sofa",
+                    "tur": "sofa",
+                    "en": 1900,
+                    "derinlik": 850
+                  },
+                  {
+                    "id": "tv",
+                    "tur": "tv",
+                    "en": 1400,
+                    "derinlik": 400
+                  }
+                ],
+                "kisitlar": [
+                  {
+                    "tur": "unknown",
+                    "a": "sofa",
+                    "b": "tv"
+                  }
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [
+            {
+              "katman": "yerlesim",
+              "kod": "kisit_anlasilmadi",
+              "kisit": {
+                "tur": "unknown",
+                "a": "sofa",
+                "b": "tv"
+              }
+            }
+          ],
+          "olcum": {
+            "yerlesim": {
+              "oda": "room",
+              "sigdi": true,
+              "secenek": 4,
+              "secilen": 0,
+              "kisit_karsilanan": 0,
+              "kisit_toplam": 1
+            }
+          },
+          "gecti": true
+        }
+      },
+      {
+        "id": "no-fit-not-positive-layout",
+        "state": {
+          "plan": {
+            "walls": [],
+            "openings": [],
+            "spaces": [
+              {
+                "id": "room",
+                "kind": "living",
+                "boundary_xy_mm": [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    500,
+                    0
+                  ],
+                  [
+                    500,
+                    500
+                  ],
+                  [
+                    0,
+                    500
+                  ]
+                ]
+              }
+            ],
+            "items": []
+          }
+        },
+        "ops": [
+          {
+            "katman": "yerlesim",
+            "type": "yerlestir",
+            "oda": "room",
+            "esyalar": [
+              {
+                "id": "bed",
+                "tur": "bed",
+                "en": 1800,
+                "derinlik": 2100
+              }
+            ]
+          }
+        ],
+        "expect": false,
+        "admitted": true,
+        "pass": false,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "room",
+                "esyalar": [
+                  {
+                    "id": "bed",
+                    "tur": "bed",
+                    "en": 1800,
+                    "derinlik": 2100
+                  }
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [
+            {
+              "katman": "yerlesim",
+              "kod": "sigmiyor",
+              "oda": "room",
+              "metin": "bed bu odaya kurallara uyarak sığmıyor"
+            }
+          ],
+          "olcum": {
+            "yerlesim": {
+              "oda": "room",
+              "sigdi": false
+            }
+          },
+          "gecti": true
+        }
+      },
+      {
+        "id": "clamped-furniture-target",
+        "state": {},
+        "ops": [
+          {
+            "katman": "mobilya",
+            "type": "set",
+            "key": "width",
+            "value": 9000
+          }
+        ],
+        "expect": false,
+        "admitted": true,
+        "pass": false,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "mobilya",
+              "op": {
+                "type": "set",
+                "key": "width",
+                "value": 9000
+              },
+              "not": [
+                "width 9000"
+              ]
+            }
+          ],
+          "red": [],
+          "uyari": [
+            {
+              "katman": "mobilya",
+              "kod": "sinira_takildi",
+              "op": {
+                "type": "set",
+                "key": "width",
+                "value": 9000
+              },
+              "hedef": 9000,
+              "gerceklesen": 3200,
+              "aralik": [
+                700,
+                3200
+              ]
+            },
+            {
+              "katman": "mobilya",
+              "kod": "section",
+              "seviye": "warn",
+              "metin": "leg: en ince kesit Ø15 mm (ahşap için en az Ø18)",
+              "deger": 7.5
+            }
+          ],
+          "olcum": {
+            "mobilya": {
+              "aile": "seating",
+              "tur": "sofa",
+              "olcu": {
+                "width": 3200,
+                "depth": 920,
+                "height": 820
+              },
+              "kutle_kg": 339,
+              "parca": 30
+            }
+          },
+          "gecti": true
+        }
+      },
+      {
+        "id": "self-intersecting-room",
+        "state": {
+          "plan": {
+            "walls": [],
+            "openings": [],
+            "spaces": [
+              {
+                "id": "room",
+                "kind": "living",
+                "boundary_xy_mm": [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    6000,
+                    0
+                  ],
+                  [
+                    6000,
+                    5000
+                  ],
+                  [
+                    0,
+                    5000
+                  ]
+                ]
+              }
+            ],
+            "items": []
+          }
+        },
+        "ops": [
+          {
+            "katman": "ev",
+            "type": "oda_tanimla",
+            "id": "room",
+            "kose": [
+              [
+                0,
+                0
+              ],
+              [
+                6000,
+                5000
+              ],
+              [
+                6000,
+                0
+              ],
+              [
+                0,
+                5000
+              ]
+            ]
+          }
+        ],
+        "expect": false,
+        "admitted": true,
+        "pass": false,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "ev",
+              "op": {
+                "katman": "ev",
+                "type": "oda_tanimla",
+                "id": "room",
+                "kose": [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    6000,
+                    5000
+                  ],
+                  [
+                    6000,
+                    0
+                  ],
+                  [
+                    0,
+                    5000
+                  ]
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [
+            {
+              "katman": "ev",
+              "kod": "oda_kendini_kesiyor",
+              "oda": "room"
+            },
+            {
+              "katman": "ev",
+              "kod": "oda_alani_olagan_disi",
+              "oda": "room",
+              "m2": 0,
+              "olagan": [
+                10,
+                60
+              ]
+            }
+          ],
+          "olcum": {
+            "ev": {
+              "oda": [
+                {
+                  "id": "room",
+                  "kat": "k0",
+                  "tur": "living",
+                  "m2": 0
+                }
+              ],
+              "toplam_m2": 0,
+              "kat": 1,
+              "merdiven": []
+            }
+          },
+          "gecti": false
+        }
+      }
+    ]
+  },
+  "after": {
+    "scope": "Positive training motor admission gate only. Honest no-fit examples require a separate reviewed negative-outcome contract; they must not be admitted as successful placements.",
+    "source_code_sha": "844ebc6fedae5d74b6bf237b1afd8cbb2e2a5161",
+    "reviewer": "Codex",
+    "review_mode": "user_authorized_self_review",
+    "training_approved": false,
+    "hashes": {
+      "tools/egitim/motor-onbellek.mjs": "805964b8debb2bd56522ef8787cb03cef1fc4d03c819de9b51bfd165fb9d7e9e",
+      "tools/studyo-motoru/motor.mjs": "201786935880c0463fc9a7f3f04879f9dc8024010a9cb23d1a4858a30c1a499f",
+      "tools/c7-audit/admission.mjs": "6b3e9b0928f25035b98763069bb1d7f5c8399cb75211af2db3587c58f1818da4"
+    },
+    "results": [
+      {
+        "id": "valid-layout",
+        "state": {
+          "plan": {
+            "walls": [],
+            "openings": [],
+            "spaces": [
+              {
+                "id": "room",
+                "kind": "living",
+                "boundary_xy_mm": [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    6000,
+                    0
+                  ],
+                  [
+                    6000,
+                    5000
+                  ],
+                  [
+                    0,
+                    5000
+                  ]
+                ]
+              }
+            ],
+            "items": []
+          }
+        },
+        "ops": [
+          {
+            "katman": "yerlesim",
+            "type": "yerlestir",
+            "oda": "room",
+            "esyalar": [
+              {
+                "id": "sofa",
+                "tur": "sofa",
+                "en": 1900,
+                "derinlik": 850
+              },
+              {
+                "id": "tv",
+                "tur": "tv",
+                "en": 1400,
+                "derinlik": 400
+              }
+            ]
+          }
+        ],
+        "expect": true,
+        "admitted": true,
+        "pass": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "room",
+                "esyalar": [
+                  {
+                    "id": "sofa",
+                    "tur": "sofa",
+                    "en": 1900,
+                    "derinlik": 850
+                  },
+                  {
+                    "id": "tv",
+                    "tur": "tv",
+                    "en": 1400,
+                    "derinlik": 400
+                  }
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [],
+          "olcum": {
+            "yerlesim": {
+              "oda": "room",
+              "sigdi": true,
+              "secenek": 4,
+              "secilen": 0,
+              "kisit_karsilanan": 0,
+              "kisit_toplam": 0
+            }
+          },
+          "gecti": true
+        }
+      },
+      {
+        "id": "unmet-distance",
+        "state": {
+          "plan": {
+            "walls": [],
+            "openings": [],
+            "spaces": [
+              {
+                "id": "room",
+                "kind": "living",
+                "boundary_xy_mm": [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    6000,
+                    0
+                  ],
+                  [
+                    6000,
+                    5000
+                  ],
+                  [
+                    0,
+                    5000
+                  ]
+                ]
+              }
+            ],
+            "items": []
+          }
+        },
+        "ops": [
+          {
+            "katman": "yerlesim",
+            "type": "yerlestir",
+            "oda": "room",
+            "esyalar": [
+              {
+                "id": "sofa",
+                "tur": "sofa",
+                "en": 1900,
+                "derinlik": 850
+              },
+              {
+                "id": "tv",
+                "tur": "tv",
+                "en": 1400,
+                "derinlik": 400
+              }
+            ],
+            "kisitlar": [
+              {
+                "tur": "uzak",
+                "a": "sofa",
+                "b": "tv",
+                "mm": 1000000000
+              }
+            ]
+          }
+        ],
+        "expect": false,
+        "admitted": false,
+        "pass": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "room",
+                "esyalar": [
+                  {
+                    "id": "sofa",
+                    "tur": "sofa",
+                    "en": 1900,
+                    "derinlik": 850
+                  },
+                  {
+                    "id": "tv",
+                    "tur": "tv",
+                    "en": 1400,
+                    "derinlik": 400
+                  }
+                ],
+                "kisitlar": [
+                  {
+                    "tur": "uzak",
+                    "a": "sofa",
+                    "b": "tv",
+                    "mm": 1000000000
+                  }
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [
+            {
+              "katman": "yerlesim",
+              "kod": "kisit_karsilanmadi",
+              "kisit": {
+                "tur": "uzak",
+                "a": "sofa",
+                "b": "tv",
+                "mm": 1000000000
+              }
+            }
+          ],
+          "olcum": {
+            "yerlesim": {
+              "oda": "room",
+              "sigdi": true,
+              "secenek": 4,
+              "secilen": 0,
+              "kisit_karsilanan": 0,
+              "kisit_toplam": 1
+            }
+          },
+          "gecti": true
+        }
+      },
+      {
+        "id": "unknown-constraint",
+        "state": {
+          "plan": {
+            "walls": [],
+            "openings": [],
+            "spaces": [
+              {
+                "id": "room",
+                "kind": "living",
+                "boundary_xy_mm": [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    6000,
+                    0
+                  ],
+                  [
+                    6000,
+                    5000
+                  ],
+                  [
+                    0,
+                    5000
+                  ]
+                ]
+              }
+            ],
+            "items": []
+          }
+        },
+        "ops": [
+          {
+            "katman": "yerlesim",
+            "type": "yerlestir",
+            "oda": "room",
+            "esyalar": [
+              {
+                "id": "sofa",
+                "tur": "sofa",
+                "en": 1900,
+                "derinlik": 850
+              },
+              {
+                "id": "tv",
+                "tur": "tv",
+                "en": 1400,
+                "derinlik": 400
+              }
+            ],
+            "kisitlar": [
+              {
+                "tur": "unknown",
+                "a": "sofa",
+                "b": "tv"
+              }
+            ]
+          }
+        ],
+        "expect": false,
+        "admitted": false,
+        "pass": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "room",
+                "esyalar": [
+                  {
+                    "id": "sofa",
+                    "tur": "sofa",
+                    "en": 1900,
+                    "derinlik": 850
+                  },
+                  {
+                    "id": "tv",
+                    "tur": "tv",
+                    "en": 1400,
+                    "derinlik": 400
+                  }
+                ],
+                "kisitlar": [
+                  {
+                    "tur": "unknown",
+                    "a": "sofa",
+                    "b": "tv"
+                  }
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [
+            {
+              "katman": "yerlesim",
+              "kod": "kisit_anlasilmadi",
+              "kisit": {
+                "tur": "unknown",
+                "a": "sofa",
+                "b": "tv"
+              }
+            }
+          ],
+          "olcum": {
+            "yerlesim": {
+              "oda": "room",
+              "sigdi": true,
+              "secenek": 4,
+              "secilen": 0,
+              "kisit_karsilanan": 0,
+              "kisit_toplam": 1
+            }
+          },
+          "gecti": true
+        }
+      },
+      {
+        "id": "no-fit-not-positive-layout",
+        "state": {
+          "plan": {
+            "walls": [],
+            "openings": [],
+            "spaces": [
+              {
+                "id": "room",
+                "kind": "living",
+                "boundary_xy_mm": [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    500,
+                    0
+                  ],
+                  [
+                    500,
+                    500
+                  ],
+                  [
+                    0,
+                    500
+                  ]
+                ]
+              }
+            ],
+            "items": []
+          }
+        },
+        "ops": [
+          {
+            "katman": "yerlesim",
+            "type": "yerlestir",
+            "oda": "room",
+            "esyalar": [
+              {
+                "id": "bed",
+                "tur": "bed",
+                "en": 1800,
+                "derinlik": 2100
+              }
+            ]
+          }
+        ],
+        "expect": false,
+        "admitted": false,
+        "pass": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "room",
+                "esyalar": [
+                  {
+                    "id": "bed",
+                    "tur": "bed",
+                    "en": 1800,
+                    "derinlik": 2100
+                  }
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [
+            {
+              "katman": "yerlesim",
+              "kod": "sigmiyor",
+              "oda": "room",
+              "metin": "bed bu odaya kurallara uyarak sığmıyor"
+            }
+          ],
+          "olcum": {
+            "yerlesim": {
+              "oda": "room",
+              "sigdi": false
+            }
+          },
+          "gecti": true
+        }
+      },
+      {
+        "id": "clamped-furniture-target",
+        "state": {},
+        "ops": [
+          {
+            "katman": "mobilya",
+            "type": "set",
+            "key": "width",
+            "value": 9000
+          }
+        ],
+        "expect": false,
+        "admitted": false,
+        "pass": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "mobilya",
+              "op": {
+                "type": "set",
+                "key": "width",
+                "value": 9000
+              },
+              "not": [
+                "width 9000"
+              ]
+            }
+          ],
+          "red": [],
+          "uyari": [
+            {
+              "katman": "mobilya",
+              "kod": "sinira_takildi",
+              "op": {
+                "type": "set",
+                "key": "width",
+                "value": 9000
+              },
+              "hedef": 9000,
+              "gerceklesen": 3200,
+              "aralik": [
+                700,
+                3200
+              ]
+            },
+            {
+              "katman": "mobilya",
+              "kod": "section",
+              "seviye": "warn",
+              "metin": "leg: en ince kesit Ø15 mm (ahşap için en az Ø18)",
+              "deger": 7.5
+            }
+          ],
+          "olcum": {
+            "mobilya": {
+              "aile": "seating",
+              "tur": "sofa",
+              "olcu": {
+                "width": 3200,
+                "depth": 920,
+                "height": 820
+              },
+              "kutle_kg": 339,
+              "parca": 30
+            }
+          },
+          "gecti": true
+        }
+      },
+      {
+        "id": "self-intersecting-room",
+        "state": {
+          "plan": {
+            "walls": [],
+            "openings": [],
+            "spaces": [
+              {
+                "id": "room",
+                "kind": "living",
+                "boundary_xy_mm": [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    6000,
+                    0
+                  ],
+                  [
+                    6000,
+                    5000
+                  ],
+                  [
+                    0,
+                    5000
+                  ]
+                ]
+              }
+            ],
+            "items": []
+          }
+        },
+        "ops": [
+          {
+            "katman": "ev",
+            "type": "oda_tanimla",
+            "id": "room",
+            "kose": [
+              [
+                0,
+                0
+              ],
+              [
+                6000,
+                5000
+              ],
+              [
+                6000,
+                0
+              ],
+              [
+                0,
+                5000
+              ]
+            ]
+          }
+        ],
+        "expect": false,
+        "admitted": false,
+        "pass": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "ev",
+              "op": {
+                "katman": "ev",
+                "type": "oda_tanimla",
+                "id": "room",
+                "kose": [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    6000,
+                    5000
+                  ],
+                  [
+                    6000,
+                    0
+                  ],
+                  [
+                    0,
+                    5000
+                  ]
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [
+            {
+              "katman": "ev",
+              "kod": "oda_kendini_kesiyor",
+              "oda": "room"
+            },
+            {
+              "katman": "ev",
+              "kod": "oda_alani_olagan_disi",
+              "oda": "room",
+              "m2": 0,
+              "olagan": [
+                10,
+                60
+              ]
+            }
+          ],
+          "olcum": {
+            "ev": {
+              "oda": [
+                {
+                  "id": "room",
+                  "kat": "k0",
+                  "tur": "living",
+                  "m2": 0
+                }
+              ],
+              "toplam_m2": 0,
+              "kat": 1,
+              "merdiven": []
+            }
+          },
+          "gecti": false
+        }
+      }
+    ]
+  },
+  "original_decisions_preserved": true,
+  "training_approved": false
+}
