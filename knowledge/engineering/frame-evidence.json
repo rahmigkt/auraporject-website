@@ -1,0 +1,275 @@
+{
+  "at": "2026-10-22T13:27:23.963056+00:00",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "base_code_sha": "5b9af52fd8e29bc5257fd10ab74104ab3e33f912",
+  "code_sha256": {
+    "assets/forma/atelier.js": "4f6e8c3cc7f1dd42664a69e52670ab2653cec67684e7bc1f75c39c72bae38729",
+    "assets/forma/studio.js": "7f9344fc114b4625ef575093252bf842f04f9ac9daf48484be91c3cb72b4ae21",
+    "assets/forma/sofa.js": "6782b76cb30c5dfff73438adf78a77efa278b4461ee33650f24858373cb7ede4",
+    "assets/forma/i18n.js": "1665bbacaf49caaeff25d3620ace3fb4eac12241e56f090ae61721ff4cc250e0",
+    "assets/forma/technical-review.js": "baf0f2402235eaf759715c139d5f5f63e25d84275233f0f501d6f5a82498c90a",
+    "assets/forma/auto-correct.js": "a887f80c693eefb6a987488f7e17d6ae282b745746aeed3100f722920a1b223f",
+    "assets/forma/construction.js": "f93c5f957bf13b0e4ca38341fa175cede100d6f285bd9f554d9b25fcbbc592fc",
+    "assets/forma/review-document.js": "c1cfb2abf7699189be456d93fd28a680b894755d834188d779d77800601e6983",
+    "tests/construction-review-check.mjs": "08760425da1c31ace2f68cfd042ddf872d72c72fb6b48c05560494b6a64ed778",
+    "tests/assessment-send-check.mjs": "9bccaa6db82d4eeb119491f1d9ee1d5160828b0d472cf75cd20d80af96e3deeb",
+    "tools/engineering/verify-frame-members.py": "b69a24a307815f4865ead8d4b76e18ea9d40c3d478f4c3e7956d2d86d0b6e1f6"
+  },
+  "sources": [
+    {
+      "title": "Purdue FNR-170",
+      "url": "https://extension.purdue.edu/extmedia/FNR/FNR-170.pdf",
+      "file": "purdue-FNR-170.pdf",
+      "bytes": 8812967,
+      "sha256": "c81cf07fe6b74f3d7a250e94c81632c454f8baf81eca677658bd7d8e49654d09",
+      "review": "35pages downloaded; pages1-5 visually read; not fully reviewed"
+    },
+    {
+      "title": "Frame FEM2022",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9458000/",
+      "file": "frame-fem-2022.html",
+      "bytes": 256707,
+      "sha256": "d7511808f1fc02f4bb067844a7bb4be0ce440dfb75b703c5c93040c2a9d38a3c",
+      "review": "Relevant introduction/methods inspected; not all results; CC BY4.0"
+    },
+    {
+      "title": "Woodworking MIT license",
+      "url": "https://github.com/dprojects/Woodworking/blob/master/LICENSE",
+      "file": "woodworking-LICENSE.txt",
+      "bytes": 1080,
+      "sha256": "31e08c887cd4e690009ea241025b854a5b852fbf9b06b45adec5d38010a99a4a",
+      "review": "License+README overview only; no installation"
+    }
+  ],
+  "opendesk_sha": "b1e9727cbe5fd3c30d5bee68b56fc8ccff95cde4",
+  "native_source_sha": "88f62a5857be375be051d69855d6e6726be32c70",
+  "tests": [
+    "construction-review-check PASS240 actual starts +6default bases + negative controls",
+    "assessment-send-check PASS actual handler with mocked networking",
+    "technical-review-check PASS",
+    "technical-package-check PASS actual package with rendering/link stubs",
+    "seating-leg-section-check PASS",
+    "seating-screen-check PASS",
+    "node --check studio/atelier PASS",
+    "git diff --check PASS"
+  ],
+  "native": {
+    "scope": "24 isolated generated rectangular member checks, not full frame FEA",
+    "production_approved": false,
+    "checks": [
+      {
+        "family": "seating",
+        "kind": "sofa",
+        "style": "aura",
+        "member": "rail-front",
+        "deflection_mm": 31.38495798523332,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "seating",
+        "kind": "sofa",
+        "style": "scandinavian_modern",
+        "member": "rail-front",
+        "deflection_mm": 238.58335208422372,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "seating",
+        "kind": "sofa",
+        "style": "minimalism",
+        "member": "frame-front-rail",
+        "deflection_mm": 20.32592592592593,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "seating",
+        "kind": "sofa",
+        "style": "bauhaus",
+        "member": "frame-front-rail",
+        "deflection_mm": 9.710629731240154,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "seating",
+        "kind": "sofa",
+        "style": "brutalism",
+        "member": "frame-front-rail",
+        "deflection_mm": 13.158857897678198,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "seating",
+        "kind": "loveseat",
+        "style": "japandi",
+        "member": "frame-front-rail",
+        "deflection_mm": 3.8721549052481836,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "seating",
+        "kind": "loveseat",
+        "style": "minimalism",
+        "member": "frame-front-rail",
+        "deflection_mm": 3.3379972565157745,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "seating",
+        "kind": "loveseat",
+        "style": "industrial",
+        "member": "frame-front-rail",
+        "deflection_mm": 3.7925925925925927,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "seating",
+        "kind": "loveseat",
+        "style": "art_deco",
+        "member": "frame-front-rail",
+        "deflection_mm": 5.202458974749783,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "seating",
+        "kind": "armchair",
+        "style": "japandi",
+        "member": "rail-front",
+        "deflection_mm": 0.8312740321693801,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "seating",
+        "kind": "armchair",
+        "style": "mid_century_modern",
+        "member": "frame-front-rail",
+        "deflection_mm": 1.0889790682314686,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "seating",
+        "kind": "armchair",
+        "style": "wabi_sabi",
+        "member": "frame-front-rail",
+        "deflection_mm": 0.9571343291164963,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "table",
+        "kind": "dining",
+        "style": "aura",
+        "member": "stretcher-side-l",
+        "deflection_mm": 62.30672497288359,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "table",
+        "kind": "dining",
+        "style": "mid_century_modern",
+        "member": "apron-front",
+        "deflection_mm": 2.4395045628818504,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "table",
+        "kind": "coffee",
+        "style": "aura",
+        "member": "apron-front",
+        "deflection_mm": 1.5956930417218043,
+        "reaction_sum_N": 1000.0000000000001
+      },
+      {
+        "family": "table",
+        "kind": "coffee",
+        "style": "wabi_sabi",
+        "member": "apron-front",
+        "deflection_mm": 3.5561286507663756,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "table",
+        "kind": "side",
+        "style": "japandi",
+        "member": "drawer-rail",
+        "deflection_mm": 3.5637950042078135,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "table",
+        "kind": "side",
+        "style": "industrial",
+        "member": "drawer-rail",
+        "deflection_mm": 5.362669822161246,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "table",
+        "kind": "console",
+        "style": "aura",
+        "member": "stretcher-side-l",
+        "deflection_mm": 1.3310106912935853,
+        "reaction_sum_N": 1000.0000000000002
+      },
+      {
+        "family": "table",
+        "kind": "console",
+        "style": "scandinavian_modern",
+        "member": "drawer-rail",
+        "deflection_mm": 165.30876841113465,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "table",
+        "kind": "console",
+        "style": "wabi_sabi",
+        "member": "drawer-rail",
+        "deflection_mm": 54.13510101010101,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "table",
+        "kind": "console",
+        "style": "brutalism",
+        "member": "slab-stretcher",
+        "deflection_mm": 3.5604595336076805,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "table",
+        "kind": "desk",
+        "style": "japandi",
+        "member": "drawer-rail",
+        "deflection_mm": 198.16838315878096,
+        "reaction_sum_N": 1000.0
+      },
+      {
+        "family": "table",
+        "kind": "desk",
+        "style": "minimalism",
+        "member": "drawer-rail",
+        "deflection_mm": 611.7562218302958,
+        "reaction_sum_N": 1000.0
+      }
+    ]
+  },
+  "browser": {
+    "customer": "Local assessment dialog; actual ZIP downloaded and reopened; schema2 notes; no live send",
+    "designer": "Auto correct; reload preserved revision; restore returned thin-leg notes; reapply; structure visible",
+    "screenshots": [
+      "gonderim-notlari.png",
+      "gonderim-notlari-mobil.png",
+      "tasarimci-otomatik-duzelt.png",
+      "tasarimci-mobil.png"
+    ],
+    "mobile_limit": "390x844 controls/notes visible; scene can crop sofa, additional camera-fit review pending"
+  },
+  "not_completed": [
+    "Whole assembly FEA with measured joint stiffness",
+    "Material grading and actual production specification",
+    "International normative full-text/test coverage",
+    "All-age individualized ergonomic fit",
+    "Physical product tests",
+    "Complete site audit",
+    "Prior Forma180s full-suite timeout remains open"
+  ]
+}

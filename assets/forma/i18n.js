@@ -4,7 +4,18 @@ export const UI_LANGS = {tr: 'Türkçe', en: 'English', de: 'Deutsch', fr: 'Fran
 export const isRTL = lang => lang === 'ar';
 
 const T = {
-  technicalTitle: ['Teknik inceleme notları', 'Technical review notes'],
+  technicalTitle: ['Tasarım değerlendirme notları', 'Design assessment notes'],
+  reviewDownload: ['Değerlendirmeyi indir', 'Download assessment'],
+  reviewBeforeSend: ['Göndermeden önce tasarımınız', 'Your design before sending'],
+  reviewContinue: ['Notlarla birlikte tasarımcıya gönder', 'Send to designer with notes'],
+  reviewClose: ['Tasarımıma dön', 'Back to my design'],
+  frameNoFloor: ['Taşıyıcıların zemin teması doğrulanamadı.', 'Floor contact of the supporting members could not be verified.'],
+  frameInvalidGeometry: ['Bazı parçalarda geometri hesabı tamamlanamadı; ayrıca incelenmeli.', 'Geometry assessment failed for some members; review is required.'],
+  backSupportMissing: ['Sırt minderinin taşıyıcı dikme ve kuşakları eksik.', 'Back cushion supporting posts and rails are missing.'],
+  frameDisconnected: ['Bazı taşıyıcı parçalar diğer gövde elemanlarından ayrık görünüyor; bağlantıları incelenmeli.', 'Some structural members appear disconnected; their joints need assessment.'],
+  tableBracing: ['Masa ayakları arasında kuşak/rijit bağlantı tasarımı gerekiyor.', 'The table legs need apron or rigid connection design.'],
+  jointCapacityReview: ['Birleşimler, lif yönü ve bağlantı rijitliği ayrıca doğrulanmalı.', 'Joints, grain direction and joint stiffness need verification.'],
+  wholeProductReview: ['Bütün ürünün devrilme, dayanım ve yorulma kontrolleri tamamlanmalı.', 'Whole product stability, strength and fatigue checks remain necessary.'],
   technicalPending: ['Tasarımcı incelemesi gerekiyor', 'Designer review required'],
   technicalReturn: ['Tasarımınız serbestçe kaydedildi. Tasarımcı ergonomi, dayanım ve estetik düzenleme önerilerini hazırlayıp onayınıza sunar; özgün tasarımınız otomatik değiştirilmez.', 'Your concept is saved freely. The designer prepares ergonomic, structural and aesthetic proposals for your approval; your original design is not changed automatically.'],
   technicalLimits: ['Bunlar otomatik ön inceleme notlarıdır; üretim uygunluğu veya güvenlik onayı değildir.', 'These are automated preliminary notes, not production or safety approval.'],

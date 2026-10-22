@@ -11,6 +11,8 @@ import {WOODS, STAINS, FINISHES, STONES, METALS, COLORS, GLASS} from './catalog.
 import {download, jpegPdf, svgToJpeg, dataUrlJpeg} from './package.js';
 import {drawingSheet} from './drawing.js';
 import {t} from './i18n.js';
+import {autoCorrectDesign,reviewDesign} from './auto-correct.js';
+import {findingText} from './review-document.js';
 
 const $ = s => document.querySelector(s);
 const NAMES = {top: 'Tabla', 'back-panel': 'Arka panel', apron: 'Kayıt', leg: 'Ayak', 'case-top': 'Üst tabla', 'vanity-top': 'Lavabo tezgahı', 'mirror-frame': 'Ayna arkalığı', mirror: 'Ayna camı', 'arm-post': 'Kol dikmesi',
@@ -29,6 +31,7 @@ async function load(hash) {
     try { const pr = JSON.parse(localStorage.getItem('aura-forma-project') || 'null'); if (pr?.items?.length) S.items = pr.items.map(i => ({...i, design: normalizeDesign(i.design)})); } catch {}
     if (!S.items.length) { try { const fam = JSON.parse(localStorage.getItem('aura-forma-family') || '"seating"'); const d = JSON.parse(localStorage.getItem('aura-forma-design-' + fam) || 'null'); if (d) S.items = [{id: 'U1', qty: 1, design: normalizeDesign(d)}]; } catch {} }
   }
+  try {const saved=JSON.parse(localStorage.getItem('aura-atelier-revisions')||'{}');S.items=S.items.map(i=>{const r=saved[JSON.stringify(i.design)];return r?.design?{...i,customerOriginal:structuredClone(i.design),design:normalizeDesign(r.design),correction:r}:i;});}catch{}
   S.cur = 0; S.target = null; renderItems(); select(0);
 }
 function renderItems() {
@@ -44,7 +47,10 @@ const design = () => S.items[S.cur]?.design;
 function rebuild() {
   const d = design(); if (!d) return;
   S.compiled = compileDesign(d);
-  viewer?.setDesign(S.compare ? compileDesign({...d, overrides: []}) : S.compiled, d.materials);
+  const shown=S.compare?(S.items[S.cur].customerOriginal||{...d,overrides:[]}):d;
+  viewer?.setDesign(S.compare ? compileDesign(shown) : S.compiled, shown.materials);
+  viewer?.structure(!!S.frameView);
+  persistRevision();
   clearTimeout(checkTimer); checkTimer = setTimeout(renderChecks, 120);
 }
 function writeOverride() {
@@ -55,6 +61,20 @@ function writeOverride() {
   rebuild(); renderItems();
 }
 function snapshot() { S.undo.push(JSON.stringify(S.pts)); if (S.undo.length > 100) S.undo.shift(); S.redo = []; }
+function persistRevision(){
+ const item=S.items[S.cur];if(!item?.customerOriginal)return;
+ try{const all=JSON.parse(localStorage.getItem('aura-atelier-revisions')||'{}');all[JSON.stringify(item.customerOriginal)]={design:item.design,changes:item.correction?.changes||[],production_approved:false};localStorage.setItem('aura-atelier-revisions',JSON.stringify(all));}catch{}
+}
+function correctionPanel(){
+ const d=design(),item=S.items[S.cur],r=reviewDesign(d),escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const labels={restoreGeneratedFrame:'Silinen taşıyıcıları geri kur',increaseLegSection:'Ayak kesitini örnek senaryoya göre büyüt',addTableAprons:'Ahşap masa kuşaklarını ekle'};
+ return `<h2>Tasarım değerlendirme notları</h2><p class="a-note">Otomatik düzelt özgün tasarımın kopyasında uygulanır. Sonuç bir tasarımcı önerisidir; üretim onayı değildir. Ergonomi ve estetik son kararı tasarımcı verir.</p><div class="a-tools"><button data-autocorrect>Otomatik düzelt</button><button data-frameview aria-pressed="${!!S.frameView}">İskeleti göster</button>${item.customerOriginal?'<button data-original>Özgün modeli geri yükle</button>':''}</div>${item.correction?.changes?.length?`<p class="a-note">Uygulanan öneriler: ${item.correction.changes.map(k=>escape(labels[k]||k)).join(' · ')}</p>`:''}<ul class="a-checks">${r.findings.map(f=>`<li class="warn">${escape(findingText(f,'tr'))}</li>`).join('')}</ul>`;
+}
+function memberScenarioPanel(){
+ const rows=reviewDesign(design()).construction?.bending_scenarios||[];
+ if(!rows.length)return '';
+ return `<details><summary>Taşıyıcı eleman örnek hesapları (${rows.length})</summary><p class="a-note">Tek eleman, basit mesnet, merkezde1000N, varsayılan E=9000MPa. Lif doğrultusu ve birleşim rijitliği doğrulanmış değildir. Bütün iskeletin analizi veya standart deney sonucu değildir.</p><ul class="a-checks">${rows.slice().sort((a,b)=>b.deflection_mm-a.deflection_mm).slice(0,8).map(r=>`<li class="warn">${r.id.replace(/[^a-z0-9_-]/gi,'')} · açıklık ${Math.round(r.span_mm)} mm · sehim ${r.deflection_mm.toFixed(2)} mm · eğilme gerilmesi ${r.bending_stress_MPa.toFixed(2)} MPa</li>`).join('')}</ul></details>`;
+}
 
 /** Ramer–Douglas–Peucker on a closed ring: few control points that keep the corners. */
 function simplify(pts, tol) {
@@ -504,7 +524,7 @@ function renderPanel() {
   const d = design(), p = $('#panel');
   if (!d) { p.innerHTML = '<p class="a-note">Tasarım bulunamadı. Müşterinin bağlantısını yapıştırın.</p>'; return; }
   const parts = editableParts(S.compiled);
-  p.innerHTML = structurePanel() + `<h2>Parça biçimi</h2><div class="a-parts">${parts.map(t => `<button data-part="${t.key}" aria-pressed="${S.target?.key === t.key}">${nameOf(t)}${(d.overrides || []).some(o => (o.id && 'id:' + o.id === t.key) || (o.role && 'role:' + o.role === t.key && o.tool === 'profile')) ? ' ✎' : ''}</button>`).join('') || '<span class="a-note">Bu üründe biçimlendirilebilir parça yok.</span>'}</div>
+  p.innerHTML = correctionPanel()+structurePanel() + `<h2>Parça biçimi</h2><div class="a-parts">${parts.map(t => `<button data-part="${t.key}" aria-pressed="${S.target?.key === t.key}">${nameOf(t)}${(d.overrides || []).some(o => (o.id && 'id:' + o.id === t.key) || (o.role && 'role:' + o.role === t.key && o.tool === 'profile')) ? ' ✎' : ''}</button>`).join('') || '<span class="a-note">Bu üründe biçimlendirilebilir parça yok.</span>'}</div>
   ${S.target ? `<h2>${nameOf(S.target)}</h2>
   <div class="a-tools">${S.target.tool === 'silhouette' ? `<button data-sym aria-pressed="${S.sym}">Simetri</button><button data-preset="soft">Yumuşak köşe</button><button data-preset="oval">Oval</button><button data-preset="boat">Tekne</button><button data-preset="bow">İçbükey kenar</button>`
     : `<button data-preset="taper">Konik</button><button data-preset="swell">Şişkin</button><button data-preset="spindle">Torna halkalı</button>`}</div>
@@ -517,6 +537,7 @@ function renderPanel() {
   <input id="linkOut" readonly hidden>`;
   if (S.target) { drawEditor(); bindEditor(); renderToolState(); }
   renderChecks();
+  $('#checks')?.insertAdjacentHTML('afterend',memberScenarioPanel());
 }
 function renderToolState() {
   const q = s => $(s); if (!q('[data-undo]')) return;
@@ -525,11 +546,19 @@ function renderToolState() {
 function renderChecks() {
   const el = $('#checks'); if (!el || !S.compiled) return;
   const r = analyse(S.compiled, design().materials, design().family);
-  el.innerHTML = r.checks.map(c => `<li class="${c.level}">${c.tr}</li>`).join('') + `<li class="ok">Toplam ağırlık ~${r.mass} kg</li>`;
+  el.innerHTML = '<li class="warn">Aşağıdakiler varsayımlı hesap sonuçlarıdır; bağlantı, malzeme ve bütün ürün testleri tamamlanmadan üretim onayı sayılmaz.</li>'+r.checks.filter(c=>!c.tr.includes('denetimleri geçti')).map(c => `<li class="${c.level==='error'?'error':'warn'}">Örnek senaryo: ${c.tr}</li>`).join('') + `<li class="warn">Malzeme/boşluk varsayımlarıyla tahmini ağırlık ~${r.mass} kg</li>`;
 }
 
 $('#panel').addEventListener('click', async e => {
   const b = e.target.closest('button'); if (!b) return;
+  if(b.hasAttribute('data-frameview')){S.frameView=!S.frameView;rebuild();renderPanel();return;}
+  if(b.hasAttribute('data-autocorrect')){
+   const item=S.items[S.cur],r=autoCorrectDesign(design());item.customerOriginal ||= structuredClone(design());item.design=r.design;item.correction={...r,original:structuredClone(item.customerOriginal),changes:[...new Set([...(item.correction?.changes||[]),...r.changes])]};
+   S.compare=false;S.target=null;S.part=null;S.frameView=true;rebuild();renderItems();renderPanel();return;
+  }
+  if(b.hasAttribute('data-original')){
+   const item=S.items[S.cur];if(item.customerOriginal){item.design=structuredClone(item.customerOriginal);item.correction=null;S.compare=false;S.target=null;S.part=null;rebuild();renderItems();renderPanel();}return;
+  }
   if (b.dataset.mode) { S.mode = b.dataset.mode; renderPanel(); syncViewerSel(); return; }
   if (b.dataset.shape) { const t = editableParts(S.compiled).find(x => x.key === b.dataset.shape); S.view = null; pickTarget(t); return; }
   if (b.hasAttribute('data-dup')) return duplicatePart(false);
