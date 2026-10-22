@@ -166,7 +166,7 @@ function shell() {
       <div class="f-caption"><div><p class="f-eyebrow" id="eyebrow"></p><h1 id="designTitle"></h1><p class="f-dims" id="dims"></p></div><p class="f-status" id="status"></p></div>
       <div class="f-stage" id="stage" aria-label="${esc(L('perspective'))}"></div>
       <div class="f-toolbar" role="toolbar">
-        <button data-view="angle" aria-pressed="true">${L('perspective')}</button><button data-view="front">${L('front')}</button><button data-view="side">${L('side')}</button><button data-view="top">${L('top')}</button>
+        <button data-view="angle" aria-pressed="true">${L('perspective')}</button><button data-view="front">${L('front')}</button><button data-view="side">${L('sideDirection')}</button><button data-view="top">${L('top')}</button>
         <button id="modeBtn" aria-pressed="${!state.sketch}">${L(state.sketch ? 'modeRender' : 'modeSketch')}</button><button id="structureBtn" aria-pressed="false">${L('structure')}</button><button id="openBtn" aria-pressed="${!!state.openFronts}" ${['storage', 'kitchen', 'bath'].includes(state.design.family) ? '' : 'hidden'}>${L('openFronts')}</button><button id="photoBtn">${L('photo')} ↓</button>
         <button data-zoom="1.12" aria-label="+">+</button><button data-zoom="0.9" aria-label="−">−</button>
         <button id="undoBtn">↶ ${L('undo')}</button><button id="redoBtn">↷ ${L('redo')}</button>
@@ -999,7 +999,7 @@ function applyActions(actions) {
   if (r.changed) setDesign(r.design);
   for (const a of r.effects) {
     const v = {viewFront: 'front', viewSide: 'side', viewTop: 'top', viewAngle: 'angle'}[a.name];
-    if (v) { viewer?.view(v); markView(v); notes.push(L(v === 'angle' ? 'perspective' : v)); }
+    if (v) { viewer?.view(v); markView(v); notes.push(L(v === 'angle' ? 'perspective' : v === 'side' ? 'sideDirection' : v)); }
     else if (a.name === 'colour') { if (state.sketch) setSketch(false); }
     else if (a.name === 'structure') toggleStructure();
     else if (a.name === 'photo') savePhoto();
