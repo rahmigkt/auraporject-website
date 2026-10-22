@@ -94,15 +94,19 @@ export function fabricMaps(spec, {maxPx = 1024} = {}) {
   const repeatMm = (motifPattern || printed) ? MOTIF_REPEAT * densityFactor(spec) * ({houndstooth: 0.12, polka: 0.45, chevron: 0.7, pinstripe: 0.35, windowpane: 0.5, buffalo: 0.7, argyle: 0.6, trellis: 0.5, tweed: 0.3}[spec.pattern] ?? 1) : 0;
   const target = repeatMm ? Math.round(repeatMm / pitch) : Math.round(96 / pitch);
   n = Math.max(n, Math.ceil(target / n) * n);
-  const ppt = clamp(Math.floor(maxPx / n), n > 400 ? 2 : 3, 10), size = n * ppt; // ≥3 px per thread keeps the interlacing readable
+  const detailPpt = clamp(Math.floor(maxPx / n), n > 400 ? 2 : 3, 10);
+  // Large pattern/weave repeats must not override the image budget. Keep their real mm scale;
+  // sample the complete repeat at lower resolution when individual threads cannot all be resolved.
+  const size = Math.min(n * detailPpt, Math.max(1, Math.floor(maxPx))), ppt = size / n;
+  const reduced = size < n * detailPpt;
   const albedo = new Uint8ClampedArray(size * size * 4), height = new Float32Array(size * size), rough = new Uint8ClampedArray(size * size * 4);
   const mask = motifPattern ? motifMask(spec.motif || MOTIF_PATTERNS[spec.pattern], size) : null;
   const seed = (spec.color?.length || 3) * 7 + (spec.weave?.length || 1);
   const slubWarp = Array.from({length: n}, (_, i) => 1 - F.slub * 0.35 * valueNoise(i * 0.37, 0.5, seed, 0));
   for (let y = 0; y < size; y++) {
-    const j = Math.floor(y / ppt), fy = (y % ppt + 0.5) / ppt;
+    const ty = (y + 0.5) / ppt, j = Math.floor(reduced ? ty : y / ppt), fy = reduced ? ty - j : (y % ppt + 0.5) / ppt;
     for (let x = 0; x < size; x++) {
-      const i = Math.floor(x / ppt), fx = (x % ppt + 0.5) / ppt;
+      const tx = (x + 0.5) / ppt, i = Math.floor(reduced ? tx : x / ppt), fx = reduced ? tx - i : (x % ppt + 0.5) / ppt;
       const fig = mask ? mask[y * size + x] : printed ? printed(x / size, y / size) : 0;
       const weave = fig && damask ? Wfig : W;
       const warpUp = weave.top(i, j);
