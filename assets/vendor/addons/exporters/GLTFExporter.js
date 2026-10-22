@@ -530,6 +530,20 @@ function getPaddedArrayBuffer( arrayBuffer, paddingByte = 0 ) {
 
 }
 
+function readBlobAsync( blob, method ) {
+
+	return new Promise( ( resolve, reject ) => {
+
+		const reader = new FileReader();
+		reader.onload = () => resolve( reader.result );
+		reader.onerror = () => reject( reader.error || new Error( 'GLTFExporter: Blob read failed.' ) );
+		reader.onabort = () => reject( new Error( 'GLTFExporter: Blob read aborted.' ) );
+		reader[ method ]( blob );
+
+	} );
+
+}
+
 function getCanvas() {
 
 	if ( typeof document === 'undefined' && typeof OffscreenCanvas !== 'undefined' ) {
@@ -694,12 +708,10 @@ class GLTFWriter {
 
 			// https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/README.md#glb-file-format-specification
 
-			const reader = new FileReader();
-			reader.readAsArrayBuffer( blob );
-			reader.onloadend = function () {
+			const buffer = await readBlobAsync( blob, 'readAsArrayBuffer' );
 
 				// Binary chunk.
-				const binaryChunk = getPaddedArrayBuffer( reader.result );
+				const binaryChunk = getPaddedArrayBuffer( buffer );
 				const binaryChunkPrefix = new DataView( new ArrayBuffer( GLB_CHUNK_PREFIX_BYTES ) );
 				binaryChunkPrefix.setUint32( 0, binaryChunk.byteLength, true );
 				binaryChunkPrefix.setUint32( 4, GLB_CHUNK_TYPE_BIN, true );
@@ -728,29 +740,14 @@ class GLTFWriter {
 					binaryChunk
 				], { type: 'application/octet-stream' } );
 
-				const glbReader = new FileReader();
-				glbReader.readAsArrayBuffer( glbBlob );
-				glbReader.onloadend = function () {
-
-					onDone( glbReader.result );
-
-				};
-
-			};
+				onDone( await readBlobAsync( glbBlob, 'readAsArrayBuffer' ) );
 
 		} else {
 
 			if ( json.buffers && json.buffers.length > 0 ) {
 
-				const reader = new FileReader();
-				reader.readAsDataURL( blob );
-				reader.onloadend = function () {
-
-					const base64data = reader.result;
-					json.buffers[ 0 ].uri = base64data;
-					onDone( json );
-
-				};
+				json.buffers[ 0 ].uri = await readBlobAsync( blob, 'readAsDataURL' );
+				onDone( json );
 
 			} else {
 
@@ -1294,20 +1291,14 @@ class GLTFWriter {
 	 * @param {Blob} blob
 	 * @return {Promise<number>} An integer
 	 */
-	processBufferViewImage( blob ) {
+	async processBufferViewImage( blob ) {
 
 		const writer = this;
 		const json = writer.json;
 
 		if ( ! json.bufferViews ) json.bufferViews = [];
 
-		return new Promise( function ( resolve ) {
-
-			const reader = new FileReader();
-			reader.readAsArrayBuffer( blob );
-			reader.onloadend = function () {
-
-				const buffer = getPaddedArrayBuffer( reader.result );
+				const buffer = getPaddedArrayBuffer( await readBlobAsync( blob, 'readAsArrayBuffer' ) );
 
 				const bufferViewDef = {
 					buffer: writer.processBuffer( buffer ),
@@ -1316,11 +1307,7 @@ class GLTFWriter {
 				};
 
 				writer.byteOffset += buffer.byteLength;
-				resolve( json.bufferViews.push( bufferViewDef ) - 1 );
-
-			};
-
-		} );
+				return json.bufferViews.push( bufferViewDef ) - 1;
 
 	}
 
