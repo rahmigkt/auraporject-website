@@ -160,6 +160,27 @@
       "not": "Chair corner at y=-5.68e-14mm is floating roundoff at wall boundary, not a real geometric penetration. Boundary contact does not establish required wall/functional clearance. Same-name side-table ambiguity remains. Original coordinate format requires reviewed native constraint conversion; current H4 target not approved by this original-source decision.",
       "training_approved": false,
       "sizma": "Semantic/paraphrase review pending."
+    },
+    "C7-yerlesim-kimlik-olcu-20261022": {
+      "karar": "uygun",
+      "kapsam": "Yalnız13 sentetik giriş/kimlik/ölçü probu ve bu dar motor düzeltmesi; eğitim satırı onayı değildir.",
+      "denetci": "Codex",
+      "ureten": "Codex",
+      "review_mode": "user_authorized_self_review",
+      "zaman": "2026-10-22T16:57:21.886501+00:00",
+      "source_code_sha": "b3f114ec60f5bdcc11a35a0f8dbc972a7b2de96d",
+      "kod_sha256_lf": {
+        "tools/studyo-motoru/motor.mjs": "201786935880c0463fc9a7f3f04879f9dc8024010a9cb23d1a4858a30c1a499f",
+        "tools/c7-audit/layout-identity.mjs": "37a7494984246db1050d628327ba851471ff55b7c556f6664dcb866947b3c565"
+      },
+      "kanit": "knowledge/ai-egitim/inceleme/C7-yerlesim-kimlik-olcu-kanit.json",
+      "testler": [
+        "node tools/c7-audit/layout-identity.mjs --out work/c7-layout-after.json --assert:13/13 PASS",
+        "node tools/studyo-motoru/test.mjs:24/24 PASS",
+        "node tools/c7-audit/motor-stair.mjs --out work/c7-stair-identity-regression.json --assert:26/26 PASS"
+      ],
+      "training_approved": false,
+      "not": "Tekrarlanan eşya kimliğinin450mm sehpa ölçüsünü500mm kaydetmesi yeniden üretildi. Belirsiz kimlikler çözümden önce reddediliyor; ayrı açık kimliklerde ölçüler korunuyor. Geçersiz girdide kayıtlı plan değişmiyor."
     }
   }
 }
