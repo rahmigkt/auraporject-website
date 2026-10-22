@@ -184,4 +184,4 @@ const KITCHEN_STARTS = kitchen.kitchenStarts(STORAGE_STYLES);
 FAMILIES.kitchen.starts = KITCHEN_STARTS;
 const BATH_STARTS = bath.bathStarts(STORAGE_STYLES);
 FAMILIES.bath.starts = BATH_STARTS;
-export const familyOf = d => FAMILIES[d?.family] || FAMILIES.seating;
+export const familyOf = d => typeof d?.family === 'string' && Object.prototype.hasOwnProperty.call(FAMILIES, d.family) ? FAMILIES[d.family] : FAMILIES.seating;
