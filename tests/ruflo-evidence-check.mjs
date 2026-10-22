@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';import fs from 'node:fs';import path fro
 const pilot=process.argv[2];assert(pilot,'Pass isolated pilot directory');
 const fixtures=path.join(path.resolve(pilot),'adapter-fixtures');fs.mkdirSync(fixtures,{recursive:true});
 for(const [file,value]of [['H5-runtime.json',{stage:'CPU_pending',training_started:false}],['C7-runtime.json',{status:'complete_with_rejections',training_approvals:0}],['site-release-runtime.json',{state:'published'}]])fs.writeFileSync(path.join(fixtures,file),JSON.stringify(value));
-const sourceFiles=fs.readdirSync(fixtures),before=sourceFiles.map(f=>fs.readFileSync(path.join(fixtures,f),'utf8'));
+const sourceFiles=['H5-runtime.json','C7-runtime.json','site-release-runtime.json'],before=sourceFiles.map(f=>fs.readFileSync(path.join(fixtures,f),'utf8'));
 assert.throws(()=>snapshot(fixtures,'../H5'));assert.throws(()=>query(fixtures,pilot,'unknown'));
 const result=sync(fixtures,pilot);assert.equal(result.receipts.length,3);
 assert.equal(query(fixtures,pilot,'H5').data.stage,'CPU_pending');
