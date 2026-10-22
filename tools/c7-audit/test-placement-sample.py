@@ -13,6 +13,8 @@ assert all(audit.inside(p, square) for p in audit.footprint([1000, 1000], 0, [50
 assert not all(audit.inside(p, square) for p in audit.footprint([1900, 1000], 90, [500, 800]))
 rotated = audit.footprint([0, 0], 90, [400, 800])
 assert math.isclose(max(p[0] for p in rotated)-min(p[0] for p in rotated), 800)
+assert audit.inside_or_boundary([1000, -5e-14], square)
+assert not audit.inside_or_boundary([1000, -0.01], square)
 for bad in ([0, 400], [-10, 400], [float('nan'), 400]):
     try:
         audit.footprint([0, 0], 0, bad)

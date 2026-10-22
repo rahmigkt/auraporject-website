@@ -61,8 +61,19 @@ function mobilya(state, ops, rep) {
 const STAIR = {width: 800, rule: 630, tol: 30, riserMin: 150, riserMax: 190, goingMin: 250};
 function levelOf(state, kat) { if (!kat || kat === 'k0') return state.plan ??= {walls: [], openings: [], spaces: [], items: []}; return state.katlar?.[kat]?.plan; }
 function stair(state, op, no) {
+  if (!Number.isFinite(op.en) || !Array.isArray(op.konum) || op.konum.length !== 2 || !op.konum.every(Number.isFinite) || (op.aci !== undefined && !Number.isFinite(op.aci))) {
+    no(op, 'merdiven eni, iki konum koordinatı ve açı sonlu sayılar olmalı'); return null;
+  }
+  if (op.basamak_sayisi !== undefined && (!Number.isInteger(op.basamak_sayisi) || op.basamak_sayisi <= 0)) {
+    no(op, 'basamak sayısı pozitif tam sayı olmalı'); return null;
+  }
+  for (const key of ['basamak_derinlik', 'sahanlik']) if (op[key] !== undefined && (!Number.isFinite(op[key]) || op[key] <= 0)) {
+    no(op, `${key} pozitif ve sonlu sayı olmalı`); return null;
+  }
   const lo = levelOf(state, op.alt), up = state.katlar?.[op.ust]; if (!lo || !up) { no(op, 'merdivenin bağlandığı kat yok'); return null; }
-  const H = up.yukseklik || 2800, n = op.basamak_sayisi || Math.ceil(H / STAIR.riserMax), riser = H / n, going = op.basamak_derinlik || Math.max(STAIR.goingMin, Math.round(STAIR.rule - 2 * riser)), landing = op.sahanlik || op.en;
+  const H = up.yukseklik ?? 2800;
+  if (!Number.isFinite(H) || H < 2200 || H > 6000) { no(op, 'kat yüksekliği 2200–6000 mm aralığında sonlu sayı olmalı'); return null; }
+  const n = op.basamak_sayisi ?? Math.ceil(H / STAIR.riserMax), riser = H / n, going = op.basamak_derinlik ?? Math.max(STAIR.goingMin, Math.round(STAIR.rule - 2 * riser)), landing = op.sahanlik ?? op.en;
   if (riser > STAIR.riserMax || riser < STAIR.riserMin) { no(op, `rıht ${riser.toFixed(0)} mm; ${STAIR.riserMin}–${STAIR.riserMax} mm olmalı`); return null; }
   if (going < STAIR.goingMin) { no(op, `basamak derinliği ${going} mm; en az ${STAIR.goingMin} mm`); return null; }
   if (op.en < STAIR.width) { no(op, `merdiven eni ${op.en} mm; en az ${STAIR.width} mm`); return null; }
@@ -80,7 +91,7 @@ function ev(state, ops, rep) {
   for (const op of ops) {
     if (NOT_YET[op.type]) { no(op, NOT_YET[op.type]); continue; }
     if (op.type === 'kat_ekle') { state.katlar ??= {}; if (state.katlar[op.id] || op.id === 'k0') { no(op, 'bu kat zaten var'); continue; }
-      if (op.yukseklik != null && !(op.yukseklik >= 2200 && op.yukseklik <= 6000)) { no(op, `kat yüksekliği ${op.yukseklik} mm; 2200–6000 mm olmalı`); continue; }
+      if (op.yukseklik != null && !(Number.isFinite(op.yukseklik) && op.yukseklik >= 2200 && op.yukseklik <= 6000)) { no(op, `kat yüksekliği ${op.yukseklik} mm; 2200–6000 mm olmalı`); continue; }
       const base = levelOf(state, op.kopya || 'k0'), outer = op.dis_duvarlar !== false ? (base?.walls || []).filter(w => (val(w.thickness) || 120) >= (op.dis_kalinlik || 200)) : [];
       state.katlar[op.id] = {yukseklik: op.yukseklik || 2800, plan: {walls: structuredClone(outer), openings: [], spaces: [], items: []}}; rep.kabul.push({katman: 'ev', op}); continue; }
     if (op.type === 'merdiven') { const st = stair(state, op, no); if (!st) continue; (state.merdivenler ??= []).push(st); const up = state.katlar[op.ust].plan; (up.voids ??= []).push({id: st.id + '-bosluk', poly: st.poly}); rep.kabul.push({katman: 'ev', op, merdiven: st}); continue; }

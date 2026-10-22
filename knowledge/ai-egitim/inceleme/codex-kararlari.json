@@ -105,6 +105,61 @@
       ],
       "training_approved": false,
       "sizma": "Anlamsal/parafraz incelemesi bekliyor; uygun degil."
+    },
+    "C7-merdiven-sayisal-sinir-20261022": {
+      "karar": "uygun",
+      "kapsam": "Yalnız kaydedilen26 mekanik giriş probu ve sayısal sınır düzeltmesi; eğitim satırı veya bütün motor onayı değildir.",
+      "denetci": "Codex",
+      "ureten": "Codex",
+      "review_mode": "user_authorized_self_review",
+      "zaman": "2026-10-22T15:11:38.903416+00:00",
+      "source_code_sha": "d6f8a15fe62c43092515a95c6e3e8bb15aad5cd8",
+      "kod_sha256_lf": {
+        "knowledge/ai-egitim/inceleme/codex-motor-184-denetim.json": "6f4f3e821c7f090b5f2d28227e1a6ecf5604fc45a2c117f1bf1baa4562b03fd1",
+        "tools/studyo-motoru/motor.mjs": "1915d022512c1ed153a0d378646c81f59ffddf057aca8e26f7302ea549e9a703",
+        "tools/c7-audit/motor-stair.mjs": "93d710512934d69a30a4dae5e96538f35e5e73c7f4b2ab533a36d3c97e7e0c55"
+      },
+      "kanit": "knowledge/ai-egitim/inceleme/C7-merdiven-sinir-kanit.json",
+      "testler": [
+        "node tools/c7-audit/motor-stair.mjs --out work/c7-stair-after.json --assert:26/26 PASS",
+        "node tools/studyo-motoru/test.mjs:24/24 PASS",
+        "node tools/c7-audit/test.mjs:PASS",
+        "python tools/c7-audit/test-placement-sample.py:PASS"
+      ],
+      "training_approved": false,
+      "not": "Tarihsel5 prob yeniden geçti; eski merdiven duzelt kararı tarihçe olarak korundu. Ek negatif kontrollerde9 gerçek sayısal giriş kusuru/hatası yeniden üretildi. Sıfır/kesirli basamak ve metin ölçüleri artık reddediliyor; geçerli uç değerler ve redden sonraki geçerli işlem çalışıyor."
+    },
+    "aura-cozucu-train-1265-room|3": {
+      "karar": "duzelt",
+      "denetci": "Codex",
+      "ureten": "Claude source conversion; procedural ProcTHOR",
+      "review_mode": "cross_review",
+      "zaman": "2026-10-22T15:16:35.843086+00:00",
+      "source_sha256": "749845b2b8b4280741df5f7d80c0621b8af35e42a3aa3ee5dc03fd2176f68502",
+      "row_sha256": "b2e7e586d5627fec2bf2bb8fa7438e3af5ec8c18d8b04259eeacca8a4b7a5109",
+      "source_code_sha": "d6f8a15fe62c43092515a95c6e3e8bb15aad5cd8",
+      "satir": 311,
+      "kaynak_dosya": "knowledge/ai-egitim/veri/yerlesim/procthor-aura-cozucu.jsonl.gz",
+      "kanit": "knowledge/ai-egitim/inceleme/C7-yerlesim-isaretli-iki-kanit.json",
+      "not": "Same named side-table target can bind500mm or450mm input. At x3958,500mm extends13mm beyond room minx3721;450mm stays inside. Binding unresolved; not a proven physical collision under the unknown true assignment. Original coordinate format requires reviewed native constraint conversion; current H4 target not approved by this original-source decision.",
+      "training_approved": false,
+      "sizma": "Semantic/paraphrase review pending."
+    },
+    "aura-cozucu-train-656-room|3": {
+      "karar": "duzelt",
+      "denetci": "Codex",
+      "ureten": "Claude source conversion; procedural ProcTHOR",
+      "review_mode": "cross_review",
+      "zaman": "2026-10-22T15:16:35.843086+00:00",
+      "source_sha256": "749845b2b8b4280741df5f7d80c0621b8af35e42a3aa3ee5dc03fd2176f68502",
+      "row_sha256": "369eddef7873065264fdc0b201b2c503b9aabfe7212e289813b1197df6cddb1d",
+      "source_code_sha": "d6f8a15fe62c43092515a95c6e3e8bb15aad5cd8",
+      "satir": 3875,
+      "kaynak_dosya": "knowledge/ai-egitim/veri/yerlesim/procthor-aura-cozucu.jsonl.gz",
+      "kanit": "knowledge/ai-egitim/inceleme/C7-yerlesim-isaretli-iki-kanit.json",
+      "not": "Chair corner at y=-5.68e-14mm is floating roundoff at wall boundary, not a real geometric penetration. Boundary contact does not establish required wall/functional clearance. Same-name side-table ambiguity remains. Original coordinate format requires reviewed native constraint conversion; current H4 target not approved by this original-source decision.",
+      "training_approved": false,
+      "sizma": "Semantic/paraphrase review pending."
     }
   }
 }

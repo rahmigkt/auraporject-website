@@ -40,6 +40,18 @@ def inside(point, polygon):
     return result
 
 
+def inside_or_boundary(point, polygon, eps_mm=1e-6):
+    # Numerical edge classification only, never a clearance/design tolerance.
+    if inside(point, polygon):
+        return True
+    for a, b in zip(polygon, polygon[1:] + polygon[:1]):
+        dx, dy = b[0]-a[0], b[1]-a[1]
+        t = max(0, min(1, ((point[0]-a[0])*dx+(point[1]-a[1])*dy)/(dx*dx+dy*dy or 1)))
+        if math.hypot(point[0]-a[0]-t*dx, point[1]-a[1]-t*dy) <= eps_mm:
+            return True
+    return False
+
+
 def inspect(row):
     prompt = row['messages'][0]['content']
     answer = json.loads(row['messages'][-1]['content'])
@@ -67,7 +79,9 @@ def inspect(row):
                        'size_association': 'ambiguous' if name in ambiguous else 'unique',
                        'candidate_sizes_mm': options,
                        'corner_checks': [{'size_mm': size, 'corners_mm': footprint(item['merkez_mm'], item['on_derece'], size),
-                                          'all_corners_strictly_inside': all(inside(p, polygon) for p in footprint(item['merkez_mm'], item['on_derece'], size))}
+                                          'all_corners_strictly_inside': all(inside(p, polygon) for p in footprint(item['merkez_mm'], item['on_derece'], size)),
+                                          'all_corners_inside_or_boundary': all(inside_or_boundary(p, polygon) for p in footprint(item['merkez_mm'], item['on_derece'], size)),
+                                          'numerical_boundary_epsilon_mm': 1e-6}
                                          for size in options]})
     findings = ['legacy_coordinate_target_requires_reviewed_constraint_conversion']
     if ambiguous:
