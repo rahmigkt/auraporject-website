@@ -33,7 +33,7 @@ import {migrate, chooserHTML, applyChoice, TEXTILE_CSS, TEXTILE_KEY, SHEERS, DRA
 const $ = (sel, root = document) => root.querySelector(sel);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
 // Browser storage; with an account every change is also saved to it (debounced), so work survives other devices.
-const store = {get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} account.schedule(); }};
+const store = {get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }, set(k, v) { try { const next = JSON.stringify(v); if (localStorage.getItem(k) === next) return; localStorage.setItem(k, next); account.schedule(); } catch {} }};
 
 const params = new URLSearchParams(location.search);
 const browserLang = (navigator.language || 'en').slice(0, 2);
