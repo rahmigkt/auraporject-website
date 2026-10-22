@@ -412,6 +412,7 @@ class TransformControls extends Controls {
 		this._onPointerHover = onPointerHover.bind( this );
 		this._onPointerMove = onPointerMove.bind( this );
 		this._onPointerUp = onPointerUp.bind( this );
+		this._onPointerCancel = onPointerCancel.bind( this );
 
 		if ( domElement !== null ) {
 
@@ -428,6 +429,7 @@ class TransformControls extends Controls {
 		this.domElement.addEventListener( 'pointerdown', this._onPointerDown );
 		this.domElement.addEventListener( 'pointermove', this._onPointerHover );
 		this.domElement.addEventListener( 'pointerup', this._onPointerUp );
+		this.domElement.addEventListener( 'pointercancel', this._onPointerCancel );
 
 		this.domElement.style.touchAction = 'none'; // Disable touch scroll
 
@@ -439,6 +441,7 @@ class TransformControls extends Controls {
 		this.domElement.removeEventListener( 'pointermove', this._onPointerHover );
 		this.domElement.removeEventListener( 'pointermove', this._onPointerMove );
 		this.domElement.removeEventListener( 'pointerup', this._onPointerUp );
+		this.domElement.removeEventListener( 'pointercancel', this._onPointerCancel );
 
 		this.domElement.style.touchAction = ''; // Restore touch scroll
 
@@ -1066,6 +1069,16 @@ function onPointerUp( event ) {
 	this.domElement.removeEventListener( 'pointermove', this._onPointerMove );
 
 	this.pointerUp( this._getPointer( event ) );
+
+}
+
+function onPointerCancel( event ) {
+
+	// Cancellation can have button -1, or arrive after the control is disabled.
+	// End at the visible transform so the owner's end callback can persist it.
+	if ( this.domElement.hasPointerCapture?.( event.pointerId ) ) this.domElement.releasePointerCapture( event.pointerId );
+	this.domElement.removeEventListener( 'pointermove', this._onPointerMove );
+	this.pointerUp( null );
 
 }
 
