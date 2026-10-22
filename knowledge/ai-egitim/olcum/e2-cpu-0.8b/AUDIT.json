@@ -1,0 +1,146 @@
+{
+  "status": "completed_limited_CPU_dry_run;model_not_qualified",
+  "producer_code_sha": "05f5412b78bcf4c47985696992b1cce2cb56c7f9",
+  "protocol_sha256": "e262474a8a87a22408aad28e67016a55ca206e209417697349d9ac47de9f6d63",
+  "journal_sha256": "0756001cd8d08abbd3861ba38c1d5e814667bde79ff8d8f4c98b533e6ea3cf83",
+  "audit_code_sha256": "60750f1b2e8d4706122aa9a4c156a7bc22a39f16c887ba08e0b371c78d78f919",
+  "attempts": 80,
+  "requests": 20,
+  "strict_json_syntax_valid": 49,
+  "outer_contract_pass": 4,
+  "motor_pass": 1,
+  "request_pass": 0,
+  "mechanical_candidates": 0,
+  "hard_requests": 20,
+  "training_approved": 0,
+  "transport_errors": 0,
+  "generation_token_limit": 11,
+  "context_truncated": 0,
+  "original_runner_reported_truncated": 0,
+  "counter_bug": "Original producer omitted native stop_type=limit. Original predictions and SCORES remain untouched; separate audited flags are authoritative for cutoff counts. Future producer has a regression-tested correction; no resampling.",
+  "selection_unchanged": true,
+  "original_outputs_repaired": false,
+  "all_attempts_retained": true,
+  "components": {
+    "bicim": {
+      "pass": 4,
+      "fail": 76,
+      "review": 0
+    },
+    "motor": {
+      "pass": 1,
+      "fail": 3,
+      "review": 76
+    },
+    "istek": {
+      "pass": 0,
+      "fail": 4,
+      "review": 76
+    },
+    "durustluk": {
+      "pass": 0,
+      "fail": 0,
+      "review": 80
+    },
+    "dil": {
+      "pass": 0,
+      "fail": 0,
+      "review": 80
+    },
+    "kisalik": {
+      "pass": 4,
+      "fail": 0,
+      "review": 76
+    }
+  },
+  "seconds": {
+    "sum": 2000.266999999294,
+    "mean": 25.003337499991176,
+    "median": 19.375,
+    "min": 9.85999999998603,
+    "max": 99.25
+  },
+  "output_tokens": 11073,
+  "threshold": 0.6666666666666666,
+  "data_checks": {
+    "h1_rows": 1800,
+    "h1_excluded_train_dev": 1800,
+    "h1_used": 0,
+    "h4_house_groups": 10,
+    "current_engine_reference_passes": 20,
+    "normalized_exam_text_overlap": 0,
+    "exact_exam_plan_overlap": 0,
+    "caveat": "No unused H1 rows remain. This dry run uses only new H4-room development requests; no approval or train/dev merge."
+  },
+  "model_sha256": "37ae482d336108d23516fa35e8e0c4126688d81018b87178a18d752a1357814f",
+  "runtime_files_verified": 26,
+  "tokenizer_files_verified": 3,
+  "model_run_repeated": false,
+  "training_started": false,
+  "gpu": false,
+  "paid_service": false,
+  "site_changed": false,
+  "limits": [
+    "20 new Turkish H4-room development requests; no unused H1 rows remained.",
+    "Only placement and lighting subset; not general AURA9B, multilingual or live PHP performance.",
+    "No trained EGITIM-01 checkpoint; actual producer is untrained0.8B CPU.",
+    "20x4 prototype,not activated k8/9B or automatic training integration.",
+    "Human review subset is separately bound; mechanical audit is not native/designer approval."
+  ],
+  "manual_review": {
+    "fully_read_unique_outputs": 25,
+    "mechanical_only_outputs": 55,
+    "rule": "Stored hash-bound review notes; first sample per20requests,all4contract-passing outputs,and1extra malformed example. Post-run selection,not a blinded statistical estimate.",
+    "decisions": {
+      "duzelt": 25,
+      "ret": 0,
+      "review": 0
+    },
+    "independent_Claude_review": false,
+    "native_expert_approval": false,
+    "review_file_sha256": "4fd39c506cfeb455989a67feaec4eb64f649c095f1571ba8cabe5112e690b8a0"
+  },
+  "pr": 263,
+  "base_pr": 262,
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "independent_Claude_review": false,
+  "native_cpu_proof": {
+    "raw_bytes": 13502756,
+    "raw_sha256": "6d2ff242ea85d568b03d10f1034883c3555c51397a0c35b79329a4a089c848f6",
+    "gzip_sha256": "50a9bad6bc5dd868d2f0d5e7517e53e3eda2daf11abb700402ab62a45c945750",
+    "cpu_backend_observed": true,
+    "gpu_backend_markers_observed": false
+  },
+  "producer_git_tag": "e2-cpu-producer-20261023-05f5412",
+  "original_counter_bug_preserved": true,
+  "authoritative_termination_report": "termination-audit.json",
+  "site_or_training_approval": false,
+  "model_provenance": {
+    "model": "Qwen/Qwen3.5-0.8B",
+    "source_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "gguf_repository": "ggml-org/Qwen3.5-0.8B-GGUF",
+    "gguf_revision": "807dfd9a6fadbf703207aac3bfb0b2b3040d077c",
+    "model_sha256": "37ae482d336108d23516fa35e8e0c4126688d81018b87178a18d752a1357814f",
+    "source_cards_sha256": {
+      "source-README.md": "87a163af54f32fa608a0f8d3ac67945c53dd2b4a7c96740b3d7fdc28e8458864",
+      "gguf-README.md": "f9e53b6a3ff7accd8486b9d9eacde851af9688e1f8158c32c80525f7b4158a56",
+      "source-api.json": "f21344be21bbc6cf2470978089936be3ee41c17b5ec10232856d2e59f148a7f9",
+      "gguf-api.json": "22d9708789bdac470b832033713f317e2e6297328516c2c504e9d048282505e6"
+    }
+  },
+  "integrated_validation": {
+    "code_sha": "3e22e1760f7c0fe55589dcc14bc5fc0aa4a14651",
+    "offline_jobs": 121,
+    "passed": 121,
+    "failed": 0,
+    "whole_site_or_native_approval": false,
+    "receipt": "integrated-full-suite.json"
+  },
+  "score_distribution_lower_bound": {
+    "0/6": 76,
+    "2/6": 3,
+    "3/6": 1
+  },
+  "timing_limit": "Sampling ran concurrently with independent CPU verification; timing is not an isolated benchmark or9B speed/cost estimate."
+}
