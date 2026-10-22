@@ -23,7 +23,12 @@ for row in rows:
         for item in op['esyalar']:
             assert set(item)<={'id','tur','en','derinlik','yukseklik'}
 assert not m.leakage(rows)
-assert report['source_lock']==m.source_lock()
+assert m.current_evidence_lock(report)==m.source_lock()
+for key,value in [('qualified_training_rows',1),('candidate_rows',2589)]:
+    changed=copy.deepcopy(report);changed[key]=value
+    try:m.current_evidence_lock(changed)
+    except ValueError:pass
+    else:raise AssertionError('Unbound snapshot accepted: '+key)
 assert len(report['engine_evidence'])==52
 assert all(e['report']['gecti'] for e in report['engine_evidence'])
 for split in ['train','dev','test']:assert (base/(split+'.jsonl')).read_bytes()==b''

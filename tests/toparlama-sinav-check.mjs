@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {loadTasks,grade,score} from './ai-eval/aura-sinav-01/score.mjs';
-const tasks=loadTasks(),positive=tasks.filter(t=>t.expected.actions.length);
+assert.throws(()=>loadTasks(),/reviewed revalidation/,'Default historical source gate must stay closed');
+assert.throws(()=>loadTasks({revalidation:'unknown'}),/reviewed revalidation/);
+const tasks=loadTasks({revalidation:'motor-20261023'}),positive=tasks.filter(t=>t.expected.actions.length);
 assert.equal(tasks.length,120);assert.equal(positive.length,100);
 for(const [group,n] of Object.entries({mobilya:40,'ev-yerlesim':40,tekstil:20,zor:20}))assert.equal(tasks.filter(t=>t.group===group).length,n);
 assert.equal(new Set(tasks.filter(t=>t.group==='mobilya').map(t=>t.lang)).size,9);

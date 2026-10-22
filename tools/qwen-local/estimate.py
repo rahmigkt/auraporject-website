@@ -1,5 +1,6 @@
 """Lightweight preparation; stdlib only. Does not load a model or contact any service."""
 import argparse
+import importlib.util
 import hashlib
 import json
 import math
@@ -55,7 +56,12 @@ def estimate_current(plan, measured=None):
     candidates=rows(base/'adaylar.jsonl');exports={s:rows(base/(s+'.jsonl')) for s in ['train','dev','test']}
     counts=json.loads((base/'sayim-raporu.json').read_text(encoding='utf-8'))
     tree=subprocess.check_output(['git','ls-tree','-r','HEAD','--','assets','tools/studyo-motoru'])
-    if hashlib.sha256(tree).hexdigest()!=counts['source_lock']['git_tree_sha256']:raise ValueError('Stale engine evidence')
+    evidence_status='original_source_matches'
+    if hashlib.sha256(tree).hexdigest()!=counts['source_lock']['git_tree_sha256']:
+        spec=importlib.util.spec_from_file_location('source_evidence',Path(__file__).resolve().parents[1]/'egitim-donustur/source_evidence.py')
+        evidence=importlib.util.module_from_spec(spec);spec.loader.exec_module(evidence)
+        evidence.verified_snapshot_lock(counts)
+        evidence_status='explicit_mechanical_revalidation;zero_exports;not_training_approval'
     subprocess.check_call(['git','diff','--exit-code','HEAD','--','assets','tools/studyo-motoru'],stdout=subprocess.DEVNULL)
     if len(candidates)!=counts['candidate_rows']:raise ValueError('Candidate count mismatch')
     schema=json.loads(Path(plan['data']['schema']).read_text(encoding='utf-8'))
@@ -79,7 +85,7 @@ def estimate_current(plan, measured=None):
             est['pod_compute_usd']={gpu:round(est['total_hours']*rate,2) for gpu,rate in plan['pricing']['pod_hourly_usd'].items()}
             est['data_available']=False;stages[stage['id']]=est
         scenarios.append({'seconds_per_optimizer_step':sec,'hypothetical_unmeasured':measured is None,'stages':stages})
-    return {'status':'blocked_preparation_only','training_started':False,'model_loaded':False,'candidate_rows':len(candidates),'available_training_rows':len(exports['train']),'split_rows':{s:len(r) for s,r in exports.items()},'candidate_characters_not_tokens':{'total':sum(chars),'median':statistics.median(chars) if chars else 0,'maximum':max(chars,default=0)},'exact_token_count':None,'dataset_sha256':{s:hashlib.sha256((base/(s+'.jsonl')).read_bytes()).hexdigest() for s in ['adaylar','train','dev','test']},'current_training_duration_hours':None,'current_training_cost_usd':None,'note':'Future size sensitivity only; no approved train rows, matching-GPU benchmark, tokenizer count or training authorization. GPU price does not imply equal speed across GPUs; taxes/storage/network and human preparation excluded.','scenarios':scenarios}
+    return {'source_evidence_status':evidence_status,'status':'blocked_preparation_only','training_started':False,'model_loaded':False,'candidate_rows':len(candidates),'available_training_rows':len(exports['train']),'split_rows':{s:len(r) for s,r in exports.items()},'candidate_characters_not_tokens':{'total':sum(chars),'median':statistics.median(chars) if chars else 0,'maximum':max(chars,default=0)},'exact_token_count':None,'dataset_sha256':{s:hashlib.sha256((base/(s+'.jsonl')).read_bytes()).hexdigest() for s in ['adaylar','train','dev','test']},'current_training_duration_hours':None,'current_training_cost_usd':None,'note':'Future size sensitivity only; no approved train rows, matching-GPU benchmark, tokenizer count or training authorization. GPU price does not imply equal speed across GPUs; taxes/storage/network and human preparation excluded.','scenarios':scenarios}
 
 if __name__ == '__main__':
     main()
