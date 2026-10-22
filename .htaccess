@@ -1,6 +1,11 @@
 Options -Indexes
 DirectoryIndex index.html
 
+# WebAssembly streaming compilation requires this MIME type.
+<IfModule mod_mime.c>
+AddType application/wasm .wasm
+</IfModule>
+
 # Always HTTPS (certificate verified on the phone 2026-10-20)
 <IfModule mod_rewrite.c>
 RewriteEngine On
