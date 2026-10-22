@@ -25,6 +25,86 @@
       "uslup": "Türkçe10 tur Codex tarafından okundu; müşteri dili anlaşılır. İnsan/dil eğitim onayı verilmedi.",
       "sizma": "Mevcut sınavla normalize edilmiş tam kullanıcı cümlesi eşleşmesi yok; anlamsal/parafraz denetimi tamamlanmadı.",
       "training_approved": false
+    },
+    "procthor-train-1-room|11": {
+      "karar": "duzelt",
+      "not": "Iki parcanin istemdeki olculerle hesaplanan koseleri oda icinde. Bu yalniz kose kontroludur; gecis/kapi/pencere ve sizma tamamlanmadi. Ozgun koordinat hedefi guncel yerel islem/kisit egitim sozlesmesine onaylanamaz.",
+      "denetci": "Codex",
+      "ureten": "Claude (conversion scripts); procedural ProcTHOR source",
+      "review_mode": "cross_review",
+      "zaman": "2026-10-22T14:56:47.045043+00:00",
+      "row_sha256": "39fc69741f09d29190690957f5f13f01a41395e545d7e9afe2bc34df8f8e8743",
+      "source_sha256": "7424022ea97ecf789fbf557ba7c83a00e62409d74d28ecd90caa3b6a1fb8de9c",
+      "source_code_sha": "263922aabb2a06d966a895a4bc8357f983f8791e",
+      "kaynak_dosya": "knowledge/ai-egitim/veri/yerlesim/procthor-denetimli.jsonl.gz",
+      "satir": 1,
+      "kanit": "knowledge/ai-egitim/inceleme/C7-yerlesim-ilk-dort-kanit.json",
+      "testler": [
+        "python tools/c7-audit/test-placement-sample.py:PASS",
+        "node tools/c7-audit/test.mjs:PASS"
+      ],
+      "training_approved": false,
+      "sizma": "Anlamsal/parafraz incelemesi bekliyor; uygun degil."
+    },
+    "procthor-train-4-room|5": {
+      "karar": "duzelt",
+      "not": "529x973 mm klozet,270 derece,[9732,12001] merkeziyle hesaplanan dort kose oda icinde. Kapi/gecis/ergonomi onayi verilmedi. Ozgun koordinat hedefi guncel yerel islem/kisit egitim sozlesmesine onaylanamaz.",
+      "denetci": "Codex",
+      "ureten": "Claude (conversion scripts); procedural ProcTHOR source",
+      "review_mode": "cross_review",
+      "zaman": "2026-10-22T14:56:47.045043+00:00",
+      "row_sha256": "878070398917da338c6c2c75b76e4577ded1ab379b847f0209ceca84e6f36166",
+      "source_sha256": "7424022ea97ecf789fbf557ba7c83a00e62409d74d28ecd90caa3b6a1fb8de9c",
+      "source_code_sha": "263922aabb2a06d966a895a4bc8357f983f8791e",
+      "kaynak_dosya": "knowledge/ai-egitim/veri/yerlesim/procthor-denetimli.jsonl.gz",
+      "satir": 2,
+      "kanit": "knowledge/ai-egitim/inceleme/C7-yerlesim-ilk-dort-kanit.json",
+      "testler": [
+        "python tools/c7-audit/test-placement-sample.py:PASS",
+        "node tools/c7-audit/test.mjs:PASS"
+      ],
+      "training_approved": false,
+      "sizma": "Anlamsal/parafraz incelemesi bekliyor; uygun degil."
+    },
+    "aura-cozucu-train-1-room|3": {
+      "karar": "duzelt",
+      "not": "Kaynak ok=false ve yerlesim=null; bu basari veya kanitlanmis olanaksizlik sayilmaz. Istemde500x500 ve450x450 iki yan sehpanin adlari ayni. Kesin sigmiyor iddiasi bagimsiz tam arama kaniti degildir. Mevcut H4 teslimi tekrar uretilmez.",
+      "denetci": "Codex",
+      "ureten": "Claude (conversion scripts); procedural ProcTHOR source",
+      "review_mode": "cross_review",
+      "zaman": "2026-10-22T14:56:47.045043+00:00",
+      "row_sha256": "648420d330549d83ce887d14f76786d6e774ba20e0aba21ed8f9e92957e7806f",
+      "source_sha256": "749845b2b8b4280741df5f7d80c0621b8af35e42a3aa3ee5dc03fd2176f68502",
+      "source_code_sha": "263922aabb2a06d966a895a4bc8357f983f8791e",
+      "kaynak_dosya": "knowledge/ai-egitim/veri/yerlesim/procthor-aura-cozucu.jsonl.gz",
+      "satir": 1,
+      "kanit": "knowledge/ai-egitim/inceleme/C7-yerlesim-ilk-dort-kanit.json",
+      "testler": [
+        "python tools/c7-audit/test-placement-sample.py:PASS",
+        "node tools/c7-audit/test.mjs:PASS"
+      ],
+      "training_approved": false,
+      "sizma": "Anlamsal/parafraz incelemesi bekliyor; uygun degil."
+    },
+    "aura-cozucu-train-1-room|4": {
+      "karar": "duzelt",
+      "not": "Kaynak ok=true,10 koordinat okundu; hesaplanan koseler oda icinde olsa da icbukey odada yalniz kose kontrolu tam kapsama kaniti degildir. Hedefte ayni yan sehpa adi500x500 ve450x450 isteklerini kimlikle baglamiyor. Ozgun hedefle yeni Codex H4 kisit hedefi ayri tutulur.",
+      "denetci": "Codex",
+      "ureten": "Claude (conversion scripts); procedural ProcTHOR source",
+      "review_mode": "cross_review",
+      "zaman": "2026-10-22T14:56:47.045043+00:00",
+      "row_sha256": "77d6a0ab47b923736a9eb5cde63778e306e5291ff5dd5314507c9a67f6aae362",
+      "source_sha256": "749845b2b8b4280741df5f7d80c0621b8af35e42a3aa3ee5dc03fd2176f68502",
+      "source_code_sha": "263922aabb2a06d966a895a4bc8357f983f8791e",
+      "kaynak_dosya": "knowledge/ai-egitim/veri/yerlesim/procthor-aura-cozucu.jsonl.gz",
+      "satir": 2,
+      "kanit": "knowledge/ai-egitim/inceleme/C7-yerlesim-ilk-dort-kanit.json",
+      "testler": [
+        "python tools/c7-audit/test-placement-sample.py:PASS",
+        "node tools/c7-audit/test.mjs:PASS"
+      ],
+      "training_approved": false,
+      "sizma": "Anlamsal/parafraz incelemesi bekliyor; uygun degil."
     }
   }
 }
