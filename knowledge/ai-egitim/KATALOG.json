@@ -1,7 +1,7 @@
 {
   "version": "aura-catalog/1",
   "date": "2026-10-21",
-  "snapshot_base": "5f704fee0297c492e943c2da1add562a74d2f72b",
+  "snapshot_base": "4a04144bfcf07bd940362b5726dd021a3b39e32e",
   "hash_policy": "Exact tracked Git blob bytes; checkout CRLF does not change catalogue hashes. Aggregate hash includes file paths, sizes and primary/support roles.",
   "counts_policy": "Counts cover tracked primary rows only; sets may overlap, so totals are NOT unique projects. Null is unknown/not applicable, never zero.",
   "datasets": [
@@ -8953,7 +8953,7 @@
       "id": "support-knowledge-ai-egitim-olcum",
       "path": "knowledge/ai-egitim/olcum/e1-puanlayici",
       "summary": "Structured research/support/derived artifacts; primary candidate counts not inferred.",
-      "sha256": "0b94db865438671a20a0ea8d94c4aac44ba51005b00f11024ba4eb529a4e5c6a",
+      "sha256": "59a319d571e7e3970caf7659f12603f52c2f20863b998cadb174e6034bf70fc5",
       "hash_scope": "SHA256(canonical JSON of Git-blob file manifests)",
       "sources": [],
       "license": null,
@@ -9002,6 +9002,102 @@
           "path": "knowledge/ai-egitim/olcum/e1-puanlayici/targeted.json",
           "sha256": "82035436afe0dcf093c62c5f814ae1db540b66ac9d110e314bc91d254541752f",
           "bytes": 2615,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/olcum/e2-cpu-0.8b/AUDIT.json",
+          "sha256": "0bec5bbf34c0adcf4db4e10e36b8365c5a9225734004508f071b3ac56ec99f64",
+          "bytes": 4805,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/olcum/e2-cpu-0.8b/MANIFEST.json",
+          "sha256": "f0d40d044a78567b4abf04f127d86489a36129fe383fe72a51ed015cf3c843e2",
+          "bytes": 3105,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/olcum/e2-cpu-0.8b/PROTOCOL.json",
+          "sha256": "e262474a8a87a22408aad28e67016a55ca206e209417697349d9ac47de9f6d63",
+          "bytes": 8855,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/olcum/e2-cpu-0.8b/RUN-COMPLETE.json",
+          "sha256": "abda39f2a0b832c20720da520e40f2ceb4b144bff6e340d4765a3ef54332ddf2",
+          "bytes": 296,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/olcum/e2-cpu-0.8b/SCORES.json",
+          "sha256": "498179d124119ebf4d73c45583a049b76903521171810229d1b204017058df31",
+          "bytes": 1863,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/olcum/e2-cpu-0.8b/audited-scores.jsonl",
+          "sha256": "bf387cdb8f29e428e408559acaae35cd18007893c0e8c8bbfaafef989b7aac72",
+          "bytes": 78811,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/olcum/e2-cpu-0.8b/candidates.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/olcum/e2-cpu-0.8b/hard-requests.jsonl",
+          "sha256": "3e5a367309baf06f63d4e05edc2ed0783fe87d7de0e6090884e3a2438a6a2bf4",
+          "bytes": 42666,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/olcum/e2-cpu-0.8b/manual-review.jsonl",
+          "sha256": "4fd39c506cfeb455989a67feaec4eb64f649c095f1571ba8cabe5112e690b8a0",
+          "bytes": 11609,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/olcum/e2-cpu-0.8b/predictions.jsonl",
+          "sha256": "0756001cd8d08abbd3861ba38c1d5e814667bde79ff8d8f4c98b533e6ea3cf83",
+          "bytes": 466326,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/olcum/e2-cpu-0.8b/prompts.jsonl",
+          "sha256": "3cc408507f2ad9f9a23a1fa07b62c0c2459a1b44c2933f75affdab8e50e11842",
+          "bytes": 122693,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/olcum/e2-cpu-0.8b/runtime-tokenizer-match.json",
+          "sha256": "6881f5fd67eabe5841a1d7e67a939c41932dac158ffd46555f4560bc9cfbf12b",
+          "bytes": 87,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/olcum/e2-cpu-0.8b/scores.jsonl",
+          "sha256": "00f366583e99d4d60f7eea53737de8736517e8b1eb7bc6a6d9e62a72f06709cc",
+          "bytes": 78822,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/olcum/e2-cpu-0.8b/server-owner.json",
+          "sha256": "f0c5233814e8c0c15d97123a86110341b4c55d6cf8de11d4ebe861c78cabe78f",
+          "bytes": 802,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/olcum/e2-cpu-0.8b/tasks.jsonl",
+          "sha256": "8dc7e849e42969197d4ad1c54b367365d5cb217ed9b2ea4fdcdbe2cf20e3d720",
+          "bytes": 76371,
+          "role": "support"
+        },
+        {
+          "path": "knowledge/ai-egitim/olcum/e2-cpu-0.8b/termination-audit.json",
+          "sha256": "baef4dffc8059a88ef62fe152b318db6533a0b2e541c0541860c34e5f99b2527",
+          "bytes": 15283,
           "role": "support"
         },
         {
@@ -10847,8 +10943,8 @@
     ]
   },
   "coverage": {
-    "structured_files": 1235,
-    "inventoried_files": 1235,
+    "structured_files": 1251,
+    "inventoried_files": 1251,
     "unassigned": []
   }
 }
