@@ -7,6 +7,7 @@ import{audit,loadExam,similarity}from'../tools/hacim-istek/leakage.mjs';
 import{decodeOperations}from'../tools/egitim-donustur/operations.mjs';
 import{quality}from'../tools/hacim-istek/quality.mjs';
 import{uygula}from'../tools/studyo-motoru/motor.mjs';
+import{assertH1Source}from'../tools/egitim/current-evidence.mjs';
 const rows=load();assert.equal(rows.length,1800);assert.equal(new Set(rows.map(r=>r.id)).size,1800);
 assert.deepEqual(rows,make(),'Inputs, labels or exact motor replay changed');
 for(const l of langs){const rs=rows.filter(r=>r.language===l);assert.equal(rs.length,200);assert.equal(new Set(rs.map(r=>r.user)).size,200);for(const [k,n]of Object.entries({single:120,multiple:50,clarify:20,unsupported:10}))assert.equal(rs.filter(r=>r.category===k).length,n);}
@@ -35,7 +36,7 @@ const impossible=structuredClone(rows.find(r=>r.assistant.actions[0]?.kisitlar?.
 impossible.assistant.actions[0].kisitlar.forEach(k=>k.mm=1);
 const impossibleResult=uygula(impossible.state,impossible.assistant.actions);
 assert(!impossibleResult.rapor.gecti||impossibleResult.rapor.uyari.length||impossibleResult.rapor.red.length,'Impossible proximity must not silently succeed');
-const manifest=JSON.parse(fs.readFileSync(new URL('sayim-raporu.json',dest)));assert.equal(manifest.source_lock.git_tree_sha256,hash(execFileSync('git',['ls-tree','-r','HEAD','--','assets','tools/studyo-motoru'],{cwd:root})));
+const manifest=JSON.parse(fs.readFileSync(new URL('sayim-raporu.json',dest)));assert.equal(assertH1Source(manifest.source_lock.git_tree_sha256),hash(execFileSync('git',['ls-tree','-r','HEAD','--','assets','tools/studyo-motoru'],{cwd:root})));
 for(const f of manifest.files)assert.equal(f.sha256,hash(fs.readFileSync(new URL(f.path,dest))));
 const c1b=JSON.parse(fs.readFileSync(new URL('C1b-degisiklik-kaniti.json',dest)));assert.equal(c1b.changed_user_rows,42);assert.equal(c1b.changed_reply_rows,1530);assert.equal(c1b.native_inputs_actions_observations_and_motor_evidence_unchanged,1800);
 for(const f of c1b.source_files)assert.equal(f.current_sha256,hash(fs.readFileSync(new URL('../'+f.path,import.meta.url))));

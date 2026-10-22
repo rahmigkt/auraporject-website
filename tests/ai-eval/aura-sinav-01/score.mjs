@@ -4,6 +4,7 @@ import {uygula} from '../../../tools/studyo-motoru/motor.mjs';
 import {vocabulary,sanitizeActions} from '../../../assets/forma/ai.js';
 import {SYSTEMS,HEADINGS,SHEERS,DRAPES,COLORS,RUGS,PATTERNS,EDGES} from '../../../assets/ev/tekstil.js';
 import {layer,encode,get} from '../../../tools/aura-sinav-01/fixtures.mjs';
+import {assertExamRevalidation} from '../../../tools/egitim/current-evidence.mjs';
 const HERE=import.meta.dirname,ROOT=path.resolve(HERE,'../../..'),sha=x=>createHash('sha256').update(x).digest('hex');
 const isObj=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
 const colorSet=new Set(COLORS.map(x=>x[0]));
@@ -44,11 +45,14 @@ function operationOK(task,op){
  }
  return false;
 }
-export function loadTasks(){
+export function loadTasks({revalidation}={}){
  const freeze=JSON.parse(fs.readFileSync(path.join(HERE,'FREEZE.json'),'utf8')),raw=fs.readFileSync(path.join(HERE,'gorevler.jsonl'));
  if(sha(raw)!==freeze.files['gorevler.jsonl'].sha256)throw Error('Frozen exam hash mismatch');
  const tree=execFileSync('git',['ls-tree','-r','HEAD','--','assets','tools/studyo-motoru'],{cwd:ROOT});
- if(sha(tree)!==freeze.source_tree_sha256)throw Error('Studio source changed; frozen exam needs reviewed revalidation, not silent reuse');
+ if(sha(tree)!==freeze.source_tree_sha256){
+  if(revalidation!=='motor-20261023')throw Error('Studio source changed; frozen exam needs reviewed revalidation, not silent reuse');
+  assertExamRevalidation(freeze);
+ }
  execFileSync('git',['diff','--exit-code','HEAD','--','assets','tools/studyo-motoru'],{cwd:ROOT,stdio:'pipe'});
  return raw.toString('utf8').trim().split('\n').map(JSON.parse);
 }

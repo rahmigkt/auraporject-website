@@ -15,6 +15,14 @@ def source_lock():
     tree=subprocess.check_output(['git','ls-tree','-r','HEAD','--','assets','tools/studyo-motoru'],cwd=ROOT)
     subprocess.check_call(['git','diff','--exit-code','HEAD','--','assets','tools/studyo-motoru'],cwd=ROOT,stdout=subprocess.DEVNULL)
     return {'git_tree_sha256':sha(tree),'scope':['assets/','tools/studyo-motoru/'],'policy':'Exact Git tree (paths and blob IDs); refuses dirty engine sources'}
+
+def current_evidence_lock(report):
+    """Explicitly revalidate the immutable, zero-export legacy snapshot only."""
+    current=source_lock()
+    if report['source_lock']==current:return current
+    spec=importlib.util.spec_from_file_location('source_evidence',ROOT/'tools/egitim-donustur/source_evidence.py')
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+    return module.verified_snapshot_lock(report)
 def approval_digest(row):
     return sha(canonical({k:v for k,v in row.items() if k not in ['denetim','bolum']}).encode())
 def qualify(row,decisions):
