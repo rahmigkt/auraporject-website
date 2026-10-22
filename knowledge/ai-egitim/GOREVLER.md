@@ -42,7 +42,7 @@ Kurallar: `assets/`, `api/`, kök `.html` dosyalarına dokunulmaz. Silme yok, sa
   - ağır perde, katmanlı tül, büyük halı (`tekstil.js` sürüm 2).
 - [ ] **C5 · H4 yerleşim verisi kısıt biçimine.** ProcTHOR çözücü kayıtları → girdi (oda JSON + eşya listesi + kısa istek, 9 dil), hedef (`yerlestir` + `kisitlar`). Kısıtlar sonuçtan çıkarılır, motorda yeniden çözülür; tutmayan kayıt girmez. Claude'un yeni takımlı verisi (G3) gelince aynı araçla işlenir.
 - [ ] **C6 · H5 sınav.** `aura-sinav-01`'deki 40 mobilya düzenleme görevini arşivle; yerine 40 ev projesi isteği koy (5'i mobilya detayı → stüdyoya yönlendirme). Yeni sürümü dondur. Küçük yerel Qwen ile CPU'da uçtan uca ilk koşu; sonuç "eğitimsiz temel ölçüm" olarak kaydedilir.
-- [ ] **C7 · Claude verisinin denetimi.** sohbet-001, yerleşim kayıtları, motor örnekleri. Kararlar `inceleme/codex-kararlari.json`.
+- [x] **C7 · Claude verisinin denetimi — PR #250.** Özgün sohbet-001 ve 17.167 yerleşim kaydı için kaynak bağlı sonuç yazıldı: 984 kaynak-test kaydı eğitimden ret, 16.183 ham koordinat kaydı ve sohbet-001 düzeltme gerektiriyor; eğitim onayı 0. Olumsuz kayıtlar doğrulanmış sözleşme/kaynak-bölümü kontrolünde durduruldu; tüm satırlara elle/anlamsal uygunluk verilmedi. Motor örnekleri ve kabul kapısı denetlendi; önceki kararlar korundu. Sonuç: `inceleme/C7-TAMAMLAMA.json`; kararlar `inceleme/codex-kararlari.json`. Veri düzeltmeleri/yeniden onay ve diğer site işleri bu denetim tamamlanmasıyla bitmiş sayılmaz.
 
 ## Claude
 

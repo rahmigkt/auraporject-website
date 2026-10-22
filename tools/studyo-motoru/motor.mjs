@@ -61,8 +61,19 @@ function mobilya(state, ops, rep) {
 const STAIR = {width: 800, rule: 630, tol: 30, riserMin: 150, riserMax: 190, goingMin: 250};
 function levelOf(state, kat) { if (!kat || kat === 'k0') return state.plan ??= {walls: [], openings: [], spaces: [], items: []}; return state.katlar?.[kat]?.plan; }
 function stair(state, op, no) {
+  if (!Number.isFinite(op.en) || !Array.isArray(op.konum) || op.konum.length !== 2 || !op.konum.every(Number.isFinite) || (op.aci !== undefined && !Number.isFinite(op.aci))) {
+    no(op, 'merdiven eni, iki konum koordinatı ve açı sonlu sayılar olmalı'); return null;
+  }
+  if (op.basamak_sayisi !== undefined && (!Number.isInteger(op.basamak_sayisi) || op.basamak_sayisi <= 0)) {
+    no(op, 'basamak sayısı pozitif tam sayı olmalı'); return null;
+  }
+  for (const key of ['basamak_derinlik', 'sahanlik']) if (op[key] !== undefined && (!Number.isFinite(op[key]) || op[key] <= 0)) {
+    no(op, `${key} pozitif ve sonlu sayı olmalı`); return null;
+  }
   const lo = levelOf(state, op.alt), up = state.katlar?.[op.ust]; if (!lo || !up) { no(op, 'merdivenin bağlandığı kat yok'); return null; }
-  const H = up.yukseklik || 2800, n = op.basamak_sayisi || Math.ceil(H / STAIR.riserMax), riser = H / n, going = op.basamak_derinlik || Math.max(STAIR.goingMin, Math.round(STAIR.rule - 2 * riser)), landing = op.sahanlik || op.en;
+  const H = up.yukseklik ?? 2800;
+  if (!Number.isFinite(H) || H < 2200 || H > 6000) { no(op, 'kat yüksekliği 2200–6000 mm aralığında sonlu sayı olmalı'); return null; }
+  const n = op.basamak_sayisi ?? Math.ceil(H / STAIR.riserMax), riser = H / n, going = op.basamak_derinlik ?? Math.max(STAIR.goingMin, Math.round(STAIR.rule - 2 * riser)), landing = op.sahanlik ?? op.en;
   if (riser > STAIR.riserMax || riser < STAIR.riserMin) { no(op, `rıht ${riser.toFixed(0)} mm; ${STAIR.riserMin}–${STAIR.riserMax} mm olmalı`); return null; }
   if (going < STAIR.goingMin) { no(op, `basamak derinliği ${going} mm; en az ${STAIR.goingMin} mm`); return null; }
   if (op.en < STAIR.width) { no(op, `merdiven eni ${op.en} mm; en az ${STAIR.width} mm`); return null; }
@@ -80,7 +91,7 @@ function ev(state, ops, rep) {
   for (const op of ops) {
     if (NOT_YET[op.type]) { no(op, NOT_YET[op.type]); continue; }
     if (op.type === 'kat_ekle') { state.katlar ??= {}; if (state.katlar[op.id] || op.id === 'k0') { no(op, 'bu kat zaten var'); continue; }
-      if (op.yukseklik != null && !(op.yukseklik >= 2200 && op.yukseklik <= 6000)) { no(op, `kat yüksekliği ${op.yukseklik} mm; 2200–6000 mm olmalı`); continue; }
+      if (op.yukseklik != null && !(Number.isFinite(op.yukseklik) && op.yukseklik >= 2200 && op.yukseklik <= 6000)) { no(op, `kat yüksekliği ${op.yukseklik} mm; 2200–6000 mm olmalı`); continue; }
       const base = levelOf(state, op.kopya || 'k0'), outer = op.dis_duvarlar !== false ? (base?.walls || []).filter(w => (val(w.thickness) || 120) >= (op.dis_kalinlik || 200)) : [];
       state.katlar[op.id] = {yukseklik: op.yukseklik || 2800, plan: {walls: structuredClone(outer), openings: [], spaces: [], items: []}}; rep.kabul.push({katman: 'ev', op}); continue; }
     if (op.type === 'merdiven') { const st = stair(state, op, no); if (!st) continue; (state.merdivenler ??= []).push(st); const up = state.katlar[op.ust].plan; (up.voids ??= []).push({id: st.id + '-bosluk', poly: st.poly}); rep.kabul.push({katman: 'ev', op, merdiven: st}); continue; }
@@ -128,9 +139,23 @@ function yerlesim(state, ops, rep) {
     if (op.type === 'secenek_sec') { const r = state.yerlesim?.[op.oda || state.sonOda]; if (!r || !r.alternatives[op.index]) { rep.red.push({katman: 'yerlesim', op, neden: 'böyle bir seçenek yok'}); continue; } state.secili = op.index; rep.kabul.push({katman: 'yerlesim', op}); continue; }
     if (op.type !== 'yerlestir') { rep.red.push({katman: 'yerlesim', op, neden: 'bilinmeyen işlem'}); continue; }
     const sp = P?.spaces.find(s => s.id === op.oda); if (!sp) { rep.red.push({katman: 'yerlesim', op, neden: 'böyle bir oda yok'}); continue; }
-    const items = []; let bad = null;
-    for (const e of op.esyalar) { const kind = KINDS[e.tur]; if (!kind || !((e.en > 0 || kind === 'majlis') && e.derinlik > 0)) { bad = e; break; } items.push({id: e.id || e.tur, name: e.ad || e.tur, design: {kind, params: kind === 'majlis' ? {layout: e.duzen || 'U', depth: e.derinlik} : undefined}, size: {w: e.en || 0, d: e.derinlik, h: e.yukseklik || (kind === 'majlis' ? 450 : 800)}}); }
-    if (bad) { rep.red.push({katman: 'yerlesim', op, neden: `eşya tanınmadı ya da ölçüsü eksik: ${JSON.stringify(bad)}`}); continue; }
+    if (!Array.isArray(op.esyalar) || !op.esyalar.length || (op.kisitlar !== undefined && (!Array.isArray(op.kisitlar) || op.kisitlar.some(c => !c || typeof c !== 'object' || Array.isArray(c))))) {
+      rep.red.push({katman: 'yerlesim', op, neden: 'eşya listesi boş olmayan bir dizi, kısıtlar nesne dizisi olmalı'}); continue;
+    }
+    const items = [], seen = new Set(), refs = new Map(); let bad = false;
+    for (const e of op.esyalar) {
+      const kind = e && typeof e === 'object' && Object.hasOwn(KINDS, e.tur) ? KINDS[e.tur] : null;
+      if (!kind || !Number.isFinite(e.derinlik) || e.derinlik <= 0 || (kind === 'majlis' ? e.en !== undefined && (!Number.isFinite(e.en) || e.en < 0) : !Number.isFinite(e.en) || e.en <= 0) ||
+          (e.yukseklik !== undefined && (!Number.isFinite(e.yukseklik) || e.yukseklik <= 0)) || (e.id !== undefined && (typeof e.id !== 'string' || !e.id.trim()))) { bad = true; break; }
+      const id = e.id ?? e.tur;
+      if (seen.has(id)) { bad = true; break; } seen.add(id);
+      for (const key of [id, e.tur]) { if (!refs.has(key)) refs.set(key, new Set()); refs.get(key).add(id); }
+      items.push({id, name: e.ad || e.tur, design: {kind, params: kind === 'majlis' ? {layout: e.duzen || 'U', depth: e.derinlik} : undefined}, size: {w: e.en ?? 0, d: e.derinlik, h: e.yukseklik ?? (kind === 'majlis' ? 450 : 800)}});
+    }
+    if (bad) { rep.red.push({katman: 'yerlesim', op, neden: 'eşya türü/sonlu pozitif ölçüsü geçerli olmalı; her eşyanın benzersiz ve boş olmayan kimliği gerekli'}); continue; }
+    if ((op.kisitlar || []).some(c => Object.hasOwn(CONS, c.tur) && [c.a, c.b].some(key => typeof key !== 'string' || refs.get(key)?.size !== 1))) {
+      rep.red.push({katman: 'yerlesim', op, neden: 'kısıt her eşyayı tekil kimlikle belirtmeli; belirsiz veya olmayan eşya referansı'}); continue;
+    }
     const walls = P.walls.map(w => { const [x0, y0] = w.from_xy_mm, [x1, y1] = w.to_xy_mm, L = Math.hypot(x1 - x0, y1 - y0) || 1; return {...w, x0, y0, ux: (x1 - x0) / L, uy: (y1 - y0) / L, L, t: val(w.thickness) || 120}; });
     const opsE = P.openings.map(o => ({...o, a: val(o.offset_from_wall_start), w: val(o.width), h: val(o.height) || 2100, sill: val(o.sill_height)}));
     const obstacles = (state.merdivenler || []).filter(m => (m.alt === (op.kat || 'k0')) || m.ust === op.kat).map(m => ({id: m.id, poly: m.poly})).concat((P.voids || []).map(v => ({id: v.id, poly: v.poly})));

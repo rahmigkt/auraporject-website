@@ -1,0 +1,63 @@
+{
+  "scope": "100% structural pass only; not manual/semantic reading or approval. Original source targets remain separate from new Codex H4 targets.",
+  "source_code_sha": "d6f8a15fe62c43092515a95c6e3e8bb15aad5cd8",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "training_approved": false,
+  "files": [
+    {
+      "file": "knowledge/ai-egitim/veri/yerlesim/procthor-denetimli.jsonl.gz",
+      "compressed_source_sha256": "7424022ea97ecf789fbf557ba7c83a00e62409d74d28ecd90caa3b6a1fb8de9c",
+      "counts": {
+        "rows": 12827,
+        "legacy_non_native_targets": 12827,
+        "narrow_prompt_checks_completed": 12827,
+        "ambiguous_dimension_name_rows": 920,
+        "strict_corner_flag_rows_require_review": 750,
+        "outside_or_ambiguous_assignment_rows_require_review": 750
+      },
+      "split_house_groups": 7219,
+      "first_check_errors": []
+    },
+    {
+      "file": "knowledge/ai-egitim/veri/yerlesim/procthor-aura-cozucu.jsonl.gz",
+      "compressed_source_sha256": "749845b2b8b4280741df5f7d80c0621b8af35e42a3aa3ee5dc03fd2176f68502",
+      "counts": {
+        "rows": 4340,
+        "legacy_non_native_targets": 4340,
+        "narrow_prompt_checks_completed": 4340,
+        "null_placement_not_success": 1266,
+        "ambiguous_dimension_name_rows": 1275,
+        "strict_corner_flag_rows_require_review": 10,
+        "outside_or_ambiguous_assignment_rows_require_review": 9,
+        "boundary_or_roundoff_only_rows": 1
+      },
+      "split_house_groups": 2836,
+      "first_check_errors": []
+    }
+  ],
+  "receipt": "knowledge/ai-egitim/inceleme/C7-yerlesim-yapisal-kayitlar.jsonl.gz",
+  "receipt_sha256": "68717ebd5c5901790380e812fd1898be770eed51bd29cb3dd19b8a814569e590",
+  "tool_sha256_lf": {
+    "C:/Users/User/Documents/Codex/2026-10-21/aura-ai-s-nav-i-emrini/work/c7-kaynak-denetim/tools/c7-audit/placement-structural.py": "0a8623bbb6afa54effeeb3c2b36626c09e7f270d6c5fc7b161a5028b07380c44",
+    "C:/Users/User/Documents/Codex/2026-10-21/aura-ai-s-nav-i-emrini/work/c7-kaynak-denetim/tools/c7-audit/placement-sample.py": "ee8c7e4f34527d3c0d4b6d1c0c233256e57be9aed490de759c0ddfe8d407e52c",
+    "tools/c7-audit/check-placement-receipt.py": "a439653959eb3c51941d33a0501bc90f36a0b010ede02d562aab64fb2098a83e"
+  },
+  "limits": [
+    "No full-polygon/door/window/clearance/collision/infeasibility certification.",
+    "Corner flags are triage only; ambiguous size bindings and boundary contacts need separate review. Numerical boundary epsilon1e-6mm is not design clearance.",
+    "Native-wrapper classification is structural; no decision or training gate is changed.",
+    "Semantic/paraphrase leakage and human language/design approval remain incomplete."
+  ],
+  "at": "2026-10-22T15:17:30.704565+00:00",
+  "validation": "python tools/c7-audit/check-placement-receipt.py; source hashes/IDs/row hashes and zero approvals across all17167 receipts",
+  "self_review": {
+    "reviewer": "Codex",
+    "review_mode": "user_authorized_self_review",
+    "scope": "Structural receipt code only; no semantic/manual reading claim for all rows",
+    "tests": [
+      "python tools/c7-audit/test-placement-sample.py:PASS (including numerical boundary controls)",
+      "python tools/c7-audit/check-placement-receipt.py:PASS (17167 row/source hashes and IDs)"
+    ]
+  }
+}

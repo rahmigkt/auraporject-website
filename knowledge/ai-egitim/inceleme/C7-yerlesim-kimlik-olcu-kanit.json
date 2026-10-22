@@ -1,0 +1,2594 @@
+{
+  "at": "2026-10-22T16:57:21.886501+00:00",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "producer": "Codex",
+  "training_approved": false,
+  "scope": "Headless AI layout input validation and identity-to-dimension preservation only; not full room/solver/ergonomic/production approval.",
+  "problem": "Two unnamed same-kind side tables500x500 and450x450 shared one ID; saved450mm table received500mm size via first-match lookup. Invalid list/constraint inputs could throw.",
+  "fix": "Reject empty/malformed lists, invalid numeric dimensions, duplicate effective IDs and ambiguous/missing references in supported constraints before solving or replacing saved room items. Explicit unique IDs preserve individual500/450mm dimensions.",
+  "before": {
+    "scope": "13 synthetic layout identity/input probes; not full solver or training approval.",
+    "source_code_sha": "b3f114ec60f5bdcc11a35a0f8dbc972a7b2de96d",
+    "reviewer": "Codex",
+    "review_mode": "user_authorized_self_review",
+    "training_approved": false,
+    "sources_sha256_lf": {
+      "tools/studyo-motoru/motor.mjs": "1915d022512c1ed153a0d378646c81f59ffddf057aca8e26f7302ea549e9a703",
+      "tools/c7-audit/layout-identity.mjs": "37a7494984246db1050d628327ba851471ff55b7c556f6664dcb866947b3c565"
+    },
+    "results": [
+      {
+        "id": "duplicate-default-ids",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            {
+              "tur": "kanepe",
+              "en": 2100,
+              "derinlik": 900
+            },
+            {
+              "tur": "tv",
+              "en": 1600,
+              "derinlik": 450
+            },
+            {
+              "tur": "yan_sehpa",
+              "en": 500,
+              "derinlik": 500
+            },
+            {
+              "tur": "yan_sehpa",
+              "en": 450,
+              "derinlik": 450
+            }
+          ]
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": null,
+        "pass": false,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": [
+                  {
+                    "tur": "kanepe",
+                    "en": 2100,
+                    "derinlik": 900
+                  },
+                  {
+                    "tur": "tv",
+                    "en": 1600,
+                    "derinlik": 450
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "en": 500,
+                    "derinlik": 500
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "en": 450,
+                    "derinlik": 450
+                  }
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [],
+          "olcum": {
+            "yerlesim": {
+              "oda": "salon",
+              "sigdi": true,
+              "secenek": 4,
+              "secilen": 0,
+              "kisit_karsilanan": 0,
+              "kisit_toplam": 0
+            }
+          },
+          "gecti": true
+        },
+        "output_items": [
+          {
+            "id": "tv",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              3020,
+              245
+            ],
+            "rot_deg": 180,
+            "size_mm": {
+              "w": 1600,
+              "d": 450,
+              "h": 800
+            }
+          },
+          {
+            "id": "kanepe",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              3000,
+              2850
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 2100,
+              "d": 900,
+              "h": 800
+            }
+          },
+          {
+            "id": "yan_sehpa",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              1660,
+              2990
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 500,
+              "d": 500,
+              "h": 800
+            }
+          },
+          {
+            "id": "yan_sehpa",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              4315,
+              3015
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 500,
+              "d": 500,
+              "h": 800
+            }
+          }
+        ]
+      },
+      {
+        "id": "duplicate-explicit-ids",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            {
+              "tur": "kanepe",
+              "en": 2100,
+              "derinlik": 900
+            },
+            {
+              "tur": "tv",
+              "en": 1600,
+              "derinlik": 450
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-a",
+              "en": 500,
+              "derinlik": 500
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-a",
+              "en": 450,
+              "derinlik": 450
+            }
+          ]
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": null,
+        "pass": false,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": [
+                  {
+                    "tur": "kanepe",
+                    "en": 2100,
+                    "derinlik": 900
+                  },
+                  {
+                    "tur": "tv",
+                    "en": 1600,
+                    "derinlik": 450
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-a",
+                    "en": 500,
+                    "derinlik": 500
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-a",
+                    "en": 450,
+                    "derinlik": 450
+                  }
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [],
+          "olcum": {
+            "yerlesim": {
+              "oda": "salon",
+              "sigdi": true,
+              "secenek": 4,
+              "secilen": 0,
+              "kisit_karsilanan": 0,
+              "kisit_toplam": 0
+            }
+          },
+          "gecti": true
+        },
+        "output_items": [
+          {
+            "id": "tv",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              3020,
+              245
+            ],
+            "rot_deg": 180,
+            "size_mm": {
+              "w": 1600,
+              "d": 450,
+              "h": 800
+            }
+          },
+          {
+            "id": "kanepe",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              3000,
+              2850
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 2100,
+              "d": 900,
+              "h": 800
+            }
+          },
+          {
+            "id": "side-a",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              1660,
+              2990
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 500,
+              "d": 500,
+              "h": 800
+            }
+          },
+          {
+            "id": "side-a",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              4315,
+              3015
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 500,
+              "d": 500,
+              "h": 800
+            }
+          }
+        ]
+      },
+      {
+        "id": "not-array",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": {}
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": "op.esyalar is not iterable",
+        "pass": false,
+        "input_preserved": true,
+        "report": null,
+        "output_items": []
+      },
+      {
+        "id": "empty-array",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": []
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": null,
+        "pass": false,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": []
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [],
+          "olcum": {
+            "yerlesim": {
+              "oda": "salon",
+              "sigdi": true,
+              "secenek": 1,
+              "secilen": 0,
+              "kisit_karsilanan": 0,
+              "kisit_toplam": 0
+            }
+          },
+          "gecti": true
+        },
+        "output_items": []
+      },
+      {
+        "id": "null-item",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            null
+          ]
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": "Cannot read properties of null (reading 'tur')",
+        "pass": false,
+        "input_preserved": true,
+        "report": null,
+        "output_items": []
+      },
+      {
+        "id": "string-width",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            {
+              "tur": "kanepe",
+              "en": 2100,
+              "derinlik": 900
+            },
+            {
+              "tur": "tv",
+              "en": 1600,
+              "derinlik": 450
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-a",
+              "en": "500",
+              "derinlik": 500
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-b",
+              "en": 450,
+              "derinlik": 450
+            }
+          ]
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": null,
+        "pass": false,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": [
+                  {
+                    "tur": "kanepe",
+                    "en": 2100,
+                    "derinlik": 900
+                  },
+                  {
+                    "tur": "tv",
+                    "en": 1600,
+                    "derinlik": 450
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-a",
+                    "en": "500",
+                    "derinlik": 500
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-b",
+                    "en": 450,
+                    "derinlik": 450
+                  }
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [],
+          "olcum": {
+            "yerlesim": {
+              "oda": "salon",
+              "sigdi": true,
+              "secenek": 4,
+              "secilen": 0,
+              "kisit_karsilanan": 0,
+              "kisit_toplam": 0
+            }
+          },
+          "gecti": true
+        },
+        "output_items": [
+          {
+            "id": "tv",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              3020,
+              245
+            ],
+            "rot_deg": 180,
+            "size_mm": {
+              "w": 1600,
+              "d": 450,
+              "h": 800
+            }
+          },
+          {
+            "id": "kanepe",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              3000,
+              2850
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 2100,
+              "d": 900,
+              "h": 800
+            }
+          },
+          {
+            "id": "side-a",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              1660,
+              2990
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": "500",
+              "d": 500,
+              "h": 800
+            }
+          },
+          {
+            "id": "side-b",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              4315,
+              3015
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 450,
+              "d": 450,
+              "h": 800
+            }
+          }
+        ]
+      },
+      {
+        "id": "zero-height",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            {
+              "tur": "kanepe",
+              "en": 2100,
+              "derinlik": 900
+            },
+            {
+              "tur": "tv",
+              "en": 1600,
+              "derinlik": 450
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-a",
+              "en": 500,
+              "derinlik": 500,
+              "yukseklik": 0
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-b",
+              "en": 450,
+              "derinlik": 450
+            }
+          ]
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": null,
+        "pass": false,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": [
+                  {
+                    "tur": "kanepe",
+                    "en": 2100,
+                    "derinlik": 900
+                  },
+                  {
+                    "tur": "tv",
+                    "en": 1600,
+                    "derinlik": 450
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-a",
+                    "en": 500,
+                    "derinlik": 500,
+                    "yukseklik": 0
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-b",
+                    "en": 450,
+                    "derinlik": 450
+                  }
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [],
+          "olcum": {
+            "yerlesim": {
+              "oda": "salon",
+              "sigdi": true,
+              "secenek": 4,
+              "secilen": 0,
+              "kisit_karsilanan": 0,
+              "kisit_toplam": 0
+            }
+          },
+          "gecti": true
+        },
+        "output_items": [
+          {
+            "id": "tv",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              3020,
+              245
+            ],
+            "rot_deg": 180,
+            "size_mm": {
+              "w": 1600,
+              "d": 450,
+              "h": 800
+            }
+          },
+          {
+            "id": "kanepe",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              3000,
+              2850
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 2100,
+              "d": 900,
+              "h": 800
+            }
+          },
+          {
+            "id": "side-a",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              1660,
+              2990
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 500,
+              "d": 500,
+              "h": 800
+            }
+          },
+          {
+            "id": "side-b",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              4315,
+              3015
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 450,
+              "d": 450,
+              "h": 800
+            }
+          }
+        ]
+      },
+      {
+        "id": "empty-explicit-id",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            {
+              "tur": "kanepe",
+              "en": 2100,
+              "derinlik": 900
+            },
+            {
+              "tur": "tv",
+              "en": 1600,
+              "derinlik": 450
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "",
+              "en": 500,
+              "derinlik": 500
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-b",
+              "en": 450,
+              "derinlik": 450
+            }
+          ]
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": null,
+        "pass": false,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": [
+                  {
+                    "tur": "kanepe",
+                    "en": 2100,
+                    "derinlik": 900
+                  },
+                  {
+                    "tur": "tv",
+                    "en": 1600,
+                    "derinlik": 450
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "",
+                    "en": 500,
+                    "derinlik": 500
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-b",
+                    "en": 450,
+                    "derinlik": 450
+                  }
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [],
+          "olcum": {
+            "yerlesim": {
+              "oda": "salon",
+              "sigdi": true,
+              "secenek": 4,
+              "secilen": 0,
+              "kisit_karsilanan": 0,
+              "kisit_toplam": 0
+            }
+          },
+          "gecti": true
+        },
+        "output_items": [
+          {
+            "id": "tv",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              3020,
+              245
+            ],
+            "rot_deg": 180,
+            "size_mm": {
+              "w": 1600,
+              "d": 450,
+              "h": 800
+            }
+          },
+          {
+            "id": "kanepe",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              3000,
+              2850
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 2100,
+              "d": 900,
+              "h": 800
+            }
+          },
+          {
+            "id": "yan_sehpa",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              1660,
+              2990
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 500,
+              "d": 500,
+              "h": 800
+            }
+          },
+          {
+            "id": "side-b",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              4315,
+              3015
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 450,
+              "d": 450,
+              "h": 800
+            }
+          }
+        ]
+      },
+      {
+        "id": "inherited-kind",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            {
+              "tur": "constructor",
+              "en": 500,
+              "derinlik": 500
+            }
+          ]
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": null,
+        "pass": false,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": [
+                  {
+                    "tur": "constructor",
+                    "en": 500,
+                    "derinlik": 500
+                  }
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [],
+          "olcum": {
+            "yerlesim": {
+              "oda": "salon",
+              "sigdi": true,
+              "secenek": 4,
+              "secilen": 0,
+              "kisit_karsilanan": 0,
+              "kisit_toplam": 0
+            }
+          },
+          "gecti": true
+        },
+        "output_items": [
+          {
+            "id": "constructor",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              270,
+              270
+            ],
+            "rot_deg": 180,
+            "size_mm": {
+              "w": 500,
+              "d": 500,
+              "h": 800
+            }
+          }
+        ]
+      },
+      {
+        "id": "constraints-not-array",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            {
+              "tur": "kanepe",
+              "en": 2100,
+              "derinlik": 900
+            },
+            {
+              "tur": "tv",
+              "en": 1600,
+              "derinlik": 450
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-a",
+              "en": 500,
+              "derinlik": 500
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-b",
+              "en": 450,
+              "derinlik": 450
+            }
+          ],
+          "kisitlar": {}
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": "(op.kisitlar || []).map is not a function",
+        "pass": false,
+        "input_preserved": true,
+        "report": null,
+        "output_items": []
+      },
+      {
+        "id": "ambiguous-constraint-alias",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            {
+              "tur": "kanepe",
+              "en": 2100,
+              "derinlik": 900
+            },
+            {
+              "tur": "tv",
+              "en": 1600,
+              "derinlik": 450
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-a",
+              "en": 500,
+              "derinlik": 500
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-b",
+              "en": 450,
+              "derinlik": 450
+            }
+          ],
+          "kisitlar": [
+            {
+              "tur": "yakin",
+              "a": "yan_sehpa",
+              "b": "kanepe",
+              "mm": 20000
+            }
+          ]
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": null,
+        "pass": false,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": [
+                  {
+                    "tur": "kanepe",
+                    "en": 2100,
+                    "derinlik": 900
+                  },
+                  {
+                    "tur": "tv",
+                    "en": 1600,
+                    "derinlik": 450
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-a",
+                    "en": 500,
+                    "derinlik": 500
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-b",
+                    "en": 450,
+                    "derinlik": 450
+                  }
+                ],
+                "kisitlar": [
+                  {
+                    "tur": "yakin",
+                    "a": "yan_sehpa",
+                    "b": "kanepe",
+                    "mm": 20000
+                  }
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [],
+          "olcum": {
+            "yerlesim": {
+              "oda": "salon",
+              "sigdi": true,
+              "secenek": 4,
+              "secilen": 0,
+              "kisit_karsilanan": 1,
+              "kisit_toplam": 1
+            }
+          },
+          "gecti": true
+        },
+        "output_items": [
+          {
+            "id": "tv",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              3020,
+              245
+            ],
+            "rot_deg": 180,
+            "size_mm": {
+              "w": 1600,
+              "d": 450,
+              "h": 800
+            }
+          },
+          {
+            "id": "kanepe",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              3000,
+              2850
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 2100,
+              "d": 900,
+              "h": 800
+            }
+          },
+          {
+            "id": "side-a",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              1660,
+              2990
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 500,
+              "d": 500,
+              "h": 800
+            }
+          },
+          {
+            "id": "side-b",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              4315,
+              3015
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 450,
+              "d": 450,
+              "h": 800
+            }
+          }
+        ]
+      },
+      {
+        "id": "valid-explicit-ids",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            {
+              "tur": "kanepe",
+              "en": 2100,
+              "derinlik": 900
+            },
+            {
+              "tur": "tv",
+              "en": 1600,
+              "derinlik": 450
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-a",
+              "en": 500,
+              "derinlik": 500
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-b",
+              "en": 450,
+              "derinlik": 450
+            }
+          ]
+        },
+        "expected": "accept-preserve-distinct-sizes",
+        "error": null,
+        "pass": true,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": [
+                  {
+                    "tur": "kanepe",
+                    "en": 2100,
+                    "derinlik": 900
+                  },
+                  {
+                    "tur": "tv",
+                    "en": 1600,
+                    "derinlik": 450
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-a",
+                    "en": 500,
+                    "derinlik": 500
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-b",
+                    "en": 450,
+                    "derinlik": 450
+                  }
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [],
+          "olcum": {
+            "yerlesim": {
+              "oda": "salon",
+              "sigdi": true,
+              "secenek": 4,
+              "secilen": 0,
+              "kisit_karsilanan": 0,
+              "kisit_toplam": 0
+            }
+          },
+          "gecti": true
+        },
+        "output_items": [
+          {
+            "id": "tv",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              3020,
+              245
+            ],
+            "rot_deg": 180,
+            "size_mm": {
+              "w": 1600,
+              "d": 450,
+              "h": 800
+            }
+          },
+          {
+            "id": "kanepe",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              3000,
+              2850
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 2100,
+              "d": 900,
+              "h": 800
+            }
+          },
+          {
+            "id": "side-a",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              1660,
+              2990
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 500,
+              "d": 500,
+              "h": 800
+            }
+          },
+          {
+            "id": "side-b",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              4315,
+              3015
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 450,
+              "d": 450,
+              "h": 800
+            }
+          }
+        ]
+      },
+      {
+        "id": "valid-explicit-constraint-ids",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            {
+              "tur": "kanepe",
+              "en": 2100,
+              "derinlik": 900
+            },
+            {
+              "tur": "tv",
+              "en": 1600,
+              "derinlik": 450
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-a",
+              "en": 500,
+              "derinlik": 500
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-b",
+              "en": 450,
+              "derinlik": 450
+            }
+          ],
+          "kisitlar": [
+            {
+              "tur": "yakin",
+              "a": "side-a",
+              "b": "side-b",
+              "mm": 20000
+            }
+          ]
+        },
+        "expected": "accept-preserve-distinct-sizes",
+        "error": null,
+        "pass": true,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": [
+                  {
+                    "tur": "kanepe",
+                    "en": 2100,
+                    "derinlik": 900
+                  },
+                  {
+                    "tur": "tv",
+                    "en": 1600,
+                    "derinlik": 450
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-a",
+                    "en": 500,
+                    "derinlik": 500
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-b",
+                    "en": 450,
+                    "derinlik": 450
+                  }
+                ],
+                "kisitlar": [
+                  {
+                    "tur": "yakin",
+                    "a": "side-a",
+                    "b": "side-b",
+                    "mm": 20000
+                  }
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [],
+          "olcum": {
+            "yerlesim": {
+              "oda": "salon",
+              "sigdi": true,
+              "secenek": 4,
+              "secilen": 0,
+              "kisit_karsilanan": 1,
+              "kisit_toplam": 1
+            }
+          },
+          "gecti": true
+        },
+        "output_items": [
+          {
+            "id": "tv",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              3020,
+              245
+            ],
+            "rot_deg": 180,
+            "size_mm": {
+              "w": 1600,
+              "d": 450,
+              "h": 800
+            }
+          },
+          {
+            "id": "kanepe",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              3000,
+              2850
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 2100,
+              "d": 900,
+              "h": 800
+            }
+          },
+          {
+            "id": "side-a",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              1660,
+              2990
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 500,
+              "d": 500,
+              "h": 800
+            }
+          },
+          {
+            "id": "side-b",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              4315,
+              3015
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 450,
+              "d": 450,
+              "h": 800
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "after": {
+    "scope": "13 synthetic layout identity/input probes; not full solver or training approval.",
+    "source_code_sha": "b3f114ec60f5bdcc11a35a0f8dbc972a7b2de96d",
+    "reviewer": "Codex",
+    "review_mode": "user_authorized_self_review",
+    "training_approved": false,
+    "sources_sha256_lf": {
+      "tools/studyo-motoru/motor.mjs": "201786935880c0463fc9a7f3f04879f9dc8024010a9cb23d1a4858a30c1a499f",
+      "tools/c7-audit/layout-identity.mjs": "37a7494984246db1050d628327ba851471ff55b7c556f6664dcb866947b3c565"
+    },
+    "results": [
+      {
+        "id": "duplicate-default-ids",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            {
+              "tur": "kanepe",
+              "en": 2100,
+              "derinlik": 900
+            },
+            {
+              "tur": "tv",
+              "en": 1600,
+              "derinlik": 450
+            },
+            {
+              "tur": "yan_sehpa",
+              "en": 500,
+              "derinlik": 500
+            },
+            {
+              "tur": "yan_sehpa",
+              "en": 450,
+              "derinlik": 450
+            }
+          ]
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": null,
+        "pass": true,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [],
+          "red": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": [
+                  {
+                    "tur": "kanepe",
+                    "en": 2100,
+                    "derinlik": 900
+                  },
+                  {
+                    "tur": "tv",
+                    "en": 1600,
+                    "derinlik": 450
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "en": 500,
+                    "derinlik": 500
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "en": 450,
+                    "derinlik": 450
+                  }
+                ]
+              },
+              "neden": "eşya türü/sonlu pozitif ölçüsü geçerli olmalı; her eşyanın benzersiz ve boş olmayan kimliği gerekli"
+            }
+          ],
+          "uyari": [],
+          "olcum": {},
+          "gecti": false
+        },
+        "output_items": [
+          {
+            "id": "saved",
+            "space_id": "salon",
+            "size_mm": {
+              "w": 300,
+              "d": 300,
+              "h": 500
+            },
+            "pos_xy_mm": [
+              1000,
+              1000
+            ],
+            "rot_deg": 0
+          }
+        ]
+      },
+      {
+        "id": "duplicate-explicit-ids",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            {
+              "tur": "kanepe",
+              "en": 2100,
+              "derinlik": 900
+            },
+            {
+              "tur": "tv",
+              "en": 1600,
+              "derinlik": 450
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-a",
+              "en": 500,
+              "derinlik": 500
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-a",
+              "en": 450,
+              "derinlik": 450
+            }
+          ]
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": null,
+        "pass": true,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [],
+          "red": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": [
+                  {
+                    "tur": "kanepe",
+                    "en": 2100,
+                    "derinlik": 900
+                  },
+                  {
+                    "tur": "tv",
+                    "en": 1600,
+                    "derinlik": 450
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-a",
+                    "en": 500,
+                    "derinlik": 500
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-a",
+                    "en": 450,
+                    "derinlik": 450
+                  }
+                ]
+              },
+              "neden": "eşya türü/sonlu pozitif ölçüsü geçerli olmalı; her eşyanın benzersiz ve boş olmayan kimliği gerekli"
+            }
+          ],
+          "uyari": [],
+          "olcum": {},
+          "gecti": false
+        },
+        "output_items": [
+          {
+            "id": "saved",
+            "space_id": "salon",
+            "size_mm": {
+              "w": 300,
+              "d": 300,
+              "h": 500
+            },
+            "pos_xy_mm": [
+              1000,
+              1000
+            ],
+            "rot_deg": 0
+          }
+        ]
+      },
+      {
+        "id": "not-array",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": {}
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": null,
+        "pass": true,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [],
+          "red": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": {}
+              },
+              "neden": "eşya listesi boş olmayan bir dizi, kısıtlar nesne dizisi olmalı"
+            }
+          ],
+          "uyari": [],
+          "olcum": {},
+          "gecti": false
+        },
+        "output_items": [
+          {
+            "id": "saved",
+            "space_id": "salon",
+            "size_mm": {
+              "w": 300,
+              "d": 300,
+              "h": 500
+            },
+            "pos_xy_mm": [
+              1000,
+              1000
+            ],
+            "rot_deg": 0
+          }
+        ]
+      },
+      {
+        "id": "empty-array",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": []
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": null,
+        "pass": true,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [],
+          "red": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": []
+              },
+              "neden": "eşya listesi boş olmayan bir dizi, kısıtlar nesne dizisi olmalı"
+            }
+          ],
+          "uyari": [],
+          "olcum": {},
+          "gecti": false
+        },
+        "output_items": [
+          {
+            "id": "saved",
+            "space_id": "salon",
+            "size_mm": {
+              "w": 300,
+              "d": 300,
+              "h": 500
+            },
+            "pos_xy_mm": [
+              1000,
+              1000
+            ],
+            "rot_deg": 0
+          }
+        ]
+      },
+      {
+        "id": "null-item",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            null
+          ]
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": null,
+        "pass": true,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [],
+          "red": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": [
+                  null
+                ]
+              },
+              "neden": "eşya türü/sonlu pozitif ölçüsü geçerli olmalı; her eşyanın benzersiz ve boş olmayan kimliği gerekli"
+            }
+          ],
+          "uyari": [],
+          "olcum": {},
+          "gecti": false
+        },
+        "output_items": [
+          {
+            "id": "saved",
+            "space_id": "salon",
+            "size_mm": {
+              "w": 300,
+              "d": 300,
+              "h": 500
+            },
+            "pos_xy_mm": [
+              1000,
+              1000
+            ],
+            "rot_deg": 0
+          }
+        ]
+      },
+      {
+        "id": "string-width",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            {
+              "tur": "kanepe",
+              "en": 2100,
+              "derinlik": 900
+            },
+            {
+              "tur": "tv",
+              "en": 1600,
+              "derinlik": 450
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-a",
+              "en": "500",
+              "derinlik": 500
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-b",
+              "en": 450,
+              "derinlik": 450
+            }
+          ]
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": null,
+        "pass": true,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [],
+          "red": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": [
+                  {
+                    "tur": "kanepe",
+                    "en": 2100,
+                    "derinlik": 900
+                  },
+                  {
+                    "tur": "tv",
+                    "en": 1600,
+                    "derinlik": 450
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-a",
+                    "en": "500",
+                    "derinlik": 500
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-b",
+                    "en": 450,
+                    "derinlik": 450
+                  }
+                ]
+              },
+              "neden": "eşya türü/sonlu pozitif ölçüsü geçerli olmalı; her eşyanın benzersiz ve boş olmayan kimliği gerekli"
+            }
+          ],
+          "uyari": [],
+          "olcum": {},
+          "gecti": false
+        },
+        "output_items": [
+          {
+            "id": "saved",
+            "space_id": "salon",
+            "size_mm": {
+              "w": 300,
+              "d": 300,
+              "h": 500
+            },
+            "pos_xy_mm": [
+              1000,
+              1000
+            ],
+            "rot_deg": 0
+          }
+        ]
+      },
+      {
+        "id": "zero-height",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            {
+              "tur": "kanepe",
+              "en": 2100,
+              "derinlik": 900
+            },
+            {
+              "tur": "tv",
+              "en": 1600,
+              "derinlik": 450
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-a",
+              "en": 500,
+              "derinlik": 500,
+              "yukseklik": 0
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-b",
+              "en": 450,
+              "derinlik": 450
+            }
+          ]
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": null,
+        "pass": true,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [],
+          "red": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": [
+                  {
+                    "tur": "kanepe",
+                    "en": 2100,
+                    "derinlik": 900
+                  },
+                  {
+                    "tur": "tv",
+                    "en": 1600,
+                    "derinlik": 450
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-a",
+                    "en": 500,
+                    "derinlik": 500,
+                    "yukseklik": 0
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-b",
+                    "en": 450,
+                    "derinlik": 450
+                  }
+                ]
+              },
+              "neden": "eşya türü/sonlu pozitif ölçüsü geçerli olmalı; her eşyanın benzersiz ve boş olmayan kimliği gerekli"
+            }
+          ],
+          "uyari": [],
+          "olcum": {},
+          "gecti": false
+        },
+        "output_items": [
+          {
+            "id": "saved",
+            "space_id": "salon",
+            "size_mm": {
+              "w": 300,
+              "d": 300,
+              "h": 500
+            },
+            "pos_xy_mm": [
+              1000,
+              1000
+            ],
+            "rot_deg": 0
+          }
+        ]
+      },
+      {
+        "id": "empty-explicit-id",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            {
+              "tur": "kanepe",
+              "en": 2100,
+              "derinlik": 900
+            },
+            {
+              "tur": "tv",
+              "en": 1600,
+              "derinlik": 450
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "",
+              "en": 500,
+              "derinlik": 500
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-b",
+              "en": 450,
+              "derinlik": 450
+            }
+          ]
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": null,
+        "pass": true,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [],
+          "red": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": [
+                  {
+                    "tur": "kanepe",
+                    "en": 2100,
+                    "derinlik": 900
+                  },
+                  {
+                    "tur": "tv",
+                    "en": 1600,
+                    "derinlik": 450
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "",
+                    "en": 500,
+                    "derinlik": 500
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-b",
+                    "en": 450,
+                    "derinlik": 450
+                  }
+                ]
+              },
+              "neden": "eşya türü/sonlu pozitif ölçüsü geçerli olmalı; her eşyanın benzersiz ve boş olmayan kimliği gerekli"
+            }
+          ],
+          "uyari": [],
+          "olcum": {},
+          "gecti": false
+        },
+        "output_items": [
+          {
+            "id": "saved",
+            "space_id": "salon",
+            "size_mm": {
+              "w": 300,
+              "d": 300,
+              "h": 500
+            },
+            "pos_xy_mm": [
+              1000,
+              1000
+            ],
+            "rot_deg": 0
+          }
+        ]
+      },
+      {
+        "id": "inherited-kind",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            {
+              "tur": "constructor",
+              "en": 500,
+              "derinlik": 500
+            }
+          ]
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": null,
+        "pass": true,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [],
+          "red": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": [
+                  {
+                    "tur": "constructor",
+                    "en": 500,
+                    "derinlik": 500
+                  }
+                ]
+              },
+              "neden": "eşya türü/sonlu pozitif ölçüsü geçerli olmalı; her eşyanın benzersiz ve boş olmayan kimliği gerekli"
+            }
+          ],
+          "uyari": [],
+          "olcum": {},
+          "gecti": false
+        },
+        "output_items": [
+          {
+            "id": "saved",
+            "space_id": "salon",
+            "size_mm": {
+              "w": 300,
+              "d": 300,
+              "h": 500
+            },
+            "pos_xy_mm": [
+              1000,
+              1000
+            ],
+            "rot_deg": 0
+          }
+        ]
+      },
+      {
+        "id": "constraints-not-array",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            {
+              "tur": "kanepe",
+              "en": 2100,
+              "derinlik": 900
+            },
+            {
+              "tur": "tv",
+              "en": 1600,
+              "derinlik": 450
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-a",
+              "en": 500,
+              "derinlik": 500
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-b",
+              "en": 450,
+              "derinlik": 450
+            }
+          ],
+          "kisitlar": {}
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": null,
+        "pass": true,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [],
+          "red": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": [
+                  {
+                    "tur": "kanepe",
+                    "en": 2100,
+                    "derinlik": 900
+                  },
+                  {
+                    "tur": "tv",
+                    "en": 1600,
+                    "derinlik": 450
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-a",
+                    "en": 500,
+                    "derinlik": 500
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-b",
+                    "en": 450,
+                    "derinlik": 450
+                  }
+                ],
+                "kisitlar": {}
+              },
+              "neden": "eşya listesi boş olmayan bir dizi, kısıtlar nesne dizisi olmalı"
+            }
+          ],
+          "uyari": [],
+          "olcum": {},
+          "gecti": false
+        },
+        "output_items": [
+          {
+            "id": "saved",
+            "space_id": "salon",
+            "size_mm": {
+              "w": 300,
+              "d": 300,
+              "h": 500
+            },
+            "pos_xy_mm": [
+              1000,
+              1000
+            ],
+            "rot_deg": 0
+          }
+        ]
+      },
+      {
+        "id": "ambiguous-constraint-alias",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            {
+              "tur": "kanepe",
+              "en": 2100,
+              "derinlik": 900
+            },
+            {
+              "tur": "tv",
+              "en": 1600,
+              "derinlik": 450
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-a",
+              "en": 500,
+              "derinlik": 500
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-b",
+              "en": 450,
+              "derinlik": 450
+            }
+          ],
+          "kisitlar": [
+            {
+              "tur": "yakin",
+              "a": "yan_sehpa",
+              "b": "kanepe",
+              "mm": 20000
+            }
+          ]
+        },
+        "expected": "reject-without-changing-saved-plan",
+        "error": null,
+        "pass": true,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [],
+          "red": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": [
+                  {
+                    "tur": "kanepe",
+                    "en": 2100,
+                    "derinlik": 900
+                  },
+                  {
+                    "tur": "tv",
+                    "en": 1600,
+                    "derinlik": 450
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-a",
+                    "en": 500,
+                    "derinlik": 500
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-b",
+                    "en": 450,
+                    "derinlik": 450
+                  }
+                ],
+                "kisitlar": [
+                  {
+                    "tur": "yakin",
+                    "a": "yan_sehpa",
+                    "b": "kanepe",
+                    "mm": 20000
+                  }
+                ]
+              },
+              "neden": "kısıt her eşyayı tekil kimlikle belirtmeli; belirsiz veya olmayan eşya referansı"
+            }
+          ],
+          "uyari": [],
+          "olcum": {},
+          "gecti": false
+        },
+        "output_items": [
+          {
+            "id": "saved",
+            "space_id": "salon",
+            "size_mm": {
+              "w": 300,
+              "d": 300,
+              "h": 500
+            },
+            "pos_xy_mm": [
+              1000,
+              1000
+            ],
+            "rot_deg": 0
+          }
+        ]
+      },
+      {
+        "id": "valid-explicit-ids",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            {
+              "tur": "kanepe",
+              "en": 2100,
+              "derinlik": 900
+            },
+            {
+              "tur": "tv",
+              "en": 1600,
+              "derinlik": 450
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-a",
+              "en": 500,
+              "derinlik": 500
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-b",
+              "en": 450,
+              "derinlik": 450
+            }
+          ]
+        },
+        "expected": "accept-preserve-distinct-sizes",
+        "error": null,
+        "pass": true,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": [
+                  {
+                    "tur": "kanepe",
+                    "en": 2100,
+                    "derinlik": 900
+                  },
+                  {
+                    "tur": "tv",
+                    "en": 1600,
+                    "derinlik": 450
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-a",
+                    "en": 500,
+                    "derinlik": 500
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-b",
+                    "en": 450,
+                    "derinlik": 450
+                  }
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [],
+          "olcum": {
+            "yerlesim": {
+              "oda": "salon",
+              "sigdi": true,
+              "secenek": 4,
+              "secilen": 0,
+              "kisit_karsilanan": 0,
+              "kisit_toplam": 0
+            }
+          },
+          "gecti": true
+        },
+        "output_items": [
+          {
+            "id": "tv",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              3020,
+              245
+            ],
+            "rot_deg": 180,
+            "size_mm": {
+              "w": 1600,
+              "d": 450,
+              "h": 800
+            }
+          },
+          {
+            "id": "kanepe",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              3000,
+              2850
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 2100,
+              "d": 900,
+              "h": 800
+            }
+          },
+          {
+            "id": "side-a",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              1660,
+              2990
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 500,
+              "d": 500,
+              "h": 800
+            }
+          },
+          {
+            "id": "side-b",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              4315,
+              3015
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 450,
+              "d": 450,
+              "h": 800
+            }
+          }
+        ]
+      },
+      {
+        "id": "valid-explicit-constraint-ids",
+        "input": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "salon",
+          "esyalar": [
+            {
+              "tur": "kanepe",
+              "en": 2100,
+              "derinlik": 900
+            },
+            {
+              "tur": "tv",
+              "en": 1600,
+              "derinlik": 450
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-a",
+              "en": 500,
+              "derinlik": 500
+            },
+            {
+              "tur": "yan_sehpa",
+              "id": "side-b",
+              "en": 450,
+              "derinlik": 450
+            }
+          ],
+          "kisitlar": [
+            {
+              "tur": "yakin",
+              "a": "side-a",
+              "b": "side-b",
+              "mm": 20000
+            }
+          ]
+        },
+        "expected": "accept-preserve-distinct-sizes",
+        "error": null,
+        "pass": true,
+        "input_preserved": true,
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "salon",
+                "esyalar": [
+                  {
+                    "tur": "kanepe",
+                    "en": 2100,
+                    "derinlik": 900
+                  },
+                  {
+                    "tur": "tv",
+                    "en": 1600,
+                    "derinlik": 450
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-a",
+                    "en": 500,
+                    "derinlik": 500
+                  },
+                  {
+                    "tur": "yan_sehpa",
+                    "id": "side-b",
+                    "en": 450,
+                    "derinlik": 450
+                  }
+                ],
+                "kisitlar": [
+                  {
+                    "tur": "yakin",
+                    "a": "side-a",
+                    "b": "side-b",
+                    "mm": 20000
+                  }
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [],
+          "olcum": {
+            "yerlesim": {
+              "oda": "salon",
+              "sigdi": true,
+              "secenek": 4,
+              "secilen": 0,
+              "kisit_karsilanan": 1,
+              "kisit_toplam": 1
+            }
+          },
+          "gecti": true
+        },
+        "output_items": [
+          {
+            "id": "tv",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              3020,
+              245
+            ],
+            "rot_deg": 180,
+            "size_mm": {
+              "w": 1600,
+              "d": 450,
+              "h": 800
+            }
+          },
+          {
+            "id": "kanepe",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              3000,
+              2850
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 2100,
+              "d": 900,
+              "h": 800
+            }
+          },
+          {
+            "id": "side-a",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              1660,
+              2990
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 500,
+              "d": 500,
+              "h": 800
+            }
+          },
+          {
+            "id": "side-b",
+            "space_id": "salon",
+            "pos_xy_mm": [
+              4315,
+              3015
+            ],
+            "rot_deg": 0,
+            "size_mm": {
+              "w": 450,
+              "d": 450,
+              "h": 800
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "tests": [
+    "node tools/c7-audit/layout-identity.mjs --out work/c7-layout-after.json --assert:13/13 PASS",
+    "node tools/studyo-motoru/test.mjs:24/24 PASS",
+    "node tools/c7-audit/motor-stair.mjs --out work/c7-stair-identity-regression.json --assert:26/26 PASS"
+  ],
+  "limits": [
+    "C7 semantic and remaining placement reviews pending",
+    "Delivered H4 evidence remains tied to its own engine fingerprint; do not reuse as approval of this changed motor",
+    "Prior Forma180s full-suite timeout remains open"
+  ]
+}

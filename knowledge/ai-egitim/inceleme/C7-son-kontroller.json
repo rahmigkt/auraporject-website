@@ -1,0 +1,166 @@
+{
+  "at": "2026-10-22T17:19:08.614616+00:00",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "source_code_sha": "844ebc6fedae5d74b6bf237b1afd8cbb2e2a5161",
+  "tests": [
+    {
+      "argv": [
+        "node",
+        "tools/c7-audit/admission.mjs",
+        "--out",
+        "work/c7-admission-final.json",
+        "--assert"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"out\":\"work/c7-admission-final.json\",\"cases\":6,\"passed\":6,\"failed\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "tests/egitim-motor-onbellek-check.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS fresh engine per run; exact-input reuse; state/action mutations; cached rejection\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "tools/studyo-motoru/test.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "✓ kanepe +100 mm ve ceviz kabul\n✓ 9 m kanepe sınıra takıldı diye raporlanır\n✓ olmayan kol tipi reddedilir\n✓ masa, 6 kişilik\n✓ salon: kanepe TV'ye bakar, sehpa yakın — çözücü yerleştirdi, kısıtlar tuttu\n✓ WC'ye çift kişilik yatak: sığmıyor\n✓ meclis U: 3 duvar boyunca oturma, sehpa ortada\n✓ meclis L: 2 duvar boyunca oturma, sehpa ortada\n✓ duvar dışına taşan kapı reddedilir\n✓ merdiven: 15 rıht [{\"id\":\"merdiven\",\"en\":900,\"riht\":186.7,\"basamak\":257,\"adet\":15,\"boy\":4498}]\n✓ dar merdiven reddedilir\n✓ adım kuralına uymayan merdiven reddedilir\n✓ olmayan kata merdiven reddedilir\n✓ yüksek rıht reddedilir\n✓ sığ basamak reddedilir\n✓ negatif kat yüksekliği reddedilir\n✓ boş işlem listesi\n✓ ışık: iki lambader, tavan kapalı {\"oda\":\"salon\",\"isik\":{\"tavan\":0,\"lambader\":2},\"renk_k\":2700}\n✓ aşırı renk sıcaklığı reddedilir\n✓ olmayan odaya ışık reddedilir\n✓ tasarımcıya gönderim kaydedilir\n✓ boş proje gönderilmez\n✓ perde kadife, halı bukle\n✓ sözlükte olmayan katman reddedilir\nhepsi geçti\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "tools/c7-audit/motor-stair.mjs",
+        "--out",
+        "work/c7-stair-final-completion.json",
+        "--assert"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"out\":\"work/c7-stair-final-completion.json\",\"total\":26,\"passed\":26,\"failed\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "tools/c7-audit/layout-identity.mjs",
+        "--out",
+        "work/c7-layout-final-completion.json",
+        "--assert"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"out\":\"work/c7-layout-final-completion.json\",\"probes\":13,\"passed\":13,\"failed\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "tools/c7-audit/test.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS original preservation;40proposals/0native actions;3900vs3000actual compile;corrected-claim control;projection drift;assumed provenance;missing plan rejection;compiler-normalized leakage positive/negative controls\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python",
+        "tools/c7-audit/test-placement-sample.py"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS independent rotated footprint;inside/outside controls;invalid dimensions;original preservation;four real rows;null refusal not success;duplicate-name dimensions unresolved;zero approvals\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python",
+        "tools/c7-audit/check-placement-receipt.py"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS gzip receipt integrity;17167 source/row hashes and IDs bound;source fingerprints unchanged;zero approvals\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python",
+        "tools/c7-audit/source-disposition.py"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"rows\": 17167, \"new_negative_decisions\": 17161, \"test_rows\": 984, \"validation_rows\": 845, \"exact_shape_matches\": 0, \"conversation_shape_matches\": 0, \"training_approvals\": 0}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python",
+        "tools/c7-audit/apply-negative-dispositions.py"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"new_negative_entries\": 0, \"previous_decisions_preserved\": 17172, \"training_approvals\": 0}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "tools/c7-audit/placement-exact-leakage.mjs",
+        "--out",
+        "work/c7-exact-final.json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"out\":\"work/c7-exact-final.json\",\"exam_tasks\":120,\"rows\":17167,\"exact_matches\":0,\"training_approved\":false}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--input-type=module",
+        "-e",
+        "import assert from 'node:assert/strict';import{loadTasks}from'./tests/ai-eval/aura-sinav-01/score.mjs';assert.throws(()=>loadTasks(),/Studio source changed/);console.log('PASS frozen exam rejects changed engine;no frozen bytes rewritten');"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS frozen exam rejects changed engine;no frozen bytes rewritten\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--exit-code",
+        "HEAD",
+        "--",
+        "assets",
+        "api",
+        ":(top,glob)*.html",
+        "tests/ai-eval/aura-sinav-01/gorevler.jsonl",
+        "tests/ai-eval/aura-sinav-01/FREEZE.json"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "all_listed_passed": true,
+  "file_sha256_lf": {
+    "tools/studyo-motoru/motor.mjs": "201786935880c0463fc9a7f3f04879f9dc8024010a9cb23d1a4858a30c1a499f",
+    "tools/egitim/motor-onbellek.mjs": "805964b8debb2bd56522ef8787cb03cef1fc4d03c819de9b51bfd165fb9d7e9e",
+    "tests/egitim-motor-onbellek-check.mjs": "102bef19b4af902568beb388d4d31ac7e50e372127f1c7b34bdca79ecb950337",
+    "tools/c7-audit/admission.mjs": "6b3e9b0928f25035b98763069bb1d7f5c8399cb75211af2db3587c58f1818da4",
+    "tools/c7-audit/apply-negative-dispositions.py": "10e36cdf54099729bc3b108ae880bd0af9da00aca6760adb49a211a568f4e938",
+    "tools/c7-audit/check-placement-receipt.py": "a439653959eb3c51941d33a0501bc90f36a0b010ede02d562aab64fb2098a83e",
+    "tools/c7-audit/layout-identity.mjs": "37a7494984246db1050d628327ba851471ff55b7c556f6664dcb866947b3c565",
+    "tools/c7-audit/motor-stair.mjs": "93d710512934d69a30a4dae5e96538f35e5e73c7f4b2ab533a36d3c97e7e0c55",
+    "tools/c7-audit/placement-exact-leakage.mjs": "30d1e0acb4a0d085706e300a212ab9fcf6a764d92044b6196d830abe6daff058",
+    "tools/c7-audit/placement-sample.py": "ee8c7e4f34527d3c0d4b6d1c0c233256e57be9aed490de759c0ddfe8d407e52c",
+    "tools/c7-audit/placement-structural.py": "0a8623bbb6afa54effeeb3c2b36626c09e7f270d6c5fc7b161a5028b07380c44",
+    "tools/c7-audit/sohbet-001.mjs": "b033d84500cbbf09e5cc7b7bc27af40e2479e634db632136125ea42660425cb2",
+    "tools/c7-audit/source-disposition.py": "ab4cb6d0ab125d5a70e8e857a28de377f3f7db533875e0baf7156f274becf161",
+    "tools/c7-audit/test-placement-sample.py": "71d6986bc35ecc270fb027ff2231fc1d189ce12e21bd9491c59c91b5c75046bc",
+    "tools/c7-audit/test.mjs": "b81c76e6ae2a380c3480eeca7b3bb1e2ca0cc4ce6cf5957b52961d496c445120"
+  },
+  "full_suite_status": "Not rerun;prior Forma180s timeout remains open",
+  "training_approved": false
+}

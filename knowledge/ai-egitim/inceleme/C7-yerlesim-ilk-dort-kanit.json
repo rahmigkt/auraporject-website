@@ -1,0 +1,801 @@
+{
+  "scope": "Exactly first two records from each original gzip; four rows read, not a representative approval sample.",
+  "source_code_sha": "263922aabb2a06d966a895a4bc8357f983f8791e",
+  "reviewer": "Codex",
+  "producer": "Claude (conversion scripts); underlying dataset procedural ProcTHOR",
+  "review_mode": "cross_review",
+  "training_approved": false,
+  "audit_tool_sha256_lf": "03e69b81837b860fb610187031f44795488f657110a6923634435d668723fc1c",
+  "records": [
+    {
+      "id": "procthor-train-1-room|11",
+      "row_sha256": "39fc69741f09d29190690957f5f13f01a41395e545d7e9afe2bc34df8f8e8743",
+      "source": {
+        "dataset": "ProcTHOR-10K",
+        "license": "Apache-2.0",
+        "split": "train",
+        "house": 1,
+        "room": "room|11",
+        "note": "procedural generation, not designer layouts"
+      },
+      "input_items": 2,
+      "output_placements": 2,
+      "source_ok": null,
+      "ambiguous_dimension_names": [],
+      "footprint_corner_checks": [
+        {
+          "part": "klozet",
+          "center_mm": [
+            10816,
+            9223
+          ],
+          "rotation_deg": 180,
+          "size_association": "unique",
+          "candidate_sizes_mm": [
+            [
+              540,
+              862
+            ]
+          ],
+          "corner_checks": [
+            {
+              "size_mm": [
+                540,
+                862
+              ],
+              "corners_mm": [
+                [
+                  11086.0,
+                  8792.0
+                ],
+                [
+                  10546.0,
+                  8792.0
+                ],
+                [
+                  10546.0,
+                  9654.0
+                ],
+                [
+                  11086.0,
+                  9654.0
+                ]
+              ],
+              "all_corners_strictly_inside": true
+            }
+          ]
+        },
+        {
+          "part": "çamaşır makinesi",
+          "center_mm": [
+            11845,
+            9132
+          ],
+          "rotation_deg": 180,
+          "size_association": "unique",
+          "candidate_sizes_mm": [
+            [
+              675,
+              679
+            ]
+          ],
+          "corner_checks": [
+            {
+              "size_mm": [
+                675,
+                679
+              ],
+              "corners_mm": [
+                [
+                  12182.5,
+                  8792.5
+                ],
+                [
+                  11507.5,
+                  8792.5
+                ],
+                [
+                  11507.5,
+                  9471.5
+                ],
+                [
+                  12182.5,
+                  9471.5
+                ]
+              ],
+              "all_corners_strictly_inside": true
+            }
+          ]
+        }
+      ],
+      "findings": [
+        "legacy_coordinate_target_requires_reviewed_constraint_conversion"
+      ],
+      "decision": "duzelt",
+      "training_approved": false,
+      "limits": [
+        "Corner-only check is not whole-polygon containment in a concave room.",
+        "Doors, windows, front clearance, pairwise collision and semantic leakage remain pending.",
+        "Source refusal is not an exhaustive infeasibility proof.",
+        "Original coordinate targets are distinct from already-delivered Codex H4 constraint targets."
+      ],
+      "file": "knowledge/ai-egitim/veri/yerlesim/procthor-denetimli.jsonl.gz",
+      "line": 1,
+      "compressed_source_sha256": "7424022ea97ecf789fbf557ba7c83a00e62409d74d28ecd90caa3b6a1fb8de9c"
+    },
+    {
+      "id": "procthor-train-4-room|5",
+      "row_sha256": "878070398917da338c6c2c75b76e4577ded1ab379b847f0209ceca84e6f36166",
+      "source": {
+        "dataset": "ProcTHOR-10K",
+        "license": "Apache-2.0",
+        "split": "train",
+        "house": 4,
+        "room": "room|5",
+        "note": "procedural generation, not designer layouts"
+      },
+      "input_items": 1,
+      "output_placements": 1,
+      "source_ok": null,
+      "ambiguous_dimension_names": [],
+      "footprint_corner_checks": [
+        {
+          "part": "klozet",
+          "center_mm": [
+            9732,
+            12001
+          ],
+          "rotation_deg": 270,
+          "size_association": "unique",
+          "candidate_sizes_mm": [
+            [
+              529,
+              973
+            ]
+          ],
+          "corner_checks": [
+            {
+              "size_mm": [
+                529,
+                973
+              ],
+              "corners_mm": [
+                [
+                  10218.5,
+                  12265.5
+                ],
+                [
+                  10218.5,
+                  11736.5
+                ],
+                [
+                  9245.5,
+                  11736.5
+                ],
+                [
+                  9245.5,
+                  12265.5
+                ]
+              ],
+              "all_corners_strictly_inside": true
+            }
+          ]
+        }
+      ],
+      "findings": [
+        "legacy_coordinate_target_requires_reviewed_constraint_conversion"
+      ],
+      "decision": "duzelt",
+      "training_approved": false,
+      "limits": [
+        "Corner-only check is not whole-polygon containment in a concave room.",
+        "Doors, windows, front clearance, pairwise collision and semantic leakage remain pending.",
+        "Source refusal is not an exhaustive infeasibility proof.",
+        "Original coordinate targets are distinct from already-delivered Codex H4 constraint targets."
+      ],
+      "file": "knowledge/ai-egitim/veri/yerlesim/procthor-denetimli.jsonl.gz",
+      "line": 2,
+      "compressed_source_sha256": "7424022ea97ecf789fbf557ba7c83a00e62409d74d28ecd90caa3b6a1fb8de9c"
+    },
+    {
+      "id": "aura-cozucu-train-1-room|3",
+      "row_sha256": "648420d330549d83ce887d14f76786d6e774ba20e0aba21ed8f9e92957e7806f",
+      "source": {
+        "dataset": "ProcTHOR-10K",
+        "license": "Apache-2.0",
+        "split": "train",
+        "house": 1,
+        "room": "room|3",
+        "note": "oda geometrisi ProcTHOR-10K (Apache-2.0); yerleşim AURA kuralları",
+        "placements": "AURA yerlesim.js"
+      },
+      "input_items": 9,
+      "output_placements": null,
+      "source_ok": false,
+      "ambiguous_dimension_names": [
+        "yan sehpa"
+      ],
+      "footprint_corner_checks": [],
+      "findings": [
+        "legacy_coordinate_target_requires_reviewed_constraint_conversion",
+        "duplicate_part_names_do_not_bind_distinct_requested_dimensions",
+        "null_placement_is_not_success_or_proof_of_infeasibility"
+      ],
+      "decision": "duzelt",
+      "training_approved": false,
+      "limits": [
+        "Corner-only check is not whole-polygon containment in a concave room.",
+        "Doors, windows, front clearance, pairwise collision and semantic leakage remain pending.",
+        "Source refusal is not an exhaustive infeasibility proof.",
+        "Original coordinate targets are distinct from already-delivered Codex H4 constraint targets."
+      ],
+      "file": "knowledge/ai-egitim/veri/yerlesim/procthor-aura-cozucu.jsonl.gz",
+      "line": 1,
+      "compressed_source_sha256": "749845b2b8b4280741df5f7d80c0621b8af35e42a3aa3ee5dc03fd2176f68502"
+    },
+    {
+      "id": "aura-cozucu-train-1-room|4",
+      "row_sha256": "77d6a0ab47b923736a9eb5cde63778e306e5291ff5dd5314507c9a67f6aae362",
+      "source": {
+        "dataset": "ProcTHOR-10K",
+        "license": "Apache-2.0",
+        "split": "train",
+        "house": 1,
+        "room": "room|4",
+        "note": "oda geometrisi ProcTHOR-10K (Apache-2.0); yerleşim AURA kuralları",
+        "placements": "AURA yerlesim.js"
+      },
+      "input_items": 10,
+      "output_placements": 10,
+      "source_ok": true,
+      "ambiguous_dimension_names": [
+        "yan sehpa"
+      ],
+      "footprint_corner_checks": [
+        {
+          "part": "TV ünitesi",
+          "center_mm": [
+            3752,
+            5347
+          ],
+          "rotation_deg": 90,
+          "size_association": "unique",
+          "candidate_sizes_mm": [
+            [
+              1800,
+              450
+            ]
+          ],
+          "corner_checks": [
+            {
+              "size_mm": [
+                1800,
+                450
+              ],
+              "corners_mm": [
+                [
+                  3527.0,
+                  4447.0
+                ],
+                [
+                  3527.0,
+                  6247.0
+                ],
+                [
+                  3977.0,
+                  6247.0
+                ],
+                [
+                  3977.0,
+                  4447.0
+                ]
+              ],
+              "all_corners_strictly_inside": true
+            }
+          ]
+        },
+        {
+          "part": "kanepe",
+          "center_mm": [
+            6357,
+            5250
+          ],
+          "rotation_deg": 270,
+          "size_association": "unique",
+          "candidate_sizes_mm": [
+            [
+              2300,
+              900
+            ]
+          ],
+          "corner_checks": [
+            {
+              "size_mm": [
+                2300,
+                900
+              ],
+              "corners_mm": [
+                [
+                  6807.0,
+                  6400.0
+                ],
+                [
+                  6807.0,
+                  4100.0
+                ],
+                [
+                  5907.0,
+                  4100.0
+                ],
+                [
+                  5907.0,
+                  6400.0
+                ]
+              ],
+              "all_corners_strictly_inside": true
+            }
+          ]
+        },
+        {
+          "part": "orta sehpa",
+          "center_mm": [
+            5157,
+            5400
+          ],
+          "rotation_deg": 90,
+          "size_association": "unique",
+          "candidate_sizes_mm": [
+            [
+              1100,
+              600
+            ]
+          ],
+          "corner_checks": [
+            {
+              "size_mm": [
+                1100,
+                600
+              ],
+              "corners_mm": [
+                [
+                  4857.0,
+                  4850.0
+                ],
+                [
+                  4857.0,
+                  5950.0
+                ],
+                [
+                  5457.0,
+                  5950.0
+                ],
+                [
+                  5457.0,
+                  4850.0
+                ]
+              ],
+              "all_corners_strictly_inside": true
+            }
+          ]
+        },
+        {
+          "part": "ikili koltuk",
+          "center_mm": [
+            5157,
+            6880
+          ],
+          "rotation_deg": 0,
+          "size_association": "unique",
+          "candidate_sizes_mm": [
+            [
+              1800,
+              900
+            ]
+          ],
+          "corner_checks": [
+            {
+              "size_mm": [
+                1800,
+                900
+              ],
+              "corners_mm": [
+                [
+                  4257.0,
+                  7330.0
+                ],
+                [
+                  6057.0,
+                  7330.0
+                ],
+                [
+                  6057.0,
+                  6430.0
+                ],
+                [
+                  4257.0,
+                  6430.0
+                ]
+              ],
+              "all_corners_strictly_inside": true
+            }
+          ]
+        },
+        {
+          "part": "tekli koltuk (berjer)",
+          "center_mm": [
+            5157,
+            4025
+          ],
+          "rotation_deg": 180,
+          "size_association": "unique",
+          "candidate_sizes_mm": [
+            [
+              850,
+              850
+            ]
+          ],
+          "corner_checks": [
+            {
+              "size_mm": [
+                850,
+                850
+              ],
+              "corners_mm": [
+                [
+                  5582.0,
+                  3600.0
+                ],
+                [
+                  4732.0,
+                  3600.0
+                ],
+                [
+                  4732.0,
+                  4450.0
+                ],
+                [
+                  5582.0,
+                  4450.0
+                ]
+              ],
+              "all_corners_strictly_inside": true
+            }
+          ]
+        },
+        {
+          "part": "yemek masası",
+          "center_mm": [
+            6657,
+            2250
+          ],
+          "rotation_deg": 90,
+          "size_association": "unique",
+          "candidate_sizes_mm": [
+            [
+              1800,
+              900
+            ]
+          ],
+          "corner_checks": [
+            {
+              "size_mm": [
+                1800,
+                900
+              ],
+              "corners_mm": [
+                [
+                  6207.0,
+                  1350.0
+                ],
+                [
+                  6207.0,
+                  3150.0
+                ],
+                [
+                  7107.0,
+                  3150.0
+                ],
+                [
+                  7107.0,
+                  1350.0
+                ]
+              ],
+              "all_corners_strictly_inside": true
+            }
+          ]
+        },
+        {
+          "part": "büfe",
+          "center_mm": [
+            8522,
+            4220
+          ],
+          "rotation_deg": 270,
+          "size_association": "unique",
+          "candidate_sizes_mm": [
+            [
+              1800,
+              450
+            ]
+          ],
+          "corner_checks": [
+            {
+              "size_mm": [
+                1800,
+                450
+              ],
+              "corners_mm": [
+                [
+                  8747.0,
+                  5120.0
+                ],
+                [
+                  8747.0,
+                  3320.0
+                ],
+                [
+                  8297.0,
+                  3320.0
+                ],
+                [
+                  8297.0,
+                  5120.0
+                ]
+              ],
+              "all_corners_strictly_inside": true
+            }
+          ]
+        },
+        {
+          "part": "kahve köşesi berjeri",
+          "center_mm": [
+            7580,
+            445
+          ],
+          "rotation_deg": 180,
+          "size_association": "unique",
+          "candidate_sizes_mm": [
+            [
+              800,
+              850
+            ]
+          ],
+          "corner_checks": [
+            {
+              "size_mm": [
+                800,
+                850
+              ],
+              "corners_mm": [
+                [
+                  7980.0,
+                  19.999999999999943
+                ],
+                [
+                  7180.0,
+                  20.000000000000057
+                ],
+                [
+                  7180.0,
+                  870.0
+                ],
+                [
+                  7980.0,
+                  870.0
+                ]
+              ],
+              "all_corners_strictly_inside": true
+            }
+          ]
+        },
+        {
+          "part": "yan sehpa",
+          "center_mm": [
+            8270,
+            330
+          ],
+          "rotation_deg": 180,
+          "size_association": "ambiguous",
+          "candidate_sizes_mm": [
+            [
+              500,
+              500
+            ],
+            [
+              450,
+              450
+            ]
+          ],
+          "corner_checks": [
+            {
+              "size_mm": [
+                500,
+                500
+              ],
+              "corners_mm": [
+                [
+                  8520.0,
+                  79.99999999999994
+                ],
+                [
+                  8020.0,
+                  80.00000000000006
+                ],
+                [
+                  8020.0,
+                  580.0
+                ],
+                [
+                  8520.0,
+                  580.0
+                ]
+              ],
+              "all_corners_strictly_inside": true
+            },
+            {
+              "size_mm": [
+                450,
+                450
+              ],
+              "corners_mm": [
+                [
+                  8495.0,
+                  105.0
+                ],
+                [
+                  8045.0,
+                  105.0
+                ],
+                [
+                  8045.0,
+                  555.0
+                ],
+                [
+                  8495.0,
+                  555.0
+                ]
+              ],
+              "all_corners_strictly_inside": true
+            }
+          ]
+        },
+        {
+          "part": "yan sehpa",
+          "center_mm": [
+            6915,
+            305
+          ],
+          "rotation_deg": 180,
+          "size_association": "ambiguous",
+          "candidate_sizes_mm": [
+            [
+              500,
+              500
+            ],
+            [
+              450,
+              450
+            ]
+          ],
+          "corner_checks": [
+            {
+              "size_mm": [
+                500,
+                500
+              ],
+              "corners_mm": [
+                [
+                  7165.0,
+                  54.99999999999994
+                ],
+                [
+                  6665.0,
+                  55.00000000000006
+                ],
+                [
+                  6665.0,
+                  555.0
+                ],
+                [
+                  7165.0,
+                  555.0
+                ]
+              ],
+              "all_corners_strictly_inside": true
+            },
+            {
+              "size_mm": [
+                450,
+                450
+              ],
+              "corners_mm": [
+                [
+                  7140.0,
+                  80.0
+                ],
+                [
+                  6690.0,
+                  80.0
+                ],
+                [
+                  6690.0,
+                  530.0
+                ],
+                [
+                  7140.0,
+                  530.0
+                ]
+              ],
+              "all_corners_strictly_inside": true
+            }
+          ]
+        }
+      ],
+      "findings": [
+        "legacy_coordinate_target_requires_reviewed_constraint_conversion",
+        "duplicate_part_names_do_not_bind_distinct_requested_dimensions"
+      ],
+      "decision": "duzelt",
+      "training_approved": false,
+      "limits": [
+        "Corner-only check is not whole-polygon containment in a concave room.",
+        "Doors, windows, front clearance, pairwise collision and semantic leakage remain pending.",
+        "Source refusal is not an exhaustive infeasibility proof.",
+        "Original coordinate targets are distinct from already-delivered Codex H4 constraint targets."
+      ],
+      "file": "knowledge/ai-egitim/veri/yerlesim/procthor-aura-cozucu.jsonl.gz",
+      "line": 2,
+      "compressed_source_sha256": "749845b2b8b4280741df5f7d80c0621b8af35e42a3aa3ee5dc03fd2176f68502"
+    }
+  ],
+  "at": "2026-10-22T14:56:47.045043+00:00",
+  "manual_read_scope": {
+    "gzip_line_ranges": [
+      {
+        "file": "knowledge/ai-egitim/veri/yerlesim/procthor-denetimli.jsonl.gz",
+        "lines": [
+          1,
+          2
+        ]
+      },
+      {
+        "file": "knowledge/ai-egitim/veri/yerlesim/procthor-aura-cozucu.jsonl.gz",
+        "lines": [
+          1,
+          2
+        ]
+      }
+    ],
+    "script_read": [
+      {
+        "file": "tools/yerlesim-veri/procthor_donustur.py",
+        "lines": [
+          1,
+          158
+        ]
+      },
+      {
+        "file": "tools/yerlesim-veri/procthor_incele.py",
+        "lines": [
+          1,
+          31
+        ]
+      }
+    ],
+    "style": "Dort kaydin Turkce istem/hedefleri okundu; kisa ve anlasilir. Ret cevabi kesin sigmiyor iddiasini eksiksiz arama kaniti olmadan dogrulanmis saymaz. Insan/dil onayi yok.",
+    "leakage": "Anlamsal/parafraz sizma incelemesi bekliyor; uygun karari yok."
+  },
+  "tool_self_review": {
+    "reviewer": "Codex",
+    "review_mode": "user_authorized_self_review",
+    "scope": "Narrow code inspection and positive/negative controls; not independent Claude review",
+    "tests": [
+      "python tools/c7-audit/test-placement-sample.py:PASS",
+      "node tools/c7-audit/test.mjs:PASS"
+    ],
+    "source_fingerprints": {
+      "tools/c7-audit/placement-sample.py": "03e69b81837b860fb610187031f44795488f657110a6923634435d668723fc1c",
+      "tools/c7-audit/test-placement-sample.py": "95b5b1e3198b268e7607a96ce7b5d303f6c1ee867b37ff44c86f92dc9a7f788a"
+    }
+  }
+}

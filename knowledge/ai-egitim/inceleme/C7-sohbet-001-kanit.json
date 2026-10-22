@@ -1,0 +1,416 @@
+{
+  "id": "sohbet-ornekleri:sohbet-001",
+  "source_turns": 10,
+  "raw_proposals": 40,
+  "coordinate_placement_proposals": 10,
+  "native_operations": 0,
+  "message_projection_exact": true,
+  "row_sha256": "9412bec0fdc2e89775f17205a30f96ede18f75dfd1fb175388e8babf12adbf7d",
+  "geometry": [
+    {
+      "id": "mutfak",
+      "position": [
+        2170,
+        4420
+      ],
+      "rotation": 0,
+      "size": {
+        "w": 3900,
+        "d": 600,
+        "h": 2420
+      },
+      "footprint": [
+        [
+          220,
+          4720
+        ],
+        [
+          4120,
+          4720
+        ],
+        [
+          4120,
+          4120
+        ],
+        [
+          220,
+          4120
+        ]
+      ]
+    },
+    {
+      "id": "kanepe",
+      "position": [
+        2550,
+        1500
+      ],
+      "rotation": 90,
+      "size": {
+        "w": 2300,
+        "d": 720,
+        "h": 730
+      },
+      "footprint": [
+        [
+          2190,
+          350
+        ],
+        [
+          2190,
+          2650
+        ],
+        [
+          2910,
+          2650
+        ],
+        [
+          2910,
+          350
+        ]
+      ]
+    },
+    {
+      "id": "tv",
+      "position": [
+        5710,
+        1370
+      ],
+      "rotation": 270,
+      "size": {
+        "w": 1800,
+        "d": 420,
+        "h": 480
+      },
+      "footprint": [
+        [
+          5920,
+          2270
+        ],
+        [
+          5920,
+          469.99999999999994
+        ],
+        [
+          5500,
+          470.00000000000006
+        ],
+        [
+          5500,
+          2270
+        ]
+      ]
+    },
+    {
+      "id": "orta-sehpa",
+      "position": [
+        3900,
+        1500
+      ],
+      "rotation": 0,
+      "size": {
+        "w": 1100,
+        "d": 650,
+        "h": 385
+      },
+      "footprint": [
+        [
+          3350,
+          1825
+        ],
+        [
+          4450,
+          1825
+        ],
+        [
+          4450,
+          1175
+        ],
+        [
+          3350,
+          1175
+        ]
+      ]
+    },
+    {
+      "id": "yemek",
+      "position": [
+        4650,
+        3150
+      ],
+      "rotation": 90,
+      "size": {
+        "w": 1400,
+        "d": 850,
+        "h": 745
+      },
+      "footprint": [
+        [
+          4225,
+          2450
+        ],
+        [
+          4225,
+          3850
+        ],
+        [
+          5075,
+          3850
+        ],
+        [
+          5075,
+          2450
+        ]
+      ]
+    },
+    {
+      "id": "yatak1",
+      "position": [
+        7130,
+        2420
+      ],
+      "rotation": 90,
+      "size": {
+        "w": 1600,
+        "d": 2100,
+        "h": 1150
+      },
+      "footprint": [
+        [
+          6080,
+          1620
+        ],
+        [
+          6080,
+          3220
+        ],
+        [
+          8180,
+          3220
+        ],
+        [
+          8180,
+          1620
+        ]
+      ]
+    },
+    {
+      "id": "gardirop",
+      "position": [
+        8430,
+        4420
+      ],
+      "rotation": 0,
+      "size": {
+        "w": 2000,
+        "d": 600,
+        "h": 2200
+      },
+      "footprint": [
+        [
+          7430,
+          4720
+        ],
+        [
+          9430,
+          4720
+        ],
+        [
+          9430,
+          4120
+        ],
+        [
+          7430,
+          4120
+        ]
+      ]
+    },
+    {
+      "id": "yatak2",
+      "position": [
+        1370,
+        7780
+      ],
+      "rotation": 0,
+      "size": {
+        "w": 900,
+        "d": 2100,
+        "h": 1150
+      },
+      "footprint": [
+        [
+          920,
+          8830
+        ],
+        [
+          1820,
+          8830
+        ],
+        [
+          1820,
+          6730
+        ],
+        [
+          920,
+          6730
+        ]
+      ]
+    },
+    {
+      "id": "calisma-masasi",
+      "position": [
+        8730,
+        8530
+      ],
+      "rotation": 0,
+      "size": {
+        "w": 1200,
+        "d": 600,
+        "h": 750
+      },
+      "footprint": [
+        [
+          8130,
+          8830
+        ],
+        [
+          9330,
+          8830
+        ],
+        [
+          9330,
+          8230
+        ],
+        [
+          8130,
+          8230
+        ]
+      ]
+    },
+    {
+      "id": "lavabo",
+      "position": [
+        4875,
+        7530
+      ],
+      "rotation": 270,
+      "size": {
+        "w": 900,
+        "d": 490,
+        "h": 870
+      },
+      "footprint": [
+        [
+          5120,
+          7980
+        ],
+        [
+          5120,
+          7080
+        ],
+        [
+          4630,
+          7080
+        ],
+        [
+          4630,
+          7980
+        ]
+      ]
+    }
+  ],
+  "exam_check": {
+    "method": "Compiler-compatible normalized exact user text comparison only; semantic/paraphrase leakage remains unreviewed",
+    "task_texts": 120,
+    "overlap": []
+  },
+  "findings": [
+    {
+      "code": "no_recorded_native_operation_sequence",
+      "existing_quarantine": true
+    },
+    {
+      "code": "kitchen_width_claim_mismatch",
+      "stated_mm": 3000,
+      "compiled_mm": 3900,
+      "module_widths_mm": [
+        600,
+        900,
+        600,
+        400,
+        800,
+        600
+      ]
+    },
+    {
+      "code": "assumptions_labeled_customer_stated",
+      "fields": [
+        "spaces/salon/ceiling_height",
+        "spaces/yatak1/ceiling_height",
+        "spaces/hol/ceiling_height",
+        "spaces/yatak2/ceiling_height",
+        "spaces/banyo/ceiling_height",
+        "spaces/wc/ceiling_height",
+        "spaces/kiler/ceiling_height",
+        "spaces/calisma/ceiling_height",
+        "spaces/balkon/ceiling_height",
+        "walls/dis-guney/thickness",
+        "walls/dis-dogu/thickness",
+        "walls/dis-kuzey/thickness",
+        "walls/dis-bati/thickness",
+        "walls/ic-1/thickness",
+        "walls/ic-2/thickness",
+        "walls/ic-3/thickness",
+        "walls/ic-4/thickness",
+        "walls/ic-5/thickness",
+        "walls/ic-6/thickness",
+        "walls/ic-7/thickness",
+        "walls/ic-8/thickness",
+        "walls/ic-9/thickness"
+      ]
+    }
+  ],
+  "decision": "duzelt",
+  "training_approved": false,
+  "scope": "One original Claude conversation and its current projection/compiled plan. No approval of other rows or full C7 completion; no source regeneration or model inference.",
+  "source_code_sha": "0de8f67c3b80fb5fd7d5d5492a211a50a7ddff4b",
+  "sources": {
+    "knowledge/ai-egitim/veri/sohbet-ornekleri/sohbet-001.json": {
+      "sha256_lf": "bac39871a8899fe89c4fbede62d74d6b76c8042e8e1191024c20e7d885aad57f"
+    },
+    "assets/ev/ornekler/sohbet-1.json": {
+      "sha256_lf": "d4e507becc68564ffc99523f6b5995e2aeb986ef1f83cfdef4b84e4567302d0c"
+    },
+    "assets/ev/items.js": {
+      "sha256_lf": "ee53132259c278f220febc0108e15833a8619928524610c1a233a798871e8348"
+    },
+    "assets/forma/generate.js": {
+      "sha256_lf": "ca12dd9b03c986817c302a896383d04d6ea42dfabc5a1b5ad21830790d1a08bc"
+    },
+    "assets/forma/kitchen.js": {
+      "sha256_lf": "e3b8f5bce64c13f5c7aba4f4137595154cc44566007467b2a5695c0952fdc11d"
+    },
+    "assets/ev/yerlesim.js": {
+      "sha256_lf": "950eff243dd22e8d919d7c2215a6ecb673e7fd00eee539be92f4945899869a51"
+    },
+    "tools/studyo-motoru/motor.mjs": {
+      "sha256_lf": "ab9b71b5b6add5c429c37825de8aafa4f79629e01c0d86b139097afccfab2022"
+    },
+    "tools/egitim-donustur/donustur.py": {
+      "sha256_lf": "681e34a4f9904691511aa9a4ec06f3e9908631abcf74f7e6206b2baa3cb04609"
+    },
+    "tools/egitim/derle.mjs": {
+      "sha256_lf": "d850ae2d4bebc680516704d900ed39f0d4c6e3c32e2e11620debe5b39961cb27"
+    },
+    "tools/aura-sinav-01/tasks.mjs": {
+      "sha256_lf": "4fd1caef7309ee163b7e445cc34fad408bae46c7b64d420be5dfac5354dff582"
+    },
+    "tools/c7-audit/sohbet-001.mjs": {
+      "sha256_lf": "b033d84500cbbf09e5cc7b7bc27af40e2479e634db632136125ea42660425cb2"
+    }
+  },
+  "projected_source_hash_matches": true,
+  "reviewer": "Codex",
+  "review_mode": "cross_review",
+  "producer": "Claude",
+  "at": "2026-10-22T14:13:56.630Z"
+}
