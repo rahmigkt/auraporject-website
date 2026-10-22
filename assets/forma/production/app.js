@@ -47,7 +47,7 @@ async function files(i) {
     {name: `${dir}/ebatlama.csv`, data: cuttingCsv(cp, nameOf)},
     {name: `${dir}/levha-plani.pdf`, data: jpegPdf(sheetPages.length ? sheetPages : [await svgToJpeg(sheetSvg({board: {label: '-'}, sheet: {label: '-'}, sheetCount: 0}, {sheet: {l: 2800, w: 2100}, placed: [], used: 0}, 0), 1200)])},
     {name: `${dir}/montaj-kitapcigi.pdf`, data: jpegPdf(bookletJpgs.map((j, k) => k ? j : {...j, link: {url: link, rect: [0.06, 0.78, 0.5, 0.81]}}))},
-    {name: `${dir}/onay.json`, data: JSON.stringify({approvedBy: s.approvedBy, date: s.date, language: s.lang, quantity: it.qty, link, design: d, sheets: cp.plan.map(p => ({board: p.board.label, sheet: p.sheet.label, count: p.sheetCount, yield: Math.round(p.yield * 100)}))}, null, 2)}
+    {name: `${dir}/onay.json`, data: JSON.stringify({approvedBy: s.approvedBy, date: s.date, language: s.lang, quantity: it.qty, link, design: d, sheets: cp.plan.map(p => ({board: p.board.label, sheet: p.sheet.label, count: p.sheetCount, yield: Math.round(p.yield * 100)}))}, null, 2)},
     ...(c.meta.shaped ? [{name: `${dir}/cnc-siluetler.dxf`, data: silhouetteDxf(c)}] : [])
   ];
 }
