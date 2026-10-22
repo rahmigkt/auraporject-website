@@ -11,8 +11,11 @@ import {styleName} from './styles.js';
 import {STARTS} from './starts.js';
 import {technicalReview, reviewMatches} from './technical-review.js';
 import {reviewDesign} from './auto-correct.js';
+import {partDimensions,partDimensionsCsv} from './part-dimensions.js';
+import {dimensionProjectFiles} from './dimension-package.js';
 import {findingText,reviewDocument,textileAssessmentFiles} from './review-document.js';
 import {textileReview} from './case-review.js';
+import {TEXTILE_PREVIEW} from './textile-preview.js';
 import {HIDES, COLORS, FIBERS, WEAVES, WEAVE_NAMES, PATTERNS, MOTIF_CHOICES, MOTIF_NAMES, WOODS, FINISHES, STAINS, METALS, STONES, GLASS, SURFACES, LINEN_COLORS, colorGroup, name as nm} from './catalog.js';
 import {MATTRESS} from './bedroom.js';
 import {harmonize} from './set.js';
@@ -209,7 +212,7 @@ function renderCaption() {
   $('#eyebrow').textContent = `F-${String(d.seed % 100000).padStart(5, '0')} · ${L(state.sketch ? 'modeSketch' : 'modeRender')}`;
   renderStartLabel();
   $('#designTitle').textContent = d.family === 'bedroom' ? (d.params.view === 'set' ? L('bedroomSet') : L(d.kind)) : L(d.family === 'seating' ? c.meta.kind : d.kind);
-  $('#dims').textContent = ui().dims(c);
+  $('#dims').textContent = L('designDimensions')+': '+ui().dims(c);
   const err = issues.filter(i => i.level === 'error'), warn = issues.filter(i => i.level === 'warn');
   const st = $('#status');
   st.dataset.level = err.length ? 'error' : warn.length ? 'warn' : 'ok';
@@ -839,6 +842,7 @@ function projectPanel() {
     <div class="f-nextrow"><b>${L('anotherProduct')}</b><span>${FAMILY_NAV.map(([f, k]) => `<button class="f-link" data-act="family" data-family="${f}">${esc(L(k))}</button>`).join('')}</span></div></section>` : '';
   const list = items.length ? `<h3>${L('projectItems')} · ${items.length}</h3><ol class="f-items">${items.map((it, n) => `<li ${it.id === state.editing ? 'aria-current="true"' : ''}><span class="f-n">${String(n + 1).padStart(2, '0')}</span><span><b>${esc(itemName(it.design))}</b><small>${esc(styleName(it.design.style, state.lang))} · ${esc(itemDims(it.design))}</small>
     <span class="f-qty">${L('quantity')} <button class="f-link" data-act="qty" data-item="${it.id}" data-d="-1" ${(it.qty || 1) <= 1 ? 'disabled' : ''}>−</button><b>${it.qty || 1}</b><button class="f-link" data-act="qty" data-item="${it.id}" data-d="1">+</button></span></span><span class="f-itemacts"><button class="f-link" data-act="edit" data-item="${it.id}">${L('edit')}</button><button class="f-link" data-act="remove" data-item="${it.id}">${L('remove')}</button></span></li>`).join('')}</ol>` : `<p class="f-note">${L('projectEmpty')}</p>`;
+  const dimensions = items.length ? `<section><button data-act="dimensions">${esc(L('dimensionsDownload'))} ↓</button><p class="f-note">${esc(L('dimensionsScope'))}</p></section>` : '';
   const room = items.length ? roomSection() : '';
   const sent = state.sent, sentChanged = sent && sent.key !== projectKey();
   const send = `<h2 class="f-h2-sub">${L('sendDesigner')}</h2><p class="f-lead">${L('sendIntro')}</p>
@@ -854,7 +858,7 @@ function projectPanel() {
   ${editing && !changed ? technicalReviewHTML(editing) : ''}
   <div class="f-current"><div><b>${esc(itemName(d))}</b><small>${esc(styleName(d.style, state.lang))} · ${esc(fam === 'bedroom' ? L('setPiecesList') : itemDims(d))}</small></div>
   <button class="f-primary" data-act="add" ${editing && !changed ? 'disabled' : ''}>${editing ? (changed ? L('saveChanges') : L('inProject')) : L('addContinue')} ${editing && !changed ? '✓' : '+'}</button></div>
-  ${next}${list}${room}${send}`;
+  ${next}${list}${dimensions}${room}${send}`;
 }
 
 function technicalReviewHTML(item) {
@@ -913,6 +917,7 @@ function showRoom() {
 }
 function projectAction(el) {
   if(el.dataset.act==='assessment')return openAssessment();
+  if(el.dataset.act==='dimensions'){download('AURA-project-dimensions.zip',zip(dimensionProjectFiles(state.project.items,compileOf)),'application/zip');return;}
   const a = el.dataset.act, items = state.project.items;
   if (a === 'add') addToProject();
   else if (a === 'same') startNew(sameDesign(state.design, el.dataset.kind), `${L(el.dataset.kind)} · ${L('withThisDesign')}`);
@@ -989,7 +994,7 @@ function authError(err) {
 /** The whole project for the designer: per product a folder (design, drawings, parts list, render), one PDF with
  * the room view (when shown), every render and every drawing sheet, and a project summary. */
 async function projectPackage() {
-  const items = state.project.items, files = [], pages = [], summary = [], keep = {design: state.design, compiled: state.compiled, cache: state.drawingCache};
+  const items = state.project.items, files = [], pages = [], summary = [], dimensionItems = [], keep = {design: state.design, compiled: state.compiled, cache: state.drawingCache};
   // Links that open the work again in the studio: one for the whole project, one per product.
   const pLink = await projectLink(items, state.room, state.lang), links = [];
   const sheetLink = [12 / 420, (297 - 12 - 6) / 297, 0.62, (297 - 12 + 1) / 297];
@@ -1001,8 +1006,11 @@ async function projectPackage() {
       const dv = deliverables(), dir = `${String(n + 1).padStart(2, '0')}-${it.design.family}-${it.design.kind}/`, title = `AURA · ${itemName(it.design)}`;
       const review=technicalReview(it.design,state.compiled,issuesOf(it.design,state.compiled));
       it.technicalReview=review;
+      const dimensions=partDimensions(state.compiled);
+      dimensionItems.push({id:it.id,quantity:it.qty||1,dimensions});
+      files.push({name:dir+'part-dimensions.json',data:JSON.stringify(dimensions,null,2)},{name:dir+'part-dimensions.csv',data:partDimensionsCsv(dimensions,it.qty||1)});
       files.push({name: dir + 'technical-review.json',data:JSON.stringify(review,null,2)});
-      files.push({name: dir + 'design.json', data: JSON.stringify({schema: SCHEMA, link, quantity: it.qty || 1, design: it.design, derived: state.compiled.meta, issues: issuesOf(it.design, state.compiled), technicalReview:review, bom: dv.bom}, null, 2)});
+      files.push({name: dir + 'design.json', data: JSON.stringify({schema: SCHEMA, link, quantity: it.qty || 1, design: it.design, derived: state.compiled.meta, issues: issuesOf(it.design, state.compiled), technicalReview:review, dimensions, bom: dv.bom}, null, 2)});
       files.push({name: dir + 'drawings.svg', data: dv.sheet.svg}, {name: dir + 'drawings.dxf', data: drawingDxf(state.compiled)}, {name: dir + 'parts.csv', data: bomCsv(dv.bom)});
       files.push({name: dir + 'open-design.html', data: linkPage(link, title)}, {name: dir + 'open-design.url', data: urlShortcut(link)});
       const url = sceneModule?.renderThumbnail(state.compiled, it.design.materials, {width: 1600, height: 1000});
@@ -1011,10 +1019,11 @@ async function projectPackage() {
       summary.push(`${n + 1}. ${itemName(it.design)} × ${it.qty || 1} — ${specRows(dv.bom).map(r => r.join(': ')).join(' | ')}\n   ${link}`);
     }
   } finally { state.design = keep.design; state.compiled = keep.compiled; state.drawingCache = keep.cache; state.sheetLink = null; }
-  files.push({name: 'project.json', data: JSON.stringify({schema: SCHEMA, created: new Date().toISOString(), language: state.lang, link: pLink, items: items.map((i, n) => ({id: i.id, qty: i.qty || 1, family: i.design.family, kind: i.design.kind, style: i.design.style, link: links[n]})), room: state.room, note: 'Concept project generated by AURA Forma. Requires review by an AURA designer before production.'}, null, 2)});
+  files.push({name: 'project.json', data: JSON.stringify({schema: SCHEMA, created: new Date().toISOString(), language: state.lang, link: pLink, items: items.map((i, n) => ({id: i.id, qty: i.qty || 1, family: i.design.family, kind: i.design.kind, style: i.design.style, link: links[n],design:i.design,dimensions:dimensionItems[n].dimensions})), units:'mm', room: state.room, note: 'Concept project generated by AURA Forma. Requires review by an AURA designer before production.'}, null, 2)});
+  files.push({name:'part-dimensions.json',data:JSON.stringify({schema:'aura.project-dimensions/1',units:'mm',items:dimensionItems,production_approved:false},null,2)});
   files.push({name: 'drawings.pdf', data: jpegPdf(pages)});
   files.push({name: 'open-project.html', data: linkPage(pLink, `AURA · ${items.length} ${L('pieces')}`)}, {name: 'open-project.url', data: urlShortcut(pLink)});
-  files.push({name: state.lang === 'tr' ? 'BENIOKU.txt' : 'README.txt', data: state.lang === 'tr' ? `AURA Forma projesi (${items.length} ürün)\n\nProjenin tamamını stüdyoda açmak için:\n${pLink}\n\n${items.map((it, n) => `${n + 1}. ${itemName(it.design)} × ${it.qty || 1}\n   ${links[n]}`).join('\n')}\n\ndrawings.pdf          önce bunu açın: görseller ve her ürünün ölçülü A3 çizimi (sayfadaki bağlantı tasarımı açar)\nopen-project.html     projeyi stüdyoda açar (çift tıklayın)\nroom.jpg              ürünler odada (oda kullanıldıysa)\nNN-aile-tür/          her ürün için: parts.csv (parça ve ölçü listesi, Excel), drawings.svg (çizim, tarayıcıda açılır), drawings.dxf (CAD/CNC), render.jpg, design.json, open-design.html\nproject.json          ürün listesi, bağlantılar ve oda yerleşimi\n\nKonsept tasarımdır. Ölçü, yapı ve yapım önerileri üretimden önce tasarımcı tarafından kontrol edilmelidir.\n` : `AURA Forma project (${items.length} products)\n\nOpen the whole project in the studio:\n${pLink}\n\n${items.map((it, n) => `${n + 1}. ${itemName(it.design)} × ${it.qty || 1}\n   ${links[n]}`).join('\n')}\n\nopen-project.html     opens the whole project in the studio (double-click)\nroom.jpg              the products placed in a room (if shown)\nNN-family-kind/       per product: design.json, drawings.svg/.dxf, parts.csv (cut list), render.jpg, open-design.html\ndrawings.pdf          room view, renders and A3 drawing sheets of every product (the link on each sheet opens that design)\nproject.json          list of products, links and the room layout\n\nConcept design. Dimensions, structure and build suggestions must be checked by the designer before production.\n`});
+  files.push({name: state.lang === 'tr' ? 'BENIOKU.txt' : 'README.txt', data: state.lang === 'tr' ? `AURA Forma projesi (${items.length} ürün)\n\nProjenin tamamını stüdyoda açmak için:\n${pLink}\n\n${items.map((it, n) => `${n + 1}. ${itemName(it.design)} × ${it.qty || 1}\n   ${links[n]}`).join('\n')}\n\ndrawings.pdf          önce bunu açın: görseller ve her ürünün ölçülü A3 çizimi (sayfadaki bağlantı tasarımı açar)\nopen-project.html     projeyi stüdyoda açar (çift tıklayın)\nroom.jpg              ürünler odada (oda kullanıldıysa)\nNN-aile-tür/          her ürün için: parts.csv (parça ve ölçü listesi, Excel), drawings.svg (çizim, tarayıcıda açılır), drawings.dxf (CAD/CNC), render.jpg, design.json, open-design.html\npart-dimensions.json  her parçanın kimliği, yerel ve yerleştirilmiş X/Y/Z ölçüleri (mm); ürün klasöründe CSV de var\nproject.json          ürünler, tasarımlar, parça ölçüleri, bağlantılar ve oda yerleşimi\n\nKonsept tasarımdır. Ölçü, yapı ve yapım önerileri üretimden önce tasarımcı tarafından kontrol edilmelidir.\n` : `AURA Forma project (${items.length} products)\n\nOpen the whole project in the studio:\n${pLink}\n\n${items.map((it, n) => `${n + 1}. ${itemName(it.design)} × ${it.qty || 1}\n   ${links[n]}`).join('\n')}\n\nopen-project.html     opens the whole project in the studio (double-click)\nroom.jpg              the products placed in a room (if shown)\nNN-family-kind/       per product: design.json, drawings.svg/.dxf, parts.csv (cut list), render.jpg, open-design.html\ndrawings.pdf          room view, renders and A3 drawing sheets of every product (the link on each sheet opens that design)\npart-dimensions.json  every part ID and local/placed XYZ dimensions (mm); per-product CSV also included\nproject.json          products, designs, component dimensions, links and room layout\n\nConcept design. Dimensions, structure and build suggestions must be checked by the designer before production.\n`});
   saveProject();
   files.push({name:'technical-reviews.json',data:JSON.stringify({status:'designer_review_required',automatic_changes:false,items:items.map(i=>({id:i.id,review:i.technicalReview}))},null,2)});
   return {files, summary: `${summary.join('\n')}\n\n${L('technicalReturn')}\n${L('technicalLimits')}\n\n${L('designLink')}: ${pLink}`};
@@ -1279,8 +1288,8 @@ async function textileScene(host, tx) {
     S.dispose = () => r.dispose(); txScene = S; addEventListener('resize', () => txScene === S && S.render());
   }
   const S = txScene; S.dyn.clear();
-  const g = P.windowTreatment({w: 1800, sill: 900, h: 1500}, 2600, tx.curtain); S.dyn.add(g);
-  if (tx.rug.on) { const rug = Hl.rugMesh(1700, 2400, tx.rug); rug.rotation.y = Math.PI / 2; rug.position.set(0.1, 0, 1.45); S.dyn.add(rug); }
+  const g = P.windowTreatment(TEXTILE_PREVIEW.window, TEXTILE_PREVIEW.ceiling_height, tx.curtain); S.dyn.add(g);
+  if (tx.rug.on) { const rug = Hl.rugMesh(TEXTILE_PREVIEW.rug.w, TEXTILE_PREVIEW.rug.d, tx.rug); rug.rotation.y = Math.PI / 2; rug.position.set(0.1, 0, 1.45); S.dyn.add(rug); }
   S.render();
 }
 function textileView() {

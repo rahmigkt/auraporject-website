@@ -1,3 +1,4 @@
+import {componentDimensions} from './component-dimensions.js';
 import {FAMILIES,DETAILS,WOODS,FABRICS,SIZE_LIMITS,normalizeStudio,changeFamily,compileStudio,label,detailValue} from './design-library.js?v=20261016n';
 
 export const phrase=(tr,en,fr,da,de,nl,es,it)=>({tr,en,fr:fr||en,da:da||en,de:de||en,nl:nl||en,es:es||en,it:it||en});
@@ -180,5 +181,5 @@ export function applyChoice(state,step,id){
 
 export function selectedChoice(step,s,brief){if(['returnSeats','service','pillows'].includes(step))return choicesFor(step,s).find(c=>detailValue(c.id)===s[step])?.id;if(step==='room')return brief.room;if(step==='family')return brief.familyChosen?s.family:null;if(step==='layout')return s.configuration==='straight'?(s.seats===2?'two':'three'):s.configuration;if(step==='storage')return String(s.family==='nightstand'?s.rows:s.columns);if(step==='size')return brief.sizePreset||null;return s[step];}
 
-export function projectRecord(state,brief,language){const model=compileStudio(state);return {format:'aura-guided-design',version:1,createdAt:new Date().toISOString(),language,design:model.state,brief:{...brief},parts:model.parts,stage:'concept',dimensionsStatus:brief.dimensionsEntered?'customer_entered_unverified':'suggested',materialsRepresentative:true,designerReviewRequired:true,paymentStatus:'not_collected',submitted:false};}
+export function projectRecord(state,brief,language){const model=compileStudio(state);return {format:'aura-guided-design',version:1,createdAt:new Date().toISOString(),language,design:model.state,brief:{...brief},parts:model.parts,units:{design_dimensions:'cm',part_size:'m',part_position:'m'},component_dimensions:componentDimensions(model),stage:'concept',dimensionsStatus:brief.dimensionsEntered?'customer_entered_unverified':'suggested',materialsRepresentative:true,designerReviewRequired:true,paymentStatus:'not_collected',submitted:false};}
 

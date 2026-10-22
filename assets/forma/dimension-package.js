@@ -1,0 +1,7 @@
+import {partDimensions,partDimensionsCsv} from './part-dimensions.js';
+export function dimensionProjectFiles(items,compile){
+ const measured=items.map(i=>({id:i.id,quantity:i.qty||1,design:structuredClone(i.design),dimensions:partDimensions(compile(i.design))}));
+ const files=[{name:'project.json',data:JSON.stringify({schema:'aura.project-dimensions/1',units:'mm',status:'concept_not_production_approved',items:measured},null,2)},
+  {name:'OLCULER-README.txt',data:'AURA · Parça ölçüleri / Component dimensions\nBirim / Units: mm. X=en, Y=yükseklik, Z=derinlik / X=width,Y=height,Z=depth.\nHer ürün klasöründe JSON ve CSV vardır. Yerel ölçü parçanın kendi eksenlerindedir; yerleştirilmiş ölçü üründeki dönüşünü içerir.\nLocal extents precede part placement; product extents include rotation.\nNominal ürün ölçüsü ve tüm parçaların model zarfı ayrı tutulur. Döşeme zarfı kesim kalıbı değildir.\nNominal dimensions and complete model envelopes are separate. Upholstery envelopes are not cutting patterns.\nKesim ölçüsü yalnız derleyici açıkça verdiyse yazılır; sırası derleyiciye aittir. Tasarımcı biçim değişikliğinden sonra yeniden kontrol eder.\nCut sizes retain compiler order and require review after overrides. No machining allowance, site measurement or production approval is inferred.\n'}];
+ measured.forEach((r,n)=>{const dir=String(n+1).padStart(2,'0')+'/';files.push({name:dir+'part-dimensions.json',data:JSON.stringify(r.dimensions,null,2)},{name:dir+'part-dimensions.csv',data:partDimensionsCsv(r.dimensions,r.quantity)});});return files;
+}

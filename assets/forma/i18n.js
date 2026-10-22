@@ -4,6 +4,9 @@ export const UI_LANGS = {tr: 'Türkçe', en: 'English', de: 'Deutsch', fr: 'Fran
 export const isRTL = lang => lang === 'ar';
 
 const T = {
+  designDimensions: ['Tasarım ölçüsü', 'Design dimensions'],
+  dimensionsDownload: ['Proje ve parça ölçülerini indir', 'Download project and component dimensions'],
+  dimensionsScope: ['Ürün başlığındaki tasarım ölçüsü, parça zarfı ve kesim ölçüsü farklıdır. Dosya bunları ayrı tutar; üretim ve yerinde ölçüm onayı değildir.', 'Nominal product size, part envelope and cut size differ. The file separates them; it is not production or site-measurement approval.'],
   shelfSupportReview: ['Rafın dört desteği, rafla teması veya yan panele bağlantısı eksik; tasarımcı bağlantıları incelemeli.', 'The shelf needs four supports contacting it and its side panels; the designer must assess the connections.'],
   textileReviewScope: ['Bu dosya perde/halı seçimine aittir; mobilya projesinden ayrı indirilir. Gerçek montaj ve yer ölçüleri ayrıca doğrulanmalıdır.', 'This file covers the curtain/rug selection and downloads separately from the furniture project. Verify actual installation and site dimensions separately.'],
   glassShelfReview: ['Cam rafın tipi, kenar işlemi, tutucusu ve yükü birlikte doğrulanmalı.', 'Verify glass type, edge treatment, retainers and shelf load together.'],

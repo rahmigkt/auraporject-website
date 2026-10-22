@@ -1,0 +1,26 @@
+AURA — SİTEDE ÖLÇÜLERİN DURUMU VE PROJE DOSYASI
+22 Ekim2026; parça ölçüsü genişletmesi, taban PR249
+
+Kesin ayrım
+1. Tasarım/nominal ölçü: seçilen ürün veya gövde parametresi. Bir yatağın1600mm ölçüsü yatak ölçüsü olabilir; başlık/çerçeve bundan taşabilir. Dolap600mm derinlikte olsa kulp dışarı taşar.
+2. Model zarfı: gerçek oluşturulmuş geometrinin en küçük/en büyük koordinatları. Yerel parça X/Y/Z ölçüleri ve ürüne yerleştirilmiş zarf ayrı yazılır. X=en, Y=yükseklik, Z=derinlik; parça dönüşü radyan, evde ürün dönüşü derece alanında korunur.
+3. Kesim ölçüsü: yalnız derleyicinin açıkça verdiği q.cut. Orijinal sıra korunur, evrenselXYZ varsayılmaz. Yoksa null. Tasarımcı biçim/ölçek değişikliği yaptıysa yeniden kesim denetimi gerekir. Döşeme zarfı sünger/kumaş kalıbı değildir.
+4. Gerçek yer ölçüsü ve üretim toleransı: model çıktısından türetilmez. Kullanıcı beyanı, tahmin ve tasarımcı düzenlemesi kaynak etiketleri korunur; bu etiketler ölçünün doğrulandığı anlamına gelmez.
+
+Yüzeyler / mevcut birimler / dosyadaki durum
+- Forma stüdyosu ve tasarımcı atölyesi: geometri ve ölçü parametreleri mm. Ürün başlığı artık açıkça Tasarım ölçüsü der. Yeni her-parça JSON/CSV; ürünün nominal ölçüsü, tüm model zarfı, farklar, tekil kimlik/rol/malzeme yuvası, yerel/yerleştirilmişXYZ, konum/dönüş ve açık kesim verisi ayrı. İç parçalar, pimler ve dekoratif parçalar atılmaz. Çoklu düğme geometrisinin üyeleri JSON ve CSV'de ayrıca listelenir.
+- Forma Proje sekmesi: Proje ve parça ölçülerini indir ile yerelde ZIP alınır; sunucuya gönderim veya iletişim bilgisi gerekmez. Dosya yalnız projeye kaydedilmiş ürünleri içerir; kaydedilmemiş editör değişikliği projedeki ürünü değiştirmez. project.json tasarımları ve parçaları içerir; her ürün klasöründe part-dimensions.json/.csv vardır. Aynı bilgiler tasarımcıya gönderilecek büyük proje paketine de eklenir. Ürün adedi ile modeldeki parça/üye adedi ayrı tutulur.
+- Ev planı: duvar/kapı/pencere koordinatları ve ölçüleri mm; alan m². Kaydet JSON'una bütün parametrik mobilyaların parça bilgisi ile duvar uzunluğu/kalınlığı, açıklık genişliği/yüksekliği/denizliği/konumu, oda sınır kutusu/çokgen alanı/tavanı eklenir. Dikdörtgen olmayan odanın sınır kutusu kullanılabilir net dikdörtgen ölçü sayılmaz. Balkon ve iç oda çokgen toplamları ayrı; üst üste binme denetimi yapılmış sayılmaz. Kaynak EV planı değişmeden kalır.
+- Eski yönlendirmeli mobilya seçimi: ürün girişleri cm, primitive boyut/konumlar m; mevcut ölçülü PDF/teknik tablo mm. Proje kaydına bu birim haritası ve her parçanın mm karşılığı eklendi. Bu eski motorda ölçü declared primitive box'tır; kumaşın eğrisel dış yüzeyine veya kesim kalıbına eşit sayılmaz.
+- Ayrı Ritmo modeli: tasarım girdileri mm, primitive geometri m, PDF mm. Kayıtta açık birim haritası ve her parçanın mm ölçüleri var. Bu yüzey Forma dolap motorundan ayrıdır.
+- Perde/halı seçimi: sabit görsel önizleme1800×1500mm pencere,2600mm tavan,1700×2400mm halı kullanır. Değerlendirme JSON'u bu değerleri preview_fixture_not_site_measured olarak içerir; actual_site_dimensions=null. Değerler renderer ile aynı ortak kaynaktan alınır. Gerçek kumaş kesim/montaj listesi oluşturulduğu iddia edilmez.
+- NAKIŞ desen aracı: rapor/tekrar birimi mm, formül JSON'u bu birimi içerir. Mobilya parça listesi değildir. NAKIŞ mekanizma ve MİZAN matematik sahnelerinde fiziksel üretim ölçeği doğrulanmış değildir; bu sahneler için mm cinsinden mobilya ölçüsü uydurulmadı.
+- AI sohbet metni: tek başına ölçü kanıtı değildir. C7'deki3m/3,9m mutfak farkı PR250'de açık; bu çalışma o eğitim kaydını değiştirmez.
+
+Doğrulama kapsamı
+445 gerçek Forma başlangıç modeli,21546 derlenmiş parça. Yerel/dönüşmüş eksenler, tasarımcı ölçekleme/silme, hatalı geometri, boş ölçü yerine unavailable, çoklu düğme üyeleri ve CSV formül hücresi kontrolleri. Örnek EV planındaki10 ürün (eski bedroom dahil),13 duvar,16 açıklık,9 oda.14 yönlendirmeli aile + Ritmo birim dönüşümleri. Gerçek proje paketi ve ev Kaydet fonksiyonları sahte yerel veriyle kontrol edilir; üretim formu veya WhatsApp gönderimi yapılmaz.
+
+Bu sayıların anlamı
+Ölçülerin bütün projeye taşındığını ve test edilen modellerden son geometriye göre çıkarıldığını gösterir. Bütün olası serbest geometrilerin hatasızlığı, fizik/ergonomi/imalat uygunluğu, gerçek ev ölçümü, ülke standardı veya bütün site denetiminin bittiği anlamına gelmez. Eksik geometri null/unavailable kalır.0,001mm dosya yuvarlaması gerçek imalat hassasiyeti değildir. Önceki Forma180s tam paket zaman aşımı açık tutulur. Site/vendor/mobil denetimin genel208/220 kapsamı bu test sayılarıyla tamamlandı sayılmaz.
+
+İşleme istisnası: CNC/delik/kanal içeren cut geometrilerinde renderer, CSG yüklenirken veya hata halinde kesilmemiş önizleme gösterebilir. Bu nedenle parça ölçüsü machining_envelope_unverified, kesim requires_machining_review olarak işaretlenir; yerel kutunun bulunması işleme doğrulaması sayılmaz. Bu teslim CNC doğrulamasını geçti iddiasında bulunmaz.
