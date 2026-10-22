@@ -1,23 +1,23 @@
 {
   "version": "H4-progress/1",
-  "complete": false,
+  "complete": true,
   "source_rows": 4340,
-  "replayed": 61,
-  "pending": 4279,
-  "mechanically_accepted": 60,
-  "excluded": 1,
+  "replayed": 4340,
+  "pending": 0,
+  "mechanically_accepted": 4282,
+  "excluded": 58,
   "journal_fingerprint": "3133c02823a178f15eb678f7d76febc72771ab516fae24cd4109637fd7df3461",
   "source_sha256": "749845b2b8b4280741df5f7d80c0621b8af35e42a3aa3ee5dc03fd2176f68502",
   "languages": {
-    "tr": 9,
-    "fr": 12,
-    "nl": 6,
-    "en": 9,
-    "de": 7,
-    "da": 7,
-    "ar": 3,
-    "it": 6,
-    "es": 1
+    "tr": 451,
+    "fr": 491,
+    "nl": 501,
+    "en": 505,
+    "de": 448,
+    "da": 444,
+    "ar": 489,
+    "it": 455,
+    "es": 498
   },
   "note": "Checkpoint only. C5 stays open until the full replay/report is delivered. Samples require Claude cross-review; no training approval or export.",
   "samples": [
@@ -5523,6 +5523,755 @@
         {
           "rol": "assistant",
           "metin": "Mit diesen Maßen habe ich keine passende Anordnung gefunden. Möchten Sie ein Möbelstück weglassen?"
+        }
+      ],
+      "islemler": [],
+      "expected": {
+        "fit": false,
+        "classification": "bounded_search_no_solution",
+        "constraints": [],
+        "automatic_resize": false
+      },
+      "review": {
+        "producer": "Codex",
+        "required_reviewer": "Claude",
+        "status": "quarantine",
+        "native_language_approved": false,
+        "training_eligible": false
+      },
+      "motor": {
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "room",
+                "esyalar": [
+                  {
+                    "id": "e0",
+                    "tur": "bed",
+                    "en": 1900,
+                    "derinlik": 2100,
+                    "yukseklik": 1000
+                  },
+                  {
+                    "id": "e1",
+                    "tur": "nightstand",
+                    "en": 500,
+                    "derinlik": 420,
+                    "yukseklik": 520
+                  },
+                  {
+                    "id": "e2",
+                    "tur": "nightstand",
+                    "en": 500,
+                    "derinlik": 420,
+                    "yukseklik": 520
+                  },
+                  {
+                    "id": "e3",
+                    "tur": "wardrobe",
+                    "en": 2200,
+                    "derinlik": 600,
+                    "yukseklik": 2300
+                  },
+                  {
+                    "id": "e4",
+                    "tur": "dresser",
+                    "en": 1200,
+                    "derinlik": 450,
+                    "yukseklik": 850
+                  }
+                ],
+                "kisitlar": []
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [
+            {
+              "katman": "yerlesim",
+              "kod": "sigmiyor",
+              "oda": "room",
+              "metin": "bed bu odaya kurallara uyarak sığmıyor"
+            }
+          ],
+          "olcum": {
+            "yerlesim": {
+              "oda": "room",
+              "sigdi": false
+            }
+          },
+          "gecti": true
+        },
+        "attempt": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "room",
+          "esyalar": [
+            {
+              "id": "e0",
+              "tur": "bed",
+              "en": 1900,
+              "derinlik": 2100,
+              "yukseklik": 1000
+            },
+            {
+              "id": "e1",
+              "tur": "nightstand",
+              "en": 500,
+              "derinlik": 420,
+              "yukseklik": 520
+            },
+            {
+              "id": "e2",
+              "tur": "nightstand",
+              "en": 500,
+              "derinlik": 420,
+              "yukseklik": 520
+            },
+            {
+              "id": "e3",
+              "tur": "wardrobe",
+              "en": 2200,
+              "derinlik": 600,
+              "yukseklik": 2300
+            },
+            {
+              "id": "e4",
+              "tur": "dresser",
+              "en": 1200,
+              "derinlik": 450,
+              "yukseklik": 850
+            }
+          ],
+          "kisitlar": []
+        },
+        "source_constraints_hold": true,
+        "unique_source_positions": 0,
+        "ambiguous_source_names": [
+          "komodin"
+        ],
+        "claim": "Current bounded solver found no layout; not a proof of physical impossibility"
+      }
+    },
+    {
+      "id": "h4-aura-cozucu-train-1049-room|4",
+      "dil": "es",
+      "grup": "ProcTHOR-10K:train:house:1049",
+      "kaynak": {
+        "dataset": "ProcTHOR-10K",
+        "license": "Apache-2.0",
+        "split": "train",
+        "house": 1049,
+        "room": "room|4",
+        "note": "oda geometrisi ProcTHOR-10K (Apache-2.0); yerleşim AURA kuralları",
+        "placements": "AURA yerlesim.js",
+        "kayit": "aura-cozucu-train-1049-room|4",
+        "source_row_sha256": "3d640900dbb9593469f8671e9e3b69b8b6e8422d1487108dc7f69f977faf342f",
+        "original_producer": "Claude",
+        "transformation_producer": "Codex",
+        "procedural_geometry": true
+      },
+      "durum": {
+        "plan": {
+          "walls": [
+            {
+              "id": "w0",
+              "from_xy_mm": [
+                0,
+                8716
+              ],
+              "to_xy_mm": [
+                0,
+                15689
+              ],
+              "thickness": 100
+            },
+            {
+              "id": "w1",
+              "from_xy_mm": [
+                0,
+                15689
+              ],
+              "to_xy_mm": [
+                5230,
+                15689
+              ],
+              "thickness": 100
+            },
+            {
+              "id": "w2",
+              "from_xy_mm": [
+                5230,
+                15689
+              ],
+              "to_xy_mm": [
+                5230,
+                8716
+              ],
+              "thickness": 100
+            },
+            {
+              "id": "w3",
+              "from_xy_mm": [
+                5230,
+                8716
+              ],
+              "to_xy_mm": [
+                0,
+                8716
+              ],
+              "thickness": 100
+            }
+          ],
+          "openings": [
+            {
+              "id": "o0",
+              "wall_id": "w3",
+              "kind": "door",
+              "offset_from_wall_start": 995,
+              "width": 1038,
+              "sill_height": 0
+            },
+            {
+              "id": "o1",
+              "wall_id": "w1",
+              "kind": "door",
+              "offset_from_wall_start": 1863,
+              "width": 1965,
+              "sill_height": 0
+            },
+            {
+              "id": "o2",
+              "wall_id": "w0",
+              "kind": "window",
+              "offset_from_wall_start": 2887,
+              "width": 1522,
+              "sill_height": 1041
+            }
+          ],
+          "spaces": [
+            {
+              "id": "room",
+              "kind": "living",
+              "boundary_xy_mm": [
+                [
+                  0,
+                  8716
+                ],
+                [
+                  0,
+                  15689
+                ],
+                [
+                  5230,
+                  15689
+                ],
+                [
+                  5230,
+                  8716
+                ]
+              ]
+            }
+          ],
+          "items": []
+        }
+      },
+      "mesajlar": [
+        {
+          "rol": "user",
+          "metin": "{\"oda\":{\"id\":\"room\",\"kind\":\"living\",\"boundary_xy_mm\":[[0,8716],[0,15689],[5230,15689],[5230,8716]]},\"duvarlar\":[{\"id\":\"w0\",\"from_xy_mm\":[0,8716],\"to_xy_mm\":[0,15689],\"thickness\":100},{\"id\":\"w1\",\"from_xy_mm\":[0,15689],\"to_xy_mm\":[5230,15689],\"thickness\":100},{\"id\":\"w2\",\"from_xy_mm\":[5230,15689],\"to_xy_mm\":[5230,8716],\"thickness\":100},{\"id\":\"w3\",\"from_xy_mm\":[5230,8716],\"to_xy_mm\":[0,8716],\"thickness\":100}],\"acikliklar\":[{\"id\":\"o0\",\"wall_id\":\"w3\",\"kind\":\"door\",\"offset_from_wall_start\":995,\"width\":1038,\"sill_height\":0},{\"id\":\"o1\",\"wall_id\":\"w1\",\"kind\":\"door\",\"offset_from_wall_start\":1863,\"width\":1965,\"sill_height\":0},{\"id\":\"o2\",\"wall_id\":\"w0\",\"kind\":\"window\",\"offset_from_wall_start\":2887,\"width\":1522,\"sill_height\":1041}],\"esyalar\":[{\"id\":\"e0\",\"tur\":\"tvunit\",\"en\":2000,\"derinlik\":450,\"yukseklik\":500},{\"id\":\"e1\",\"tur\":\"sofa\",\"en\":2300,\"derinlik\":900,\"yukseklik\":820},{\"id\":\"e2\",\"tur\":\"coffee\",\"en\":1200,\"derinlik\":600,\"yukseklik\":420},{\"id\":\"e3\",\"tur\":\"loveseat\",\"en\":1600,\"derinlik\":900,\"yukseklik\":820},{\"id\":\"e4\",\"tur\":\"armchair\",\"en\":850,\"derinlik\":850,\"yukseklik\":850},{\"id\":\"e5\",\"tur\":\"side\",\"en\":500,\"derinlik\":500,\"yukseklik\":550},{\"id\":\"e6\",\"tur\":\"reading\",\"en\":800,\"derinlik\":850,\"yukseklik\":950},{\"id\":\"e7\",\"tur\":\"side\",\"en\":450,\"derinlik\":450,\"yukseklik\":550},{\"id\":\"e8\",\"tur\":\"dining\",\"en\":1400,\"derinlik\":900,\"yukseklik\":750}],\"istek\":\"Distribuye estos muebles en la habitación respetando las relaciones especificadas.\",\"kisitlar\":[{\"tur\":\"bakar\",\"a\":\"e1\",\"b\":\"e0\"},{\"tur\":\"bakar\",\"a\":\"e1\",\"b\":\"e2\"},{\"tur\":\"bakar\",\"a\":\"e3\",\"b\":\"e2\"},{\"tur\":\"bakar\",\"a\":\"e4\",\"b\":\"e2\"}]}"
+        },
+        {
+          "rol": "assistant",
+          "metin": "He colocado los muebles con las medidas indicadas y respetado las relaciones solicitadas."
+        }
+      ],
+      "islemler": [
+        {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "room",
+          "esyalar": [
+            {
+              "id": "e0",
+              "tur": "tvunit",
+              "en": 2000,
+              "derinlik": 450,
+              "yukseklik": 500
+            },
+            {
+              "id": "e1",
+              "tur": "sofa",
+              "en": 2300,
+              "derinlik": 900,
+              "yukseklik": 820
+            },
+            {
+              "id": "e2",
+              "tur": "coffee",
+              "en": 1200,
+              "derinlik": 600,
+              "yukseklik": 420
+            },
+            {
+              "id": "e3",
+              "tur": "loveseat",
+              "en": 1600,
+              "derinlik": 900,
+              "yukseklik": 820
+            },
+            {
+              "id": "e4",
+              "tur": "armchair",
+              "en": 850,
+              "derinlik": 850,
+              "yukseklik": 850
+            },
+            {
+              "id": "e5",
+              "tur": "side",
+              "en": 500,
+              "derinlik": 500,
+              "yukseklik": 550
+            },
+            {
+              "id": "e6",
+              "tur": "reading",
+              "en": 800,
+              "derinlik": 850,
+              "yukseklik": 950
+            },
+            {
+              "id": "e7",
+              "tur": "side",
+              "en": 450,
+              "derinlik": 450,
+              "yukseklik": 550
+            },
+            {
+              "id": "e8",
+              "tur": "dining",
+              "en": 1400,
+              "derinlik": 900,
+              "yukseklik": 750
+            }
+          ],
+          "kisitlar": [
+            {
+              "tur": "bakar",
+              "a": "e1",
+              "b": "e0"
+            },
+            {
+              "tur": "bakar",
+              "a": "e1",
+              "b": "e2"
+            },
+            {
+              "tur": "bakar",
+              "a": "e3",
+              "b": "e2"
+            },
+            {
+              "tur": "bakar",
+              "a": "e4",
+              "b": "e2"
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "fit": true,
+        "classification": "placement",
+        "constraints": [
+          {
+            "tur": "bakar",
+            "a": "e1",
+            "b": "e0"
+          },
+          {
+            "tur": "bakar",
+            "a": "e1",
+            "b": "e2"
+          },
+          {
+            "tur": "bakar",
+            "a": "e3",
+            "b": "e2"
+          },
+          {
+            "tur": "bakar",
+            "a": "e4",
+            "b": "e2"
+          }
+        ],
+        "automatic_resize": false
+      },
+      "review": {
+        "producer": "Codex",
+        "required_reviewer": "Claude",
+        "status": "quarantine",
+        "native_language_approved": false,
+        "training_eligible": false
+      },
+      "motor": {
+        "report": {
+          "surum": "studyo-motoru/1",
+          "kabul": [
+            {
+              "katman": "yerlesim",
+              "op": {
+                "katman": "yerlesim",
+                "type": "yerlestir",
+                "oda": "room",
+                "esyalar": [
+                  {
+                    "id": "e0",
+                    "tur": "tvunit",
+                    "en": 2000,
+                    "derinlik": 450,
+                    "yukseklik": 500
+                  },
+                  {
+                    "id": "e1",
+                    "tur": "sofa",
+                    "en": 2300,
+                    "derinlik": 900,
+                    "yukseklik": 820
+                  },
+                  {
+                    "id": "e2",
+                    "tur": "coffee",
+                    "en": 1200,
+                    "derinlik": 600,
+                    "yukseklik": 420
+                  },
+                  {
+                    "id": "e3",
+                    "tur": "loveseat",
+                    "en": 1600,
+                    "derinlik": 900,
+                    "yukseklik": 820
+                  },
+                  {
+                    "id": "e4",
+                    "tur": "armchair",
+                    "en": 850,
+                    "derinlik": 850,
+                    "yukseklik": 850
+                  },
+                  {
+                    "id": "e5",
+                    "tur": "side",
+                    "en": 500,
+                    "derinlik": 500,
+                    "yukseklik": 550
+                  },
+                  {
+                    "id": "e6",
+                    "tur": "reading",
+                    "en": 800,
+                    "derinlik": 850,
+                    "yukseklik": 950
+                  },
+                  {
+                    "id": "e7",
+                    "tur": "side",
+                    "en": 450,
+                    "derinlik": 450,
+                    "yukseklik": 550
+                  },
+                  {
+                    "id": "e8",
+                    "tur": "dining",
+                    "en": 1400,
+                    "derinlik": 900,
+                    "yukseklik": 750
+                  }
+                ],
+                "kisitlar": [
+                  {
+                    "tur": "bakar",
+                    "a": "e1",
+                    "b": "e0"
+                  },
+                  {
+                    "tur": "bakar",
+                    "a": "e1",
+                    "b": "e2"
+                  },
+                  {
+                    "tur": "bakar",
+                    "a": "e3",
+                    "b": "e2"
+                  },
+                  {
+                    "tur": "bakar",
+                    "a": "e4",
+                    "b": "e2"
+                  }
+                ]
+              }
+            }
+          ],
+          "red": [],
+          "uyari": [],
+          "olcum": {
+            "yerlesim": {
+              "oda": "room",
+              "sigdi": true,
+              "secenek": 4,
+              "secilen": 0,
+              "kisit_karsilanan": 4,
+              "kisit_toplam": 4
+            }
+          },
+          "gecti": true
+        },
+        "attempt": {
+          "katman": "yerlesim",
+          "type": "yerlestir",
+          "oda": "room",
+          "esyalar": [
+            {
+              "id": "e0",
+              "tur": "tvunit",
+              "en": 2000,
+              "derinlik": 450,
+              "yukseklik": 500
+            },
+            {
+              "id": "e1",
+              "tur": "sofa",
+              "en": 2300,
+              "derinlik": 900,
+              "yukseklik": 820
+            },
+            {
+              "id": "e2",
+              "tur": "coffee",
+              "en": 1200,
+              "derinlik": 600,
+              "yukseklik": 420
+            },
+            {
+              "id": "e3",
+              "tur": "loveseat",
+              "en": 1600,
+              "derinlik": 900,
+              "yukseklik": 820
+            },
+            {
+              "id": "e4",
+              "tur": "armchair",
+              "en": 850,
+              "derinlik": 850,
+              "yukseklik": 850
+            },
+            {
+              "id": "e5",
+              "tur": "side",
+              "en": 500,
+              "derinlik": 500,
+              "yukseklik": 550
+            },
+            {
+              "id": "e6",
+              "tur": "reading",
+              "en": 800,
+              "derinlik": 850,
+              "yukseklik": 950
+            },
+            {
+              "id": "e7",
+              "tur": "side",
+              "en": 450,
+              "derinlik": 450,
+              "yukseklik": 550
+            },
+            {
+              "id": "e8",
+              "tur": "dining",
+              "en": 1400,
+              "derinlik": 900,
+              "yukseklik": 750
+            }
+          ],
+          "kisitlar": [
+            {
+              "tur": "bakar",
+              "a": "e1",
+              "b": "e0"
+            },
+            {
+              "tur": "bakar",
+              "a": "e1",
+              "b": "e2"
+            },
+            {
+              "tur": "bakar",
+              "a": "e3",
+              "b": "e2"
+            },
+            {
+              "tur": "bakar",
+              "a": "e4",
+              "b": "e2"
+            }
+          ]
+        },
+        "source_constraints_hold": true,
+        "unique_source_positions": 7,
+        "ambiguous_source_names": [
+          "yan sehpa"
+        ],
+        "claim": "Fresh engine result satisfies every derived relation and exact size"
+      }
+    },
+    {
+      "id": "h4-aura-cozucu-train-1079-room|2",
+      "dil": "ar",
+      "grup": "ProcTHOR-10K:train:house:1079",
+      "kaynak": {
+        "dataset": "ProcTHOR-10K",
+        "license": "Apache-2.0",
+        "split": "train",
+        "house": 1079,
+        "room": "room|2",
+        "note": "oda geometrisi ProcTHOR-10K (Apache-2.0); yerleşim AURA kuralları",
+        "placements": "AURA yerlesim.js",
+        "kayit": "aura-cozucu-train-1079-room|2",
+        "source_row_sha256": "750a1848a13074c1d3b9a5fb54ecaf342abe59d7aa657f3970c23e42e14c538c",
+        "original_producer": "Claude",
+        "transformation_producer": "Codex",
+        "procedural_geometry": true
+      },
+      "durum": {
+        "plan": {
+          "walls": [
+            {
+              "id": "w0",
+              "from_xy_mm": [
+                0,
+                10075
+              ],
+              "to_xy_mm": [
+                2015,
+                10075
+              ],
+              "thickness": 100
+            },
+            {
+              "id": "w1",
+              "from_xy_mm": [
+                2015,
+                10075
+              ],
+              "to_xy_mm": [
+                2015,
+                6045
+              ],
+              "thickness": 100
+            },
+            {
+              "id": "w2",
+              "from_xy_mm": [
+                2015,
+                6045
+              ],
+              "to_xy_mm": [
+                2015,
+                2015
+              ],
+              "thickness": 100
+            },
+            {
+              "id": "w3",
+              "from_xy_mm": [
+                2015,
+                2015
+              ],
+              "to_xy_mm": [
+                0,
+                2015
+              ],
+              "thickness": 100
+            },
+            {
+              "id": "w4",
+              "from_xy_mm": [
+                0,
+                2015
+              ],
+              "to_xy_mm": [
+                0,
+                10075
+              ],
+              "thickness": 100
+            }
+          ],
+          "openings": [
+            {
+              "id": "o0",
+              "wall_id": "w2",
+              "kind": "door",
+              "offset_from_wall_start": 172,
+              "width": 1914,
+              "sill_height": 0
+            },
+            {
+              "id": "o1",
+              "wall_id": "w4",
+              "kind": "window",
+              "offset_from_wall_start": 1526,
+              "width": 909,
+              "sill_height": 1042
+            }
+          ],
+          "spaces": [
+            {
+              "id": "room",
+              "kind": "bedroom",
+              "boundary_xy_mm": [
+                [
+                  0,
+                  10075
+                ],
+                [
+                  2015,
+                  10075
+                ],
+                [
+                  2015,
+                  6045
+                ],
+                [
+                  2015,
+                  2015
+                ],
+                [
+                  0,
+                  2015
+                ]
+              ]
+            }
+          ],
+          "items": []
+        }
+      },
+      "mesajlar": [
+        {
+          "rol": "user",
+          "metin": "{\"oda\":{\"id\":\"room\",\"kind\":\"bedroom\",\"boundary_xy_mm\":[[0,10075],[2015,10075],[2015,6045],[2015,2015],[0,2015]]},\"duvarlar\":[{\"id\":\"w0\",\"from_xy_mm\":[0,10075],\"to_xy_mm\":[2015,10075],\"thickness\":100},{\"id\":\"w1\",\"from_xy_mm\":[2015,10075],\"to_xy_mm\":[2015,6045],\"thickness\":100},{\"id\":\"w2\",\"from_xy_mm\":[2015,6045],\"to_xy_mm\":[2015,2015],\"thickness\":100},{\"id\":\"w3\",\"from_xy_mm\":[2015,2015],\"to_xy_mm\":[0,2015],\"thickness\":100},{\"id\":\"w4\",\"from_xy_mm\":[0,2015],\"to_xy_mm\":[0,10075],\"thickness\":100}],\"acikliklar\":[{\"id\":\"o0\",\"wall_id\":\"w2\",\"kind\":\"door\",\"offset_from_wall_start\":172,\"width\":1914,\"sill_height\":0},{\"id\":\"o1\",\"wall_id\":\"w4\",\"kind\":\"window\",\"offset_from_wall_start\":1526,\"width\":909,\"sill_height\":1042}],\"esyalar\":[{\"id\":\"e0\",\"tur\":\"bed\",\"en\":1900,\"derinlik\":2100,\"yukseklik\":1000},{\"id\":\"e1\",\"tur\":\"nightstand\",\"en\":500,\"derinlik\":420,\"yukseklik\":520},{\"id\":\"e2\",\"tur\":\"nightstand\",\"en\":500,\"derinlik\":420,\"yukseklik\":520},{\"id\":\"e3\",\"tur\":\"wardrobe\",\"en\":2200,\"derinlik\":600,\"yukseklik\":2300},{\"id\":\"e4\",\"tur\":\"dresser\",\"en\":1200,\"derinlik\":450,\"yukseklik\":850}],\"istek\":\"وزّع هذه القطع في الغرفة مع الحفاظ على العلاقات المحددة بينها.\",\"kisitlar\":[]}"
+        },
+        {
+          "rol": "assistant",
+          "metin": "لم أجد توزيعًا مناسبًا بهذه المقاسات. هل ترغب في الاستغناء عن إحدى القطع؟"
         }
       ],
       "islemler": [],

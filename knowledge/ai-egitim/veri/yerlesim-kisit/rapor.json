@@ -1,0 +1,67 @@
+{
+  "version": "H4/1",
+  "kind": "H4-replay/1",
+  "fingerprint": "3133c02823a178f15eb678f7d76febc72771ab516fae24cd4109637fd7df3461",
+  "source_sha256": "749845b2b8b4280741df5f7d80c0621b8af35e42a3aa3ee5dc03fd2176f68502",
+  "source_rows": 4340,
+  "exam_sha256": "54db415d5056dcfacc6f351c3fb77807346d190522c77ddafb6e276a9233d0f4",
+  "complete": true,
+  "processed": 4340,
+  "accepted": 4282,
+  "excluded": 58,
+  "source_outcomes": {
+    "false": 1266,
+    "true": 3074
+  },
+  "outcomes": {
+    "bounded_search_no_solution": 1224,
+    "placement": 3058
+  },
+  "languages": {
+    "tr": 451,
+    "fr": 491,
+    "nl": 501,
+    "en": 505,
+    "de": 448,
+    "da": 444,
+    "ar": 489,
+    "it": 455,
+    "es": 498
+  },
+  "source_houses": 2836,
+  "accepted_houses": 2799,
+  "constraints": {
+    "bakar": 7224,
+    "yakin": 1567,
+    "uzak": 1653
+  },
+  "without_constraints": 25,
+  "excluded_reasons": {
+    "outcome_changed": 42,
+    "motor_warning": 16
+  },
+  "exam_leakage_hits": 0,
+  "requested_languages": [
+    "tr",
+    "en",
+    "de",
+    "fr",
+    "nl",
+    "da",
+    "es",
+    "it",
+    "ar"
+  ],
+  "training_exported": 0,
+  "cross_review": "Codex transformations require Claude; original Claude placement review remains separate (C7)",
+  "provenance_policy": "ProcTHOR procedural geometry, Apache-2.0; AURA solver furniture sizes; heights recovered from tracked generator constants. Opening heights absent in source remain absent (engine fallback). Duplicate furniture names never assigned invented source placement IDs.",
+  "no_fit_policy": "Current bounded engine search finds no solution; target has no actions and asks about removing a piece. Not a geometric impossibility proof.",
+  "motor_policy": "Fresh full-size solve; all derived constraints checked independently; outcome/size/item/constraint mismatch excluded. No target coordinates.",
+  "limitations": [
+    "One language per source room, distributed deterministically over nine languages; no extra unique rooms claimed for translations",
+    "Cross-review/native style and designer quality are not inferred from mechanical checks",
+    "Lexical exam screening does not prove absence of semantic or cross-language paraphrases",
+    "No GPU, model, training, paid API or deployment"
+  ],
+  "candidates_sha256": "0cf1bb677b225de0b741cf40efec5ee6ec649514f0f5f69661649b670d3cf43d"
+}
