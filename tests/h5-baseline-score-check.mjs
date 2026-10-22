@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';import {loadTasks} from '../tools/h5-exam/load.mjs';import {assess,strictJSON,repeatedOutput} from '../tools/h5-exam/baseline-score.mjs';
+const tasks=loadTasks(),t=tasks[0],gold=JSON.stringify({reply:'Oda güncellendi.',actions:t.expected.actions});
+assert(assess(t,gold).request_mechanical_pass);
+for(const text of ['```json\n'+gold+'\n```','{"reply":"a","reply":"b","actions":[]}',gold+' trailing','{"reply":"","actions":[]}','{"reply":"ok","actions":[],"extra":true}','{"reply":"ok","actions":[{"type":"oda_tanimla","katman":"tekstil"}]}'])assert(!assess(t,text).request_mechanical_pass);
+const bad=JSON.parse(gold);bad.actions[0].ad='Different';assert(!assess(t,JSON.stringify(bad)).request_mechanical_pass);
+assert.throws(()=>strictJSON('{"reply":"ok","actions":[],"n":1e999}'));
+assert(repeatedOutput(JSON.stringify({reply:'Bu uzun cümle tekrar ediyor. Bu uzun cümle tekrar ediyor. Bu uzun cümle tekrar ediyor.',actions:[]})).repeated_reply_sentence);
+assert(!repeatedOutput(JSON.stringify({reply:'İki ayrı eşyayı yerleştirdim.',actions:[{type:'x',id:1},{type:'x',id:2}]})).identical_action_duplicates);
+const route=tasks.find(x=>x.expected.intent==='studio_redirect');assert(assess(route,JSON.stringify({reply:route.expected.route.url,actions:[]})).request_mechanical_pass);assert(!assess(route,JSON.stringify({reply:'api/forma-submit.php',actions:[]})).request_mechanical_pass);
+console.log(JSON.stringify({positive_controls:2,negative_controls:9,reply_repetition_control:true,legitimate_distinct_actions_not_duplicate:true,model_run:false}));
