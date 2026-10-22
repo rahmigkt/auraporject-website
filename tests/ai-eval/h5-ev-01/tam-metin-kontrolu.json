@@ -1,0 +1,30 @@
+{
+  "scope": "new40 user text exact normalized equality only;not paraphrase/semantic/solution leakage clearance",
+  "exam_tasks": 40,
+  "compiler_normalizer_sha256": "7299875c4df80ffb75b6807de75c71ab080c9a4e20bd8fa68591c4c1fe9b987a",
+  "files": [
+    {
+      "file": "knowledge/ai-egitim/veri/yerlesim/procthor-denetimli.jsonl.gz",
+      "sha256": "7424022ea97ecf789fbf557ba7c83a00e62409d74d28ecd90caa3b6a1fb8de9c",
+      "rows": 12827,
+      "user_texts_checked": 12827,
+      "matches": []
+    },
+    {
+      "file": "knowledge/ai-egitim/veri/yerlesim/procthor-aura-cozucu.jsonl.gz",
+      "sha256": "749845b2b8b4280741df5f7d80c0621b8af35e42a3aa3ee5dc03fd2176f68502",
+      "rows": 4340,
+      "user_texts_checked": 4340,
+      "matches": []
+    },
+    {
+      "file": "knowledge/ai-egitim/veri/birlesik/adaylar.jsonl",
+      "sha256": "ba5ff3d33c041eaea43af7443c9c81f33ba478bd2d7d69df3f3a0d0a26b571d6",
+      "rows": 2590,
+      "user_texts_checked": 3492,
+      "matches": []
+    }
+  ],
+  "controls": "numeric/accent normalization;known exam hit;unrelated negative",
+  "training_export_run": false
+}

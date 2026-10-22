@@ -1,0 +1,22 @@
+{
+  "scope": "exact full room polygon; translation,90degree rotation,reflection and collinear vertex invariant; not semantic/solution leakage clearance",
+  "new_tasks": 40,
+  "new_room_shapes": 39,
+  "exam_sha256": "25614e7cf108253f6dfb1809470937f73a77953d984c37956ce294aea0225aa0",
+  "sources": [
+    {
+      "file": "knowledge/ai-egitim/veri/yerlesim/procthor-denetimli.jsonl.gz",
+      "sha256": "7424022ea97ecf789fbf557ba7c83a00e62409d74d28ecd90caa3b6a1fb8de9c",
+      "rows": 12827,
+      "matches": []
+    },
+    {
+      "file": "knowledge/ai-egitim/veri/yerlesim/procthor-aura-cozucu.jsonl.gz",
+      "sha256": "749845b2b8b4280741df5f7d80c0621b8af35e42a3aa3ee5dc03fd2176f68502",
+      "rows": 4340,
+      "matches": []
+    }
+  ],
+  "controls": "known translated/rotated/collinear shape match;1mm dimension change negative",
+  "training_approval": false
+}

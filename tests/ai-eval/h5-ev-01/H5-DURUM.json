@@ -1,0 +1,55 @@
+{
+  "status": "40_new_tasks_authored_reviewed_and_frozen;CPU_baseline_pending",
+  "source_code_sha": "d15678527094f3720671b1ded5870cb99b913597",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "new_tasks": 40,
+  "languages": [
+    "tr",
+    "en",
+    "nl",
+    "fr",
+    "de",
+    "ar",
+    "da",
+    "es",
+    "it"
+  ],
+  "new_behaviour_counts": {
+    "motor_operations": 30,
+    "clarify_missing_measurements": 3,
+    "refuse_unsafe_or_secrets": 2,
+    "studio_redirect": 5
+  },
+  "full_new_exam": {
+    "records": 120,
+    "new_furniture_editing": 0,
+    "historical_other_records_retained": 80,
+    "historical_positive_gold_replays": 60,
+    "historical_no_action_records": 20,
+    "historical80_new_semantic_approval": false
+  },
+  "verification": {
+    "new40_gold_validations": 40,
+    "negative_mutations_rejected": 14,
+    "all120_prompts_input_only": true,
+    "old_exam_and_sources_preserved": 8,
+    "new_frozen_file_engine_tool_tamper_rejections": true,
+    "old_frozen_engine_gate_still_rejects_changed_source": true,
+    "exact_text_screen_source_rows": 19757,
+    "user_texts_checked": 20659,
+    "exact_text_matches": 0,
+    "exact_shape_screen_source_rows": 17167,
+    "exact_shape_matches": 0
+  },
+  "limits": [
+    "No model generation or CPU baseline yet;gold replays are not model performance",
+    "Real tokenizer usage-prefix/EOS comparison pending",
+    "Native-language specialist review not performed",
+    "Historical80 mechanically replayed,not individually semantically reapproved",
+    "Exact overlap checks do not prove semantic/paraphrase/solution leakage absence",
+    "No training/production/physical approval;no site deployment"
+  ],
+  "freeze_sha256": "0c03f9fac1da4eef7da4d563583237c39d73bec273aa2df108a7969d1fa6bb48",
+  "at": "2026-10-22T18:38:00.547069+00:00"
+}
