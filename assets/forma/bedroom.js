@@ -200,7 +200,7 @@ export function compileBed(p) {
     parts.push(part('rail-foot', 'rail', rm, {fn: 'cushion', w: BW, h: p.railHeight, d: railT, r: rr}, [0, legH + p.railHeight / 2, zFoot - railT / 2]));
     parts.push(box('slat-deck', 'slat-deck', 'frame', W0, 25, L0, [0, deckTop - 12.5, zHead + railT / 2 + 5 + L0 / 2], {internal: true}, 2));
     parts.push(box('centre-rail', 'centre-rail', 'frame', 50, 70, L0, [0, deckTop - 60, zHead + L0 / 2], {internal: true}, 2));
-    if (W0 >= 1400 && legH > 30) parts.push(box('centre-leg', 'centre-leg', 'dark', 40, deckTop - 95, 40, [0, (deckTop - 95) / 2, 0], {internal: true}));
+    if (W0 >= 1400 && legH > 30 && deckTop > 95) parts.push(box('centre-leg', 'centre-leg', 'dark', 40, deckTop - 95, 40, [0, (deckTop - 95) / 2, 0], {internal: true}));
     if (p.storage === 'drawers') for (const s of [-1, 1]) for (let i = 0; i < 2; i++) parts.push(box(`bed-drawer-${s}-${i}`, 'drawer-front', rm, 3, p.railHeight - 40, L0 * 0.4, [s * (BW / 2 + 1.5), legH + p.railHeight / 2, -L0 * 0.22 + i * L0 * 0.44]));
   }
   // Legs / plinth
