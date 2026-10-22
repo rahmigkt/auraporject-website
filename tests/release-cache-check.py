@@ -26,7 +26,7 @@ class CacheRelease(unittest.TestCase):
                 (root / 'assets').mkdir()
                 (root / 'assets/entry.js').write_text("import {value} from './child.js'; export {value};")
                 (root / 'assets/child.js').write_text('export const value=1;')
-                html = '<html><head><script type="module" src="assets/entry.js?v=old"></script></head></html>'
+                html = '<html><head><meta charset="utf-8"><script type="module" src="assets/entry.js?v=old"></script></head></html>'
                 before, _ = versions.build('index.html', html)
                 entry_before = import_map(before)['./assets/entry.js']
                 child_before = import_map(before)['./assets/child.js']
@@ -36,6 +36,7 @@ class CacheRelease(unittest.TestCase):
                 self.assertNotEqual(child_before, import_map(after)['./assets/child.js'])
                 self.assertEqual(versions.build('index.html', after)[0], after)
                 self.assertLess(after.index('type="importmap"'), after.index('type="module"'))
+                self.assertLess(after.index('charset="utf-8"'), after.index('type="importmap"'))
         finally:
             versions.ROOT = saved
 
