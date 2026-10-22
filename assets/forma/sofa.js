@@ -342,7 +342,13 @@ export function validate(design) {
   if (p.armType !== 'none' && p.armHeight - p.seatHeight > 360) add('warn', 'armHigh', p.armHeight - p.seatHeight);
   if (p.height - p.seatHeight < 230 && p.backType !== 'low') add('warn', 'backLow', p.height - p.seatHeight);
   if (p.width > 2600) add('warn', 'transportSplit', p.width);
-  if (p.baseType === 'legs' && p.legHeight > 0 && p.legSize < 16 && p.width > 1500) add('warn', 'thinLegs', p.legSize);
+  // Both bases use legGeom below. Compare the actual narrowest profile section,
+  // not its nominal top radius. This retains the existing concept warning
+  // threshold; absence of a warning is not structural/load-capacity approval.
+  if (['legs', 'frame'].includes(p.baseType) && p.legHeight > 0 && p.width > 1500) {
+    const minRadius = Math.min(...legProfile(p.legType, p.legHeight, p.legSize, p.legTaper).map(([, r]) => r));
+    if (minRadius < 16) add('warn', 'thinLegs', minRadius);
+  }
   for (const q of parts) {
     const g = q.geom;
     for (const k of ['w', 'h', 'd']) if (g[k] !== undefined && !(g[k] > 0)) add('error', 'nonPositive', `${q.id}.${k}`);
