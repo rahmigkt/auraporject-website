@@ -50,11 +50,11 @@ export function sanitizeActions(list, v = vocabulary()) {
   const out = [];
   for (const a of Array.isArray(list) ? list.slice(0, 20) : []) {
     if (!a || typeof a !== 'object') continue;
-    if ((a.type === 'set' || a.type === 'delta') && v.params[a.key] && Number.isFinite(+a.value)) out.push({type: a.type, key: a.key, value: +a.value});
-    else if (a.type === 'enum' && v.enums[a.key]?.includes(a.value)) out.push({type: 'enum', key: a.key, value: a.value});
+    if ((a.type === 'set' || a.type === 'delta') && typeof a.key === 'string' && Object.hasOwn(v.params, a.key) && Number.isFinite(+a.value)) out.push({type: a.type, key: a.key, value: +a.value});
+    else if (a.type === 'enum' && typeof a.key === 'string' && Object.hasOwn(v.enums, a.key) && v.enums[a.key].includes(a.value)) out.push({type: 'enum', key: a.key, value: a.value});
     else if (a.type === 'style' && v.styles.includes(a.value)) out.push({type: 'style', value: a.value});
     else if (a.type === 'kind' && v.kinds.includes(a.value)) out.push({type: 'kind', value: a.value});
-    else if (a.type === 'material' && v.materials[a.slot]?.[a.key]?.includes(a.value)) out.push({type: 'material', slot: a.slot, key: a.key, value: a.value});
+    else if (a.type === 'material' && typeof a.slot === 'string' && typeof a.key === 'string' && Object.hasOwn(v.materials, a.slot) && Object.hasOwn(v.materials[a.slot], a.key) && v.materials[a.slot][a.key].includes(a.value)) out.push({type: 'material', slot: a.slot, key: a.key, value: a.value});
   }
   return out;
 }
