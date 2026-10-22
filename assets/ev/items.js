@@ -6,10 +6,17 @@ import {normalizeBedroomMaterials} from '../forma/catalog.js';
 
 export const LABEL = {sofa: 'Kanepe', armchair: 'Berjer', coffee: 'Orta sehpa', dining: 'Yemek masası', desk: 'Çalışma masası', side: 'Yan sehpa', console: 'Konsol', tvunit: 'TV ünitesi', wardrobe: 'Gardırop', bookcase: 'Kitaplık', sideboard: 'Konsol dolabı', dresser: 'Şifonyer', nightstand: 'Komodin', run: 'Mutfak', island: 'Mutfak adası', basin: 'Lavabo dolabı', bed: 'Yatak', vitrine: 'Vitrin', vanity: 'Makyaj masası'};
 const cache = new Map();
+LABEL.majlis = 'Meclis';
 export function compileItem(item) {
-  const key = JSON.stringify(item.design); if (cache.has(key)) return cache.get(key);
+  const key = JSON.stringify([item.design, item.design.kind === 'majlis' ? item.size_mm : null]); if (cache.has(key)) return cache.get(key);
   let out;
-  if (item.design.family === 'bedroom') { const p = bedroom.normalize({...bedroom.DEFAULTS, ...item.design.params, kind: item.design.kind}); out = {compiled: bedroom.compile(p), materials: normalizeBedroomMaterials(item.design.materials || {})}; }
+  if (item.design.kind === 'majlis') {
+    const size = item.size_mm;
+    if (!size || !['w', 'd', 'h'].every(k => Number.isFinite(size[k]) && size[k] > 0)) throw new Error('Meclis parçasının ölçüleri eksik.');
+    const {w, d, h} = size;
+    // Low measured seating volumes: no substitute sofa and no invented back/arm dimensions.
+    out = {compiled: {meta: {overall: {width: w, depth: d, height: h}}, parts: [{id: 'majlis-seat', role: 'seat', mat: 'fabric', pos: [0, h / 2, 0], rot: [0, 0, 0], geom: {fn: 'box', w, h, d}}]}, materials: normalizeDesign({family: 'seating', materials: item.design.materials}).materials};
+  } else if (item.design.family === 'bedroom') { const p = bedroom.normalize({...bedroom.DEFAULTS, ...item.design.params, kind: item.design.kind}); out = {compiled: bedroom.compile(p), materials: normalizeBedroomMaterials(item.design.materials || {})}; }
   else { const d = normalizeDesign(item.design); out = {compiled: compileDesign(d), materials: d.materials}; }
   const o = out.compiled.meta?.overall || {}; out.size = {w: o.width || 1000, d: o.depth || 600, h: o.height || 800};
   cache.set(key, out); return out;

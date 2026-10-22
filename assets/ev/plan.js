@@ -3,7 +3,8 @@
 // blue windows across the wall, light door gaps, red entrance mark, north up (plan y grows to the north).
 import * as THREE from '../vendor/three.module.js?v=20261016b';
 import {PAINTS, FLOORS, SCHEMES, paintHex, floorTexture} from './finishes.js?v=20261020r';
-import {compileItem, footprint, itemName} from './items.js?v=20261020u';
+import {compileItem, footprint, itemName} from './items.js?v=20261022a';
+import {applyRoomLayout, placedItems} from './layout-state.js?v=20261022a';
 import {accessories} from './aksesuar.js?v=20261021e';
 import {rugMesh} from './hali.js?v=20261021e';
 import {migrate, merged, chooserHTML, applyChoice, TEXTILE_CSS, TEXTILE_KEY} from './tekstil.js?v=20261021e';
@@ -73,7 +74,7 @@ function drawPlan() {
   for (const o of ops) { const w = W[o.wall_id]; if (!w) continue; el('polygon', {points: pts(band(w, o.a, o.a + o.w)), fill: o.kind === 'window' ? INK.window : INK.door, 'data-op': o.id, 'data-wall': w.id}); }
   const ACC = accessories(D);
   for (const r of ACC.rugs) el('polygon', {points: pts(r.poly), fill: r.color, 'fill-opacity': 0.35, stroke: r.color, 'stroke-width': 14, 'stroke-dasharray': '60 40', style: 'pointer-events:none'});
-  for (const it of D.items || []) { if (!it.design) continue; const f = footprint(it), k = Math.max(vb[2], vb[3]) / 900;
+  for (const it of placedItems(D.items)) { if (!it.design) continue; const f = footprint(it), k = Math.max(vb[2], vb[3]) / 900;
     el('polygon', {points: pts(f), fill: 'rgba(255,253,248,.78)', stroke: '#6b645a', 'stroke-width': 14, 'data-item': it.id});
     const fr = [(f[2][0] + f[3][0]) / 2, (f[2][1] + f[3][1]) / 2], c = centroid(f); el('line', {x1: c[0], y1: -c[1], x2: fr[0], y2: -fr[1], stroke: '#b9b1a3', 'stroke-width': 10});
     const t = el('text', {x: c[0], y: -c[1] + 50, 'text-anchor': 'middle', 'font-size': 120, fill: '#5d574e', style: 'pointer-events:none'}); t.textContent = itemName(it); }
@@ -168,12 +169,12 @@ let house = null, productObject = null; const products = new Map();
 function build(cut) {
   if (house) { scene.remove(house); house.traverse(o => { if (o.geometry && !o.userData.keep) o.geometry.dispose(); }); }
   house = new THREE.Group(); scene.add(house); if (S.view === 'room') house.add(ground); ground.userData.keep = true;
-  if ((D.items || []).some(i => i.design)) { if (!productObject) import('../forma/scene.js').then(m => { productObject = m.productObject; if (S.view !== 'plan') show(S.view); });
-    else for (const it of D.items) { if (!it.design) continue; const key = it.id + JSON.stringify(it.design); let o = products.get(key);
+  if (placedItems(D.items).some(i => i.design)) { if (!productObject) import('../forma/scene.js').then(m => { productObject = m.productObject; if (S.view !== 'plan') show(S.view); });
+    else for (const it of placedItems(D.items)) { if (!it.design) continue; const key = it.id + JSON.stringify([it.design, it.size_mm]); let o = products.get(key);
       if (!o) { const {compiled, materials} = compileItem(it); o = productObject(compiled, materials, {onReady: () => render()}); o.traverse(x => { x.userData.keep = true; }); products.set(key, o); }
       o.position.set(it.pos_xy_mm[0] / 1000, 0, -it.pos_xy_mm[1] / 1000); o.rotation.y = (it.rot_deg || 0) * Math.PI / 180; house.add(o); } }
   const hs = D.spaces.find(x => x.id === S.room); if (A.human && hs && S.view !== 'maket') { // stand where nothing is placed: free floor point closest to the room centre
-    const b = bbox(hs.boundary_xy_mm), [cx0, cy0] = centroid(hs.boundary_xy_mm), feet = (D.items || []).filter(i => i.design).map(i => footprint(i)); let best = [cx0, cy0], bd = Infinity;
+    const b = bbox(hs.boundary_xy_mm), [cx0, cy0] = centroid(hs.boundary_xy_mm), feet = placedItems(D.items).filter(i => i.design).map(i => footprint(i)); let best = [cx0, cy0], bd = Infinity;
     for (let x = b.x0 + 400; x < b.x1 - 400; x += 200) for (let y = b.y0 + 400; y < b.y1 - 400; y += 200) { const p = [x, y]; if (!inside(p, hs.boundary_xy_mm) || feet.some(f => inside(p, f) || f.some(q => Math.hypot(q[0] - x, q[1] - y) < 450))) continue; const d = Math.hypot(x - cx0, y - cy0); if (d < bd) { bd = d; best = p; } }
     human.position.set(best[0] / 1000, 0, -best[1] / 1000); human.traverse(o => { o.userData.keep = true; }); house.add(human); }
   for (const s of D.spaces) {
@@ -331,10 +332,10 @@ function layoutPanel() {
 }
 async function layoutAction(b) { try { await layoutRun(b); } catch (err) { console.error('layout', err); LAY.res = {ok: false, reason: 'Yerleşim hesaplanamadı: ' + err.message}; side(); } }
 async function layoutRun(b) {
-  const {solveRoom} = await import('./yerlesim.js?v=20261021j');
+  const {solveRoom} = await import('./yerlesim.js?v=20261022a');
   if (b.dataset.lay === 'solve') { const r = D.spaces.find(x => x.id === S.room); LAY.room = r.id; LAY.pick = 0; LAY.res = solveRoom(r, D.items.filter(i => i.design && i.space_id === r.id), {walls, ops}, {beam: 60}); }
   if (b.dataset.lay === 'alt') LAY.pick = +b.dataset.i;
-  if (LAY.res?.ok) for (const pl of LAY.res.alternatives[LAY.pick].placements) Object.assign(D.items.find(i => i.id === pl.id), {pos_xy_mm: pl.pos_xy_mm, rot_deg: pl.rot_deg});
+  if (LAY.res?.ok) D.items = applyRoomLayout(D.items, LAY.res.alternatives[LAY.pick].placements, LAY.room);
   side(); if (S.view === 'plan') drawPlan(); else show(S.view);
 }
 function finishPanel() {
