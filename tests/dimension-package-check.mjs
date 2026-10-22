@@ -1,0 +1,14 @@
+import fs from 'node:fs';import vm from 'node:vm';import assert from 'node:assert/strict';
+import {dimensionProjectFiles} from '../assets/forma/dimension-package.js';
+import {normalizeDesign,compileDesign} from '../assets/forma/generate.js';
+import {projectWithDimensions} from '../assets/ev/project-dimensions.js';
+import {zip} from '../assets/forma/package.js';
+const items=['seating','table','storage','kitchen','bath'].map((family,n)=>({id:'EXAMPLE-'+n,qty:n===2?2:1,design:normalizeDesign({family})})),before=JSON.stringify(items),files=dimensionProjectFiles(items,compileDesign);
+assert.equal(JSON.stringify(items),before);const doc=JSON.parse(files[0].data);assert.equal(doc.items.length,5);assert.equal(files.length,12);assert.equal(doc.items[2].quantity,2);assert.equal(doc.units,'mm');
+for(const [n,item]of doc.items.entries()){assert.deepEqual(item.design,items[n].design);assert.equal(item.dimensions.parts.length,compileDesign(item.design).parts.length);assert.equal(item.dimensions.production_approved,false);const csv=files.find(f=>f.name===String(n+1).padStart(2,'0')+'/part-dimensions.csv').data;assert(csv.includes('Local X mm'));}
+let captured;const src=fs.readFileSync('assets/forma/studio.js','utf8'),fn=src.slice(src.indexOf('function projectAction(el)'),src.indexOf('// ---- Account'));
+const sandbox={state:{project:{items}},dimensionProjectFiles,compileOf:compileDesign,zip,download:(name,bytes,mime)=>captured={name,bytes,mime},openAssessment:()=>{throw Error('Wrong route');}};vm.createContext(sandbox);vm.runInContext(fn,sandbox);sandbox.projectAction({dataset:{act:'dimensions'}});assert.equal(captured.name,'AURA-project-dimensions.zip');assert.equal(captured.bytes[0],0x50);assert.equal(captured.bytes[1],0x4b);assert.equal(JSON.stringify(items),before);
+const evSource=fs.readFileSync('assets/ev/edit.js','utf8'),line=evSource.split('\n').find(l=>l.includes("if (a === 'save')"));assert(line.includes('projectWithDimensions(ev.D)'));
+const plan=JSON.parse(fs.readFileSync('assets/ev/ornekler/sohbet-1.json','utf8'));let blob,clicked=false;const evSandbox={a:'save',ev:{D:plan},projectWithDimensions,Date,Blob,URL:{createObjectURL:v=>{blob=v;return 'blob:local-test';},revokeObjectURL:()=>{}},document:{createElement:()=>({click:()=>clicked=true})},setTimeout:()=>{}};vm.createContext(evSandbox);vm.runInContext(line,evSandbox);assert(clicked);const saved=JSON.parse(await blob.text());assert.equal(saved.component_dimensions.products.length,10);assert.equal(saved.measurement_summary.areas_m2.overlap_checked,false);
+const pos=process.argv.indexOf('--sample');if(pos>=0){fs.writeFileSync(process.argv[pos+1],captured.bytes);fs.writeFileSync(process.argv[pos+1].replace(/\.zip$/,'.ev.json'),JSON.stringify(saved,null,2));}
+console.log('PASS actual project-dimension ZIP route;5families;quantity2;complete per-part rows;real ZIP bytes;actual EV save handler adds10products and wall/opening/room summaries;no mutation/send');
