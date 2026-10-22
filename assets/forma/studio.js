@@ -9,6 +9,7 @@ import {FAMILIES, familyOf} from './families.js';
 import {buildMesh} from './build.js';
 import {styleName} from './styles.js';
 import {STARTS} from './starts.js';
+import {technicalReview, reviewMatches} from './technical-review.js';
 import {HIDES, COLORS, FIBERS, WEAVES, WEAVE_NAMES, PATTERNS, MOTIF_CHOICES, MOTIF_NAMES, WOODS, FINISHES, STAINS, METALS, STONES, GLASS, SURFACES, LINEN_COLORS, colorGroup, name as nm} from './catalog.js';
 import {MATTRESS} from './bedroom.js';
 import {harmonize} from './set.js';
@@ -212,6 +213,11 @@ function renderCaption() {
   const st = $('#status');
   st.dataset.level = err.length ? 'error' : warn.length ? 'warn' : 'ok';
   st.textContent = err.length || warn.length ? [...err, ...warn].map(i => L('issues.' + i.code).replace('{v}', Math.round(i.value))).join(' · ') : L('ok');
+  const saved=state.project.items.find(i=>i.id===state.editing);
+  if(saved && reviewMatches(saved.technicalReview,d)) {
+    if(!err.length)st.dataset.level='warn';
+    st.textContent += ' · '+L('technicalPending');
+  }
   $('#undoBtn').disabled = !state.history.length; $('#redoBtn').disabled = !state.future.length;
 }
 function feedback(text, level = 'info') { const f = $('#feedback'); f.textContent = text; f.dataset.level = level; }
@@ -787,11 +793,12 @@ const projectKey = () => state.project.items.map(i => designKey(i.design) + '×'
 function saveProject() { store.set('aura-forma-project', state.project); store.set('aura-forma-editing', state.editing); }
 function addToProject() {
   const items = state.project.items, d = structuredClone(state.design), i = items.findIndex(x => x.id === state.editing);
-  if (i >= 0) items[i] = {...items[i], design: d};
-  else { const id = 'U' + (1 + Math.max(0, ...items.map(x => +x.id.slice(1) || 0))); items.push({id, design: d}); state.editing = id; }
+  const c=compileOf(d), report=technicalReview(d,c,issuesOf(d,c));
+  if (i >= 0) items[i] = {...items[i], design: d, technicalReview:report};
+  else { const id = 'U' + (1 + Math.max(0, ...items.map(x => +x.id.slice(1) || 0))); items.push({id, design: d, technicalReview:report}); state.editing = id; }
   state.justAdded = true; saveProject();
   feedback(`${itemName(d)} · ${L(i >= 0 ? 'projectUpdated' : 'projectAdded')}`);
-  renderPanel();
+  renderCaption(); renderPanel();
 }
 /** The same design language in another size of the family (sofa → loveseat / armchair; dining → coffee table …). */
 function sameDesign(d, kind) {
@@ -851,9 +858,17 @@ function projectPanel() {
     <label class="f-check full"><input type="checkbox" name="consent" required><span>${L('consent')} <a href="proje-gizlilik.html?lang=${state.lang}" target="_blank" rel="noopener">↗</a></span></label>
     <button class="f-primary" type="submit" ${items.length ? '' : 'disabled'}>${L('sendProject')} →</button></form>` : ''}`;
   return `<h2>${L('tabProject')}</h2><p class="f-lead">${L('projectIntro')}</p>
+  ${editing && !changed ? technicalReviewHTML(editing) : ''}
   <div class="f-current"><div><b>${esc(itemName(d))}</b><small>${esc(styleName(d.style, state.lang))} · ${esc(fam === 'bedroom' ? L('setPiecesList') : itemDims(d))}</small></div>
   <button class="f-primary" data-act="add" ${editing && !changed ? 'disabled' : ''}>${editing ? (changed ? L('saveChanges') : L('inProject')) : L('addContinue')} ${editing && !changed ? '✓' : '+'}</button></div>
   ${next}${list}${room}${send}`;
+}
+
+function technicalReviewHTML(item) {
+  const r=item.technicalReview;
+  if(!reviewMatches(r,item.design))return `<p class="f-note">${L('technicalOnSend')}</p>`;
+  const specific={materialGradeUnknown:'technicalMaterial',memberScreenUnknown:'technicalUnsupported',memberScreenReview:'technicalLeg',olderAdultSeatDepth:'technicalErgo'};
+  return `<section class="f-next" aria-label="${esc(L('technicalTitle'))}"><h3>${L('technicalTitle')}</h3><p class="f-note">${L('technicalReturn')}</p><ul>${r.findings.map(x=>`<li>${esc(L(specific[x.code]||'issues.'+x.code).replace('{v}',Math.round(x.value||0)))}</li>`).join('')}</ul><p class="f-note">${L('technicalLimits')}</p></section>`;
 }
 
 // ---- Room: the whole project placed in a lit room ---------------------------------------------------
@@ -972,7 +987,10 @@ async function projectPackage() {
       const link = await designLink(it.design, state.lang); links.push(link);
       state.design = it.design; state.compiled = compileOf(it.design); state.drawingCache = null; state.sheetLink = link;
       const dv = deliverables(), dir = `${String(n + 1).padStart(2, '0')}-${it.design.family}-${it.design.kind}/`, title = `AURA · ${itemName(it.design)}`;
-      files.push({name: dir + 'design.json', data: JSON.stringify({schema: SCHEMA, link, quantity: it.qty || 1, design: it.design, derived: state.compiled.meta, issues: issuesOf(it.design, state.compiled), bom: dv.bom}, null, 2)});
+      const review=technicalReview(it.design,state.compiled,issuesOf(it.design,state.compiled));
+      it.technicalReview=review;
+      files.push({name: dir + 'technical-review.json',data:JSON.stringify(review,null,2)});
+      files.push({name: dir + 'design.json', data: JSON.stringify({schema: SCHEMA, link, quantity: it.qty || 1, design: it.design, derived: state.compiled.meta, issues: issuesOf(it.design, state.compiled), technicalReview:review, bom: dv.bom}, null, 2)});
       files.push({name: dir + 'drawings.svg', data: dv.sheet.svg}, {name: dir + 'drawings.dxf', data: drawingDxf(state.compiled)}, {name: dir + 'parts.csv', data: bomCsv(dv.bom)});
       files.push({name: dir + 'open-design.html', data: linkPage(link, title)}, {name: dir + 'open-design.url', data: urlShortcut(link)});
       const url = sceneModule?.renderThumbnail(state.compiled, it.design.materials, {width: 1600, height: 1000});
@@ -985,7 +1003,9 @@ async function projectPackage() {
   files.push({name: 'drawings.pdf', data: jpegPdf(pages)});
   files.push({name: 'open-project.html', data: linkPage(pLink, `AURA · ${items.length} ${L('pieces')}`)}, {name: 'open-project.url', data: urlShortcut(pLink)});
   files.push({name: state.lang === 'tr' ? 'BENIOKU.txt' : 'README.txt', data: state.lang === 'tr' ? `AURA Forma projesi (${items.length} ürün)\n\nProjenin tamamını stüdyoda açmak için:\n${pLink}\n\n${items.map((it, n) => `${n + 1}. ${itemName(it.design)} × ${it.qty || 1}\n   ${links[n]}`).join('\n')}\n\ndrawings.pdf          önce bunu açın: görseller ve her ürünün ölçülü A3 çizimi (sayfadaki bağlantı tasarımı açar)\nopen-project.html     projeyi stüdyoda açar (çift tıklayın)\nroom.jpg              ürünler odada (oda kullanıldıysa)\nNN-aile-tür/          her ürün için: parts.csv (parça ve ölçü listesi, Excel), drawings.svg (çizim, tarayıcıda açılır), drawings.dxf (CAD/CNC), render.jpg, design.json, open-design.html\nproject.json          ürün listesi, bağlantılar ve oda yerleşimi\n\nKonsept tasarımdır. Ölçü, yapı ve yapım önerileri üretimden önce tasarımcı tarafından kontrol edilmelidir.\n` : `AURA Forma project (${items.length} products)\n\nOpen the whole project in the studio:\n${pLink}\n\n${items.map((it, n) => `${n + 1}. ${itemName(it.design)} × ${it.qty || 1}\n   ${links[n]}`).join('\n')}\n\nopen-project.html     opens the whole project in the studio (double-click)\nroom.jpg              the products placed in a room (if shown)\nNN-family-kind/       per product: design.json, drawings.svg/.dxf, parts.csv (cut list), render.jpg, open-design.html\ndrawings.pdf          room view, renders and A3 drawing sheets of every product (the link on each sheet opens that design)\nproject.json          list of products, links and the room layout\n\nConcept design. Dimensions, structure and build suggestions must be checked by the designer before production.\n`});
-  return {files, summary: `${summary.join('\n')}\n\n${L('designLink')}: ${pLink}`};
+  saveProject();
+  files.push({name:'technical-reviews.json',data:JSON.stringify({status:'designer_review_required',automatic_changes:false,items:items.map(i=>({id:i.id,review:i.technicalReview}))},null,2)});
+  return {files, summary: `${summary.join('\n')}\n\n${L('technicalReturn')}\n${L('technicalLimits')}\n\n${L('designLink')}: ${pLink}`};
 }
 async function downloadAs(kind) {
   // The only file a customer can take is the PDF of a design already sent to the designer.

@@ -1,0 +1,72 @@
+AURA concept hand-off technical notes — 2026-10-22
+
+Behavior
+Customers keep designing freely. Saving a project item adds preliminary technical
+notes above the saved model. Preparing the designer package refreshes these notes
+and includes per-product technical-review.json and aggregate technical-reviews.json.
+The designer is asked to propose ergonomic, structural and aesthetic revisions for
+customer approval. No geometry or material is automatically changed. Every report
+remains designer_review_required and production_approved=false, including models
+that satisfy the numerical scenario. Geometry/material/override changes invalidate
+the displayed old report. No actual designer response workflow or live delivery was
+implemented by this patch. Existing send availability remains controlled by backend.
+
+Numerical scope
+Seating only: real compiled wooden lathe leg/arm-post minimum sections and height.
+Four assumed strength classes D24/D30/D40/D70, not species-to-grade assignments.
+EurocodePy upstream https://github.com/pcachim/eurocodepy
+SHA a768cdf95f94836ab6c847cef966e785fc9ffdcd (LGPL-3.0-or-later root license).
+Generated envelope: 968 native checks with accepted/rejected boundary bracketing.
+5mm height bins rounded upward; required radius rounded outward. Native checks on
+276 accepted member/grade combinations across 90 actual compiled starting models
+were repeated without the lookup table. This is not 90 full-product FEA solutions.
+
+Scenario inputs: 1000N axial, 100+1000*sin(20deg)=442.0201433N lateral per member,
+ideal fixed-free upper joint, effective buckling length 2H, service class SC1,
+medium duration, EN1995-1-1:2004 implementation; national annex not verified.
+These are explicit example design forces, NOT EN furniture test loads/cycles or a
+declared seating capacity. Minimum-section constant prism replaces the actual taper.
+Round sections use a conservative inscribed square because upstream grouped circular
+check leaves width/height zero; that unsupported path was not patched or bypassed.
+Cut/unsupported/nonfinite/out-of-range geometry receives a review note, never a pass.
+Connections, whole-product tipping, fatigue, impact, supplier grading and actual
+end restraint remain outside this screen. Tables/other families receive their
+existing validation notes, not a new numerical stability approval.
+
+Independent solver verification
+PyNite official https://github.com/JWock82/Pynite
+SHA 88f62a5857be375be051d69855d6e6726be32c70 (MIT).
+Local native FEModel3D cantilever check: H=300mm, square side=40mm, E=11000MPa,
+P=100N. Displacement 0.38352272727272685mm agrees with PL^3/(3EI), reaction=-100N.
+This checks a textbook member only. Upstream libraries stay in local research
+directories; the site ships generated envelope data and the JavaScript adapter.
+
+Ergonomics
+https://doi.org/10.33439/ergonomi.1353465, printed Table2 p30 (PDF page5), Turkey
+65+ cohort, 2721 participants. Female P5 popliteal height380mm, buttock-popliteal
+length408mm; P95 hip breadth403mm. These are body dimensions, NOT universal finished
+seat limits for Turkey or all ages. Only deep-seat fit is flagged for assessment.
+Cushion compression, footwear, clearance, other populations and individual needs
+are not calculated. New UI text is Turkish/English; seven other languages fall
+back to English for these new keys, not independently translated new explanations.
+
+Reproduction (local CPU; no paid service)
+node tests/seating-leg-section-check.mjs
+node tests/seating-screen-check.mjs
+node tests/technical-review-check.mjs
+node tests/technical-package-check.mjs
+python tools/engineering/build-seating-screen.py --research-root ../arastirma-temel
+python tools/engineering/verify-native.py --research-root ../arastirma-temel
+Research root must contain pinned sources and solver-deps. Generator fails when
+upstream types/data are absent, rather than inventing strength classes.
+
+Evidence and limits
+Targeted checks above PASS. Actual package function tested with local image/link
+stubs, real compilation and review; two items preserve original designs, carry
+fresh per-item and aggregate notes, restore active editor after rendering failure.
+Local browser: save, reload, same notes; desktop and390x844 viewport visually checked.
+No production submission, email, account or physical-phone/touch check performed.
+Previous Forma full-suite180s timeout remains open; no all-tests-passed claim.
+Reviewer=Codex; review_mode=user_authorized_self_review. Not independent Claude
+review. Source/code file hashes and native result are in technical-review-evidence.json.
+Stacked change on PR246; neither PR merged or deployed by this work.

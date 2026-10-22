@@ -4,6 +4,15 @@ export const UI_LANGS = {tr: 'Türkçe', en: 'English', de: 'Deutsch', fr: 'Fran
 export const isRTL = lang => lang === 'ar';
 
 const T = {
+  technicalTitle: ['Teknik inceleme notları', 'Technical review notes'],
+  technicalPending: ['Tasarımcı incelemesi gerekiyor', 'Designer review required'],
+  technicalReturn: ['Tasarımınız serbestçe kaydedildi. Tasarımcı ergonomi, dayanım ve estetik düzenleme önerilerini hazırlayıp onayınıza sunar; özgün tasarımınız otomatik değiştirilmez.', 'Your concept is saved freely. The designer prepares ergonomic, structural and aesthetic proposals for your approval; your original design is not changed automatically.'],
+  technicalLimits: ['Bunlar otomatik ön inceleme notlarıdır; üretim uygunluğu veya güvenlik onayı değildir.', 'These are automated preliminary notes, not production or safety approval.'],
+  technicalOnSend: ['Teknik inceleme notları kayıt/gönderim hazırlığında yenilenecek.', 'Technical notes will be refreshed when saving or preparing the hand-off.'],
+  technicalMaterial: ['Malzemenin yapısal sınıfı ve bağlantı detayları tasarımcı tarafından doğrulanmalı.', 'The designer must verify the material grade and joint details.'],
+  technicalUnsupported: ['Ayak yapısı mevcut otomatik hesap kapsamı dışında; ayrıca incelenmeli.', 'The leg construction is outside the automated calculation scope and needs review.'],
+  technicalLeg: ['İnce ayak kesiti, örnek yük senaryosunda yeniden tasarım gerektiriyor; bağlantı ve bütün ürün testleri ayrıca yapılmalı.', 'The narrow leg section needs revision under the example load scenario; joints and the complete product need separate assessment.'],
+  technicalErgo: ['Oturum derinliği {v} mm. Türkiye65+ referansında küçük bedenli kullanıcıların sırt/ayak desteği ayrıca değerlendirilmeli; bütün yaşlar için bir sınır değildir.', 'Usable seat depth is {v} mm. Back and foot support for smaller users in the Turkey65+ reference need assessment; this is not a limit for all ages.'],
   title:        ['Tasarım stüdyosu', 'Design studio', 'Designstudio', 'Studio de design', 'Ontwerpstudio', 'Designstudie', 'Estudio de diseño', 'Studio di design'],
   famSeating:   ['Oturma grubu', 'Seating', 'Sitzmöbel', 'Assises', 'Zitmeubelen', 'Siddemøbler', 'Asientos', 'Sedute'],
   famBedroom: ['Yatak odası', 'Bedroom', 'Schlafzimmer', 'Chambre', 'Slaapkamer', 'Soveværelse', 'Dormitorio', 'Camera da letto'],
