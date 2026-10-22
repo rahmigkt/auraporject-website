@@ -90,12 +90,13 @@ class Server:
         node_prompts()  # All frozen data/source gates still execute.
         with socket.socket() as s:s.bind(('127.0.0.1',0));port=s.getsockname()[1]
         self.url=f'http://127.0.0.1:{port}'
-        self.command=[str(self.out/'cpu-runtime/llama-server.exe'),'-m',p['model_file'],'--host','127.0.0.1','--port',str(port),'--device','none','-ngl','0','--no-op-offload','--fit','off','--offline','--parallel','1','--ctx-size',str(p['context']),'-t',str(p['threads']),'-tb',str(p['threads']),'--ctx-checkpoints','0','--no-context-shift','--no-warmup']
+        self.command=[str(self.out/'cpu-runtime/llama-server.exe'),'-m',p['model_file'],'--host','127.0.0.1','--port',str(port),'--device','none','-ngl','0','--no-op-offload','--fit','off','--offline','--parallel','1','--ctx-size',str(p['context']),'-t',str(p['threads']),'-tb',str(p['threads']),'--ctx-checkpoints','0','--no-context-shift','--no-warmup','--verbosity','5']
         env={k:os.environ[k] for k in ['SystemRoot','WINDIR','PATH','PATHEXT','TEMP','TMP','COMSPEC'] if k in os.environ}
         env.update(CUDA_VISIBLE_DEVICES='-1',HIP_VISIBLE_DEVICES='-1',ROCR_VISIBLE_DEVICES='-1',GGML_VK_VISIBLE_DEVICES='',HF_HUB_OFFLINE='1')
-        self.log=(self.out/'server.log').open('ab')
+        self.log_path=self.out/f'server-{time.time_ns()}.log'
+        self.log=self.log_path.open('ab')
         self.process=subprocess.Popen(self.command,cwd=self.out/'cpu-runtime',env=env,stdout=self.log,stderr=subprocess.STDOUT,creationflags=subprocess.CREATE_NO_WINDOW)
-        save(self.out/'server-owner.json',{'pid':self.process.pid,'runner_pid':os.getpid(),'command':self.command,'url':self.url,'started_at':now()})
+        save(self.out/'server-owner.json',{'pid':self.process.pid,'runner_pid':os.getpid(),'command':self.command,'url':self.url,'log':str(self.log_path),'started_at':now()})
         try:
             for _ in range(120):
                 if self.process.poll() is not None:raise RuntimeError('CPU server exited; inspect server.log')
@@ -103,7 +104,7 @@ class Server:
                     if self.http('/health',timeout=1).get('status')=='ok':break
                 except Exception:time.sleep(.5)
             else:raise RuntimeError('CPU server startup timeout')
-            logs=(self.out/'server.log').read_text(encoding='utf8',errors='replace')
+            logs=self.log_path.read_text(encoding='utf8',errors='replace')
             assert 'CPU' in logs and not any(x in logs for x in ['CUDA0','Vulkan0','ROCm0']),'CPU evidence gate'
             save(self.out/'runtime-props.json',self.http('/props'))
             return self
