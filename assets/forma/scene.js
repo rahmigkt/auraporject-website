@@ -540,13 +540,14 @@ export function createViewer(host, {onRotate} = {}) {
   async function studioPhoto({width = 2400, height = 1600, samples = 48, yaw: y = yaw, pitch: pt = 0.16, lens = 24, zoom: zm = 1.04, focus: fc = null} = {}) {
     for (let t = 0; (!matsReady || mats?.pendingParts) && t < 200; t++) await new Promise(r => setTimeout(r, 100)); // full-resolution maps first (incl. per-part materials)
     if (shooting) return null; shooting = true; cancelAnimationFrame(raf);
-    try {
-    const keep = {bg: scene.background, env: scene.environmentIntensity, tm: renderer.toneMapping, exp: renderer.toneMappingExposure, sun: sun.position.clone(), si: sun.intensity, fov: persp.fov, yaw, pitch, view, zoom, pr: renderer.getPixelRatio()};
+    const keep = {bg: scene.background, env: scene.environmentIntensity, tm: renderer.toneMapping, exp: renderer.toneMappingExposure, sun: sun.position.clone(), si: sun.intensity, fov: persp.fov, yaw, pitch, view, zoom, focus, co: contact.material.opacity, pr: renderer.getPixelRatio(), hostRect: host.getBoundingClientRect};
     const floor = scene.children.find(o => o.material?.isShadowMaterial), fo = floor?.material.opacity;
+    let wall = null;
+    try {
     scene.background = new THREE.Color('#ebe6dc'); renderer.toneMapping = THREE.NeutralToneMapping; renderer.toneMappingExposure = 1.0;
     scene.environmentIntensity = 0.75; sun.intensity = 2.6; if (floor) floor.material.opacity = 0.34; contact.material.opacity = 0.75;
     // Wall-hung pieces (wall cabinets, wall taps, mirrors) get the wall they hang on, so nothing floats.
-    let wall = null; const bb = new THREE.Box3().setFromObject(group);
+    const bb = new THREE.Box3().setFromObject(group);
     const hung = bb.min.y > 0.04 || compiled.params?.base === 'wall' || compiled.parts.some(q => ['mirror', 'mirror-frame'].includes(q.role));
     if (hung || compiled.parts.some(q => ['tap', 'wall-rail', 'hood', 'mirror'].includes(q.role) && q.pos?.[1] > 900)) {
       wall = new THREE.Mesh(new THREE.PlaneGeometry(40, 12), new THREE.MeshStandardMaterial({color: '#efeae1', roughness: 0.95}));
@@ -577,12 +578,16 @@ export function createViewer(host, {onRotate} = {}) {
       for (let j = 0; j < 3; j++) img.data[k + j] = acc[k + j] / samples * v; img.data[k + 3] = 255;
     }
     g.putImageData(img, 0, 0);
+    return c2.toDataURL('image/jpeg', 0.92);
+    } finally {
+    host.getBoundingClientRect = keep.hostRect;
+    persp.clearViewOffset();
     if (wall) { scene.remove(wall); wall.geometry.dispose(); wall.material.dispose(); }
     Object.assign(scene, {background: keep.bg, environmentIntensity: keep.env}); renderer.toneMapping = keep.tm; renderer.toneMappingExposure = keep.exp;
-    sun.position.copy(keep.sun); sun.intensity = keep.si; if (floor) floor.material.opacity = fo; contact.material.opacity = 1;
-    persp.fov = keep.fov; focus = null; ({yaw, pitch, view, zoom} = keep); ao.updateGtaoMaterial({samples: 16}); renderer.setPixelRatio(keep.pr);
-    return c2.toDataURL('image/jpeg', 0.92);
-    } finally { shooting = false; if (pendingRebuild) { pendingRebuild = false; rebuild(); } resize(); }
+    sun.position.copy(keep.sun); sun.intensity = keep.si; if (floor) floor.material.opacity = fo; contact.material.opacity = keep.co;
+    persp.fov = keep.fov; ({yaw, pitch, view, zoom, focus} = keep); ao.updateGtaoMaterial({samples: 16}); renderer.setPixelRatio(keep.pr);
+    shooting = false; if (pendingRebuild) { pendingRebuild = false; rebuild(); } resize();
+    }
   }
   return {
     setDesign(next, nextMaterials) {
@@ -642,11 +647,14 @@ export function createViewer(host, {onRotate} = {}) {
     async photo(scale = 2, opts = {}) {
       if (!room && !sketch && compiled && !compiled.meta?.room && opts.studio !== false) return studioPhoto(opts);
       const r = host.getBoundingClientRect(), w = Math.round(r.width * scale), h = Math.round(r.height * scale);
-      const pr = renderer.getPixelRatio(); renderer.setPixelRatio(1); renderer.setSize(w, h, false); composer.setPixelRatio(1); composer.setSize(w, h);
+      const pr = renderer.getPixelRatio();
+      try {
+      renderer.setPixelRatio(1); renderer.setSize(w, h, false); composer.setPixelRatio(1); composer.setSize(w, h);
       ao.updateGtaoMaterial({samples: 32}); place(); sketchResolution(); renderPass.camera = camera; ao.camera = camera; composer.render();
-      const url = canvas.toDataURL('image/jpeg', 0.92);
+      return canvas.toDataURL('image/jpeg', 0.92);
+      } finally {
       ao.updateGtaoMaterial({samples: 16}); renderer.setPixelRatio(pr); resize();
-      return url;
+      }
     },
     capture() { place(); sketchResolution(); composer.render(); return canvas; },
     /** Binary STL of what is shown, in millimetres. */
