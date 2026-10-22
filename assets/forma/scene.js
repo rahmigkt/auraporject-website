@@ -46,7 +46,13 @@ function dataTexture(data, w, h, srgb) {
 const hexColor = h => new THREE.Color(h);
 
 /** Material set for one design. Starts with flat colours; textures arrive asynchronously. */
-function materialSet(materials, opts = {}) { return materials.front ? storageMaterialSet(materials, opts) : materials.top ? tableMaterialSet(materials, opts) : materials.case ? bedroomMaterialSet(materials, opts) : seatingMaterialSet(materials, opts); }
+function disposePartMaterials(set) { for (const m of set.perPart?.values() || []) m.dispose(); set.perPart?.clear(); }
+function materialSet(materials, opts = {}) {
+  const set = materials.front ? storageMaterialSet(materials, opts) : materials.top ? tableMaterialSet(materials, opts) : materials.case ? bedroomMaterialSet(materials, opts) : seatingMaterialSet(materials, opts);
+  const dispose = set.dispose;
+  set.dispose = () => { disposePartMaterials(set); dispose(); };
+  return set;
+}
 /** Room for a project view: walls, floor, rug, LED, window glass. */
 function roomMaterialSet(spec, {onReady} = {}) {
   const set = {textures: []}, jobs = [];
@@ -54,7 +60,7 @@ function roomMaterialSet(spec, {onReady} = {}) {
   set.glass = new THREE.MeshPhysicalMaterial({color: '#e4edf1', roughness: 0.04, transparent: true, opacity: 0.18, depthWrite: false});
   set.fabric = set.wall;
   Promise.all(jobs).then(() => { if (!set.disposed) onReady?.(); });
-  set.dispose = () => { set.disposed = true; for (const m of new Set([...(set.extra || []), set.glass])) m.dispose(); for (const t of set.textures) t.dispose(); };
+  set.dispose = () => { set.disposed = true; disposePartMaterials(set); for (const m of new Set([...(set.extra || []), set.glass])) m.dispose(); for (const t of set.textures) t.dispose(); };
   return set;
 }
 /** Room shell and room textiles on top of the bedroom set. */
@@ -147,9 +153,9 @@ function woodMaterial(w) {
 function partMaterial(spec, mats) {
   const key = JSON.stringify(spec); mats.perPart ??= new Map();
   if (!mats.perPart.has(key)) {
-    const jobs = [], m = surfaceMaterial(spec, mats, jobs); mats.perPart.set(key, m); (mats.extra ??= []).push(m);
+    const jobs = [], m = surfaceMaterial(spec, mats, jobs); mats.perPart.set(key, m);
     mats.pendingParts = (mats.pendingParts || 0) + 1;
-    Promise.all(jobs).then(() => { mats.pendingParts--; mats.onPart?.(); });
+    Promise.all(jobs).then(() => { mats.pendingParts--; if (!mats.disposed) mats.onPart?.(); });
   }
   return mats.perPart.get(key);
 }
@@ -588,7 +594,7 @@ export function createViewer(host, {onRotate} = {}) {
   return {
     setDesign(next, nextMaterials) {
       const matKey = JSON.stringify(nextMaterials);
-      if (!mats || matKey !== JSON.stringify(materials)) { mats?.perPart?.forEach(m => m.dispose()); mats?.dispose(); matsReady = false; mats = materialSet(nextMaterials, {onReady: () => { matsReady = true; rebuild(); }}); mats.onPart = () => rebuild(); materials = structuredClone(nextMaterials); }
+      if (!mats || matKey !== JSON.stringify(materials)) { mats?.dispose(); matsReady = false; mats = materialSet(nextMaterials, {onReady: () => { matsReady = true; rebuild(); }}); mats.onPart = () => rebuild(); materials = structuredClone(nextMaterials); }
       compiled = next; room = null; rebuild();
     },
     /** Project room: {shell (compiled room shell), roomMaterials, items: [{compiled, materials, x, z, rot}]}; null leaves it. */
