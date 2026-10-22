@@ -4,6 +4,18 @@ export const UI_LANGS = {tr: 'Türkçe', en: 'English', de: 'Deutsch', fr: 'Fran
 export const isRTL = lang => lang === 'ar';
 
 const T = {
+  shelfSupportReview: ['Rafın dört desteği, rafla teması veya yan panele bağlantısı eksik; tasarımcı bağlantıları incelemeli.', 'The shelf needs four supports contacting it and its side panels; the designer must assess the connections.'],
+  textileReviewScope: ['Bu dosya perde/halı seçimine aittir; mobilya projesinden ayrı indirilir. Gerçek montaj ve yer ölçüleri ayrıca doğrulanmalıdır.', 'This file covers the curtain/rug selection and downloads separately from the furniture project. Verify actual installation and site dimensions separately.'],
+  glassShelfReview: ['Cam rafın tipi, kenar işlemi, tutucusu ve yükü birlikte doğrulanmalı.', 'Verify glass type, edge treatment, retainers and shelf load together.'],
+  hingeSelectionReview: ['Menteşe seçimi kapak yüksekliği, ağırlığı ve seçilen ürün çizelgesiyle doğrulanmalı.', 'Verify hinges against door height, weight and the selected product chart.'],
+  runnerSelectionReview: ['Çekmece yükü, ray modeli, montaj boşluğu ve açılma hareketi doğrulanmalı.', 'Verify drawer load, runner model, installation clearances and movement.'],
+  cabinetFixingReview: ['Duvar/zemin bağlantısı ve devrilmeye karşı önlemler gerçek montaj yerinde doğrulanmalı; bir askı çizimi montaj onayı değildir.', 'Verify floor/wall fixing and tip-over measures at the actual installation; a modeled hanger is not installation approval.'],
+  cabinetUseReview: ['Raf yükü, uzun süreli sehim, erişim ve kapak/çekmece kullanım boşluğu ayrıca değerlendirilmeli.', 'Assess shelf loads, long-term deflection, reach and door/drawer operating space.'],
+  wetRoomReview: ['Su/nem dayanımı, kesilmiş kenarların yalıtımı ve tesisat boşlukları seçilen ürünlerle doğrulanmalı.', 'Verify moisture resistance, cut-edge sealing and plumbing clearances for the selected products.'],
+  applianceInstallationReview: ['Cihaz havalandırması, ısı/gaz/elektrik ve davlumbaz boşlukları cihazın güncel montaj kılavuzuna göre belirlenmeli.', 'Determine appliance ventilation, heat/gas/electrical and hood clearances from its current installation instructions.'],
+  curtainMountingReview: ['Perde rayı, askı aralıkları, kumaş ağırlığı ve duvar/tavan bağlantıları doğrulanmalı.', 'Verify curtain tracks, bracket spacing, fabric weight and wall/ceiling fixings.'],
+  blindCordReview: ['Stor/plise kumandası ve erişilebilir kordon güvenliği seçilen gerçek ürün üzerinde incelenmeli.', 'Assess blind controls and accessible-cord safety on the actual selected product.'],
+  rugUseReview: ['Halı kenarı, kapı geçişi ve zemine uygun kaymaz altlık yerinde değerlendirilmeli.', 'Assess rug edges, door clearances and a floor-compatible non-slip underlay on site.'],
   technicalTitle: ['Tasarım değerlendirme notları', 'Design assessment notes'],
   reviewDownload: ['Değerlendirmeyi indir', 'Download assessment'],
   reviewBeforeSend: ['Göndermeden önce tasarımınız', 'Your design before sending'],

@@ -67,7 +67,7 @@ function persistRevision(){
 }
 function correctionPanel(){
  const d=design(),item=S.items[S.cur],r=reviewDesign(d),escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const labels={restoreGeneratedFrame:'Silinen taşıyıcıları geri kur',increaseLegSection:'Ayak kesitini örnek senaryoya göre büyüt',addTableAprons:'Ahşap masa kuşaklarını ekle'};
+ const labels={restoreShelfSupports:'Silinen raf desteklerini geri kur',restoreGeneratedFrame:'Silinen taşıyıcıları geri kur',increaseLegSection:'Ayak kesitini örnek senaryoya göre büyüt',addTableAprons:'Ahşap masa kuşaklarını ekle'};
  return `<h2>Tasarım değerlendirme notları</h2><p class="a-note">Otomatik düzelt özgün tasarımın kopyasında uygulanır. Sonuç bir tasarımcı önerisidir; üretim onayı değildir. Ergonomi ve estetik son kararı tasarımcı verir.</p><div class="a-tools"><button data-autocorrect>Otomatik düzelt</button><button data-frameview aria-pressed="${!!S.frameView}">İskeleti göster</button>${item.customerOriginal?'<button data-original>Özgün modeli geri yükle</button>':''}</div>${item.correction?.changes?.length?`<p class="a-note">Uygulanan öneriler: ${item.correction.changes.map(k=>escape(labels[k]||k)).join(' · ')}</p>`:''}<ul class="a-checks">${r.findings.map(f=>`<li class="warn">${escape(findingText(f,'tr'))}</li>`).join('')}</ul>`;
 }
 function memberScenarioPanel(){

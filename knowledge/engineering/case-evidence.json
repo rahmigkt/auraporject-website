@@ -1,0 +1,74 @@
+{
+  "at": "2026-10-22T13:54:48.596Z",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "base_sha": "49ebeae705d077b47a96ca4c770e36926b625c4a",
+  "code_sha256": {
+    "assets/forma/storage.js": "49cdbb520dd528192f1708f208f8509ec513d9ff89198de68ab515fd4d78591f",
+    "assets/forma/bath.js": "05109f16dfd7696eab9a003fe639c05160c912022b582160f4725adbf47f8e74",
+    "assets/forma/case-review.js": "45978415c4257b2988b3ac8284ff57fee607a8b648e27642644139c4bb659ecf",
+    "assets/forma/auto-correct.js": "f7a424e169c8b2a7c51d1644c1da5500e5562dc1939c2c893d088d153533f58e",
+    "assets/forma/technical-review.js": "07551840e91c3f4e85fcce7f26cffd915a95b0b3bce4e0da7a30ad57acc73a50",
+    "assets/forma/review-document.js": "7a65de2230c2386907e2591dfc59f5800493e2328d1619d24e2d5b2fa6210f15",
+    "assets/forma/i18n.js": "24b5486762fcdcb88c23386294af9ed562b270329b1c6d66ad6da97c838fa82f",
+    "assets/forma/studio.js": "64c9b591ab1195821fe31f1145d8b17434efb5fc90050a1bf506f63f6b96941b",
+    "assets/forma/atelier.js": "77c516049f9e778c8a4b037865b10133f79e38ebdecddefc6365173aba466b4d"
+  },
+  "tests": [
+    {
+      "command": "node tests/case-review-check.mjs",
+      "exit_code": 0,
+      "stdout": "{\"status\":\"PASS\",\"models\":{\"storage\":142,\"kitchen\":30,\"bath\":33},\"shelves\":528,\"pins\":2112,\"negative_checks\":[\"removed pin\",\"moved pin\",\"missing side\",\"custom override preserved\",\"idempotence\",\"stale report\",\"unverified bath capacity removed\",\"textile configuration separation\"],\"production_approved\":false}",
+      "stderr": ""
+    },
+    {
+      "command": "node tests/textile-assessment-check.mjs",
+      "exit_code": 0,
+      "stdout": "PASS actual textile download handler; selected configuration + advisory notes; explicit separate scope; no mutation or external submission",
+      "stderr": ""
+    },
+    {
+      "command": "node tests/technical-review-check.mjs",
+      "exit_code": 0,
+      "stdout": "PASS no geometry/material mutation; no automatic approval; thin-leg+ergonomic notes; persistence; stale geometry/material/override invalidation; unsupported geometry remains reviewable",
+      "stderr": ""
+    },
+    {
+      "command": "node tests/technical-package-check.mjs",
+      "exit_code": 0,
+      "stdout": "PASS actual package function: two models, fresh per-model+aggregate reports, original model/editor preserved, render failure restoration; no external send",
+      "stderr": ""
+    },
+    {
+      "command": "node tests/assessment-send-check.mjs",
+      "exit_code": 0,
+      "stdout": "PASS actual submit handler with mocks: first click no send; current confirmed assessment sends once; edited design requires new assessment; backend unavailable blocks network",
+      "stderr": ""
+    },
+    {
+      "command": "node tests/construction-review-check.mjs",
+      "exit_code": 0,
+      "stdout": "PASS 240 real seating/table starts;6default bases; missing/moved/broken geometry; original preservation; reversible/idempotent proposals; wooden-only table fix; unresolved engineering notes retained",
+      "stderr": ""
+    }
+  ],
+  "browser": {
+    "origin": "http://127.0.0.1:8885/case-preview/",
+    "observed": [
+      "storage save in fake local project; advisory notes visible",
+      "designer wardrobe automatic-correct opens reversible copy; remaining notes preserved",
+      "textile stor notes and download button visible at390x844"
+    ],
+    "download": "Actual handler tested with local zip/download stubs; no new completed browser download claim",
+    "no_external_submission": true,
+    "viewport_reset": true
+  },
+  "limits": [
+    "AABB potential contact, not joint capacity",
+    "No hardware identity or full-product certification",
+    "Glass support geometry and motion collisions not yet implemented",
+    "TR/EN new text; other languages fallback",
+    "Full site audit incomplete; prior Forma180s timeout open"
+  ],
+  "production_approved": false
+}

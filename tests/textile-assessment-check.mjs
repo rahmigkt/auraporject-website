@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
+import {textileAssessmentFiles} from '../assets/forma/review-document.js';
+const tx={curtain:{system:'stor'},rug:{on:true}},original=structuredClone(tx),files=textileAssessmentFiles(tx,'tr');
+assert.deepEqual(tx,original);assert.equal(files.length,2);
+const saved=JSON.parse(files.find(f=>f.name==='assessment.json').data);
+assert.deepEqual(saved.configuration,tx);assert.equal(saved.review.production_approved,false);
+assert(saved.review.findings.some(f=>f.code==='blindCordReview'));
+assert(files[0].data.includes('mobilya projesinden ayrı'));
+const source=fs.readFileSync(new URL('../assets/forma/studio.js',import.meta.url),'utf8');
+const line=source.split('\n').find(l=>l.includes("if(e.target.closest('[data-txreview]'))"));
+assert(line,'Actual download branch exists');let captured;
+const sandbox={e:{target:{closest:s=>s==='[data-txreview]'}},tx,state:{lang:'tr'},textileAssessmentFiles,zip:items=>items,download:(name,items,mime)=>captured={name,items,mime}};
+vm.createContext(sandbox);vm.runInContext('(function(){'+line+'})()',sandbox);
+assert.equal(captured.name,'AURA-textile-assessment.zip');assert.equal(captured.mime,'application/zip');assert.deepEqual(captured.items,files);
+console.log('PASS actual textile download handler; selected configuration + advisory notes; explicit separate scope; no mutation or external submission');
