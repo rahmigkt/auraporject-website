@@ -1,0 +1,50 @@
+{
+  "at": "2026-10-23T04:55:19.001607+00:00",
+  "code_sha": "8f2c8309741120ece51467c52ed4c39da252acef",
+  "baseline_sha": "f196afb4b4fce92ca4f4803b46d416cb32634c4c",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "before": "Actual DxfWriter serialized rotation=auto for aligned line-135 degrees as group53=45 degrees, an unwanted relative rotation. New regression fails before change.",
+  "fix": "Omit optional group53 for auto, as for unspecified rotation; explicit numeric group53 and linear dimension-line group50 remain unchanged. No acute-angle/atan2 rewrite.",
+  "primary_source": "https://help.autodesk.com/cloudhelp/2026/ENU/AutoCAD-DXF/files/GUID-EDD54EAC-A339-4EBA-AEA6-EC8066505E2B.htm",
+  "checks": [
+    {
+      "test": "dxf-dimension-text-rotation-check.mjs",
+      "exit": 0,
+      "stdout": "PASS 80 actual DXF serialization cases: automatic/default relative text rotation, explicit angles and separate line angles.\n"
+    },
+    {
+      "test": "dxf-aligned-offset-check.mjs",
+      "exit": 0,
+      "stdout": "PASS 72 aligned dimension distance/perpendicular/translation/endpoint controls; sign, Z and degenerate inputs checked.\n"
+    },
+    {
+      "test": "dxf-xdata-check.mjs",
+      "exit": 0,
+      "stdout": "PASS 32 DXF text/binary boundary, Unicode, invalid input and writer smoke controls.\n"
+    },
+    {
+      "test": "dxf-face-visibility-check.mjs",
+      "exit": 0,
+      "stdout": "PASS 128 edge visibility transitions, idempotence and serialized flags.\n"
+    }
+  ],
+  "source_read_original": [
+    [
+      1,
+      2405
+    ]
+  ],
+  "sha256": {
+    "assets/vendor/dxf/dxf.mjs": "8e3171a72e5eef4678ff7e11d58863f7c125d55bd883f1390e9df6cd370c3a48",
+    "tests/dxf-dimension-text-rotation-check.mjs": "2bcb9077694cd4181474500b99b2fc6b2701c787bac689c80e4bea8fcb6ad085"
+  },
+  "limits": [
+    "No verified live vendor import; Forma has separate R12 writer",
+    "Actual serialized entity tag verification, not CAD application rendering/interoperability",
+    "LinearDimension signed angular offset remains open",
+    "Remaining vendor/mobile review and historical Forma180s/four fixtures not closed"
+  ],
+  "merged": false,
+  "deployed": false
+}
