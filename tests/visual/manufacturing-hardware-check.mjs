@@ -40,11 +40,21 @@ try{
   await page.waitForFunction(()=>formaDebug.state.compiled.parts.some(q=>q.hardware?.profile==='hettich-ka5632-ss-2025'));
   await page.locator('[data-enum="backConstruction"][data-value="module-grooved"]').click();
   await page.locator('[data-enum="connectorSystem"][data-value="rastex15-18-du232t"]').click();
+  await page.locator('[data-enum="hingeSystem"][data-value="blum-110-inserta-expando"]').click();
   const chosen=await page.evaluate(()=>formaDebug.state.design);
   await page.reload();await page.waitForFunction(()=>window.formaDebug?.state?.compiled);
   assert.deepEqual(await page.evaluate(()=>formaDebug.state.design),chosen);
   const manifest=await page.evaluate(async()=>{const m=await import('/assets/forma/production/manufacturing.js');return m.manufacturingReport(formaDebug.state.compiled,formaDebug.state.design);});
   assert.equal(manifest.production_approved,false);assert(manifest.parts.length>0);
+  assert.equal(chosen.params.hingeSystem,'blum-110-inserta-expando');
+  if(family==='storage'){
+    await page.locator('[data-tab="deliver"]').click();
+    await page.locator('[data-act="add"]').click();
+    const downloading=page.waitForEvent('download',{timeout:60000});
+    await page.locator('[data-act="manufacturingGeometry"]').click();
+    const download=await downloading;assert.equal(download.suggestedFilename(),'AURA-manufacturing-geometry-review.zip');
+    await download.saveAs(resolve(out,download.suggestedFilename()));
+  }
   const filename=`hardware-${family}-${width}.png`;await page.screenshot({path:resolve(out,filename),fullPage:true});
   assert.deepEqual(errors,[]);results.push({family,kind,width,selected_and_reloaded:true,drawer_code:manifest.drawer_hardware[0]?.product_code,part_count:manifest.part_count,page_errors:errors});
   writeFileSync(resolve(out,'results.json'),JSON.stringify({passed:results.length,results},null,2));console.log('PASS '+family+'/'+width);await context.close();

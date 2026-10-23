@@ -10,7 +10,7 @@
 // A piece is a row of bays (Ritmo columns); each bay is a stack of cells, bottom → top, separated by fixed shelves.
 // Cell types: door, drawers, open, glass (glazed door), knee (leg room under a vanity). Units: mm; front = +z.
 import {clamp} from './rng.js';
-import {CONNECTOR_SYSTEMS, RUNNER_SYSTEMS, runnerProfile, runnerLength, runnerAssessment} from './hardware.js';
+import {HINGE_SYSTEMS, HINGE_PROFILE, hingeForOverlay, CONNECTOR_SYSTEMS, RUNNER_SYSTEMS, runnerProfile, runnerLength, runnerAssessment} from './hardware.js';
 import {drawerFit} from '../vendor/woodworkingshop/drawer-fit.js';
 import {topOutline, roundedRectLoop} from './mesh.js';
 import {legProfile} from './profiles.js';
@@ -47,7 +47,7 @@ export const RANGES = {
 export function rangeFor(key, p) { const s = SIZE[p.kind]?.[key]; return s ? [s[0], s[1], RANGES[key][2]] : RANGES[key]; }
 
 export const ENUMS = {
-  runnerSystem: RUNNER_SYSTEMS, connectorSystem: CONNECTOR_SYSTEMS,
+  runnerSystem: RUNNER_SYSTEMS, connectorSystem: CONNECTOR_SYSTEMS, hingeSystem:HINGE_SYSTEMS,
   backConstruction: ['legacy-bay','module-grooved'],
   frontFit: ['overlay', 'inset'],
   doorType: ['hinged', 'sliding'],
@@ -84,7 +84,7 @@ export const LAYOUTS = {
   sideboard: () => [B([C('door', {k: 1})]), B([C('drawers', {n: 3})]), B([C('door', {k: 1})])]
 };
 const BASE = {
-  runnerSystem: 'legacy-side-12.7', connectorSystem:'legacy-unspecified', backConstruction: 'legacy-bay',
+  runnerSystem: 'legacy-side-12.7', connectorSystem:'legacy-unspecified', hingeSystem:'legacy-unspecified', backConstruction: 'legacy-bay',
   solidThickness: 22, plinthHeight: 80, legHeight: 150, legSize: 40, topThickness: 22, topOverhang: 0, fluteWidth: 30, mirrorHeight: 800, mirrorWidth: 0.7,
   frontFit: 'overlay', doorType: 'hinged', frontStyle: 'flat', pull: 'bar', base: 'plinth', legType: 'taper', topType: 'flush', caseEdge: 'eased', caseLine: 'none', mirror: 'none', backPanel: 'on', led: 'off', board: 'mdf', frontBoard: 'mdf'
 };
@@ -192,11 +192,11 @@ function yLayout(bay, y0, y1, T) {
 export function compile(raw) {
   const p = normalize(raw), parts = [], k = p.kind;
   const T = p.board === 'solid' ? p.solidThickness : RULES.mdf, TF = p.frontBoard === 'solid' ? p.solidThickness : RULES.mdf;
-  const W = p.width, H = p.height, D = p.depth, rv = RULES.reveal;
+  const W = p.width, H = p.height, D = p.depth, rv = RULES.reveal, bumper=p.hingeSystem==='blum-110-inserta-expando'?HINGE_PROFILE.gap:RULES.bumper;
   const sliding = k === 'wardrobe' && p.doorType === 'sliding', inset = !sliding && p.frontFit === 'inset';
-  const Dc = sliding ? D - RULES.slideDepth : inset ? D : D - TF - RULES.bumper;
+  const Dc = sliding ? D - RULES.slideDepth : inset ? D : D - TF - bumper;
   const zB = -D / 2, zF = zB + Dc, zBackFace = zB + RULES.backInset + RULES.back;
-  const zFace = sliding ? D / 2 : inset ? zF : zF + RULES.bumper + TF; // front face of the piece
+  const zFace = sliding ? D / 2 : inset ? zF : zF + bumper + TF; // front face of the piece
   const slab = p.topType === 'slab', topT = slab ? p.topThickness : T;
   const yB = p.base === 'plinth' ? p.plinthHeight : p.legHeight;
   const yCarcTop = slab ? H - topT : H; // sides end here
@@ -262,7 +262,7 @@ export function compile(raw) {
       else {
         const fy0 = below === 'bottom' ? yB : below === 'ext' ? y0 - T : y0 - T / 2 + rv / 2;
         const fy1 = above === 'top' ? (slab ? H - topT - rv : H - rv / 2) : y1 + T / 2 - rv / 2;
-        f = {x0: xl + rv / 2, x1: xr - rv / 2, y0: fy0, y1: fy1, z0: zF + RULES.bumper, z1: zF + RULES.bumper + TF};
+        f = {x0: xl + rv / 2, x1: xr - rv / 2, y0: fy0, y1: fy1, z0: zF + bumper, z1: zF + bumper + TF};
       }
       const innerZ1 = inset ? zF - TF - 2 : zF; // front of the usable interior
       const tint = k0 => { if (c.color) for (const q of parts.slice(k0)) if (q.mat === 'front') q.mat = 'lac:' + c.color; };
@@ -274,8 +274,10 @@ export function compile(raw) {
           const k0 = parts.length;
           frontFace(parts, `${id}-door${l + 1}`, 'door', leaf, p, c.type === 'door' ? p.frontStyle : c.type, frontsOf); tint(k0);
           pull(parts, `${id}-door${l + 1}`, leaf, p, 'door', side, counts);
-          const hh = leaf.y1 - leaf.y0, nh = hh <= 900 ? 2 : hh <= 1600 ? 3 : hh <= 2000 ? 4 : 5, hx = side > 0 ? leaf.x0 + 22 : leaf.x1 - 22;
-          for (let q = 0; q < nh; q++) { const hy = nh === 1 ? (leaf.y0 + leaf.y1) / 2 : leaf.y0 + 100 + q * (hh - 200) / (nh - 1); pnl(parts, `${id}-door${l + 1}-hinge${q + 1}`, 'hinge', 'metal', [hx - 17.5, hx + 17.5], [hy - 17.5, hy + 17.5], [leaf.z0 - 12, leaf.z0], {internal: true, nocut: true}, 4); }
+          const hh = leaf.y1 - leaf.y0, nh = hh <= 900 ? 2 : hh <= 1600 ? 3 : hh <= 2000 ? 4 : 5;
+          const overlay=side>0?b.x0-leaf.x0:leaf.x1-b.x1, chosen=hingeForOverlay(overlay,inset), branded=p.hingeSystem==='blum-110-inserta-expando', cupOffset=branded&&!chosen.issues.length?17.5+chosen.tb:22, hx=side>0?leaf.x0+cupOffset:leaf.x1-cupOffset;
+          const hingeMount=branded?{system:p.hingeSystem,hand:side,overlay_mm:r1(overlay),product_code:chosen.code,boring_distance_mm:chosen.tb,issues:chosen.issues}:null;
+          for (let q = 0; q < nh; q++) { const hy = nh === 1 ? (leaf.y0 + leaf.y1) / 2 : leaf.y0 + 100 + q * (hh - 200) / (nh - 1); pnl(parts, `${id}-door${l + 1}-hinge${q + 1}`, 'hinge', 'metal', [hx - 17.5, hx + 17.5], [hy - 17.5, hy + 17.5], [leaf.z0 - 12, leaf.z0], {internal: true, nocut: true,...(hingeMount?{hingeMount}: {})}, 4); }
           counts.leaves++; counts.hinges += nh; info.leafH.push(hh); info.leafW.push(lw);
           opens.push({door: true, parts: parts.slice(k0), px: side > 0 ? leaf.x0 : leaf.x1, pz: leaf.z0, sign: side > 0 ? -1 : 1});
         }
@@ -627,13 +629,17 @@ export function storageBom(compiled, materials, lang, buildMesh, text) {
   }
   // Hardware.
   const hw = (nameTr, nameEn, qty, specTr, specEn) => { if (qty) rows.push({code: `H${String(rows.filter(r => r.code[0] === 'H').length + 1).padStart(2, '0')}`, nameTr, nameEn, qty, size: [0, 0, 0], material: tr ? 'Donanım' : 'Hardware', specTr, specEn, internal: false}); };
-  hw('Menteşe', 'Hinge', c.hinges, `Frenli 110°, Ø35 kap, ${m.inset ? 'gömme (iç bini)' : 'tam bini'}`, `Soft-close 110°, Ø35 cup, ${m.inset ? 'inset' : 'full overlay'}`);
-  for (const [len, qty] of Object.entries(c.runners)) hw('Çekmece rayı (çift)', 'Drawer runners (pair)', qty, `Tam açılım, frenli, bilyalı ${len} mm; yan montaj 12,7 mm boşluk`, `Full extension, soft-close, ball-bearing ${len} mm; side mount 12.7 mm clearance`);
+  if(p.hingeSystem==='blum-110-inserta-expando'){
+    const variants=new Map();for(const q of compiled.parts.filter(q=>q.role==='hinge')){const code=q.hingeMount?.product_code||'ürün eşlemesi eksik / unresolved product';variants.set(code,(variants.get(code)||0)+1);}
+    for(const [code,n]of variants)hw('Menteşe + montaj plakası','Hinge + mounting plate',n,`${code} + ${HINGE_PROFILE.plate}; delik/yerleşim incelemesi, yük ve açılım onayı değil`,`${code} + ${HINGE_PROFILE.plate}; drilling/placement review, not load or sweep approval`);
+  }else hw('Menteşe', 'Hinge', c.hinges, `Frenli 110°, Ø35 kap, ${m.inset ? 'gömme (iç bini)' : 'tam bini'}`, `Soft-close 110°, Ø35 cup, ${m.inset ? 'inset' : 'full overlay'}`);
+  const rp=runnerProfile(p.runnerSystem);
+  for (const [len, qty] of Object.entries(c.runners)) hw('Çekmece rayı (çift)', 'Drawer runners (pair)', qty, `${rp.codes?.[len]||rp.name}; ${len} mm; yan boşluk ${rp.sideSpace} mm; delik/vida reçetesi ayrıca doğrulanmalı`, `${rp.codes?.[len]||rp.name}; ${len} mm; side space ${rp.sideSpace} mm; fixing/pilot recipe needs separate validation`);
   const pullName = {bar: ['Çubuk kulp', 'Bar handle'], knob: ['Düğme kulp', 'Knob'], edge: ['Alüminyum kenar profili', 'Aluminium edge pull'], cutout: ['Freze tutamak', 'Routed finger pull'], leather: ['Deri tutamak', 'Leather tab']}[p.pull];
   const pitch = compiled.parts.find(q => q.role === 'pull' && q.pitch)?.pitch;
   if (pullName) hw(pullName[0], pullName[1], c.pulls, pitch ? `Aks ${pitch} mm` : '', pitch ? `${pitch} mm centres` : '');
   hw('Bas-aç mekanizması', 'Push-to-open', c.push, 'Kulpsuz kapak / çekmece için', 'For handle-less fronts', '');
-  hw('Askı borusu', 'Hanging rail', c.rails, `Oval 30×15 mm, toplam ${(c.railLen / 1000).toFixed(2)} m, uç yuvalı`, `Oval 30×15 mm, ${(c.railLen / 1000).toFixed(2)} m in all, with end cups`);
+  hw('Askı borusu', 'Hanging rail', c.rails, `Model Ø24 mm; toplam ${(c.railLen / 1000).toFixed(2)} m; uç yuvası/donanım seçimi gerekli`, `Model Ø24 mm; ${(c.railLen / 1000).toFixed(2)} m in all; end support/hardware selection required`);
   hw('Raf pimi', 'Shelf pin', (c.shelves + (c.glassShelves || 0)) * 4, 'Ø5 mm', 'Ø5 mm');
   hw('LED şerit', 'LED strip', c.ledLen ? 1 : 0, `2700 K, alüminyum profil + difüzör, toplam ${((c.ledLen || 0) / 1000).toFixed(2)} m; trafo ve anahtar`, `2700 K, aluminium profile + diffuser, ${((c.ledLen || 0) / 1000).toFixed(2)} m in all; driver and switch`);
   hw('Kablo geçiş kapağı', 'Cable grommet', c.grommets || 0, 'Arkalıkta, cihaz bölmesinde; havalandırma', 'In the back of the device bay; ventilation');

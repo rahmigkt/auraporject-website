@@ -1,5 +1,13 @@
 // Product-specific planning dimensions. A geometry fit is not a drilling/load approval.
 const legacy = 'legacy-side-12.7';
+export const HINGE_SYSTEMS=Object.freeze(['legacy-unspecified','blum-110-inserta-expando']);
+export const HINGE_PROFILE=Object.freeze({id:'blum-110-inserta-expando',name:'Blum CLIP top BLUMOTION110° · INSERTA/EXPANDO',cupDiameter:35,cupDepth:13,fixDiameter:8,fixPitch:45,fixOffset:9.5,plate:'174H7100E',platePitch:32,plateFromFront:37,plateBore:5,plateDepth:11.5,gap:1.5,source:'https://publications.blum.com/2024/catalogue/en/77/',drillingSource:'https://shop-ua.blum.com/uploads/documents/dfd537f5-17b4-4d26-ba24-1812df4ae3c4.pdf',plateSource:'https://d1.blum.com/mefiles/BEC003/ka110-kp-002_ka_dok_bau_%24sru_%24aof_%24v3.pdf',plateSourcePdfPage:80,plateSourcePrintedPage:175});
+export function hingeForOverlay(overlay,inset=false){
+  if(!Number.isFinite(overlay))return {issues:['invalid_overlay']};
+  const variant=inset?{code:'71B3790',constant:-7}:overlay>=14?{code:'71B3590',constant:11}:{code:'71B3690',constant:1.5};
+  const tb=Math.round((overlay-variant.constant)*1000)/1000;
+  return {code:variant.code,tb,issues:tb<3||tb>7?['unsupported_overlay_for_zero_height_plate']:[]};
+}
 export const RUNNER_SYSTEMS = Object.freeze([legacy, 'accuride-3832ec', 'hettich-ka5632-ss-2025']);
 export const CONNECTOR_SYSTEMS=Object.freeze(['legacy-unspecified','rastex15-18-du232t']);
 export const CONNECTOR_PROFILES=Object.freeze({

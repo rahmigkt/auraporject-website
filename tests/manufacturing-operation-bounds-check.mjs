@@ -4,7 +4,7 @@ import {manufacturingReport,manufacturingOperationsCsv} from '../assets/forma/pr
 import {normalizeDesign,compileDesign} from '../assets/forma/generate.js';
 const d=normalizeDesign({family:'storage',kind:'wardrobe',style:'japandi',seed:2,params:{connectorSystem:'rastex15-18-du232t',backConstruction:'module-grooved',runnerSystem:'accuride-3832ec'}});
 const report=manufacturingReport(compileDesign(d),d),ops=report.parts.flatMap(p=>p.operations.map(o=>({p,o})));
-assert.equal(ops.length,80);assert.deepEqual(report.invalid_operations,[]);
+assert.equal(ops.length,122);assert.deepEqual(report.invalid_operations,[]);
 for(const {p,o}of ops){assert.equal(o.stock_bounds.status,'nominal_containment_only');assert.equal(o.stock_bounds.production_approved,false);assert.equal(JSON.stringify(operationBounds(p,o)),JSON.stringify(o.stock_bounds));}
 const {p,o}=ops.find(x=>x.o.kind==='rastex_cam_bore');
 let negatives=0;

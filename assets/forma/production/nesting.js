@@ -33,7 +33,7 @@ export function cuttingList(compiled, design, qty = 1, rules = CUT_RULES) {
   const rows = new Map(), extra = new Map();
   const banded = q => (q.mat === 'case' && design.materials.case.surface === 'veneer') || (q.mat === 'front' && design.materials.front.surface === 'veneer');
   for (const q of compiled.parts) {
-    if (q.nocut || q.line || q.decor || q.role === 'seam' || q.role === 'reeds') continue;
+    if ((q.nocut && q.role !== 'front-frame') || q.line || q.decor || q.role === 'seam' || q.role === 'reeds') continue;
     const dims = (q.cut || [q.geom.w, q.geom.h, q.geom.d]).map(v => Math.round(v * 10) / 10).sort((a, b) => b - a), [l, w, t] = dims, board = boardOf(q, design);
     if (!board) { const k = `${q.role}|${q.mat}|${Math.round(l)}x${Math.round(w)}x${Math.round(t)}`; const e = extra.get(k) || {role: q.role, mat: q.mat, l: Math.round(l), w: Math.round(w), t: Math.round(t), qty: 0}; e.qty += qty; extra.set(k, e); continue; }
     const oriented = panelBlank(q, banded(q) ? rules.band : 0);

@@ -1,3 +1,4 @@
+import {machiningGeometryFiles} from './production/machined-geometry.js';
 // AURA Forma design studio: family → style (one starting form) → parts / dimensions / materials → send to the designer.
 // No ready-made proposal gallery: people build their own piece. Drawings, parts list and files never leave the
 // browser before sending; afterwards the customer can download the PDF of the design they sent.
@@ -11,7 +12,7 @@ import {styleName} from './styles.js';
 import {STARTS} from './starts.js';
 import {technicalReview, reviewMatches} from './technical-review.js';
 import {reviewDesign} from './auto-correct.js';
-import {CONNECTOR_SYSTEMS, CONNECTOR_PROFILES, RUNNER_SYSTEMS, RUNNER_PROFILES} from './hardware.js';
+import {HINGE_SYSTEMS, HINGE_PROFILE, CONNECTOR_SYSTEMS, CONNECTOR_PROFILES, RUNNER_SYSTEMS, RUNNER_PROFILES} from './hardware.js';
 import {partDimensions,partDimensionsCsv} from './part-dimensions.js';
 import {dimensionProjectFiles} from './dimension-package.js';
 import {findingText,reviewDocument,textileAssessmentFiles} from './review-document.js';
@@ -292,7 +293,7 @@ const kindRow = () => isBedroom() ? '' : `<div class="f-kinds">${ui().kinds.map(
 
 function runnerControls(){
   const tr=state.lang==='tr', selected=state.design.params.runnerSystem;
-  return `<section class="f-runner-controls"><h3>${tr?'Gövde bağlantısı':'Carcass connector'}</h3><div class="f-chips">${CONNECTOR_SYSTEMS.map(id=>chip(`data-enum="connectorSystem" data-value="${id}"`,CONNECTOR_PROFILES[id].name,state.design.params.connectorSystem===id)).join('')}</div><h3>${tr?'Arkalık yapısı':'Back construction'}</h3><div class="f-chips">${[['legacy-bay',tr?'Mevcut bölme arkalığı':'Existing bay backs'],['module-grooved',tr?'Modül arkalığı · üretim pilotu':'Module back · production trial']].map(([id,label])=>chip(`data-enum="backConstruction" data-value="${id}"`,label,state.design.params.backConstruction===id)).join('')}</div><h3>${tr?'Çekmece rayı':'Drawer runner'}</h3><div class="f-chips">${RUNNER_SYSTEMS.map(id=>chip(`data-enum="runnerSystem" data-value="${id}"`,RUNNER_PROFILES[id].name,selected===id)).join('')}</div><p class="f-note">${tr?'Seçim kutu genişliğini, yan levha kalınlığını ve ray boyunu değiştirir. Delik şablonu ve yük kontrolü tamamlanmadan üretim onayı değildir.':'Selection changes box width, side thickness and runner length. Drilling and load verification are still required.'}</p></section>`;
+  return `<section class="f-runner-controls"><h3>${tr?'Menteşe sistemi':'Hinge system'}</h3><div class="f-chips">${HINGE_SYSTEMS.map(id=>chip(`data-enum="hingeSystem" data-value="${id}"`,id==='legacy-unspecified'?(tr?'Mevcut örnek':'Existing example'):HINGE_PROFILE.name,state.design.params.hingeSystem===id)).join('')}</div><h3>${tr?'Gövde bağlantısı':'Carcass connector'}</h3><div class="f-chips">${CONNECTOR_SYSTEMS.map(id=>chip(`data-enum="connectorSystem" data-value="${id}"`,CONNECTOR_PROFILES[id].name,state.design.params.connectorSystem===id)).join('')}</div><h3>${tr?'Arkalık yapısı':'Back construction'}</h3><div class="f-chips">${[['legacy-bay',tr?'Mevcut bölme arkalığı':'Existing bay backs'],['module-grooved',tr?'Modül arkalığı · üretim pilotu':'Module back · production trial']].map(([id,label])=>chip(`data-enum="backConstruction" data-value="${id}"`,label,state.design.params.backConstruction===id)).join('')}</div><h3>${tr?'Çekmece rayı':'Drawer runner'}</h3><div class="f-chips">${RUNNER_SYSTEMS.map(id=>chip(`data-enum="runnerSystem" data-value="${id}"`,RUNNER_PROFILES[id].name,selected===id)).join('')}</div><p class="f-note">${tr?'Seçim kutu genişliğini, yan levha kalınlığını ve ray boyunu değiştirir. Delik şablonu ve yük kontrolü tamamlanmadan üretim onayı değildir.':'Selection changes box width, side thickness and runner length. Drilling and load verification are still required.'}</p></section>`;
 }
 function enumGroup(key, labelKey, ns = key, options = familyOf(state.design).mod.ENUMS[key]) {
   return `<h3>${L(labelKey)}</h3><div class="f-chips">${options.map(v => chip(`data-enum="${key}" data-value="${v}"`, partName(ns, v, state.lang), state.design.params[key] === v)).join('')}</div>`;
@@ -877,7 +878,7 @@ function projectPanel() {
     <div class="f-nextrow"><b>${L('anotherProduct')}</b><span>${FAMILY_NAV.map(([f, k]) => `<button class="f-link" data-act="family" data-family="${f}">${esc(L(k))}</button>`).join('')}</span></div></section>` : '';
   const list = items.length ? `<h3>${L('projectItems')} · ${items.length}</h3><ol class="f-items">${items.map((it, n) => `<li ${it.id === state.editing ? 'aria-current="true"' : ''}><span class="f-n">${String(n + 1).padStart(2, '0')}</span><span><b>${esc(itemName(it.design))}</b><small>${esc(styleName(it.design.style, state.lang))} · ${esc(itemDims(it.design))}</small>
     <span class="f-qty">${L('quantity')} <button class="f-link" data-act="qty" data-item="${it.id}" data-d="-1" ${(it.qty || 1) <= 1 ? 'disabled' : ''}>−</button><b>${it.qty || 1}</b><button class="f-link" data-act="qty" data-item="${it.id}" data-d="1">+</button></span></span><span class="f-itemacts"><button class="f-link" data-act="edit" data-item="${it.id}">${L('edit')}</button><button class="f-link" data-act="remove" data-item="${it.id}">${L('remove')}</button></span></li>`).join('')}</ol>` : `<p class="f-note">${L('projectEmpty')}</p>`;
-  const dimensions = items.length ? `<section><button data-act="dimensions">${esc(L('dimensionsDownload'))} ↓</button><p class="f-note">${esc(L('dimensionsScope'))}</p></section>` : '';
+  const dimensions = items.length ? `<section><button data-act="dimensions">${esc(L('dimensionsDownload'))} ↓</button><button data-act="manufacturingGeometry">${state.lang==='tr'?'İmalat geometrisi · inceleme':'Manufacturing geometry · review'} ↓</button><p class="f-note">${state.lang==='tr'?'Desteklenen delik ve yuvalar çıkarılmış parça geometrisi. Eksik bağlantılar ve imalat onayı dosyada ayrı belirtilir.':'Part geometry with supported holes and grooves removed. Missing joints and manufacturing approval are recorded separately.'}</p><p class="f-note">${esc(L('dimensionsScope'))}</p></section>` : '';
   const room = items.length ? roomSection() : '';
   const sent = state.sent, sentChanged = sent && sent.key !== projectKey();
   const send = `<h2 class="f-h2-sub">${L('sendDesigner')}</h2><p class="f-lead">${L('sendIntro')}</p>
@@ -998,8 +999,25 @@ function showRoom() {
   $('#designTitle').textContent = `${L('room_' + r.type)} · ${items.length} ${L('pieces')}`;
   $('#dims').textContent = `${(plan.W / 1000).toFixed(1)} × ${(plan.D / 1000).toFixed(1)} m · ${L('layout')} ${r.layout + 1} / 3`;
 }
+let machiningDownloadBusy=false;
+async function downloadMachiningProject(){
+  if(machiningDownloadBusy)return;
+  machiningDownloadBusy=true;
+  const snapshot=structuredClone(state.project.items),files=[];
+  try{
+    feedback(state.lang==='tr'?'İmalat inceleme geometrisi hazırlanıyor…':'Preparing manufacturing review geometry…');
+    for(const [n,item] of snapshot.entries()){
+      const result=await machiningGeometryFiles(compileOf(item.design),item.design),dir=String(n+1).padStart(2,'0')+'/';
+      files.push(...result.files.map(f=>({...f,name:dir+f.name})),{name:dir+'order.json',data:JSON.stringify({id:item.id,quantity:item.qty||1,production_approved:false},null,2)});
+    }
+    if(!files.length)throw Error(state.lang==='tr'?'Önce projeye ürün ekleyin.':'Add a product first.');
+    download('AURA-manufacturing-geometry-review.zip',zip(files),'application/zip');
+    feedback(state.lang==='tr'?'İnceleme dosyası hazır; imalat onayı değildir.':'Review file ready; not manufacturing approval.');
+  }catch(error){feedback(String(error.message||error),'error');}finally{machiningDownloadBusy=false;}
+}
 function projectAction(el) {
   if(el.dataset.act==='assessment')return openAssessment();
+  if(el.dataset.act==='manufacturingGeometry')return downloadMachiningProject();
   if(el.dataset.act==='dimensions'){download('AURA-project-dimensions.zip',zip(dimensionProjectFiles(state.project.items,compileOf)),'application/zip');return;}
   if (el.dataset.act?.startsWith('set-')) return seatingSetAction(el.dataset.act);
   const a = el.dataset.act, items = state.project.items;

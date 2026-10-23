@@ -1,3 +1,8 @@
+import {verifyRastexMates} from './joint-mating.js';
+import {addPlinthConnections} from './plinth-layout.js';
+import {runnerMountPattern} from './runner-layout.js';
+import {addDividerConnections} from './divider-layout.js';
+import {addHingeOperations} from './hinge-layout.js';
 import {reassembleCarcass} from './reassemble-carcass.js';
 import {panelBlank} from './panel-blank.js';
 import {CONNECTOR_PROFILES} from '../hardware.js';
@@ -15,6 +20,7 @@ function bounds(q){
 function classify(q){
   if(q.line||q.decor)return 'decorative';
   if(['fabric','leather','foam','cushion'].includes(q.mat)||/cushion|pillow|upholster|seat-pad/.test(q.role))return 'upholstery_pattern_required';
+  if(q.role==='front-frame')return 'wood_component';
   if(q.nocut)return 'purchased_or_specialist_part';
   if(['case','front','frame','back'].includes(q.mat)||q.mat?.startsWith('lac:'))return 'wood_component';
   return 'specialist_recipe_required';
@@ -36,17 +42,18 @@ export function manufacturingReport(compiled,design,{band=1}={}){
         const face=sign<0?hb.min[0]:hb.max[0],vf=sign<0?vb.max[0]:vb.min[0];
         if(Math.abs(face-vf)>.11||hb.min[1]<vb.min[1]-.11||hb.max[1]>vb.max[1]+.11)continue;
         const a=Math.max(hb.min[2],vb.min[2]),b=Math.min(hb.max[2],vb.max[2]);if(b-a<100)continue;
-        const joint={horizontal:h.id,vertical:v.id,system:design.params.connectorSystem,source:connector.source,source_pages:connector.pages,placement_basis:'AURA trial: 37 mm from front/back, middle fixing for depths over 400 mm; product drawing does not prescribe this spacing.',status:'nominal_mating_only',fixings:[]};
+        const joint={part_a:h.id,part_b:v.id,member_axis:0,horizontal:h.id,vertical:v.id,system:design.params.connectorSystem,source:connector.source,source_pages:connector.pages,placement_basis:'AURA trial: 37 mm from front/back, middle fixing for depths over 400 mm; product drawing does not prescribe this spacing.',status:'nominal_mating_only',fixings:[]};
         if(Math.abs(hb.xyz[1]-connector.panelThickness)>.01||vb.xyz[0]<connector.sidePilotDepth+2||hb.xyz[0]<2*connector.camSetback+connector.camDiameter){joint.status='incompatible_stock_or_span';joints.push(joint);continue;}
         const zs=b-a>400?[a+37,(a+b)/2,b-37]:[a+37,b-37];
         for(const z of zs){
+          const connectionId=h.id+'|'+v.id+'|'+sign+'|'+z;
           const center=[face,hb.min[1]+connector.dowelAxis,z],cam=[face-sign*connector.camSetback,h.role==='top'?hb.min[1]:hb.max[1],z];
-          const op=(part,kind,world,axis,entrySign,diameter,depth)=>({kind,mate:part===h.id?v.id:h.id,datum:'finished part minimum XYZ corner; blank origin shifts by negative-edge band build-up',center_finished_local_mm:world.map((x,k)=>round(x-(part===h.id?hb:vb).min[k])),world_center_mm:world.map(round),entry_axis:axis,entry_sign:entrySign,diameter_mm:diameter,depth_mm:depth,status:'source_dimensions_trial_placement_not_CNC_released',source:connector.source});
+          const op=(part,kind,world,axis,entrySign,diameter,depth)=>({kind,connection_id:connectionId,mate:part===h.id?v.id:h.id,datum:'finished part minimum XYZ corner; blank origin shifts by negative-edge band build-up',center_finished_local_mm:world.map((x,k)=>round(x-(part===h.id?hb:vb).min[k])),world_center_mm:world.map(round),entry_axis:axis,entry_sign:entrySign,diameter_mm:diameter,depth_mm:depth,status:'source_dimensions_trial_placement_not_CNC_released',source:connector.source});
           const edge=op(h.id,'rastex_edge_bore',center,0,sign,connector.edgeDiameter,connector.camSetback);
           const boss=op(h.id,'rastex_cam_bore',cam,1,h.role==='top'?-1:1,connector.camDiameter,connector.camDepth);
           const pilot=op(v.id,'rastex_dowel_pilot',center,0,-sign,connector.sidePilotDiameter,connector.sidePilotDepth);
           byId.get(h.id).operations.push(edge,boss);byId.get(v.id).operations.push(pilot);
-          joint.fixings.push({cam_product:connector.cam,dowel_product:connector.dowel,edge_entry_world_mm:edge.world_center_mm,side_entry_world_mm:pilot.world_center_mm,cam_center_world_mm:boss.world_center_mm,nominal_axes_coincident:true});
+          joint.fixings.push({connection_id:connectionId,cam_product:connector.cam,dowel_product:connector.dowel,edge_entry_world_mm:edge.world_center_mm,side_entry_world_mm:pilot.world_center_mm,cam_center_world_mm:boss.world_center_mm,nominal_axes_coincident:true});
         }
         joints.push(joint);
       }
@@ -72,17 +79,22 @@ export function manufacturingReport(compiled,design,{band=1}={}){
     }
     const edges=new Set(support.map(s=>s.edge));backFits.push({back:back.id,retaining_edges:support,missing_edges:['X-','X+','Y-','Y+'].filter(e=>!edges.has(e)),status:edges.size===4?'four_nominal_edges_trial':'retention_incomplete'});
   }
-  const hardware=records.filter(r=>r.hardware&&r.role==='box-bottom').map(r=>({part:r.id,...r.hardware}));
+  joints.push(...addDividerConnections(compiled,records,connector));
+  const plinthJoints=addPlinthConnections(compiled,records,connector);
+  const hingeHardware=addHingeOperations(compiled,records);
+  const unresolvedHinges=hingeHardware.filter(h=>!h.door_stock||!h.mounting_side);
+  const hardware=records.filter(r=>r.hardware&&r.role==='box-bottom').map(r=>({part:r.id,...r.hardware,mounting_pattern:runnerMountPattern(r.hardware.profile,r.hardware.nominal_length_mm)}));
   const invalidOperations=[];
   for(const part of records)for(const [index,op]of part.operations.entries()){
     op.stock_bounds=operationBounds(part,op);
     if(op.stock_bounds.status==='invalid')invalidOperations.push({part:part.id,index,issues:op.stock_bounds.issues});
   }
+  const jointMating=verifyRastexMates(records,connector);
   const reconstruction=reassembleCarcass({parts:records},design);
   return {schema:'aura.manufacturing-review/1',units:'mm',production_approved:false,status:'engineering_review_required',tolerances:{...TRIAL_TOLERANCES},
     scope:'Blank/finished correspondence and nominal back-retention analysis. Not a complete joinery recipe, collision proof, CNC program or physical assembly test.',
-    reconstruction,invalid_operations:invalidOperations,part_count:records.length,parts:records,back_fits:backFits,drawer_hardware:hardware,carcass_joints:joints,selected_connector:connector?structuredClone(connector):null,
-    blockers:['material_and_band_measurement','connector_and_hinge_drilling_recipes','joint_strength_and_product_testing','independent_full_assembly_reconstruction',...(invalidOperations.length?['operation_outside_stock_or_unverified_shape']:[]),...(backFits.some(b=>b.status!=='four_nominal_edges_trial')?['back_retention_incomplete']:[]),...(hardware.some(h=>!h.geometry_fit)?['runner_geometry_or_legacy_profile']:[])]};
+    hinge_hardware:hingeHardware,plinth_joints:plinthJoints,joint_mating:jointMating,reconstruction,invalid_operations:invalidOperations,part_count:records.length,parts:records,back_fits:backFits,drawer_hardware:hardware,carcass_joints:joints,selected_connector:connector?structuredClone(connector):null,
+    blockers:[...(unresolvedHinges.length?['selected_hinge_has_no_complete_stock_mounting_recipe']:[]),...(jointMating.invalid.length?['mating_bore_mismatch']:[]),'material_and_band_measurement','connector_and_hinge_drilling_recipes','joint_strength_and_product_testing','independent_full_assembly_reconstruction',...(invalidOperations.length?['operation_outside_stock_or_unverified_shape']:[]),...(backFits.some(b=>b.status!=='four_nominal_edges_trial')?['back_retention_incomplete']:[]),...(hardware.some(h=>!h.geometry_fit)?['runner_geometry_or_legacy_profile']:[])]};
 }
 const cell=v=>{let s=String(v??'');if(typeof v==='string'&&/^[=+\-@\t\r]/.test(s))s="'"+s;return '"'+s.replaceAll('"','""')+'"';};
 export function manufacturingCsv(report,orderQuantity=1){

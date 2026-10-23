@@ -18,7 +18,7 @@ export function operationBounds(part,op){
     if(![0,1,2].includes(along)||along===axis||!Number.isFinite(op.length_mm)||op.length_mm<=0||!Number.isFinite(op.width_mm)||op.width_mm<=0)return fail('invalid_groove_extent');
     min[along]-=op.length_mm/2;max[along]+=op.length_mm/2;
     min[widthAxis]-=op.width_mm/2;max[widthAxis]+=op.width_mm/2;
-  }else if(['rastex_cam_bore','rastex_edge_bore','rastex_dowel_pilot'].includes(op.kind)){
+  }else if(['rastex_cam_bore','rastex_edge_bore','rastex_dowel_pilot','hinge_cup_bore','hinge_inserta_bore','hinge_plate_expando_bore'].includes(op.kind)){
     if(!Number.isFinite(op.diameter_mm)||op.diameter_mm<=0)return fail('invalid_bore_diameter');
     for(const k of [0,1,2].filter(k=>k!==axis)){min[k]-=op.diameter_mm/2;max[k]+=op.diameter_mm/2;}
   }else return fail('unknown_operation');

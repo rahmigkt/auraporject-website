@@ -17,7 +17,7 @@ assert.equal(report.back_fits.length,2);assert(report.back_fits.every(b=>b.missi
 assert.equal(report.drawer_hardware[0].outer_width_mm,487);
 assert.equal(report.drawer_hardware[0].product_code,'3832-C20EC');
 assert(report.reconstruction.complete);assert.equal(report.reconstruction.scope,'carcass_and_module_backs_only');
-assert.equal(report.carcass_joints.length,8);assert.equal(report.carcass_joints.reduce((s,j)=>s+j.fixings.length,0),24);
+assert.equal(report.carcass_joints.length,10);assert.equal(report.carcass_joints.reduce((s,j)=>s+j.fixings.length,0),30);
 for(const j of report.carcass_joints)for(const f of j.fixings)assert.deepEqual(f.edge_entry_world_mm,f.side_entry_world_mm);
 for(const op of report.parts.flatMap(q=>q.operations).filter(op=>op.kind==='back_groove_candidate')){
  assert.equal(op.width_mm,8.4);assert.equal(op.depth_mm,7.5);assert(op.clearance_budget_mm.groove_minus_max_back>0);assert(op.clearance_budget_mm.depth_minus_max_insertion>0);
@@ -46,4 +46,4 @@ for(const family of ['kitchen','bath']){
  const d=normalizeDesign({family,kind:family==='kitchen'?'run':'basin',style:'japandi',seed:2,params:{runnerSystem:'hettich-ka5632-ss-2025',connectorSystem:'rastex15-18-du232t',backConstruction:'module-grooved'}});
  const compiled=compileDesign(d);assert.equal(d.params.runnerSystem,'hettich-ka5632-ss-2025');assert(compiled.parts.some(q=>q.hardware?.profile==='hettich-ka5632-ss-2025'));
 }
-console.log('PASS hardware-dependent box geometry, legacy dimensions, module backs, 24 nominal mating fixings, limited independent reconstruction and three perturbations, edge axes, oversize rejection, kitchen/bath propagation, source preservation and CSV safety. Not production certification.');
+console.log('PASS hardware-dependent box geometry, legacy dimensions, module backs, 30 nominal mating fixings, limited independent reconstruction and three perturbations, edge axes, oversize rejection, kitchen/bath propagation, source preservation and CSV safety. Not production certification.');
