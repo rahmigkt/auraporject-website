@@ -1,3 +1,4 @@
+import {assertMechanismDatums} from './mechanism-review.js';
 import {buildMesh} from '../build.js';
 import {transformPositions} from '../mesh.js';
 import {loadCsg,csgReady,cutMesh,meshIntersectionVolume} from '../csg.js';
@@ -45,8 +46,9 @@ export function assemblyMotionPlans(compiled){
 
 export async function assemblyCollisionAudit(compiled,design,{angleStep=5,distanceStep=25,volumeTolerance=.05,motion=true}={}){
  if(!Number.isFinite(angleStep)||angleStep<=0||angleStep>10||!Number.isFinite(distanceStep)||distanceStep<=0||distanceStep>50||!Number.isFinite(volumeTolerance)||volumeTolerance<0||volumeTolerance>1)throw Error('Invalid collision audit sampling/tolerance');
+ const report=manufacturingReport(compiled,design);assertMechanismDatums(compiled,report);
  await loadCsg();if(!csgReady())throw Error('Collision engine unavailable;no pass recorded');
- const report=manufacturingReport(compiled,design),records=new Map(report.parts.map(p=>[p.id,p])),solids=[],unverified=[];
+ const records=new Map(report.parts.map(p=>[p.id,p])),solids=[],unverified=[];
  if(report.invalid_operations.length||report.joint_mating.invalid.length||report.blockers.some(b=>['module_joining_incomplete','selected_assembly_connection_incomplete','selected_hinge_has_no_complete_stock_mounting_recipe','selected_shelf_support_recipe_incomplete','selected_runner_fixing_recipe_incomplete','selected_drawer_joinery_incomplete','selected_rail_support_recipe_incomplete','drawer_blank_reconstruction_mismatch'].includes(b)))throw Error('Invalid manufacturing inputs;no assembly pass');
  for(const q of compiled.parts){
   const r=records.get(q.id);

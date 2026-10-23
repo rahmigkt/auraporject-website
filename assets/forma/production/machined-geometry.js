@@ -1,3 +1,4 @@
+import {assertMechanismDatums} from './mechanism-review.js';
 import {loadCsg,csgReady,cutMesh} from '../csg.js';
 import {buildMesh,worldPositions} from '../build.js';
 import {manufacturingReport} from './manufacturing.js';
@@ -31,7 +32,7 @@ function extent(P){const min=[Infinity,Infinity,Infinity],max=[-Infinity,-Infini
 export async function machiningGeometryFiles(compiled,design){
   const containsCut=g=>!!g&&(g.fn==='cut'||containsCut(g.inner));
   if(compiled.parts.some(q=>containsCut(q.geom)))throw Error('Tasarımcı işleme geometrisinin bağımsız doğrulaması gerekli; önizleme yedeği imalat geometrisi olarak aktarılmayacak.');
-  const report=manufacturingReport(compiled,design);
+  const report=manufacturingReport(compiled,design);assertMechanismDatums(compiled,report);
   if(report.blockers.some(b=>['module_joining_incomplete','selected_assembly_connection_incomplete','drawer_blank_reconstruction_mismatch','selected_rail_support_recipe_incomplete','selected_drawer_joinery_incomplete','selected_runner_fixing_recipe_incomplete'].includes(b)))throw Error('Ray/çekmece deneme reçetesinin donanım veya bağlantı eşleşmesi eksik.');
   if(report.invalid_operations.length)throw Error('İşleme geometrisi hazırlanamadı: parça sınırı dışında veya doğrulanmamış operasyon var.');
   if(report.blockers.includes('selected_shelf_support_recipe_incomplete'))throw Error('Seçilen raf desteği ile gövde/raf eşleştirilemedi; eksik işleme paketi aktarılmayacak.');
