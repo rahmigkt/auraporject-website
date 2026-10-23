@@ -7178,8 +7178,11 @@ var Hatch = class extends Entity {
 		dx.push(52, angle);
 		dx.push(41, scale);
 		dx.push(77, Number(double));
-		const pattern = PredefinedHatchPatterns.get(name);
-		if (pattern) {
+		const template = PredefinedHatchPatterns.get(name);
+		if (template) {
+			// Per-export settings must never mutate shared predefined pattern rows.
+			const pattern = new HatchPattern(template.name);
+			pattern.patternsData = template.patternsData.map(row => ({...row, dashLengthItems: [...row.dashLengthItems]}));
 			pattern.scale = scale;
 			if (angle !== 0) pattern.angle = angle;
 			pattern.dxfy(dx);

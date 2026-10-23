@@ -18,3 +18,5 @@ Primary upstream implementation: https://raw.githubusercontent.com/dxfjs/writer/
 Dimension rotation="auto" leaves optional DXF group53 absent, as it is an override away from the default dimension-line orientation, not the line angle itself. Explicit numeric text rotation and LinearDimension group50 are preserved. Regression: tests/dxf-dimension-text-rotation-check.mjs (actual DXF entity serialization, both dimension types and eight line angles).
 Reference: https://help.autodesk.com/cloudhelp/2026/ENU/AutoCAD-DXF/files/GUID-EDD54EAC-A339-4EBA-AEA6-EC8066505E2B.htm
 This does not repair LinearDimension offset geometry or certify rendered CAD text layout.
+
+Hatch.pattern now clones predefined rows for each export before applying local scale/angle, so a rotated export cannot alter later default or scaled exports. Regression: tests/dxf-hatch-isolation-check.mjs, all82definitions and export-order checks. Existing nonzero-angle transformation semantics are retained, not certified; complete CAD pattern orientation/rendering is still under review.
