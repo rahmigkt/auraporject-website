@@ -8,6 +8,7 @@ import {GTAOPass} from '../vendor/addons/postprocessing/GTAOPass.js';
 import {SMAAPass} from '../vendor/addons/postprocessing/SMAAPass.js';
 import {OutputPass} from '../vendor/addons/postprocessing/OutputPass.js';
 import {buildMesh} from './build.js';
+import {boxFitDistance} from '../camera-framing.js';
 import {csgReady, onCsgReady} from './csg.js';
 import {COLORS, FIBERS, METALS, WOODS, FINISHES, STAINS, STONES, GLASS} from './catalog.js';
 import {fabricMaps} from './textile.js';
@@ -456,7 +457,7 @@ export function createViewer(host, {onRotate} = {}) {
   const {scene, contact, sun, disposeEnvironment} = makeStage(renderer, SHEET);
   // A calm, untextured sheet: dimensions supply scale without a receding grid behind every part.
   const persp = new THREE.PerspectiveCamera(30, 1, 0.05, 60), ortho = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.05, 60);
-  let userMoved = false, sketch = true, dims = null, camera = persp, view = 'angle', yaw = 0.62, pitch = 0.2, zoom = 1, group = null, mats = null, compiled = null, materials = null, structure = false, size = [1, 1, 1], baseY = 0, focus = null, matsReady = false;
+  let userMoved = false, sketch = true, dims = null, camera = persp, view = 'angle', yaw = 0.62, pitch = 0.2, zoom = 1, group = null, mats = null, compiled = null, materials = null, structure = false, size = [1, 1, 1], baseY = 0, focus = null, frameBounds = null, matsReady = false;
   const composer = new EffectComposer(renderer);
   const renderPass = new RenderPass(scene, camera), ao = new GTAOPass(scene, camera, 1, 1), smaa = new SMAAPass(), out = new OutputPass();
   ao.blendIntensity = 0.85; ao.updateGtaoMaterial({radius: 0.35, distanceExponent: 1.4, thickness: 1.2, scale: 1.0, samples: 16});
@@ -471,7 +472,10 @@ export function createViewer(host, {onRotate} = {}) {
     if (view === 'angle') {
       camera = persp; persp.aspect = aspect;
       const radius = Math.hypot(W, H, D) * 0.5, fov = persp.fov * Math.PI / 180;
-      const dist = radius / Math.sin(Math.min(fov, 2 * Math.atan(Math.tan(fov / 2) * aspect)) / 2) * (H > 1.5 * Math.max(W, D) ? 1.15 : aspect < 1 ? 1.02 : H > 0.8 * Math.max(W, D) ? 1.0 : 0.8) / zoom; // tall pieces (wardrobes) need the whole sphere
+      const authoredDistance = radius / Math.sin(Math.min(fov, 2 * Math.atan(Math.tan(fov / 2) * aspect)) / 2) * (H > 1.5 * Math.max(W, D) ? 1.15 : aspect < 1 ? 1.02 : H > 0.8 * Math.max(W, D) ? 1.0 : 0.8) / zoom; // tall pieces (wardrobes) need the whole sphere
+      // Interactive fitting uses real bounds; authored photographs and explicit zoom retain their composition.
+      const fitDistance = frameBounds && !shooting && !focus ? boxFitDistance({...frameBounds, target: target.toArray(), aspect, yaw, pitch, fov: persp.fov}) / zoom : 0;
+      const dist = Math.max(authoredDistance, fitDistance);
       persp.position.set(Math.sin(yaw) * Math.cos(pitch) * dist, target.y + Math.sin(pitch) * dist, Math.cos(yaw) * Math.cos(pitch) * dist);
       persp.lookAt(target); persp.updateProjectionMatrix();
     } else {
@@ -538,6 +542,7 @@ export function createViewer(host, {onRotate} = {}) {
     const ov = room?.shell.meta.overall;
     cove.intensity = room && !sketch ? 5 : 0; if (ov) cove.position.set(0, (ov.height - 300) / 1000, (-ov.depth / 2 + 500) / 1000);
     const b = new THREE.Box3().setFromObject(group), s = b.getSize(new THREE.Vector3());
+    frameBounds = {min: b.min.toArray(), max: b.max.toArray()};
     if (dims) { scene.remove(dims); disposeGroup(dims); dims = null; }
     const meta = room ? room.shell.meta : compiled.meta;
     if (sketch && !meta?.room) { dims = dimensionGroup(b); scene.add(dims); }
