@@ -1,0 +1,44 @@
+{
+  "updated_at": "2026-10-23T17:03:47.928847+00:00",
+  "denetci": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "decision": "nominal_containment_gate_only_not_manufacturing_approval",
+  "parent_code": "c6463242e54f7174c9c0ed89c924b356fa794126",
+  "sha256": {
+    "assets/forma/production/operation-bounds.js": "58b13c07394992495d105395ab4079d5dd3de78237a61499b4b72df0ebd933b0",
+    "assets/forma/production/manufacturing.js": "09c58d9d107f785b6a980865619ffcda528cc404685de2ce8d207591e55de7ed",
+    "tests/manufacturing-operation-bounds-check.mjs": "6305cca4ef2eabb2295f8279d34351a35a754e4dc23b9f523565f77b7f2c7da1"
+  },
+  "tests": [
+    {
+      "command": "node tests/manufacturing-operation-bounds-check.mjs",
+      "result": "PASS",
+      "nominal_operations": 80,
+      "negative_cases": 15
+    },
+    {
+      "command": "node tests/manufacturing-hardware-check.mjs",
+      "result": "PASS"
+    },
+    {
+      "command": "node tests/dimension-package-check.mjs",
+      "result": "PASS"
+    },
+    {
+      "command": "python tools/release/version-assets.py --check",
+      "result": "PASS",
+      "pages": 16,
+      "stale": 0
+    }
+  ],
+  "scope": "Checks declared entry face, finite dimensions, cylinder/slot bounding extent and blind depth containment in the nominal finished rectangular stock. CSV explicitly includes validation status and issues. No geometry is subtracted.",
+  "exclusions": [
+    "real stock/banding tolerance stack",
+    "shaped part outline validation",
+    "hole-to-hole and cutter sweep collision",
+    "complete joint mating and assembly",
+    "CNC/toolpath release or load approval"
+  ],
+  "remote_delivery": "none; existing user authorization question remains pending",
+  "production_approved": false
+}

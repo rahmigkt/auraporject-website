@@ -1,6 +1,7 @@
 import {reassembleCarcass} from './reassemble-carcass.js';
 import {panelBlank} from './panel-blank.js';
 import {CONNECTOR_PROFILES} from '../hardware.js';
+import {operationBounds} from './operation-bounds.js';
 // Workshop trial values, not an ISO/EN certification or a substitute for measured stock.
 export const TRIAL_TOLERANCES=Object.freeze({id:'aura-workshop-trial-1',approved:false,cut_length_plus_minus_mm:.2,stock_thickness_plus_minus_mm:.2,band_build_up_plus_minus_mm:.1,groove_width_plus_minus_mm:.1,groove_depth_plus_minus_mm:.1,groove_width_clearance_mm:.4,groove_depth_clearance_mm:.5});
 const round=v=>Math.round(v*1000)/1000;
@@ -72,11 +73,16 @@ export function manufacturingReport(compiled,design,{band=1}={}){
     const edges=new Set(support.map(s=>s.edge));backFits.push({back:back.id,retaining_edges:support,missing_edges:['X-','X+','Y-','Y+'].filter(e=>!edges.has(e)),status:edges.size===4?'four_nominal_edges_trial':'retention_incomplete'});
   }
   const hardware=records.filter(r=>r.hardware&&r.role==='box-bottom').map(r=>({part:r.id,...r.hardware}));
+  const invalidOperations=[];
+  for(const part of records)for(const [index,op]of part.operations.entries()){
+    op.stock_bounds=operationBounds(part,op);
+    if(op.stock_bounds.status==='invalid')invalidOperations.push({part:part.id,index,issues:op.stock_bounds.issues});
+  }
   const reconstruction=reassembleCarcass({parts:records},design);
   return {schema:'aura.manufacturing-review/1',units:'mm',production_approved:false,status:'engineering_review_required',tolerances:{...TRIAL_TOLERANCES},
     scope:'Blank/finished correspondence and nominal back-retention analysis. Not a complete joinery recipe, collision proof, CNC program or physical assembly test.',
-    reconstruction,part_count:records.length,parts:records,back_fits:backFits,drawer_hardware:hardware,carcass_joints:joints,selected_connector:connector?structuredClone(connector):null,
-    blockers:['material_and_band_measurement','connector_and_hinge_drilling_recipes','joint_strength_and_product_testing','independent_full_assembly_reconstruction',...(backFits.some(b=>b.status!=='four_nominal_edges_trial')?['back_retention_incomplete']:[]),...(hardware.some(h=>!h.geometry_fit)?['runner_geometry_or_legacy_profile']:[])]};
+    reconstruction,invalid_operations:invalidOperations,part_count:records.length,parts:records,back_fits:backFits,drawer_hardware:hardware,carcass_joints:joints,selected_connector:connector?structuredClone(connector):null,
+    blockers:['material_and_band_measurement','connector_and_hinge_drilling_recipes','joint_strength_and_product_testing','independent_full_assembly_reconstruction',...(invalidOperations.length?['operation_outside_stock_or_unverified_shape']:[]),...(backFits.some(b=>b.status!=='four_nominal_edges_trial')?['back_retention_incomplete']:[]),...(hardware.some(h=>!h.geometry_fit)?['runner_geometry_or_legacy_profile']:[])]};
 }
 const cell=v=>{let s=String(v??'');if(typeof v==='string'&&/^[=+\-@\t\r]/.test(s))s="'"+s;return '"'+s.replaceAll('"','""')+'"';};
 export function manufacturingCsv(report,orderQuantity=1){
@@ -86,7 +92,7 @@ export function manufacturingCsv(report,orderQuantity=1){
 }
 export function manufacturingOperationsCsv(report,orderQuantity=1){
   if(!Number.isInteger(orderQuantity)||orderQuantity<1)throw Error('Invalid order quantity');
-  const header=['Part ID','Operation','Mate','Order quantity','Status','Datum','Entry axis','Entry sign','Finished local X mm','Finished local Y mm','Finished local Z mm','Diameter mm','Groove width mm','Length mm','Depth mm','Source'];
-  const rows=report.parts.flatMap(p=>p.operations.map(o=>[p.id,o.kind,o.mate,orderQuantity,o.status,o.datum,o.entry_axis,o.entry_sign,...o.center_finished_local_mm,o.diameter_mm??'',o.width_mm??'',o.length_mm??'',o.depth_mm,o.source??'AURA workshop trial - not CNC released']));
+  const header=['Part ID','Operation','Mate','Order quantity','Status','Datum','Entry axis','Entry sign','Finished local X mm','Finished local Y mm','Finished local Z mm','Diameter mm','Groove width mm','Length mm','Depth mm','Source','Stock bounds status','Stock bounds issues'];
+  const rows=report.parts.flatMap(p=>p.operations.map(o=>[p.id,o.kind,o.mate,orderQuantity,o.status,o.datum,o.entry_axis,o.entry_sign,...o.center_finished_local_mm,o.diameter_mm??'',o.width_mm??'',o.length_mm??'',o.depth_mm,o.source??'AURA workshop trial - not CNC released',o.stock_bounds?.status??'not_checked',o.stock_bounds?.issues?.join('|')??'']));
   return '\uFEFF'+[header,...rows].map(r=>r.map(cell).join(';')).join('\r\n');
 }
