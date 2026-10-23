@@ -13,9 +13,9 @@ export function addRunnerOperations(compiled,records){
   const receivingX=hand>0?support.b.max[0]:support.b.min[0];
   const op=(q,bb,kind,at,sg,dia,depth,screw)=>({kind,mate:runner.id,datum:'Closed member reference=actual box front+2mm;actual receiving stock face;not a physical stop verification',entry_axis:0,entry_sign:sg,center_finished_local_mm:at.map((v,k)=>Math.round((v-bb.min[k])*1000)/1000),world_center_mm:at,diameter_mm:dia,depth_mm:depth,source:F.installation,fastener:screw,trial_qualification:F.trial,status:'nominal_trial_pilot_not_CNC_released'});
   for(const [i,offset]of pattern.cabinet_from_front_mm.entries())map.get(support.p.id).operations.push(op(support.p,support.b,'runner_cabinet_pilot',[receivingX,cy-(i===pattern.cabinet_from_front_mm.length-1?14.5:0),ref-offset],hand,F.cabinetBore,F.cabinetBoreDepth,F.cabinetScrew));
-  const dx=hand>0?sb.min[0]:sb.max[0];
-  for(const offset of pattern.drawer_from_front_mm)map.get(side.id).operations.push(op(side,sb,'runner_drawer_pilot',[dx,cy,ref-offset],-hand,F.drawerBore,F.drawerBoreDepth,F.drawerScrew));
-  row.support=support.p.id;row.drawer_side=side.id;row.reference_world_z_mm=ref;row.cabinet_pilots=pattern.cabinet_from_front_mm.length;row.drawer_pilots=pattern.drawer_from_front_mm.length;row.issues.push('drawer_fastener_SKU_and_material_pullout_tip_torque_physical_stop_not_validated');
+  const dx=hand>0?sb.min[0]:sb.max[0],drawerRef=h.assembly_profile==='hettich-71833-assembly-trial'?sb.max[2]:ref;
+  for(const offset of pattern.drawer_from_front_mm)map.get(side.id).operations.push(op(side,sb,'runner_drawer_pilot',[dx,cy,drawerRef-offset],-hand,F.drawerBore,F.drawerBoreDepth,F.drawerScrew));
+  row.support=support.p.id;row.drawer_side=side.id;row.reference_world_z_mm=ref;row.drawer_reference_world_z_mm=drawerRef;row.drawer_member_front_world_z_mm=drawerRef-2;row.cabinet_pilots=pattern.cabinet_from_front_mm.length;row.drawer_pilots=pattern.drawer_from_front_mm.length;row.issues.push('drawer_fastener_SKU_and_material_pullout_tip_torque_physical_stop_not_validated');
  }
  return rows;
 }

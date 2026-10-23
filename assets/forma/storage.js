@@ -10,7 +10,7 @@
 // A piece is a row of bays (Ritmo columns); each bay is a stack of cells, bottom → top, separated by fixed shelves.
 // Cell types: door, drawers, open, glass (glazed door), knee (leg room under a vanity). Units: mm; front = +z.
 import {clamp} from './rng.js';
-import {RAIL_SYSTEMS,RAIL_PROFILE,RUNNER_FIXING_SYSTEMS,RUNNER_FIXING_TRIAL,SHELF_SUPPORT_SYSTEMS,SHELF_SUPPORT_PROFILE,HINGE_SYSTEMS, HINGE_PROFILE, hingeForOverlay, CONNECTOR_SYSTEMS, RUNNER_SYSTEMS, runnerProfile, runnerLength, runnerAssessment} from './hardware.js';
+import {ASSEMBLY_SYSTEMS,RAIL_SYSTEMS,RAIL_PROFILE,RUNNER_FIXING_SYSTEMS,RUNNER_FIXING_TRIAL,SHELF_SUPPORT_SYSTEMS,SHELF_SUPPORT_PROFILE,HINGE_SYSTEMS, HINGE_PROFILE, hingeForOverlay, CONNECTOR_SYSTEMS, RUNNER_SYSTEMS, runnerProfile, runnerLength, runnerAssessment} from './hardware.js';
 import {drawerFit} from '../vendor/woodworkingshop/drawer-fit.js';
 import {topOutline, roundedRectLoop} from './mesh.js';
 import {legProfile} from './profiles.js';
@@ -47,6 +47,7 @@ export const RANGES = {
 export function rangeFor(key, p) { const s = SIZE[p.kind]?.[key]; return s ? [s[0], s[1], RANGES[key][2]] : RANGES[key]; }
 
 export const ENUMS = {
+  assemblySystem:ASSEMBLY_SYSTEMS,
   railSystem:RAIL_SYSTEMS,
   runnerFixingSystem:RUNNER_FIXING_SYSTEMS,
   shelfSupportSystem:SHELF_SUPPORT_SYSTEMS,
@@ -87,6 +88,7 @@ export const LAYOUTS = {
   sideboard: () => [B([C('door', {k: 1})]), B([C('drawers', {n: 3})]), B([C('door', {k: 1})])]
 };
 const BASE = {
+  assemblySystem:'legacy-unspecified',
   railSystem:'legacy-round24',
   runnerFixingSystem:'legacy-unspecified',
   shelfSupportSystem:'legacy-generic',
@@ -298,7 +300,7 @@ export function compile(raw) {
           const dy0 = f.y0 + m * (fh + rv), df = {x0: f.x0, x1: f.x1, y0: dy0, y1: dy0 + fh, z0: f.z0, z1: f.z1}, did = `${id}-drawer${m + 1}`;
           const k0 = parts.length;
           if (!sliding) { frontFace(parts, did, 'drawer-front', df, p, p.frontStyle, frontsOf); tint(k0); pull(parts, did, df, p, 'drawer', 0, counts); info.drawerFronts.push(fh); info.drawerWidths.push(df.x1 - df.x0); }
-          drawerBox(parts, did, b.x0, b.x1, y0 + m * pitch, pitch, innerZ1, runner, counts, p.runnerSystem, depthAvail,p.runnerFixingSystem);
+          drawerBox(parts, did, b.x0, b.x1, y0 + m * pitch, pitch, innerZ1, runner, counts, p.runnerSystem, depthAvail,p.runnerFixingSystem,p.assemblySystem,df.z0);
           if (!sliding) opens.push({drawer: true, parts: parts.slice(k0).filter(q => q.role !== 'runner'), dz: runner * 0.6});
         }
         if (sliding) for (let m = 0; m < n; m++) pnl(parts, `${id}-ifront${m + 1}`, 'inner-front', 'case', [b.x0 + 2, b.x1 - 2], [y0 + m * pitch + 2, y0 + (m + 1) * pitch - 2], [innerZ1 - RULES.mdf, innerZ1], {internal: true, band: 'four'});
@@ -473,18 +475,21 @@ function pull(parts, id, f, p, kind, side, counts) {
 }
 
 /** Drawer box on side-mounted runners (Ritmo / drawerFit): 12 mm sides and ends, 6 mm bottom. */
-function drawerBox(parts, id, x0, x1, y0, pitch, zFront, runner, counts, system, availableDepth,fixingSystem='legacy-unspecified') {
+function drawerBox(parts, id, x0, x1, y0, pitch, zFront, runner, counts, system, availableDepth,fixingSystem='legacy-unspecified',assemblySystem='legacy-unspecified',frontContactZ=null) {
   const profile = runnerProfile(system);
   const fit = drawerFit({openingWidthMm: x1 - x0, openingHeightMm: Math.max(40, pitch - 25), openingDepthMm: runner + 24, sideClearanceMm: profile.sideSpace});
   const trial=fixingSystem===RUNNER_FIXING_TRIAL.id&&system==='hettich-ka5632-ss-2025';
-  const bw = fit.widthMm, bh = Math.max(34, fit.heightMm), bd = fit.depthMm, t = trial?18:profile.sideThickness, cx = (x0 + x1) / 2, yb = y0 + 12, z1 = zFront - (trial?2:1), z0 = z1 - bd;
+  const contact=trial&&assemblySystem==='hettich-71833-assembly-trial';
+  const bw = fit.widthMm, bh = Math.max(34, fit.heightMm), bd = fit.depthMm, t = trial?18:profile.sideThickness, cx = (x0 + x1) / 2, yb = y0 + 12, z1 = contact?(frontContactZ??zFront):zFront-(trial?2:1), z0 = z1 - bd;
+  const memberFront=contact?zFront-2:z1;
   const hardware = runnerAssessment(system, {openingWidth:x1-x0, boxHeight:bh, length:runner, availableDepth});
+  if(contact)Object.assign(hardware,{assembly_profile:assemblySystem,datum_scope:'Separate actual box front and cabinet front references;display runner proxy is cabinet member only;actual closed stop remains unverified'});
   if(trial)Object.assign(hardware,{fixing_system:fixingSystem,side_board_mm:t,stock_choice:'AURA opt-in18mm plywood sides/ends;not manufacturer minimum',member_front_inset_mm:2,pilot_recipe_qualified:false});
   for (const s of [-1, 1]) pnl(parts, `${id}-box-side${s < 0 ? 'L' : 'R'}`, 'box-side', 'frame', s < 0 ? [cx - bw / 2, cx - bw / 2 + t] : [cx + bw / 2 - t, cx + bw / 2], [yb, yb + bh], [z0, z1], {internal: true});
   for (const e of [-1, 1]) pnl(parts, `${id}-box-end${e < 0 ? 'B' : 'F'}`, 'box-end', 'frame', [cx - bw / 2 + t, cx + bw / 2 - t], [yb, yb + bh], e < 0 ? [z0, z0 + t] : [z1 - t, z1], {internal: true});
   const insertion=trial?4:0,bottomY=yb+(trial?6:0);
   pnl(parts, `${id}-box-bottom`, 'box-bottom', 'frame', [cx - bw / 2 + t-insertion, cx + bw / 2 - t+insertion], [bottomY, bottomY + RULES.boxBottom], [z0 + t-insertion, z1 - t+insertion], {internal: true, hardware,...(trial?{drawerConstruction:{id:'aura-grooved-18-trial',insertion_mm:4,groove_clearance_mm:.4,depth_clearance_mm:.5,production_approved:false}}:{})});
-  for (const s of [-1, 1]) pnl(parts, `${id}-runner${s < 0 ? 'L' : 'R'}`, 'runner', 'metal', s < 0 ? [x0, x0 + (system === 'legacy-side-12.7' ? 12 : 12.7)] : [x1 - (system === 'legacy-side-12.7' ? 12 : 12.7), x1], [yb + 4, yb + 4 + profile.height], [z1 - runner, z1], {internal: true, nocut: true, hardware}, 1);
+  for (const s of [-1, 1]) pnl(parts, `${id}-runner${s < 0 ? 'L' : 'R'}`, 'runner', 'metal', s < 0 ? [x0, x0 + (system === 'legacy-side-12.7' ? 12 : 12.7)] : [x1 - (system === 'legacy-side-12.7' ? 12 : 12.7), x1], [yb + 4, yb + 4 + profile.height], [memberFront - runner, memberFront], {internal: true, nocut: true, hardware}, 1);
   counts.drawers++; counts.runners[runner] = (counts.runners[runner] || 0) + 1;
 }
 
@@ -536,7 +541,7 @@ function interior(parts, id, c, x0, x1, y0, y1, zBack, zFront, T, p, counts, inf
     counts.spacers += 2;
     for (let m = 0; m < n; m++) {
       pnl(parts, `${id}-idrawer${m + 1}-front`, 'inner-front', 'case', [x0 + sp + 2, x1 - sp - 2], [y0 + m * pitch + 3, y0 + (m + 1) * pitch - 3], [zFront - RULES.setback - RULES.mdf, zFront - RULES.setback], {...mk, band: 'four'});
-      drawerBox(parts, `${id}-idrawer${m + 1}`, x0 + sp, x1 - sp, y0 + m * pitch, pitch, zFront - RULES.setback - RULES.mdf, runner, counts, p.runnerSystem, depthAvail,p.runnerFixingSystem);
+      drawerBox(parts, `${id}-idrawer${m + 1}`, x0 + sp, x1 - sp, y0 + m * pitch, pitch, zFront - RULES.setback - RULES.mdf, runner, counts, p.runnerSystem, depthAvail,p.runnerFixingSystem,p.assemblySystem);
       counts.inner++;
     }
     const ys = y0 + n * pitch + 10; shelf(`${id}-shelf-over`, ys);
