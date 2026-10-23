@@ -1,3 +1,4 @@
+import {panelBlank} from './panel-blank.js';
 // Production: from an approved design to the workshop's cutting (ebatlama) list and sheet layouts.
 // Panels are grouped by board (material + thickness), cut sizes take off the edge-banding thickness on banded
 // edges, grain-direction boards (veneer, solid) are not rotated, and parts are packed on standard sheets with a
@@ -18,15 +19,14 @@ export function boardOf(q, design) {
   if (q.role === 'back') return {key: 'back-8', kind: 'back', t: 8, grain: false, label: 'MDF 8 mm (arkalık)'};
   if (q.mat === 'frame') { const t = Math.round(Math.min(...(q.cut || [q.geom.w, q.geom.h, q.geom.d]))); return {key: `ply-${t}`, kind: 'ply', t, grain: false, label: `Huş kontrplak ${t} mm`}; }
   if (q.mat === 'case' || q.mat === 'front' || q.mat?.startsWith('lac:')) {
-    const spec = q.mat === 'case' ? m.case : m.front, kind = q.mat.startsWith('lac:') ? 'mdf' : surf(spec), t = q.mat === 'case' ? T : TF;
+    const spec = q.mat === 'case' ? m.case : m.front, kind = q.mat.startsWith('lac:') ? 'mdf' : surf(spec);
+    // A 25 mm hinge spacer is not an 18 mm case sheet. Keep actual rectangular stock thickness.
+    const rectangular=panelBlank(q,0),t=rectangular?rectangular.t:q.mat === 'case' ? T : TF;
     const name = kind === 'solid' ? `Masif ${spec.species}` : kind === 'veneer' ? `Kaplamalı MDF (${spec.species})` : 'MDF (boya / lake için ham)';
     return {key: `${kind}-${kind === 'mdf' ? '' : spec.species}-${t}`, kind, t, grain: kind !== 'mdf', label: `${name} ${t} mm`};
   }
   return null; // worktop, glass, mirror, metal: ordered separately
 }
-
-/** Banded edges: [long edges, short edges]. */
-const BANDS = {front: [1, 0], long: [1, 0], three: [1, 2], four: [2, 2]};
 
 /** Cutting list for a compiled design × order quantity. Lacquered parts are not banded (painted edges). */
 export function cuttingList(compiled, design, qty = 1, rules = CUT_RULES) {
@@ -36,14 +36,15 @@ export function cuttingList(compiled, design, qty = 1, rules = CUT_RULES) {
     if (q.nocut || q.line || q.decor || q.role === 'seam' || q.role === 'reeds') continue;
     const dims = (q.cut || [q.geom.w, q.geom.h, q.geom.d]).map(v => Math.round(v * 10) / 10).sort((a, b) => b - a), [l, w, t] = dims, board = boardOf(q, design);
     if (!board) { const k = `${q.role}|${q.mat}|${Math.round(l)}x${Math.round(w)}x${Math.round(t)}`; const e = extra.get(k) || {role: q.role, mat: q.mat, l: Math.round(l), w: Math.round(w), t: Math.round(t), qty: 0}; e.qty += qty; extra.set(k, e); continue; }
-    const [bl, bs] = banded(q) ? BANDS[q.band] || [0, 0] : [0, 0];
-    const cl = Math.round((l - bs * rules.band) * 10) / 10, cw = Math.round((w - bl * rules.band) * 10) / 10;
+    const oriented = panelBlank(q, banded(q) ? rules.band : 0);
+    if (banded(q) && q.band && !oriented) throw Error('Kenar bandı yönü doğrulanamadı: ' + q.id);
+    const [bl, bs] = oriented ? [oriented.bandLong, oriented.bandShort] : [0, 0];
+    const cl = oriented ? oriented.l : l, cw = oriented ? oriented.w : w;
     const k = `${board.key}|${q.role}|${cl}x${cw}|${bl}${bs}|${q.mat}`;
-    const r = rows.get(k) || {board, role: q.role, mat: q.mat, l: cl, w: cw, t: board.t, net: [Math.round(l), Math.round(w)], bandLong: bl, bandShort: bs, qty: 0, ids: []};
+    const r = rows.get(k) || {board, role: q.role, mat: q.mat, l: cl, w: cw, t: board.t, net: oriented ? oriented.net : [l, w], bandLong: bl, bandShort: bs, qty: 0, ids: []};
     r.qty += qty; r.ids.push(q.id); rows.set(k, r);
   }
-  // Parts longer than a sheet (kitchen plinths, island panels) are cut in equal lengths and joined on site.
-  for (const r of rows.values()) { const sh = SHEETS[r.board.kind] || SHEETS.mdf, max = sh.l - 2 * rules.trim; if (r.l > max) { const n = Math.ceil(r.l / max); r.split = n; r.l = Math.round(r.l / n * 10) / 10 + 2; r.qty *= n; } }
+  // Oversize parts remain whole. A splice requires its own engineered joint recipe.
   const list = [...rows.values()].sort((a, b) => a.board.key.localeCompare(b.board.key) || b.l * b.w - a.l * a.w);
   list.forEach((r, i) => { r.code = `E${String(i + 1).padStart(3, '0')}`; });
   return {rows: list, extra: [...extra.values()]};
@@ -80,7 +81,8 @@ export function cuttingPlan(compiled, design, qty = 1, rules = CUT_RULES) {
   const {rows, extra} = cuttingList(compiled, design, qty, rules), boards = new Map();
   for (const r of rows) { const b = boards.get(r.board.key) || {board: r.board, rows: []}; b.rows.push(r); boards.set(r.board.key, b); }
   const plan = [...boards.values()].map(b => { const sheets = packBoard(b.rows, SHEETS[b.board.kind] || SHEETS.mdf, rules); return {...b, sheet: SHEETS[b.board.kind] || SHEETS.mdf, sheets, sheetCount: sheets.filter(s => s.placed.length).length, yield: sheets.length ? sheets.reduce((a, s) => a + s.used, 0) / Math.max(1, sheets.filter(s => s.placed.length).length) : 0}; });
-  return {rows, extra, plan, rules, qty};
+  const unplaced = plan.flatMap(b => b.sheets.flatMap(s => (s.oversize || []).map(p => ({...p,board:b.board.key}))));
+  return {rows, extra, plan, rules, qty, complete:unplaced.length===0, unplaced};
 }
 
 const SIDE_TR = {front: 'ön kenar', long: 'uzun kenar'};

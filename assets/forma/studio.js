@@ -11,6 +11,7 @@ import {styleName} from './styles.js';
 import {STARTS} from './starts.js';
 import {technicalReview, reviewMatches} from './technical-review.js';
 import {reviewDesign} from './auto-correct.js';
+import {CONNECTOR_SYSTEMS, CONNECTOR_PROFILES, RUNNER_SYSTEMS, RUNNER_PROFILES} from './hardware.js';
 import {partDimensions,partDimensionsCsv} from './part-dimensions.js';
 import {dimensionProjectFiles} from './dimension-package.js';
 import {findingText,reviewDocument,textileAssessmentFiles} from './review-document.js';
@@ -289,6 +290,10 @@ function linesSection() {
 }
 const kindRow = () => isBedroom() ? '' : `<div class="f-kinds">${ui().kinds.map(k => chip(`data-kind="${k}"`, L(k), state.design.kind === k)).join('')}</div>`;
 
+function runnerControls(){
+  const tr=state.lang==='tr', selected=state.design.params.runnerSystem;
+  return `<section class="f-runner-controls"><h3>${tr?'Gövde bağlantısı':'Carcass connector'}</h3><div class="f-chips">${CONNECTOR_SYSTEMS.map(id=>chip(`data-enum="connectorSystem" data-value="${id}"`,CONNECTOR_PROFILES[id].name,state.design.params.connectorSystem===id)).join('')}</div><h3>${tr?'Arkalık yapısı':'Back construction'}</h3><div class="f-chips">${[['legacy-bay',tr?'Mevcut bölme arkalığı':'Existing bay backs'],['module-grooved',tr?'Modül arkalığı · üretim pilotu':'Module back · production trial']].map(([id,label])=>chip(`data-enum="backConstruction" data-value="${id}"`,label,state.design.params.backConstruction===id)).join('')}</div><h3>${tr?'Çekmece rayı':'Drawer runner'}</h3><div class="f-chips">${RUNNER_SYSTEMS.map(id=>chip(`data-enum="runnerSystem" data-value="${id}"`,RUNNER_PROFILES[id].name,selected===id)).join('')}</div><p class="f-note">${tr?'Seçim kutu genişliğini, yan levha kalınlığını ve ray boyunu değiştirir. Delik şablonu ve yük kontrolü tamamlanmadan üretim onayı değildir.':'Selection changes box width, side thickness and runner length. Drilling and load verification are still required.'}</p></section>`;
+}
 function enumGroup(key, labelKey, ns = key, options = familyOf(state.design).mod.ENUMS[key]) {
   return `<h3>${L(labelKey)}</h3><div class="f-chips">${options.map(v => chip(`data-enum="${key}" data-value="${v}"`, partName(ns, v, state.lang), state.design.params[key] === v)).join('')}</div>`;
 }
@@ -352,7 +357,7 @@ const CELL_COLORS = ['white', 'cream', 'sand', 'greige', 'taupe', 'mink', 'silve
 const selCell = () => { const p = state.design.params, s = state.sel || {b: 0, c: 0}; const b = Math.min(s.b, p.bays.length - 1), c = Math.min(s.c, p.bays[b].cells.length - 1); return {b, c}; };
 function storagePartsPanel(p) {
   const k = state.design.kind, E = familyOf(state.design).mod.ENUMS;
-  return `<h2>${L('tabParts')}</h2>${layoutEditor(p)}
+  return `<h2>${L('tabParts')}</h2>${layoutEditor(p)}${runnerControls()}
   ${k === 'wardrobe' ? enumGroup('doorType', 'doorType') : ''}
   ${p.doorType === 'sliding' ? '' : enumGroup('frontFit', 'frontFit')}
   ${enumGroup('frontStyle', 'frontStyle')}${enumGroup('pull', 'pull')}
@@ -457,7 +462,7 @@ function bathPartsPanel(p) {
   ${k === 'mirror' ? enumGroup('mirrorCabinet', 'bMirrorCabinet', 'bMirrorCabinet') : ''}
   ${k === 'mirror' && !cab ? enumGroup('mirror', 'mirror') + enumGroup('mirrorLight', 'bMirrorLight', 'bMirrorLight') : ''}
   ${k === 'basin' ? enumGroup('basinType', 'bBasinType', 'bBasinType') + enumGroup('basinShape', 'bBasinShape', 'bBasinShape') + (p.width >= 1100 ? enumGroup('basins', 'bBasins', 'bBasins') : '') + enumGroup('tap', 'bTap', 'bTap') : ''}
-  ${cab ? layoutEditor(p) : ''}
+  ${cab ? layoutEditor(p) + runnerControls() : ''}
   ${cab ? enumGroup('frontStyle', 'frontStyle') + enumGroup('pull', 'pull') : ''}
   ${k !== 'mirror' ? enumGroup('base', 'caseBase', 'sBase') + (p.base === 'legs' ? enumGroup('legType', 'legType', 'sLegType') : '') : ''}
   ${cab ? enumGroup('caseEdge', 'caseEdge') : ''}
@@ -483,7 +488,7 @@ function kitchenPartsPanel(p) {
   });
   const svg = `<svg class="f-layout-svg" viewBox="${-W / 2 - pad} ${-H} ${W + 2 * pad} ${H + pad}">${out.join('')}</svg>`;
   const types = KTYPES.filter(t => run || !['tallFridge', 'tallOven', 'pantry'].includes(t)), widths = KWIDTHS[m.type] || [150, 300, 400, 450, 500, 600, 800, 900, 1000, 1200];
-  return `<h2>${L('tabParts')}</h2><section class="f-layoutbox"><h3>${L('kModules')} · ${p.modules.length} · ${g.total} mm</h3>${svg}<p class="f-note">${L('kHint')}</p>
+  return `<h2>${L('tabParts')}</h2>${runnerControls()}<section class="f-layoutbox"><h3>${L('kModules')} · ${p.modules.length} · ${g.total} mm</h3>${svg}<p class="f-note">${L('kHint')}</p>
   <h3>${L('kModule')} ${i + 1} · ${L('kBaseType')}</h3><div class="f-chips">${types.map(t => chip(`data-mtype="${t}"`, partName('kBase', t, state.lang), m.type === t)).join('')}</div>
   <h3>${L('width')}</h3><div class="f-seg">${widths.map(w => chip(`data-mw="${w}"`, String(w), m.w === w)).join('')}</div>
   ${run && !tall ? `<h3>${L('kWallType')}</h3><div class="f-chips">${['doors', 'glass', 'open', 'flap', 'hood', 'none'].map(t => chip(`data-mwall="${t}"`, partName('kWall', t, state.lang), m.wall === t)).join('')}</div>` : ''}

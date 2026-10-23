@@ -1,3 +1,4 @@
+import {manufacturingReport,manufacturingCsv,manufacturingOperationsCsv} from './manufacturing.js';
 // Production page: open an approved design (link or file), record the approval, then produce the cutting plan
 // and the assembly booklet for each panel product. Nothing here is offered to customers.
 import {normalizeDesign, compileDesign} from '../generate.js';
@@ -44,18 +45,22 @@ async function files(i) {
   const b = bom(c, d.materials, s.lang === 'tr' ? 'tr' : 'en'), link = await designLink(d, s.lang), dir = `${String(i + 1).padStart(2, '0')}-${d.kind}`;
   // Cutting plan.
   const cp = cuttingPlan(c, d, it.qty, rules()), sheetPages = [];
+  if(!cp.complete) throw Error('Kesim paketi eksik: levhaya sığmayan parça var. Onaylı ek tasarımı veya uygun levha seçilmeden üretim çıktısı hazırlanamaz.');
   for (const bd of cp.plan) for (const [k, sh] of bd.sheets.entries()) if (sh.placed.length) sheetPages.push(await svgToJpeg(sheetSvg(bd, sh, k, {title: `${name} × ${it.qty}`, note: `${id} · Onay: ${s.approvedBy} ${s.date}`}), 2480));
   // Booklet.
   const o = c.meta.overall, pages = bookletPages(c, b, {title: name, id, qty: it.qty, approvedBy: s.approvedBy, date: s.date, link, lang: s.lang, dims: `${o.width} × ${o.depth} × ${o.height} mm`});
   const bookletJpgs = []; for (const pg of pages) bookletJpgs.push(await svgToJpeg(pg, 1754));
+  const assessment=manufacturingReport(c,d,{band:rules().band});
   return [
     {name: `${dir}/ebatlama.csv`, data: cuttingCsv(cp, nameOf)},
     {name: `${dir}/levha-plani.pdf`, data: jpegPdf(sheetPages.length ? sheetPages : [await svgToJpeg(sheetSvg({board: {label: '-'}, sheet: {label: '-'}, sheetCount: 0}, {sheet: {l: 2800, w: 2100}, placed: [], used: 0}, 0), 1200)])},
     {name: `${dir}/montaj-kitapcigi.pdf`, data: jpegPdf(bookletJpgs.map((j, k) => k ? j : {...j, link: {url: link, rect: [0.06, 0.78, 0.5, 0.81]}}))},
-    {name: `${dir}/onay.json`, data: JSON.stringify({approvedBy: s.approvedBy, date: s.date, language: s.lang, quantity: it.qty, link, design: d, sheets: cp.plan.map(p => ({board: p.board.label, sheet: p.sheet.label, count: p.sheetCount, yield: Math.round(p.yield * 100)}))}, null, 2)},
+    {name: `${dir}/onay.json`, data: JSON.stringify({approval_scope:'user_design_confirmation_only',manufacturing_approved:false,approvedBy: s.approvedBy, date: s.date, language: s.lang, quantity: it.qty, link, design: d, sheets: cp.plan.map(p => ({board: p.board.label, sheet: p.sheet.label, count: p.sheetCount, yield: Math.round(p.yield * 100)}))}, null, 2)},
+    ...assessmentFiles(dir,assessment,it.qty),
     ...(c.meta.shaped ? [{name: `${dir}/cnc-siluetler.dxf`, data: silhouetteDxf(c)}] : [])
   ];
 }
+function assessmentFiles(dir,report,quantity=1){return [{name:dir+'/manufacturing-review.json',data:JSON.stringify(report,null,2)},{name:dir+'/manufacturing-blanks.csv',data:manufacturingCsv(report,quantity)},{name:dir+'/machining-review.csv',data:manufacturingOperationsCsv(report,quantity)}];}
 /** Free-form (designer-shaped) pieces of families without a panel cut list: CNC outlines and the approval record. */
 async function shapedFiles(i) {
   const it = items[i], d = it.design, c = compileDesign(d), s = stamp(), link = await designLink(d, s.lang), dir = `${String(i + 1).padStart(2, '0')}-${d.kind}`;
@@ -75,7 +80,7 @@ $('#items').addEventListener('click', async e => {
 });
 $('#all').onclick = async () => {
   if (!ready()) return; $('#outState').textContent = 'Hazırlanıyor…';
-  try { const all = []; for (const [i, it] of items.entries()) { if (PANEL.includes(it.design.family)) all.push(...await files(i)); else if (it.design.overrides?.length) all.push(...await shapedFiles(i)); } download(`AURA-uretim-${new Date().toISOString().slice(0, 10)}.zip`, zip(all), 'application/zip'); $('#outState').textContent = 'Hazır.'; }
+  try { const all = []; for (const [i, it] of items.entries()) { if (PANEL.includes(it.design.family)) all.push(...await files(i)); else { all.push(...assessmentFiles(String(i+1).padStart(2,'0')+'-'+it.design.kind,manufacturingReport(compileDesign(it.design),it.design),it.qty));if(it.design.overrides?.length)all.push(...await shapedFiles(i)); } } download(`AURA-uretim-${new Date().toISOString().slice(0, 10)}.zip`, zip(all), 'application/zip'); $('#outState').textContent = 'Hazır.'; }
   catch (err) { $('#outState').textContent = String(err.message || err); }
 };
 for (const el of ['#approve', '#approver']) $(el).addEventListener('input', render);

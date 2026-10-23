@@ -10,6 +10,7 @@
 // A piece is a row of bays (Ritmo columns); each bay is a stack of cells, bottom → top, separated by fixed shelves.
 // Cell types: door, drawers, open, glass (glazed door), knee (leg room under a vanity). Units: mm; front = +z.
 import {clamp} from './rng.js';
+import {CONNECTOR_SYSTEMS, RUNNER_SYSTEMS, runnerProfile, runnerLength, runnerAssessment} from './hardware.js';
 import {drawerFit} from '../vendor/woodworkingshop/drawer-fit.js';
 import {topOutline, roundedRectLoop} from './mesh.js';
 import {legProfile} from './profiles.js';
@@ -46,6 +47,8 @@ export const RANGES = {
 export function rangeFor(key, p) { const s = SIZE[p.kind]?.[key]; return s ? [s[0], s[1], RANGES[key][2]] : RANGES[key]; }
 
 export const ENUMS = {
+  runnerSystem: RUNNER_SYSTEMS, connectorSystem: CONNECTOR_SYSTEMS,
+  backConstruction: ['legacy-bay','module-grooved'],
   frontFit: ['overlay', 'inset'],
   doorType: ['hinged', 'sliding'],
   frontStyle: ['flat', 'shaker', 'grooved', 'fluted', 'slats', 'cane'],
@@ -81,6 +84,7 @@ export const LAYOUTS = {
   sideboard: () => [B([C('door', {k: 1})]), B([C('drawers', {n: 3})]), B([C('door', {k: 1})])]
 };
 const BASE = {
+  runnerSystem: 'legacy-side-12.7', connectorSystem:'legacy-unspecified', backConstruction: 'legacy-bay',
   solidThickness: 22, plinthHeight: 80, legHeight: 150, legSize: 40, topThickness: 22, topOverhang: 0, fluteWidth: 30, mirrorHeight: 800, mirrorWidth: 0.7,
   frontFit: 'overlay', doorType: 'hinged', frontStyle: 'flat', pull: 'bar', base: 'plinth', legType: 'taper', topType: 'flush', caseEdge: 'eased', caseLine: 'none', mirror: 'none', backPanel: 'on', led: 'off', board: 'mdf', frontBoard: 'mdf'
 };
@@ -229,6 +233,12 @@ export function compile(raw) {
     counts.connectors += 2 * mods.length * conn(Dc);
   }
 
+  // Opt-in production trial: one back per transport module, retained by its four outside boards.
+  // Knee/slab layouts keep their existing bay backs and remain review-required.
+  if(p.backConstruction==='module-grooved' && p.backPanel!=='off' && !slab)mods.forEach((m,mi)=>{
+    if(m.bays.some(i=>kneeBays[i]))return;
+    pnl(parts,`m${mi+1}-back`,'back','back',[m.x0+T-RULES.groove,m.x1-T+RULES.groove],[yB+T-RULES.groove,yIn1+RULES.groove],[zB+RULES.backInset,zBackFace]);
+  });
   // Bays: back panel, cells, fixed shelves, fronts and interior.
   const frontsOf = [], grid = [], opens = []; // fronts for line details; grid for the layout editor
   p.bays.forEach((bay, i) => {
@@ -236,7 +246,7 @@ export function compile(raw) {
     const yStart = knee ? 0 : yB + T, cells = yLayout(bay, yStart, yIn1, T);
     grid.push({x0: r1(b.x0), x1: r1(b.x1), cells: cells.map(({y0, y1}) => ({y0: r1(y0), y1: r1(y1)}))});
     const backY0 = knee ? cells[0].y1 + T : yB + T;
-    if (p.backPanel !== 'off') pnl(parts, `b${i + 1}-back`, 'back', 'back', [b.x0 - RULES.groove, b.x1 + RULES.groove], [backY0 - RULES.groove, yIn1 + RULES.groove], [zB + RULES.backInset, zBackFace]);
+    if (p.backPanel !== 'off' && (p.backConstruction !== 'module-grooved' || mods[b.mod].bays.some(j=>kneeBays[j]) || slab)) pnl(parts, `b${i + 1}-back`, 'back', 'back', [b.x0 - RULES.groove, b.x1 + RULES.groove], [backY0 - RULES.groove, yIn1 + RULES.groove], [zB + RULES.backInset, zBackFace]);
     // Horizontal edges of fronts (overlay: to the panel centre line, exterior: to the outer face).
     const extL = Math.abs(b.x0 - T - (-W / 2)) < 0.5, extR = Math.abs(b.x1 + T - W / 2) < 0.5;
     const xl = extL ? -W / 2 : b.left === 'side' ? b.x0 - T : b.x0 - T / 2, xr = extR ? W / 2 : b.right === 'side' ? b.x1 + T : b.x1 + T / 2;
@@ -272,13 +282,13 @@ export function compile(raw) {
       }
       if (c.type === 'drawers') {
         const n = c.n, fh = (f.y1 - f.y0 - (n - 1) * rv) / n, pitch = (y1 - y0) / n;
-        const depthAvail = innerZ1 - zBackFace - 4, runner = RUNNERS.filter(v => v <= depthAvail).at(-1) || RUNNERS[0];
+        const depthAvail = innerZ1 - zBackFace, runner = runnerLength(p.runnerSystem, depthAvail);
         info.runner = Math.max(info.runner, runner);
         for (let m = 0; m < n; m++) {
           const dy0 = f.y0 + m * (fh + rv), df = {x0: f.x0, x1: f.x1, y0: dy0, y1: dy0 + fh, z0: f.z0, z1: f.z1}, did = `${id}-drawer${m + 1}`;
           const k0 = parts.length;
           if (!sliding) { frontFace(parts, did, 'drawer-front', df, p, p.frontStyle, frontsOf); tint(k0); pull(parts, did, df, p, 'drawer', 0, counts); info.drawerFronts.push(fh); info.drawerWidths.push(df.x1 - df.x0); }
-          drawerBox(parts, did, b.x0, b.x1, y0 + m * pitch, pitch, innerZ1, runner, counts);
+          drawerBox(parts, did, b.x0, b.x1, y0 + m * pitch, pitch, innerZ1, runner, counts, p.runnerSystem, depthAvail);
           if (!sliding) opens.push({drawer: true, parts: parts.slice(k0).filter(q => q.role !== 'runner'), dz: runner * 0.6});
         }
         if (sliding) for (let m = 0; m < n; m++) pnl(parts, `${id}-ifront${m + 1}`, 'inner-front', 'case', [b.x0 + 2, b.x1 - 2], [y0 + m * pitch + 2, y0 + (m + 1) * pitch - 2], [innerZ1 - RULES.mdf, innerZ1], {internal: true, band: 'four'});
@@ -453,13 +463,15 @@ function pull(parts, id, f, p, kind, side, counts) {
 }
 
 /** Drawer box on side-mounted runners (Ritmo / drawerFit): 12 mm sides and ends, 6 mm bottom. */
-function drawerBox(parts, id, x0, x1, y0, pitch, zFront, runner, counts) {
-  const fit = drawerFit({openingWidthMm: x1 - x0, openingHeightMm: Math.max(40, pitch - 25), openingDepthMm: runner + 24});
-  const bw = fit.widthMm, bh = Math.max(34, fit.heightMm), bd = fit.depthMm, t = RULES.boxSide, cx = (x0 + x1) / 2, yb = y0 + 12, z1 = zFront - 1, z0 = z1 - bd;
+function drawerBox(parts, id, x0, x1, y0, pitch, zFront, runner, counts, system, availableDepth) {
+  const profile = runnerProfile(system);
+  const fit = drawerFit({openingWidthMm: x1 - x0, openingHeightMm: Math.max(40, pitch - 25), openingDepthMm: runner + 24, sideClearanceMm: profile.sideSpace});
+  const bw = fit.widthMm, bh = Math.max(34, fit.heightMm), bd = fit.depthMm, t = profile.sideThickness, cx = (x0 + x1) / 2, yb = y0 + 12, z1 = zFront - 1, z0 = z1 - bd;
+  const hardware = runnerAssessment(system, {openingWidth:x1-x0, boxHeight:bh, length:runner, availableDepth});
   for (const s of [-1, 1]) pnl(parts, `${id}-box-side${s < 0 ? 'L' : 'R'}`, 'box-side', 'frame', s < 0 ? [cx - bw / 2, cx - bw / 2 + t] : [cx + bw / 2 - t, cx + bw / 2], [yb, yb + bh], [z0, z1], {internal: true});
   for (const e of [-1, 1]) pnl(parts, `${id}-box-end${e < 0 ? 'B' : 'F'}`, 'box-end', 'frame', [cx - bw / 2 + t, cx + bw / 2 - t], [yb, yb + bh], e < 0 ? [z0, z0 + t] : [z1 - t, z1], {internal: true});
-  pnl(parts, `${id}-box-bottom`, 'box-bottom', 'frame', [cx - bw / 2 + t, cx + bw / 2 - t], [yb, yb + RULES.boxBottom], [z0 + t, z1 - t], {internal: true});
-  for (const s of [-1, 1]) pnl(parts, `${id}-runner${s < 0 ? 'L' : 'R'}`, 'runner', 'metal', s < 0 ? [x0, x0 + RULES.runnerClear - 0.7] : [x1 - RULES.runnerClear + 0.7, x1], [yb + 4, yb + 40], [z1 - runner, z1], {internal: true, nocut: true}, 1);
+  pnl(parts, `${id}-box-bottom`, 'box-bottom', 'frame', [cx - bw / 2 + t, cx + bw / 2 - t], [yb, yb + RULES.boxBottom], [z0 + t, z1 - t], {internal: true, hardware});
+  for (const s of [-1, 1]) pnl(parts, `${id}-runner${s < 0 ? 'L' : 'R'}`, 'runner', 'metal', s < 0 ? [x0, x0 + (system === 'legacy-side-12.7' ? 12 : 12.7)] : [x1 - (system === 'legacy-side-12.7' ? 12 : 12.7), x1], [yb + 4, yb + 4 + profile.height], [z1 - runner, z1], {internal: true, nocut: true, hardware}, 1);
   counts.drawers++; counts.runners[runner] = (counts.runners[runner] || 0) + 1;
 }
 
@@ -495,13 +507,13 @@ function interior(parts, id, c, x0, x1, y0, y1, zBack, zFront, T, p, counts, inf
     info.hang.push(y1 - RULES.railDrop - mid, mid - RULES.railDrop - y0);
   } else if (c.inside === 'hangDrawers') {
     // Inner drawers behind the doors clear the hinges on 25 mm spacers; a shelf over them, the rail above.
-    const sp = 25, pitch = 200, n = 2, depthAvail = zFront - RULES.setback - RULES.mdf - zBack - 4, runner = RUNNERS.filter(v => v <= depthAvail).at(-1) || RUNNERS[0];
+    const sp = 25, pitch = 200, n = 2, depthAvail = zFront - RULES.setback - RULES.mdf - zBack, runner = runnerLength(p.runnerSystem, depthAvail);
     info.runner = Math.max(info.runner, runner);
     for (const s of [-1, 1]) pnl(parts, `${id}-spacer${s < 0 ? 'L' : 'R'}`, 'spacer', 'case', s < 0 ? [x0, x0 + sp] : [x1 - sp, x1], [y0, y0 + n * pitch], [zFront - runner - 20, zFront - RULES.setback], {...mk, band: 'front'});
     counts.spacers += 2;
     for (let m = 0; m < n; m++) {
       pnl(parts, `${id}-idrawer${m + 1}-front`, 'inner-front', 'case', [x0 + sp + 2, x1 - sp - 2], [y0 + m * pitch + 3, y0 + (m + 1) * pitch - 3], [zFront - RULES.setback - RULES.mdf, zFront - RULES.setback], {...mk, band: 'four'});
-      drawerBox(parts, `${id}-idrawer${m + 1}`, x0 + sp, x1 - sp, y0 + m * pitch, pitch, zFront - RULES.setback - RULES.mdf, runner, counts);
+      drawerBox(parts, `${id}-idrawer${m + 1}`, x0 + sp, x1 - sp, y0 + m * pitch, pitch, zFront - RULES.setback - RULES.mdf, runner, counts, p.runnerSystem, depthAvail);
       counts.inner++;
     }
     const ys = y0 + n * pitch + 10; shelf(`${id}-shelf-over`, ys);
