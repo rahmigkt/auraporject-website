@@ -10,3 +10,7 @@ Regression: tests/dxf-xdata-check.mjs. Current Forma drawingDxf uses its own R12
 
 Face.setEdgeVisible clears the invisible-edge bit when visible=true, sets it when false, and preserves other edges. Regression: tests/dxf-face-visibility-check.mjs (all16 initial masks).
 Reference: https://help.autodesk.com/cloudhelp/2020/ENU/AutoCAD-DXF/files/GUID-747865D5-51F0-45F2-BEFE-9572DBC5B151.htm
+
+AlignedDimension.offset uses a unit normal instead of the singular slope/intersection helpers. Positive offsets retain the intended below-line side for nonvertical lines (the upstream b(v) convention); exactly vertical lines use the right side. XY distance and perpendicularity are invariant under translation and endpoint reversal. Z and measured endpoints are retained. Nonfinite XY/offset and nonzero offsets from a zero-length reference fail explicitly; zero offset at a repeated point remains defined.
+Regression: tests/dxf-aligned-offset-check.mjs. Legacy LinearDimension angular offset/rotation semantics remain under review and are NOT fixed or certified by this patch.
+Primary upstream implementation: https://raw.githubusercontent.com/dxfjs/writer/main/src/Sections/EntitiesSection/Entities/Dimension/AlignedDimension.ts

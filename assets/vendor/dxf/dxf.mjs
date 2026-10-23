@@ -456,9 +456,14 @@ var AlignedDimension = class extends Dimension {
 	}
 	offset(v) {
 		if (v == null) return;
-		const [a_, b_] = ab(this.fisrtPoint, this.secondPoint);
-		const _b = b(v, [a_, b_]);
-		this.definitionPoint = xy([a_, _b], this.fisrtPoint);
+		const first = this.fisrtPoint, second = this.secondPoint;
+		if (![v, first.x, first.y, second.x, second.y].every(Number.isFinite)) throw new RangeError("Aligned dimension offset and XY coordinates must be finite");
+		const dx = second.x - first.x, dy = second.y - first.y, length = Math.hypot(dx, dy);
+		if (!Number.isFinite(length) || (!length && v !== 0)) throw new RangeError("Aligned dimension offset needs a nonzero finite reference line");
+		// Preserve the old b(v) convention: positive lies below nonvertical lines.
+		// A vertical line uses its right side; vector projection avoids slope singularities.
+		const direction = dx < 0 || (dx === 0 && dy < 0) ? -1 : 1;
+		this.definitionPoint = length ? point3d(first.x + v * (dy / length) * direction, first.y - v * (dx / length) * direction, first.z) : point3d(first.x, first.y, first.z);
 	}
 	rotate() {
 		return angle(this.fisrtPoint, this.secondPoint);
