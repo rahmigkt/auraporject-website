@@ -14,3 +14,7 @@ Reference: https://help.autodesk.com/cloudhelp/2020/ENU/AutoCAD-DXF/files/GUID-7
 AlignedDimension.offset uses a unit normal instead of the singular slope/intersection helpers. Positive offsets retain the intended below-line side for nonvertical lines (the upstream b(v) convention); exactly vertical lines use the right side. XY distance and perpendicularity are invariant under translation and endpoint reversal. Z and measured endpoints are retained. Nonfinite XY/offset and nonzero offsets from a zero-length reference fail explicitly; zero offset at a repeated point remains defined.
 Regression: tests/dxf-aligned-offset-check.mjs. Legacy LinearDimension angular offset/rotation semantics remain under review and are NOT fixed or certified by this patch.
 Primary upstream implementation: https://raw.githubusercontent.com/dxfjs/writer/main/src/Sections/EntitiesSection/Entities/Dimension/AlignedDimension.ts
+
+Dimension rotation="auto" leaves optional DXF group53 absent, as it is an override away from the default dimension-line orientation, not the line angle itself. Explicit numeric text rotation and LinearDimension group50 are preserved. Regression: tests/dxf-dimension-text-rotation-check.mjs (actual DXF entity serialization, both dimension types and eight line angles).
+Reference: https://help.autodesk.com/cloudhelp/2026/ENU/AutoCAD-DXF/files/GUID-EDD54EAC-A339-4EBA-AEA6-EC8066505E2B.htm
+This does not repair LinearDimension offset geometry or certify rendered CAD text layout.

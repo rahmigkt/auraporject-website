@@ -400,7 +400,8 @@ var Dimension = class extends Entity {
 		dx.push(41, this.textLineSpacingFactor);
 		dx.push(42, this.ActualMeasurement);
 		dx.push(1, this.text);
-		dx.push(53, this.rotation === "auto" ? this.rotate() : this.rotation);
+		// Group 53 is an override relative to the dimension line; auto keeps CAD defaults.
+		dx.push(53, this.rotation === "auto" ? undefined : this.rotation);
 		dx.push(51, this.horizontalDirection);
 		dx.push(3, this.styleName);
 	}
