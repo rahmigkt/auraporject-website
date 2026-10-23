@@ -1,0 +1,49 @@
+{
+  "captured_at": "2026-10-23T19:43:25.058319+00:00",
+  "denetci": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "code_sha": "ab2b7fe60f61833d2e2b35de467181182e356b50",
+  "status": "source_candidate_and_current_fit_rejection_not_implemented",
+  "production_approved": false,
+  "source": {
+    "url": "https://www.hettich.com/fileadmin/Media_Center/Catalogue/1608_014_Drawer_runner_0523_HUK_en.pdf",
+    "local_file": "hettich-drawer-runner-HUK-0523.pdf",
+    "sha256": "20c878f431a9e01b24e49d0d1923488021277f91ee1221ac08cd0e7994198bb3",
+    "pdf_page_visually_read": 71,
+    "printed_page": 69
+  },
+  "source_dimensions": {
+    "product": "71833 front panel adjuster for four-sided wooden drawer",
+    "front_housing_diameter_mm": 20,
+    "front_housing_depth_mm": 10,
+    "box_end_clearance_bore_mm": 5,
+    "countersunk_screw_diameter_mm": 4,
+    "screw_length_formula": "box end thickness +10mm housing depth",
+    "additional_fixing": "After adjustment,secure front with additional chipboard screw"
+  },
+  "target_measurements": [
+    {
+      "front": "b3c1-idrawer1-front",
+      "box_front_end": "b3c1-idrawer1-box-endF",
+      "front_back_world_z_mm": 242.5,
+      "box_front_world_z_mm": 240.5,
+      "gap_mm": 2.0,
+      "status": "not_contacting_no_front_adjuster_assembly_approval"
+    },
+    {
+      "front": "b3c1-idrawer2-front",
+      "box_front_end": "b3c1-idrawer2-box-endF",
+      "front_back_world_z_mm": 242.5,
+      "box_front_world_z_mm": 240.5,
+      "gap_mm": 2.0,
+      "status": "not_contacting_no_front_adjuster_assembly_approval"
+    }
+  ],
+  "source_vs_trial": [
+    "Source does not specify edge distances,pilot diameter/depth of final locking screw,number/spacing of adjusters,material torque/pullout or exact screw SKU",
+    "18mm box end would require28mm nominal adjustment screw by source formula;do not silently substitute25or30mm",
+    "Existing opt-in drawer box is2mm behind separate front;this is not a source-verified mounting stand-off. Need reconcile box front vs member2mm inset BEFORE applying pocket or screw.",
+    "No71833holes/CNC/connection approval added;source research does not close the existing pending front attachment gate."
+  ],
+  "next": "Use separate explicit source-profile selection;reconcile touching front/box surfaces and runner member inset independently;validate pocket/through bore mating and negatives,then geometry/motion export. Preserve ab2b7fe audit as frozen previous scope."
+}

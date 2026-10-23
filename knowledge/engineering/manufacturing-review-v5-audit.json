@@ -1,0 +1,182 @@
+{
+  "schema": "aura.engineering-review-v5-audit/1",
+  "captured_at": "2026-10-23T20:52:10.156551+00:00",
+  "denetci": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "independent_claude_review": false,
+  "code_sha": "ba9d2f49e03af03f6c8188a72528bc3fcf7f9eb2",
+  "test_code_sha": "ba9d2f49e03af03f6c8188a72528bc3fcf7f9eb2",
+  "source_and_test_sha256": {
+    "assets/forma/atelier.js": "8c6410f8e233e4e46fc63c7677c76d571e0504f3608fb3b88806c0d013cbd3f3",
+    "assets/forma/hardware.js": "b528af6d9f85bd1bd9b41542a2f835ec29d3d1ae8428b6f1f57349ff1aa769ba",
+    "assets/forma/production/assembly-collision.js": "c641c522e4da457e46299dfe72d23c7c4f3d32e76f4f05f84f93985158391e27",
+    "assets/forma/production/engineering-checks.js": "07bfb4e8fa94667a0f204637c4e93eb92404e48b69781bc11537184504a8bccd",
+    "assets/forma/production/hinge-spacer-relief.js": "4c924fba7c492ebf900f0ec0e7a0bf0758b012d02ff26512d65eaaa9c73313d6",
+    "assets/forma/production/inspection-pdf.js": "4576440d42b905f221fa8288367a6172dbb62f7f0c8ee072c505dfb9ad477020",
+    "assets/forma/production/inspection-ui.js": "8ffe0296ce84a75139d5b747b4148689871412eb1ae6a65b2aafae2e46d3bf51",
+    "assets/forma/production/machined-geometry.js": "d43ea2e972474096803fbe1b48fc8bb96cc2628a6d696ec6c2065019bbb2ba2f",
+    "assets/forma/production/manufacturing.js": "fcc4250fcab3d729d3a4f7cd5be2b8bce807d645eb4720959ca8af66c802e683",
+    "assets/forma/production/module-joining.js": "f95d9a007cbcca51317006faefb076ac97083cc6fd72a6336f687e63ca34fab7",
+    "assets/forma/production/operation-bounds.js": "207f6b55c3880a4b6bd5ab051d4477bdf1e421a45cda4c728859a97790a65b82",
+    "assets/forma/production/review-sample.json": "8341a1a6848794bc9938e9c1e70dfa252f5df45bb91f5dce8ff5cbb4d3aa3984",
+    "assets/forma/storage.js": "e196c861078a995e7eeeb0142892110b67cfd55a2b365ea0b4aec0dc70060d5a",
+    "assets/forma/studio.js": "7582559d3b8c0965046561b1ed947e5a4e6a135e694e7914e387f104922a0192",
+    "ev.html": "72641bfa8822ed1b95f46773e9e816a0948349d0629c74ce738aca8247d553e6",
+    "index.html": "19dfd75ab2d620db923b1d1ab05ef20288cc7da3190a23cf2678fad8f26bd5d3",
+    "knowledge/engineering/open-fronts-interior-audit.json": "484a5bfa0080c1d978a27ed773eceec55017a9ec0d8af6ebf7965557b7a843a8",
+    "sohbet.html": "f729c257c1821ba1e02f55020db3b9157bb072c3c0242ea5068a2e5f2346945f",
+    "tarzlar.html": "868e381bb823d29ad076e2a3e5536f171d48d84b0887be79ad4a7b20af2b51e8",
+    "tasarimci.html": "38018235b1f2c6fa88458a8d67be72d0be1916d51b397da043004302e116d18c",
+    "tasarla.html": "4a249fd977b33734d10c7b13fba5bd8ac3fcb279f30ced8083090e6e10cdadc0",
+    "tests/assembly-front-base-check.mjs": "39019bf9a8a7e5db6a23a4da03bc7516bf148c7c4bd1ca24a468c6435ab1eca7",
+    "tests/engineering-review-check.mjs": "1700bebf8714811edad905a13ecae3812a471dfd917b1a9599bb1cb5ee27152a",
+    "tests/open-fronts-interior-check.mjs": "09a5e559530d7ce79dafdb15e62592ddf19f053a9321e97e3eb96797b361c6b2",
+    "tests/visual/engineering-review-check.mjs": "3e6f68eef6510f6971898d8d0187231867e4a3c401f04922e94fdd101ccb7454",
+    "tests/visual/open-fronts-interior-check.mjs": "e3945682afa97081ad1b2dbed329027bca464d3b3df886397414e219d3f32390",
+    "uretim.html": "f5b4e2369b1cacec72635ba82123c3fc39eabe328122cd83bed8b99059edcf20"
+  },
+  "sources": [
+    {
+      "url": "https://catalog.hettich.com/General/TA_2025/en_DE/catalogs/TA_2025_en_DE/pdf/save/bk_407.pdf",
+      "local_file": "hettich-ka5632-2025.pdf",
+      "sha256": "e823a2cb5caa76c6d3ccddb5c8846f9cc5cf8d6704f2d0bcd918830a0d51c602",
+      "scope": "Manufacturer factual dimensions;not redistributed CAD or whole product qualification"
+    },
+    {
+      "url": "https://www.schwarzstahl.ch/media/upload/Montageanleitung_Verbindungsschraube-Set_vernickelt.pdf",
+      "local_file": "hettich-89316-manufacturer-instruction.pdf",
+      "sha256": "4339f21c8311708ffe74981540f9cac84b818f9164d55248e68f8faebddaf101",
+      "scope": "Manufacturer factual dimensions;not redistributed CAD or whole product qualification"
+    },
+    {
+      "url": "https://catalog.hettich.com/General/TuI/en_DE/catalogs/TuI_en_DE/pdf/save/bk_1301.pdf",
+      "local_file": "hettich-VHS-primary-planning.pdf",
+      "sha256": "56a00cb2d39c1461878278e8483653a57e6cb1abfe4bd7fc5c15fa45671c4594",
+      "scope": "Manufacturer factual dimensions;not redistributed CAD or whole product qualification"
+    }
+  ],
+  "production_approved": false,
+  "corrections": [
+    "Two hinge plate access obstructions by left inner drawer spacer reproduced with actual stock solids;one AURA trial64x52x25 through relief clears selected catalogue plate footprint;strength not qualified",
+    "89316source5mm bore/28–38clamp covers trial35.6–36.4two-board stack;4joins/8bores;head locations checked before later spacers",
+    "KA5632nominal300 actual source255stroke bound added;other lengths remain nominal stress only",
+    "PR269open-front interior retained without activating dormant vendor paths"
+  ],
+  "measurements": {
+    "parts": 92,
+    "operations": 392,
+    "machined_parts": 30,
+    "module_mates": 4,
+    "access_checks": 154,
+    "planned_stage_obstructions": 0,
+    "stock_parts": 40,
+    "motion_samples": 100,
+    "sampled_collisions": 0,
+    "excluded_parts": 52
+  },
+  "pdf": {
+    "pages": 36,
+    "sha256": "7a8b8b5402d94f68bfce9cc4cc05de133900106d9a8b7f6e5f026f371cb7b336",
+    "actual_browser_download": true,
+    "all36page_layout_contact_sheet_viewed": true,
+    "readability_inspection_full_size_pages": [
+      1,
+      15,
+      36
+    ],
+    "all_part_and_operation_rows_programmatically_present": true,
+    "raster_pdf": true
+  },
+  "browser": {
+    "passed": true,
+    "width": 390,
+    "pages": 36,
+    "ops": 392,
+    "access": 154,
+    "machined_parts": 30,
+    "page_errors": []
+  },
+  "regressions": [
+    {
+      "test": "manufacturing-hardware",
+      "exit": 0,
+      "output": "PASS hardware-dependent box geometry, legacy dimensions, module backs, 30 nominal mating fixings, limited independent reconstruction and three perturbations, edge axes, oversize rejection, kitchen/bath propagation, source preservation and CSV safety. Not production certification.\n"
+    },
+    {
+      "test": "manufacturing-hinge-joints",
+      "exit": 0,
+      "output": "PASS 15 source-profile hinges/75 bores;38 independently recomputed Rastex mates (30 carcass +8 plinth);5 negative mutations;cached-world independence;kitchen/bath propagation. Not assembly/load approval.\n"
+    },
+    {
+      "test": "manufacturing-operation-bounds",
+      "exit": 0,
+      "output": "{\"status\":\"PASS\",\"nominal_operations\":122,\"negative_cases\":15,\"scope\":\"Nominal finished-stock/tool-envelope containment; no actual CSG, tolerance stack, CNC or load approval\"}\n"
+    },
+    {
+      "test": "runner-mount-pattern",
+      "exit": 0,
+      "output": "PASS six source runner patterns, 37mm-origin regression and unsupported profile/length guards; no pilot/load approval.\n"
+    },
+    {
+      "test": "runner-drawer-joinery",
+      "exit": 0,
+      "output": "PASS313trial operations;54source-section mates;20cabinet/16drawer pilots;8bottom grooves;extended520mm spacer;3negative recipes;actualCSG;kitchen/bath propagation.No stock/material/load/pilot qualification.\n"
+    },
+    {
+      "test": "shelf-support-manufacturing",
+      "exit": 0,
+      "output": "PASS storage source5mm/8mm/3.75mm dimensions,trial8.5mm bores,placement remapping,proxy disclosure,negative bearing datum and legacy geometry\nPASS kitchen source5mm/8mm/3.75mm dimensions,trial8.5mm bores,placement remapping,proxy disclosure,negative bearing datum and legacy geometry\nPASS bath source5mm/8mm/3.75mm dimensions,trial8.5mm bores,placement remapping,proxy disclosure,negative bearing datum and legacy geometry\n"
+    },
+    {
+      "test": "part-dimensions",
+      "exit": 0,
+      "output": "{\"status\":\"PASS\",\"models\":{\"seating\":90,\"table\":150,\"storage\":142,\"kitchen\":30,\"bath\":33},\"parts\":21546,\"unavailable\":[],\"controls\":[\"rotated axes\",\"designer scaling/removal\",\"explicit missing geometry\",\"button members\",\"source preservation\",\"10home products with bedroom compatibility\",\"room/wall/opening measures\",\"unsupported design\",\"re-export refresh\"]}\n"
+    },
+    {
+      "test": "dimension-package",
+      "exit": 0,
+      "output": "PASS actual project-dimension ZIP route;5families;quantity2;complete per-part rows;real ZIP bytes;actual EV save handler adds10products and wall/opening/room summaries;no mutation/send\n"
+    },
+    {
+      "test": "assembly-collision",
+      "exit": 0,
+      "output": "PASS actual500mm3 intersection,touch,gap,rotation,invalid vertex/sampling,excluded hardware and sampled door obstacle. No continuous/mechanism/load approval.\n"
+    },
+    {
+      "test": "open-fronts-interior",
+      "exit": 0,
+      "output": "{\"hinged_open_interior_cases\":12,\"sliding_negative\":1,\"status\":\"PASS\"}\n"
+    }
+  ],
+  "additional_tests": [
+    "engineering-review-check positive and missingboard/wrongdiameter/placement/input/invalidgauge negatives",
+    "assembly-front-base-check392ops62Rastex14front-spacer mates",
+    "16versionmaps stale0"
+  ],
+  "failed_test_attempts": [
+    "Visual first assertion referenced nonexistent operation_count; corrected to actual parts operation sum;PDF generation itself succeeded",
+    "Unit300runner fixture hit wardrobe depth normalization minimum450; replaced with explicit supported300runnerAssessment plus synthetic drawer motion fixture"
+  ],
+  "open_limits": [
+    "No physical assembly,all-part independent reconstruction,load/strength/material/torque/stock process qualification",
+    "Wall substrate/load/anchor/bracket/site data missing:wallfixing not selected or approved",
+    "TrueBlum4bar and runner steel member CAD/stops/continuous sweep unavailable;no real mechanism clearance approval",
+    "Straight10mmx80mm tool trial with assembly stages,not realhands/tools/fastener insertion/ceiling",
+    "Full tolerance chain incomplete;trialcutstock±.2/band±.1/depth±.1 illustrative;manufacturer runner clearance tolerance unknown",
+    "Other model families inherit report/preview with rejection or missingrecipes retained;not all445productionapproved",
+    "HistoricalForma180s and4oldbrowserfixtures remain;baseline211/220sourceaudit"
+  ],
+  "previous_evidence_preserved": [
+    "manufacturing-front-base-v4-audit.json",
+    "manufacturing-assembly-v3-audit.json",
+    "open-fronts-interior-audit.json",
+    "work/engineering-access-probe-v5.json",
+    "work/engineering-access-after-v5.json"
+  ],
+  "delivery": {
+    "pr": 270,
+    "publication_requested_this_turn": true,
+    "merged": false,
+    "deployed": false
+  }
+}

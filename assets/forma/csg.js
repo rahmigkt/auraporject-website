@@ -27,6 +27,7 @@ function cutterSolid(op) {
   const {Manifold} = W, d = op.depth > 0 ? op.depth : 4000, ax = op.axis, sg = op.sign;
   let m;
   if (op.type === 'hole') m = Manifold.cylinder(d + EPS, op.dia / 2, op.dia / 2, 40, false).translate([0, 0, -d]);
+  else if (op.type === 'countersink') m = Manifold.cylinder(d + EPS, op.innerDia / 2, op.dia / 2 + EPS, 40, false).translate([0, 0, -d]);
   else if (op.type === 'pocket') m = Manifold.cube([op.a, op.b, d + EPS], false).translate([-op.a / 2, -op.b / 2, -d]);
   else if (op.type === 'slot') { const L = Math.max(op.a - op.b, 0.1), r = op.b / 2; m = Manifold.union([Manifold.cube([L, op.b, d + EPS], false).translate([-L / 2, -r, -d]), Manifold.cylinder(d + EPS, r, r, 32).translate([-L / 2, 0, -d]), Manifold.cylinder(d + EPS, r, r, 32).translate([L / 2, 0, -d])]); }
   else { // groove / flutes: round-bottomed channels of width b, length a, depth d (≤ b/2 gives a true half-round)
@@ -81,4 +82,18 @@ export function cutMesh(mesh, ops) {
     return creaseMesh(m.vertProperties, m.triVerts);
   } catch { return {failed: true}; }
   finally { base?.delete?.(); out?.delete?.(); }
+}
+
+// Exact triangle-solid intersection within Manifold's numerical precision.
+// Missing/invalid solids must not become a zero-volume success.
+export function meshIntersectionVolume(first,second){
+  if(!W)throw Error('Collision solid engine is not loaded');
+  let a,b,out;
+  try{
+    a=toManifold(first);b=toManifold(second);
+    if(a.status()!=='NoError'||b.status()!=='NoError')throw Error('Invalid collision input solid');
+    out=W.Manifold.intersection([a,b]);if(out.status()!=='NoError')throw Error('Collision intersection failed');
+    const volume=out.volume();if(!Number.isFinite(volume)||volume<0)throw Error('Invalid intersection volume');
+    return volume;
+  }finally{a?.delete?.();b?.delete?.();out?.delete?.();}
 }

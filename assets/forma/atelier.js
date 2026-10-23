@@ -1,3 +1,5 @@
+import {openInspectionPdf,inspectionPanelSummary,cachedInspection} from './production/inspection-ui.js';
+import {verifiedMachiningPreview,inspectionKey} from './production/engineering-checks.js';
 // Designer workshop: open a customer's design, shape parts by hand (silhouettes of flat parts, turned profiles of
 // legs) on a touch screen or with a mouse, see the physical and production checks live, then hand it to production.
 // No AI: the designer gives the form, the engine builds it and checks it.
@@ -25,7 +27,8 @@ let viewer = null, checkTimer = 0;
 
 // ---- Loading ---------------------------------------------------------------------------------------------------
 async function load(hash) {
-  const got = await readLink(hash);
+  const sample=new URLSearchParams(location.search).get('ornek-uretim')==='gardirop'?await fetch('assets/forma/production/review-sample.json').then(r=>{if(!r.ok)throw Error('Örnek yüklenemedi');return r.json();}):null;
+  const got = sample?{design:sample}:await readLink(hash);
   if (got?.design) S.items = [{id: 'U1', qty: 1, design: normalizeDesign(got.design)}];
   else if (got?.items) { S.items = got.items.map(i => ({...i, design: normalizeDesign(i.design)})); S.room = got.room; }
   else {
@@ -47,7 +50,7 @@ const design = () => S.items[S.cur]?.design;
 // ---- Model ------------------------------------------------------------------------------------------------------
 function rebuild() {
   const d = design(); if (!d) return;
-  S.compiled = compileDesign(d);
+  S.compiled = compileDesign(d);S.machinedPreview=null;
   const shown=S.compare?(S.items[S.cur].customerOriginal||{...d,overrides:[]}):d;
   viewer?.setDesign(S.compare ? compileDesign(shown) : S.compiled, shown.materials);
   viewer?.structure(!!S.frameView);
@@ -525,7 +528,7 @@ function renderPanel() {
   const d = design(), p = $('#panel');
   if (!d) { p.innerHTML = '<p class="a-note">Tasarım bulunamadı. Müşterinin bağlantısını yapıştırın.</p>'; return; }
   const parts = editableParts(S.compiled);
-  p.innerHTML = correctionPanel()+structurePanel() + `<h2>Parça biçimi</h2><div class="a-parts">${parts.map(t => `<button data-part="${t.key}" aria-pressed="${S.target?.key === t.key}">${nameOf(t)}${(d.overrides || []).some(o => (o.id && 'id:' + o.id === t.key) || (o.role && 'role:' + o.role === t.key && o.tool === 'profile')) ? ' ✎' : ''}</button>`).join('') || '<span class="a-note">Bu üründe biçimlendirilebilir parça yok.</span>'}</div>
+  p.innerHTML = inspectionPanelSummary(d,S.engineeringReport)+correctionPanel()+structurePanel() + `<h2>Parça biçimi</h2><div class="a-parts">${parts.map(t => `<button data-part="${t.key}" aria-pressed="${S.target?.key === t.key}">${nameOf(t)}${(d.overrides || []).some(o => (o.id && 'id:' + o.id === t.key) || (o.role && 'role:' + o.role === t.key && o.tool === 'profile')) ? ' ✎' : ''}</button>`).join('') || '<span class="a-note">Bu üründe biçimlendirilebilir parça yok.</span>'}</div>
   ${S.target ? `<h2>${nameOf(S.target)}</h2>
   <div class="a-tools">${S.target.tool === 'silhouette' ? `<button data-sym aria-pressed="${S.sym}">Simetri</button><button data-preset="soft">Yumuşak köşe</button><button data-preset="oval">Oval</button><button data-preset="boat">Tekne</button><button data-preset="bow">İçbükey kenar</button>`
     : `<button data-preset="taper">Konik</button><button data-preset="swell">Şişkin</button><button data-preset="spindle">Torna halkalı</button>`}</div>
@@ -552,6 +555,9 @@ function renderChecks() {
 
 $('#panel').addEventListener('click', async e => {
   const b = e.target.closest('button'); if (!b) return;
+  if(b.hasAttribute('data-inspection-pdf')){await openInspectionPdf([{...S.items[S.cur],design:structuredClone(design())}]);S.engineeringReport=cachedInspection(design());renderPanel();return;}
+  if(b.hasAttribute('data-machined-reset')){S.machinedPreview=null;rebuild();renderPanel();return;}
+  if(b.hasAttribute('data-machined-preview')){b.disabled=true;const snapshot=structuredClone(design()),key=inspectionKey(snapshot);try{const p=await verifiedMachiningPreview(snapshot);if(key!==inspectionKey(design()))throw Error('Tasarım değişti;önizlemeyi yeniden açın.');S.machinedPreview=p;S.compare=false;viewer?.setDesign(p.compiled,snapshot.materials);viewer?.structure(true);b.textContent='İşlenmiş parça: '+p.machined_parts+' · inceleme';}catch(error){b.textContent='Gösterilemedi: '+String(error.message||error);}finally{b.disabled=false;}return;}
   if(b.hasAttribute('data-frameview')){S.frameView=!S.frameView;rebuild();renderPanel();return;}
   if(b.hasAttribute('data-autocorrect')){
    const item=S.items[S.cur],r=autoCorrectDesign(design());item.customerOriginal ||= structuredClone(design());item.design=r.design;item.correction={...r,original:structuredClone(item.customerOriginal),changes:[...new Set([...(item.correction?.changes||[]),...r.changes])]};

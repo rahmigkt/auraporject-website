@@ -1,0 +1,40 @@
+TEST tests/manufacturing-hardware-check.mjs EXIT 0
+PASS hardware-dependent box geometry, legacy dimensions, module backs, 30 nominal mating fixings, limited independent reconstruction and three perturbations, edge axes, oversize rejection, kitchen/bath propagation, source preservation and CSV safety. Not production certification.
+TEST tests/manufacturing-hinge-joints-check.mjs EXIT 0
+PASS 15 source-profile hinges/75 bores;38 independently recomputed Rastex mates (30 carcass +8 plinth);5 negative mutations;cached-world independence;kitchen/bath propagation. Not assembly/load approval.
+TEST tests/manufacturing-operation-bounds-check.mjs EXIT 0
+{"status":"PASS","nominal_operations":122,"negative_cases":15,"scope":"Nominal finished-stock/tool-envelope containment; no actual CSG, tolerance stack, CNC or load approval"}
+TEST tests/runner-mount-pattern-check.mjs EXIT 0
+PASS six source runner patterns, 37mm-origin regression and unsupported profile/length guards; no pilot/load approval.
+TEST tests/rail-mount-check.mjs EXIT 0
+PASS4sourceSL786 roof bores6.5mm,M6x25,max19mm;3through guard mutations;30x15 capsule envelope;thick roof rejection;legacy round24 preserved.No hardware CAD/thread/load approval.
+TEST tests/shelf-support-manufacturing-check.mjs EXIT 0
+PASS storage source5mm/8mm/3.75mm dimensions,trial8.5mm bores,placement remapping,proxy disclosure,negative bearing datum and legacy geometry
+PASS kitchen source5mm/8mm/3.75mm dimensions,trial8.5mm bores,placement remapping,proxy disclosure,negative bearing datum and legacy geometry
+PASS bath source5mm/8mm/3.75mm dimensions,trial8.5mm bores,placement remapping,proxy disclosure,negative bearing datum and legacy geometry
+TEST tests/dimension-package-check.mjs EXIT 0
+PASS actual project-dimension ZIP route;5families;quantity2;complete per-part rows;real ZIP bytes;actual EV save handler adds10products and wall/opening/room summaries;no mutation/send
+TEST tests/panel-engine-check.mjs EXIT 0
+PASS 48 panel constructions, clearances, internal drawer components and BOM consistency.
+TEST tests/production-quantity-check.mjs EXIT 0
+PASS import undefined gives an integer and correct panel total
+PASS import 2 gives an integer and correct panel total
+PASS import 2 gives an integer and correct panel total
+PASS invalid import 0 preserves loaded items
+PASS invalid import -1 preserves loaded items
+PASS invalid import 1.5 preserves loaded items
+PASS invalid import no preserves loaded items
+PASS invalid import Infinity preserves loaded items
+PASS invalid import 1000 preserves loaded items
+PASS invalid quantity edit restores the last valid count; valid edit still saves
+TEST tests/production-sheet-trim-check.mjs EXIT 0
+PASS trim 0: drawing position and size match the packed pieces
+PASS trim 10: drawing position and size match the packed pieces
+PASS trim 25: drawing position and size match the packed pieces
+PASS trim 50: drawing position and size match the packed pieces
+TEST tests/storage-bay-move-check.mjs EXIT 0
+PASS 12 storage/bath layouts: move, boundary, nested settings, source immutability, reverse move and JSON reopen.
+TEST tests/bath-layout-click-check.mjs EXIT 0
+{"passed":40,"failed":0,"failures":[]}
+TEST tests/kitchen-studies-check.mjs EXIT 0
+PASS 9 kitchen studies, finite parts, 27 drawings, sink openings, fluting and waterfall ends.

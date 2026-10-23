@@ -1,3 +1,5 @@
+import {projectInspectionEnabled,openInspectionPdf} from './production/inspection-ui.js';
+import {machiningGeometryFiles} from './production/machined-geometry.js';
 // AURA Forma design studio: family → style (one starting form) → parts / dimensions / materials → send to the designer.
 // No ready-made proposal gallery: people build their own piece. Drawings, parts list and files never leave the
 // browser before sending; afterwards the customer can download the PDF of the design they sent.
@@ -11,6 +13,7 @@ import {styleName} from './styles.js';
 import {STARTS} from './starts.js';
 import {technicalReview, reviewMatches} from './technical-review.js';
 import {reviewDesign} from './auto-correct.js';
+import {ASSEMBLY_SYSTEMS,RAIL_SYSTEMS,RUNNER_FIXING_SYSTEMS,SHELF_SUPPORT_SYSTEMS,HINGE_SYSTEMS, HINGE_PROFILE, CONNECTOR_SYSTEMS, CONNECTOR_PROFILES, RUNNER_SYSTEMS, RUNNER_PROFILES} from './hardware.js';
 import {partDimensions,partDimensionsCsv} from './part-dimensions.js';
 import {dimensionProjectFiles} from './dimension-package.js';
 import {findingText,reviewDocument,textileAssessmentFiles} from './review-document.js';
@@ -289,6 +292,10 @@ function linesSection() {
 }
 const kindRow = () => isBedroom() ? '' : `<div class="f-kinds">${ui().kinds.map(k => chip(`data-kind="${k}"`, L(k), state.design.kind === k)).join('')}</div>`;
 
+function runnerControls(){
+  const tr=state.lang==='tr', selected=state.design.params.runnerSystem;
+  return `<section class="f-runner-controls"><h3>${tr?'Cephe, takoz ve kaide montajı':'Front, spacer and base assembly'}</h3><div class="f-chips">${ASSEMBLY_SYSTEMS.map(id=>chip(`data-enum="assemblySystem" data-value="${id}"`,id==='legacy-unspecified'?(tr?'Mevcut örnek':'Existing example'):(tr?'71833 / takoz / Rastex · montaj denemesi':'71833 / spacer / Rastex · assembly trial'),state.design.params.assemblySystem===id)).join('')}</div><p class="f-note">${tr?'Kaynaklı bağlantı ölçüleri ve atölyede doğrulanacak pilotlar. Hettich ray denemesi ve Rastex ile kullanılır; yük ve imalat onayı değildir.':'Source connection sizes with workshop trial pilots. Requires Hettich runner trial and Rastex;not load or manufacturing approval.'}</p><h3>${tr?'Askılık bağlantısı':'Wardrobe rail connection'}</h3><div class="f-chips">${RAIL_SYSTEMS.map(id=>chip(`data-enum="railSystem" data-value="${id}"`,id==='legacy-round24'?(tr?'Mevcut Ø24 örneği':'Existing Ø24 example'):'HettichSL786 · M6/üst tabla',state.design.params.railSystem===id)).join('')}</div><h3>${tr?'Ray bağlantı denemesi':'Runner fixing trial'}</h3><div class="f-chips">${RUNNER_FIXING_SYSTEMS.map(id=>chip(`data-enum="runnerFixingSystem" data-value="${id}"`,id==='legacy-unspecified'?(tr?'Mevcut örnek':'Existing example'):(tr?'Hettich ·18mm kutu/vida/pilot denemesi':'Hettich ·18mm box/screw/pilot trial'),state.design.params.runnerFixingSystem===id)).join('')}</div><p class="f-note">${tr?'Deneme seçimi HettichKA5632 ve18mm Rastex ile kullanılır; kutu yanı18mm olur, taban dört kenardan kanala girer. Pilot çap/derinliği atölyede doğrulanmalıdır; imalat onayı değildir.':'Trial requires HettichKA5632 and18mm Rastex;18mm box sides and grooved bottom. Pilot dimensions require workshop validation;not manufacturing approval.'}</p><h3>${tr?'Raf desteği':'Shelf support'}</h3><div class="f-chips">${SHELF_SUPPORT_SYSTEMS.map(id=>chip(`data-enum="shelfSupportSystem" data-value="${id}"`,id==='legacy-generic'?(tr?'Mevcut örnek pim':'Existing example pin'):'Hettich016181 · delik planı',state.design.params.shelfSupportSystem===id)).join('')}</div><h3>${tr?'Menteşe sistemi':'Hinge system'}</h3><div class="f-chips">${HINGE_SYSTEMS.map(id=>chip(`data-enum="hingeSystem" data-value="${id}"`,id==='legacy-unspecified'?(tr?'Mevcut örnek':'Existing example'):HINGE_PROFILE.name,state.design.params.hingeSystem===id)).join('')}</div><h3>${tr?'Gövde bağlantısı':'Carcass connector'}</h3><div class="f-chips">${CONNECTOR_SYSTEMS.map(id=>chip(`data-enum="connectorSystem" data-value="${id}"`,CONNECTOR_PROFILES[id].name,state.design.params.connectorSystem===id)).join('')}</div><h3>${tr?'Arkalık yapısı':'Back construction'}</h3><div class="f-chips">${[['legacy-bay',tr?'Mevcut bölme arkalığı':'Existing bay backs'],['module-grooved',tr?'Modül arkalığı · üretim pilotu':'Module back · production trial']].map(([id,label])=>chip(`data-enum="backConstruction" data-value="${id}"`,label,state.design.params.backConstruction===id)).join('')}</div><h3>${tr?'Çekmece rayı':'Drawer runner'}</h3><div class="f-chips">${RUNNER_SYSTEMS.map(id=>chip(`data-enum="runnerSystem" data-value="${id}"`,RUNNER_PROFILES[id].name,selected===id)).join('')}</div><p class="f-note">${tr?'Seçim kutu genişliğini, yan levha kalınlığını ve ray boyunu değiştirir. Delik şablonu ve yük kontrolü tamamlanmadan üretim onayı değildir.':'Selection changes box width, side thickness and runner length. Drilling and load verification are still required.'}</p></section>`;
+}
 function enumGroup(key, labelKey, ns = key, options = familyOf(state.design).mod.ENUMS[key]) {
   return `<h3>${L(labelKey)}</h3><div class="f-chips">${options.map(v => chip(`data-enum="${key}" data-value="${v}"`, partName(ns, v, state.lang), state.design.params[key] === v)).join('')}</div>`;
 }
@@ -352,7 +359,7 @@ const CELL_COLORS = ['white', 'cream', 'sand', 'greige', 'taupe', 'mink', 'silve
 const selCell = () => { const p = state.design.params, s = state.sel || {b: 0, c: 0}; const b = Math.min(s.b, p.bays.length - 1), c = Math.min(s.c, p.bays[b].cells.length - 1); return {b, c}; };
 function storagePartsPanel(p) {
   const k = state.design.kind, E = familyOf(state.design).mod.ENUMS;
-  return `<h2>${L('tabParts')}</h2>${layoutEditor(p)}
+  return `<h2>${L('tabParts')}</h2>${layoutEditor(p)}${runnerControls()}
   ${k === 'wardrobe' ? enumGroup('doorType', 'doorType') : ''}
   ${p.doorType === 'sliding' ? '' : enumGroup('frontFit', 'frontFit')}
   ${enumGroup('frontStyle', 'frontStyle')}${enumGroup('pull', 'pull')}
@@ -457,7 +464,7 @@ function bathPartsPanel(p) {
   ${k === 'mirror' ? enumGroup('mirrorCabinet', 'bMirrorCabinet', 'bMirrorCabinet') : ''}
   ${k === 'mirror' && !cab ? enumGroup('mirror', 'mirror') + enumGroup('mirrorLight', 'bMirrorLight', 'bMirrorLight') : ''}
   ${k === 'basin' ? enumGroup('basinType', 'bBasinType', 'bBasinType') + enumGroup('basinShape', 'bBasinShape', 'bBasinShape') + (p.width >= 1100 ? enumGroup('basins', 'bBasins', 'bBasins') : '') + enumGroup('tap', 'bTap', 'bTap') : ''}
-  ${cab ? layoutEditor(p) : ''}
+  ${cab ? layoutEditor(p) + runnerControls() : ''}
   ${cab ? enumGroup('frontStyle', 'frontStyle') + enumGroup('pull', 'pull') : ''}
   ${k !== 'mirror' ? enumGroup('base', 'caseBase', 'sBase') + (p.base === 'legs' ? enumGroup('legType', 'legType', 'sLegType') : '') : ''}
   ${cab ? enumGroup('caseEdge', 'caseEdge') : ''}
@@ -483,7 +490,7 @@ function kitchenPartsPanel(p) {
   });
   const svg = `<svg class="f-layout-svg" viewBox="${-W / 2 - pad} ${-H} ${W + 2 * pad} ${H + pad}">${out.join('')}</svg>`;
   const types = KTYPES.filter(t => run || !['tallFridge', 'tallOven', 'pantry'].includes(t)), widths = KWIDTHS[m.type] || [150, 300, 400, 450, 500, 600, 800, 900, 1000, 1200];
-  return `<h2>${L('tabParts')}</h2><section class="f-layoutbox"><h3>${L('kModules')} · ${p.modules.length} · ${g.total} mm</h3>${svg}<p class="f-note">${L('kHint')}</p>
+  return `<h2>${L('tabParts')}</h2>${runnerControls()}<section class="f-layoutbox"><h3>${L('kModules')} · ${p.modules.length} · ${g.total} mm</h3>${svg}<p class="f-note">${L('kHint')}</p>
   <h3>${L('kModule')} ${i + 1} · ${L('kBaseType')}</h3><div class="f-chips">${types.map(t => chip(`data-mtype="${t}"`, partName('kBase', t, state.lang), m.type === t)).join('')}</div>
   <h3>${L('width')}</h3><div class="f-seg">${widths.map(w => chip(`data-mw="${w}"`, String(w), m.w === w)).join('')}</div>
   ${run && !tall ? `<h3>${L('kWallType')}</h3><div class="f-chips">${['doors', 'glass', 'open', 'flap', 'hood', 'none'].map(t => chip(`data-mwall="${t}"`, partName('kWall', t, state.lang), m.wall === t)).join('')}</div>` : ''}
@@ -872,7 +879,7 @@ function projectPanel() {
     <div class="f-nextrow"><b>${L('anotherProduct')}</b><span>${FAMILY_NAV.map(([f, k]) => `<button class="f-link" data-act="family" data-family="${f}">${esc(L(k))}</button>`).join('')}</span></div></section>` : '';
   const list = items.length ? `<h3>${L('projectItems')} · ${items.length}</h3><ol class="f-items">${items.map((it, n) => `<li ${it.id === state.editing ? 'aria-current="true"' : ''}><span class="f-n">${String(n + 1).padStart(2, '0')}</span><span><b>${esc(itemName(it.design))}</b><small>${esc(styleName(it.design.style, state.lang))} · ${esc(itemDims(it.design))}</small>
     <span class="f-qty">${L('quantity')} <button class="f-link" data-act="qty" data-item="${it.id}" data-d="-1" ${(it.qty || 1) <= 1 ? 'disabled' : ''}>−</button><b>${it.qty || 1}</b><button class="f-link" data-act="qty" data-item="${it.id}" data-d="1">+</button></span></span><span class="f-itemacts"><button class="f-link" data-act="edit" data-item="${it.id}">${L('edit')}</button><button class="f-link" data-act="remove" data-item="${it.id}">${L('remove')}</button></span></li>`).join('')}</ol>` : `<p class="f-note">${L('projectEmpty')}</p>`;
-  const dimensions = items.length ? `<section><button data-act="dimensions">${esc(L('dimensionsDownload'))} ↓</button><p class="f-note">${esc(L('dimensionsScope'))}</p></section>` : '';
+  const dimensions = items.length ? `<section><button data-act="dimensions">${esc(L('dimensionsDownload'))} ↓</button><button data-act="manufacturingGeometry">${state.lang==='tr'?'İmalat geometrisi · inceleme':'Manufacturing geometry · review'} ↓</button><p class="f-note">${state.lang==='tr'?'Desteklenen delik ve yuvalar çıkarılmış parça geometrisi. Eksik bağlantılar ve imalat onayı dosyada ayrı belirtilir.':'Part geometry with supported holes and grooves removed. Missing joints and manufacturing approval are recorded separately.'}</p><p class="f-note">${esc(L('dimensionsScope'))}</p></section>` : '';
   const room = items.length ? roomSection() : '';
   const sent = state.sent, sentChanged = sent && sent.key !== projectKey();
   const send = `<h2 class="f-h2-sub">${L('sendDesigner')}</h2><p class="f-lead">${L('sendIntro')}</p>
@@ -888,7 +895,7 @@ function projectPanel() {
   ${editing && !changed ? technicalReviewHTML(editing) : ''}
   <div class="f-current"><div><b>${esc(itemName(d))}</b><small>${esc(styleName(d.style, state.lang))} · ${esc(fam === 'bedroom' ? L('setPiecesList') : itemDims(d))}</small></div>
   <button class="f-primary" data-act="add" ${editing && !changed ? 'disabled' : ''}>${editing ? (changed ? L('saveChanges') : L('inProject')) : L('addContinue')} ${editing && !changed ? '✓' : '+'}</button></div>
-  ${next}${list}${dimensions}${room}${send}`;
+  ${next}${list}${dimensions}${projectInspectionEnabled()?`<section data-temporary-inspection><h3>Geçici montaj incelemesi</h3><button data-act="currentInspectionPdf">Bu modeli incele / PDF indir</button><button data-act="inspectionPdf" ${items.length?'':'disabled'}>Projedeki ürünleri incele / PDF indir</button><p class="f-note">Projeye kaydedilmiş ürünler için bu tarayıcıda üretilir. Bu görünüm bağlantıdaki inceleme seçeneğiyle açılır; erişim yetkilendirmesi değildir. Gönderim yapılmaz.</p></section>`:''}${room}${send}`;
 }
 
 function technicalReviewHTML(item) {
@@ -993,8 +1000,29 @@ function showRoom() {
   $('#designTitle').textContent = `${L('room_' + r.type)} · ${items.length} ${L('pieces')}`;
   $('#dims').textContent = `${(plan.W / 1000).toFixed(1)} × ${(plan.D / 1000).toFixed(1)} m · ${L('layout')} ${r.layout + 1} / 3`;
 }
+let machiningDownloadBusy=false;
+async function downloadMachiningProject(){
+  if(machiningDownloadBusy)return;
+  machiningDownloadBusy=true;
+  const snapshot=structuredClone(state.project.items),files=[];
+  try{
+    feedback(state.lang==='tr'?'İmalat inceleme geometrisi hazırlanıyor…':'Preparing manufacturing review geometry…');
+    for(const [n,item] of snapshot.entries()){
+      const compiled=compileOf(item.design),result=await machiningGeometryFiles(compiled,item.design),dir=String(n+1).padStart(2,'0')+'/';
+      const {assemblyCollisionAudit}=await import('./production/assembly-collision.js');
+      const collision=await assemblyCollisionAudit(compiled,item.design);
+      files.push({name:dir+'assembly-collision-review.json',data:JSON.stringify(collision,null,2)},...result.files.map(f=>({...f,name:dir+f.name})),{name:dir+'order.json',data:JSON.stringify({id:item.id,quantity:item.qty||1,production_approved:false},null,2)});
+    }
+    if(!files.length)throw Error(state.lang==='tr'?'Önce projeye ürün ekleyin.':'Add a product first.');
+    download('AURA-manufacturing-geometry-review.zip',zip(files),'application/zip');
+    feedback(state.lang==='tr'?'İnceleme dosyası hazır; imalat onayı değildir.':'Review file ready; not manufacturing approval.');
+  }catch(error){feedback(String(error.message||error),'error');}finally{machiningDownloadBusy=false;}
+}
 function projectAction(el) {
+  if(el.dataset.act==='currentInspectionPdf')return openInspectionPdf([{id:'CURRENT',qty:1,design:state.design}]).catch(error=>feedback(String(error.message||error),'error'));
+  if(el.dataset.act==='inspectionPdf')return openInspectionPdf(state.project.items).catch(error=>feedback(String(error.message||error),'error'));
   if(el.dataset.act==='assessment')return openAssessment();
+  if(el.dataset.act==='manufacturingGeometry')return downloadMachiningProject();
   if(el.dataset.act==='dimensions'){download('AURA-project-dimensions.zip',zip(dimensionProjectFiles(state.project.items,compileOf)),'application/zip');return;}
   if (el.dataset.act?.startsWith('set-')) return seatingSetAction(el.dataset.act);
   const a = el.dataset.act, items = state.project.items;
@@ -1478,3 +1506,6 @@ const openFromLink = () => readLink().then(r => {
 openFromLink();
 window.addEventListener('hashchange', openFromLink);
 aiStatus().then(s => { state.ai = s; if (state.tab === 'parts') renderPanel(); });
+
+// Explicit owner-review sample link;the existing saved project is never replaced.
+if(new URLSearchParams(location.search).get('ornek-uretim')==='gardirop')fetch('assets/forma/production/review-sample.json').then(r=>{if(!r.ok)throw Error('Örnek yüklenemedi');return r.json();}).then(d=>{state.editing=null;state.room=null;setDesign(normalizeDesign(d));state.tab='deliver';renderPanel();feedback('Üretim inceleme örneği açıldı; mevcut projeniz korunur.');}).catch(e=>feedback(String(e.message),'error'));

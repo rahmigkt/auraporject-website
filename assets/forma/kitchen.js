@@ -24,6 +24,11 @@ export const RANGES = {
   wallGap: [450, 750, 10], wallHeight: [360, 960, 10], wallDepth: [280, 400, 5], solidThickness: [20, 30, 1], fluteWidth: [12, 60, 1]
 };
 export const ENUMS = {
+  assemblySystem:S.ENUMS.assemblySystem,
+  railSystem:S.ENUMS.railSystem,
+  runnerFixingSystem:S.ENUMS.runnerFixingSystem,
+  shelfSupportSystem:S.ENUMS.shelfSupportSystem,
+  runnerSystem: S.ENUMS.runnerSystem, hingeSystem:S.ENUMS.hingeSystem, connectorSystem:S.ENUMS.connectorSystem, backConstruction: S.ENUMS.backConstruction,
   frontStyle: S.ENUMS.frontStyle.filter(x => !['grooved', 'fluted', 'slats'].includes(x)), // no channelled/striped fronts in wet rooms
   pull: S.ENUMS.pull, frontFit: S.ENUMS.frontFit, caseEdge: S.ENUMS.caseEdge, caseLine: S.ENUMS.caseLine,
   sink: ['single', 'double', 'drainer'], sinkMount: ['undermount', 'inset'], tap: ['arc', 'straight', 'pullout'],
@@ -35,7 +40,7 @@ export const LAYOUTS = {
   run: () => [M('pantry', 600, 'none'), M('drawers', 600), M('sink', 800), M('dishwasher', 600), M('hob', 900, 'hood'), M('drawerDoor', 600), M('tallOven', 600, 'none'), M('tallFridge', 600, 'none')],
   island: () => [M('drawers', 800, 'none'), M('sink', 900, 'none'), M('dishwasher', 600, 'none'), M('doors', 800, 'none')]
 };
-const BASE = {worktopHeight: 900, topThickness: 30, topDepth: 600, plinthHeight: 120, wallGap: 550, wallHeight: 720, wallDepth: 330, solidThickness: 22, fluteWidth: 30,
+const BASE = {assemblySystem:'legacy-unspecified',railSystem:'legacy-round24',runnerFixingSystem:'legacy-unspecified',shelfSupportSystem:'legacy-generic',runnerSystem: 'legacy-side-12.7', hingeSystem:'legacy-unspecified', connectorSystem:'legacy-unspecified', backConstruction:'legacy-bay', worktopHeight: 900, topThickness: 30, topDepth: 600, plinthHeight: 120, wallGap: 550, wallHeight: 720, wallDepth: 330, solidThickness: 22, fluteWidth: 30,
   frontStyle: 'flat', pull: 'edge', frontFit: 'overlay', caseEdge: 'eased', caseLine: 'none', sink: 'single', sinkMount: 'undermount', tap: 'arc', hob: 'induction', hood: 'chimney', backsplash: 'low', board: 'mdf', frontBoard: 'mdf'};
 export const defaultsFor = kind => ({...BASE, ...(kind === 'island' ? {topDepth: 1000, backsplash: 'none'} : {}), modules: LAYOUTS[KINDS[kind] ? kind : 'run'](), kind: KINDS[kind] ? kind : 'run'});
 export const DEFAULTS = defaultsFor('run');
@@ -69,7 +74,7 @@ function box(parts, id, role, mat, [x0, x1], [y0, y1], [z0, z1], extra = {}, r =
   const w = x1 - x0, h = y1 - y0, d = z1 - z0; if (!(w > 0.5 && h > 0.5 && d > 0.5)) return;
   parts.push(part(id, role, mat, {fn: 'cushion', w: r1(w), h: r1(h), d: r1(d), r: Math.min(r, w / 3, h / 3, d / 3)}, [(x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2], [0, 0, 0], extra));
 }
-const UNIT_KEYS = ['frontStyle', 'pull', 'frontFit', 'caseEdge', 'caseLine', 'solidThickness', 'fluteWidth', 'board', 'frontBoard'];
+const UNIT_KEYS = ['assemblySystem','railSystem','runnerFixingSystem','shelfSupportSystem','hingeSystem','connectorSystem','backConstruction','runnerSystem', 'frontStyle', 'pull', 'frontFit', 'caseEdge', 'caseLine', 'solidThickness', 'fluteWidth', 'board', 'frontBoard'];
 const D_BASE = 580; // carcass 561 + 1 + 18 mm front
 const C = (type, o = {}) => ({type, ...o});
 function baseBays(m, interiorH) {
