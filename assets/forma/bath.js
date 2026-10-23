@@ -18,6 +18,9 @@ const SIZE = {
 };
 export const rangeFor = (key, p) => { const s = SIZE[p.kind]?.[key]; return s ? [s[0], s[1], RANGES[key][2]] : RANGES[key]; };
 export const ENUMS = {
+  railSystem:S.ENUMS.railSystem,
+  runnerFixingSystem:S.ENUMS.runnerFixingSystem,
+  shelfSupportSystem:S.ENUMS.shelfSupportSystem,
   runnerSystem: S.ENUMS.runnerSystem, hingeSystem:S.ENUMS.hingeSystem, connectorSystem:S.ENUMS.connectorSystem, backConstruction: S.ENUMS.backConstruction,
   frontStyle: S.ENUMS.frontStyle.filter(x => !['grooved', 'fluted', 'slats'].includes(x)), // no channelled/striped fronts in wet rooms
   pull: S.ENUMS.pull, frontFit: S.ENUMS.frontFit, caseEdge: S.ENUMS.caseEdge, caseLine: S.ENUMS.caseLine,
@@ -32,7 +35,7 @@ export const LAYOUTS = {
   column: () => [{w: 1, cells: [C('door', {k: 3}), C('open', {k: 0, mm: 300})]}],
   mirror: () => [{w: 1, cells: [C('mirror', {k: 2})]}]
 };
-const BASE = {runnerSystem: 'legacy-side-12.7', hingeSystem:'legacy-unspecified', connectorSystem:'legacy-unspecified', backConstruction:'legacy-bay', frontStyle: 'flat', pull: 'cutout', frontFit: 'overlay', caseEdge: 'eased', caseLine: 'none', base: 'wall', legType: 'taper', legHeight: 250, basinType: 'vessel', basinShape: 'round', basins: 'single', tap: 'wall',
+const BASE = {railSystem:'legacy-round24',runnerFixingSystem:'legacy-unspecified',shelfSupportSystem:'legacy-generic',runnerSystem: 'legacy-side-12.7', hingeSystem:'legacy-unspecified', connectorSystem:'legacy-unspecified', backConstruction:'legacy-bay', frontStyle: 'flat', pull: 'cutout', frontFit: 'overlay', caseEdge: 'eased', caseLine: 'none', base: 'wall', legType: 'taper', legHeight: 250, basinType: 'vessel', basinShape: 'round', basins: 'single', tap: 'wall',
   mirror: 'rounded', mirrorLight: 'back', mirrorCabinet: 'none', topThickness: 20, solidThickness: 22, fluteWidth: 30, board: 'mdf', frontBoard: 'mdf'};
 const KIND_DEFAULTS = {
   basin: {width: 1000, height: 450, depth: 480, mountHeight: 860, mirrorWidth: 800, mirrorHeight: 800},
@@ -61,7 +64,7 @@ function box(parts, id, role, mat, [x0, x1], [y0, y1], [z0, z1], extra = {}, r =
   const w = x1 - x0, h = y1 - y0, d = z1 - z0; if (!(w > 0.5 && h > 0.5 && d > 0.5)) return;
   parts.push(part(id, role, mat, {fn: 'cushion', w: r1(w), h: r1(h), d: r1(d), r: Math.min(r, w / 3, h / 3, d / 3)}, [(x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2], [0, 0, 0], extra));
 }
-const UNIT_KEYS = ['hingeSystem','connectorSystem','backConstruction','runnerSystem', 'frontStyle', 'pull', 'frontFit', 'caseEdge', 'caseLine', 'solidThickness', 'fluteWidth', 'board', 'frontBoard', 'legType'];
+const UNIT_KEYS = ['railSystem','runnerFixingSystem','shelfSupportSystem','hingeSystem','connectorSystem','backConstruction','runnerSystem', 'frontStyle', 'pull', 'frontFit', 'caseEdge', 'caseLine', 'solidThickness', 'fluteWidth', 'board', 'frontBoard', 'legType'];
 /** A wall-hung (or leg-mounted) carcass from the panel engine whose top is at yTop and body is h tall. */
 function unitAt(p, {width, h, depth, yTop, legs, open}) {
   const common = Object.fromEntries(UNIT_KEYS.map(k => [k, p[k]]));

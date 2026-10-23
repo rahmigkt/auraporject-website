@@ -513,11 +513,12 @@ export function profiledSlab(outline, t, inset = () => 0, {steps = 12, exact = f
  * Section w (along bend) × d, scaled linearly from taper0 (t=0) to taper1 (t=1).
  */
 export function sweep({axis = 1, bend = [1, 0, 0], L, start = 0, w, d, shape = 'square', bow = 0, mode = 'arc', taper0 = 1, taper1 = 1, steps = 28}) {
+  if(shape==='capsule'&&(![w,d,L].every(v=>Number.isFinite(v)&&v>0)||w<d))throw Error('Invalid capsule rail dimensions');
   const A = [0, 0, 0]; A[axis] = 1;
   const B = bend, C = [A[1] * B[2] - A[2] * B[1], A[2] * B[0] - A[0] * B[2], A[0] * B[1] - A[1] * B[0]];
   const off = t => mode === 'sabre' ? bow * (1 - t) ** 2 : bow * 4 * t * (1 - t);
   const doff = t => mode === 'sabre' ? -2 * bow * (1 - t) : bow * 4 * (1 - 2 * t);
-  const sec = shape === 'round'
+  const sec = shape==='capsule'?[...Array.from({length:13},(_,i)=>{const a=-Math.PI/2+i*Math.PI/12;return [((w-d)/2+d/2*Math.cos(a))/w,Math.sin(a)/2];}),...Array.from({length:13},(_,i)=>{const a=Math.PI/2+i*Math.PI/12;return [(-(w-d)/2+d/2*Math.cos(a))/w,Math.sin(a)/2];})]:shape === 'round'
     ? Array.from({length: 20}, (_, i) => { const a = i / 20 * Math.PI * 2; return [Math.cos(a) / 2, Math.sin(a) / 2]; })
     : [[0.5, -0.5], [0.5, 0.5], [-0.5, 0.5], [-0.5, -0.5]];
   const frames = [];

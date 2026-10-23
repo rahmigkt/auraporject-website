@@ -1,4 +1,9 @@
 import {verifyRastexMates} from './joint-mating.js';
+import {addShelfOperations} from './shelf-layout.js';
+import {addRunnerOperations} from './runner-drilling.js';
+import {addDrawerConnections} from './drawer-joinery.js';
+import {addRailOperations} from './rail-layout.js';
+import {reassembleDrawers} from './reassemble-drawers.js';
 import {addPlinthConnections} from './plinth-layout.js';
 import {runnerMountPattern} from './runner-layout.js';
 import {addDividerConnections} from './divider-layout.js';
@@ -30,7 +35,7 @@ export function manufacturingReport(compiled,design,{band=1}={}){
     const category=classify(q),surface=design.materials?.[q.mat]?.surface;
     const blank=category==='wood_component'?panelBlank(q,surface==='veneer'?band:0):null;
     return {id:q.id,role:q.role,material_slot:q.mat,category,quantity:q.qty||1,blank,placement:{position_mm:q.pos||[0,0,0],rotation_rad:q.rot||[0,0,0]},
-      hardware:q.hardware?structuredClone(q.hardware):null,operations:[],status:blank?'blank_correspondence_only':'recipe_required',production_approved:false};
+      construction:q.drawerConstruction?structuredClone(q.drawerConstruction):null,hardware:q.hardware?structuredClone(q.hardware):null,operations:[],status:blank?'blank_correspondence_only':'recipe_required',production_approved:false};
   });
   const byId=new Map(records.map(r=>[r.id,r])),backFits=[];
   const joints=[],connector=CONNECTOR_PROFILES[design.params?.connectorSystem];
@@ -82,6 +87,10 @@ export function manufacturingReport(compiled,design,{band=1}={}){
   joints.push(...addDividerConnections(compiled,records,connector));
   const plinthJoints=addPlinthConnections(compiled,records,connector);
   const hingeHardware=addHingeOperations(compiled,records);
+  const shelfHardware=addShelfOperations(compiled,records);
+  const railHardware=addRailOperations(compiled,records);
+  const runnerDrilling=addRunnerOperations(compiled,records),drawerJoinery=addDrawerConnections(compiled,records,connector);
+  const unresolvedDrawers=compiled.parts.filter(q=>q.drawerConstruction).some(q=>!drawerJoinery.some(r=>r.bottom===q.id&&r.grooves.length===4&&r.fixings.length&&!r.issues.length));
   const unresolvedHinges=hingeHardware.filter(h=>!h.door_stock||!h.mounting_side);
   const hardware=records.filter(r=>r.hardware&&r.role==='box-bottom').map(r=>({part:r.id,...r.hardware,mounting_pattern:runnerMountPattern(r.hardware.profile,r.hardware.nominal_length_mm)}));
   const invalidOperations=[];
@@ -91,10 +100,13 @@ export function manufacturingReport(compiled,design,{band=1}={}){
   }
   const jointMating=verifyRastexMates(records,connector);
   const reconstruction=reassembleCarcass({parts:records},design);
+  const drawerReconstruction=reassembleDrawers(records);
+  const pendingConnections=compiled.parts.filter(q=>['spacer','inner-front','drawer-front','plinth'].includes(q.role)).map(q=>({part:q.id,role:q.role,status:'attachment_to_support_still_requires_recipe',production_approved:false}));
+  if(compiled.parts.some(q=>q.role==='side'))pendingConnections.push({part:'product',role:'anti_tip_wall_and_module_interface',status:'site_and_product_specific_fixing_required',production_approved:false});
   return {schema:'aura.manufacturing-review/1',units:'mm',production_approved:false,status:'engineering_review_required',tolerances:{...TRIAL_TOLERANCES},
     scope:'Blank/finished correspondence and nominal back-retention analysis. Not a complete joinery recipe, collision proof, CNC program or physical assembly test.',
-    hinge_hardware:hingeHardware,plinth_joints:plinthJoints,joint_mating:jointMating,reconstruction,invalid_operations:invalidOperations,part_count:records.length,parts:records,back_fits:backFits,drawer_hardware:hardware,carcass_joints:joints,selected_connector:connector?structuredClone(connector):null,
-    blockers:[...(unresolvedHinges.length?['selected_hinge_has_no_complete_stock_mounting_recipe']:[]),...(jointMating.invalid.length?['mating_bore_mismatch']:[]),'material_and_band_measurement','connector_and_hinge_drilling_recipes','joint_strength_and_product_testing','independent_full_assembly_reconstruction',...(invalidOperations.length?['operation_outside_stock_or_unverified_shape']:[]),...(backFits.some(b=>b.status!=='four_nominal_edges_trial')?['back_retention_incomplete']:[]),...(hardware.some(h=>!h.geometry_fit)?['runner_geometry_or_legacy_profile']:[])]};
+    pending_connections:pendingConnections,drawer_reconstruction:drawerReconstruction,rail_hardware:railHardware,drawer_joinery:drawerJoinery,runner_drilling:runnerDrilling,shelf_hardware:shelfHardware,hinge_hardware:hingeHardware,plinth_joints:plinthJoints,joint_mating:jointMating,reconstruction,invalid_operations:invalidOperations,part_count:records.length,parts:records,back_fits:backFits,drawer_hardware:hardware,carcass_joints:joints,selected_connector:connector?structuredClone(connector):null,
+    blockers:[...(drawerReconstruction.some(r=>!r.complete)?['drawer_blank_reconstruction_mismatch']:[]),...(railHardware.some(r=>!r.roof)?['selected_rail_support_recipe_incomplete']:[]),...(unresolvedDrawers?['selected_drawer_joinery_incomplete']:[]),...(runnerDrilling.some(r=>!r.support)||design.params?.runnerFixingSystem==='hettich-6x14-trial'&&design.params.runnerSystem!=='hettich-ka5632-ss-2025'?['selected_runner_fixing_recipe_incomplete']:[]),...(shelfHardware.some(h=>!h.support)?['selected_shelf_support_recipe_incomplete']:[]),...(unresolvedHinges.length?['selected_hinge_has_no_complete_stock_mounting_recipe']:[]),...(jointMating.invalid.length?['mating_bore_mismatch']:[]),'material_and_band_measurement','connector_and_hinge_drilling_recipes','joint_strength_and_product_testing','independent_full_assembly_reconstruction',...(invalidOperations.length?['operation_outside_stock_or_unverified_shape']:[]),...(backFits.some(b=>b.status!=='four_nominal_edges_trial')?['back_retention_incomplete']:[]),...(hardware.some(h=>!h.geometry_fit)?['runner_geometry_or_legacy_profile']:[])]};
 }
 const cell=v=>{let s=String(v??'');if(typeof v==='string'&&/^[=+\-@\t\r]/.test(s))s="'"+s;return '"'+s.replaceAll('"','""')+'"';};
 export function manufacturingCsv(report,orderQuantity=1){
@@ -104,7 +116,7 @@ export function manufacturingCsv(report,orderQuantity=1){
 }
 export function manufacturingOperationsCsv(report,orderQuantity=1){
   if(!Number.isInteger(orderQuantity)||orderQuantity<1)throw Error('Invalid order quantity');
-  const header=['Part ID','Operation','Mate','Order quantity','Status','Datum','Entry axis','Entry sign','Finished local X mm','Finished local Y mm','Finished local Z mm','Diameter mm','Groove width mm','Length mm','Depth mm','Source','Stock bounds status','Stock bounds issues'];
-  const rows=report.parts.flatMap(p=>p.operations.map(o=>[p.id,o.kind,o.mate,orderQuantity,o.status,o.datum,o.entry_axis,o.entry_sign,...o.center_finished_local_mm,o.diameter_mm??'',o.width_mm??'',o.length_mm??'',o.depth_mm,o.source??'AURA workshop trial - not CNC released',o.stock_bounds?.status??'not_checked',o.stock_bounds?.issues?.join('|')??'']));
+  const header=['Part ID','Operation','Mate','Order quantity','Status','Datum','Entry axis','Entry sign','Finished local X mm','Finished local Y mm','Finished local Z mm','Diameter mm','Groove width mm','Length mm','Depth mm','Source','Through','Fastener','Trial qualification','Stock bounds status','Stock bounds issues'];
+  const rows=report.parts.flatMap(p=>p.operations.map(o=>[p.id,o.kind,o.mate,orderQuantity,o.status,o.datum,o.entry_axis,o.entry_sign,...o.center_finished_local_mm,o.diameter_mm??'',o.width_mm??'',o.length_mm??'',o.depth_mm,o.source??'AURA workshop trial - not CNC released',o.through===true,o.fastener??'',o.trial_qualification??'',o.stock_bounds?.status??'not_checked',o.stock_bounds?.issues?.join('|')??'']));
   return '\uFEFF'+[header,...rows].map(r=>r.map(cell).join(';')).join('\r\n');
 }

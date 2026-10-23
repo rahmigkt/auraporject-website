@@ -41,12 +41,13 @@ try{
   await page.locator('[data-enum="backConstruction"][data-value="module-grooved"]').click();
   await page.locator('[data-enum="connectorSystem"][data-value="rastex15-18-du232t"]').click();
   await page.locator('[data-enum="hingeSystem"][data-value="blum-110-inserta-expando"]').click();
+  for(const [key,value]of [['shelfSupportSystem','hettich-16181'],['railSystem','hettich-sl786'],['runnerFixingSystem','hettich-6x14-trial']])await page.locator(`[data-enum="${key}"][data-value="${value}"]`).click();
   const chosen=await page.evaluate(()=>formaDebug.state.design);
   await page.reload();await page.waitForFunction(()=>window.formaDebug?.state?.compiled);
   assert.deepEqual(await page.evaluate(()=>formaDebug.state.design),chosen);
   const manifest=await page.evaluate(async()=>{const m=await import('/assets/forma/production/manufacturing.js');return m.manufacturingReport(formaDebug.state.compiled,formaDebug.state.design);});
   assert.equal(manifest.production_approved,false);assert(manifest.parts.length>0);
-  assert.equal(chosen.params.hingeSystem,'blum-110-inserta-expando');
+  assert.equal(chosen.params.hingeSystem,'blum-110-inserta-expando');assert.equal(chosen.params.shelfSupportSystem,'hettich-16181');assert.equal(chosen.params.runnerFixingSystem,'hettich-6x14-trial');assert.equal(chosen.params.railSystem,'hettich-sl786');assert.deepEqual(manifest.invalid_operations,[]);
   if(family==='storage'){
     await page.locator('[data-tab="deliver"]').click();
     await page.locator('[data-act="add"]').click();

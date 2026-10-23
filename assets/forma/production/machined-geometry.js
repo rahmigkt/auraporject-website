@@ -9,7 +9,7 @@ export function solidVolume(mesh){
 export function machiningCutter(part,op){
   if(op.stock_bounds?.status!=='nominal_containment_only')throw Error('Unvalidated machining operation: '+part.id);
   const at=op.center_finished_local_mm.map((v,k)=>v-part.blank.finished_xyz_mm[k]/2),common={at,axis:op.entry_axis,sign:op.entry_sign,depth:op.depth_mm};
-  if(op.kind==='back_groove_candidate'){
+  if(['back_groove_candidate','drawer_bottom_groove'].includes(op.kind)){
     // csg pocket base X maps to globalZ for an X-entry, otherwise globalX.
     const baseX=common.axis===0?2:0,a=op.length_axis===baseX?op.length_mm:op.width_mm,b=op.length_axis===baseX?op.width_mm:op.length_mm;
     return {...common,type:'pocket',a,b};
@@ -31,7 +31,9 @@ export async function machiningGeometryFiles(compiled,design){
   const containsCut=g=>!!g&&(g.fn==='cut'||containsCut(g.inner));
   if(compiled.parts.some(q=>containsCut(q.geom)))throw Error('Tasarımcı işleme geometrisinin bağımsız doğrulaması gerekli; önizleme yedeği imalat geometrisi olarak aktarılmayacak.');
   const report=manufacturingReport(compiled,design);
+  if(report.blockers.some(b=>['drawer_blank_reconstruction_mismatch','selected_rail_support_recipe_incomplete','selected_drawer_joinery_incomplete','selected_runner_fixing_recipe_incomplete'].includes(b)))throw Error('Ray/çekmece deneme reçetesinin donanım veya bağlantı eşleşmesi eksik.');
   if(report.invalid_operations.length)throw Error('İşleme geometrisi hazırlanamadı: parça sınırı dışında veya doğrulanmamış operasyon var.');
+  if(report.blockers.includes('selected_shelf_support_recipe_incomplete'))throw Error('Seçilen raf desteği ile gövde/raf eşleştirilemedi; eksik işleme paketi aktarılmayacak.');
   if(report.joint_mating.invalid.length)throw Error('Karşılıklı bağlantı delikleri eşleşmiyor; işleme paketi hazırlanmadı.');
   if(report.blockers.includes('selected_hinge_has_no_complete_stock_mounting_recipe'))throw Error('Seçilen menteşe için kapak/yan panel delik yerleşimi tamamlanamadı; işleme paketi hazırlanmadı.');
   if(report.parts.some(p=>p.operations.length)){await loadCsg();if(!csgReady())throw Error('İşleme motoru yüklenemedi. Kesilmemiş model başarılı gösterilmeyecek.');}

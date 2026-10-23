@@ -10,15 +10,18 @@ export function operationBounds(part,op){
   const expected=op.entry_sign>0?size[axis]:0;
   if(Math.abs(c[axis]-expected)>.001)issues.push('entry_not_on_named_face');
   if(op.depth_mm>size[axis]+.001)issues.push('depth_exceeds_stock');
-  if(op.depth_mm>=size[axis]-.001)issues.push('blind_operation_breaks_through');
+  const permittedThrough=op.kind==='rail_top_through_bore'&&op.through===true;
+  if(op.through&&!permittedThrough)issues.push('through_not_permitted_for_operation');
+  if(permittedThrough&&Math.abs(op.depth_mm-size[axis])>.001)issues.push('through_depth_must_equal_stock');
+  if(!permittedThrough&&op.depth_mm>=size[axis]-.001)issues.push('blind_operation_breaks_through');
   const min=c.slice(),max=c.slice();
   if(op.entry_sign>0)min[axis]-=op.depth_mm;else max[axis]+=op.depth_mm;
-  if(op.kind==='back_groove_candidate'){
+  if(['back_groove_candidate','drawer_bottom_groove'].includes(op.kind)){
     const along=op.length_axis,widthAxis=[0,1,2].find(k=>k!==axis&&k!==along);
     if(![0,1,2].includes(along)||along===axis||!Number.isFinite(op.length_mm)||op.length_mm<=0||!Number.isFinite(op.width_mm)||op.width_mm<=0)return fail('invalid_groove_extent');
     min[along]-=op.length_mm/2;max[along]+=op.length_mm/2;
     min[widthAxis]-=op.width_mm/2;max[widthAxis]+=op.width_mm/2;
-  }else if(['rastex_cam_bore','rastex_edge_bore','rastex_dowel_pilot','hinge_cup_bore','hinge_inserta_bore','hinge_plate_expando_bore'].includes(op.kind)){
+  }else if(['rail_top_through_bore','runner_cabinet_pilot','runner_drawer_pilot','shelf_support_bore','rastex_cam_bore','rastex_edge_bore','rastex_dowel_pilot','hinge_cup_bore','hinge_inserta_bore','hinge_plate_expando_bore'].includes(op.kind)){
     if(!Number.isFinite(op.diameter_mm)||op.diameter_mm<=0)return fail('invalid_bore_diameter');
     for(const k of [0,1,2].filter(k=>k!==axis)){min[k]-=op.diameter_mm/2;max[k]+=op.diameter_mm/2;}
   }else return fail('unknown_operation');

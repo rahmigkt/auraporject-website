@@ -82,3 +82,17 @@ export function cutMesh(mesh, ops) {
   } catch { return {failed: true}; }
   finally { base?.delete?.(); out?.delete?.(); }
 }
+
+// Exact triangle-solid intersection within Manifold's numerical precision.
+// Missing/invalid solids must not become a zero-volume success.
+export function meshIntersectionVolume(first,second){
+  if(!W)throw Error('Collision solid engine is not loaded');
+  let a,b,out;
+  try{
+    a=toManifold(first);b=toManifold(second);
+    if(a.status()!=='NoError'||b.status()!=='NoError')throw Error('Invalid collision input solid');
+    out=W.Manifold.intersection([a,b]);if(out.status()!=='NoError')throw Error('Collision intersection failed');
+    const volume=out.volume();if(!Number.isFinite(volume)||volume<0)throw Error('Invalid intersection volume');
+    return volume;
+  }finally{a?.delete?.();b?.delete?.();out?.delete?.();}
+}
