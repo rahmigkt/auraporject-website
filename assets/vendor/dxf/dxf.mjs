@@ -7678,7 +7678,7 @@ var Spline = class extends Entity {
 		dx.push(74, this.fitPoints.length);
 		dx.push(42, "0.0000001");
 		dx.push(43, "0.0000001");
-		dx.push(42, "0.0000000001");
+		dx.push(44, "0.0000000001");
 		this.knots.forEach((k) => dx.push(40, k));
 		this.weights.forEach((w) => dx.push(41, w));
 		this.controlPoints.forEach((cp) => dx.point3d(cp));

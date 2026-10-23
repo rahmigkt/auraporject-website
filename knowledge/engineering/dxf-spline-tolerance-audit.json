@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-23T11:43:08.505378+00:00",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "source_head": "d6cbabfc7dacf9dac4f45871d2983ecdf8cb2d5b",
+  "source_contract": "https://help.autodesk.com/cloudhelp/2024/ENU/AutoCAD-DXF/files/GUID-E1F884F8-AA90-4864-A215-3182D47A9C74.htm",
+  "baseline": {
+    "command": "node tests/dxf-spline-tolerance-check.mjs",
+    "exit": 1,
+    "actual_group42": [
+      1e-07,
+      1e-10
+    ],
+    "expected_group42": [
+      1e-07
+    ],
+    "missing_group44": true
+  },
+  "change": "Fit tolerance emits group44; knot42/control43 and curve data unchanged",
+  "validation": {
+    "serialized_cases": 12,
+    "invalid_inputs": 2,
+    "existing_groups": "32XDATA/128face/72aligned/80text/82hatch PASS"
+  },
+  "scope": "Unused vendor serializer; no live import or CAD-render certification",
+  "files": {
+    "assets/vendor/dxf/dxf.mjs": "8b343b2abd2a669d3be1d015216691d84e7772836f78462de5c427c19b251c8f",
+    "tests/dxf-spline-tolerance-check.mjs": "02aea6c60c508147d0c06a08bc89afb93642acfcac79c0b9a2a9a2430eafa61a"
+  }
+}

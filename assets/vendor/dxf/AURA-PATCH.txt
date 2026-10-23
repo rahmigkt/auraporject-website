@@ -20,3 +20,7 @@ Reference: https://help.autodesk.com/cloudhelp/2026/ENU/AutoCAD-DXF/files/GUID-E
 This does not repair LinearDimension offset geometry or certify rendered CAD text layout.
 
 Hatch.pattern now clones predefined rows for each export before applying local scale/angle, so a rotated export cannot alter later default or scaled exports. Regression: tests/dxf-hatch-isolation-check.mjs, all82definitions and export-order checks. Existing nonzero-angle transformation semantics are retained, not certified; complete CAD pattern orientation/rendering is still under review.
+
+Spline writes fit tolerance to DXF group44, independently of knot tolerance42 and control-point tolerance43. The former duplicate42 incorrectly replaced the knot value in consumers. Values and curve geometry are unchanged. Regression: tests/dxf-spline-tolerance-check.mjs,12serialized degree/fit/rational combinations and2invalid input controls.
+Reference: https://help.autodesk.com/cloudhelp/2024/ENU/AutoCAD-DXF/files/GUID-E1F884F8-AA90-4864-A215-3182D47A9C74.htm
+No live importer, CAD render approval, or general spline validity certification is inferred.
