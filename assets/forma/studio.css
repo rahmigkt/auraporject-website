@@ -47,7 +47,7 @@
 
 /* Editor column */
 .f-editor{background:var(--sheet);border-left:1px solid var(--hair);min-height:calc(100vh - 44px);display:flex;flex-direction:column}
-.f-tabs{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--hair);position:sticky;top:0;background:var(--sheet);z-index:2}
+.f-tabs{display:grid;grid-template-columns:repeat(var(--tab-count,4),minmax(0,1fr));border-bottom:1px solid var(--hair);position:sticky;top:0;background:var(--sheet);z-index:2}
 .f-tabs button{background:none;border:0;border-bottom:1.5px solid transparent;padding:13px 4px 11px 18px;font-size:12px;color:var(--muted);text-align:left}
 .f-tabs span{display:block;font:9.5px var(--mono);letter-spacing:1px;margin-bottom:3px}
 .f-tabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--red)}.f-tabs button[aria-selected=true] span{color:var(--red)}
@@ -201,3 +201,5 @@ body[data-room] .f-step,body[data-room] .f-start{display:none}
 [dir=rtl] body{font-family:'Noto Naskh Arabic','Segoe UI','Tahoma',system-ui,sans-serif}
 [dir=rtl] .f-stage,[dir=rtl] .f-tx-stage,[dir=rtl] svg,[dir=rtl] canvas{direction:ltr}
 [dir=rtl] *{letter-spacing:0!important}
+
+.f-tabs button[hidden]{display:none}.f-set-row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--hair2)}.f-set-row small{display:block;font:11px var(--mono);color:var(--muted);margin-top:5px}.f-set-row input{display:block;width:78px;min-height:42px;margin-top:5px;border:1px solid var(--hair);background:var(--sheet);color:var(--ink);padding:8px;font:inherit}.f-set-plan{display:block;width:100%;max-height:270px;margin:18px 0;border:1px solid var(--hair)}

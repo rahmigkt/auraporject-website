@@ -19,6 +19,7 @@ import {TEXTILE_PREVIEW} from './textile-preview.js';
 import {HIDES, COLORS, FIBERS, WEAVES, WEAVE_NAMES, PATTERNS, MOTIF_CHOICES, MOTIF_NAMES, WOODS, FINISHES, STAINS, METALS, STONES, GLASS, SURFACES, LINEN_COLORS, colorGroup, name as nm} from './catalog.js';
 import {MATTRESS} from './bedroom.js';
 import {harmonize} from './set.js';
+import {SET_KINDS, createSeatingSet, setCounts, saveSeatingSet, seatingSetPlan} from './seating-set.js';
 import {EDIT_TYPES as CELL_TYPES, INSIDE, leafCount, leafFor, leafMin} from './storage.js';
 import {designLink, projectLink, readLink, linkPage, urlShortcut} from './link.js';
 import {account} from './account.js';
@@ -79,7 +80,7 @@ function setDesign(next, {record = true, keepPanel = false, sync = true} = {}) {
   }
   if (record && state.design) { state.history.push(state.design); if (state.history.length > 80) state.history.shift(); state.future = []; }
   const familyChanged = state.design && state.design.family !== next.family;
-  state.design = next; state.compiled = compileOf(next); state.room = null; delete document.body.dataset.room;
+  state.design = next; state.compiled = compileOf(next); state.room = null; state.seatingPreview = false; delete document.body.dataset.room;
   viewer?.setDesign(shown(next), next.materials);
   store.set('aura-forma-design-' + next.family, next); store.set('aura-forma-family', next.family); store.set(`aura-forma-kind-${next.family}-${next.kind}`, next);
   state.drawingCache = null;
@@ -187,7 +188,7 @@ function shell() {
       <p class="f-hint">${L('rotateHint')} ${L('concept')}</p>
     </section>
     <aside class="f-editor">
-      <nav class="f-tabs" role="tablist">${['parts', 'size', 'material', 'deliver'].map((k, i) => `<button role="tab" data-tab="${k}" aria-selected="${state.tab === k}"><span>${String(i + 1).padStart(2, '0')}</span>${L(k === 'deliver' ? 'tabProject' : 'tab' + k[0].toUpperCase() + k.slice(1))}</button>`).join('')}</nav>
+      <nav class="f-tabs" role="tablist">${['parts', 'size', 'material', 'team', 'deliver'].map((k, i) => `<button role="tab" data-tab="${k}" aria-selected="${state.tab === k}"><span>${String(i + 1).padStart(2, '0')}</span>${L(k === 'team' ? 'setTitle' : k === 'deliver' ? 'tabProject' : 'tab' + k[0].toUpperCase() + k.slice(1))}</button>`).join('')}</nav>
       <div id="panel" class="f-panel"></div>
     </aside>
   </main>`;
@@ -198,7 +199,7 @@ function shell() {
     sceneModule = mod; const {createViewer} = mod;
     viewer = createViewer(host);
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
-    else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(shown(), state.design.materials); if (state.room) showRoom(); }
+    else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(shown(), state.design.materials); if (state.tab === 'team') showSeatingSet(); else if (state.room) showRoom(); }
   }).catch(() => { host.innerHTML = '<p class="f-nogl">WebGL</p>'; });
   bindShell(); shellNav();
   renderCaption(); renderPanel();
@@ -224,14 +225,24 @@ function renderCaption() {
     if(!err.length)st.dataset.level='warn';
     st.textContent += ' · '+L('technicalPending');
   }
+  if (state.seatingPreview && state.tab === 'team' && state.teamCache) {
+    const {plan} = state.teamCache;
+    $('#designTitle').textContent = `${L('setPreview')} · ${plan.total} ${L('pieces')}`;
+    $('#dims').textContent = `${(plan.W / 1000).toFixed(1)} × ${(plan.D / 1000).toFixed(1)} m · ${L('setConcept')}`;
+  }
   $('#undoBtn').disabled = !state.history.length; $('#redoBtn').disabled = !state.future.length;
 }
 function feedback(text, level = 'info') { const f = $('#feedback'); f.textContent = text; f.dataset.level = level; }
 
 // ---- Panels ---------------------------------------------------------------------------
 function renderPanel() {
+  if (state.tab === 'team' && state.design.family !== 'seating') state.tab = 'parts';
+  let tabNumber = 0;
+  for (const b of document.querySelectorAll('[data-tab]')) { b.hidden = b.dataset.tab === 'team' && state.design.family !== 'seating'; if (!b.hidden) b.querySelector('span').textContent = String(++tabNumber).padStart(2, '0'); }
+  document.querySelector('.f-tabs').style.setProperty('--tab-count', tabNumber);
   for (const b of document.querySelectorAll('[data-tab]')) b.setAttribute('aria-selected', String(b.dataset.tab === state.tab));
-  $('#panel').innerHTML = { parts: partsPanel, size: sizePanel, material: materialPanel, deliver: projectPanel}[state.tab]();
+  $('#panel').innerHTML = { parts: partsPanel, size: sizePanel, material: materialPanel, team: seatingSetPanel, deliver: projectPanel}[state.tab]();
+  if (state.tab === 'team') showSeatingSet();
   if (state.tab === 'material') drawMaterialPreviews();
   if (state.tab === 'deliver') drawDeliverables();
 }
@@ -401,6 +412,7 @@ function layoutEditor(p) {
     ${c.inside === 'shelves' ? `<h3>${L('shelvesN')}</h3><div class="f-seg">${[0, 1, 2, 3, 4, 5, 6].map(n => chip(`data-cellset="k" data-value="${n}"`, String(n), c.k === n)).join('')}</div>` : ''}` : ''}
   ${bay.cells.length > 1 ? slider('data-cellmm', L('cellHeight'), 100, maxCell, cellH, 'data-cellauto="1"', !c.mm) : ''}
   ${p.bays.length > 1 ? slider('data-baymm', L('bayWidth'), 260, maxBay, bayW, 'data-bayauto="1"', !bay.mm) : ''}
+  <div class="f-actions"><button class="f-secondary" data-bayop="left" ${sb === 0 ? 'disabled' : ''}>← ${L('moveLeft')}</button><button class="f-secondary" data-bayop="right" ${sb >= p.bays.length - 1 ? 'disabled' : ''}>${L('moveRight')} →</button></div>
   <div class="f-actions"><button class="f-secondary" data-cellop="split" ${bay.cells.length >= 8 || cellH < 260 ? 'disabled' : ''}>${L('splitCell')}</button><button class="f-secondary" data-cellop="merge" ${sc >= bay.cells.length - 1 ? 'disabled' : ''}>${L('mergeCell')}</button></div>
   <div class="f-actions"><button class="f-secondary" data-bayop="add" ${p.bays.length >= 8 ? 'disabled' : ''}>+ ${L('addBay')}</button><button class="f-secondary" data-bayop="remove" ${p.bays.length <= 1 ? 'disabled' : ''}>− ${L('removeBay')}</button></div></section>`;
 }
@@ -422,6 +434,13 @@ function layoutAction(d) {
   else if (d.cellset) cell[d.cellset] = d.cellset === 'inside' ? d.value : +d.value;
   else if (d.cellauto) cell.mm = 0;
   else if (d.bayauto) bay.mm = 0;
+  else if (d.bayop === 'left' || d.bayop === 'right') {
+    const to = b + (d.bayop === 'left' ? -1 : 1);
+    if (to < 0 || to >= bays.length) return false;
+    // Move the whole bay, including its width and all nested front/interior settings.
+    [bays[b], bays[to]] = [bays[to], bays[b]];
+    state.sel = {b: to, c};
+  }
   else if (d.cellop === 'split') { const h = (cell.h || 1) / 2; bay.cells.splice(c, 1, {...cell, h, mm: 0}, {...structuredClone(cell), h, mm: 0}); }
   else if (d.cellop === 'merge' && c < bay.cells.length - 1) { const up = bay.cells[c + 1]; cell.h = (cell.h || 1) + (up.h || 1); cell.mm = cell.mm && up.mm ? cell.mm + up.mm : 0; if (cell.type === 'drawers' && up.type === 'drawers') cell.n = Math.min(6, cell.n + up.n); bay.cells.splice(c + 1, 1); }
   else if (d.bayop === 'add') { bays.splice(b + 1, 0, structuredClone({...bay, mm: 0})); state.sel = {b: b + 1, c: 0}; }
@@ -897,6 +916,54 @@ function openAssessment(forSend=false){
  document.body.append(m);m.querySelector('button')?.focus();
 }
 
+// ---- Seating set workspace ---------------------------------------------------
+function seatingSetDraft() {
+  const sourceKey = JSON.stringify(state.design);
+  let draft = state.seatingSet || store.get('aura-forma-seating-set');
+  if (!draft || draft.sourceKey !== sourceKey) {
+    let counts; try { counts = setCounts(draft?.counts || {sofa: 1, loveseat: 1, armchair: 1}); } catch { counts = {sofa: 1, loveseat: 1, armchair: 1}; }
+    draft = {sourceKey, counts, layout: 0, groupId: 'S' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7)};
+  }
+  try { draft.counts = setCounts(draft.counts); } catch { draft.counts = {sofa: 1, loveseat: 1, armchair: 1}; }
+  draft.layout = draft.layout === 1 ? 1 : 0;
+  if (typeof draft.groupId !== 'string' || !draft.groupId) draft.groupId = 'S' + Date.now().toString(36);
+  state.seatingSet = draft; store.set('aura-forma-seating-set', draft); return draft;
+}
+function seatingSetData() {
+  const draft = seatingSetDraft(), key = JSON.stringify([state.design, draft.counts, draft.layout]);
+  if (state.teamCache?.key === key) return state.teamCache;
+  const entries = createSeatingSet(state.design, draft.counts);
+  const prepared = entries.map(it => { const compiled = compileOf(it.design); return {...it, compiled, materials: it.design.materials, fp: footprint(compiled)}; });
+  return state.teamCache = {key, entries, plan: seatingSetPlan(prepared, draft.layout)};
+}
+const setKindName = kind => L({sofa: 'setThree', loveseat: 'setTwo', armchair: 'setOne'}[kind]);
+function seatingSetPanel() {
+  const draft = seatingSetDraft(), {entries, plan} = seatingSetData(), saved = state.project.items.some(i => i.seatingSet === draft.groupId);
+  const list = SET_KINDS.map(kind => { const entry = entries.find(i => i.kind === kind); return `<label class="f-set-row"><span><b>${esc(setKindName(kind))}</b><small>${entry ? esc(itemDims(entry.design)) : '—'}</small></span><span>${L('quantity')}<input type="number" min="0" max="999" step="1" inputmode="numeric" data-set-qty="${kind}" aria-label="${esc(setKindName(kind))} · ${esc(L('quantity'))}" value="${draft.counts[kind]}"></span></label>`; }).join('');
+  const drawing = plan.placed.length ? `<svg class="f-set-plan" viewBox="0 0 ${plan.W} ${plan.D}" role="img" aria-label="${esc(L('setPreview'))}"><rect width="${plan.W}" height="${plan.D}" fill="#eee9de"/>${plan.placed.map(it => { const c = Math.cos(it.rot), zc = it.x + (it.fp.x0 + it.fp.x1) / 2 * c + plan.W / 2, zz = it.z + (it.fp.z0 + it.fp.z1) / 2 * c + plan.D / 2; return `<g><rect x="${zc - it.fp.w / 2}" y="${zz - it.fp.d / 2}" width="${it.fp.w}" height="${it.fp.d}" rx="80" fill="#c3cbbd" stroke="#344c3f" stroke-width="24"/><text x="${zc}" y="${zz}" text-anchor="middle" dominant-baseline="middle" font-size="145" fill="#243327">${esc(setKindName(it.kind))}</text></g>`; }).join('')}</svg>` : `<p class="f-note">${L('setEmpty')}</p>`;
+  return `<h2>${L('setTitle')}</h2><p class="f-lead">${L('setIntro')}</p>${list}<p><b>${L('setTotal')}: ${plan.total}</b></p><div class="f-seg"><button data-act="set-layout-0" aria-pressed="${!draft.layout}">${L('setOpposed')}</button><button data-act="set-layout-1" aria-pressed="${!!draft.layout}">${L('setRows')}</button></div>${drawing}<p class="f-note">${L('setConcept')}</p>${plan.total > plan.shown ? `<p class="f-note">${esc(L('setLimit').replace('{shown}', plan.shown).replace('{total}', plan.total))}</p>` : ''}${state.design.overrides?.length ? `<p class="f-note">${L('setOverrides')}</p>` : ''}<div class="f-actions"><button class="f-primary" data-act="set-save" ${plan.total ? '' : 'disabled'}>${L(saved ? 'setUpdate' : 'setAdd')}</button><button data-act="set-back">${L('setReturn')}</button></div>`;
+}
+function showSeatingSet() {
+  if (state.design.family !== 'seating' || !viewer) return;
+  const {plan} = seatingSetData();
+  state.room = null; state.seatingPreview = !!plan.shown;
+  if (!plan.shown) { delete document.body.dataset.room; viewer.setDesign(shown(), state.design.materials); renderCaption(); return; }
+  document.body.dataset.room = 'seating-set';
+  viewer.setRoom({shell: roomShell(plan.W, plan.D), roomMaterials: ROOM_MATERIALS, items: plan.placed.map(it => ({compiled: it.compiled, materials: it.materials, x: it.x, z: it.z, rot: it.rot}))});
+  $('#designTitle').textContent = `${L('setPreview')} · ${plan.total} ${L('pieces')}`;
+  $('#dims').textContent = `${(plan.W / 1000).toFixed(1)} × ${(plan.D / 1000).toFixed(1)} m · ${L('setConcept')}`;
+}
+function seatingSetAction(action) {
+  if (state.design.family !== 'seating') return;
+  const draft = seatingSetDraft();
+  if (action.startsWith('set-layout-')) { draft.layout = action.endsWith('1') ? 1 : 0; store.set('aura-forma-seating-set', draft); state.teamCache = null; renderPanel(); }
+  if (action === 'set-save') {
+    const {entries} = seatingSetData(); if (!entries.length) return;
+    state.project = saveSeatingSet(state.project, entries, draft.groupId); saveProject(); feedback(L('setSaved')); renderPanel();
+  }
+  if (action === 'set-back') { state.seatingPreview = false; state.tab = 'parts'; delete document.body.dataset.room; viewer?.setDesign(shown(), state.design.materials); setSketch(true); renderPanel(); }
+}
+
 // ---- Room: the whole project placed in a lit room ---------------------------------------------------
 const ROOM_MATERIALS = {wall: {color: 'cream'}, floor: {surface: 'lacquer', color: 'stone', finish: 'matte'}, rug: {color: 'oat'}};
 function roomSection() {
@@ -929,6 +996,7 @@ function showRoom() {
 function projectAction(el) {
   if(el.dataset.act==='assessment')return openAssessment();
   if(el.dataset.act==='dimensions'){download('AURA-project-dimensions.zip',zip(dimensionProjectFiles(state.project.items,compileOf)),'application/zip');return;}
+  if (el.dataset.act?.startsWith('set-')) return seatingSetAction(el.dataset.act);
   const a = el.dataset.act, items = state.project.items;
   if (a === 'add') addToProject();
   else if (a === 'same') startNew(sameDesign(state.design, el.dataset.kind), `${L(el.dataset.kind)} · ${L('withThisDesign')}`);
@@ -1140,7 +1208,7 @@ function bindShell() {
   $('#undoBtn').onclick = undo; $('#redoBtn').onclick = redo;
   $('#commandForm').onsubmit = e => { e.preventDefault(); runCommand($('#command').value); };
   $('#micBtn').onclick = listen;
-  for (const b of document.querySelectorAll('[data-tab]')) b.onclick = () => { state.tab = b.dataset.tab; if (state.room && state.tab !== 'deliver') { state.room = null; delete document.body.dataset.room; viewer?.setDesign(shown(), state.design.materials); } setSketch(!['material', 'deliver'].includes(state.tab)); renderPanel(); };
+  for (const b of document.querySelectorAll('[data-tab]')) b.onclick = () => { state.tab = b.dataset.tab; if (state.seatingPreview && state.tab !== 'team') { state.seatingPreview = false; delete document.body.dataset.room; viewer?.setDesign(shown(), state.design.materials); } if (state.room && state.tab !== 'deliver') { state.room = null; delete document.body.dataset.room; viewer?.setDesign(shown(), state.design.materials); } setSketch(!['material', 'deliver', 'team'].includes(state.tab)); renderPanel(); };
   $('#modeBtn').onclick = () => setSketch(!state.sketch);
 
   const panel = $('#panel');
@@ -1200,6 +1268,7 @@ function bindShell() {
   });
   panel.addEventListener('change', e => {
     const el = e.target;
+    if (el.dataset.setQty) { try { const draft = seatingSetDraft(); draft.counts = setCounts({...draft.counts, [el.dataset.setQty]: el.value}); store.set('aura-forma-seating-set', draft); state.teamCache = null; renderPanel(); } catch { el.value = seatingSetDraft().counts[el.dataset.setQty]; feedback(L('setRange'), 'error'); } return; }
     if (el.dataset.cellmm !== undefined || el.dataset.baymm !== undefined) {
       const bays = structuredClone(state.design.params.bays), {b, c} = selCell();
       if (el.dataset.cellmm !== undefined) bays[b].cells[c].mm = +el.value; else bays[b].mm = +el.value;

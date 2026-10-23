@@ -1,0 +1,125 @@
+{
+  "at": "2026-10-23T11:19:22.819245+00:00",
+  "authorization": "Human requested combined checks, fixes, one package, publish and verify live on 2026-10-23",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "base": "abb449189fe4f359d2c234a8e8771e42db93798d",
+  "included_draft_prs": [
+    259,
+    260,
+    264,
+    267
+  ],
+  "excluded": [
+    "PR265 and266 dormant imports; independent branches preserved",
+    "AI preparations and model training"
+  ],
+  "feature": "Seating-only Team tab: derive three/two/one seat variants; user quantities0..999; two sample layouts; actual 3D meshes; project upsert, reload and dimensions export; original design preserved",
+  "preview_limit": 12,
+  "quantities_saved_full": true,
+  "language_scope": "Turkish and English additions; other existing site languages use the existing English fallback for these new strings. No native-language review claimed.",
+  "tests": [
+    {
+      "test": "transform-pointer-cancel-check.mjs",
+      "exit": 0,
+      "stdout": "{\"passed\":7,\"scope\":\"Actual vendor class;mock canvas and synthetic in-progress gesture;no WebGL or real-device claim\"}\n",
+      "stderr": ""
+    },
+    {
+      "test": "gltf-reader-failure-check.mjs",
+      "exit": 0,
+      "stdout": "{\"passed\":16,\"scope\":\"Actual exporter and image buffer method;mock FileReader success/error/abort/synchronous throw;no real-browser/WebGL claim\"}\n",
+      "stderr": ""
+    },
+    {
+      "test": "scene-glb-cleanup-check.mjs",
+      "exit": 0,
+      "stdout": "{\"passed\":4,\"failed\":0,\"failures\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "test": "storage-bay-move-check.mjs",
+      "exit": 0,
+      "stdout": "PASS 12 storage/bath layouts: move, boundary, nested settings, source immutability, reverse move and JSON reopen.\n",
+      "stderr": ""
+    },
+    {
+      "test": "kitchen-worktop-command-check.mjs",
+      "exit": 0,
+      "stdout": "{\"passed\":28,\"failed\":0,\"failures\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "test": "panel-engine-check.mjs",
+      "exit": 0,
+      "stdout": "PASS 48 panel constructions, clearances, internal drawer components and BOM consistency.\n",
+      "stderr": ""
+    },
+    {
+      "test": "forma-camera-fit-check.mjs",
+      "exit": 0,
+      "stdout": "PASS 72 projected model bounds at mobile/desktop aspects and orbit angles; explicit zoom and photo composition retained.\n",
+      "stderr": ""
+    },
+    {
+      "test": "camera-framing-check.mjs",
+      "exit": 0,
+      "stdout": "PASS 243 perspective fits: all 3D envelope corners stay in frame.\n",
+      "stderr": ""
+    },
+    {
+      "test": "scene-photo-restore-check.mjs",
+      "exit": 0,
+      "stdout": "{\"passed\":8,\"failed\":0,\"failures\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "test": "scene-dispose-check.mjs",
+      "exit": 0,
+      "stdout": "{\"passed\":7,\"failed\":0,\"failures\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "test": "bath-layout-click-check.mjs",
+      "exit": 0,
+      "stdout": "{\"passed\":40,\"failed\":0,\"failures\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "test": "seating-set-check.mjs",
+      "exit": 0,
+      "stdout": "{\"design_cases\":12,\"counts_project_export_layout_checks\":\"PASS\"}\n",
+      "stderr": ""
+    }
+  ],
+  "browser": {
+    "passed": 2,
+    "results": [
+      {
+        "width": 1440,
+        "create_update_reload_empty_invalid_return": true,
+        "page_errors": 0
+      },
+      {
+        "width": 390,
+        "create_update_reload_empty_invalid_return": true,
+        "page_errors": 0
+      }
+    ]
+  },
+  "limits": [
+    "Example arrangement, not an actual customer room or engineering approval",
+    "Part-specific freeform overrides remain on original kind and do not transfer to other sizes; disclosed in UI",
+    "211/220 source audit still incomplete",
+    "Historical Forma180s full-suite timeout and four older browser fixture issues remain open",
+    "No physical device approval; actual390px browser viewport checked"
+  ],
+  "files": {
+    "assets/forma/seating-set.js": "05fc3a37dfc5a49b8c0a41d05904308e0c6b1c358dc53880adb20deb08ea40bc",
+    "assets/forma/studio.js": "fea292af515bcde593e567f8f1cc9df9df365f78578b8d32ed334429de8a1e18",
+    "assets/forma/studio.css": "28259ebff3a2d8eb9e78f32571ccfe6e91f07504456ae88babdb41c2a5207e0b",
+    "assets/forma/i18n.js": "3d2f2c1f6b83282c56137371d001804a1511d411a1f03354336e8765882a8f57",
+    "tests/seating-set-check.mjs": "0bcd75e1553657745f0495acc738663147b70e4bcddfb445eae8717973b6be21",
+    "tests/visual/seating-set-check.mjs": "c15f4c186eee24ec60f91e12bb3595dbd8a3d8402dd3cb203995deeeb5ba082c"
+  }
+}

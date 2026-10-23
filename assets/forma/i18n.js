@@ -4,6 +4,25 @@ export const UI_LANGS = {tr: 'Türkçe', en: 'English', de: 'Deutsch', fr: 'Fran
 export const isRTL = lang => lang === 'ar';
 
 const T = {
+  setTitle: ["Takım yap", "Build a set"],
+  setIntro: ["Bu koltuğun tarzı, kolu, sırtı, ayakları, rengi ve kumaşıyla üçlü, ikili ve berjer türetin.", "Create a sofa, loveseat and armchair using this design’s style, arms, back, legs, colour and fabric."],
+  setThree: ["Üçlü koltuk", "Three-seat sofa"],
+  setTwo: ["İkili koltuk", "Two-seat loveseat"],
+  setOne: ["Berjer / tekli", "Armchair"],
+  setTotal: ["Toplam", "Total"],
+  setPreview: ["Takım çalışma alanı", "Seating set workspace"],
+  setOpposed: ["Karşılıklı", "Facing each other"],
+  setRows: ["Sıralı", "Rows"],
+  setAdd: ["Takımı projeye ekle", "Add set to project"],
+  setUpdate: ["Projedeki takımı güncelle", "Update project set"],
+  setSaved: ["Takım projeye kaydedildi. Proje sekmesinden düzenleyebilir ve indirebilirsiniz.", "Set saved. Edit and download it from the Project tab."],
+  setEmpty: ["En az bir ürüne adet verin.", "Choose a quantity for at least one item."],
+  setLimit: ["3B görünümde {shown} / {total} ürün gösteriliyor. Tüm adetler projeye kaydedilir.", "The 3D preview shows {shown} / {total} items. All quantities are saved to the project."],
+  setOverrides: ["Parçaya özel serbest şekil değişiklikleri diğer boyutlara otomatik aktarılmaz.", "Part-specific free-form edits are not automatically transferred to other sizes."],
+  setRange: ["Adet 0–999 arasında tam sayı olmalıdır.", "Quantity must be a whole number from 0 to 999."],
+  setReturn: ["Tek koltuğa dön", "Return to single seat"],
+  setConcept: ["Örnek düzen; gerçek oda yerleşimi için Proje sekmesini kullanın.", "Example arrangement; use the Project tab for actual room planning."],
+
   designDimensions: ['Tasarım ölçüsü', 'Design dimensions'],
   dimensionsDownload: ['Proje ve parça ölçülerini indir', 'Download project and component dimensions'],
   dimensionsScope: ['Ürün başlığındaki tasarım ölçüsü, parça zarfı ve kesim ölçüsü farklıdır. Dosya bunları ayrı tutar; üretim ve yerinde ölçüm onayı değildir.', 'Nominal product size, part envelope and cut size differ. The file separates them; it is not production or site-measurement approval.'],
