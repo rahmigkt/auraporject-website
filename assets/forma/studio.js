@@ -401,6 +401,7 @@ function layoutEditor(p) {
     ${c.inside === 'shelves' ? `<h3>${L('shelvesN')}</h3><div class="f-seg">${[0, 1, 2, 3, 4, 5, 6].map(n => chip(`data-cellset="k" data-value="${n}"`, String(n), c.k === n)).join('')}</div>` : ''}` : ''}
   ${bay.cells.length > 1 ? slider('data-cellmm', L('cellHeight'), 100, maxCell, cellH, 'data-cellauto="1"', !c.mm) : ''}
   ${p.bays.length > 1 ? slider('data-baymm', L('bayWidth'), 260, maxBay, bayW, 'data-bayauto="1"', !bay.mm) : ''}
+  <div class="f-actions"><button class="f-secondary" data-bayop="left" ${sb === 0 ? 'disabled' : ''}>← ${L('moveLeft')}</button><button class="f-secondary" data-bayop="right" ${sb >= p.bays.length - 1 ? 'disabled' : ''}>${L('moveRight')} →</button></div>
   <div class="f-actions"><button class="f-secondary" data-cellop="split" ${bay.cells.length >= 8 || cellH < 260 ? 'disabled' : ''}>${L('splitCell')}</button><button class="f-secondary" data-cellop="merge" ${sc >= bay.cells.length - 1 ? 'disabled' : ''}>${L('mergeCell')}</button></div>
   <div class="f-actions"><button class="f-secondary" data-bayop="add" ${p.bays.length >= 8 ? 'disabled' : ''}>+ ${L('addBay')}</button><button class="f-secondary" data-bayop="remove" ${p.bays.length <= 1 ? 'disabled' : ''}>− ${L('removeBay')}</button></div></section>`;
 }
@@ -422,6 +423,13 @@ function layoutAction(d) {
   else if (d.cellset) cell[d.cellset] = d.cellset === 'inside' ? d.value : +d.value;
   else if (d.cellauto) cell.mm = 0;
   else if (d.bayauto) bay.mm = 0;
+  else if (d.bayop === 'left' || d.bayop === 'right') {
+    const to = b + (d.bayop === 'left' ? -1 : 1);
+    if (to < 0 || to >= bays.length) return false;
+    // Move the whole bay, including its width and all nested front/interior settings.
+    [bays[b], bays[to]] = [bays[to], bays[b]];
+    state.sel = {b: to, c};
+  }
   else if (d.cellop === 'split') { const h = (cell.h || 1) / 2; bay.cells.splice(c, 1, {...cell, h, mm: 0}, {...structuredClone(cell), h, mm: 0}); }
   else if (d.cellop === 'merge' && c < bay.cells.length - 1) { const up = bay.cells[c + 1]; cell.h = (cell.h || 1) + (up.h || 1); cell.mm = cell.mm && up.mm ? cell.mm + up.mm : 0; if (cell.type === 'drawers' && up.type === 'drawers') cell.n = Math.min(6, cell.n + up.n); bay.cells.splice(c + 1, 1); }
   else if (d.bayop === 'add') { bays.splice(b + 1, 0, structuredClone({...bay, mm: 0})); state.sel = {b: b + 1, c: 0}; }

@@ -3,7 +3,7 @@ import vm from 'node:vm';
 import assert from 'node:assert/strict';
 const source=fs.readFileSync(new URL('../assets/forma/studio.js',import.meta.url),'utf8').replace(/\r\n/g,'\n');
 const click=source.slice(source.indexOf("  panel.addEventListener('click', e => {"),source.indexOf('  // Dragging a bay'));
-const edits=[{baycount:'2'},{cellcolor:'sage'},{celltype:'drawers'},{cellset:'inside',value:'shelves'},{cellop:'split'},{bayop:'add'},{cellauto:'1'},{bayauto:'1'}];
+const edits=[{baycount:'2'},{cellcolor:'sage'},{celltype:'drawers'},{cellset:'inside',value:'shelves'},{cellop:'split'},{bayop:'add'},{bayop:'left'},{bayop:'right'},{cellauto:'1'},{bayauto:'1'}];
 const failures=[];let passed=0;
 for(const family of ['bath','storage','kitchen','seating'])for(const dataset of edits){
  try{
