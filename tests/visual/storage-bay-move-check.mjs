@@ -44,7 +44,12 @@ try {
     const before = await page.evaluate(()=>formaDebug.state.design);
     const kitchen = family === 'kitchen', data = kitchen ? 'mop' : 'bayop', select = kitchen ? '[data-mod="1"]' : '[data-cell="1:1"]';
     // A kitchen SVG group spans base AND wall cabinets; its bounding-box centre may be empty backsplash.
-    await page.locator(select).locator('rect').first().click();
+    if (kitchen) await page.locator(select).locator('rect').first().click();
+    else {
+      // Nested drawer lines are valid cell hit targets; clicking only the rect rejects them.
+      await page.locator(select).click();
+      assert.deepEqual(await page.evaluate(()=>formaDebug.state.sel),{b:1,c:1},'actual cell selected before moving');
+    }
     await page.locator(`[data-${data}="left"]`).click();
     assert(await page.locator(`[data-${data}="left"]`).isDisabled());
     const after = await page.evaluate(()=>formaDebug.state.design);
