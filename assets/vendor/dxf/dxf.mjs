@@ -199,15 +199,18 @@ function stringByteSize(value) {
 	return new Blob([value]).size;
 }
 function stringChunksSplit(value, length = 255) {
+	// AURA local fix: retain every code point and cap encoded DXF string bytes, not UTF-16 units.
+	if (!Number.isInteger(length) || length <= 0) throw new RangeError("Invalid DXF chunk length");
 	const chunks = [];
-	const tempChunk = [];
-	for (let i = 0; i < value.length; i++) {
-		const char = value[i];
-		if (tempChunk.length === length || i === value.length - 1) {
-			chunks.push(tempChunk.join(""));
-			tempChunk.length = 0;
-		} else tempChunk.push(char);
+	let chunk = "", bytes = 0;
+	for (const char of value) {
+		const size = stringByteSize(char);
+		if (size > length) throw new RangeError("DXF character exceeds chunk length");
+		if (bytes + size > length) { chunks.push(chunk); chunk = ""; bytes = 0; }
+		chunk += char;
+		bytes += size;
 	}
+	if (chunk) chunks.push(chunk);
 	return chunks;
 }
 //#endregion
@@ -234,7 +237,9 @@ var ExtendedData = class {
 		this.#tags.push(tag(1003, name));
 	}
 	binaryData(data) {
-		stringChunksSplit(data).forEach((chunk) => this.#tags.push(tag(1004, chunk)));
+		if (typeof data !== "string" || data.length % 2 || !/^[0-9a-f]*$/i.test(data)) throw new TypeError("DXF binary data must be even-length hexadecimal");
+		// Group 1004: 127 binary bytes, represented by 254 hexadecimal characters.
+		stringChunksSplit(data, 254).forEach((chunk) => this.#tags.push(tag(1004, chunk)));
 	}
 	databaseHandle(handle) {
 		this.#tags.push(tag(1005, handle));

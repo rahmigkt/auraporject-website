@@ -1,0 +1,9 @@
+Local AURA patch, 23 October 2026. Original MIT LICENSE.md retained unchanged.
+
+stringChunksSplit retains the final character and chunk-boundary characters, respects UTF-8 byte lengths and does not split Unicode code points. Invalid chunk sizes fail explicitly.
+ExtendedData.binaryData validates even-length hexadecimal before appending tags and uses127-byte/254-hex-character chunks.
+
+Reference: Autodesk DXF Extended Data, group1000 max255bytes, group1004 max127binary bytes:
+https://help.autodesk.com/cloudhelp/2025/ENU/AutoCAD-DXF/files/GUID-A2A628B0-3699-4740-A215-C560E7242F63.htm
+
+Regression: tests/dxf-xdata-check.mjs. Current Forma drawingDxf uses its own R12 LINE writer; repository search found no live importer of this vendor library. This patch does not enable a new runtime path or claim full CAD application interoperability.
