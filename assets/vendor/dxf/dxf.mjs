@@ -812,8 +812,9 @@ var Face = class extends Entity {
 		else this.invisibleEdges = 15;
 	}
 	setEdgeVisible(flag, visible) {
-		if (visible) this.invisibleEdges |= flag;
-		else if (this.invisibleEdges === (this.invisibleEdges | flag)) this.invisibleEdges ^= flag;
+		// DXF group 70 bits mark invisible edges; visible clears the selected bit.
+		if (visible) this.invisibleEdges &= ~flag;
+		else this.invisibleEdges |= flag;
 	}
 	boundingBox() {
 		return BoundingBox.verticesBBox([
