@@ -27,4 +27,11 @@ with tempfile.TemporaryDirectory(dir=test_root) as directory:
     for flag in flags:
         assert flag + '_missing' in gate.qualify({**row, flag: False}, row['product'])
     assert 'cad_file_missing' in gate.qualify({**row, 'path': str(path) + '.missing'}, row['product'])
+    for name, content in [('renamed-dwg.step', b'AC1018\x00not STEP'),
+                          ('login-page.stp', b'<html>Sign in</html>')]:
+        bad_path = Path(directory) / name
+        bad_path.write_bytes(content)
+        bad_row = {**row, 'path': str(bad_path), 'sha256': hashlib.sha256(content).hexdigest()}
+        assert 'step_content_signature_missing' in gate.qualify(bad_row, row['product'])
 print('PASS synthetic STEP -> CadQuery -> FCL static intake; wrong SKU/hash and seven missing qualifications reject; no motion approval')
+print('PASS renamed DWG and login HTML reject despite STEP extension and matching SHA')

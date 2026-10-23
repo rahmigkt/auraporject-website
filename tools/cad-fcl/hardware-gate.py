@@ -12,10 +12,13 @@ def qualify(row, expected_product):
     if not path.is_file():
         errors.append('cad_file_missing')
     else:
-        if hashlib.sha256(path.read_bytes()).hexdigest() != row.get('sha256'):
+        content = path.read_bytes()
+        if hashlib.sha256(content).hexdigest() != row.get('sha256'):
             errors.append('cad_hash_mismatch')
         if path.suffix.lower() not in ('.step', '.stp'):
             errors.append('unsupported_cad_format_requires_qualified_conversion')
+        elif not content.removeprefix(b'\xef\xbb\xbf').lstrip().startswith(b'ISO-10303-21;'):
+            errors.append('step_content_signature_missing')
     for name in ('units_mm_verified', 'local_use_permitted', 'sku_identity_verified',
                  'mounting_datums_verified', 'rigid_members_verified',
                  'closed_stop_verified', 'motion_law_verified'):

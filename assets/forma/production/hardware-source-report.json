@@ -8,29 +8,29 @@
     {
       "product": "9221528",
       "count": 4,
-      "found": "Üreticinin seçili ürün sayfasından 9221544_3d.zip indirildi: 6 ACIS 3DSOLID, mm birimi; STEP değil.",
-      "blocked": "Bağlantı 9221528 için verilmiş olsa da arşiv 9221544 kodunu taşıyor. İki ürünün 500 mm / 46 × 12,7 mm bilgileri uyuşuyor; bu tek başına SKU, datum ve hareket eşdeğerliği değildir. STEP seçim servisi güvenlik engeli verdi.",
+      "found": "Üreticinin seçili ürün sayfasından 9221544_3d.zip indirildi: 6 ACIS 3DSOLID, mm birimi; STEP değil. Alternatif resmi CAD kataloğunda 9221528 / 500 mm STEP kaydı bulundu; dosya indirilemedi.",
+      "blocked": "Bağlantı 9221528 için verilmiş olsa da arşiv 9221544 kodunu taşıyor. İki ürünün 500 mm / 46 × 12,7 mm bilgileri uyuşuyor; bu tek başına SKU, datum ve hareket eşdeğerliği değildir. STEP seçim servisi güvenlik engeli verdi. Alternatif PartCommunity arayüzü de güvenlik engeli verdi. 450 mm topluluk modeli, farklı boy/SKU/provenans nedeniyle seçili ray yerine kullanılmadı.",
       "needed": "Seçili SKU için kullanılabilir STEP, ayrı sabit/ara/hareketli üyeler, montaj datumları, kapalı durdurucu ve 500 mm rayın kaynaklı hareket kanunu.",
       "source": "https://shop.hettich.com/de_DE/p/9221528"
     },
     {
       "product": "71B3590",
       "count": 15,
-      "found": "Ürün koduyla eşleşen 3D DWG/DXF indirme bağlantıları bulundu; dosya sunucuları 403 döndürdü.",
-      "blocked": "Üretici STEP hizmeti, yasal şirket temsilcisi olarak şartların kabulünü istiyor; bu beyan verilmedi. Dosya veya gerçek bağlantı yörüngesi alınmadı.",
+      "found": "Démos’un 71B3590 ürün sayfasına bağlı 361231 baytlık 3D DWG indirildi; SHA256 ve AC1018 DWG başlığı doğrulandı. STEP değil; iç katı geometri ve ürün datumları henüz çözümlenmedi.",
+      "blocked": "Yeni güvenilir dağıtıcı dosyası DWG biçiminde. Geçerli bir STEP dönüşümü, rijit üyeler ve gerçek hareket kanunu elde edilmedi. Önceki Blum temsilci beyanı/403 engelleri korunuyor.",
       "needed": "Kullanımı izinli menteşe STEP dosyası, ayrı rijit üyeler ve üreticiye bağlı çok bağlantılı hareket / montaj referansı.",
-      "source": "https://www.blum.com/us/en/services/e-services/productdatabase/"
+      "source": "https://www.demos-trade.hu/bl-71b3590-rautodo-inserta-csillap-110/"
     },
     {
       "product": "174H7100E",
       "count": 15,
-      "found": "Ürün koduna bağlı DWG ve üreticinin 3D CAD seçim ekranı bulundu.",
-      "blocked": "Açık dosya bağlantısı 403 döndürdü; STEP hizmetinin şirket temsilcisi beyanı kabul edilmedi.",
+      "found": "Ürün koduna bağlı DWG ve üreticinin 3D CAD seçim ekranı bulundu. Foussier seçili plaka grubunda iki CAD dokümanı listeliyor.",
+      "blocked": "Açık dosya bağlantısı 403 döndürdü; STEP hizmetinin şirket temsilcisi beyanı kabul edilmedi. Foussier CAD düğmesi hesap girişi istedi; dosya alınmadı.",
       "needed": "Kullanımı izinli seçili plaka STEP dosyası ve menteşe eşleştirme datumları.",
       "source": "https://www.groheshop.com/blum/exzenter-kreuzmontageplatte-clip-top/706-0338"
     }
   ],
-  "comparison": "Önceki 40 ahşap parça / 392 işlem CAD karşılaştırması korunuyor. Bu araştırma metal donanım eklemedi, yeni bir gerçek donanım hareket testi üretmedi. Eksik veriler nedeniyle hareket onayı verilmedi.",
+  "comparison": "Önceki 40 ahşap parça / 392 işlem CAD karşılaştırması korunuyor. Alternatif araştırmada 1 DWG indirildi, doğrulanmış STEP elde edilemedi. Gerçek metal üyeler gardıroba eklenmedi ve yeni donanım hareket testi yapılamadı; hareket/üretim onayı yok.",
   "artifacts": [
     {
       "name": "sources\\blum-service.html",
@@ -81,6 +81,31 @@
     {
       "url": "https://shop.hettich.com/ph_EN/p/9221544",
       "role": "same nominal dimensions, different SKU; not qualified equivalence"
+    }
+  ],
+  "alternative_review_at": "2026-10-23T23:57:33.491456+00:00",
+  "alternative_sources": [
+    {
+      "name": "Démos 71B3590",
+      "url": "https://www.demos-trade.hu/product-file/download/34558",
+      "result": "DWG downloaded; not STEP",
+      "bytes": 361231,
+      "sha256": "6e028f87ed5796e6a1e44fbe523752be4fa3fd772bf428b2ccec2ebfee8e0944"
+    },
+    {
+      "name": "Hettich official CAD catalogue selected SKU",
+      "url": "https://hettich.partcommunity.com/3d-cad-models/?info=hettich%2Fdrawer_runners%2Fball_bearing_slides%2Fmounted_on_sides%2Fka_5632_sisy_tab.prj",
+      "result": "Security block. Indexed selected 9221528 / 500 STEP exists; no actual STEP downloaded."
+    },
+    {
+      "name": "Foussier 174H7100E group",
+      "url": "https://rapido.foussier.fr/embase-croix-reglage-par-excentrique-avec-tourillon-expando-o-5-mm/sp10714",
+      "result": "CAD1044109/1044110 button opens login dialog; no file downloaded"
+    },
+    {
+      "name": "Community Hettich KA5632/5332 450mm candidate",
+      "url": "https://grabcad.com/library/hettich-ka5632-5332-450mm-drawer-slide-1",
+      "result": "Not selected SKU/length; no manufacturer qualification. Not imported or substituted. Page403."
     }
   ]
 }
