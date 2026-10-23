@@ -1,0 +1,85 @@
+{
+  "schema": "aura.cad-fcl-pilot-audit/1",
+  "at": "2026-10-23T23:27:10.801479+00:00",
+  "denetci": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "independent_claude_review": false,
+  "producer_test_code": "42654cfdd597b5132c9f2334ff730004c231c835",
+  "base": "038023fa3010fbe990d64b4b328dcf7998ed96d9",
+  "parent_pr": 273,
+  "python_environment": "work/cad-fcl-env;Python3.12.14;include-system-site-packages=false",
+  "install": "47hash-pinned Windows wheels via base pip --python isolated interpreter;pipcheck no broken requirements;global Python unchanged",
+  "source_and_test_sha256": {
+    "tools\\cad-fcl\\pilot.py": "05225b5ad823513751bccb1236abd7244526c1bad968cd5dc7aff0ba4697c157",
+    "tools\\cad-fcl\\resume-step.py": "89ec85e468fcf4e58078d952cfa49ad814cc6f1b3dcdb30f95568e595307ca97",
+    "tools\\cad-fcl\\export-input.mjs": "74045e09522ec849bfc55e990cd8319433003054b1184376da5fcba52b395cb2",
+    "tools\\cad-fcl\\requirements-win-py312.lock": "7f633ecdfd85e138af8ce2f1ef636473f909d4c38e7b85b43df3967ba804ed7a",
+    "assets\\forma\\production\\external-validation.js": "fffb9792905ec8bf8d4437743e71223fc9f1ceaad9a9b3e589f1160bb36a140a",
+    "assets\\forma\\production\\inspection-viewer.js": "2f24ab34babfdaa79dc447f6e13d845580203e614481daa7d31c231364b48d8c",
+    "assets\\forma\\production\\cad-fcl-pilot-report.json": "93d4e53957994200d9df9643a9f0442025f1f71351daa34f1d2a291fda53fb26",
+    "tests\\external-validation-check.mjs": "ea305fb7d3ffb51a3f9f34d522722b28086aa9d35be2ef6419f77bea46ec92a0",
+    "tests\\visual\\cad-fcl-report-check.mjs": "a9206f6bf18278843e8bfa85b61546a1e3a7fe83500f330440f463193395efea"
+  },
+  "evidence_sha256": {
+    "outputs\\cad-fcl-pilot\\input.json": "78fc4a812334e8d052b4a1dd9e522e4e685a94187ec5b8a7780e246494f02cd4",
+    "outputs\\cad-fcl-pilot\\install-result.json": "efc4175a2d5ea8747c0a182c269b6258ddc09057e3e85804ad089704dd1e83db",
+    "outputs\\cad-fcl-pilot\\environment.json": "ff3075ff2853a053f8d20093ec25e2b76137457707b3101ddab6230c60f8e80e",
+    "outputs\\cad-fcl-pilot\\run\\report.json": "d1adb5025295f92f95f49dc4114865d383e1c6173501cedfbde846b07f775182",
+    "outputs\\cad-fcl-pilot\\run\\wardrobe-stock.step": "650603eb6deef3dfa9e4b3e6f1ca097816d81daabb250cf06d5687549b2c5e41",
+    "outputs\\cad-fcl-pilot\\first-run-code.py": "8458a78e5cde902a41a3dc9c541fe96257bd8936ad4162017e517bd8fd9d655e",
+    "outputs\\cad-fcl-pilot\\ccd-preflight-matrix.json": "5c8dcb132d7a9595af198e3ee5ed876bfec0727f11ec5739b5d48495ce802c7a",
+    "outputs\\cad-fcl-pilot\\aura-discrete-ccd-control.json": "3f62af6fcab2c9967825c7e9cb24c3f573c33ecc4520e9db4dc6a6b7c78f320f",
+    "outputs\\cad-fcl-pilot\\step-first-read-audit.json": "103abd050c0ec7c44928674d7a706451cb0778b908ddf2799284168efd58fda3",
+    "outputs\\cad-fcl-pilot\\unsupported-return-control.json": "44d0c8c9ca1ea7ecc0597b1e2ca69c7c8f382236ff2e71346e100730c4355991",
+    "outputs\\cad-fcl-pilot\\browser\\browser-external.json": "aa7a29e5f523257069b26c2a8f39782575dfeb0cd0dae3610cbe0238d955c9e2"
+  },
+  "checks": {
+    "source_part_identity": 92,
+    "native_stock_solids": 40,
+    "excluded_specialist_hardware": 52,
+    "operations": 392,
+    "cad_errors": 0,
+    "native_stock_brep_overlapping_candidate_pairs": 56,
+    "positive_volume_intersections": 0,
+    "FCL_source_mesh_contacts": 0,
+    "max_envelope_delta_mm": 4.8828125045474735e-05,
+    "max_relative_volume_delta_percent": 0.736003895796869,
+    "step_solid_count": 40,
+    "step_individually_matched": 40,
+    "step_sum_volume_delta_mm3": 1.0132789611816406e-06,
+    "analytic_volume_cases": 3,
+    "synthetic_CCD_GST_INDEP_contact_fraction": 0.25,
+    "synthetic_AURA_coarse_samples_collisions": [
+      1,
+      0
+    ],
+    "synthetic_AURA_fine_samples_collisions": [
+      16,
+      7
+    ],
+    "geometry_negative_controls": [
+      "Rigid drawer1mmtranslation independently measured13.7/11.7 versus12.7",
+      "Missing source component rejected",
+      "Changed89316module5mm bore to6mm rejected",
+      "Stubbed negative solver return rejected"
+    ],
+    "viewer_checks": "Chrome390studio matching92/40/52+392report;1440othermodelreportrejected;source/storagepreserved;download0/pageerror0",
+    "versionmaps": {
+      "pages": 16,
+      "stale": 0
+    }
+  },
+  "retained_failures": [
+    "venv ensurepip failed;explicit basepip --python fixed isolation without globalinstall",
+    "Initial dryrunJSON CP1252 read failed beforeinstall;UTF8 fixed",
+    "WrongprimarynonGitcwd corrected;selected geometry modules gitdiff empty",
+    "First defaultGST_LIBCCD CCD false negative on positivefixture;8configuration matrix retained;only testedGST_INDEP allowed",
+    "FirstSTEP Compound.Volume versus sum solids mismatch7.3347mm3 caused gatefailure;each40solid then matched uniquely by envelope+volume;sumdelta1e-6;gate tolerance not widened",
+    "First sharedsourcebroadphase report retained;final nativeBRep ownbounds expanded candidatepairs24to56;no extra overlaps",
+    "One diagnostic outputfilepath was relative to wrongworktree;no model/site effect"
+  ],
+  "scope": "Same wardrobe input/source recipes;independent smooth BRep and tessellated mesh differ.52hardwareparts not turned into genericCAD. Full hardware trajectories,tolerance capability,load,walls/anchors and physical manufacturing not qualified. No expensive445CSG or prior392cut package regenerated;frozen mesh reused afterCRC/design/ID/pose/envelope checks;one native392cut build and STEPcheckpoint continuation.",
+  "merged": false,
+  "deployed": false,
+  "production_approved": false
+}
