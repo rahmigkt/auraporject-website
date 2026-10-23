@@ -1,0 +1,429 @@
+{
+  "schema": "aura.model-inspection-ui-audit/1",
+  "captured_at": "2026-10-23T21:49:45.730087+00:00",
+  "denetci": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "independent_claude_review": false,
+  "code_sha": "45d847ef239e8d421cde8d2fd4e9a80d364b7985",
+  "production_approved": false,
+  "scope": "Read-only direct model/part/operation/assembly/drawing inspection in atelier and temporary studio project entry;all current project items selectable;no export needed",
+  "parent_source_fix_pr": 271,
+  "catalogue": {
+    "models": 445,
+    "parts": 21546,
+    "families": {
+      "seating": 90,
+      "table": 150,
+      "storage": 142,
+      "kitchen": 30,
+      "bath": 33,
+      "bedroom": 1,
+      "set": 1
+    },
+    "manufacturing_errors": [],
+    "dimension_unavailable": 0
+  },
+  "catalogue_scope": "445starts/21546compiled parts in5active families;bedroom/set compatibility inputs normalize to storage/seating and are not two new independent families",
+  "browser_full_flow": {
+    "pass": true,
+    "widths": [
+      390,
+      1440
+    ],
+    "studio": {
+      "parts": 92,
+      "ops": 392,
+      "access": 154,
+      "machined": 30
+    },
+    "designer": [
+      {
+        "family": "seating",
+        "count": 40,
+        "scene": {
+          "shown": 40,
+          "errors": []
+        }
+      },
+      {
+        "family": "table",
+        "count": 13,
+        "scene": {
+          "shown": 13,
+          "errors": []
+        }
+      },
+      {
+        "family": "storage",
+        "count": 93,
+        "scene": {
+          "shown": 93,
+          "errors": []
+        }
+      },
+      {
+        "family": "seating",
+        "count": 40,
+        "scene": {
+          "shown": 40,
+          "errors": []
+        }
+      },
+      {
+        "family": "storage",
+        "count": 93,
+        "scene": {
+          "shown": 93,
+          "errors": []
+        }
+      },
+      {
+        "family": "kitchen",
+        "count": 318,
+        "scene": {
+          "shown": 318,
+          "errors": []
+        }
+      },
+      {
+        "family": "bath",
+        "count": 29,
+        "scene": {
+          "shown": 29,
+          "errors": []
+        }
+      }
+    ],
+    "page_errors": [],
+    "downloads": [],
+    "source_preserved": true
+  },
+  "browser_final_presentation": {
+    "pass": true,
+    "widths": [
+      390,
+      1440
+    ],
+    "studio": {
+      "parts": 92,
+      "ops": 392,
+      "access": null,
+      "machined": null
+    },
+    "designer": [
+      {
+        "family": "seating",
+        "count": 40,
+        "envelope": {
+          "min_mm": [
+            -1050,
+            0,
+            -460
+          ],
+          "max_mm": [
+            1050,
+            800.131,
+            479.826
+          ],
+          "xyz_mm": [
+            2100,
+            800.131,
+            939.826
+          ]
+        },
+        "scene": {
+          "shown": 40,
+          "errors": [],
+          "bounds": {
+            "min": [
+              -1050,
+              0,
+              -460
+            ],
+            "max": [
+              1050,
+              800.1312687848945,
+              479.8259758556897
+            ]
+          }
+        }
+      },
+      {
+        "family": "table",
+        "count": 13,
+        "envelope": {
+          "min_mm": [
+            -900,
+            0,
+            -450
+          ],
+          "max_mm": [
+            900,
+            750,
+            450
+          ],
+          "xyz_mm": [
+            1800,
+            750,
+            900
+          ]
+        },
+        "scene": {
+          "shown": 13,
+          "errors": [],
+          "bounds": {
+            "min": [
+              -900,
+              0,
+              -450
+            ],
+            "max": [
+              900,
+              750,
+              450
+            ]
+          }
+        }
+      },
+      {
+        "family": "storage",
+        "count": 93,
+        "envelope": {
+          "min_mm": [
+            -900,
+            0,
+            -300
+          ],
+          "max_mm": [
+            900,
+            2400,
+            335.988
+          ],
+          "xyz_mm": [
+            1800,
+            2400,
+            635.988
+          ]
+        },
+        "scene": {
+          "shown": 93,
+          "errors": [],
+          "bounds": {
+            "min": [
+              -900,
+              0,
+              -300
+            ],
+            "max": [
+              900,
+              2400,
+              335.9883117675781
+            ]
+          }
+        }
+      },
+      {
+        "family": "seating",
+        "count": 40,
+        "envelope": {
+          "min_mm": [
+            -1050,
+            0,
+            -460
+          ],
+          "max_mm": [
+            1050,
+            800.131,
+            479.826
+          ],
+          "xyz_mm": [
+            2100,
+            800.131,
+            939.826
+          ]
+        },
+        "scene": {
+          "shown": 40,
+          "errors": [],
+          "bounds": {
+            "min": [
+              -1050,
+              0,
+              -460
+            ],
+            "max": [
+              1050,
+              800.1312687848945,
+              479.8259758556897
+            ]
+          }
+        }
+      },
+      {
+        "family": "storage",
+        "count": 93,
+        "envelope": {
+          "min_mm": [
+            -900,
+            0,
+            -300
+          ],
+          "max_mm": [
+            900,
+            2400,
+            335.988
+          ],
+          "xyz_mm": [
+            1800,
+            2400,
+            635.988
+          ]
+        },
+        "scene": {
+          "shown": 93,
+          "errors": [],
+          "bounds": {
+            "min": [
+              -900,
+              0,
+              -300
+            ],
+            "max": [
+              900,
+              2400,
+              335.9883117675781
+            ]
+          }
+        }
+      },
+      {
+        "family": "kitchen",
+        "count": 318,
+        "envelope": {
+          "min_mm": [
+            -2650,
+            0,
+            -290
+          ],
+          "max_mm": [
+            2650,
+            2420,
+            326.986
+          ],
+          "xyz_mm": [
+            5300,
+            2420,
+            616.986
+          ]
+        },
+        "scene": {
+          "shown": 318,
+          "errors": [],
+          "bounds": {
+            "min": [
+              -2650,
+              0,
+              -290
+            ],
+            "max": [
+              2650,
+              2420,
+              326.986083984375
+            ]
+          }
+        }
+      },
+      {
+        "family": "bath",
+        "count": 29,
+        "envelope": {
+          "min_mm": [
+            -500,
+            260,
+            -240
+          ],
+          "max_mm": [
+            500,
+            1060,
+            250
+          ],
+          "xyz_mm": [
+            1000,
+            800,
+            490
+          ]
+        },
+        "scene": {
+          "shown": 29,
+          "errors": [],
+          "bounds": {
+            "min": [
+              -500,
+              260,
+              -240
+            ],
+            "max": [
+              500,
+              1060,
+              250
+            ]
+          }
+        }
+      }
+    ],
+    "page_errors": [],
+    "downloads": [],
+    "source_preserved": true
+  },
+  "other_tests": [
+    "Existing hardware-dependent manufacturing group PASS",
+    "7exactAccuride lengths/clearance overflow/visible PDF warning PASS",
+    "Collision primitives/touch/gap/rotation/invalidsampling/doorobstacle group PASS",
+    "16versionmaps stale0;syntax and diff checks PASS"
+  ],
+  "read_only_properties": [
+    "Input/project JSON preserved inrealChrome;no downloads",
+    "Whole-design snapshots shared between tabs,sourcechanges require reopen;newinput reopening tested",
+    "Duplicate detailed-check calls share per-input in-flight promise/cache;no automatic heavy run",
+    "One lightweight read-only3Dcontext per dialog;dispose/forcecontextloss/observer/listener cleanup onclose",
+    "Source meshes transformed with their actual local XYZ/Euler placement;precise rendered vertex bounds compared to dimension envelopes within0.003mm",
+    "Part local and placed envelopes separate from blank/finished stock;null and missingrecipe not inferred",
+    "Actual machining preview requested separately and checked by existing independent cut-volume gate;failures retain normal model"
+  ],
+  "failed_attempts_preserved": [
+    "First catalogue test asserted allrows but failed writing missing outputfolder;test nowcreatesfolder;rerunpassed",
+    "New canvas resize initially changed CSS size from observer;changed backing-size only;realclickrerunpassed",
+    "Precise rendered-envelope regression caught ThreeBox3coarse transformed-box mismatch forangled sofa members;using precise vertices fixed without widening tolerance",
+    "Early module wiring had syntax/absentOrbitControls preflight errors;fixed before any delivery by local pointer orbit;no dependencyupgrade"
+  ],
+  "remaining": [
+    "Representation colors only;not photo/material certification",
+    "Detailed collision/access/realhardware/stock/load/torque/fullproduct/tolerance/site-anchor gates remain unqualified",
+    "Some models have no complete assembly sequence or stock/operationrecipe;those omissions remain visible",
+    "Not all445modelsphysicallyassembled or rendered/manuallyreviewed;catalogue check is data/geometry reporting only",
+    "HistoricalForma180s/fourlegacyfixtures andbaseline211/220siteaudit remain open",
+    "New technical review labels Turkish;existing page language behavior not a completed new9language translation audit"
+  ],
+  "source_and_test_sha256": {
+    "assets/forma/atelier.js": "a661035ad80a2241edc17f6b8c2851b68e0331fbab587ea1875403a96ae44c30",
+    "assets/forma/production/inspection-scene.js": "bb0c2ccfc71acdd379c212fd806eb72a0326e38415bf0b562353b8842204ba20",
+    "assets/forma/production/inspection-ui.js": "7201e2741969946621336b04283b1c40229ab01a4387e15739e1a87aa300ba27",
+    "assets/forma/production/inspection-viewer.js": "02f0e463dcc30d22b06ddc5bfa341b6e2c2bbc4bc9a58c51c18c73fa1a2207d2",
+    "assets/forma/production/model-inspection.js": "befde262dfd621e59ab952aca436a7e974b9f3b38f0ec91aeb3f68297288894c",
+    "assets/forma/studio.js": "d14be7e3c9047b63ffeeaf041175e13d8f0571922d5c87821690e7f9488a4f3b",
+    "tasarimci.html": "7e783a2af2aedab2d1b7dedf235bf6e819107ee5e886bc2b2b1aedcecfda8f7e",
+    "tasarla.html": "cc67db810a8221b2b7261c0a71d3a85715545ddeb3b6de0ece9166839a8bf976",
+    "tests/model-inspection-check.mjs": "06ba1626f54d9031cbfb52eee351368ab6e4dc1332affdc8d51acba6464ecdb1",
+    "tests/visual/model-inspection-check.mjs": "cb29b833d1560fcf49cb63e4646863ae744a307a29a167ee92b61f6050c63ef5"
+  },
+  "evidence_sha256": {
+    "browser-final-ui.json": "aa0c065e327e5626cefbaae980a446b1ec9b20b0aece7be126a39139506beaaa",
+    "browser.json": "5b5ff3433e2a3536c3ea4434a7b026ea26e210680ec4cc99487b0a30f4fe2056",
+    "catalogue.json": "1164f889d9930bb5e3a1074f5fa146a197b3afdf43af7f241e39a5c38f367d98"
+  },
+  "delivery": {
+    "pushed": false,
+    "merged": false,
+    "deployed": false
+  }
+}
