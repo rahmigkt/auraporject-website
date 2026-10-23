@@ -1,0 +1,199 @@
+{
+  "schema": "aura.manufacturing-front-base-audit/4",
+  "captured_at": "2026-10-23T20:07:35.522903+00:00",
+  "denetci": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "independent_human_review": false,
+  "code_sha": "f1f7330121209059a80e280b4495a90b84596e7a",
+  "test_code_sha": "f1f7330121209059a80e280b4495a90b84596e7a",
+  "source_and_test_files_sha256": {
+    "assets/forma/bath.js": "b2bf9b84d64552eda702fa152327a71ab798658b88d8bf66549cb9afa838729e",
+    "assets/forma/csg.js": "4ea15207f77c550b63e3cf972607bdef52a2081a41eb241fea56d49b1afb573d",
+    "assets/forma/hardware.js": "4fb2281f9cd206a74f35ab63148d1c926ec4c415d1f09a14a2b533e1de05ff9d",
+    "assets/forma/kitchen.js": "2ada851e3870b8a445d52b6010e0c0e73eef63a6aaed5263c0f8f3673cb93c83",
+    "assets/forma/production/assembly-collision.js": "9cb0aad1c9d1210d2030b80597c8a8ef826aa23d8135a230cf6db57d1250dcfc",
+    "assets/forma/production/assembly-connections.js": "f73fa61b750579973833388549925366d056c0c83119d9c08f07d50a50571616",
+    "assets/forma/production/machined-geometry.js": "826c5cedae673412e91b38b7296b00bf7e9c44768492f8ed633d39c6ae2b833d",
+    "assets/forma/production/manufacturing.js": "bbe36486a2841b851a1e4cb70569bd08b951e47215db31a89d0513c97d8910f8",
+    "assets/forma/production/operation-bounds.js": "06f74b789482aacb49d4e2a5619fe1fd09435c92f151564cfb30db195d13805e",
+    "assets/forma/production/runner-drilling.js": "d80a323e5148a64c0fc732c5c080d9884aad49d90b996a413a85a99299936be9",
+    "assets/forma/storage.js": "f20f90dd74c1daaba9ec4b632618dd1bf8cbc3cf135a474f3edfa93bff1e26f9",
+    "assets/forma/studio.js": "6462c12f986d53a170f5f1731cda876e85e9379bdbfe09321bfeba46f0ad2426",
+    "ev.html": "3331ac9a880f283ee6f7844404249d43fea841708eb60c325f6a94a5345117c1",
+    "index.html": "b6c193d12d831b041086133e05427276358d57ba133d053d0caa1a109a625e91",
+    "sohbet.html": "7c4ce2d8179cd9ac5bcb2de40b0246932f21e754436c7a088e6082819cb4ce06",
+    "tarzlar.html": "9c0178275bc80d30559def1687234f2affc14b9c7db10a487f1a0d2720a6f742",
+    "tasarimci.html": "8fcc9b2486cf192596b15e91ba1063cb21271031c476b3fff3aaa9f6ab21e890",
+    "tasarla.html": "4882437f239fcb3b0a6b94c85e7e3024d2939bff40995c7e0152e9d24b2aec08",
+    "tests/assembly-front-base-check.mjs": "73b9f9492fc27a00a35404d1423f10b0ec72c3f62a6b5db18ca3e11dc5c9368f",
+    "tests/visual/manufacturing-hardware-check.mjs": "09267a1f2fd3fcf66d45cfa45789543cf50c1b60f4a7ed4b782652e597736c51",
+    "tools/production/machining-review-pilot.mjs": "78fa3f242e9d347b17712edb94bda853c49440c2b9c36f724dfbf7287148d374",
+    "uretim.html": "2fd70652ee3d0474b82c8fe2972463cb71af10676d0d5f0126da47f5d50a7a15"
+  },
+  "production_approved": false,
+  "scope": "Opt-in71833front contact/runner references,spacer face screws and rotated Rastex plinth-floor nominal connections;actual machined stock export and sampled motion",
+  "previous_evidence_preserved": [
+    "manufacturing-assembly-v3-audit.json",
+    "manufacturing-front-connection-source-audit.json",
+    "work/front-datum-probe.json"
+  ],
+  "sources": [
+    {
+      "url": "https://www.hettich.com/fileadmin/Media_Center/Catalogue/1608_014_Drawer_runner_0523_HUK_en.pdf",
+      "local_file": "hettich-drawer-runner-HUK-0523.pdf",
+      "sha256": "20c878f431a9e01b24e49d0d1923488021277f91ee1221ac08cd0e7994198bb3",
+      "pdf_page_visually_read": 71,
+      "printed_page": 69
+    },
+    {
+      "url": "https://www.spax.com/content/spaxinternational/gb/en/products/category-page.html/screws/universal-screws.html",
+      "read_scope": "Primary manufacturer search-index catalogue text lists WIROX full-thread4x28 and4x40 size candidates;full page fetch406,not a downloaded SKU/head/pilot technical specification",
+      "limitations": "No exactSKU/head/material torque/pullout qualification inferred"
+    },
+    {
+      "url": "https://www.hettich.com/fileadmin/Media_Center/Catalogue/Connecting_technology_2016_16359_HUS.pdf",
+      "scope": "Previously recorded/rendered18mm Rastex15/DU232T section,rotated to base rail/floor. Spacing/access and load are AURA trial decisions,not manufacturer product approval"
+    },
+    {
+      "url": "https://web2.hettich.com/hbh/addon/montage/MS_10924_03.pdf",
+      "scope": "Previously read two-page runner installation;case and drawer member-front inset2mm separated from actual box/front contact."
+    }
+  ],
+  "source_vs_trial": {
+    "manufacturer_dimensions": "71833pocket20x10,box passage5,countersunk screw4,length=box end thickness+10 =>28for18mm end;extra locking screw required",
+    "aura_trials": [
+      "Adjuster count2/front and40mm position from boxend side;one final lock30mm above center",
+      "8mm90degree head envelope and conical cutter,4.5clearance/2.5pilots;exactheadfitunqualified",
+      "Spacer25mm stock with40mm nominal screw gives15mm nominal embedding;pilot/placement/strength/material unqualified",
+      "Rastex8plinth-floor fixings use18mm section;37mm trialXspacing and cam access sequence require physical validation"
+    ]
+  },
+  "target": {
+    "part_count": 92,
+    "exported_stls": 92,
+    "machined_parts": 30,
+    "operations": 383,
+    "old_operations": 317,
+    "added_operations": 66,
+    "nominal_rastex_connections": 62,
+    "added_plinth_floor_connections": 8,
+    "nominal_front_spacer_connections": 14,
+    "71833_adjusters": 4,
+    "locking_screws": 2,
+    "spacer_screws": 8,
+    "front_datums": [
+      {
+        "front": "b3c1-idrawer1-front",
+        "front_back_mm": 242.5,
+        "box_front_mm": 242.5,
+        "gap_mm": 0.0,
+        "first_drawer_pilot_from_actual_box_front_mm": 37.0
+      },
+      {
+        "front": "b3c1-idrawer2-front",
+        "front_back_mm": 242.5,
+        "box_front_mm": 242.5,
+        "gap_mm": 0.0,
+        "first_drawer_pilot_from_actual_box_front_mm": 37.0
+      }
+    ],
+    "invalid_operation_count": 0,
+    "invalid_mates": [],
+    "remaining_product_connection_gate": [
+      {
+        "part": "product",
+        "role": "anti_tip_wall_and_module_interface",
+        "status": "site_and_product_specific_fixing_required",
+        "production_approved": false
+      }
+    ]
+  },
+  "stock_collision": {
+    "stock_parts": 40,
+    "unverified_parts": 52,
+    "motion_samples": 100,
+    "collisions": 0,
+    "errors": 0,
+    "scope": "Actual machined-stock solid intersections at closed pose and discrete preview/stress samples. Not continuous collision detection,hardware mechanism validation,manufacturing reconstruction,strength or physical assembly approval."
+  },
+  "package_validation": [
+    {
+      "file": "outputs\\uretim-montaj-pilotu\\gardirop-islenmis-v4\\GARDIROP-ISLENMIS-GEOMETRI-INCELEME.zip",
+      "entries": 100,
+      "crc_pass": true,
+      "sha256": "ed80b2ddcb3fc1086b890aa49ae4bd584da4cbdbe87b3f493d580564e6dccb73"
+    },
+    {
+      "file": "outputs\\uretim-montaj-pilotu\\assembly-browser-v4\\AURA-manufacturing-geometry-review.zip",
+      "entries": 96,
+      "crc_pass": true,
+      "sha256": "7251b84f2d527f22df39c8c11a60ae66cad9bfd7980979d997806fbe34a6d922"
+    }
+  ],
+  "independent_stl_scope": "Independent binary STL parsing and placed-envelope comparison,not independent full mechanical reconstruction",
+  "default_preservation": {
+    "models": 445,
+    "parts_equal": 445,
+    "raw_equal": 240,
+    "equivalent_after_only_new_default_param_removed": 445,
+    "normalization": "Only new params.assemblySystem=legacy-unspecified key removed for compiled comparison;raw hash and parts hash retained separately",
+    "no_broad445CSGrepeat": true
+  },
+  "tests": {
+    "new": "383operation/62Rastex/14front-spacer mates;12negative checks;realCSG/analytic countersink volume;legacy317;source profiles in kitchen/bath",
+    "targeted_regressions": "13groups exit0 inregression-test-output;post-final hinge/operation/dimension checks exit0;previouscollision primitive/negative group exit0",
+    "browser": {
+      "passed": 3,
+      "results": [
+        {
+          "family": "storage",
+          "kind": "wardrobe",
+          "width": 390,
+          "selected_and_reloaded": true,
+          "drawer_code": "9221528",
+          "part_count": 92,
+          "page_errors": []
+        },
+        {
+          "family": "kitchen",
+          "kind": "run",
+          "width": 1440,
+          "selected_and_reloaded": true,
+          "drawer_code": "9221528",
+          "part_count": 318,
+          "page_errors": []
+        },
+        {
+          "family": "bath",
+          "kind": "basin",
+          "width": 390,
+          "selected_and_reloaded": true,
+          "drawer_code": "9221526",
+          "part_count": 29,
+          "page_errors": []
+        }
+      ]
+    },
+    "versionmap": "16pages,stale0",
+    "failed_attempts_preserved_in_narrative": [
+      "Initial negative test exposed plinth/floor candidate dropping a lifted floor;expected-floor matching added and lifted/removed-floor negatives now reject",
+      "First family fixture copied wardrobe layout into bath/kitchen;corrected to propagate hardware-only params;not a product geometry fix",
+      "Intermediate local text edit usedwrongencoding;all affected source text restored before commit,finaldiffchecked",
+      "CLI placeholder codeSHA refused before generation;exactfrozenSHA rerun succeeded",
+      "Baseline snapshot initially missed original nakis dependency;added same-commit dependency",
+      "Raw compiled hashes initially differed on205panelmodels solelynewdefault params.assemblySystem;all445part hashes match,onlythatdocumenteddefaultkey removed for equivalentcompiled comparison"
+    ]
+  },
+  "not_claimed": [
+    "No entire-product physical assembly or independent complete reconstruction",
+    "No realBlum4bar/runnerstroke or continuous collision proof;52hardware/specialist pieces not checked",
+    "No all445new-selected-profile stock scan or semantic manufacturing approval;v3static catalogue remains boundtoab2b7fe",
+    "No wall/module fixings,material/stock/torque/load/stability/ergonomic or normative certification",
+    "No whole-site/mobile approval;Forma180s and4oldbrowserfixtures open;baseline211/220sourceaudit unchanged"
+  ],
+  "delivery": {
+    "draft_pr": 270,
+    "merged": false,
+    "deployed": false
+  }
+}
