@@ -29,6 +29,7 @@ export const RUNNER_PROFILES = Object.freeze({
     codes:{300:'3832-C12EC',350:'3832-C14EC',400:'3832-C16EC',450:'3832-C18EC',500:'3832-C20EC',550:'3832-C22EC',600:'3832-C24EC'},
     source:'https://www.accuride.com/media/amasty/amfile/attach/lsENsMwHMdlHk0OlD2EpkPTjq1u8ZoYw.pdf', pages:[1,2,3], note:'27 mm total width allowance recommended by manufacturer. Rear 4 mm is an AURA planning allowance, not a manufacturer minimum.'},
   'hettich-ka5632-ss-2025': {id:'hettich-ka5632-ss-2025', name:'Hettich KA 5632 · Silent System (2025)', sideSpace:12.7, sideThickness:14, height:46, lengths:[300,350,400,450,500,550], rearSpace:4, planningVerified:true,
+    documentedTravel:{300:255},
     codes:{300:'9221513',350:'9221525',400:'9221526',450:'9221527',500:'9221528',550:'9221539'},
     source:'https://catalog.hettich.com/General/TA_2025/en_DE/catalogs/TA_2025_en_DE/pdf/save/bk_407.pdf', pages:[1], note:'12.7 mm installation width; catalogue minimum14mm refers to CABINET side stock, not drawer side thickness. Drawer14mm plywood is an AURA stock choice. Linked MS10924.03 instead shows cabinet minimum16mm. Minimum cabinet depth SL+4. Closed-member datums/pilots/load are not approved.'}
 });
@@ -51,6 +52,6 @@ export function runnerAssessment(id,{openingWidth,boxHeight,length,availableDept
   if(outerWidth<=2*p.sideThickness)issues.push('insufficient_width');
   if(p.maxWidthIsLength&&outerWidth>length)issues.push('box_wider_than_slide_length');
   if(!p.planningVerified)issues.push('legacy_hardware_unverified');
-  return {profile:p.id,product_code:p.codes?.[length]??null,source:p.source,nominal_length_mm:length,side_space_mm:p.sideSpace,side_board_mm:p.sideThickness,outer_width_mm:outerWidth,
+  return {...(Number.isFinite(p.documentedTravel?.[length])?{documented_travel_mm:p.documentedTravel[length]}:{}),profile:p.id,product_code:p.codes?.[length]??null,source:p.source,nominal_length_mm:length,side_space_mm:p.sideSpace,side_board_mm:p.sideThickness,outer_width_mm:outerWidth,
     fit_scope:'Listed width/depth/height and stock checks only; runner setback, screw positions, opening sweep and load are not verified.',geometry_fit:issues.length===0,issues,drilling_verified:false,production_approved:false};
 }
