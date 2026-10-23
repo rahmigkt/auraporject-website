@@ -1,3 +1,4 @@
+import {openInspectionViewer} from './production/inspection-viewer.js';
 import {openInspectionPdf,inspectionPanelSummary,cachedInspection} from './production/inspection-ui.js';
 import {verifiedMachiningPreview,inspectionKey} from './production/engineering-checks.js';
 // Designer workshop: open a customer's design, shape parts by hand (silhouettes of flat parts, turned profiles of
@@ -555,6 +556,7 @@ function renderChecks() {
 
 $('#panel').addEventListener('click', async e => {
   const b = e.target.closest('button'); if (!b) return;
+  if(b.hasAttribute('data-inspection-viewer')){try{openInspectionViewer(S.items.map((it,i)=>({...it,design:structuredClone(i===S.cur?design():it.design)})),{initial:S.cur});}catch(error){b.textContent='İnceleme açılamadı: '+String(error.message||error);}return;}
   if(b.hasAttribute('data-inspection-pdf')){await openInspectionPdf([{...S.items[S.cur],design:structuredClone(design())}]);S.engineeringReport=cachedInspection(design());renderPanel();return;}
   if(b.hasAttribute('data-machined-reset')){S.machinedPreview=null;rebuild();renderPanel();return;}
   if(b.hasAttribute('data-machined-preview')){b.disabled=true;const snapshot=structuredClone(design()),key=inspectionKey(snapshot);try{const p=await verifiedMachiningPreview(snapshot);if(key!==inspectionKey(design()))throw Error('Tasarım değişti;önizlemeyi yeniden açın.');S.machinedPreview=p;S.compare=false;viewer?.setDesign(p.compiled,snapshot.materials);viewer?.structure(true);b.textContent='İşlenmiş parça: '+p.machined_parts+' · inceleme';}catch(error){b.textContent='Gösterilemedi: '+String(error.message||error);}finally{b.disabled=false;}return;}

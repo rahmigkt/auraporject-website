@@ -1,3 +1,4 @@
+import {openInspectionViewer} from './production/inspection-viewer.js';
 import {projectInspectionEnabled,openInspectionPdf} from './production/inspection-ui.js';
 import {machiningGeometryFiles} from './production/machined-geometry.js';
 // AURA Forma design studio: family → style (one starting form) → parts / dimensions / materials → send to the designer.
@@ -895,7 +896,7 @@ function projectPanel() {
   ${editing && !changed ? technicalReviewHTML(editing) : ''}
   <div class="f-current"><div><b>${esc(itemName(d))}</b><small>${esc(styleName(d.style, state.lang))} · ${esc(fam === 'bedroom' ? L('setPiecesList') : itemDims(d))}</small></div>
   <button class="f-primary" data-act="add" ${editing && !changed ? 'disabled' : ''}>${editing ? (changed ? L('saveChanges') : L('inProject')) : L('addContinue')} ${editing && !changed ? '✓' : '+'}</button></div>
-  ${next}${list}${dimensions}${projectInspectionEnabled()?`<section data-temporary-inspection><h3>Geçici montaj incelemesi</h3><button data-act="currentInspectionPdf">Bu modeli incele / PDF indir</button><button data-act="inspectionPdf" ${items.length?'':'disabled'}>Projedeki ürünleri incele / PDF indir</button><p class="f-note">Projeye kaydedilmiş ürünler için bu tarayıcıda üretilir. Bu görünüm bağlantıdaki inceleme seçeneğiyle açılır; erişim yetkilendirmesi değildir. Gönderim yapılmaz.</p></section>`:''}${room}${send}`;
+  ${next}${list}${dimensions}<section data-model-inspection-entry><h3>Model ve montaj inceleyicisi · geçici</h3><button data-act="modelInspection">Bu modeli ve proje ürünlerini incele</button><p class="f-note">Dosya indirmeden 3B model, bütün parça ölçüleri ve mevcut montaj kayıtları. Eksik reçeteler onaylı sayılmaz.</p></section>${projectInspectionEnabled()?`<section data-temporary-inspection><h3>Geçici montaj incelemesi</h3><button data-act="currentInspectionPdf">Bu modeli incele / PDF indir</button><button data-act="inspectionPdf" ${items.length?'':'disabled'}>Projedeki ürünleri incele / PDF indir</button><p class="f-note">Projeye kaydedilmiş ürünler için bu tarayıcıda üretilir. Bu görünüm bağlantıdaki inceleme seçeneğiyle açılır; erişim yetkilendirmesi değildir. Gönderim yapılmaz.</p></section>`:''}${room}${send}`;
 }
 
 function technicalReviewHTML(item) {
@@ -1019,6 +1020,7 @@ async function downloadMachiningProject(){
   }catch(error){feedback(String(error.message||error),'error');}finally{machiningDownloadBusy=false;}
 }
 function projectAction(el) {
+  if(el.dataset.act==='modelInspection'){try{return openInspectionViewer([{id:'CURRENT',name:state.lang==='tr'?'Şimdiki tasarım':'Current design',qty:1,design:state.design},...state.project.items],{temporary:true});}catch(error){feedback(String(error.message||error),'error');return;}}
   if(el.dataset.act==='currentInspectionPdf')return openInspectionPdf([{id:'CURRENT',qty:1,design:state.design}]).catch(error=>feedback(String(error.message||error),'error'));
   if(el.dataset.act==='inspectionPdf')return openInspectionPdf(state.project.items).catch(error=>feedback(String(error.message||error),'error'));
   if(el.dataset.act==='assessment')return openAssessment();
