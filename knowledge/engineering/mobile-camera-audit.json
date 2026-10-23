@@ -1,0 +1,361 @@
+{
+  "code_sha": "2ba6793c9fbcc34b725a2e2aa4de0d6c4ae8eaa6",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "checks": [
+    {
+      "test": "forma-camera-fit-check.mjs",
+      "exit": 0,
+      "stdout": "PASS 72 projected model bounds at mobile/desktop aspects and orbit angles; explicit zoom and photo composition retained.\n",
+      "stderr": ""
+    },
+    {
+      "test": "camera-framing-check.mjs",
+      "exit": 0,
+      "stdout": "PASS 243 perspective fits: all 3D envelope corners stay in frame.\n",
+      "stderr": ""
+    },
+    {
+      "test": "scene-photo-restore-check.mjs",
+      "exit": 0,
+      "stdout": "{\"passed\":8,\"failed\":0,\"failures\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "test": "scene-dispose-check.mjs",
+      "exit": 0,
+      "stdout": "{\"passed\":7,\"failed\":0,\"failures\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "test": "scene-part-material-dispose-check.mjs",
+      "exit": 0,
+      "stdout": "{\"passed\":7,\"failed\":0,\"failures\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "test": "scene-glb-cleanup-check.mjs",
+      "exit": 0,
+      "stdout": "{\"passed\":4,\"failed\":0,\"failures\":[]}\n",
+      "stderr": ""
+    },
+    {
+      "test": "scene-environment-check.mjs",
+      "exit": 0,
+      "stdout": "{\"temporaryRoomResourcesFreed\":true,\"pmremIntermediatesFreed\":true,\"environmentLiveUntilViewerShutdown\":true,\"targetDisposedOnce\":true,\"generationFailureCleanup\":true,\"passed\":true,\"realWebGLVisualCertification\":false}\n",
+      "stderr": ""
+    }
+  ],
+  "not_merged_or_deployed": true,
+  "browser": [
+    {
+      "mode": "before",
+      "family": "table",
+      "kind": "dining",
+      "width": 390,
+      "clipped": true,
+      "errors": [],
+      "data": {
+        "points": [
+          [
+            -0.3752583713270625,
+            -0.13509306952474628,
+            0.9781615661923443
+          ],
+          [
+            -0.9524653545970321,
+            -0.3159174699644683,
+            0.9733943331760709
+          ],
+          [
+            -0.3888671477298395,
+            0.5276764225251814,
+            0.9773091013362213
+          ],
+          [
+            -0.9943195517473236,
+            0.4792255073360207,
+            0.9721519005842554
+          ],
+          [
+            1.042955989380366,
+            -0.41780665957764435,
+            0.9707081386827167
+          ],
+          [
+            0.6353359697525722,
+            -0.7530397519578258,
+            0.9618700932515918
+          ],
+          [
+            1.093351230757411,
+            0.45160727304448745,
+            0.969212167080767
+          ],
+          [
+            0.6753507332141876,
+            0.35908126509641736,
+            0.9593635358236855
+          ]
+        ],
+        "bounds": {
+          "min": [
+            -0.9,
+            0,
+            -0.45
+          ],
+          "max": [
+            0.9,
+            0.75,
+            0.45
+          ]
+        },
+        "viewport": 390,
+        "host": {
+          "x": 0,
+          "y": 95,
+          "width": 390,
+          "height": 354.46875,
+          "top": 95,
+          "right": 390,
+          "bottom": 449.46875,
+          "left": 0
+        }
+      }
+    },
+    {
+      "mode": "after",
+      "family": "table",
+      "kind": "dining",
+      "width": 390,
+      "clipped": false,
+      "errors": [],
+      "data": {
+        "points": [
+          [
+            -0.3433206011152783,
+            -0.12359546749543537,
+            0.9801621741737435
+          ],
+          [
+            -0.8566166095152216,
+            -0.2841259797025198,
+            0.9762395819893889
+          ],
+          [
+            -0.35467645127184955,
+            0.48128108032175443,
+            0.9794508344556555
+          ],
+          [
+            -0.890321845296693,
+            0.4291024321656645,
+            0.9752390495147281
+          ],
+          [
+            0.9291179083451425,
+            -0.3722032891053071,
+            0.9740873969578188
+          ],
+          [
+            0.5488868443652528,
+            -0.6505748656017288,
+            0.9672853369924039
+          ],
+          [
+            0.9689024858298162,
+            0.40020388431676224,
+            0.9729064005683512
+          ],
+          [
+            0.5784992044969965,
+            0.3075856973152519,
+            0.9654303945955245
+          ]
+        ],
+        "bounds": {
+          "min": [
+            -0.9,
+            0,
+            -0.45
+          ],
+          "max": [
+            0.9,
+            0.75,
+            0.45
+          ]
+        },
+        "viewport": 390,
+        "host": {
+          "x": 0,
+          "y": 95,
+          "width": 390,
+          "height": 354.46875,
+          "top": 95,
+          "right": 390,
+          "bottom": 449.46875,
+          "left": 0
+        }
+      }
+    },
+    {
+      "mode": "after",
+      "family": "storage",
+      "kind": "wardrobe",
+      "width": 390,
+      "clipped": false,
+      "errors": [],
+      "data": {
+        "points": [
+          [
+            -0.3411506297492527,
+            -0.41326352334847577,
+            0.9888912713089577
+          ],
+          [
+            -0.5404684770970996,
+            -0.4961791215897606,
+            0.9879856413147032
+          ],
+          [
+            -0.363262321004372,
+            0.7532465033854864,
+            0.98806314346902
+          ],
+          [
+            -0.578155092393279,
+            0.75299798098519,
+            0.9870315728586802
+          ],
+          [
+            0.6113614222877017,
+            -0.6604955031334262,
+            0.986190926606859
+          ],
+          [
+            0.4492740768702955,
+            -0.7840131711546198,
+            0.9848418281579174
+          ],
+          [
+            0.6600282411889836,
+            0.7524986362501013,
+            0.9849588850344388
+          ],
+          [
+            0.4884272218181674,
+            0.7521171637725446,
+            0.9833754631938652
+          ]
+        ],
+        "bounds": {
+          "min": [
+            -1.2000000000000002,
+            0,
+            -0.325
+          ],
+          "max": [
+            1.2000000000000002,
+            2.4,
+            0.325
+          ]
+        },
+        "viewport": 390,
+        "host": {
+          "x": 0,
+          "y": 95,
+          "width": 390,
+          "height": 354.46875,
+          "top": 95,
+          "right": 390,
+          "bottom": 449.46875,
+          "left": 0
+        }
+      }
+    },
+    {
+      "mode": "after",
+      "family": "table",
+      "kind": "dining",
+      "width": 1440,
+      "clipped": false,
+      "errors": [],
+      "data": {
+        "points": [
+          [
+            -0.346939657600202,
+            -0.11976472408726638,
+            0.9808287319322689
+          ],
+          [
+            -0.8607803034448305,
+            -0.2737720251492389,
+            0.9771662317520498
+          ],
+          [
+            -0.3580481495888326,
+            0.46588653750447545,
+            0.9801614877377404
+          ],
+          [
+            -0.8933684042494974,
+            0.4128733278343128,
+            0.9762386223044814
+          ],
+          [
+            0.930763264204112,
+            -0.3575369261674117,
+            0.9751741900568859
+          ],
+          [
+            0.5445667434182417,
+            -0.6189247741631917,
+            0.9689580364473473
+          ],
+          [
+            0.9689833529826134,
+            0.3837866270882475,
+            0.9740862679453661
+          ],
+          [
+            0.5724435828634407,
+            0.2918558176202416,
+            0.9672835824079822
+          ]
+        ],
+        "bounds": {
+          "min": [
+            -0.9,
+            0,
+            -0.45
+          ],
+          "max": [
+            0.9,
+            0.75,
+            0.45
+          ]
+        },
+        "viewport": 1440,
+        "host": {
+          "x": 0,
+          "y": 57,
+          "width": 753.28125,
+          "height": 714,
+          "top": 57,
+          "right": 753.28125,
+          "bottom": 771,
+          "left": 0
+        }
+      }
+    }
+  ],
+  "limits": [
+    "Actual local installed Chrome with software WebGL; not physical-device coverage",
+    "Only normal-zoom model bounds; not every dimension label/all products/all mobile flows",
+    "Historical Forma180s and four legacy fixtures remain open"
+  ],
+  "sha256": {
+    "assets/camera-framing.js": "cff42bd6dd5a892dd6693546f4aed541962d688db52f6dff6a20f7406879478a",
+    "assets/forma/scene.js": "792cc91459e3d0495abf72eaf583e5f4f5d07de025551920f6b05a6234eb4cf3"
+  }
+}
