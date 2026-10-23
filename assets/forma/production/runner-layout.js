@@ -16,6 +16,7 @@ export function runnerMountPattern(profile,length){
   for(const v of row.b)if(v!==null){sum+=v;cabinet.push(round(sum));}
   return {status:'source_fixing_centers_only',profile,length_mm:length,source:'https://catalog.hettich.com/General/TA_2025/en_DE/catalogs/TA_2025_en_DE/pdf/save/bk_407.pdf',printed_page:405,
     cabinet_from_front_mm:cabinet,drawer_from_front_mm:[37,...row.c.map(c=>round(37+c))],rear_cabinet_hole_drop_mm:14.5,
+    cross_check:{installation:'https://web2.hettich.com/hbh/addon/montage/MS_10924_03.pdf',pdf_page:2,scope:'2025 table and installation drawing agree on500mm C2=224 from first fixing. eShop9221528 metadata instead lists192; do not silently substitute it.',unresolved:['cabinet minimum14mm in catalogue vs16mm in installation','2mm member-front inset must be reconciled with the actual AURA front datums','material-specific screw and pilot recipe']},
     note:'Vertical centerline:23mm above/below the46mm runner edges. Cabinet final fixing is14.5mm below that line. Screw options on drawing:drawer4x14;cabinet4x14 or6x14. Pilot bores depend on selected fastener and stock.',
     drilling_verified:false,production_approved:false};
 }

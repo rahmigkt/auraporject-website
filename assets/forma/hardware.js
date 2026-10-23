@@ -22,7 +22,7 @@ export const RUNNER_PROFILES = Object.freeze({
     source:'https://www.accuride.com/media/amasty/amfile/attach/lsENsMwHMdlHk0OlD2EpkPTjq1u8ZoYw.pdf', pages:[1,2,3], note:'27 mm total width allowance recommended by manufacturer. Rear 4 mm is an AURA planning allowance, not a manufacturer minimum.'},
   'hettich-ka5632-ss-2025': {id:'hettich-ka5632-ss-2025', name:'Hettich KA 5632 · Silent System (2025)', sideSpace:12.7, sideThickness:14, height:46, lengths:[300,350,400,450,500,550], rearSpace:4, planningVerified:true,
     codes:{300:'9221513',350:'9221525',400:'9221526',450:'9221527',500:'9221528',550:'9221539'},
-    source:'https://catalog.hettich.com/General/TA_2025/en_DE/catalogs/TA_2025_en_DE/pdf/save/bk_407.pdf', pages:[1], note:'12.7 mm runner installation width; side panel at least 14 mm; cabinet depth at least SL + 4. No load approval for the assembled cabinet.'}
+    source:'https://catalog.hettich.com/General/TA_2025/en_DE/catalogs/TA_2025_en_DE/pdf/save/bk_407.pdf', pages:[1], note:'12.7 mm installation width; catalogue minimum14mm refers to CABINET side stock, not drawer side thickness. Drawer14mm plywood is an AURA stock choice. Linked MS10924.03 instead shows cabinet minimum16mm. Minimum cabinet depth SL+4. Closed-member datums/pilots/load are not approved.'}
 });
 export function runnerProfile(id=legacy){
   if(!RUNNER_SYSTEMS.includes(id))throw Error('Unknown runner system');

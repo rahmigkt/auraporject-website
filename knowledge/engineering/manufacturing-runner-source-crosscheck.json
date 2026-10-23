@@ -1,0 +1,77 @@
+{
+  "captured_at": "2026-10-23T18:50:59.711950+00:00",
+  "denetci": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "production_approved": false,
+  "status": "source_crosscheck_no_drilling_release",
+  "previous_audit": "knowledge/engineering/manufacturing-hinge-assembly-audit.json",
+  "sources": [
+    {
+      "file": "hettich-ka5632-MS10924-03.pdf",
+      "url": "https://web2.hettich.com/hbh/addon/montage/MS_10924_03.pdf",
+      "sha256": "8bcc9de2cef67c1b63b0353ca22baaf4bb0ffba211f782a90c4b68dbc20b77bf",
+      "bytes": 613424,
+      "pages_visually_read": [
+        1,
+        2
+      ]
+    },
+    {
+      "file": "hettich-ka5632-2025.pdf",
+      "url": "https://catalog.hettich.com/General/TA_2025/en_DE/catalogs/TA_2025_en_DE/pdf/save/bk_407.pdf",
+      "sha256": "e823a2cb5caa76c6d3ccddb5c8846f9cc5cf8d6704f2d0bcd918830a0d51c602",
+      "bytes": 296376,
+      "pages_visually_read": [
+        1
+      ]
+    },
+    {
+      "file": "hettich-shelf-supports-2025.pdf",
+      "url": "https://catalog.hettich.com/General/TA_2025/en_DE/catalogs/TA_2025_en_DE/pdf/save/bk_828.pdf",
+      "sha256": "450df90b03a37e0fa43e71148e36747844a127afd5f42e6a78aab881e6090626",
+      "bytes": 132015,
+      "pages_visually_read": [
+        1
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "subject": "Hettich9221528 drawer C2",
+      "primary_catalogue_2025_mm": 224,
+      "linked_primary_installation_MS10924_03_mm": 224,
+      "eshop_metadata_mm": 192,
+      "decision": "Preserve explicitly versioned2025planning224; record primary-source inconsistency, do not call the eShop192 a validated drilling correction. No pilot or full assembly approval.",
+      "eshop_url": "https://shop.hettich.com/is_EN/Runner-systems/Ball-bearing-runners/Side-installation/KA-5632-ball-bearing-runner-with-Silent-System,-side-installation,-dimensions-(H-x-W)-46-x-12-7-mm,-black/p/9221528"
+    },
+    {
+      "subject": "Runner side-board thickness",
+      "catalogue_min_cabinet_side_mm": 14,
+      "installation_min_cabinet_side_mm": 16,
+      "drawer_side_14mm": "AURA stock choice, not a manufacturer minimum. Corrected explanatory source attribution; geometry unchanged.",
+      "decision": "Keep drilling_verified=false. Target18mmcase/25mmspacers exceed both nominal case minima, but fastening and whole-product load not approved."
+    },
+    {
+      "subject": "Closed-member datums",
+      "installation_pdf_page": 2,
+      "visible_member_front_inset_mm": 2,
+      "decision": "Source drawings show2mm member-front insets. Actual AURA box/decorativefront/cabinet/spacer datums still require independent reconciliation before locating bores in stock."
+    },
+    {
+      "subject": "Shelf support source candidate",
+      "catalogue_printed_page": 826,
+      "product": "016181 shoulder support",
+      "pin_diameter_mm": 5,
+      "insertion_mm": 8,
+      "support_axis_below_shelf_mm": 3.75,
+      "decision": "Source candidate only. Current plain14mm long pin has2.5mm radius and6mm projection, not this shouldered product. Do not reuse its geometry as if product016181 selected or claim shelf load/certification."
+    }
+  ],
+  "code_change_scope": "Source attribution and cross-check metadata only; numeric pattern/stock/geometry unchanged. Version maps refreshed.",
+  "tests": [
+    "runner-mount-pattern-check PASS sixpatterns and guards",
+    "manufacturing-hardware-check PASS;original dimensions and limited reconstruction preserved",
+    "version-assets.py --check16pages stale0"
+  ],
+  "next": "Reconcile closed member/front datums and choose compatible material-specific screws/pilots, then implement source-specific shelf support geometry and bores."
+}
