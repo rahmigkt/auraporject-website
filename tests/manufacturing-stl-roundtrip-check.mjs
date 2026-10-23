@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {normalizeDesign,compileDesign} from '../assets/forma/generate.js';
 import {defaultsFor} from '../assets/forma/storage.js';
+import {FAMILIES} from '../assets/forma/families.js';import {STARTS} from '../assets/forma/starts.js';
 import {machiningGeometryFiles,solidVolume} from '../assets/forma/production/machined-geometry.js';
 import {buildMesh} from '../assets/forma/build.js';
 import {loadCsg,cutMesh,csgReady} from '../assets/forma/csg.js';
@@ -24,7 +25,10 @@ for(const p of m.assembly){
 await loadCsg();assert(csgReady());const before=buildMesh({geom:{fn:'box',w:100,h:100,d:18}}),after=cutMesh(before,[{type:'hole',at:[0,0,9],axis:2,sign:1,depth:10,dia:10}]);
 const removed=solidVolume(before)-solidVolume(after),expected=Math.PI*25*10;assert(Math.abs(removed-expected)/expected<.01,'actual bore removes analytic cylinder volume within tessellation tolerance');
 await assert.rejects(()=>machiningGeometryFiles({parts:[{id:'unsupported',geom:{fn:'cut',inner:{fn:'box',w:100,h:100,d:18}},pos:[0,0,0]}]},design));
-const incompatible=normalizeDesign({...design,params:{...design.params,board:'solid',solidThickness:22}});
+// A real solid-case start needs an overlay outside this zero-height-plate recipe.
+// Merely changing params.board would be normalized back to MDF by its material slot.
+const start=(FAMILIES.storage.starts||STARTS.storage).wardrobe.find(e=>e.style==='wabi_sabi'&&e.seed===1);
+const incompatible=normalizeDesign({family:'storage',kind:'wardrobe',style:start.style,seed:start.seed,params:{...start.p,hingeSystem:'blum-110-inserta-expando'},materials:start.m});
 await assert.rejects(()=>machiningGeometryFiles(compileDesign(incompatible),incompatible),/menteşe/,'unresolved selected hinge cannot silently export an undrilled success');
 console.log(JSON.stringify({pass:true,parts:m.assembly.length,machined_parts:m.machined.length,operations:197,vertices,analytic_bore_removed_mm3:removed,scope:'Independent binary STL parser/transform and envelope roundtrip, not full physical assembly or complete joinery'}));
 
