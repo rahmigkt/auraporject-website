@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {matchHardwareSources} from '../assets/forma/production/hardware-source-validation.js';
+const input=JSON.parse(readFileSync('../../outputs/cad-fcl-pilot/input.json','utf8'));
+const report=JSON.parse(readFileSync('assets/forma/production/hardware-source-report.json','utf8'));
+assert.equal((await matchHardwareSources(input,report)).products.length,3);
+assert.equal(await matchHardwareSources({...input,design:{...input.design,changed:true}},report),null);
+assert.equal(await matchHardwareSources({...input,manufacturing:{...input.manufacturing,changed:true}},report),null);
+await assert.rejects(()=>matchHardwareSources(input,{...report,real_hardware_motion_verified:true}));
+await assert.rejects(()=>matchHardwareSources(input,{...report,production_approved:true}));
+await assert.rejects(()=>matchHardwareSources(input,{...report,input_sha256:'invalid'}));
+assert.deepEqual(report.products.map(p=>p.product),['9221528','71B3590','174H7100E']);
+console.log('PASS same-input source report; changed design/recipe and scope upgrades reject');

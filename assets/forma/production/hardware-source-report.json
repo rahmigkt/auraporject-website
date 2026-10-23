@@ -1,0 +1,86 @@
+{
+  "schema": "aura.hardware-source-review/1",
+  "input_sha256": "52164bdd1442d900a44a1670c612384c329c9ac3d5ce020a56abb3075c565e12",
+  "production_approved": false,
+  "real_hardware_motion_verified": false,
+  "status": "source_files_found_motion_unqualified",
+  "products": [
+    {
+      "product": "9221528",
+      "count": 4,
+      "found": "Üreticinin seçili ürün sayfasından 9221544_3d.zip indirildi: 6 ACIS 3DSOLID, mm birimi; STEP değil.",
+      "blocked": "Bağlantı 9221528 için verilmiş olsa da arşiv 9221544 kodunu taşıyor. İki ürünün 500 mm / 46 × 12,7 mm bilgileri uyuşuyor; bu tek başına SKU, datum ve hareket eşdeğerliği değildir. STEP seçim servisi güvenlik engeli verdi.",
+      "needed": "Seçili SKU için kullanılabilir STEP, ayrı sabit/ara/hareketli üyeler, montaj datumları, kapalı durdurucu ve 500 mm rayın kaynaklı hareket kanunu.",
+      "source": "https://shop.hettich.com/de_DE/p/9221528"
+    },
+    {
+      "product": "71B3590",
+      "count": 15,
+      "found": "Ürün koduyla eşleşen 3D DWG/DXF indirme bağlantıları bulundu; dosya sunucuları 403 döndürdü.",
+      "blocked": "Üretici STEP hizmeti, yasal şirket temsilcisi olarak şartların kabulünü istiyor; bu beyan verilmedi. Dosya veya gerçek bağlantı yörüngesi alınmadı.",
+      "needed": "Kullanımı izinli menteşe STEP dosyası, ayrı rijit üyeler ve üreticiye bağlı çok bağlantılı hareket / montaj referansı.",
+      "source": "https://www.blum.com/us/en/services/e-services/productdatabase/"
+    },
+    {
+      "product": "174H7100E",
+      "count": 15,
+      "found": "Ürün koduna bağlı DWG ve üreticinin 3D CAD seçim ekranı bulundu.",
+      "blocked": "Açık dosya bağlantısı 403 döndürdü; STEP hizmetinin şirket temsilcisi beyanı kabul edilmedi.",
+      "needed": "Kullanımı izinli seçili plaka STEP dosyası ve menteşe eşleştirme datumları.",
+      "source": "https://www.groheshop.com/blum/exzenter-kreuzmontageplatte-clip-top/706-0338"
+    }
+  ],
+  "comparison": "Önceki 40 ahşap parça / 392 işlem CAD karşılaştırması korunuyor. Bu araştırma metal donanım eklemedi, yeni bir gerçek donanım hareket testi üretmedi. Eksik veriler nedeniyle hareket onayı verilmedi.",
+  "artifacts": [
+    {
+      "name": "sources\\blum-service.html",
+      "bytes": 1120,
+      "sha256": "f451b7a42fc9a509818df3feb3b6229d4ae2675ae6217cd5240d7e6e05308783"
+    },
+    {
+      "name": "sources\\hettich-extracted\\9221544\\9221544_2D_front_view.dxf",
+      "bytes": 244157,
+      "sha256": "c110f27fcd8c7c4a478349463f2a29381e521595937c7b7c06567d9b4c3888a8"
+    },
+    {
+      "name": "sources\\hettich-extracted\\9221544\\9221544_2D_side_view.dxf",
+      "bytes": 269289,
+      "sha256": "9a7c04d334e22fd87c8ebf012dfe5347c6281783761bdd5374901d74f0734de8"
+    },
+    {
+      "name": "sources\\hettich-extracted\\9221544\\9221544_2D_top_view.dxf",
+      "bytes": 245092,
+      "sha256": "d9f20f8884f0dee3d01797f3c057075e6d10237e9127a5a9262e08d59dd9634e"
+    },
+    {
+      "name": "sources\\hettich-extracted\\9221544\\9221544_3D.dwg",
+      "bytes": 658736,
+      "sha256": "935293d4a714eca8aec2686b15a83f0f361c1cadd2958522e0f342dc30579e11"
+    },
+    {
+      "name": "sources\\hettich-extracted\\9221544\\9221544_3D.dxf",
+      "bytes": 696306,
+      "sha256": "649e867dea8c1617ecf76031e51e638eeff150b220eb64f4354555a346217008"
+    },
+    {
+      "name": "sources\\hettich-linked-9221544_3d.zip",
+      "bytes": 316992,
+      "sha256": "5e25fb9d0a51bb8223691feaeec944ba7b3cf1fdffd2a07dabb5a9bce7d37ea8"
+    },
+    {
+      "name": "sources\\hettich-product.html",
+      "bytes": 167054,
+      "sha256": "fce36d37c8b028f308cbecca1b7fdb2ae86ccb0ecbabd58fc51de27002b1bf2b"
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://web2.hettich.com/hbh/addon/cad/9221544_3d.zip",
+      "role": "selected product page actual CAD link"
+    },
+    {
+      "url": "https://shop.hettich.com/ph_EN/p/9221544",
+      "role": "same nominal dimensions, different SKU; not qualified equivalence"
+    }
+  ]
+}
