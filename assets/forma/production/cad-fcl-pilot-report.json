@@ -1,0 +1,1379 @@
+{
+  "schema": "aura.cad-fcl-pilot/1",
+  "input_sha256": "52164bdd1442d900a44a1670c612384c329c9ac3d5ce020a56abb3075c565e12",
+  "source_input_file_sha256": "78fc4a812334e8d052b4a1dd9e522e4e685a94187ec5b8a7780e246494f02cd4",
+  "baseline_zip_sha256": "39355e6ec94e7052859d128bae5af762de6f5603c2a5ec910eef111f80353601",
+  "packages": {
+    "cadquery": "2.8.0",
+    "cadquery-ocp": "7.9.3.1.1",
+    "python-fcl": "0.7.0.11",
+    "numpy": "2.5.4"
+  },
+  "python": "3.12.14",
+  "source_parts": 92,
+  "production_approved": false,
+  "analytic": [
+    {
+      "case": "box",
+      "actual": 24000.0,
+      "expected": 24000,
+      "pass": true
+    },
+    {
+      "case": "blind_bore_removed",
+      "actual": 125.66370614359403,
+      "expected": 125.66370614359172,
+      "pass": true
+    },
+    {
+      "case": "groove_removed",
+      "actual": 600.0,
+      "expected": 600,
+      "pass": true
+    }
+  ],
+  "ccd": {
+    "case": "between_sample_box_collision",
+    "is_collide": true,
+    "first_contact": 0.25,
+    "expected_contact": 0.25,
+    "scope": "Synthetic translation;not actual manufacturer motion",
+    "solver": "conservative_advancement_GST_INDEP",
+    "pass": true
+  },
+  "parts": [
+    {
+      "id": "m1-side-L",
+      "operations": 17,
+      "cad_valid": true,
+      "cad_volume_mm3": 24091690.48655839,
+      "aura_mesh_volume_mm3": 24056236.108302563,
+      "delta_volume_mm3": 35454.37825582549,
+      "relative_delta_volume": 0.0014716434396999558,
+      "cad_envelope": {
+        "min": [
+          -900.0,
+          79.99999999999996,
+          -299.95
+        ],
+        "max": [
+          -882.0,
+          2400.0,
+          280.55000000000007
+        ]
+      },
+      "envelope_max_delta_mm": 1.2207031318212103e-05
+    },
+    {
+      "id": "m1-side-R",
+      "operations": 31,
+      "cad_valid": true,
+      "cad_volume_mm3": 24088608.92427193,
+      "aura_mesh_volume_mm3": 24053167.087688804,
+      "delta_volume_mm3": 35441.836583126336,
+      "relative_delta_volume": 0.0014713110538904874,
+      "cad_envelope": {
+        "min": [
+          282.0,
+          79.99999999999996,
+          -299.95
+        ],
+        "max": [
+          300.0,
+          2400.0,
+          280.55000000000007
+        ]
+      },
+      "envelope_max_delta_mm": 1.2207031318212103e-05
+    },
+    {
+      "id": "m1-top",
+      "operations": 18,
+      "cad_valid": true,
+      "cad_volume_mm3": 12064182.630800651,
+      "aura_mesh_volume_mm3": 12045365.945960352,
+      "delta_volume_mm3": 18816.68484029919,
+      "relative_delta_volume": 0.0015597148531437974,
+      "cad_envelope": {
+        "min": [
+          -882.0000001,
+          2381.9999999,
+          -299.95
+        ],
+        "max": [
+          282.0000001,
+          2400.0,
+          280.55000000000007
+        ]
+      },
+      "envelope_max_delta_mm": 1.2207031318212103e-05
+    },
+    {
+      "id": "m1-bottom",
+      "operations": 20,
+      "cad_valid": true,
+      "cad_volume_mm3": 12064802.075752286,
+      "aura_mesh_volume_mm3": 12045972.939820975,
+      "delta_volume_mm3": 18829.135931311175,
+      "relative_delta_volume": 0.0015606667903117761,
+      "cad_envelope": {
+        "min": [
+          -882.0000001,
+          80.0,
+          -299.95
+        ],
+        "max": [
+          282.0000001,
+          98.0000001,
+          280.55000000000007
+        ]
+      },
+      "envelope_max_delta_mm": 1.2207031318212103e-05
+    },
+    {
+      "id": "b1-divider",
+      "operations": 22,
+      "cad_valid": true,
+      "cad_volume_mm3": 23099974.650820583,
+      "aura_mesh_volume_mm3": 23064532.439113412,
+      "delta_volume_mm3": 35442.21170717105,
+      "relative_delta_volume": 0.0015342965627848442,
+      "cad_envelope": {
+        "min": [
+          -309.0000001,
+          97.9999999,
+          -281.95
+        ],
+        "max": [
+          -291.0,
+          2382.0000001,
+          280.55000000000007
+        ]
+      },
+      "envelope_max_delta_mm": 1.2207031318212103e-05
+    },
+    {
+      "id": "m2-side-L",
+      "operations": 27,
+      "cad_valid": true,
+      "cad_volume_mm3": 24089648.451333553,
+      "aura_mesh_volume_mm3": 24054202.446587875,
+      "delta_volume_mm3": 35446.00474567711,
+      "relative_delta_volume": 0.0014714205903538164,
+      "cad_envelope": {
+        "min": [
+          300.0,
+          79.99999999999996,
+          -299.95
+        ],
+        "max": [
+          318.0,
+          2400.0,
+          280.55000000000007
+        ]
+      },
+      "envelope_max_delta_mm": 1.2207031318212103e-05
+    },
+    {
+      "id": "m2-side-R",
+      "operations": 13,
+      "cad_valid": true,
+      "cad_volume_mm3": 24093320.187747493,
+      "aura_mesh_volume_mm3": 24057859.128661085,
+      "delta_volume_mm3": 35461.059086408466,
+      "relative_delta_volume": 0.0014718211857094716,
+      "cad_envelope": {
+        "min": [
+          882.0,
+          79.99999999999996,
+          -299.95
+        ],
+        "max": [
+          900.0,
+          2400.0,
+          280.55000000000007
+        ]
+      },
+      "envelope_max_delta_mm": 1.2207031318212103e-05
+    },
+    {
+      "id": "m2-top",
+      "operations": 15,
+      "cad_valid": true,
+      "cad_volume_mm3": 5833589.829000378,
+      "aura_mesh_volume_mm3": 5821195.541198508,
+      "delta_volume_mm3": 12394.287801870145,
+      "relative_delta_volume": 0.0021246416297996708,
+      "cad_envelope": {
+        "min": [
+          317.9999999,
+          2381.9999999,
+          -299.95
+        ],
+        "max": [
+          882.0000001,
+          2400.0,
+          280.55000000000007
+        ]
+      },
+      "envelope_max_delta_mm": 1.2207031318212103e-05
+    },
+    {
+      "id": "m2-bottom",
+      "operations": 17,
+      "cad_valid": true,
+      "cad_volume_mm3": 5834209.0988938315,
+      "aura_mesh_volume_mm3": 5821794.551899557,
+      "delta_volume_mm3": 12414.546994274482,
+      "relative_delta_volume": 0.0021278885936104495,
+      "cad_envelope": {
+        "min": [
+          317.9999999,
+          80.0,
+          -299.95
+        ],
+        "max": [
+          882.0000001,
+          98.0000001,
+          280.55000000000007
+        ]
+      },
+      "envelope_max_delta_mm": 1.2207031318212103e-05
+    },
+    {
+      "id": "m1-back",
+      "operations": 0,
+      "cad_valid": true,
+      "cad_volume_mm3": 21654438.643323183,
+      "aura_mesh_volume_mm3": 21608071.778057057,
+      "delta_volume_mm3": 46366.86526612565,
+      "relative_delta_volume": 0.0021412176057688834,
+      "cad_envelope": {
+        "min": [
+          -889.0,
+          90.99999999999996,
+          -290.0
+        ],
+        "max": [
+          289.00000000000006,
+          2389.0,
+          -282.0
+        ]
+      },
+      "envelope_max_delta_mm": 5.684341886080802e-14
+    },
+    {
+      "id": "m2-back",
+      "operations": 0,
+      "cad_valid": true,
+      "cad_volume_mm3": 10624368.271744221,
+      "aura_mesh_volume_mm3": 10589140.330035146,
+      "delta_volume_mm3": 35227.94170907512,
+      "relative_delta_volume": 0.0033157681292698346,
+      "cad_envelope": {
+        "min": [
+          311.0,
+          90.99999999999996,
+          -290.0
+        ],
+        "max": [
+          889.0,
+          2389.0,
+          -282.0
+        ]
+      },
+      "envelope_max_delta_mm": 4.263256414560601e-14
+    },
+    {
+      "id": "b1c1-door1",
+      "operations": 15,
+      "cad_valid": true,
+      "cad_volume_mm3": 24882577.170147397,
+      "aura_mesh_volume_mm3": 24793388.019845184,
+      "delta_volume_mm3": 89189.15030221269,
+      "relative_delta_volume": 0.0035844016354228936,
+      "cad_envelope": {
+        "min": [
+          -899.0,
+          80.0,
+          282.0
+        ],
+        "max": [
+          -301.0,
+          2399.0,
+          300.0
+        ]
+      },
+      "envelope_max_delta_mm": 0.0
+    },
+    {
+      "id": "b2c1-door1",
+      "operations": 15,
+      "cad_valid": true,
+      "cad_volume_mm3": 24882577.170147393,
+      "aura_mesh_volume_mm3": 24793388.01952675,
+      "delta_volume_mm3": 89189.15062064305,
+      "relative_delta_volume": 0.0035844016482202167,
+      "cad_envelope": {
+        "min": [
+          -299.0,
+          80.0,
+          282.0
+        ],
+        "max": [
+          299.0,
+          2399.0,
+          300.0
+        ]
+      },
+      "envelope_max_delta_mm": 0.0
+    },
+    {
+      "id": "b2c1-shelf1",
+      "operations": 0,
+      "cad_valid": true,
+      "cad_volume_mm3": 5554639.160185383,
+      "aura_mesh_volume_mm3": 5542152.027345574,
+      "delta_volume_mm3": 12487.13283980824,
+      "relative_delta_volume": 0.002248054730415916,
+      "cad_envelope": {
+        "min": [
+          -290.0,
+          469.7,
+          -279.95
+        ],
+        "max": [
+          281.00000000000006,
+          487.7,
+          260.55000000000007
+        ]
+      },
+      "envelope_max_delta_mm": 1.2207031318212103e-05
+    },
+    {
+      "id": "b2c1-shelf2",
+      "operations": 0,
+      "cad_valid": true,
+      "cad_volume_mm3": 5554639.160185382,
+      "aura_mesh_volume_mm3": 5542152.027345574,
+      "delta_volume_mm3": 12487.13283980731,
+      "relative_delta_volume": 0.002248054730415749,
+      "cad_envelope": {
+        "min": [
+          -290.0,
+          850.3,
+          -279.95
+        ],
+        "max": [
+          281.00000000000006,
+          868.3,
+          260.55000000000007
+        ]
+      },
+      "envelope_max_delta_mm": 1.2207031318212103e-05
+    },
+    {
+      "id": "b2c1-shelf3",
+      "operations": 0,
+      "cad_valid": true,
+      "cad_volume_mm3": 5554639.160185383,
+      "aura_mesh_volume_mm3": 5542152.027345574,
+      "delta_volume_mm3": 12487.13283980824,
+      "relative_delta_volume": 0.002248054730415916,
+      "cad_envelope": {
+        "min": [
+          -290.0,
+          1231.0,
+          -279.95
+        ],
+        "max": [
+          281.00000000000006,
+          1249.0,
+          260.55000000000007
+        ]
+      },
+      "envelope_max_delta_mm": 1.2207031318212103e-05
+    },
+    {
+      "id": "b2c1-shelf4",
+      "operations": 0,
+      "cad_valid": true,
+      "cad_volume_mm3": 5554639.160185383,
+      "aura_mesh_volume_mm3": 5542152.027345574,
+      "delta_volume_mm3": 12487.13283980824,
+      "relative_delta_volume": 0.002248054730415916,
+      "cad_envelope": {
+        "min": [
+          -290.0,
+          1611.7,
+          -279.95
+        ],
+        "max": [
+          281.00000000000006,
+          1629.7,
+          260.55000000000007
+        ]
+      },
+      "envelope_max_delta_mm": 4.8828125045474735e-05
+    },
+    {
+      "id": "b2c1-shelf5",
+      "operations": 0,
+      "cad_valid": true,
+      "cad_volume_mm3": 5554639.160185382,
+      "aura_mesh_volume_mm3": 5542152.027345574,
+      "delta_volume_mm3": 12487.13283980731,
+      "relative_delta_volume": 0.002248054730415749,
+      "cad_envelope": {
+        "min": [
+          -290.0,
+          1992.3,
+          -279.95
+        ],
+        "max": [
+          281.00000000000006,
+          2010.3,
+          260.55000000000007
+        ]
+      },
+      "envelope_max_delta_mm": 4.8828125045474735e-05
+    },
+    {
+      "id": "b3c1-door1",
+      "operations": 15,
+      "cad_valid": true,
+      "cad_volume_mm3": 24882577.170147397,
+      "aura_mesh_volume_mm3": 24793388.019845184,
+      "delta_volume_mm3": 89189.15030221269,
+      "relative_delta_volume": 0.0035844016354228936,
+      "cad_envelope": {
+        "min": [
+          301.0,
+          80.0,
+          282.0
+        ],
+        "max": [
+          899.0,
+          2399.0,
+          300.0
+        ]
+      },
+      "envelope_max_delta_mm": 0.0
+    },
+    {
+      "id": "b3c1-spacerL",
+      "operations": 19,
+      "cad_valid": true,
+      "cad_volume_mm3": 5111850.737560869,
+      "aura_mesh_volume_mm3": 5101585.091298555,
+      "delta_volume_mm3": 10265.64626231417,
+      "relative_delta_volume": 0.0020082054013987986,
+      "cad_envelope": {
+        "min": [
+          318.0,
+          98.0,
+          -259.5
+        ],
+        "max": [
+          343.0,
+          498.0,
+          260.50000000000006
+        ]
+      },
+      "envelope_max_delta_mm": 5.684341886080802e-14
+    },
+    {
+      "id": "b3c1-spacerR",
+      "operations": 18,
+      "cad_valid": true,
+      "cad_volume_mm3": 5195033.157378419,
+      "aura_mesh_volume_mm3": 5184413.31152335,
+      "delta_volume_mm3": 10619.845855069347,
+      "relative_delta_volume": 0.0020442306205468884,
+      "cad_envelope": {
+        "min": [
+          857.0,
+          98.0,
+          -259.5
+        ],
+        "max": [
+          882.0,
+          498.0,
+          260.50000000000006
+        ]
+      },
+      "envelope_max_delta_mm": 5.684341886080802e-14
+    },
+    {
+      "id": "b3c1-idrawer1-front",
+      "operations": 3,
+      "cad_valid": true,
+      "cad_volume_mm3": 1774191.7601289304,
+      "aura_mesh_volume_mm3": 1766259.652290513,
+      "delta_volume_mm3": 7932.107838417403,
+      "relative_delta_volume": 0.004470828924287743,
+      "cad_envelope": {
+        "min": [
+          345.0,
+          101.0,
+          242.5
+        ],
+        "max": [
+          855.0,
+          295.0,
+          260.5
+        ]
+      },
+      "envelope_max_delta_mm": 0.0
+    },
+    {
+      "id": "b3c1-idrawer1-box-sideL",
+      "operations": 9,
+      "cad_valid": true,
+      "cad_volume_mm3": 1505890.8338089567,
+      "aura_mesh_volume_mm3": 1499116.2171389007,
+      "delta_volume_mm3": 6774.616670056013,
+      "relative_delta_volume": 0.004498743546317029,
+      "cad_envelope": {
+        "min": [
+          355.7,
+          110.0,
+          -257.5
+        ],
+        "max": [
+          373.7,
+          279.0,
+          242.5
+        ]
+      },
+      "envelope_max_delta_mm": 1.2207031261368684e-05
+    },
+    {
+      "id": "b3c1-idrawer1-box-sideR",
+      "operations": 9,
+      "cad_valid": true,
+      "cad_volume_mm3": 1505890.8338089583,
+      "aura_mesh_volume_mm3": 1499116.2171389007,
+      "delta_volume_mm3": 6774.616670057643,
+      "relative_delta_volume": 0.0044987435463181066,
+      "cad_envelope": {
+        "min": [
+          826.3,
+          110.0,
+          -257.5
+        ],
+        "max": [
+          844.3,
+          279.0,
+          242.5
+        ]
+      },
+      "envelope_max_delta_mm": 1.2207031204525265e-05
+    },
+    {
+      "id": "b3c1-idrawer1-box-endB",
+      "operations": 9,
+      "cad_valid": true,
+      "cad_volume_mm3": 1348569.6619822728,
+      "aura_mesh_volume_mm3": 1342148.7972142652,
+      "delta_volume_mm3": 6420.864768007537,
+      "relative_delta_volume": 0.004761240704888363,
+      "cad_envelope": {
+        "min": [
+          373.6999998999999,
+          110.0,
+          -257.5
+        ],
+        "max": [
+          826.3000001,
+          279.0,
+          -239.4999999
+        ]
+      },
+      "envelope_max_delta_mm": 1.2307031340696994e-05
+    },
+    {
+      "id": "b3c1-idrawer1-box-endF",
+      "operations": 15,
+      "cad_valid": true,
+      "cad_volume_mm3": 1347506.8557081423,
+      "aura_mesh_volume_mm3": 1341090.3546615068,
+      "delta_volume_mm3": 6416.501046635443,
+      "relative_delta_volume": 0.00476175762628194,
+      "cad_envelope": {
+        "min": [
+          373.6999998999999,
+          110.0,
+          224.4999999
+        ],
+        "max": [
+          826.3000001,
+          279.0,
+          242.5
+        ]
+      },
+      "envelope_max_delta_mm": 1.2307031340696994e-05
+    },
+    {
+      "id": "b3c1-idrawer1-box-bottom",
+      "operations": 0,
+      "cad_valid": true,
+      "cad_volume_mm3": 1303904.2369613352,
+      "aura_mesh_volume_mm3": 1294307.4509798393,
+      "delta_volume_mm3": 9596.785981495865,
+      "relative_delta_volume": 0.00736003895796869,
+      "cad_envelope": {
+        "min": [
+          369.7,
+          116.0,
+          -243.5
+        ],
+        "max": [
+          830.3,
+          122.0,
+          228.5
+        ]
+      },
+      "envelope_max_delta_mm": 1.2207031261368684e-05
+    },
+    {
+      "id": "b3c1-idrawer2-front",
+      "operations": 3,
+      "cad_valid": true,
+      "cad_volume_mm3": 1774191.7601289304,
+      "aura_mesh_volume_mm3": 1766259.652290513,
+      "delta_volume_mm3": 7932.107838417403,
+      "relative_delta_volume": 0.004470828924287743,
+      "cad_envelope": {
+        "min": [
+          345.0,
+          301.0,
+          242.5
+        ],
+        "max": [
+          855.0,
+          495.0,
+          260.5
+        ]
+      },
+      "envelope_max_delta_mm": 0.0
+    },
+    {
+      "id": "b3c1-idrawer2-box-sideL",
+      "operations": 9,
+      "cad_valid": true,
+      "cad_volume_mm3": 1505890.8338089564,
+      "aura_mesh_volume_mm3": 1499116.2171389007,
+      "delta_volume_mm3": 6774.616670055781,
+      "relative_delta_volume": 0.004498743546316875,
+      "cad_envelope": {
+        "min": [
+          355.7,
+          310.0,
+          -257.5
+        ],
+        "max": [
+          373.7,
+          479.0,
+          242.5
+        ]
+      },
+      "envelope_max_delta_mm": 1.2207031261368684e-05
+    },
+    {
+      "id": "b3c1-idrawer2-box-sideR",
+      "operations": 9,
+      "cad_valid": true,
+      "cad_volume_mm3": 1505890.8338089583,
+      "aura_mesh_volume_mm3": 1499116.2171389007,
+      "delta_volume_mm3": 6774.616670057643,
+      "relative_delta_volume": 0.0044987435463181066,
+      "cad_envelope": {
+        "min": [
+          826.3,
+          310.0,
+          -257.5
+        ],
+        "max": [
+          844.3,
+          479.0,
+          242.5
+        ]
+      },
+      "envelope_max_delta_mm": 1.2207031204525265e-05
+    },
+    {
+      "id": "b3c1-idrawer2-box-endB",
+      "operations": 9,
+      "cad_valid": true,
+      "cad_volume_mm3": 1348569.6619822725,
+      "aura_mesh_volume_mm3": 1342148.7972142652,
+      "delta_volume_mm3": 6420.8647680073045,
+      "relative_delta_volume": 0.004761240704888191,
+      "cad_envelope": {
+        "min": [
+          373.6999998999999,
+          310.0,
+          -257.5
+        ],
+        "max": [
+          826.3000001,
+          479.0,
+          -239.4999999
+        ]
+      },
+      "envelope_max_delta_mm": 1.2307031340696994e-05
+    },
+    {
+      "id": "b3c1-idrawer2-box-endF",
+      "operations": 15,
+      "cad_valid": true,
+      "cad_volume_mm3": 1347506.8557081423,
+      "aura_mesh_volume_mm3": 1341090.3546615068,
+      "delta_volume_mm3": 6416.501046635443,
+      "relative_delta_volume": 0.00476175762628194,
+      "cad_envelope": {
+        "min": [
+          373.6999998999999,
+          310.0,
+          224.4999999
+        ],
+        "max": [
+          826.3000001,
+          479.0,
+          242.5
+        ]
+      },
+      "envelope_max_delta_mm": 1.2307031340696994e-05
+    },
+    {
+      "id": "b3c1-idrawer2-box-bottom",
+      "operations": 0,
+      "cad_valid": true,
+      "cad_volume_mm3": 1303904.2369613352,
+      "aura_mesh_volume_mm3": 1294307.4509798393,
+      "delta_volume_mm3": 9596.785981495865,
+      "relative_delta_volume": 0.00736003895796869,
+      "cad_envelope": {
+        "min": [
+          369.7,
+          316.0,
+          -243.5
+        ],
+        "max": [
+          830.3,
+          322.0,
+          228.5
+        ]
+      },
+      "envelope_max_delta_mm": 1.2207031261368684e-05
+    },
+    {
+      "id": "b3c1-shelf-over",
+      "operations": 0,
+      "cad_valid": true,
+      "cad_volume_mm3": 5467083.104611695,
+      "aura_mesh_volume_mm3": 5454783.143885463,
+      "delta_volume_mm3": 12299.960726232268,
+      "relative_delta_volume": 0.0022498214296133123,
+      "cad_envelope": {
+        "min": [
+          319.0,
+          508.0,
+          -279.95
+        ],
+        "max": [
+          881.0,
+          526.0,
+          260.55000000000007
+        ]
+      },
+      "envelope_max_delta_mm": 1.2207031318212103e-05
+    },
+    {
+      "id": "plinth1-front",
+      "operations": 12,
+      "cad_valid": true,
+      "cad_volume_mm3": 2575198.837929268,
+      "aura_mesh_volume_mm3": 2561286.668404389,
+      "delta_volume_mm3": 13912.16952487873,
+      "relative_delta_volume": 0.005402367118208854,
+      "cad_envelope": {
+        "min": [
+          -900.0,
+          -2.886579864025407e-15,
+          231.9999999
+        ],
+        "max": [
+          900.0,
+          80.0000001,
+          250.0
+        ]
+      },
+      "envelope_max_delta_mm": 9.999999406318238e-08
+    },
+    {
+      "id": "plinth1-rear",
+      "operations": 12,
+      "cad_valid": true,
+      "cad_volume_mm3": 2575198.863086642,
+      "aura_mesh_volume_mm3": 2561286.668404389,
+      "delta_volume_mm3": 13912.194682253059,
+      "relative_delta_volume": 0.005402376834532248,
+      "cad_envelope": {
+        "min": [
+          -900.0,
+          -2.886579864025407e-15,
+          -280.0
+        ],
+        "max": [
+          900.0,
+          80.0000001,
+          -261.9999999
+        ]
+      },
+      "envelope_max_delta_mm": 1.0000002248489182e-07
+    },
+    {
+      "id": "plinth1-endL",
+      "operations": 4,
+      "cad_valid": true,
+      "cad_volume_mm3": 703607.5974963547,
+      "aura_mesh_volume_mm3": 699235.4416445837,
+      "delta_volume_mm3": 4372.155851771007,
+      "relative_delta_volume": 0.006213912225121558,
+      "cad_envelope": {
+        "min": [
+          -900.0000001,
+          -2.886579864025407e-15,
+          -262.0000001
+        ],
+        "max": [
+          -882.0,
+          80.0,
+          232.0000001
+        ]
+      },
+      "envelope_max_delta_mm": 1.0000002248489182e-07
+    },
+    {
+      "id": "plinth1-endR",
+      "operations": 4,
+      "cad_valid": true,
+      "cad_volume_mm3": 703607.5974963547,
+      "aura_mesh_volume_mm3": 699235.4416445837,
+      "delta_volume_mm3": 4372.155851771007,
+      "relative_delta_volume": 0.006213912225121558,
+      "cad_envelope": {
+        "min": [
+          881.9999999,
+          -2.886579864025407e-15,
+          -262.0000001
+        ],
+        "max": [
+          900.0,
+          80.0,
+          232.0000001
+        ]
+      },
+      "envelope_max_delta_mm": 1.0000002248489182e-07
+    },
+    {
+      "id": "plinth1-mid1",
+      "operations": 4,
+      "cad_valid": true,
+      "cad_volume_mm3": 703607.5974963529,
+      "aura_mesh_volume_mm3": 699235.4416445837,
+      "delta_volume_mm3": 4372.155851769145,
+      "relative_delta_volume": 0.006213912225118927,
+      "cad_envelope": {
+        "min": [
+          -309.0000001,
+          -2.886579864025407e-15,
+          -262.0000001
+        ],
+        "max": [
+          -291.0,
+          80.0,
+          232.0000001
+        ]
+      },
+      "envelope_max_delta_mm": 1.0000002248489182e-07
+    },
+    {
+      "id": "plinth1-mid2",
+      "operations": 4,
+      "cad_valid": true,
+      "cad_volume_mm3": 703607.5974963529,
+      "aura_mesh_volume_mm3": 699235.4416445837,
+      "delta_volume_mm3": 4372.155851769145,
+      "relative_delta_volume": 0.006213912225118927,
+      "cad_envelope": {
+        "min": [
+          290.9999999,
+          -2.886579864025407e-15,
+          -262.0000001
+        ],
+        "max": [
+          309.0,
+          80.0,
+          232.0000001
+        ]
+      },
+      "envelope_max_delta_mm": 1.0000002248489182e-07
+    }
+  ],
+  "excluded": [
+    {
+      "id": "b1c1-door1-pull",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b1c1-door1-hinge1",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b1c1-door1-hinge2",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b1c1-door1-hinge3",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b1c1-door1-hinge4",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b1c1-door1-hinge5",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b1c1-rail",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b1c1-rail-cupL",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b1c1-rail-cupR",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-door1-pull",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-door1-hinge1",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-door1-hinge2",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-door1-hinge3",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-door1-hinge4",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-door1-hinge5",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-shelf1-pin--1-0",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-shelf1-pin--1-1",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-shelf1-pin-1-0",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-shelf1-pin-1-1",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-shelf2-pin--1-0",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-shelf2-pin--1-1",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-shelf2-pin-1-0",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-shelf2-pin-1-1",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-shelf3-pin--1-0",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-shelf3-pin--1-1",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-shelf3-pin-1-0",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-shelf3-pin-1-1",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-shelf4-pin--1-0",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-shelf4-pin--1-1",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-shelf4-pin-1-0",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-shelf4-pin-1-1",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-shelf5-pin--1-0",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-shelf5-pin--1-1",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-shelf5-pin-1-0",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b2c1-shelf5-pin-1-1",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b3c1-door1-pull",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b3c1-door1-hinge1",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b3c1-door1-hinge2",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b3c1-door1-hinge3",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b3c1-door1-hinge4",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b3c1-door1-hinge5",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b3c1-idrawer1-runnerL",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b3c1-idrawer1-runnerR",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b3c1-idrawer2-runnerL",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b3c1-idrawer2-runnerR",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b3c1-shelf-over-pin--1-0",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b3c1-shelf-over-pin--1-1",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b3c1-shelf-over-pin-1-0",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b3c1-shelf-over-pin-1-1",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b3c1-rail",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b3c1-rail-cupL",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    },
+    {
+      "id": "b3c1-rail-cupR",
+      "reason": "Purchased/specialist hardware proxy or unsupported stock;not native manufacturer CAD"
+    }
+  ],
+  "failed": [],
+  "mesh_contacts": [],
+  "brep_intersections": [],
+  "geometry_basis": "CadQuery intended smooth rounded stock plus source operations;AURA frozen tessellated stock is an independent approximation. Envelope/volume differences reported,not silently treated as identical surfaces.",
+  "real_hardware_motion_verified": false,
+  "operations_attempted": 392,
+  "stock_parts": 40,
+  "datum_crosscheck": [
+    {
+      "runner": "b3c1-idrawer1-runnerL",
+      "cad_gap_mm": 12.699999999998568,
+      "translated_CAD_gap_mm": 13.699999999998568,
+      "aura_gap_mm": 12.7
+    },
+    {
+      "runner": "b3c1-idrawer1-runnerR",
+      "cad_gap_mm": 12.699999999978672,
+      "translated_CAD_gap_mm": 11.699999999978672,
+      "aura_gap_mm": 12.7
+    }
+  ],
+  "status": "limited_stock_pilot_complete_not_product_approval",
+  "negative_checks": [
+    "missing_component_rejected",
+    "changed_source_module_bore_rejected"
+  ],
+  "broadphase_overlapping_pairs": 56,
+  "step_file": "outputs\\cad-fcl-pilot\\run\\wardrobe-stock.step",
+  "step_roundtrip": {
+    "solids": 40,
+    "matched_individual_solids": [
+      {
+        "id": "m1-side-L",
+        "envelope_delta_mm": 5.684341886080802e-14,
+        "volume_delta_mm3": 2.123415470123291e-07
+      },
+      {
+        "id": "m1-side-R",
+        "envelope_delta_mm": 5.684341886080802e-14,
+        "volume_delta_mm3": 1.4528632164001465e-07
+      },
+      {
+        "id": "m1-top",
+        "envelope_delta_mm": 5.684341886080802e-14,
+        "volume_delta_mm3": -1.1175870895385742e-07
+      },
+      {
+        "id": "m1-bottom",
+        "envelope_delta_mm": 5.684341886080802e-14,
+        "volume_delta_mm3": 3.91155481338501e-08
+      },
+      {
+        "id": "b1-divider",
+        "envelope_delta_mm": 5.684341886080802e-14,
+        "volume_delta_mm3": 1.4156103134155273e-07
+      },
+      {
+        "id": "m2-side-L",
+        "envelope_delta_mm": 5.684341886080802e-14,
+        "volume_delta_mm3": 1.564621925354004e-07
+      },
+      {
+        "id": "m2-side-R",
+        "envelope_delta_mm": 5.684341886080802e-14,
+        "volume_delta_mm3": 1.8998980522155762e-07
+      },
+      {
+        "id": "m2-top",
+        "envelope_delta_mm": 5.684341886080802e-14,
+        "volume_delta_mm3": -5.4016709327697754e-08
+      },
+      {
+        "id": "m2-bottom",
+        "envelope_delta_mm": 5.684341886080802e-14,
+        "volume_delta_mm3": 1.7695128917694092e-08
+      },
+      {
+        "id": "m1-back",
+        "envelope_delta_mm": 5.684341886080802e-14,
+        "volume_delta_mm3": 3.725290298461914e-09
+      },
+      {
+        "id": "m2-back",
+        "envelope_delta_mm": 4.263256414560601e-14,
+        "volume_delta_mm3": 1.862645149230957e-09
+      },
+      {
+        "id": "b1c1-door1",
+        "envelope_delta_mm": 0.0,
+        "volume_delta_mm3": -1.1175870895385742e-08
+      },
+      {
+        "id": "b2c1-door1",
+        "envelope_delta_mm": 0.0,
+        "volume_delta_mm3": 5.21540641784668e-08
+      },
+      {
+        "id": "b2c1-shelf1",
+        "envelope_delta_mm": 5.684341886080802e-14,
+        "volume_delta_mm3": 1.30385160446167e-08
+      },
+      {
+        "id": "b2c1-shelf2",
+        "envelope_delta_mm": 5.684341886080802e-14,
+        "volume_delta_mm3": 1.4901161193847656e-08
+      },
+      {
+        "id": "b2c1-shelf3",
+        "envelope_delta_mm": 5.684341886080802e-14,
+        "volume_delta_mm3": 3.725290298461914e-08
+      },
+      {
+        "id": "b2c1-shelf4",
+        "envelope_delta_mm": 5.684341886080802e-14,
+        "volume_delta_mm3": 3.632158041000366e-08
+      },
+      {
+        "id": "b2c1-shelf5",
+        "envelope_delta_mm": 5.684341886080802e-14,
+        "volume_delta_mm3": 3.725290298461914e-08
+      },
+      {
+        "id": "b3c1-door1",
+        "envelope_delta_mm": 0.0,
+        "volume_delta_mm3": -1.1175870895385742e-08
+      },
+      {
+        "id": "b3c1-spacerL",
+        "envelope_delta_mm": 1.4210854715202004e-12,
+        "volume_delta_mm3": 2.1420419216156006e-08
+      },
+      {
+        "id": "b3c1-spacerR",
+        "envelope_delta_mm": 2.1373125491663814e-11,
+        "volume_delta_mm3": 2.9802322387695312e-08
+      },
+      {
+        "id": "b3c1-idrawer1-front",
+        "envelope_delta_mm": 0.0,
+        "volume_delta_mm3": 9.313225746154785e-10
+      },
+      {
+        "id": "b3c1-idrawer1-box-sideL",
+        "envelope_delta_mm": 0.0,
+        "volume_delta_mm3": 9.313225746154785e-09
+      },
+      {
+        "id": "b3c1-idrawer1-box-sideR",
+        "envelope_delta_mm": 0.0,
+        "volume_delta_mm3": 6.05359673500061e-09
+      },
+      {
+        "id": "b3c1-idrawer1-box-endB",
+        "envelope_delta_mm": 1.1368683772161603e-13,
+        "volume_delta_mm3": -6.51925802230835e-09
+      },
+      {
+        "id": "b3c1-idrawer1-box-endF",
+        "envelope_delta_mm": 1.1368683772161603e-13,
+        "volume_delta_mm3": -5.122274160385132e-09
+      },
+      {
+        "id": "b3c1-idrawer1-box-bottom",
+        "envelope_delta_mm": 0.0,
+        "volume_delta_mm3": 1.30385160446167e-08
+      },
+      {
+        "id": "b3c1-idrawer2-front",
+        "envelope_delta_mm": 0.0,
+        "volume_delta_mm3": 9.313225746154785e-10
+      },
+      {
+        "id": "b3c1-idrawer2-box-sideL",
+        "envelope_delta_mm": 0.0,
+        "volume_delta_mm3": 9.313225746154785e-09
+      },
+      {
+        "id": "b3c1-idrawer2-box-sideR",
+        "envelope_delta_mm": 0.0,
+        "volume_delta_mm3": 6.05359673500061e-09
+      },
+      {
+        "id": "b3c1-idrawer2-box-endB",
+        "envelope_delta_mm": 1.1368683772161603e-13,
+        "volume_delta_mm3": -6.28642737865448e-09
+      },
+      {
+        "id": "b3c1-idrawer2-box-endF",
+        "envelope_delta_mm": 1.1368683772161603e-13,
+        "volume_delta_mm3": -4.889443516731262e-09
+      },
+      {
+        "id": "b3c1-idrawer2-box-bottom",
+        "envelope_delta_mm": 0.0,
+        "volume_delta_mm3": 8.614733815193176e-09
+      },
+      {
+        "id": "b3c1-shelf-over",
+        "envelope_delta_mm": 5.684341886080802e-14,
+        "volume_delta_mm3": 2.60770320892334e-08
+      },
+      {
+        "id": "plinth1-front",
+        "envelope_delta_mm": 2.886579864025407e-15,
+        "volume_delta_mm3": 6.51925802230835e-09
+      },
+      {
+        "id": "plinth1-rear",
+        "envelope_delta_mm": 2.886579864025407e-15,
+        "volume_delta_mm3": -1.3969838619232178e-09
+      },
+      {
+        "id": "plinth1-endL",
+        "envelope_delta_mm": 2.886579864025407e-15,
+        "volume_delta_mm3": 2.444721758365631e-09
+      },
+      {
+        "id": "plinth1-endR",
+        "envelope_delta_mm": 2.886579864025407e-15,
+        "volume_delta_mm3": 2.444721758365631e-09
+      },
+      {
+        "id": "plinth1-mid1",
+        "envelope_delta_mm": 2.886579864025407e-15,
+        "volume_delta_mm3": 1.1641532182693481e-09
+      },
+      {
+        "id": "plinth1-mid2",
+        "envelope_delta_mm": 2.886579864025407e-15,
+        "volume_delta_mm3": 1.1641532182693481e-09
+      }
+    ],
+    "sum_solid_volume_delta_mm3": 1.0132789611816406e-06,
+    "scope": "Each solid mapped by unique envelope+volume. No claim of PMI or native feature tree preservation."
+  },
+  "resumed_from_verified_step": true,
+  "comparison_elapsed_seconds": 96.94220949998999,
+  "limits": [
+    "40wood stocks and392operations only;52hardware/specialpart proxies excluded from nativeCAD.",
+    "AURA triangular stock and smooth BRep are independently compared;different surfaces,not exact native-model equivalence.",
+    "Synthetic CCD uses GST_INDEP;tested defaultGST_LIBCCD returnedfalse in the positive control. Only verified algorithm/shape combinations may be used.",
+    "No real hardware kinematics,physicalassembly,FEA,load,wall fixing or manufacturing approval."
+  ]
+}

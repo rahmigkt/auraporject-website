@@ -1,0 +1,13 @@
+import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+import {compileDesign,normalizeDesign} from '../../assets/forma/generate.js';
+import {engineeringReview} from '../../assets/forma/production/engineering-checks.js';
+import {worldPositions} from '../../assets/forma/build.js';
+import {bounds} from '../../assets/forma/mesh.js';
+import {externalInput} from '../../assets/forma/production/external-validation.js';
+const [input,out]=process.argv.slice(2);if(!input||!out)throw Error('Usage: node tools/cad-fcl/export-input.mjs snapshot.json out.json');
+const x=JSON.parse(fs.readFileSync(input)),design=normalizeDesign(x.design),compiled=compileDesign(design);
+assert.deepEqual(compiled,x.compiled,'Compiler output changed; frozen pilot cannot silently move');
+assert.deepEqual(engineeringReview(design,compiled).manufacturing,x.manufacturing,'Manufacturing recipe changed');
+const input_sha256=crypto.createHash('sha256').update(externalInput({design,compiled,manufacturing:x.manufacturing})).digest('hex');
+const result={...x,input_sha256,source_envelopes:compiled.parts.map(p=>({id:p.id,...bounds(worldPositions(p))}))};
+fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,JSON.stringify(result));console.log(JSON.stringify({source_parts:compiled.parts.length,input_sha256}));
