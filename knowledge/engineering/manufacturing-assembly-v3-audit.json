@@ -1,0 +1,250 @@
+{
+  "schema": "aura.manufacturing-assembly-audit/3",
+  "captured_at": "2026-10-23T19:39:24.804535+00:00",
+  "denetci": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "independent_human_review": false,
+  "production_approved": false,
+  "code_sha": "ab2b7fe60f61833d2e2b35de467181182e356b50",
+  "test_code_sha": "ab2b7fe60f61833d2e2b35de467181182e356b50",
+  "previous_audits_preserved": [
+    "manufacturing-hinge-assembly-audit.json",
+    "manufacturing-runner-source-crosscheck.json"
+  ],
+  "runtime_and_test_sha256": {
+    "assets/forma/bath.js": "2f2760b20849af361c11639febca3545a1eb418694e386122b0a0e013f70d273",
+    "assets/forma/csg.js": "2330fe3ffb337aaf3dc186a338666d5c481f8c7de9147a9da254d44d8554835d",
+    "assets/forma/hardware.js": "8b35baca040c3764293f4457797af660455e1941f4d9dde5f90ab3b6e2796e3a",
+    "assets/forma/kitchen.js": "9e36c1a3c1287034c16ca523f156a522eebeb745d27d381722cc7f63acc2a8e0",
+    "assets/forma/mesh.js": "ac0ba4fe9a3d396d48ab4225f4653a2c1ea6ce6e1126f38403bd98ef0d8dde1c",
+    "assets/forma/production/assembly-collision.js": "b64913b2444a2f402d40caf27bc2b99f436013533fdd53aef4669ef7b97f96a5",
+    "assets/forma/production/drawer-joinery.js": "8974c66e6185d8225855c917eb84fb7f356fb97a520c624e7bb6394f39ca73e2",
+    "assets/forma/production/machined-geometry.js": "d26a2dc312952f0b2364a113c1e1edca738b46a28d880f949ee7b0cabebe469a",
+    "assets/forma/production/manufacturing.js": "db1e1bb5bc822c7f127f4c23f407d59890bf85dcc8444c551e1ef94988038412",
+    "assets/forma/production/operation-bounds.js": "e1bb5dc3dacaffebdbbb48a8012fef428349a14d68bd18fcadf19a51b7b2afa0",
+    "assets/forma/production/rail-layout.js": "3e926aa58813da50230e962b586f3b9716a1b652e80070b13dda1a07db7169ec",
+    "assets/forma/production/reassemble-drawers.js": "9ffe3fd785385a52039bb18a4355308c3e8f8d1fc780705c15eb2a014befce08",
+    "assets/forma/production/runner-drilling.js": "419e576375cd8ec653aa56fea4bf15fc13ce03fe7937f6188196979e6ef65d6d",
+    "assets/forma/production/shelf-layout.js": "f46e30eb8212337353e557121eea6b5372166a4d6159739dd992c1a86203d552",
+    "assets/forma/storage.js": "e535a927c91f8fc4fda5a7bc05dbb69a30de45e01d9a2a8d91ac4cfd3772b853",
+    "assets/forma/studio.js": "0e95ccc87de014e73e3d4310e1c35e79b35a5377db4aeea83a1f4d5271b70493",
+    "ev.html": "8d7795502264b678457a8da4ad62a72cff1969375234cd659a32a73fa7065de7",
+    "index.html": "255a3209f75fc044a61a7caf5687fcf37483cd8cde05ca3261ceff01121f817c",
+    "sohbet.html": "ca859c8ff3b96c29469f12601558b545a5794a8a00e1359fbb5ef5560e2c13f8",
+    "tarzlar.html": "a661e4ade86ddfe3d47dfb84dcacf90829c6266739a071a62a04be8340907af1",
+    "tasarimci.html": "f885fb87bfa5b6ab26caac89734dcc1078c3ab5da7afe0b1dfeeb108097f0426",
+    "tasarla.html": "5d05f6f27af0f76a07fd01a5209697a16696afd601ee48d771e7a55ad7754648",
+    "tests/assembly-collision-check.mjs": "abcc5e17f6986ad08728a7dc1f64c3dd2df8ec1fbfedbffd8431ac9089cf580a",
+    "tests/manufacturing-selected-catalogue-check.mjs": "7646fae276e0da5795e46189393434076632c415073afeeec44390e409e9968d",
+    "tests/rail-mount-check.mjs": "09a3d20f4a1cac0c98263fea53cf2b3954610b8be7885f54360417bb792456cd",
+    "tests/runner-drawer-joinery-check.mjs": "1c455defeb9ac14abc2b479ae9f2f4b3e9b14b520c3bb4822fc9aa3ac4a36512",
+    "tests/shelf-support-manufacturing-check.mjs": "6fd32666fb4bd63e08e72272f73bfa91d43e524462c4d880cca2302218963002",
+    "tests/visual/manufacturing-hardware-check.mjs": "48207e0a116a67980ec45629675b5c2ffe0b3c2792ad4fcde690317b36aa1e45",
+    "tools/production/assembly-catalogue-audit.mjs": "c60d26be73b91e5b897083f5f782c7d5d1b056333d8b5e614e35d7d98650fff8",
+    "tools/production/assembly-collision-audit.mjs": "b2bbc805764bd5a2016436514ecc64538fd3061ebbdc648c4fcd7f671b7173b8",
+    "tools/production/machining-review-pilot.mjs": "7a09b1f0bf17517ddde099cee80051d864f9b402ad72ba0f87604b97a0804d4c",
+    "uretim.html": "3617d892d753492743ea30ba07d148f90933313c0a608d2346c9575f37bea821"
+  },
+  "sources": [
+    {
+      "file": "hettich-ka5632-MS10924-03.pdf",
+      "url": "https://web2.hettich.com/hbh/addon/montage/MS_10924_03.pdf",
+      "sha256": "8bcc9de2cef67c1b63b0353ca22baaf4bb0ffba211f782a90c4b68dbc20b77bf",
+      "bytes": 613424,
+      "scope": "Both rendered pages read;2mm member inset,case>=16mm,cabinet6x14 or4x14,drawer4x14;no exact drawer SKU/pilot qualification"
+    },
+    {
+      "file": "hettich-ka5632-2025.pdf",
+      "url": "https://catalog.hettich.com/General/TA_2025/en_DE/catalogs/TA_2025_en_DE/pdf/save/bk_407.pdf",
+      "sha256": "e823a2cb5caa76c6d3ccddb5c8846f9cc5cf8d6704f2d0bcd918830a0d51c602",
+      "bytes": 296376,
+      "scope": "Rendered drawing read;500mm pattern:37,165,261,325,496.3 cabinet;37,165,261,389 drawer. C2=224,not inconsistent eShop192."
+    },
+    {
+      "file": "hettich-shelf-supports-2025.pdf",
+      "url": "https://catalog.hettich.com/General/TA_2025/en_DE/catalogs/TA_2025_en_DE/pdf/save/bk_828.pdf",
+      "sha256": "450df90b03a37e0fa43e71148e36747844a127afd5f42e6a78aab881e6090626",
+      "bytes": 132015,
+      "scope": "Printed826 read;16181 diameter5,insertion8,bearing axis3.75 below shelf.8.5holedepth/projection6 are unqualified AURA trial/proxy."
+    },
+    {
+      "file": "hettich-70668-planning.pdf",
+      "url": "https://catalog.hettich.com/General/TA_2025/de_DE/catalogs/TA_2025_de_DE/pdf/save/bk_975.pdf",
+      "sha256": "0463573b76de8928f251989f064af9dc0232607e27353e0440dab1f650730ae6",
+      "bytes": 117324,
+      "scope": "Printed973 read;SL786 roof hole6.5,M6x25 supplied special screw,max19 roof,10.5 frominside side;30x15 rail opening-13;31 gap to rail top=>46axis."
+    },
+    {
+      "file": "hettich-70668-cad.zip",
+      "url": "https://web2.hettich.com/hbh/addon/cad/70668_3d.zip",
+      "sha256": "8789144dd0e440e0577c2805a9b3a01c105082a86ad91643cbc784069af2d4a1",
+      "bytes": 66334,
+      "scope": "Reference only;2D drawings/3DSOLID ACIS inventory,not rendered fullsolid or open redistribution licence;not embedded in code."
+    }
+  ],
+  "target_wardrobe": {
+    "raw_legacy_geometry": "Legacy defaults preserved;opt-in source/trial profiles deliberately change selected drawer,support,rail dimensions",
+    "exported_stls": 92,
+    "machined_parts": 28,
+    "operations": 317,
+    "runner_pilots": {
+      "cabinet": 20,
+      "drawer": 16,
+      "qualified": false
+    },
+    "shelf_bores": 24,
+    "rail_roof_through_bores": 4,
+    "drawer_bottom_grooves": 8,
+    "nominal_joint_mates": 54,
+    "drawer_box_blank_reconstructions": 2,
+    "independent_stl_envelope_comparison": 92,
+    "closed_and_sampled_stock_collision": {
+      "stock_parts": 40,
+      "unverified_parts": 52,
+      "motion_samples": 100,
+      "collisions": 0,
+      "errors": 0,
+      "scope": "Actual machined-stock solid intersections at closed pose and discrete preview/stress samples. Not continuous collision detection,hardware mechanism validation,manufacturing reconstruction,strength or physical assembly approval."
+    },
+    "zip_checks": [
+      {
+        "file": "outputs\\uretim-montaj-pilotu\\gardirop-islenmis-v3\\GARDIROP-ISLENMIS-GEOMETRI-INCELEME.zip",
+        "entries": 100,
+        "crc_pass": true,
+        "sha256": "1dce0191ce70782ebd49064e28e6d41b3dbd97f0c1563711fa7f7f81399441fc"
+      },
+      {
+        "file": "outputs\\uretim-montaj-pilotu\\assembly-browser-final-v3\\AURA-manufacturing-geometry-review.zip",
+        "entries": 96,
+        "crc_pass": true,
+        "sha256": "97b40d6ed75cfe143cf0cf2013ae08d0e99009b2490eb27d0916982e91e206c5"
+      }
+    ]
+  },
+  "catalogue_static_summary": {
+    "type": "end",
+    "models": 445,
+    "counts": {
+      "interference_found": 133,
+      "no_qualified_stock_geometry": 103,
+      "no_stock_interference_at_samples_product_incomplete": 163,
+      "input_rejected": 46
+    },
+    "fingerprint": "06a3adbac5051458385f042e1b085d5ff598b28af57b7a56f466dc96b9b82d21",
+    "source_hash_confirmed": true,
+    "production_approved": 0,
+    "completed_at": "2026-10-23T19:37:35.656Z",
+    "journal_sha256": "56ee890bc3b55aa0176580c03c6569f21410aa19f7df1672244537b414f694d2",
+    "families": {
+      "seating": {
+        "interference_found": 90
+      },
+      "table": {
+        "no_qualified_stock_geometry": 93,
+        "no_stock_interference_at_samples_product_incomplete": 14,
+        "interference_found": 43
+      },
+      "storage": {
+        "no_stock_interference_at_samples_product_incomplete": 98,
+        "input_rejected": 44
+      },
+      "kitchen": {
+        "no_stock_interference_at_samples_product_incomplete": 28,
+        "input_rejected": 2
+      },
+      "bath": {
+        "no_stock_interference_at_samples_product_incomplete": 23,
+        "no_qualified_stock_geometry": 10
+      }
+    },
+    "manual_semantic_approval": false
+  },
+  "browser": "3/3 local real Chrome storage390/kitchen1440/bath390 selection/save/reload,pageerror0;96entry actual geometryZIP CRC verified;not whole site/mobile approval",
+  "tests_passed": [
+    "shelf-support-manufacturing-check",
+    "runner-drawer-joinery-check",
+    "rail-mount-check",
+    "assembly-collision-check",
+    "manufacturing-hardware-check",
+    "manufacturing-hinge-joints-check",
+    "operation-bounds checks",
+    "STL roundtrip(previous197 operation fixture;not new317 operation proof)",
+    "runner pattern6",
+    "dimension package",
+    "panel engine48",
+    "production quantity/sheet trim",
+    "storage bay12/bath layout40/kitchen studies9",
+    "part dimensions445/21546/legacy dimensions14 families",
+    "16versionmaps stale0 after final edit"
+  ],
+  "test_run_notes": [
+    "An intermediate batch saw stale versionmaps during own source edits;maps regenerated and final --check passed. Do not claim uninterrupted first batch pass.",
+    "Independent new317-operation binary STL/envelope validation is geometry export correspondence,not full assembly."
+  ],
+  "resolved_geometry_findings": [
+    "Old spacer500mm too short for final rear runner fixing;opt-in trial spacer520mm,negative short-stock test rejects",
+    "Shelf generic bearing axis2.5mm cannot represent16181 source3.75mm;source-only profile changes bearing and bores",
+    "Preview rear-edge door pivot yielded40 stock interferences;front-edge preview pivot yields0. Not evidence of40 physical Blum failures or verified4bar kinematics."
+  ],
+  "trial_and_proxy_limits": [
+    "2.5x12 drawer pilots for generic4x14 screw:exactSKU,material drill/torque/tip/head/pullout not qualified",
+    "Cabinet9137114 diameter5 source;14mm holedepth trial;supportstock>=16 anddrawer18 are conservative AURA choices,not complete product qualification",
+    "16181hole8.5 andprojection6 trial/proxy;SL786 rendered envelope not hollow structural CAD/thread/load verification",
+    "Drawer joint spacing,bottom groove clearance and18mm plywood are AURA trial recipe choices",
+    "Door100degree5degree steps andrunner nominal500mm25mm steps are discrete preview/stress hypotheses,not source-verifiedstroke/continuous collisions"
+  ],
+  "remaining": [
+    {
+      "part": "b3c1-spacerL",
+      "role": "spacer",
+      "status": "attachment_to_support_still_requires_recipe",
+      "production_approved": false
+    },
+    {
+      "part": "b3c1-spacerR",
+      "role": "spacer",
+      "status": "attachment_to_support_still_requires_recipe",
+      "production_approved": false
+    },
+    {
+      "part": "b3c1-idrawer1-front",
+      "role": "inner-front",
+      "status": "attachment_to_support_still_requires_recipe",
+      "production_approved": false
+    },
+    {
+      "part": "b3c1-idrawer2-front",
+      "role": "inner-front",
+      "status": "attachment_to_support_still_requires_recipe",
+      "production_approved": false
+    },
+    {
+      "part": "plinth1-front",
+      "role": "plinth",
+      "status": "attachment_to_support_still_requires_recipe",
+      "production_approved": false
+    },
+    {
+      "part": "plinth1-rear",
+      "role": "plinth",
+      "status": "attachment_to_support_still_requires_recipe",
+      "production_approved": false
+    },
+    {
+      "part": "product",
+      "role": "anti_tip_wall_and_module_interface",
+      "status": "site_and_product_specific_fixing_required",
+      "production_approved": false
+    },
+    "Full independent complete-product assembly/assembly sequence/actual hardware interference/tolerance chain and real material qualification remain open",
+    "133models have actual stock intersections;requires joinery/interface interpretation,not arbitrary notching or automatic manufacturing approval",
+    "103models have no qualified stock geometry;46rejected,163only sampled/static stock without full product approval",
+    "Seating frame/upholstery,table joints,bath installation/water/material/load/stability require family-specific engineering",
+    "Historical Forma180s full test timeout,4old browser fixtures and211/220 baseline source audit remain open"
+  ],
+  "remote_policy": {
+    "draft_pr": 270,
+    "merge": false,
+    "deploy": false
+  }
+}
