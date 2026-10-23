@@ -1,12 +1,12 @@
 import {inspectEngineering,inspectionKey,INSPECTION_VERSION} from './engineering-checks.js';
 import {inspectionPdf} from './inspection-pdf.js';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const cache=new Map();let dialog=null;
+const cache=new Map(),pending=new Map();let dialog=null;
 export const cachedInspection=design=>cache.get(inspectionKey(design));
 export const projectInspectionEnabled=()=>new URLSearchParams(location.search).get('uretim-inceleme')==='1';
 async function digest(s){const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(h),v=>v.toString(16).padStart(2,'0')).join('');}
 export async function inspectItem(item,onProgress=()=>{}){
- const key=inspectionKey(item.design);let r=cache.get(key);if(!r){onProgress('Montaj, erişim ve hareket kontrolü çalışıyor…');r=await inspectEngineering(item.design);r.design_sha256=await digest(key);try{const pins=JSON.parse(document.querySelector('script[type=importmap]')?.textContent||'{}').imports||{};r.generator_assets=Object.entries(pins).filter(([k])=>/engineering-checks|inspection-pdf|assembly-collision/.test(k));}catch{}cache.set(key,r);}
+ const key=inspectionKey(item.design);let r=cache.get(key);if(!r){onProgress('Montaj, erişim ve hareket kontrolü çalışıyor…');if(!pending.has(key)){const job=(async()=>{const result=await inspectEngineering(item.design);result.design_sha256=await digest(key);try{const pins=JSON.parse(document.querySelector('script[type=importmap]')?.textContent||'{}').imports||{};result.generator_assets=Object.entries(pins).filter(([k])=>/engineering-checks|inspection-pdf|assembly-collision/.test(k));}catch{}cache.set(key,result);return result;})();pending.set(key,job);job.then(()=>pending.delete(key),()=>pending.delete(key));}r=await pending.get(key);}
  return {...r,id:item.id,name:item.name||item.design.kind,quantity:item.qty??1,origin:location.origin+location.pathname};
 }
 export async function openInspectionPdf(items){
@@ -20,5 +20,5 @@ export async function openInspectionPdf(items){
  }catch(error){progress('Rapor oluşturulamadı: '+String(error.message||error));}
 }
 export function inspectionPanelSummary(design,report){
- report ||= cachedInspection(design);const same=report&&report.input===inspectionKey(design);return `<section data-engineering-summary><h2>Montaj ve ölçü incelemesi</h2><p class="a-note">Nihai çalışma modelinin ölçüleri, bağlantıları, erişim ve tolerans kontrolleri. Üretim onayı değildir.</p><div class="a-tools"><button data-inspection-pdf>Raporu görüntüle / PDF indir</button><button data-machined-preview>İşlenmiş parçaları göster</button><button data-machined-reset>Normal modele dön</button></div><p class="a-note">${same?'Bu model için kontrol mevcut.':'Bu tasarım için güncel ayrıntılı kontrol henüz çalıştırılmadı.'}</p></section>`;
+ report ||= cachedInspection(design);const same=report&&report.input===inspectionKey(design);return `<section data-engineering-summary><h2>Montaj ve ölçü incelemesi</h2><p class="a-note">Nihai çalışma modelinin ölçüleri, bağlantıları, erişim ve tolerans kontrolleri. Üretim onayı değildir.</p><div class="a-tools"><button data-inspection-viewer>Modeli / parçaları / montajı incele</button><button data-inspection-pdf>Raporu görüntüle / PDF indir</button><button data-machined-preview>İşlenmiş parçaları göster</button><button data-machined-reset>Normal modele dön</button></div><p class="a-note">${same?'Bu model için kontrol mevcut.':'Bu tasarım için güncel ayrıntılı kontrol henüz çalıştırılmadı.'}</p></section>`;
 }

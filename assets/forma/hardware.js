@@ -26,6 +26,8 @@ export const CONNECTOR_PROFILES=Object.freeze({
 export const RUNNER_PROFILES = Object.freeze({
   [legacy]: {id:legacy, name:'Mevcut örnek / Existing example · 12.7 mm', sideSpace:12.7, sideThickness:12, height:36, lengths:[250,300,350,400,450,500,550,600], rearSpace:4, planningVerified:false, source:null},
   'accuride-3832ec': {id:'accuride-3832ec', name:'Accuride 3832EC · Easy-Close', sideSpace:13.5, sideThickness:12, height:45.7, lengths:[300,350,400,450,500,550,600], rearSpace:4, minHeight:47.625, maxWidthIsLength:true, planningVerified:true,
+    documentedTravel:{300:305,350:307,400:406,450:457,500:508,550:559,600:610},
+    sideSpaceRange:[12.7,13.5],sideSpaceRangeScope:'3832EC source-specific12.7+0.8/-0.0mm;not generic3832Europe guidance',
     codes:{300:'3832-C12EC',350:'3832-C14EC',400:'3832-C16EC',450:'3832-C18EC',500:'3832-C20EC',550:'3832-C22EC',600:'3832-C24EC'},
     source:'https://www.accuride.com/media/amasty/amfile/attach/lsENsMwHMdlHk0OlD2EpkPTjq1u8ZoYw.pdf', pages:[1,2,3], note:'27 mm total width allowance recommended by manufacturer. Rear 4 mm is an AURA planning allowance, not a manufacturer minimum.'},
   'hettich-ka5632-ss-2025': {id:'hettich-ka5632-ss-2025', name:'Hettich KA 5632 · Silent System (2025)', sideSpace:12.7, sideThickness:14, height:46, lengths:[300,350,400,450,500,550], rearSpace:4, planningVerified:true,
