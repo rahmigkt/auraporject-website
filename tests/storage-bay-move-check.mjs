@@ -13,7 +13,7 @@ for (const [family, kind, sliding] of [
 ]) {
   const design = normalizeDesign({...sample({family, kind, seed: 2}), params: {
     ...sample({family, kind, seed: 2}).params, doorType: sliding ? 'sliding' : 'hinged', mirrorCabinet: 'cabinet',
-    bays: [0,1,2].map((i) => ({w: 1 + i * .2, mm: 0, cells: [
+    bays: [0,1,2].map((i) => ({w: 1 + i * .2, mm: kind === 'wardrobe' && i === 1 ? 510 : 0, cells: [
       {type: kind === 'vanity' && i === 1 ? 'knee' : 'door', inside: kind === 'wardrobe' ? 'hang' : 'shelves', color: ['sage','navy','sand'][i], h: 2, k: i, lv: 2},
       {type: 'drawers', n: i + 1, h: 1, mm: 120, color: 'petrol'}
     ]}))

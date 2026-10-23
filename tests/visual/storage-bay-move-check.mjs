@@ -23,6 +23,7 @@ const results = [];
 const clean = x => JSON.parse(JSON.stringify(x,(k,v) => k === 'id' ? undefined : v));
 try {
   for (const [family,kind,width] of [['storage','wardrobe',1440],['storage','nightstand',1440],['storage','dresser',1440],['storage','vanity',1440],['storage','tvunit',1440],['storage','bookcase',1440],['storage','vitrine',1440],['storage','sideboard',1440],['bath','basin',1440],['bath','column',1440],['bath','mirror',1440],['storage','wardrobe',390],['bath','column',390],['kitchen','run',1440]]) {
+    if (process.env.AURA_UI_CASES && !process.env.AURA_UI_CASES.split(',').includes(`${family}/${kind}/${width}`)) continue;
     const initial = sample({family,kind,seed:2});
     if (family !== 'kitchen') initial.params = {...initial.params,mirrorCabinet:'cabinet',bays:[0,1,2].map(i => ({w:1+i*.2,mm:0,cells:[{type:'door',h:2,k:i,color:['sage','navy','sand'][i]},{type:'drawers',h:1,mm:120,n:i+1,color:'petrol'}]}))};
     const design = normalizeDesign(initial), context = await browser.newContext({viewport:{width,height:1000},isMobile:width===390,hasTouch:width===390});
@@ -42,7 +43,8 @@ try {
     assert.equal(await page.evaluate(()=>innerWidth),width,'real viewport');
     const before = await page.evaluate(()=>formaDebug.state.design);
     const kitchen = family === 'kitchen', data = kitchen ? 'mop' : 'bayop', select = kitchen ? '[data-mod="1"]' : '[data-cell="1:1"]';
-    await page.locator(select).click();
+    // A kitchen SVG group spans base AND wall cabinets; its bounding-box centre may be empty backsplash.
+    await page.locator(select).locator('rect').first().click();
     await page.locator(`[data-${data}="left"]`).click();
     assert(await page.locator(`[data-${data}="left"]`).isDisabled());
     const after = await page.evaluate(()=>formaDebug.state.design);
@@ -57,6 +59,8 @@ try {
     if (kind === 'wardrobe' || width===390) await page.screenshot({path:resolve(out,`${family}-${kind}-${width}.png`),fullPage:true});
     assert.deepEqual(errors,[],'no browser runtime errors');
     results.push({family,kind,width,move:true,undo_redo:true,reload:true,page_errors:errors.length});
+    writeFileSync(resolve(out,'results.json'),JSON.stringify({passed:results.length,results},null,2)+'\n');
+    console.log(`PASS ${family}/${kind}/${width}`);
     await context.close();
   }
   writeFileSync(resolve(out,'results.json'),JSON.stringify({passed:results.length,results},null,2)+'\n');
