@@ -1,0 +1,35 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {compileDesign,normalizeDesign} from '../assets/forma/generate.js';
+import {engineeringReview,toleranceReview,assemblyAccessAudit} from '../assets/forma/production/engineering-checks.js';
+import {machiningGeometryFiles} from '../assets/forma/production/machined-geometry.js';
+import {assemblyCollisionAudit} from '../assets/forma/production/assembly-collision.js';
+import {mechanismReview,assertMechanismDatums} from '../assets/forma/production/mechanism-review.js';
+const sample=JSON.parse(fs.readFileSync('assets/forma/production/review-sample.json'));
+const d=normalizeDesign(sample),c=compileDesign(d),initial=JSON.stringify(c),r=engineeringReview(d,c),m=r.mechanism_datums;
+assert(m.runner_faces.length===4);assert(m.runner_faces.every(x=>x.actual_side_clearance_mm===12.7&&x.issues.length===0));
+assert(m.runner_faces.every(x=>x.closed_datums.difference_mm===2&&x.source_side_interval_mm===null));
+assert(m.runner_faces.every(x=>x.trial_terms.length===4&&Math.abs(x.trial_side_interval_mm[1]-13.3)<1e-7));
+assert(m.drawers.every(x=>x.documented_travel_mm===null));assert(m.hinges.length===15);assert.equal(m.production_approved,false);assert.equal(JSON.stringify(c),initial);
+const id=c.parts.find(p=>p.role==='box-bottom').id.replace(/-box-bottom$/,'');
+const shifted=structuredClone(c);for(const p of shifted.parts)if(p.id.startsWith(id+'-box-'))p.pos[0]+=1;
+const sr=engineeringReview(d,shifted),s=sr.mechanism_datums.runner_faces.filter(x=>x.drawer===id);
+// Original profile-only tolerance table cannot distinguish these different physical face gaps.
+assert.deepEqual(toleranceReview(r.manufacturing).runner_stacks,toleranceReview(sr.manufacturing).runner_stacks);
+assert.deepEqual(s.map(x=>x.actual_side_clearance_mm),[13.7,11.7]);assert(s.every(x=>x.issues.includes('actual_gap_differs_from_selected_profile')));
+assert.equal(sr.status,'nominal_input_rejected');assert.throws(()=>assertMechanismDatums(shifted,sr.manufacturing),/Actual runner/);
+await assert.rejects(()=>assemblyCollisionAudit(shifted,d),/Actual runner/);await assert.rejects(()=>assemblyAccessAudit(shifted,d),/Actual runner/);await assert.rejects(()=>machiningGeometryFiles(shifted,d),/Actual runner/);
+const ad=normalizeDesign({...sample,params:{...sample.params,runnerSystem:'accuride-3832ec',runnerFixingSystem:'legacy-unspecified'}}),ac=compileDesign(ad),ar=engineeringReview(ad,ac);
+assert(ar.mechanism_datums.runner_faces.every(x=>x.actual_side_clearance_mm===13.5&&x.issues.includes('trial_interval_outside_source_interval')&&!x.issues.includes('actual_gap_outside_source_interval')));
+const aid=ac.parts.find(p=>p.role==='box-bottom').id.replace(/-box-bottom$/,'');for(const p of ac.parts)if(p.id.startsWith(aid+'-box-'))p.pos[0]+=1;
+const am=engineeringReview(ad,ac).mechanism_datums.runner_faces.filter(x=>x.drawer===aid);assert.deepEqual(am.map(x=>x.actual_side_clearance_mm),[14.5,12.5]);assert(am.every(x=>x.issues.includes('actual_gap_outside_source_interval')));
+const movedRunner=structuredClone(c);movedRunner.parts.find(p=>p.id===id+'-runnerL').pos[0]+=2;
+assert(engineeringReview(d,movedRunner).mechanism_datums.runner_faces.find(x=>x.runner===id+'-runnerL').issues.includes('unique_actual_receiving_face_not_found'));
+const rotated=structuredClone(c);rotated.parts.find(p=>p.id===id+'-box-sideR').rot=[0,.01,0];assert(engineeringReview(d,rotated).mechanism_datums.runner_faces.find(x=>x.runner===id+'-runnerR').issues.includes('unsupported_runner_or_box_transform'));
+const synthetic=structuredClone(r.manufacturing);const left=m.runner_faces[0];synthetic.parts.find(p=>p.id===left.support).blank.edges.push({axis:0,build_up_mm:1});
+const band=mechanismReview(c,synthetic).runner_faces[0];assert(Math.abs((band.trial_side_interval_mm[1]-band.actual_side_clearance_mm)-.65)<1e-7);
+synthetic.parts.find(p=>p.id===left.support).blank=null;assert(mechanismReview(c,synthetic).runner_faces[0].issues.includes('finished_stock_budget_unavailable'));
+for(const trial of [{support_datum_mm:-1,box_datum_mm:.2},{support_datum_mm:NaN,box_datum_mm:.2},{support_datum_mm:.2}])assert.throws(()=>mechanismReview(c,r.manufacturing,trial));
+assert.equal(mechanismReview(c,r.manufacturing,{support_datum_mm:0,box_datum_mm:0}).production_approved,false);
+for(const family of ['seating','table','storage','kitchen','bath']){const fd=normalizeDesign({family,seed:2}),fc=compileDesign(fd),fr=engineeringReview(fd,fc);assert.equal(fr.mechanism_datums.production_approved,false);assert(fr.mechanism_datums.runner_faces.every(x=>!x.mechanism_qualified));}
+console.log('PASS actual left/right datums, rigid shifted box reproducer, exact source interval overflow, rotated/ambiguous/unknown stock rejection, band terms, explicit trial budgets, 5 active family applicability; no mechanism/production approval.');

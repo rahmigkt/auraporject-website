@@ -1,0 +1,82 @@
+{
+  "schema": "aura.mechanism-tolerance-audit/1",
+  "at": "2026-10-23T22:43:40.265085+00:00",
+  "denetci": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "independent_claude_review": false,
+  "producer_test_sha": "874d00010f825309cfe5a1dc14b919f13326115f",
+  "base": "76ebcb6827e3fd37952a3a6c54a584dcd35bbd82",
+  "source_and_test_sha256": {
+    "assets/forma/production/mechanism-review.js": "29d9e127dd25ea7800f675ab948e16a48c0c8a3cbefe4cf77279e702c9eff42a",
+    "assets/forma/production/engineering-checks.js": "156b20d085887a2d7404f6664eff9c89c4fb807ca3040448430590eb15dcd51e",
+    "assets/forma/production/inspection-viewer.js": "d67f5d2487da16827bd2683d21336022a61c8e4e3e0002145b23716c0dc7dd29",
+    "assets/forma/production/assembly-collision.js": "151250bca196c9644044712acc345ae929d782a7510202f41e7f20f11267d165",
+    "assets/forma/production/machined-geometry.js": "d2fcbeea2fff21ecfcf47b8842c4a4ba7982fdd62de5eb38cd01b6854d2132a6",
+    "tests/mechanism-datum-check.mjs": "d4c945c589139c49b3ae00e3e6a89b42827bb94a2c888c105f4807cb02fa540a",
+    "tests/visual/mechanism-datum-check.mjs": "513f7ee82d19603eedf8bc5c7c9b7bfd8de831ccc607d21f43657d0bc8900971",
+    "tasarimci.html": "af0ce1c4828085cfa3f14a051ed031f3810fcbcdadc3b53a058a41943f4b6fd4",
+    "tasarla.html": "69f23f45f6ef9da4f33ef5ce05835d8ca2831a5c8dd668609a178401c5a13676"
+  },
+  "sources": [
+    {
+      "url": "https://help.accuride-europe.com/knowledge/installing-drawer-slides",
+      "final_url": "https://help.accuride-europe.com/knowledge/installing-drawer-slides",
+      "sha256": "bb7e37b55e7f5990d8f2e1c294df978b88f7f1c3cd9c29c54519672b39d93c34",
+      "bytes": 120818,
+      "at": "2026-10-23T22:40:16.852427+00:00"
+    },
+    {
+      "url": "https://www.blum.com/gb/en/services/industrial-production/cad-cam-dataservice/",
+      "final_url": "https://www.blum.com/gb/en/services/industrial-production/cad-cam-dataservice/",
+      "sha256": "f7c309d441129073722a363c736d285773c8f74a01f4fccd59a6556d1da8e55e",
+      "bytes": 429622,
+      "at": "2026-10-23T22:40:17.644282+00:00"
+    }
+  ],
+  "source_interpretation": [
+    "Accuride requires parallel members and consistent side space along slide length. Generic3832 width guidance is not substituted for exact3832EC source profile.",
+    "Blum manufacturer service offers configuration-specific CAD and collision-checked planning; no actual hinge linkage or CAD member package acquired/verified in this increment. No external configuration submitted."
+  ],
+  "reproduction": "Rigid drawer-box translation+1mm leaves old profile-only table unchanged; actual side gaps13.7/11.7 versus12.7 target. New hard gates reject contradiction before CSG work.",
+  "checks": {
+    "mechanism_datum_positive_negative": "PASS",
+    "assembly_collision_primitive_and_obstacle": "PASS",
+    "runner_source_clearance": "PASS",
+    "manufacturing_hardware": "PASS",
+    "operation_bounds": {
+      "nominal": 122,
+      "negative": 15,
+      "pass": true
+    },
+    "hinge_and_joint_regression": "PASS",
+    "six_runner_patterns": "PASS",
+    "model_inspection_data": {
+      "models": 445,
+      "parts": 21546,
+      "scope": "Data/measurements only, no full catalogue CSG repeated",
+      "pass": true
+    },
+    "browser_full_ui": "PASS390studio1440designer5active+2compatibility;no downloads/pageerror;source preserved",
+    "final_browser_smoke": "PASS390studio1440storage after final gates;no downloads/pageerror",
+    "versionmaps": {
+      "pages": 16,
+      "stale": 0
+    }
+  },
+  "browser_evidence": [
+    "outputs/mekanizma-tolerans-kontrol/browser-final-ui.json",
+    "outputs/mekanizma-tolerans-kontrol/final/browser-final-smoke.json"
+  ],
+  "geometry_changed": false,
+  "geometry_package_or_full_motion_CSG_repeated": false,
+  "production_approved": false,
+  "merged": false,
+  "deployed": false,
+  "limits": [
+    "Only axis-aligned rectangular nominal receiving/box faces;rotations/ambiguous faces explicit unknown",
+    "Per-face datum±.2 and halfcut/stock±.2+axisband±.1 are unapproved independent workshop budgets;not full elastic product chain",
+    "Real multi-link hinge trajectory,metal slide members/closed stop,load deformation/torque/pilots unknown",
+    "Wall substrate/anchor/anti-tip/site and other family engineering remain open",
+    "Historical Forma180s/fourfixtures and baseline211/220 retained"
+  ]
+}
