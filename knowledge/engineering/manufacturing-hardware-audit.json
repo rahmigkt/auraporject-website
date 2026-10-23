@@ -1,0 +1,149 @@
+{
+  "updated_at": "2026-10-23T15:58:25.641473+00:00",
+  "denetci": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "producer": "Codex",
+  "product_code_sha": "8ba9468e2060abd1994abe2aad0f0aaca0401ecc",
+  "base": "3c2dbabb919e1f2e1a80a9ebd450bae5c8c16035",
+  "decision": "draft_increment_reviewable_not_manufacturing_approved",
+  "source_manifest": "knowledge/engineering/manufacturing-hardware-sources.json",
+  "source_manifest_sha256": "1856ff2ad0519598f0a38504931822dc05b1a072baa9c574fe233491ef31c577",
+  "code_files": {
+    "assets/forma/hardware.js": "315fd70b5078c77b4b6477178fbf1b55d3bedc9ae12679b6d948bb85f15b30ab",
+    "assets/forma/production/manufacturing.js": "cdaf22cbab50884dc00bc94b592eb9676494f9d231209894f89dce90f4b204e4",
+    "assets/forma/production/panel-blank.js": "f34aca46284712a369b27071daf6dac55bcbf4e6ba6a2d1e92f10cf66687109e",
+    "assets/forma/production/reassemble-carcass.js": "b8c56e26a9a6a77bbdb34f0df248cd04fe162737b24b7ce1c59f6ca3dbe89c1a",
+    "assets/forma/storage.js": "d9f0d25978927221297998256d4f9eefe62f55e4b3fb05381842f5106921dcb1",
+    "assets/forma/kitchen.js": "f74986b9ee13f750aa48bad582ff0a1eb5e0a2fc17fdfe7f3a418e3978cbd0ce",
+    "assets/forma/bath.js": "163849d39746ff82d0b15a4d3a99934a15998ce445686ec5a9429f25aa40e695",
+    "assets/forma/studio.js": "ed4c315ad5131deb0ac0613e7c971bef1bc89681cda8bdc8d4da0d79fd13fda6",
+    "assets/forma/production/nesting.js": "11c8fd8707f5936a72b9fbd633aa3a04e8cd89e1e4ddb8906c78cfa2050e1046",
+    "assets/forma/production/app.js": "30d95342d4e7f5b5f51438b6ea8b18d573f5012305efce31eeeec6c72f605261",
+    "assets/forma/dimension-package.js": "3737a2f68735db1780d9822bc5bffa4b9651baa715ebddf09ad9ea745b4ab5e8"
+  },
+  "tests": [
+    {
+      "command": "node tests/manufacturing-hardware-check.mjs",
+      "status": "PASS",
+      "scope": "runner width/stock/length; old default dimensions; module backs;24 nominal fixings;limited carcass reconstruction;three negative perturbations;edge directions;oversize failure;kitchen/bath propagation;CSV injection"
+    },
+    {
+      "command": "node tests/manufacturing-catalogue-check.mjs",
+      "status": "PASS",
+      "evidence": "work/manufacturing-catalogue-audit.json"
+    },
+    {
+      "command": "node tests/panel-engine-check.mjs",
+      "status": "PASS",
+      "cases": 48
+    },
+    {
+      "command": "node tests/production-quantity-check.mjs",
+      "status": "PASS",
+      "cases": 10
+    },
+    {
+      "command": "node tests/production-sheet-trim-check.mjs",
+      "status": "PASS",
+      "cases": 4
+    },
+    {
+      "command": "node tests/dimension-package-check.mjs",
+      "status": "PASS",
+      "scope": "five families, actual handler/ZIP route, new manufacturing records, no mutation"
+    },
+    {
+      "command": "node tests/seating-set-check.mjs",
+      "status": "PASS",
+      "design_cases": 12
+    },
+    {
+      "command": "node tests/visual/manufacturing-hardware-check.mjs",
+      "status": "PASS",
+      "evidence": "outputs/uretim-montaj-pilotu/browser/results.json",
+      "scope": "three local Chrome cases:storage390,kitchen1440,bath390;selections and reload;pageerror0"
+    },
+    {
+      "command": "python tools/release/version-assets.py --check",
+      "status": "PASS",
+      "pages": 16,
+      "stale": 0
+    }
+  ],
+  "catalogue": {
+    "scope": "Generated manufacturing inventory; not full assembly, physical tests or engineering approval",
+    "models": 445,
+    "parts": 21546,
+    "families": {
+      "seating": 90,
+      "table": 150,
+      "storage": 142,
+      "kitchen": 30,
+      "bath": 33
+    },
+    "categories": {
+      "specialist_recipe_required": 2151,
+      "upholstery_pattern_required": 799,
+      "wood_component": 9651,
+      "purchased_or_specialist_part": 8945
+    },
+    "blank_correspondence": 9640,
+    "recipe_required": 11906,
+    "production_approved": 0
+  },
+  "browser": {
+    "passed": 3,
+    "results": [
+      {
+        "family": "storage",
+        "kind": "wardrobe",
+        "width": 390,
+        "selected_and_reloaded": true,
+        "drawer_code": "9221528",
+        "part_count": 92,
+        "page_errors": []
+      },
+      {
+        "family": "kitchen",
+        "kind": "run",
+        "width": 1440,
+        "selected_and_reloaded": true,
+        "drawer_code": "9221528",
+        "part_count": 318,
+        "page_errors": []
+      },
+      {
+        "family": "bath",
+        "kind": "basin",
+        "width": 390,
+        "selected_and_reloaded": true,
+        "drawer_code": "9221526",
+        "part_count": 29,
+        "page_errors": []
+      }
+    ]
+  },
+  "legacy93_geometry_comparison": {
+    "status": "PASS",
+    "fields": [
+      "id",
+      "role",
+      "geom",
+      "pos",
+      "rot",
+      "cut"
+    ],
+    "note": "Initial direct object equality was an invalid harness: historical evidence omits material/band fields and stores absent cuts as null; comparing the recorded fields passes. No source model was changed to pass this check."
+  },
+  "known_open": [
+    "Complete runner screw/drill/setback recipes; MOVENTO needs a different drawer architecture",
+    "Hinge SKU/plate/cup hole and full opening sweep validation",
+    "Middle-divider/inner-drawer/base/shelf/rail connection recipes and suitable thickness variants",
+    "Actual subtractive machining geometry; current grooves/holes are candidate operations, not applied mesh/CNC",
+    "Full-product independent reconstruction, all joints/parts, motion/collision and assembly sequence",
+    "Measured stock/band and validated workshop tolerances; current numerical tolerances are explicitly unapproved trials",
+    "Whole furniture load/stability and family-specific engineering/ergonomics; no physical or normative certification"
+  ],
+  "deployment": "none",
+  "manufacturing_approved": false
+}
