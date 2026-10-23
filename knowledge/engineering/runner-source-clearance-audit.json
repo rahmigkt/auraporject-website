@@ -1,0 +1,93 @@
+{
+  "schema": "aura.runner-source-clearance-audit/1",
+  "captured_at": "2026-10-23T21:05:22.518940+00:00",
+  "denetci": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "independent_claude_review": false,
+  "code_sha": "16d1f17d67891dee94f7ac5be035e14f7240777f",
+  "production_approved": false,
+  "source": {
+    "url": "https://www.accuride.com/media/amasty/amfile/attach/lsENsMwHMdlHk0OlD2EpkPTjq1u8ZoYw.pdf",
+    "local_file": "accuride-3832EC.pdf",
+    "sha256": "6a29d6e6024420d8b2dddf7f39570abb1f4fb267cddb3bbd62e23753b5476a2a",
+    "visually_read_pdf_page": 1,
+    "limits": "Exact3832ECsupplierrevision;genericEurope3832recommendationnot substituted;different olderECmechanism may be incompatible"
+  },
+  "facts": {
+    "nominal_travel_mm": [
+      [
+        300,
+        305
+      ],
+      [
+        350,
+        307
+      ],
+      [
+        400,
+        406
+      ],
+      [
+        450,
+        457
+      ],
+      [
+        500,
+        508
+      ],
+      [
+        550,
+        559
+      ],
+      [
+        600,
+        610
+      ]
+    ],
+    "side_clearance_mm": [
+      12.7,
+      13.5
+    ],
+    "optimal_drawer_width_deduction_mm": 27
+  },
+  "confirmed_software_omission": "toleranceReview enumerated only runner_drilling,which is Hettich-specific;Accuride drawers vanished from tolerance table. Now enumerate actual runner parts with hardware,including unspecified legacy profiles.",
+  "trial_budget_finding": {
+    "source_selected_nominal_per_side_mm": 13.5,
+    "AURA_trial_half_range_mm": 0.6,
+    "trial_interval_mm": [
+      12.9,
+      14.1
+    ],
+    "outside_source_maximum_mm": 0.6,
+    "status": "outside_source_trial_budget_not_physical_measurement",
+    "dimensions_automatically_changed": false
+  },
+  "changes": [
+    "Seven manufacturer-listed strokes bound nominal sampled drawer translations;not actual solid mechanism sweep",
+    "Known per-profile source clearance limits and explicit overflow flag in PDF;Hettichandlegacy unknown limits remain unknown",
+    "No rounding before source-bound comparison;positive and negative endpoint tests"
+  ],
+  "tests": {
+    "runner_source_clearance": "PASS7source lengths,motionlimits,clearance endpoints,small overflow,unknownprofile,invalid input,real Accuride PDF SVG warning",
+    "manufacturing_hardware": "PASS",
+    "runner_mount_pattern": "PASS6source patterns",
+    "engineering_review": "PASS392ops/154access/fourmodulemates/nominalHettichscope unchanged",
+    "versionmaps": "16stale0",
+    "first_attempts": [
+      "Actual Accuride PDF test initially exposed empty runner table;fixed enumeration",
+      "PDF full phrase assertion spanned wrapped SVG text;normalized text tags/whitespace then passed"
+    ]
+  },
+  "not_claimed": [
+    "No real runnerCAD,bearing/intermediate-member geometry,Blum4bar,fulltolerancechain,physicalprototype/load or manufacturing approval",
+    "No Accuride full selected-catalogue motion rerun;listed scalar travels not independent mechanism proof",
+    "No new PDF browser download/whole-site/mobile certification;priorv5livePDF stays boundtoitsSHA",
+    "No merge or deploy;live270 remains unchanged"
+  ],
+  "files_sha256": {
+    "assets/forma/hardware.js": "369a3a48700628338c3552ce1a03f0463fa5a372962c93e45912ab80f3eafef4",
+    "assets/forma/production/engineering-checks.js": "f591bd9c8b2b59fb295ed1d682ff02518d6f4a3c5e51b0c32b3efb7c94aef1c1",
+    "assets/forma/production/inspection-pdf.js": "8e19912e86c9394cbdd1390c24d63d09e8178a3d941f4f7aea3dd0a8e65f7729",
+    "tests/runner-source-clearance-check.mjs": "eb7db6f9c46debe8f788f1a79706dc006d77762ff80463fec322f8370059a9a6"
+  }
+}
