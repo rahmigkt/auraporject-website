@@ -283,7 +283,11 @@ export function compile(raw) {
         }
         if (sliding) for (let m = 0; m < n; m++) pnl(parts, `${id}-ifront${m + 1}`, 'inner-front', 'case', [b.x0 + 2, b.x1 - 2], [y0 + m * pitch + 2, y0 + (m + 1) * pitch - 2], [innerZ1 - RULES.mdf, innerZ1], {internal: true, band: 'four'});
       }
+      const interiorStart = parts.length;
       if (['door', 'glass', 'mirror', 'open'].includes(c.type) || (sliding && c.type !== 'drawers')) interior(parts, id, c, b.x0, b.x1, y0, y1, zBackFace, innerZ1, T, p, counts, info, ['door', 'mirror'].includes(c.type) || (sliding && c.type !== 'open'));
+      // Opening hinged fronts must reveal their existing contents, without moving the interior.
+      // Sliding panels have no open transform here: keep their closed visibility contract.
+      if (raw.openFronts && !sliding) for (let n = interiorStart; n < parts.length; n++) parts[n].internal = false;
     });
   });
 

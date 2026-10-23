@@ -1,0 +1,58 @@
+{
+  "at": "2026-10-23T15:07:51.506368+00:00",
+  "base": "3c2dbabb919e1f2e1a80a9ebd450bae5c8c16035",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "trigger": "Requested interior drawing exposed code observation; reproduced on actual local studio",
+  "baseline": [
+    {
+      "width": 1440,
+      "expected_parts": 10,
+      "visible_when_open": 0,
+      "closed_restored": true,
+      "source_design_preserved": true,
+      "page_errors": 0
+    }
+  ],
+  "after": [
+    {
+      "width": 1440,
+      "expected_parts": 10,
+      "visible_when_open": 10,
+      "closed_restored": true,
+      "source_design_preserved": true,
+      "page_errors": 0
+    },
+    {
+      "width": 390,
+      "expected_parts": 10,
+      "visible_when_open": 10,
+      "closed_restored": true,
+      "source_design_preserved": true,
+      "page_errors": 0
+    }
+  ],
+  "change": "Four lines in storage compile reveal only newly created existing cell contents for hinged open preview; no geometry/material/count changes; source design and closed/sliding behavior retained",
+  "tests": {
+    "compile_cases": 12,
+    "sliding_negative": 1,
+    "existing_storage_cases": 12,
+    "existing_panel_cases": 48,
+    "seating_design_cases": 12,
+    "version_maps": 16,
+    "stale": 0
+  },
+  "instrumentation": "Local server adds only read-only inspection of actual group mesh part IDs to scene.js; no visibility filter mocked.10targets are instantiated meshes, not a claim each is unoccluded from every camera angle.",
+  "scope": "Same wardrobe1440/390actual localChrome; sketch preview, not physical device/all products/all viewing angles",
+  "not_deployed": true,
+  "limits": [
+    "Hinged previews only;sliding transform not implemented by this change",
+    "Historical Forma180s/4fixtures and remaining vendor/mobile audit open",
+    "No engineering certification or measurement changes"
+  ],
+  "files": {
+    "assets/forma/storage.js": "b4b5c2e2502b4828764da94d2ec203d2d5971bcb125cc1e1dc137373f6a04cd4",
+    "tests/open-fronts-interior-check.mjs": "c51449cd46fe72b912a5a425a08746b51ec49d28223cb5b2b1c818ff443e376c",
+    "tests/visual/open-fronts-interior-check.mjs": "9016bd3ef23850b7fe0ed25c143f88403c832088054fabf5330a7e342eb2ac77"
+  }
+}
