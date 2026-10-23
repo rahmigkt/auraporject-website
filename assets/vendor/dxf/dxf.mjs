@@ -199,15 +199,18 @@ function stringByteSize(value) {
 	return new Blob([value]).size;
 }
 function stringChunksSplit(value, length = 255) {
+	// AURA local fix: retain every code point and cap encoded DXF string bytes, not UTF-16 units.
+	if (!Number.isInteger(length) || length <= 0) throw new RangeError("Invalid DXF chunk length");
 	const chunks = [];
-	const tempChunk = [];
-	for (let i = 0; i < value.length; i++) {
-		const char = value[i];
-		if (tempChunk.length === length || i === value.length - 1) {
-			chunks.push(tempChunk.join(""));
-			tempChunk.length = 0;
-		} else tempChunk.push(char);
+	let chunk = "", bytes = 0;
+	for (const char of value) {
+		const size = stringByteSize(char);
+		if (size > length) throw new RangeError("DXF character exceeds chunk length");
+		if (bytes + size > length) { chunks.push(chunk); chunk = ""; bytes = 0; }
+		chunk += char;
+		bytes += size;
 	}
+	if (chunk) chunks.push(chunk);
 	return chunks;
 }
 //#endregion
@@ -234,7 +237,9 @@ var ExtendedData = class {
 		this.#tags.push(tag(1003, name));
 	}
 	binaryData(data) {
-		stringChunksSplit(data).forEach((chunk) => this.#tags.push(tag(1004, chunk)));
+		if (typeof data !== "string" || data.length % 2 || !/^[0-9a-f]*$/i.test(data)) throw new TypeError("DXF binary data must be even-length hexadecimal");
+		// Group 1004: 127 binary bytes, represented by 254 hexadecimal characters.
+		stringChunksSplit(data, 254).forEach((chunk) => this.#tags.push(tag(1004, chunk)));
 	}
 	databaseHandle(handle) {
 		this.#tags.push(tag(1005, handle));
@@ -395,7 +400,8 @@ var Dimension = class extends Entity {
 		dx.push(41, this.textLineSpacingFactor);
 		dx.push(42, this.ActualMeasurement);
 		dx.push(1, this.text);
-		dx.push(53, this.rotation === "auto" ? this.rotate() : this.rotation);
+		// Group 53 is an override relative to the dimension line; auto keeps CAD defaults.
+		dx.push(53, this.rotation === "auto" ? undefined : this.rotation);
 		dx.push(51, this.horizontalDirection);
 		dx.push(3, this.styleName);
 	}
@@ -451,9 +457,14 @@ var AlignedDimension = class extends Dimension {
 	}
 	offset(v) {
 		if (v == null) return;
-		const [a_, b_] = ab(this.fisrtPoint, this.secondPoint);
-		const _b = b(v, [a_, b_]);
-		this.definitionPoint = xy([a_, _b], this.fisrtPoint);
+		const first = this.fisrtPoint, second = this.secondPoint;
+		if (![v, first.x, first.y, second.x, second.y].every(Number.isFinite)) throw new RangeError("Aligned dimension offset and XY coordinates must be finite");
+		const dx = second.x - first.x, dy = second.y - first.y, length = Math.hypot(dx, dy);
+		if (!Number.isFinite(length) || (!length && v !== 0)) throw new RangeError("Aligned dimension offset needs a nonzero finite reference line");
+		// Preserve the old b(v) convention: positive lies below nonvertical lines.
+		// A vertical line uses its right side; vector projection avoids slope singularities.
+		const direction = dx < 0 || (dx === 0 && dy < 0) ? -1 : 1;
+		this.definitionPoint = length ? point3d(first.x + v * (dy / length) * direction, first.y - v * (dx / length) * direction, first.z) : point3d(first.x, first.y, first.z);
 	}
 	rotate() {
 		return angle(this.fisrtPoint, this.secondPoint);
@@ -807,8 +818,9 @@ var Face = class extends Entity {
 		else this.invisibleEdges = 15;
 	}
 	setEdgeVisible(flag, visible) {
-		if (visible) this.invisibleEdges |= flag;
-		else if (this.invisibleEdges === (this.invisibleEdges | flag)) this.invisibleEdges ^= flag;
+		// DXF group 70 bits mark invisible edges; visible clears the selected bit.
+		if (visible) this.invisibleEdges &= ~flag;
+		else this.invisibleEdges |= flag;
 	}
 	boundingBox() {
 		return BoundingBox.verticesBBox([
@@ -7166,8 +7178,11 @@ var Hatch = class extends Entity {
 		dx.push(52, angle);
 		dx.push(41, scale);
 		dx.push(77, Number(double));
-		const pattern = PredefinedHatchPatterns.get(name);
-		if (pattern) {
+		const template = PredefinedHatchPatterns.get(name);
+		if (template) {
+			// Per-export settings must never mutate shared predefined pattern rows.
+			const pattern = new HatchPattern(template.name);
+			pattern.patternsData = template.patternsData.map(row => ({...row, dashLengthItems: [...row.dashLengthItems]}));
 			pattern.scale = scale;
 			if (angle !== 0) pattern.angle = angle;
 			pattern.dxfy(dx);
@@ -7663,7 +7678,7 @@ var Spline = class extends Entity {
 		dx.push(74, this.fitPoints.length);
 		dx.push(42, "0.0000001");
 		dx.push(43, "0.0000001");
-		dx.push(42, "0.0000000001");
+		dx.push(44, "0.0000000001");
 		this.knots.forEach((k) => dx.push(40, k));
 		this.weights.forEach((w) => dx.push(41, w));
 		this.controlPoints.forEach((cp) => dx.point3d(cp));

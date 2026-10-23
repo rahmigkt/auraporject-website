@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-23T02:49:58.844767+00:00",
+  "baseline_sha": "34412b6490295218c1449acd6130b058007678f3",
+  "code_sha": "a65baf0016ef2cda632e80d3cdb371ecdafed9c2",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "before": "tests/dxf-aligned-offset-check.mjs failed: requested offset10 measured14.142135623730951. work/dxf-offset-probe.json retains14 observations including huge near-vertical values.",
+  "checks": [
+    {
+      "test": "dxf-aligned-offset-check.mjs",
+      "exit": 0,
+      "stdout": "PASS 72 aligned dimension distance/perpendicular/translation/endpoint controls; sign, Z and degenerate inputs checked.\n"
+    },
+    {
+      "test": "dxf-xdata-check.mjs",
+      "exit": 0,
+      "stdout": "PASS 32 DXF text/binary boundary, Unicode, invalid input and writer smoke controls.\n"
+    },
+    {
+      "test": "dxf-face-visibility-check.mjs",
+      "exit": 0,
+      "stdout": "PASS 128 edge visibility transitions, idempotence and serialized flags.\n"
+    }
+  ],
+  "source_read_original": [
+    [
+      1,
+      1605
+    ]
+  ],
+  "source_sha256": "be83190c328946b1d05a8336030721248bb0ca9a25bd1d1fbbae1c46a93608cb",
+  "test_sha256": "5a90b07c6b544edacaad6066d8bd4ecea228cdec4d5091cc41fbbae887852937",
+  "upstream_primary": [
+    "https://raw.githubusercontent.com/dxfjs/writer/main/src/Sections/EntitiesSection/Entities/Dimension/AlignedDimension.ts",
+    "https://raw.githubusercontent.com/dxfjs/writer/main/src/Sections/EntitiesSection/Entities/Dimension/LinearDimension.ts"
+  ],
+  "compatibility": "Positive below nonvertical reference line retained from upstream b(v) subtraction intent; vertical right side defined. Z/endpoints remain. Nonzero offset for repeated points rejects; zero allowed. No offset leaves constructor unchanged.",
+  "limits": [
+    "Unused vendor writer; no new live import, production site unchanged",
+    "Only aligned definition-point offset fixed; existing rotation/quadrant helper and LinearDimension angular offset remain under review",
+    "No CAD application interoperability certification or full9495line manual audit",
+    "Whole site211/220 remains incomplete"
+  ],
+  "merged": false,
+  "deployed": false
+}

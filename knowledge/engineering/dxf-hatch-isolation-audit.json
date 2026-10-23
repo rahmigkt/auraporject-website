@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-23T06:59:51.437797+00:00",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "code_sha": "1fb75e63d4171d63d6dae0b743de8768dff9f557",
+  "baseline_sha": "48c96b2ef9b3dbd5e76f5c6cf759dd33d327e36a",
+  "before": "ANGLE default line-angle tags[0,90] changed to[37,37] after an unrelated rotated export. New regression fails before patch.",
+  "fix": "Clone each predefined pattern and its rows/dash arrays for per-export scale/angle settings; retain existing nonzero-angle behavior without claiming geometric correctness.",
+  "passed_checks": [
+    {
+      "test": "dxf-hatch-isolation-check.mjs",
+      "definitions": 82,
+      "checks": "default/scaled/rotated export-order independence"
+    },
+    {
+      "test": "dxf-dimension-text-rotation-check.mjs",
+      "cases": 80
+    },
+    {
+      "test": "dxf-aligned-offset-check.mjs",
+      "cases": 72
+    },
+    {
+      "test": "dxf-xdata-check.mjs",
+      "cases": 32
+    },
+    {
+      "test": "dxf-face-visibility-check.mjs",
+      "cases": 128
+    }
+  ],
+  "source_sha256": "e5b75a82542335f492eec57c1842473cd803623bf89f603a00b2fb9c4b686a80",
+  "test_sha256": "a517765ebe3b6357fa4a87ff73482542dc01de72badb02d7a6e0d2978570ea9e",
+  "manual_source_ranges_original": [
+    [
+      1,
+      3613
+    ],
+    [
+      6845,
+      7297
+    ]
+  ],
+  "machine_color_evidence": "work/dxf-color-data-audit.json:256uniqueACI entries,hex/decimal agree andconversions agree; not normative palette equivalence or manual full table reading",
+  "limits": [
+    "No verified live vendor import; no site activation or deployment",
+    "Predefined hatch rotation geometry and mixed boundary paths remain under review",
+    "No rendered CAD interoperability certification",
+    "LinearDimension signed angular offset and remaining source remain open"
+  ],
+  "merged": false,
+  "deployed": false
+}

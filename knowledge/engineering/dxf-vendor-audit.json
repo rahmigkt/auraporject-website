@@ -1,0 +1,41 @@
+{
+  "code_sha": "a1506b2abf8e4510378e493def087733237e9df7",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "checks": [
+    {
+      "test": "dxf-xdata-check.mjs",
+      "exit": 0,
+      "stdout": "PASS 32 DXF text/binary boundary, Unicode, invalid input and writer smoke controls.\n",
+      "stderr": ""
+    },
+    {
+      "test": "dxf-face-visibility-check.mjs",
+      "exit": 0,
+      "stdout": "PASS 128 edge visibility transitions, idempotence and serialized flags.\n",
+      "stderr": ""
+    },
+    {
+      "test": "ai-workspace-check.mjs",
+      "exit": 0,
+      "stdout": "PASS 3 imported home templates × 14 furniture families: proposals do not mutate rooms, bounds, occupancy, edit exclusion, sliding-door clearance and sanitised restore.\n",
+      "stderr": ""
+    }
+  ],
+  "not_merged_or_deployed": true,
+  "limits": [
+    "Vendor DXF writer has no confirmed live import; current drawingDxf uses separate R12 writer",
+    "Read original source only1-905; complete9495line audit remains pending",
+    "No CAD application interoperability certification"
+  ],
+  "source_ranges_original": [
+    [
+      1,
+      905
+    ]
+  ],
+  "sha256": {
+    "assets/vendor/dxf/dxf.mjs": "5f60d42b958926875970426d4aecff7890a61111e31cd2cae97f0364b877e84f",
+    "assets/vendor/dxf/LICENSE.md": "45b434e2577ee4aa2930aab582dab2d577d9b1d4fc7e1368bc31deef1246fee1"
+  }
+}
