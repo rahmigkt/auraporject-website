@@ -36,7 +36,7 @@ const T={
 };
 const t=(k,l)=>{const r=T[k];return r?r[Math.max(0,ORDER.indexOf(l))]??r[1]:k;};
 
-export const siteHeader=(lang='tr',{switcher=false}={})=>`<header class="a-header"><a class="a-brand" href="index.html">AURA</a><nav class="a-nav" aria-label="Menu"><a href="tasarla.html?lang=${lang}">${t('design',lang)}</a><a href="sohbet.html">${t('ai',lang)}</a>${switcher?`<select id="homeLang" aria-label="Language">${ORDER.map(k=>`<option value="${k}" ${k===lang?'selected':''}>${LANGS[k]}</option>`).join('')}</select>`:''}</nav></header>`;
+export const siteHeader=(lang='tr',{switcher=false}={})=>`<header class="a-header"><a class="a-brand" href="index.html?lang=${lang}">AURA</a><nav class="a-nav" aria-label="Menu"><a href="tasarla.html?lang=${lang}">${t('design',lang)}</a><a href="sohbet.html">${t('ai',lang)}</a>${switcher?`<select id="homeLang" aria-label="Language">${ORDER.map(k=>`<option value="${k}" ${k===lang?'selected':''}>${LANGS[k]}</option>`).join('')}</select>`:''}</nav></header>`;
 export const siteFooter=(lang='tr')=>`<footer class="a-footer"><span>${t('foot',lang)}</span><span><a href="iletisim.html">${t('contact',lang)}</a> · <a href="proje-gizlilik.html">${t('privacy',lang)}</a></span></footer>`;
 
 // ---- Home: a drawing table, not a catalogue --------------------------------------------------------
