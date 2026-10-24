@@ -1,0 +1,57 @@
+{
+  "schema": "aura.design-transfer-story.audit/1",
+  "date": "2026-10-24",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "producer_test_sha": "251c0550527eb6639376a1702580f9e8176d8933",
+  "source_sha256": {
+    "assets/forma/identity.js": "a2ca55a8a252a6d514dad623db5cc76e8dc2abfc0b4b3926a865b1d75acb42f8",
+    "assets/forma/link.js": "f92f2d08f7df907d61ed1ac18b8203149a0e7fa91cd4292ede5b68d564d0aa89",
+    "assets/forma/studio.js": "6159d89f78be414e650eece8a98d99f3dae29d51d21bc536cd6e82a867cdbfef",
+    "assets/forma/generate.js": "c9ae07e365a8bcc79633a7491d5a4d2f4981aefd55c36dbd675d0031a86e94a9",
+    "assets/social/editor.js": "ae74d6bf473675fc8884bac9d817fdf96bdea738c549a065d0a3ea2247302dcd",
+    "assets/social/transfer.js": "063fc95c5afbcc2d05e056bdfcfca604ffe649581defeb0a5bcd1562d8c06b38",
+    "assets/social/story-flow.js": "b986541d681922e2f8a24e046a43d7387ae28198ad756b58db5f45fbdcdaa8e4",
+    "assets/social/story-renderer.js": "3b4a9bb60f830002326553aec2b8d304e200fa1416e0a8e384ed9925f4e03f12",
+    "assets/social/duration.js": "49dd899b4595226cfadcbbf03607d7f6b63132be0dda956761e749b620186fd2"
+  },
+  "human_steering": "Video production deferred by user; current focus exact design transfer and product identity. User final image not copied into Git or any third-party service; no wardrobe film made.",
+  "changes": [
+    "Expose existing compressed design/project fragment links in studio Project tab; copy with selectable fallback, local editor handoff, current-design JSON backup",
+    "Persist random 128-bit product identity in normalized design, legacy backfill on studio load, preserve in links/JSON; independent full SHA256 canonical content revision",
+    "Editor parses fragment locally without fetching supplied URL, registers copy without replacing project; identity/revision shown on imported source",
+    "Prior authorized local process story implementation retained: six scenes, eight reveal frames, final-only reference; own WebM duration patch, local draft update and snapshot restoration"
+  ],
+  "tests_passed": [
+    "5 active family exact design/project/identity/revision/compiled-geometry roundtrips and immutable input",
+    "Invalid ordinary address, scheme/path, encoding/version, prototype key, oversized input, decompression expansion rejected",
+    "Story room/concavity/ordering/timing/validation",
+    "Existing social model tests; 7 owner authorization tests; PHP auth response regression and lint",
+    "18 version maps stale0; syntax; diff-check"
+  ],
+  "browser_evidence": {
+    "scope": "Synthetic loopback UI, not real wardrobe reconstruction",
+    "desktop": "Native studio Project link modal; refresh preserves same identity/revision; input copied through visible readonly field into editor; same identity/revision displayed",
+    "mobile390": "Document and modal width375, no horizontal overflow",
+    "negative": "Ordinary studio URL rejected with actionable explanation",
+    "clipboard": "Browser button reported copied, CUA clipboard returned empty; transferable URL verified from visible textarea instead",
+    "story_prior": "18.021399 s decoded720x1280 WebM after duration patch; first draft persisted6 roles/8frames and original synthetic projects unchanged; rights/caption update preserved video",
+    "proof_local": "outputs/social-story/design-link-proof.png"
+  },
+  "failures_preserved": [
+    "Initial story model syntax typo repaired",
+    "First WebM infinite metadata duration; fixed with pinned MIT helper",
+    "CUA short locator waits during real-time recording; did not treat timeout as passing",
+    "CUA canvas pixel sampling unsupported; no pixel metric claim",
+    "Initial PHP restart unavailable; hidden local process restored server, original protected route retained",
+    "Synthetic server initially omitted HTML MIME; repaired",
+    "Full tests/forma-check.mjs started then interrupted without result; not counted as pass"
+  ],
+  "limits": [
+    "No global product-ID lookup registry. Identity alone cannot retrieve data; use full snapshot link/JSON.",
+    "Links are snapshots with embedded design data, no access-control boundary and no live synchronization.",
+    "Saved model without identity can only receive a new identity when opened in updated studio; historical origin correspondence not inferred.",
+    "No full site security approval, production/manufacturing approval or physical device verification.",
+    "No paid operation, posting, raw customer media egress, merge or deployment."
+  ]
+}
