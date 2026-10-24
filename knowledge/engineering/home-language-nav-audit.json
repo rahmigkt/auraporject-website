@@ -1,0 +1,149 @@
+{
+  "schema": "aura.home-language-nav-audit/1",
+  "at": "2026-10-24T06:15:11.224772+00:00",
+  "denetci": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "base": "76ebcb6827e3fd37952a3a6c54a584dcd35bbd82",
+  "producer_test_sha": "d6d3fe1d528216ba253818fb71a53f64e330cd61",
+  "problem": "Freshbrowser explicitArabic/GermanhomeURL lostlanguage onAURAbrandlink; Englishbrowserlocale won andArabicRTLchangedtoLTR.",
+  "before": [
+    {
+      "requested": "ar",
+      "width": 320,
+      "before": {
+        "lang": "ar",
+        "dir": "rtl",
+        "viewport": 320,
+        "scrollWidth": 320,
+        "stored": null,
+        "categories": [
+          "tasarla.html?family=seating&lang=ar",
+          "tasarla.html?family=table&lang=ar",
+          "tasarla.html?family=storage&lang=ar",
+          "tasarla.html?family=kitchen&lang=ar",
+          "tasarla.html?family=bath&lang=ar"
+        ],
+        "brand": "index.html"
+      },
+      "after": {
+        "lang": "en",
+        "dir": "ltr",
+        "stored": null
+      },
+      "errors": []
+    },
+    {
+      "requested": "de",
+      "width": 390,
+      "before": {
+        "lang": "de",
+        "dir": "ltr",
+        "viewport": 390,
+        "scrollWidth": 390,
+        "stored": null,
+        "categories": [
+          "tasarla.html?family=seating&lang=de",
+          "tasarla.html?family=table&lang=de",
+          "tasarla.html?family=storage&lang=de",
+          "tasarla.html?family=kitchen&lang=de",
+          "tasarla.html?family=bath&lang=de"
+        ],
+        "brand": "index.html"
+      },
+      "after": {
+        "lang": "en",
+        "dir": "ltr",
+        "stored": null
+      },
+      "errors": []
+    }
+  ],
+  "change": "SharedbrandURL carriescurrentlang query. Does notwriteURLchoice into permanentlanguagepreference.",
+  "after": {
+    "passed": 4,
+    "results": [
+      {
+        "lang": "ar",
+        "width": 320,
+        "stored_before": null,
+        "brand_retains_language": true,
+        "catalogue_studio_home": true,
+        "rtl": "rtl",
+        "overflow": false,
+        "unrelated_storage_preserved": true,
+        "page_errors": 0,
+        "downloads": 0,
+        "non_get_requests": 0
+      },
+      {
+        "lang": "de",
+        "width": 390,
+        "stored_before": null,
+        "brand_retains_language": true,
+        "catalogue_studio_home": true,
+        "rtl": "ltr",
+        "overflow": false,
+        "unrelated_storage_preserved": true,
+        "page_errors": 0,
+        "downloads": 0,
+        "non_get_requests": 0
+      },
+      {
+        "lang": "ar",
+        "width": 390,
+        "stored_before": "\"fr\"",
+        "brand_retains_language": true,
+        "catalogue_studio_home": true,
+        "rtl": "rtl",
+        "overflow": false,
+        "unrelated_storage_preserved": true,
+        "page_errors": 0,
+        "downloads": 0,
+        "non_get_requests": 0
+      },
+      {
+        "lang": "fr",
+        "width": 1440,
+        "stored_before": null,
+        "brand_retains_language": true,
+        "catalogue_studio_home": true,
+        "rtl": "ltr",
+        "overflow": false,
+        "unrelated_storage_preserved": true,
+        "page_errors": 0,
+        "downloads": 0,
+        "non_get_requests": 0
+      }
+    ]
+  },
+  "unit": "9supportedlanguages anddefault; brand/designhref andswitcher retained",
+  "version_maps": {
+    "pages": 16,
+    "stale": 0
+  },
+  "syntax_diff": "PASS",
+  "artifacts": [
+    {
+      "path": "outputs/mobile-language-navigation/probe.json",
+      "sha256": "f6362075c3a55fe5f523fe0dd1eb035a6a811481bdbdf99377243c422a241253"
+    },
+    {
+      "path": "outputs/mobile-language-navigation/after/results.json",
+      "sha256": "0d8d4bec14effc76ab68f9e37a63d3f26789d79c61332cd3a56f93e8efd32459"
+    },
+    {
+      "path": "outputs/mobile-language-navigation/after/ar-320.png",
+      "sha256": "1f6010ffe5beda1ceff6d518c1c634aa953070f3c345388f892bb60193ee83d3"
+    }
+  ],
+  "scope": "AR320/DE390/AR390withsavedFR/FR1440; cataloguetablelink->studio->home,brandclick,RTLdirection,width,unrelatedstorage,GETonly/noerrors/downloads. No all-page translation orphysicalphone certification.",
+  "limits": [
+    "LocalChrome mobileviewport/touch, notSafari/iOS/OSkeyboard orallbrowsers.",
+    "Pageheaderlinksverified; AI chatmessages/servicesnotinvoked.",
+    "No merge/deploy; PR277 independentdraft unchanged.",
+    "HardwareCAD/manufacturing remains userdeferred.",
+    "Baseline212/220 andhistoricalForma180s/fourfixturesremainopen."
+  ],
+  "merged": false,
+  "deployed": false
+}
