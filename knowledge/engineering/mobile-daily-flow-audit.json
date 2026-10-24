@@ -1,0 +1,362 @@
+{
+  "schema": "aura.mobile-daily-flow-audit/1",
+  "at": "2026-10-24T06:05:16.183100+00:00",
+  "denetci": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "base": "76ebcb6827e3fd37952a3a6c54a584dcd35bbd82",
+  "producer_test_sha": "50c2d5b79851dc75a33c5d51238bf360c761205c",
+  "scope": "Normal project creation/editing/navigation; hardwareCAD and manufacturing research remain userdeferred.",
+  "before": {
+    "category_overwrite": [
+      {
+        "width": 390,
+        "original": [
+          {
+            "id": "U1",
+            "family": "table"
+          }
+        ],
+        "selected": {
+          "family": "storage",
+          "editing": "U1",
+          "tab": "deliver",
+          "items": 1
+        },
+        "after": [
+          {
+            "id": "U1",
+            "family": "storage"
+          }
+        ],
+        "originalPreserved": false,
+        "layout": {
+          "viewport": 390,
+          "scrollWidth": 390,
+          "visual": {
+            "top": 79,
+            "bottom": 489.59375
+          },
+          "tabs": [
+            {
+              "tab": "parts",
+              "left": 0,
+              "right": 97.5,
+              "top": 490.59375,
+              "bottom": 541.59375,
+              "hit": "parts"
+            },
+            {
+              "tab": "size",
+              "left": 97.5,
+              "right": 195,
+              "top": 490.59375,
+              "bottom": 541.59375,
+              "hit": "size"
+            },
+            {
+              "tab": "material",
+              "left": 195,
+              "right": 292.5,
+              "top": 490.59375,
+              "bottom": 541.59375,
+              "hit": "material"
+            },
+            {
+              "tab": "deliver",
+              "left": 292.5,
+              "right": 390,
+              "top": 490.59375,
+              "bottom": 541.59375,
+              "hit": "deliver"
+            }
+          ],
+          "overflow": []
+        },
+        "errors": []
+      },
+      {
+        "width": 320,
+        "original": [
+          {
+            "id": "U1",
+            "family": "table"
+          }
+        ],
+        "selected": {
+          "family": "storage",
+          "editing": "U1",
+          "tab": "deliver",
+          "items": 1
+        },
+        "after": [
+          {
+            "id": "U1",
+            "family": "storage"
+          }
+        ],
+        "originalPreserved": false,
+        "layout": {
+          "viewport": 320,
+          "scrollWidth": 320,
+          "visual": {
+            "top": 93,
+            "bottom": 503.59375
+          },
+          "tabs": [
+            {
+              "tab": "parts",
+              "left": 0,
+              "right": 80,
+              "top": 504.59375,
+              "bottom": 555.59375,
+              "hit": "parts"
+            },
+            {
+              "tab": "size",
+              "left": 80,
+              "right": 160,
+              "top": 504.59375,
+              "bottom": 555.59375,
+              "hit": "size"
+            },
+            {
+              "tab": "material",
+              "left": 160,
+              "right": 240,
+              "top": 504.59375,
+              "bottom": 555.59375,
+              "hit": "material"
+            },
+            {
+              "tab": "deliver",
+              "left": 240,
+              "right": 320,
+              "top": 504.59375,
+              "bottom": 555.59375,
+              "hit": "deliver"
+            }
+          ],
+          "overflow": []
+        },
+        "errors": []
+      },
+      {
+        "width": 1440,
+        "original": [
+          {
+            "id": "U1",
+            "family": "table"
+          }
+        ],
+        "selected": {
+          "family": "storage",
+          "editing": "U1",
+          "tab": "deliver",
+          "items": 1
+        },
+        "after": [
+          {
+            "id": "U1",
+            "family": "storage"
+          }
+        ],
+        "originalPreserved": false,
+        "layout": {
+          "viewport": 1440,
+          "scrollWidth": 1440,
+          "visual": {
+            "top": 44,
+            "bottom": 830.859375
+          },
+          "tabs": [
+            {
+              "tab": "parts",
+              "left": 931,
+              "right": 1058.25,
+              "top": 44,
+              "bottom": 97,
+              "hit": "parts"
+            },
+            {
+              "tab": "size",
+              "left": 1058.25,
+              "right": 1185.5,
+              "top": 44,
+              "bottom": 97,
+              "hit": "size"
+            },
+            {
+              "tab": "material",
+              "left": 1185.5,
+              "right": 1312.75,
+              "top": 44,
+              "bottom": 97,
+              "hit": "material"
+            },
+            {
+              "tab": "deliver",
+              "left": 1312.75,
+              "right": 1440,
+              "top": 44,
+              "bottom": 97,
+              "hit": "deliver"
+            }
+          ],
+          "overflow": []
+        },
+        "errors": []
+      }
+    ],
+    "sticky_tabs": {
+      "scrollY": 710,
+      "tab": {
+        "top": 0,
+        "bottom": 51
+      },
+      "visual": {
+        "top": 0,
+        "bottom": 397.59375
+      },
+      "hit": "<canvas class=\"f-canvas\" tabindex=\"0\" role=\"img\" data-engine=\"three.js r186\" width=\"366\" height=\"337\" style=\"touch-action: none;\"></canvas>",
+      "clickable": false
+    }
+  },
+  "changes": [
+    {
+      "problem": "Header family change kept editingU1; saving wardrobe replaced saved table. Reproduced390/320/1440.",
+      "fix": "Detach project item identity on deliberate family navigation. ExplicitprojectEdit keepsID; samefamilyheaderclicknochange."
+    },
+    {
+      "problem": "Scrolled mobile tabs at top0 were behind sticky3D visual bottom397.594; centerhitcanvas, nottab.",
+      "fix": "ResizeObserver updates actualvisualheight inlayoutcustomproperty; mobiletabsstickbelow it and controls getscrollmargin. Observer disconnected/rebound on shell/language rebuild."
+    }
+  ],
+  "after": {
+    "passed": 2,
+    "results": [
+      {
+        "width": 390,
+        "families": 5,
+        "original_item_preserved": true,
+        "quantity_preserved": true,
+        "explicit_edit_undo_redo": true,
+        "reload": true,
+        "room_preview": true,
+        "remove_remaining_preserved": true,
+        "designer_handoff": 4,
+        "sticky": [
+          {
+            "width": 390,
+            "height": 844,
+            "tabTop": 398,
+            "visualBottom": 397.59375,
+            "clickable": true,
+            "scrollWidth": 390
+          },
+          {
+            "width": 320,
+            "height": 740,
+            "tabTop": 356,
+            "visualBottom": 356,
+            "clickable": true,
+            "scrollWidth": 320
+          },
+          {
+            "width": 844,
+            "height": 390,
+            "tabTop": 232,
+            "visualBottom": 231.59375,
+            "clickable": true,
+            "scrollWidth": 844
+          }
+        ],
+        "language_shell_resize": true,
+        "downloads": 0,
+        "page_errors": 0,
+        "non_get_requests": 0,
+        "external_requests_blocked": 0
+      },
+      {
+        "width": 1440,
+        "families": 5,
+        "original_item_preserved": true,
+        "quantity_preserved": true,
+        "explicit_edit_undo_redo": true,
+        "reload": true,
+        "room_preview": true,
+        "remove_remaining_preserved": true,
+        "designer_handoff": 4,
+        "sticky": [],
+        "language_shell_resize": false,
+        "downloads": 0,
+        "page_errors": 0,
+        "non_get_requests": 0,
+        "external_requests_blocked": 0
+      }
+    ]
+  },
+  "sticky_after": {
+    "scrollY": 483,
+    "tab": {
+      "top": 398,
+      "bottom": 449
+    },
+    "visual": {
+      "top": 0,
+      "bottom": 397.59375
+    },
+    "hit": "<button role=\"tab\" data-tab=\"size\" aria-selected=\"false\"><span>02</span>Ölçüler</button>",
+    "clickable": true
+  },
+  "checks": {
+    "studio_shell_races": 5,
+    "seating_set_cases": 12,
+    "storage_bay_cases": 12,
+    "version_map_pages": 16,
+    "version_map_stale": 0,
+    "syntax_diff": "PASS",
+    "CSS_cache": "studio.css hash479675edd4dbe42b in3HTMLentrypoints; JavaScript version mapupdated"
+  },
+  "artifacts": [
+    {
+      "path": "outputs/mobile-daily-flow/before/probe.json",
+      "bytes": 3801,
+      "sha256": "50a4dcd627c82e1c9397c87a777cb7ff5acf3b5c94e9b8f36490e52d44cce9ab"
+    },
+    {
+      "path": "outputs/mobile-daily-flow/before/sticky-before.json",
+      "bytes": 312,
+      "sha256": "b4ad63de463dda4cbe3a9ad82cd35ae0a4b7d81798e214381393ecad72683c19"
+    },
+    {
+      "path": "outputs/mobile-daily-flow/after/results.json",
+      "bytes": 1520,
+      "sha256": "04f13ac200a6ed2a4f53fb19799864750c348f9726d52d741bb990ae3ff39da7"
+    },
+    {
+      "path": "outputs/mobile-daily-flow/after/sticky-after.json",
+      "bytes": 258,
+      "sha256": "2d788394823883fecc69a8519bfa3d84e4fc9454154a8ae5fafb0cf7c2c508ac"
+    },
+    {
+      "path": "outputs/mobile-daily-flow/after/sticky-after.png",
+      "bytes": 55788,
+      "sha256": "4abcde72358e21c13c1b91b40a1580f4775e3a8b7a51dbc9411c78ea72f91df2"
+    }
+  ],
+  "test_runner_notes": [
+    "Initialprobe selector matched header andproject suggestion buttons; corrected to#families before recording behavior.",
+    "Initialwideflow run interrupted withoutresults,notcounted aspassed; subsequentlogged fullrun9580 completedbothcases exit0.",
+    "Baselineprobe interrupted afterfinalJSONwaswritten; observations retained, notclaimed successfuluninterruptedtest suite.",
+    "Fullpagescreenshots repositionsticky elements; actual390viewport screenshot separatelyinspected."
+  ],
+  "limits": [
+    "Real localChrome with emulatedviewport/touch; notphysicalphone/Safari/iOSkeyboard oralllanguages.",
+    "TRflows,ENshellrebuild; no allpage/mobilecertification.",
+    "No realAPI/auth/send/payment/email/social actions; nonGETrequests0/download0.",
+    "No deployment/merge, no hardwareCADresearch resumed.",
+    "Sourcecoverage212/220 andhistoricalForma180s/fourbrowserfixturesremainopen."
+  ],
+  "deployed": false,
+  "merged": false
+}
