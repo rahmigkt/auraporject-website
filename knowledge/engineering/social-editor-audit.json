@@ -1,0 +1,139 @@
+{
+  "updated_at": "2026-10-24T07:19:59.346317+00:00",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "producer_test_sha": "857dbeb039c25f4177ecec7677be1478e69a16bc",
+  "base": "76ebcb6827e3fd37952a3a6c54a584dcd35bbd82",
+  "scope": "Protected PHP editor; local-only media generation, import and IndexedDB draft workflow; no remote storage, Postiz server, team sync, schedule or publication",
+  "platforms": [
+    "instagram",
+    "facebook",
+    "youtube",
+    "linkedin",
+    "snapchat"
+  ],
+  "excluded_by_user": [
+    "x",
+    "tiktok"
+  ],
+  "markets": [
+    "TR/tr-TR",
+    "DE/de-DE",
+    "SA/ar-SA",
+    "AE/ar-AE"
+  ],
+  "account_slots": 20,
+  "real_accounts_connected": 0,
+  "posts_or_remote_uploads": 0,
+  "paid_operations": 0,
+  "hashes": {
+    "sosyal-editor.php": "63e157a3167c5980f2ef78401515d35821f37ee0e60c73437c490fed22de5274",
+    "assets/social/editor.js": "053d0fd913e374eacfcc1cae236fc82b4e9c39782a6aa39a1062ff1664104ea0",
+    "assets/social/model.js": "c6d1fb2affb711668564461ba0821db35e3a517e63c115845900f1964cca7c3a",
+    "assets/social/editor.css": "6c038f83ead0e6a24efc75cc58c1c7db7eb9132d42929fac60932f2f833bf5b2",
+    "tools/release/version-assets.py": "3160fbe173731ee68aaea8f875f4d6c8d6d6a59edc81217b3a2d679cd09f3e36",
+    "tests/social-editor-auth-check.mjs": "fe9f986f1536cc9bb7b4e5b517a9bf302a0ea35367d3f298fe66693c7ec686fe",
+    "tests/social-editor-check.mjs": "23df24dc5bdf47f16db101428627cc29377c7bb3a67522e518b59608b17ddab4",
+    "tests/visual/social-editor-check.mjs": "dc95a9bd996703a965d4666e91033eca7532aba3042d644422b76190339339f6"
+  },
+  "verification": {
+    "model": "20 allowed market/channel combinations; X/TikTok/unknown rejection; EV bounds and text injection; source immutability; rights requirement; no publication function; signature rejection",
+    "php_gate": {
+      "missing_configuration": 503,
+      "wrong_password": 401,
+      "non_https_non_local": 403,
+      "valid_local": 200
+    },
+    "browser": {
+      "passed": 2,
+      "results": [
+        {
+          "width": 1440,
+          "auth_unauthorized_401": true,
+          "ev_video": {
+            "width": 720,
+            "height": 1280,
+            "duration": null,
+            "ready": 4
+          },
+          "generated_file": "C:\\Users\\User\\Documents\\Codex\\2026-10-21\\aura-ai-s-nav-i-emrini\\outputs\\social-editor\\1440-AURA-TR-instagram.webm",
+          "local_video_import_and_square_render": true,
+          "furniture_scene": true,
+          "fake_mp4_rejected": true,
+          "draft_blob_reload": true,
+          "rights_recheck": true,
+          "unrelated_projects_preserved": true,
+          "pageerrors": 0,
+          "external_requests": 0,
+          "non_get_requests": 0,
+          "overflow": false
+        },
+        {
+          "width": 390,
+          "auth_unauthorized_401": true,
+          "ev_video": {
+            "width": 720,
+            "height": 1280,
+            "duration": null,
+            "ready": 4
+          },
+          "generated_file": "C:\\Users\\User\\Documents\\Codex\\2026-10-21\\aura-ai-s-nav-i-emrini\\outputs\\social-editor\\390-AURA-TR-instagram.webm",
+          "local_video_import_and_square_render": true,
+          "furniture_scene": true,
+          "fake_mp4_rejected": true,
+          "draft_blob_reload": true,
+          "rights_recheck": true,
+          "unrelated_projects_preserved": true,
+          "pageerrors": 0,
+          "external_requests": 0,
+          "non_get_requests": 0,
+          "overflow": false
+        }
+      ]
+    },
+    "versionmaps_pages": 17,
+    "versionmaps_stale": 0,
+    "php_lint": "PASS",
+    "node_syntax": "PASS",
+    "diff_whitespace": "PASS"
+  },
+  "sources": {
+    "furniture": "Existing Forma normalized design, compiler and renderThumbnail; still rendered image with pan/zoom, not 3D orbit",
+    "EV": "Existing EV sample or supplied/saved EV JSON, simplified top-view polygons/walls; openings/furnishings not fully represented",
+    "room": "Existing normaliseProject/roomSvg on copied home/room storage; not claimed browser-tested in this delivery",
+    "local_files": "Decoded PNG/JPEG/WebP/MP4/WebM only, 50 MB per file; no SVG/HTML input; image resized to1600px; video output silent"
+  },
+  "storage": "IndexedDB, local origin/device only, 75 MB per draft/150 MB library budget; no account-synced client workspace changes",
+  "access": "PHP Basic auth with server env user/password_hash; fail closed if not configured; production requires HTTPS. Local trial credentials are outside repository. Not complete security review; production rate limiting/identity integration still open.",
+  "format_limit": "Working default Chrome output WebM VP8; real 720x1280 and720x720 video decode/load/import passed. MP4 high-resolution attempts yielded empty output and were rejected. No conversion or platform upload compatibility approval. WebM streaming duration metadata may be non-finite; visible timeline is planned duration.",
+  "preserved_failures": [
+    {
+      "session": 60951,
+      "reason": "Initial forced SwiftShader browser recording yielded empty output/timeout; no success credited"
+    },
+    {
+      "session": 39156,
+      "reason": "Explicit requestFrame alone did not resolve initial recording"
+    },
+    {
+      "session": 3457,
+      "reason": "WebM under forced GPU flags still empty"
+    },
+    {
+      "session": 94715,
+      "reason": "One standard-Chrome run timed out after final visibility guard; not reproduced on final63953 run; intermittent empty recording remains guarded error, not successful file"
+    },
+    {
+      "artifact": "mp4-probe.json",
+      "reason": "Default MP4 selected VP9, empty output rejected"
+    },
+    {
+      "artifact": "mp4-level31-probe.json",
+      "reason": "Explicit H264 profile probe empty, no MP4 success claim"
+    }
+  ],
+  "final_browser_session": 63953,
+  "hardware_topic": "User deferred; no manufacturing/CAD work resumed",
+  "merged": false,
+  "deployed": false
+}
