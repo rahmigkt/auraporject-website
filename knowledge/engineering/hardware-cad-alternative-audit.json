@@ -1,0 +1,201 @@
+{
+  "schema": "aura.hardware-cad-alternatives/1",
+  "updated_at": "2026-10-23T23:59:48.514289+00:00",
+  "denetci": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "producer_test_sha": "65f46d9783f54039d9d4b2d37eda970182eb0565",
+  "previous_delivery_sha": "ea349ac7c8a43c8bedf715959630879b592df1c3",
+  "input_sha256": "52164bdd1442d900a44a1670c612384c329c9ac3d5ce020a56abb3075c565e12",
+  "production_approved": false,
+  "real_hardware_imported": false,
+  "real_hardware_motion_run": false,
+  "alternative_sources": [
+    {
+      "name": "Démos 71B3590",
+      "url": "https://www.demos-trade.hu/product-file/download/34558",
+      "result": "DWG downloaded; not STEP",
+      "bytes": 361231,
+      "sha256": "6e028f87ed5796e6a1e44fbe523752be4fa3fd772bf428b2ccec2ebfee8e0944"
+    },
+    {
+      "name": "Hettich official CAD catalogue selected SKU",
+      "url": "https://hettich.partcommunity.com/3d-cad-models/?info=hettich%2Fdrawer_runners%2Fball_bearing_slides%2Fmounted_on_sides%2Fka_5632_sisy_tab.prj",
+      "result": "Security block. Indexed selected 9221528 / 500 STEP exists; no actual STEP downloaded."
+    },
+    {
+      "name": "Foussier 174H7100E group",
+      "url": "https://rapido.foussier.fr/embase-croix-reglage-par-excentrique-avec-tourillon-expando-o-5-mm/sp10714",
+      "result": "CAD1044109/1044110 button opens login dialog; no file downloaded"
+    },
+    {
+      "name": "Community Hettich KA5632/5332 450mm candidate",
+      "url": "https://grabcad.com/library/hettich-ka5632-5332-450mm-drawer-slide-1",
+      "result": "Not selected SKU/length; no manufacturer qualification. Not imported or substituted. Page403."
+    }
+  ],
+  "actual_file_intake": {
+    "actual_source": "outputs\\hardware-cad-alternatives\\sources\\demos-71B3590.dwg",
+    "bytes": 361231,
+    "sha256": "6e028f87ed5796e6a1e44fbe523752be4fa3fd772bf428b2ccec2ebfee8e0944",
+    "file_magic": "b'AC1018'",
+    "intake": {
+      "status": "blocked",
+      "reasons": [
+        "unsupported_cad_format_requires_qualified_conversion",
+        "units_mm_verified_missing",
+        "local_use_permitted_missing",
+        "sku_identity_verified_missing",
+        "mounting_datums_verified_missing",
+        "rigid_members_verified_missing",
+        "closed_stop_verified_missing",
+        "motion_law_verified_missing"
+      ],
+      "motion_verified": false
+    },
+    "wardrobe_motion_run": {
+      "executed": false,
+      "reason": "No qualified selected STEP / member datums / closed stop / motion law available"
+    },
+    "previous_stock_evidence_reused_as_hardware_evidence": false,
+    "production_approved": false
+  },
+  "checks": {
+    "synthetic_STEP_static_import": "passed; not hardware motion",
+    "renamed_DWG_and_login_HTML_as_STEP": "rejected despite matching SHA",
+    "source_report_fingerprint_and_scope": "passed",
+    "external_report_regression": "passed",
+    "versionmap_pages": 16,
+    "versionmap_stale": 0,
+    "browser": {
+      "pass": true,
+      "widths": [
+        390,
+        1440
+      ],
+      "studio": {
+        "parts": 92,
+        "ops": 392,
+        "access": null,
+        "machined": null
+      },
+      "designer": [
+        {
+          "family": "storage",
+          "count": 93,
+          "envelope": {
+            "min_mm": [
+              -900,
+              0,
+              -300
+            ],
+            "max_mm": [
+              900,
+              2400,
+              335.988
+            ],
+            "xyz_mm": [
+              1800,
+              2400,
+              635.988
+            ]
+          },
+          "scene": {
+            "shown": 93,
+            "errors": [],
+            "bounds": {
+              "min": [
+                -900,
+                0,
+                -300
+              ],
+              "max": [
+                900,
+                2400,
+                335.9883117675781
+              ]
+            }
+          }
+        }
+      ],
+      "page_errors": [],
+      "downloads": [],
+      "source_preserved": true
+    }
+  },
+  "source_evidence": [
+    {
+      "file": "outputs\\hardware-cad-alternatives\\actual-file-intake.json",
+      "bytes": 913,
+      "sha256": "dca4230e32ee26fb19f07f558028c749852c12e9d25b930a713e99259df1463d"
+    },
+    {
+      "file": "outputs\\hardware-cad-alternatives\\browser\\browser-external.json",
+      "bytes": 835,
+      "sha256": "aa7a29e5f523257069b26c2a8f39782575dfeb0cd0dae3610cbe0238d955c9e2"
+    },
+    {
+      "file": "outputs\\hardware-cad-alternatives\\browser\\designer-bath-1440.png",
+      "bytes": 67779,
+      "sha256": "1ca2c523dc0b81f7398abe89f6f0ea23d5847852347aff5a8f502b857a520625"
+    },
+    {
+      "file": "outputs\\hardware-cad-alternatives\\browser\\external-mismatch-1440.png",
+      "bytes": 46115,
+      "sha256": "cbfe665593fd24d7311a941ae5ea822e8d2aca94492420020b5d1ed9694f2ba0"
+    },
+    {
+      "file": "outputs\\hardware-cad-alternatives\\browser\\external-studio-390.png",
+      "bytes": 52655,
+      "sha256": "cb2a06e3244fc9a747b8dee6aaa4ef05e51ed088648679c88b0fe610443553e8"
+    },
+    {
+      "file": "outputs\\hardware-cad-alternatives\\browser\\hardware-sources-390.png",
+      "bytes": 57382,
+      "sha256": "aa9ba79acc0c472885a9ee0a911f53e037218a91711b8b0bead938d580535313"
+    },
+    {
+      "file": "outputs\\hardware-cad-alternatives\\download-results.json",
+      "bytes": 587,
+      "sha256": "64afa661e633322c26329ebcafbaae78f836514d90d580ca125150041a973c42"
+    },
+    {
+      "file": "outputs\\hardware-cad-alternatives\\foussier-ui.png",
+      "bytes": 183781,
+      "sha256": "9d69d10c18ad5b8fb63c866cc00dcc2dd9152800db5c19fac4da6bdf838de573"
+    },
+    {
+      "file": "outputs\\hardware-cad-alternatives\\foussier-ui.txt",
+      "bytes": 9610,
+      "sha256": "27cff926067fad6b66193166fed3e456566e548b5e349ad49601ad1140f1af36"
+    },
+    {
+      "file": "outputs\\hardware-cad-alternatives\\hettich-ui.png",
+      "bytes": 32096,
+      "sha256": "a1345b55ad450f54a9389fe4f53225dcac67e8c165e0e6856fd1277a3dd8c748"
+    },
+    {
+      "file": "outputs\\hardware-cad-alternatives\\hettich-ui.txt",
+      "bytes": 698,
+      "sha256": "99a6717015c9b01239078c5005d08b4eb7bfa8d8f97f4007a287adaad8b067eb"
+    },
+    {
+      "file": "outputs\\hardware-cad-alternatives\\report.json",
+      "bytes": 5968,
+      "sha256": "693fce223eda0ac60f145776b947ac39ddcc0f6e173423d656be32f39aef7867"
+    },
+    {
+      "file": "outputs\\hardware-cad-alternatives\\sources\\demos-71B3590.dwg",
+      "bytes": 361231,
+      "sha256": "6e028f87ed5796e6a1e44fbe523752be4fa3fd772bf428b2ccec2ebfee8e0944"
+    }
+  ],
+  "scope": "One downloaded distributor-linked DWG identified by binary AC1018 header/hash. Inner solids, mounting datums, SKU exact geometry, permissions and kinematic law not qualified. Manufacturer indexed STEP record was not downloaded. No full wardrobe motion or production approval.",
+  "preserved": "Earlier source audit, gate failures, source390/1440 runs and40stock/392op evidence remain at their original SHA; no new hardware inference.",
+  "retained_environment_errors": [
+    "Initial runtime read issued from worktree with primary-relative path; corrected ../../work path",
+    "Default-sandbox fetch DNS failed; authorized network fetch succeeded",
+    "Foussier rawHTML GET403; normal browser displays login gate for CAD download; not bypassed"
+  ],
+  "deployed": false,
+  "merged": false
+}

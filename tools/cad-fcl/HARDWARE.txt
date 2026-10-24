@@ -1,0 +1,21 @@
+Üretici donanım CAD kabulü
+
+hardware-gate.py MANIFEST.json SONUC.json
+
+Bu yol yalnız izole yerel CPU ortamında çalışır. Web sayfası motor çalıştırmaz.
+Her girdi seçili ürün kodunu, dosyanın SHA256 değerini ve kaynak incelemesiyle
+belgelenmiş birim/kullanım/SKU/datum/rijit üye/durdurucu/hareket durumunu taşır.
+Alanların true yapılması kaynak kanıtı yerine geçmez; ilgili kaynak audit'i gerekir.
+Bir eksik varsa dosya geometriye alınmaz. Mevcut Hettich arşivi ACIS içerir;
+STEP okuyucuya uzantı değiştirerek verilmez. Yanlış SKU sessizce değiştirilmez.
+
+Geçerli STEP CadQuery katıları olarak açılır, sonlu pozitif hacim ve geçerlilik
+kontrolünden sonra FCL BVH statik geometrisine aktarılır. Bu aşama dahi hareket
+onayı döndürmez. Üreticiye bağlı ayrı üye dönüşümleri ve gerçek montaj referansı
+olmadan yörünge üretilmez. Sentetik kontrol gerçek donanım testi değildir.
+
+Bu artışta gerçek donanım CAD'i CadQuery/FCL'ye alınamadı ve gardırobun gerçek
+donanım hareketi yeniden sınanamadı. Önceki ahşap stok pilotu kendi kanıtıyla kalır.
+Üretici dosyaları açık kaynak sayılmaz; ham dosyalar veya kopyalanmış geometrileri
+Git'e ve siteye eklenmez. Görüntüleyici yalnız aynı girdiye bağlı kaynak durumunu
+gösterir. Canlıya yayın ayrı kullanıcı yetkisi gerektirir.

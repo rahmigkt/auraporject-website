@@ -1,0 +1,283 @@
+{
+  "schema": "aura.hardware-cad-source-audit/1",
+  "reviewed_at": "2026-10-23T23:45:39.292126+00:00",
+  "denetci": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "parent_head": "663644f2ce260a4b85fb1ba1bcc6045e5733574b",
+  "input_sha256": "52164bdd1442d900a44a1670c612384c329c9ac3d5ce020a56abb3075c565e12",
+  "production_approved": false,
+  "real_hardware_motion_verified": false,
+  "actual_manufacturer_cad_downloaded": true,
+  "actual_cad_format": "DXF AC1015 ACIS 3DSOLID; 6 entities; units header4/mm",
+  "cadquery_hardware_imported": false,
+  "hardware_motion_rerun": false,
+  "intake_result": {
+    "schema": "aura.hardware-cad-intake/1",
+    "production_approved": false,
+    "real_hardware_motion_verified": false,
+    "members": [
+      {
+        "expected_product": "9221528",
+        "status": "blocked",
+        "reasons": [
+          "product_code_mismatch",
+          "unsupported_cad_format_requires_qualified_conversion",
+          "sku_identity_verified_missing",
+          "mounting_datums_verified_missing",
+          "rigid_members_verified_missing",
+          "closed_stop_verified_missing",
+          "motion_law_verified_missing"
+        ],
+        "motion_verified": false
+      },
+      {
+        "expected_product": "71B3590",
+        "status": "blocked",
+        "reasons": [
+          "cad_file_missing",
+          "units_mm_verified_missing",
+          "local_use_permitted_missing",
+          "sku_identity_verified_missing",
+          "mounting_datums_verified_missing",
+          "rigid_members_verified_missing",
+          "closed_stop_verified_missing",
+          "motion_law_verified_missing"
+        ],
+        "motion_verified": false
+      },
+      {
+        "expected_product": "174H7100E",
+        "status": "blocked",
+        "reasons": [
+          "cad_file_missing",
+          "units_mm_verified_missing",
+          "local_use_permitted_missing",
+          "sku_identity_verified_missing",
+          "mounting_datums_verified_missing",
+          "rigid_members_verified_missing",
+          "closed_stop_verified_missing",
+          "motion_law_verified_missing"
+        ],
+        "motion_verified": false
+      }
+    ]
+  },
+  "source_report": {
+    "schema": "aura.hardware-source-review/1",
+    "input_sha256": "52164bdd1442d900a44a1670c612384c329c9ac3d5ce020a56abb3075c565e12",
+    "production_approved": false,
+    "real_hardware_motion_verified": false,
+    "status": "source_files_found_motion_unqualified",
+    "products": [
+      {
+        "product": "9221528",
+        "count": 4,
+        "found": "Üreticinin seçili ürün sayfasından 9221544_3d.zip indirildi: 6 ACIS 3DSOLID, mm birimi; STEP değil.",
+        "blocked": "Bağlantı 9221528 için verilmiş olsa da arşiv 9221544 kodunu taşıyor. İki ürünün 500 mm / 46 × 12,7 mm bilgileri uyuşuyor; bu tek başına SKU, datum ve hareket eşdeğerliği değildir. STEP seçim servisi güvenlik engeli verdi.",
+        "needed": "Seçili SKU için kullanılabilir STEP, ayrı sabit/ara/hareketli üyeler, montaj datumları, kapalı durdurucu ve 500 mm rayın kaynaklı hareket kanunu.",
+        "source": "https://shop.hettich.com/de_DE/p/9221528"
+      },
+      {
+        "product": "71B3590",
+        "count": 15,
+        "found": "Ürün koduyla eşleşen 3D DWG/DXF indirme bağlantıları bulundu; dosya sunucuları 403 döndürdü.",
+        "blocked": "Üretici STEP hizmeti, yasal şirket temsilcisi olarak şartların kabulünü istiyor; bu beyan verilmedi. Dosya veya gerçek bağlantı yörüngesi alınmadı.",
+        "needed": "Kullanımı izinli menteşe STEP dosyası, ayrı rijit üyeler ve üreticiye bağlı çok bağlantılı hareket / montaj referansı.",
+        "source": "https://www.blum.com/us/en/services/e-services/productdatabase/"
+      },
+      {
+        "product": "174H7100E",
+        "count": 15,
+        "found": "Ürün koduna bağlı DWG ve üreticinin 3D CAD seçim ekranı bulundu.",
+        "blocked": "Açık dosya bağlantısı 403 döndürdü; STEP hizmetinin şirket temsilcisi beyanı kabul edilmedi.",
+        "needed": "Kullanımı izinli seçili plaka STEP dosyası ve menteşe eşleştirme datumları.",
+        "source": "https://www.groheshop.com/blum/exzenter-kreuzmontageplatte-clip-top/706-0338"
+      }
+    ],
+    "comparison": "Önceki 40 ahşap parça / 392 işlem CAD karşılaştırması korunuyor. Bu araştırma metal donanım eklemedi, yeni bir gerçek donanım hareket testi üretmedi. Eksik veriler nedeniyle hareket onayı verilmedi.",
+    "artifacts": [
+      {
+        "name": "sources\\blum-service.html",
+        "bytes": 1120,
+        "sha256": "f451b7a42fc9a509818df3feb3b6229d4ae2675ae6217cd5240d7e6e05308783"
+      },
+      {
+        "name": "sources\\hettich-extracted\\9221544\\9221544_2D_front_view.dxf",
+        "bytes": 244157,
+        "sha256": "c110f27fcd8c7c4a478349463f2a29381e521595937c7b7c06567d9b4c3888a8"
+      },
+      {
+        "name": "sources\\hettich-extracted\\9221544\\9221544_2D_side_view.dxf",
+        "bytes": 269289,
+        "sha256": "9a7c04d334e22fd87c8ebf012dfe5347c6281783761bdd5374901d74f0734de8"
+      },
+      {
+        "name": "sources\\hettich-extracted\\9221544\\9221544_2D_top_view.dxf",
+        "bytes": 245092,
+        "sha256": "d9f20f8884f0dee3d01797f3c057075e6d10237e9127a5a9262e08d59dd9634e"
+      },
+      {
+        "name": "sources\\hettich-extracted\\9221544\\9221544_3D.dwg",
+        "bytes": 658736,
+        "sha256": "935293d4a714eca8aec2686b15a83f0f361c1cadd2958522e0f342dc30579e11"
+      },
+      {
+        "name": "sources\\hettich-extracted\\9221544\\9221544_3D.dxf",
+        "bytes": 696306,
+        "sha256": "649e867dea8c1617ecf76031e51e638eeff150b220eb64f4354555a346217008"
+      },
+      {
+        "name": "sources\\hettich-linked-9221544_3d.zip",
+        "bytes": 316992,
+        "sha256": "5e25fb9d0a51bb8223691feaeec944ba7b3cf1fdffd2a07dabb5a9bce7d37ea8"
+      },
+      {
+        "name": "sources\\hettich-product.html",
+        "bytes": 167054,
+        "sha256": "fce36d37c8b028f308cbecca1b7fdb2ae86ccb0ecbabd58fc51de27002b1bf2b"
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://web2.hettich.com/hbh/addon/cad/9221544_3d.zip",
+        "role": "selected product page actual CAD link"
+      },
+      {
+        "url": "https://shop.hettich.com/ph_EN/p/9221544",
+        "role": "same nominal dimensions, different SKU; not qualified equivalence"
+      }
+    ]
+  },
+  "native_test_scope": "One synthetic2x3x4 STEP imported into CadQuery and FCL BVH. This is an adapter control, not manufacturer geometry or wardrobe motion. WrongSKU/hash and missing qualification rejects.",
+  "retained_failures": [
+    "CUA initialization missing kernel assets; browser DOM read performed with existing Playwright/Chrome",
+    "Buller/SWS/direct Blum distributor CAD requests returned403; not bypassed",
+    "Hettich PARTcommunity service security block; not bypassed",
+    "Blum product CAD service requires company-representative acceptance; no such declaration was made",
+    "First native control temporarySTEP failed in sandboxTemp; moved control into writable ASCII workspace",
+    "First browser control Chrome path unset; pointed at existingChrome; no install",
+    "Second browser control loopback denied in sandbox; authorized local-only rerun",
+    "Audit helper invoked from worktree with primary-root-relative paths; corrected primary workspace cwd; no CAD result changed"
+  ],
+  "code_files": [
+    {
+      "path": "tools\\cad-fcl\\hardware-gate.py",
+      "sha256": "e174e1935448ba1f4732e47ed6ccf03e97ed2f9b1e1cd2b3d2c3cb76032104a0"
+    },
+    {
+      "path": "tools\\cad-fcl\\test-hardware-gate.py",
+      "sha256": "0ecb8a340efa05c4e98a1a45453ee56e73fd89e96718990d862fee664227a3ff"
+    },
+    {
+      "path": "assets\\forma\\production\\inspection-viewer.js",
+      "sha256": "0370084d5f45dbc68711fd0ddb4f4619eb1bf11074d2012783bc37e67da7f55e"
+    },
+    {
+      "path": "assets\\forma\\production\\hardware-source-validation.js",
+      "sha256": "db046028fc1c900a4d4b7016b540fe3981416122480f9e470bc547ed8e92756b"
+    },
+    {
+      "path": "tests\\hardware-source-check.mjs",
+      "sha256": "54899ba9dbf11d32c5438da5efe2395b41db66e258d9ad6d0dcb830bc3d5328d"
+    },
+    {
+      "path": "tests\\visual\\hardware-source-check.mjs",
+      "sha256": "47d628545faffc746b13de5b00d11680e2110ae0a3922cac96c8469e3e124329"
+    }
+  ],
+  "not_repeated": [
+    "392native stock cuts",
+    "445catalogue CSG",
+    "old H4/H5/E2 runs"
+  ],
+  "deployed": false,
+  "merged": false,
+  "producer_test_sha": "691672aa8399f22aee7e8a4ae22ca6c69e17edc0",
+  "checks": {
+    "synthetic_native_step_to_fcl": "passed; static adapter only",
+    "wrong_sku_hash_missing_qualification": "rejected",
+    "actual_manufacturer_acis_intake": "blocked; no motion simulation",
+    "same_input_and_scope_guards": "passed",
+    "versionmap": {
+      "pages": 16,
+      "stale": 0
+    },
+    "browser": {
+      "pass": true,
+      "widths": [
+        390,
+        1440
+      ],
+      "studio": {
+        "parts": 92,
+        "ops": 392,
+        "access": null,
+        "machined": null
+      },
+      "designer": [
+        {
+          "family": "storage",
+          "count": 93,
+          "envelope": {
+            "min_mm": [
+              -900,
+              0,
+              -300
+            ],
+            "max_mm": [
+              900,
+              2400,
+              335.988
+            ],
+            "xyz_mm": [
+              1800,
+              2400,
+              635.988
+            ]
+          },
+          "scene": {
+            "shown": 93,
+            "errors": [],
+            "bounds": {
+              "min": [
+                -900,
+                0,
+                -300
+              ],
+              "max": [
+                900,
+                2400,
+                335.9883117675781
+              ]
+            }
+          }
+        }
+      ],
+      "page_errors": [],
+      "downloads": [],
+      "source_preserved": true
+    }
+  },
+  "browser_artifacts": [
+    {
+      "path": "outputs\\hardware-cad\\browser-final\\browser-external.json",
+      "sha256": "aa7a29e5f523257069b26c2a8f39782575dfeb0cd0dae3610cbe0238d955c9e2"
+    },
+    {
+      "path": "outputs\\hardware-cad\\browser-final\\designer-bath-1440.png",
+      "sha256": "1ca2c523dc0b81f7398abe89f6f0ea23d5847852347aff5a8f502b857a520625"
+    },
+    {
+      "path": "outputs\\hardware-cad\\browser-final\\external-mismatch-1440.png",
+      "sha256": "cbfe665593fd24d7311a941ae5ea822e8d2aca94492420020b5d1ed9694f2ba0"
+    },
+    {
+      "path": "outputs\\hardware-cad\\browser-final\\external-studio-390.png",
+      "sha256": "cb2a06e3244fc9a747b8dee6aaa4ef05e51ed088648679c88b0fe610443553e8"
+    },
+    {
+      "path": "outputs\\hardware-cad\\browser-final\\hardware-sources-390.png",
+      "sha256": "4dc04dc506ff18a0823a5041a3c238645b9d459d0183c9b15932ddffab09056c"
+    }
+  ]
+}
