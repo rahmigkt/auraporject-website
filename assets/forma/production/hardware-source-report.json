@@ -8,15 +8,15 @@
     {
       "product": "9221528",
       "count": 4,
-      "found": "Üreticinin seçili ürün sayfasından 9221544_3d.zip indirildi: 6 ACIS 3DSOLID, mm birimi; STEP değil. Alternatif resmi CAD kataloğunda 9221528 / 500 mm STEP kaydı bulundu; dosya indirilemedi.",
-      "blocked": "Bağlantı 9221528 için verilmiş olsa da arşiv 9221544 kodunu taşıyor. İki ürünün 500 mm / 46 × 12,7 mm bilgileri uyuşuyor; bu tek başına SKU, datum ve hareket eşdeğerliği değildir. STEP seçim servisi güvenlik engeli verdi. Alternatif PartCommunity arayüzü de güvenlik engeli verdi. 450 mm topluluk modeli, farklı boy/SKU/provenans nedeniyle seçili ray yerine kullanılmadı.",
+      "found": "Üreticinin resmi toplu paketinden 9221544 STEP indirildi:6 geçerli CAD katısı. Seçili9221528 için ürün sayfası aynı9221544 CAD arşivini bağlıyor; nominal boy500 mm.",
+      "blocked": "SKU eşdeğerliği ve gerçek durdurucu/yörünge doğrulanmadı. Ayrı gardırop denemesinde ilk4 delik eşleşirken son CAD deliği mevcut tariften13 mm farklı; doğrudan uyum kabul edilmedi.",
       "needed": "Seçili SKU için kullanılabilir STEP, ayrı sabit/ara/hareketli üyeler, montaj datumları, kapalı durdurucu ve 500 mm rayın kaynaklı hareket kanunu.",
       "source": "https://shop.hettich.com/de_DE/p/9221528"
     },
     {
       "product": "71B3590",
       "count": 15,
-      "found": "Démos’un 71B3590 ürün sayfasına bağlı 361231 baytlık 3D DWG indirildi; SHA256 ve AC1018 DWG başlığı doğrulandı. STEP değil; iç katı geometri ve ürün datumları henüz çözümlenmedi.",
+      "found": "Démos’un 71B3590 ürün sayfasına bağlı 361231 baytlık 3D DWG indirildi; SHA256 ve AC1018 DWG başlığı doğrulandı. STEP değil; iç katı geometri ve ürün datumları henüz çözümlenmedi. Alternatif Hettich9071205 menteşe STEP dosyası da indirildi;52x5.5 düzeni CAD ve üretici çizimiyle kontrol edildi.",
       "blocked": "Yeni güvenilir dağıtıcı dosyası DWG biçiminde. Geçerli bir STEP dönüşümü, rijit üyeler ve gerçek hareket kanunu elde edilmedi. Önceki Blum temsilci beyanı/403 engelleri korunuyor.",
       "needed": "Kullanımı izinli menteşe STEP dosyası, ayrı rijit üyeler ve üreticiye bağlı çok bağlantılı hareket / montaj referansı.",
       "source": "https://www.demos-trade.hu/bl-71b3590-rautodo-inserta-csillap-110/"
@@ -24,13 +24,13 @@
     {
       "product": "174H7100E",
       "count": 15,
-      "found": "Ürün koduna bağlı DWG ve üreticinin 3D CAD seçim ekranı bulundu. Foussier seçili plaka grubunda iki CAD dokümanı listeliyor.",
+      "found": "Ürün koduna bağlı DWG ve üreticinin 3D CAD seçim ekranı bulundu. Foussier seçili plaka grubunda iki CAD dokümanı listeliyor. Alternatif Hettich9071575 taban STEP dosyası mevcut; özgünBlum parçasının yerine otomatik uygulanmadı.",
       "blocked": "Açık dosya bağlantısı 403 döndürdü; STEP hizmetinin şirket temsilcisi beyanı kabul edilmedi. Foussier CAD düğmesi hesap girişi istedi; dosya alınmadı.",
       "needed": "Kullanımı izinli seçili plaka STEP dosyası ve menteşe eşleştirme datumları.",
       "source": "https://www.groheshop.com/blum/exzenter-kreuzmontageplatte-clip-top/706-0338"
     }
   ],
-  "comparison": "Önceki 40 ahşap parça / 392 işlem CAD karşılaştırması korunuyor. Alternatif araştırmada 1 DWG indirildi, doğrulanmış STEP elde edilemedi. Gerçek metal üyeler gardıroba eklenmedi ve yeni donanım hareket testi yapılamadı; hareket/üretim onayı yok.",
+  "comparison": "Gerçek alternatif STEP katıları artık Donanım CAD denemesi sekmesinde incelenebilir. Bu ayrı nominal deneme, özgün gardırop deliklerini değiştirmez. Gerçek hareket/üretim onayı yok; önceki40ahşap/392işlem kanıtı kendi kapsamındadır.",
   "artifacts": [
     {
       "name": "sources\\blum-service.html",

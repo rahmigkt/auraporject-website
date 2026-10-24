@@ -1,0 +1,309 @@
+{
+  "schema": "aura.hardware-cad-assembly-audit/1",
+  "updated_at": "2026-10-24T00:35:28.865097+00:00",
+  "denetci": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "producer_test_sha": "81ab32231392c00a51ae062f7a472952fd51bc80",
+  "parent_sha": "1f9aaa49ecfefb23633bb8ea8867139f2bc641cf",
+  "production_approved": false,
+  "real_hardware_motion_verified": false,
+  "continuous_collision_verified": false,
+  "code_scope": "Real manufacturer STEP candidate placement, native six-pair BRep intersections, sampled mesh FCL diagnostics, read-only local viewer. Original design/recipe unchanged.",
+  "sources": [
+    {
+      "url": "https://shop.hettich.com/gb_EN/p/9071205",
+      "finding": "TH52x5.5, cup35/depth12.8,15-24mm,110deg,B12.5"
+    },
+    {
+      "url": "https://shop.hettich.com/gb_EN/p/9071575",
+      "finding": "37x32,D0,4.5x16 countersunk screw"
+    },
+    {
+      "url": "https://web2.hettich.com/hbh/addon/montage/300201_Distanz_B12_5_DE.pdf",
+      "finding": "Rendered primary drawing: D=C+B-A;C4.5/D0 foroverlay17"
+    },
+    {
+      "url": "https://catalog.hettich.com/General/TA_2025/de_DE/catalogs/TA_2025_de_DE/pdf/save/bk_24.pdf",
+      "finding": "Rendered printed22:9071205 TH52x5.5"
+    },
+    {
+      "url": "https://shop.hettich.com/sg_EN/p/9221544",
+      "finding": "Alternative500mm ray, not exact selected9221528. Source STEP native6solids."
+    }
+  ],
+  "findings": {
+    "ray_last_pilot_delta_mm": -13,
+    "ray_existing_last_mm": 496.3,
+    "ray_candidate_last_mm": 483.3,
+    "hinge_candidate": "9071205 +9071575",
+    "hinge_existing_fixing_mm": 45,
+    "hinge_candidate_fixing_mm": 52,
+    "hinge_cup_center_shift_mm": 1.5,
+    "drop_in_compatible": false,
+    "candidate9071223": "Source descriptionTB45 vs actual bulkCAD52; reject for45mm drilling authority.9071205 actual52 matchesTH52 source."
+  },
+  "native_checks": [
+    {
+      "hardware": "b3c1-idrawer1-runnerL-fixed",
+      "stock": "b3c1-spacerL",
+      "intersection_mm3": 0,
+      "cad_world_bbox": [
+        342.9999999,
+        114.15,
+        -259.5,
+        354.2,
+        159.85,
+        240.5
+      ],
+      "stock_world_bbox": [
+        318.0,
+        98.0,
+        -259.5,
+        343.0000000000014,
+        498.0,
+        260.5
+      ],
+      "scope": "One nominal trial pose versus unchanged original machining;not a qualified installation or motion defect"
+    },
+    {
+      "hardware": "b3c1-idrawer1-runnerL-inner",
+      "stock": "b3c1-idrawer1-box-sideL",
+      "intersection_mm3": 0,
+      "cad_world_bbox": [
+        346.6,
+        124.69723572496841,
+        -247.0,
+        355.7000001,
+        149.3027642750316,
+        240.5
+      ],
+      "stock_world_bbox": [
+        355.7,
+        110.0,
+        -257.5,
+        373.7,
+        279.0,
+        242.5
+      ],
+      "scope": "One nominal trial pose versus unchanged original machining;not a qualified installation or motion defect"
+    },
+    {
+      "hardware": "b3c1-idrawer1-runnerR-fixed",
+      "stock": "b3c1-spacerR",
+      "intersection_mm3": 0,
+      "cad_world_bbox": [
+        845.8,
+        114.15,
+        -259.5,
+        857.0000001,
+        159.85,
+        240.5
+      ],
+      "stock_world_bbox": [
+        856.9999999999786,
+        98.0,
+        -259.5,
+        882.0,
+        498.0,
+        260.5
+      ],
+      "scope": "One nominal trial pose versus unchanged original machining;not a qualified installation or motion defect"
+    },
+    {
+      "hardware": "b1c1-door1-hinge1-sensys",
+      "stock": "b1c1-door1",
+      "intersection_mm3": 671.7942290006921,
+      "cad_world_bbox": [
+        -898.2500059999999,
+        146.4009824594832,
+        211.0305709055161,
+        -859.4999999,
+        213.599003713934,
+        294.80000010000003
+      ],
+      "stock_world_bbox": [
+        -899.0,
+        80.0,
+        282.0,
+        -301.0,
+        2399.0,
+        300.0
+      ],
+      "scope": "One nominal trial pose versus unchanged original machining;not a qualified installation or motion defect"
+    },
+    {
+      "hardware": "b1c1-door1-hinge1-sensys",
+      "stock": "m1-side-L",
+      "intersection_mm3": 5638.947855533551,
+      "cad_world_bbox": [
+        -898.2500059999999,
+        146.4009824594832,
+        211.0305709055161,
+        -859.4999999,
+        213.599003713934,
+        294.80000010000003
+      ],
+      "stock_world_bbox": [
+        -900.0,
+        80.0,
+        -299.95,
+        -882.0,
+        2400.0,
+        280.55
+      ],
+      "scope": "One nominal trial pose versus unchanged original machining;not a qualified installation or motion defect"
+    },
+    {
+      "hardware": "b1c1-door1-hinge1-plate",
+      "stock": "m1-side-L",
+      "intersection_mm3": 0,
+      "cad_world_bbox": [
+        -882.0,
+        152.3434978127129,
+        220.9,
+        -875.5999999999999,
+        207.6565021872871,
+        271.90000010000006
+      ],
+      "stock_world_bbox": [
+        -900.0,
+        80.0,
+        -299.95,
+        -882.0,
+        2400.0,
+        280.55
+      ],
+      "scope": "One nominal trial pose versus unchanged original machining;not a qualified installation or motion defect"
+    }
+  ],
+  "tests": {
+    "scope_and_negative": "tests/hardware-trial-check.mjs PASS; exact design/recipe binding, invalid approval and malformed mesh rejection",
+    "source_gate": "hardware-source-check PASS",
+    "baseline_binding": "external-validation-check PASS",
+    "browser": {
+      "pass": true,
+      "widths": [
+        390,
+        1440
+      ],
+      "hardware_trial": {
+        "instances": 82,
+        "local_only": true,
+        "assumed_travel_mm": 50,
+        "real_motion_verified": false
+      },
+      "studio": {
+        "parts": 92,
+        "ops": 392,
+        "access": null,
+        "machined": null
+      },
+      "designer": [
+        {
+          "family": "storage",
+          "count": 93,
+          "envelope": {
+            "min_mm": [
+              -900,
+              0,
+              -300
+            ],
+            "max_mm": [
+              900,
+              2400,
+              335.988
+            ],
+            "xyz_mm": [
+              1800,
+              2400,
+              635.988
+            ]
+          },
+          "scene": {
+            "shown": 93,
+            "errors": [],
+            "bounds": {
+              "min": [
+                -900,
+                0,
+                -300
+              ],
+              "max": [
+                900,
+                2400,
+                335.9883117675781
+              ]
+            }
+          }
+        }
+      ],
+      "page_errors": [],
+      "downloads": [],
+      "source_preserved": true
+    },
+    "version_maps": "16pages/stale0",
+    "syntax_diff": "node syntax andgitdiffcheck passed",
+    "fcl_positive_control": "Actual STEP mesh shifted2mm into receiving coupon detected contact",
+    "sampled_poses_mm": [
+      0,
+      50,
+      100,
+      200,
+      300,
+      400,
+      500
+    ],
+    "native_scope": "Sixselectedpairs only.3runner pairs0volume.2hingepairs positive inunqualifiedpose.1platepair0.",
+    "expensive_jobs": "No392cut or445model rerun"
+  },
+  "retained_failures": [
+    {
+      "failure": "First general cq.Matrix transformShape rejected nonorthogonalGTrsf",
+      "resolution": "Proper rigid gp_Trsf, transformed BRep vs tessellated world bbox crosscheck<0.2mm; thresholdnotrelaxed."
+    },
+    {
+      "failure": "Rounded displayproxy introduced0.05mm raydatumerror and false volumepenetration",
+      "resolution": "Receiving plane from actual support stock face and pilotcenter, old results retained underbefore-actual-face-correction/."
+    }
+  ],
+  "limits": [
+    "Ray0..500travel/carrierhalf-speed are assumptions, not qualified stroke/closedstop/source member law.",
+    "Hinge singlefusedsolid remains static; no actualfourbar/continuouscollision approval.",
+    "Meshsurfacecontact is notnative volume penetration.",
+    "Unchanged old bores are incompatible with candidate; no automatic new machining.",
+    "No allparts motion, metalselfcontact, load, torque, wall/sitetest/physicalprototype approval.",
+    "Raw manufacturerCAD andlocalmeshes remain outsideGit; no live deployment."
+  ],
+  "artifacts": [
+    {
+      "path": "outputs/hardware-cad-assembly/report.json",
+      "bytes": 35164,
+      "sha256": "1f95c1307d470ba7d28ef67b911c753ef585642f11a8b7f4bc815777bacdf269"
+    },
+    {
+      "path": "outputs/hardware-cad-assembly/native-intersections.json",
+      "bytes": 3134,
+      "sha256": "de7a397080dbfcf56aa0cb27e4cb04bae3cd1c2c4fe30a868de575fe83c51c56"
+    },
+    {
+      "path": "outputs/hardware-cad-assembly/preview.local.json",
+      "bytes": 24056367,
+      "sha256": "e6fc7f9637a03809f6275a3a0af2e6e731d1f6e0aef40596f53bc3a30998690f"
+    },
+    {
+      "path": "outputs/hardware-cad-assembly/browser-final/browser-external.json",
+      "bytes": 970,
+      "sha256": "cbbd09385e9a466173717cac3eb4bf546fa84c0e2e9a25521f41b26bd4967b3e"
+    },
+    {
+      "path": "outputs/hardware-cad-assembly/before-actual-face-correction/report.json",
+      "bytes": 27534,
+      "sha256": "384d0f1501dc1f7bf943724aba9c2f5422c8fdc973cef861f99e82165b6c8760"
+    },
+    {
+      "path": "outputs/hardware-cad-assembly/before-actual-face-correction/native-intersections.json",
+      "bytes": 3195,
+      "sha256": "ed45fbc60ffcc2e3010d4650b42e3c9700b9688212a2f0170bfcf706b86200c4"
+    }
+  ]
+}
