@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-24",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "producer_test_sha": "9022af601ced989b913edd086d82facf696237ff",
+  "defect": "Process-story material resolver selected a dormant paint colour before the selected wood surface; WOODS uses base, not hex.",
+  "fix": "Resolve explicit per-part material then active surface first. Wood/veneer uses species base and stain mixed in Three linear colour space, matching native scene convention. Preserve lacquer, stone, glass and metal selection. No source design mutation.",
+  "validation": [
+    "Targeted active wood/veneer with stale paint and stain, explicit lacquer/per-part override/stone/glass/metal and immutable source checks",
+    "Existing story-model and five-family transfer checks",
+    "18 version maps stale0, diff-check",
+    "Actual private local wardrobe film: 6 scenes/56 visible parts, 30.030799 seconds, 1280x720 WebM. Visual corrected brown surface, before-final room and decoded final reference verified; local draft save/download. Raw input and customer media excluded from Git."
+  ],
+  "historical_failures": [
+    "First recording used dormant paint and was discarded; local screenshot retained",
+    "Initial final seek screenshot captured old frame while decoder sought; next decoded frame verified final reference",
+    "Unrelated root-directory test invocation failed to locate repository/tests; not counted passing, correct-worktree targeted checks had already passed"
+  ],
+  "no_live_release": true,
+  "no_posting": true,
+  "no_paid_operation": true,
+  "limits": [
+    "Flat representative material colours; no texture/photorealism parity claim",
+    "Representative room, not measured room",
+    "Design animation, not recorded human workflow or manufacturing approval"
+  ]
+}
