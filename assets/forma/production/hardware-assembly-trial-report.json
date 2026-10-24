@@ -1,0 +1,1240 @@
+{
+  "schema": "aura.hardware-assembly-trial/1",
+  "input_sha256": "52164bdd1442d900a44a1670c612384c329c9ac3d5ce020a56abb3075c565e12",
+  "production_approved": false,
+  "real_hardware_motion_verified": false,
+  "status": "candidate_diagnostic_not_drop_in_compatible",
+  "sources": [
+    {
+      "sku": "9221544",
+      "sha256": "741d1b6ea51dd89658899bd3961b8a18f0ee45e7f213197a7a557c7b056a22b9",
+      "solids": 6,
+      "valid": true
+    },
+    {
+      "sku": "9071205",
+      "sha256": "27b7942fdf4dfdec04a84d4c59840835ddf2b9ef36c66b509a49ab7e6c656b33",
+      "solids": 1,
+      "valid": true
+    },
+    {
+      "sku": "9071575",
+      "sha256": "be0ac48b907e5951d52cf1c56a9586ee020d57160b103f7c37303caa8eebafb2",
+      "solids": 1,
+      "valid": true
+    }
+  ],
+  "stock_parts": 40,
+  "cad_instances": 42,
+  "queries": 149,
+  "native_feature_checks": {
+    "runner_selected_circular_axes_y_mm": [
+      27.0,
+      155.0,
+      251.0,
+      315.0,
+      473.3
+    ],
+    "hinge_fixing_axis_z_mm": [
+      -26.0,
+      26.0
+    ],
+    "hinge_fixing_pitch_mm": 52.0
+  },
+  "runner_fit": [
+    {
+      "runner": "b3c1-idrawer1-runnerL",
+      "current_sku": "9221528",
+      "candidate_sku": "9221544",
+      "actual_support_face_x_mm": 343.0,
+      "rounded_proxy_face_x_mm": 343.04999999999995,
+      "corrected_proxy_datum_delta_mm": -0.05,
+      "current_pilot_offsets_mm": [
+        37.0,
+        165.0,
+        261.0,
+        325.0,
+        496.3
+      ],
+      "cad_selected_hole_offsets_mm": [
+        37.0,
+        165.0,
+        261.0,
+        325.0,
+        483.3
+      ],
+      "delta_mm": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -13.0
+      ],
+      "scope": "Native circular mounting axes mapped with nominal cabinet datum; not closed stop qualification",
+      "drop_in_compatible": false
+    },
+    {
+      "runner": "b3c1-idrawer1-runnerR",
+      "current_sku": "9221528",
+      "candidate_sku": "9221544",
+      "actual_support_face_x_mm": 857.0,
+      "rounded_proxy_face_x_mm": 857.0500000000001,
+      "corrected_proxy_datum_delta_mm": -0.05,
+      "current_pilot_offsets_mm": [
+        37.0,
+        165.0,
+        261.0,
+        325.0,
+        496.3
+      ],
+      "cad_selected_hole_offsets_mm": [
+        37.0,
+        165.0,
+        261.0,
+        325.0,
+        483.3
+      ],
+      "delta_mm": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -13.0
+      ],
+      "scope": "Native circular mounting axes mapped with nominal cabinet datum; not closed stop qualification",
+      "drop_in_compatible": false
+    },
+    {
+      "runner": "b3c1-idrawer2-runnerL",
+      "current_sku": "9221528",
+      "candidate_sku": "9221544",
+      "actual_support_face_x_mm": 343.0,
+      "rounded_proxy_face_x_mm": 343.04999999999995,
+      "corrected_proxy_datum_delta_mm": -0.05,
+      "current_pilot_offsets_mm": [
+        37.0,
+        165.0,
+        261.0,
+        325.0,
+        496.3
+      ],
+      "cad_selected_hole_offsets_mm": [
+        37.0,
+        165.0,
+        261.0,
+        325.0,
+        483.3
+      ],
+      "delta_mm": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -13.0
+      ],
+      "scope": "Native circular mounting axes mapped with nominal cabinet datum; not closed stop qualification",
+      "drop_in_compatible": false
+    },
+    {
+      "runner": "b3c1-idrawer2-runnerR",
+      "current_sku": "9221528",
+      "candidate_sku": "9221544",
+      "actual_support_face_x_mm": 857.0,
+      "rounded_proxy_face_x_mm": 857.0500000000001,
+      "corrected_proxy_datum_delta_mm": -0.05,
+      "current_pilot_offsets_mm": [
+        37.0,
+        165.0,
+        261.0,
+        325.0,
+        496.3
+      ],
+      "cad_selected_hole_offsets_mm": [
+        37.0,
+        165.0,
+        261.0,
+        325.0,
+        483.3
+      ],
+      "delta_mm": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -13.0
+      ],
+      "scope": "Native circular mounting axes mapped with nominal cabinet datum; not closed stop qualification",
+      "drop_in_compatible": false
+    }
+  ],
+  "hinge_fit": [
+    {
+      "hinge": "b1c1-door1-hinge1",
+      "candidate": "9071205 + 9071575",
+      "cup_world_mm": [
+        -877.0,
+        180.0,
+        282.0
+      ],
+      "trial_cup_edge_mm": 4.5,
+      "trial_overlay_mm": 17,
+      "trial_plate_distance_mm": 0,
+      "old_fixing_pitch_mm": 45,
+      "new_fixing_pitch_mm": 52,
+      "old_mounting_holes_mm": 5,
+      "new_plate_screw_mm": 4.5,
+      "drop_in_compatible": false,
+      "motion_verified": false,
+      "reason": "Different cup/pilot/plate machining; original stock has old holes. Source pose and four-bar law not qualified."
+    },
+    {
+      "hinge": "b1c1-door1-hinge2",
+      "candidate": "9071205 + 9071575",
+      "cup_world_mm": [
+        -877.0,
+        709.8,
+        282.0
+      ],
+      "trial_cup_edge_mm": 4.5,
+      "trial_overlay_mm": 17,
+      "trial_plate_distance_mm": 0,
+      "old_fixing_pitch_mm": 45,
+      "new_fixing_pitch_mm": 52,
+      "old_mounting_holes_mm": 5,
+      "new_plate_screw_mm": 4.5,
+      "drop_in_compatible": false,
+      "motion_verified": false,
+      "reason": "Different cup/pilot/plate machining; original stock has old holes. Source pose and four-bar law not qualified."
+    },
+    {
+      "hinge": "b1c1-door1-hinge3",
+      "candidate": "9071205 + 9071575",
+      "cup_world_mm": [
+        -877.0,
+        1239.5,
+        282.0
+      ],
+      "trial_cup_edge_mm": 4.5,
+      "trial_overlay_mm": 17,
+      "trial_plate_distance_mm": 0,
+      "old_fixing_pitch_mm": 45,
+      "new_fixing_pitch_mm": 52,
+      "old_mounting_holes_mm": 5,
+      "new_plate_screw_mm": 4.5,
+      "drop_in_compatible": false,
+      "motion_verified": false,
+      "reason": "Different cup/pilot/plate machining; original stock has old holes. Source pose and four-bar law not qualified."
+    },
+    {
+      "hinge": "b1c1-door1-hinge4",
+      "candidate": "9071205 + 9071575",
+      "cup_world_mm": [
+        -877.0,
+        1769.3,
+        282.0
+      ],
+      "trial_cup_edge_mm": 4.5,
+      "trial_overlay_mm": 17,
+      "trial_plate_distance_mm": 0,
+      "old_fixing_pitch_mm": 45,
+      "new_fixing_pitch_mm": 52,
+      "old_mounting_holes_mm": 5,
+      "new_plate_screw_mm": 4.5,
+      "drop_in_compatible": false,
+      "motion_verified": false,
+      "reason": "Different cup/pilot/plate machining; original stock has old holes. Source pose and four-bar law not qualified."
+    },
+    {
+      "hinge": "b1c1-door1-hinge5",
+      "candidate": "9071205 + 9071575",
+      "cup_world_mm": [
+        -877.0,
+        2299.0,
+        282.0
+      ],
+      "trial_cup_edge_mm": 4.5,
+      "trial_overlay_mm": 17,
+      "trial_plate_distance_mm": 0,
+      "old_fixing_pitch_mm": 45,
+      "new_fixing_pitch_mm": 52,
+      "old_mounting_holes_mm": 5,
+      "new_plate_screw_mm": 4.5,
+      "drop_in_compatible": false,
+      "motion_verified": false,
+      "reason": "Different cup/pilot/plate machining; original stock has old holes. Source pose and four-bar law not qualified."
+    },
+    {
+      "hinge": "b2c1-door1-hinge1",
+      "candidate": "9071205 + 9071575",
+      "cup_world_mm": [
+        277.0,
+        180.0,
+        282.0
+      ],
+      "trial_cup_edge_mm": 4.5,
+      "trial_overlay_mm": 17,
+      "trial_plate_distance_mm": 0,
+      "old_fixing_pitch_mm": 45,
+      "new_fixing_pitch_mm": 52,
+      "old_mounting_holes_mm": 5,
+      "new_plate_screw_mm": 4.5,
+      "drop_in_compatible": false,
+      "motion_verified": false,
+      "reason": "Different cup/pilot/plate machining; original stock has old holes. Source pose and four-bar law not qualified."
+    },
+    {
+      "hinge": "b2c1-door1-hinge2",
+      "candidate": "9071205 + 9071575",
+      "cup_world_mm": [
+        277.0,
+        709.8,
+        282.0
+      ],
+      "trial_cup_edge_mm": 4.5,
+      "trial_overlay_mm": 17,
+      "trial_plate_distance_mm": 0,
+      "old_fixing_pitch_mm": 45,
+      "new_fixing_pitch_mm": 52,
+      "old_mounting_holes_mm": 5,
+      "new_plate_screw_mm": 4.5,
+      "drop_in_compatible": false,
+      "motion_verified": false,
+      "reason": "Different cup/pilot/plate machining; original stock has old holes. Source pose and four-bar law not qualified."
+    },
+    {
+      "hinge": "b2c1-door1-hinge3",
+      "candidate": "9071205 + 9071575",
+      "cup_world_mm": [
+        277.0,
+        1239.5,
+        282.0
+      ],
+      "trial_cup_edge_mm": 4.5,
+      "trial_overlay_mm": 17,
+      "trial_plate_distance_mm": 0,
+      "old_fixing_pitch_mm": 45,
+      "new_fixing_pitch_mm": 52,
+      "old_mounting_holes_mm": 5,
+      "new_plate_screw_mm": 4.5,
+      "drop_in_compatible": false,
+      "motion_verified": false,
+      "reason": "Different cup/pilot/plate machining; original stock has old holes. Source pose and four-bar law not qualified."
+    },
+    {
+      "hinge": "b2c1-door1-hinge4",
+      "candidate": "9071205 + 9071575",
+      "cup_world_mm": [
+        277.0,
+        1769.3,
+        282.0
+      ],
+      "trial_cup_edge_mm": 4.5,
+      "trial_overlay_mm": 17,
+      "trial_plate_distance_mm": 0,
+      "old_fixing_pitch_mm": 45,
+      "new_fixing_pitch_mm": 52,
+      "old_mounting_holes_mm": 5,
+      "new_plate_screw_mm": 4.5,
+      "drop_in_compatible": false,
+      "motion_verified": false,
+      "reason": "Different cup/pilot/plate machining; original stock has old holes. Source pose and four-bar law not qualified."
+    },
+    {
+      "hinge": "b2c1-door1-hinge5",
+      "candidate": "9071205 + 9071575",
+      "cup_world_mm": [
+        277.0,
+        2299.0,
+        282.0
+      ],
+      "trial_cup_edge_mm": 4.5,
+      "trial_overlay_mm": 17,
+      "trial_plate_distance_mm": 0,
+      "old_fixing_pitch_mm": 45,
+      "new_fixing_pitch_mm": 52,
+      "old_mounting_holes_mm": 5,
+      "new_plate_screw_mm": 4.5,
+      "drop_in_compatible": false,
+      "motion_verified": false,
+      "reason": "Different cup/pilot/plate machining; original stock has old holes. Source pose and four-bar law not qualified."
+    },
+    {
+      "hinge": "b3c1-door1-hinge1",
+      "candidate": "9071205 + 9071575",
+      "cup_world_mm": [
+        323.0,
+        180.0,
+        282.0
+      ],
+      "trial_cup_edge_mm": 4.5,
+      "trial_overlay_mm": 17,
+      "trial_plate_distance_mm": 0,
+      "old_fixing_pitch_mm": 45,
+      "new_fixing_pitch_mm": 52,
+      "old_mounting_holes_mm": 5,
+      "new_plate_screw_mm": 4.5,
+      "drop_in_compatible": false,
+      "motion_verified": false,
+      "reason": "Different cup/pilot/plate machining; original stock has old holes. Source pose and four-bar law not qualified."
+    },
+    {
+      "hinge": "b3c1-door1-hinge2",
+      "candidate": "9071205 + 9071575",
+      "cup_world_mm": [
+        323.0,
+        709.8,
+        282.0
+      ],
+      "trial_cup_edge_mm": 4.5,
+      "trial_overlay_mm": 17,
+      "trial_plate_distance_mm": 0,
+      "old_fixing_pitch_mm": 45,
+      "new_fixing_pitch_mm": 52,
+      "old_mounting_holes_mm": 5,
+      "new_plate_screw_mm": 4.5,
+      "drop_in_compatible": false,
+      "motion_verified": false,
+      "reason": "Different cup/pilot/plate machining; original stock has old holes. Source pose and four-bar law not qualified."
+    },
+    {
+      "hinge": "b3c1-door1-hinge3",
+      "candidate": "9071205 + 9071575",
+      "cup_world_mm": [
+        323.0,
+        1239.5,
+        282.0
+      ],
+      "trial_cup_edge_mm": 4.5,
+      "trial_overlay_mm": 17,
+      "trial_plate_distance_mm": 0,
+      "old_fixing_pitch_mm": 45,
+      "new_fixing_pitch_mm": 52,
+      "old_mounting_holes_mm": 5,
+      "new_plate_screw_mm": 4.5,
+      "drop_in_compatible": false,
+      "motion_verified": false,
+      "reason": "Different cup/pilot/plate machining; original stock has old holes. Source pose and four-bar law not qualified."
+    },
+    {
+      "hinge": "b3c1-door1-hinge4",
+      "candidate": "9071205 + 9071575",
+      "cup_world_mm": [
+        323.0,
+        1769.3,
+        282.0
+      ],
+      "trial_cup_edge_mm": 4.5,
+      "trial_overlay_mm": 17,
+      "trial_plate_distance_mm": 0,
+      "old_fixing_pitch_mm": 45,
+      "new_fixing_pitch_mm": 52,
+      "old_mounting_holes_mm": 5,
+      "new_plate_screw_mm": 4.5,
+      "drop_in_compatible": false,
+      "motion_verified": false,
+      "reason": "Different cup/pilot/plate machining; original stock has old holes. Source pose and four-bar law not qualified."
+    },
+    {
+      "hinge": "b3c1-door1-hinge5",
+      "candidate": "9071205 + 9071575",
+      "cup_world_mm": [
+        323.0,
+        2299.0,
+        282.0
+      ],
+      "trial_cup_edge_mm": 4.5,
+      "trial_overlay_mm": 17,
+      "trial_plate_distance_mm": 0,
+      "old_fixing_pitch_mm": 45,
+      "new_fixing_pitch_mm": 52,
+      "old_mounting_holes_mm": 5,
+      "new_plate_screw_mm": 4.5,
+      "drop_in_compatible": false,
+      "motion_verified": false,
+      "reason": "Different cup/pilot/plate machining; original stock has old holes. Source pose and four-bar law not qualified."
+    }
+  ],
+  "sampled_linear_stress": [
+    {
+      "assumed_translation_mm": 0,
+      "contacts": [
+        {
+          "hardware": "b3c1-idrawer1-runnerL-fixed",
+          "stock": "b3c1-spacerL"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerL-inner",
+          "stock": "b3c1-idrawer1-box-sideL"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-fixed",
+          "stock": "b3c1-spacerR"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-inner",
+          "stock": "b3c1-idrawer1-box-sideR"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-fixed",
+          "stock": "b3c1-spacerL"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-inner",
+          "stock": "b3c1-idrawer2-box-sideL"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-fixed",
+          "stock": "b3c1-spacerR"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-inner",
+          "stock": "b3c1-idrawer2-box-sideR"
+        },
+        {
+          "hardware": "b1c1-door1-hinge1-sensys",
+          "stock": "m1-side-L"
+        },
+        {
+          "hardware": "b1c1-door1-hinge1-sensys",
+          "stock": "b1c1-door1"
+        },
+        {
+          "hardware": "b1c1-door1-hinge1-plate",
+          "stock": "m1-side-L"
+        },
+        {
+          "hardware": "b1c1-door1-hinge2-sensys",
+          "stock": "m1-side-L"
+        },
+        {
+          "hardware": "b1c1-door1-hinge2-sensys",
+          "stock": "b1c1-door1"
+        },
+        {
+          "hardware": "b1c1-door1-hinge2-plate",
+          "stock": "m1-side-L"
+        },
+        {
+          "hardware": "b1c1-door1-hinge3-sensys",
+          "stock": "m1-side-L"
+        },
+        {
+          "hardware": "b1c1-door1-hinge3-sensys",
+          "stock": "b1c1-door1"
+        },
+        {
+          "hardware": "b1c1-door1-hinge3-plate",
+          "stock": "m1-side-L"
+        },
+        {
+          "hardware": "b1c1-door1-hinge4-sensys",
+          "stock": "m1-side-L"
+        },
+        {
+          "hardware": "b1c1-door1-hinge4-sensys",
+          "stock": "b1c1-door1"
+        },
+        {
+          "hardware": "b1c1-door1-hinge4-plate",
+          "stock": "m1-side-L"
+        },
+        {
+          "hardware": "b1c1-door1-hinge5-sensys",
+          "stock": "m1-side-L"
+        },
+        {
+          "hardware": "b1c1-door1-hinge5-sensys",
+          "stock": "b1c1-door1"
+        },
+        {
+          "hardware": "b1c1-door1-hinge5-plate",
+          "stock": "m1-side-L"
+        },
+        {
+          "hardware": "b2c1-door1-hinge1-sensys",
+          "stock": "m1-side-R"
+        },
+        {
+          "hardware": "b2c1-door1-hinge1-sensys",
+          "stock": "b2c1-door1"
+        },
+        {
+          "hardware": "b2c1-door1-hinge1-plate",
+          "stock": "m1-side-R"
+        },
+        {
+          "hardware": "b2c1-door1-hinge2-sensys",
+          "stock": "m1-side-R"
+        },
+        {
+          "hardware": "b2c1-door1-hinge2-sensys",
+          "stock": "b2c1-door1"
+        },
+        {
+          "hardware": "b2c1-door1-hinge2-plate",
+          "stock": "m1-side-R"
+        },
+        {
+          "hardware": "b2c1-door1-hinge3-sensys",
+          "stock": "m1-side-R"
+        },
+        {
+          "hardware": "b2c1-door1-hinge3-sensys",
+          "stock": "b2c1-door1"
+        },
+        {
+          "hardware": "b2c1-door1-hinge3-sensys",
+          "stock": "b2c1-shelf3"
+        },
+        {
+          "hardware": "b2c1-door1-hinge3-plate",
+          "stock": "m1-side-R"
+        },
+        {
+          "hardware": "b2c1-door1-hinge3-plate",
+          "stock": "b2c1-shelf3"
+        },
+        {
+          "hardware": "b2c1-door1-hinge4-sensys",
+          "stock": "m1-side-R"
+        },
+        {
+          "hardware": "b2c1-door1-hinge4-sensys",
+          "stock": "b2c1-door1"
+        },
+        {
+          "hardware": "b2c1-door1-hinge4-plate",
+          "stock": "m1-side-R"
+        },
+        {
+          "hardware": "b2c1-door1-hinge5-sensys",
+          "stock": "m1-side-R"
+        },
+        {
+          "hardware": "b2c1-door1-hinge5-sensys",
+          "stock": "b2c1-door1"
+        },
+        {
+          "hardware": "b2c1-door1-hinge5-plate",
+          "stock": "m1-side-R"
+        },
+        {
+          "hardware": "b3c1-door1-hinge1-sensys",
+          "stock": "m2-side-L"
+        },
+        {
+          "hardware": "b3c1-door1-hinge1-sensys",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-door1-hinge1-plate",
+          "stock": "m2-side-L"
+        },
+        {
+          "hardware": "b3c1-door1-hinge2-sensys",
+          "stock": "m2-side-L"
+        },
+        {
+          "hardware": "b3c1-door1-hinge2-sensys",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-door1-hinge2-plate",
+          "stock": "m2-side-L"
+        },
+        {
+          "hardware": "b3c1-door1-hinge3-sensys",
+          "stock": "m2-side-L"
+        },
+        {
+          "hardware": "b3c1-door1-hinge3-sensys",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-door1-hinge3-plate",
+          "stock": "m2-side-L"
+        },
+        {
+          "hardware": "b3c1-door1-hinge4-sensys",
+          "stock": "m2-side-L"
+        },
+        {
+          "hardware": "b3c1-door1-hinge4-sensys",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-door1-hinge4-plate",
+          "stock": "m2-side-L"
+        },
+        {
+          "hardware": "b3c1-door1-hinge5-sensys",
+          "stock": "m2-side-L"
+        },
+        {
+          "hardware": "b3c1-door1-hinge5-sensys",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-door1-hinge5-plate",
+          "stock": "m2-side-L"
+        }
+      ],
+      "contact_count": 55
+    },
+    {
+      "assumed_translation_mm": 50,
+      "contacts": [
+        {
+          "hardware": "b3c1-idrawer1-runnerL-fixed",
+          "stock": "b3c1-spacerL"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerL-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerL-inner",
+          "stock": "b3c1-idrawer1-box-sideL"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-fixed",
+          "stock": "b3c1-spacerR"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-inner",
+          "stock": "b3c1-idrawer1-box-sideR"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-fixed",
+          "stock": "b3c1-spacerL"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-inner",
+          "stock": "b3c1-idrawer2-box-sideL"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-fixed",
+          "stock": "b3c1-spacerR"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-inner",
+          "stock": "b3c1-idrawer2-box-sideR"
+        }
+      ],
+      "contact_count": 12
+    },
+    {
+      "assumed_translation_mm": 100,
+      "contacts": [
+        {
+          "hardware": "b3c1-idrawer1-runnerL-fixed",
+          "stock": "b3c1-spacerL"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerL-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerL-inner",
+          "stock": "b3c1-idrawer1-box-sideL"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerL-carrier",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-fixed",
+          "stock": "b3c1-spacerR"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-inner",
+          "stock": "b3c1-idrawer1-box-sideR"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-carrier",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-fixed",
+          "stock": "b3c1-spacerL"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-inner",
+          "stock": "b3c1-idrawer2-box-sideL"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-carrier",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-fixed",
+          "stock": "b3c1-spacerR"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-inner",
+          "stock": "b3c1-idrawer2-box-sideR"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-carrier",
+          "stock": "b3c1-door1"
+        }
+      ],
+      "contact_count": 16
+    },
+    {
+      "assumed_translation_mm": 200,
+      "contacts": [
+        {
+          "hardware": "b3c1-idrawer1-runnerL-fixed",
+          "stock": "b3c1-spacerL"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerL-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerL-inner",
+          "stock": "b3c1-idrawer1-box-sideL"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerL-carrier",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-fixed",
+          "stock": "b3c1-spacerR"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-inner",
+          "stock": "b3c1-idrawer1-box-sideR"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-carrier",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-fixed",
+          "stock": "b3c1-spacerL"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-inner",
+          "stock": "b3c1-idrawer2-box-sideL"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-carrier",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-fixed",
+          "stock": "b3c1-spacerR"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-inner",
+          "stock": "b3c1-idrawer2-box-sideR"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-carrier",
+          "stock": "b3c1-door1"
+        }
+      ],
+      "contact_count": 16
+    },
+    {
+      "assumed_translation_mm": 300,
+      "contacts": [
+        {
+          "hardware": "b3c1-idrawer1-runnerL-fixed",
+          "stock": "b3c1-spacerL"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerL-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerL-inner",
+          "stock": "b3c1-idrawer1-box-sideL"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerL-carrier",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-fixed",
+          "stock": "b3c1-spacerR"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-inner",
+          "stock": "b3c1-idrawer1-box-sideR"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-carrier",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-fixed",
+          "stock": "b3c1-spacerL"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-inner",
+          "stock": "b3c1-idrawer2-box-sideL"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-carrier",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-fixed",
+          "stock": "b3c1-spacerR"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-inner",
+          "stock": "b3c1-idrawer2-box-sideR"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-carrier",
+          "stock": "b3c1-door1"
+        }
+      ],
+      "contact_count": 16
+    },
+    {
+      "assumed_translation_mm": 400,
+      "contacts": [
+        {
+          "hardware": "b3c1-idrawer1-runnerL-fixed",
+          "stock": "b3c1-spacerL"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerL-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerL-inner",
+          "stock": "b3c1-idrawer1-box-sideL"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerL-carrier",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-fixed",
+          "stock": "b3c1-spacerR"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-inner",
+          "stock": "b3c1-idrawer1-box-sideR"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-carrier",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-fixed",
+          "stock": "b3c1-spacerL"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-inner",
+          "stock": "b3c1-idrawer2-box-sideL"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-carrier",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-fixed",
+          "stock": "b3c1-spacerR"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-inner",
+          "stock": "b3c1-idrawer2-box-sideR"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-carrier",
+          "stock": "b3c1-door1"
+        }
+      ],
+      "contact_count": 16
+    },
+    {
+      "assumed_translation_mm": 500,
+      "contacts": [
+        {
+          "hardware": "b3c1-idrawer1-runnerL-fixed",
+          "stock": "b3c1-spacerL"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerL-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerL-inner",
+          "stock": "b3c1-idrawer1-box-sideL"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerL-carrier",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-fixed",
+          "stock": "b3c1-spacerR"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-inner",
+          "stock": "b3c1-idrawer1-box-sideR"
+        },
+        {
+          "hardware": "b3c1-idrawer1-runnerR-carrier",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-fixed",
+          "stock": "b3c1-spacerL"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-inner",
+          "stock": "b3c1-idrawer2-box-sideL"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerL-carrier",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-fixed",
+          "stock": "b3c1-spacerR"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-inner",
+          "stock": "b3c1-door1"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-inner",
+          "stock": "b3c1-idrawer2-box-sideR"
+        },
+        {
+          "hardware": "b3c1-idrawer2-runnerR-carrier",
+          "stock": "b3c1-door1"
+        }
+      ],
+      "contact_count": 16
+    }
+  ],
+  "actual_mesh_positive_control": true,
+  "continuous_collision_verified": false,
+  "limits": [
+    "9221544 is an alternative SKU, not automatically9221528.",
+    "Ray member translation0..500 and carrier half-travel are diagnostic assumptions, not manufacturer kinematics.",
+    "Hinge STEP is a single fused solid; pose/source datums and real four-bar trajectory remain unqualified.",
+    "Contacts are mesh surface contacts, not measured penetration volume or certified defects.",
+    "Original40stock meshes retain old machining; different hardware requires a new qualified recipe.",
+    "No load, fastener torque, physical prototype, continuous collision or production approval."
+  ],
+  "native_nominal_intersections": [
+    {
+      "hardware": "b3c1-idrawer1-runnerL-fixed",
+      "stock": "b3c1-spacerL",
+      "intersection_mm3": 0,
+      "cad_world_bbox": [
+        342.9999999,
+        114.15,
+        -259.5,
+        354.2,
+        159.85,
+        240.5
+      ],
+      "stock_world_bbox": [
+        318.0,
+        98.0,
+        -259.5,
+        343.0000000000014,
+        498.0,
+        260.5
+      ],
+      "scope": "One nominal trial pose versus unchanged original machining;not a qualified installation or motion defect"
+    },
+    {
+      "hardware": "b3c1-idrawer1-runnerL-inner",
+      "stock": "b3c1-idrawer1-box-sideL",
+      "intersection_mm3": 0,
+      "cad_world_bbox": [
+        346.6,
+        124.69723572496841,
+        -247.0,
+        355.7000001,
+        149.3027642750316,
+        240.5
+      ],
+      "stock_world_bbox": [
+        355.7,
+        110.0,
+        -257.5,
+        373.7,
+        279.0,
+        242.5
+      ],
+      "scope": "One nominal trial pose versus unchanged original machining;not a qualified installation or motion defect"
+    },
+    {
+      "hardware": "b3c1-idrawer1-runnerR-fixed",
+      "stock": "b3c1-spacerR",
+      "intersection_mm3": 0,
+      "cad_world_bbox": [
+        845.8,
+        114.15,
+        -259.5,
+        857.0000001,
+        159.85,
+        240.5
+      ],
+      "stock_world_bbox": [
+        856.9999999999786,
+        98.0,
+        -259.5,
+        882.0,
+        498.0,
+        260.5
+      ],
+      "scope": "One nominal trial pose versus unchanged original machining;not a qualified installation or motion defect"
+    },
+    {
+      "hardware": "b1c1-door1-hinge1-sensys",
+      "stock": "b1c1-door1",
+      "intersection_mm3": 671.7942290006921,
+      "cad_world_bbox": [
+        -898.2500059999999,
+        146.4009824594832,
+        211.0305709055161,
+        -859.4999999,
+        213.599003713934,
+        294.80000010000003
+      ],
+      "stock_world_bbox": [
+        -899.0,
+        80.0,
+        282.0,
+        -301.0,
+        2399.0,
+        300.0
+      ],
+      "scope": "One nominal trial pose versus unchanged original machining;not a qualified installation or motion defect"
+    },
+    {
+      "hardware": "b1c1-door1-hinge1-sensys",
+      "stock": "m1-side-L",
+      "intersection_mm3": 5638.947855533551,
+      "cad_world_bbox": [
+        -898.2500059999999,
+        146.4009824594832,
+        211.0305709055161,
+        -859.4999999,
+        213.599003713934,
+        294.80000010000003
+      ],
+      "stock_world_bbox": [
+        -900.0,
+        80.0,
+        -299.95,
+        -882.0,
+        2400.0,
+        280.55
+      ],
+      "scope": "One nominal trial pose versus unchanged original machining;not a qualified installation or motion defect"
+    },
+    {
+      "hardware": "b1c1-door1-hinge1-plate",
+      "stock": "m1-side-L",
+      "intersection_mm3": 0,
+      "cad_world_bbox": [
+        -882.0,
+        152.3434978127129,
+        220.9,
+        -875.5999999999999,
+        207.6565021872871,
+        271.90000010000006
+      ],
+      "stock_world_bbox": [
+        -900.0,
+        80.0,
+        -299.95,
+        -882.0,
+        2400.0,
+        280.55
+      ],
+      "scope": "One nominal trial pose versus unchanged original machining;not a qualified installation or motion defect"
+    }
+  ],
+  "datum_correction": {
+    "previous_trial": "before-actual-face-correction/",
+    "error_mm": 0.05,
+    "cause": "Rounded display proxy used instead of actual receiving stock face",
+    "corrected": true,
+    "scope": "Three selected runner/stock nominal native intersections now zero; not full assembly approval"
+  }
+}
