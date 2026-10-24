@@ -1,3 +1,4 @@
+import {validProductId} from './identity.js';
 // Design generation for every family: sample a style, propose diverse variants, explore neighbours, blend.
 import {rng, hash, clamp, lerp} from './rng.js';
 import {FAMILIES, familyOf} from './families.js';
@@ -10,10 +11,11 @@ const has = (catalog, key) => typeof key === 'string' && Object.prototype.hasOwn
 export function normalizeDesign(d = {}) {
   if (!d || typeof d !== 'object' || Array.isArray(d)) d = {};
   // The old bed-led bedroom set is no longer offered: its pieces open as RİTMO case goods.
-  if (d?.family === 'bedroom') d = {family: 'storage', kind: ['wardrobe', 'dresser', 'nightstand'].includes(d.kind) ? d.kind : 'wardrobe', style: d.style, seed: d.seed};
+  if (d?.family === 'bedroom') d = {productId:d.productId, family: 'storage', kind: ['wardrobe', 'dresser', 'nightstand'].includes(d.kind) ? d.kind : 'wardrobe', style: d.style, seed: d.seed};
   const fam = familyOf(d), style = has(fam.byId, d.style) ? d.style : 'japandi';
   const kind = has(fam.kinds, d.kind) ? d.kind : fam.defaultKind;
   const out = {schema: SCHEMA, family: fam.id, kind, style, seed: (d.seed >>> 0) || 1, params: fam.mod.normalize({...(d.params || {}), kind}), materials: fam.normalizeMaterials(d.materials || {})};
+  if(validProductId(d.productId))out.productId=d.productId;
   const ov = normalizeOverrides(d.overrides); if (ov.length) out.overrides = ov;
   return fam.couple ? fam.couple(out) : out;
 }

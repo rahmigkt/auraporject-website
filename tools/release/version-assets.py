@@ -95,7 +95,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
-    pages = sorted(list(ROOT.glob('*.html')) + list((ROOT / 'mizan').rglob('*.html')))
+    pages = sorted(list(ROOT.glob('*.html')) + list(ROOT.glob('*.php')) + list((ROOT / 'mizan').rglob('*.html')))
     changed = []
     total = 0
     for p in pages:
