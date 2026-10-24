@@ -1,0 +1,34 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {resolve} from 'node:path';
+import {createRequire} from 'node:module';
+const {chromium}=createRequire(import.meta.url)('C:/Users/User/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const base='http://127.0.0.1:51888',out=resolve('../../outputs/social-editor');mkdirSync(out,{recursive:true});
+const credentials=JSON.parse(readFileSync('../../work/social-editor-local-auth.json','utf8').replace(/^\uFEFF/,''));
+assert.equal((await fetch(base+'/sosyal-editor.php')).status,401);
+const bad=await fetch(base+'/sosyal-editor.php',{headers:{authorization:'Basic '+Buffer.from('editor:wrong').toString('base64')}});assert.equal(bad.status,401);
+const browser=await chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'});
+const results=[];
+try{for(const width of [1440,390]){
+ const context=await browser.newContext({httpCredentials:credentials,viewport:{width,height:960},isMobile:width===390,hasTouch:width===390,acceptDownloads:true});
+ const errors=[],external=[],writes=[];await context.route('**/*',r=>{const q=r.request();if(!q.url().startsWith(base+'/')&&!q.url().startsWith('blob:')){external.push(q.url());return r.abort()}if(q.method()!=='GET'){writes.push(q.url());return r.abort()}return r.continue()});
+ const page=await context.newPage();page.setDefaultTimeout(45000);page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(base+'/sosyal-editor.php');await page.locator('#drafts').waitFor();console.log('READY '+width);
+ await page.evaluate(()=>{localStorage.setItem('aura-forma-project',JSON.stringify({items:[]}));localStorage.setItem('social-sentinel','keep')});
+ assert.equal(await page.locator('#channel option').count(),5);assert.equal(await page.locator('#channel option[value="x"]').count(),0);assert.equal(await page.locator('#channel option[value="tiktok"]').count(),0);
+ await page.selectOption('#market','SA');assert.equal(await page.locator('#caption').getAttribute('dir'),'rtl');await page.selectOption('#market','TR');
+ await page.locator('#sampleHome').click();await page.waitForFunction(()=>document.querySelectorAll('.shot').length===1);console.log('HOME '+width);
+ await page.locator('#render').click();await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('iznini'));assert.ok(await page.locator('#download').isHidden());
+ await page.locator('#rights').check();await page.locator('#render').click();await page.waitForFunction(()=>!document.querySelector('#video').hidden);await page.locator('#video').evaluate(v=>new Promise((res,rej)=>{if(v.readyState>=2)return res();v.onloadeddata=res;v.onerror=rej}));
+ let info=await page.locator('#video').evaluate(v=>({width:v.videoWidth,height:v.videoHeight,duration:v.duration,ready:v.readyState}));assert.equal(info.width,720);assert.equal(info.height,1280);console.log('RENDER '+width+' '+JSON.stringify(info));
+ const downloadPromise=page.waitForEvent('download');await page.locator('#download').click();const dl=await downloadPromise;const mediaPath=resolve(out,width+'-'+dl.suggestedFilename());await dl.saveAs(mediaPath);assert.ok(readFileSync(mediaPath).length>500);
+ await page.locator('#save').click();await page.waitForFunction(()=>document.querySelector('#drafts button')!==null);await page.reload();await page.getByRole('button',{name:'Taslağı aç',exact:true}).first().click();await page.waitForFunction(()=>!document.querySelector('#video').hidden);assert.ok(!await page.locator('#rights').isChecked());console.log('RELOAD '+width);
+ await page.locator('#clear').click();await page.locator('#media').setInputFiles({name:'fake.mp4',mimeType:'video/mp4',buffer:Buffer.from('<svg onload="alert(1)"></svg>')});await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('kabul edilir'));assert.equal(await page.locator('.shot').count(),0);
+ await page.locator('#media').setInputFiles(mediaPath);await page.waitForFunction(()=>document.querySelectorAll('.shot').length===1);assert.ok((await page.locator('.shot').textContent()).includes('.mp4')||(await page.locator('.shot').textContent()).includes('.webm'));console.log('UPLOAD '+width);
+ await page.selectOption('#format','square');await page.locator('#rights').check();await page.locator('#render').click();await page.waitForFunction(()=>!document.querySelector('#video').hidden);await page.locator('#video').evaluate(v=>new Promise(r=>{if(v.readyState>=2)return r();v.onloadeddata=r}));assert.equal(await page.locator('#video').evaluate(v=>v.videoWidth),720);assert.equal(await page.locator('#video').evaluate(v=>v.videoHeight),720);
+ await page.locator('#clear').click();await page.locator('#samplePiece').click();await page.waitForFunction(()=>document.querySelectorAll('.shot').length===1);console.log('FURNITURE '+width);
+ assert.equal(await page.evaluate(()=>localStorage.getItem('social-sentinel')),'keep');assert.equal(await page.evaluate(()=>localStorage.getItem('aura-forma-project')),JSON.stringify({items:[]}));
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));assert.ok(await page.locator('#publish').isDisabled());
+ await page.screenshot({path:resolve(out,'editor-'+width+'.png'),fullPage:true});assert.deepEqual(errors,[]);assert.deepEqual(external,[]);assert.deepEqual(writes,[]);
+ results.push({width,auth_unauthorized_401:true,ev_video:info,generated_file:mediaPath,local_video_import_and_square_render:true,furniture_scene:true,fake_mp4_rejected:true,draft_blob_reload:true,rights_recheck:true,unrelated_projects_preserved:true,pageerrors:0,external_requests:0,non_get_requests:0,overflow:false});writeFileSync(resolve(out,'browser-results.json'),JSON.stringify({passed:results.length,results},null,2));await context.close();console.log('PASS '+width);
+}}finally{await browser.close()}
