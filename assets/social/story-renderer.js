@@ -1,10 +1,9 @@
 import * as THREE from '../vendor/three.module.js?v=20261016b';
 import {buildMesh} from '../forma/build.js';
 import {normalizeDesign,compileDesign} from '../forma/generate.js';
-import {COLORS,WOODS,METALS} from '../forma/catalog.js';
+import {storyPartColor} from './story-material.js';
 import {validateRoom,visualPlacement} from './story-model.js';
 
-function colorFor(design,part){const spec=design.materials[part.mat]||design.materials.wood||design.materials.case||design.materials.base||{};return COLORS[spec.color]?.hex||WOODS[spec.species]?.hex||METALS[spec.finish]?.hex||(['metal','dark','hardware'].includes(part.mat)?'#565e59':part.mat==='glass'?'#b9d3cd':'#ccaf84');}
 export async function renderStoryViews(input,designs){
   const room=validateRoom(input);if(!designs.length||designs.length>4)throw Error('1–4 AURA mobilyası seçin.');
   const canvas=document.createElement('canvas');let renderer;
@@ -21,7 +20,7 @@ export async function renderStoryViews(input,designs){
       const materialMap=new Map();
       for(const part of compiled.parts){if(part.internal||part.planOnly)continue;const m=buildMesh(part);triangles+=m.indices.length/3;if(triangles>1200000)throw Error('Seçim önizleme ayrıntı sınırını aşıyor. Daha az mobilya seçin.');
         const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(m.positions,3));g.setAttribute('normal',new THREE.BufferAttribute(m.normals,3));g.setIndex(new THREE.BufferAttribute(m.indices,1));geometries.push(g);
-        const color=colorFor(design,part);if(!materialMap.has(color))materialMap.set(color,mat(color));const mesh=new THREE.Mesh(g,materialMap.get(color));mesh.position.set(...part.pos);mesh.rotation.set(...part.rot);mesh.userData.height=part.pos[1];group.add(mesh);meshes.push(mesh);
+        const color=storyPartColor(design,part);if(!materialMap.has(color))materialMap.set(color,mat(color));const mesh=new THREE.Mesh(g,materialMap.get(color));mesh.position.set(...part.pos);mesh.rotation.set(...part.rot);mesh.userData.height=part.pos[1];group.add(mesh);meshes.push(mesh);
       }
       if(!group.children.length)throw Error('Tasarımda gösterilecek parça yok.');
       const b=new THREE.Box3().setFromObject(group),s=b.getSize(new THREE.Vector3()),c=b.getCenter(new THREE.Vector3());sizes.push({width:s.x*1000,depth:s.z*1000,height:s.y*1000});group.position.set(-c.x,-b.min.y,-c.z);

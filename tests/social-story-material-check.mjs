@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {Color} from '../assets/vendor/three.core.js';
+import {storyPartColor} from '../assets/social/story-material.js';
+import {COLORS,STAINS,WOODS,STONES,GLASS,METALS} from '../assets/forma/catalog.js';
+const spec={surface:'wood',species:'ebonized',stain:'walnut',color:'turquoise'},d={materials:{case:spec}},before=JSON.stringify(d);
+const expected='#'+new Color(WOODS.ebonized.base).lerp(new Color(STAINS.walnut.hex),STAINS.walnut.k).getHexString();
+assert.equal(storyPartColor(d,{mat:'case'}),expected);assert.notEqual(expected,COLORS.turquoise.hex);assert.equal(JSON.stringify(d),before);
+assert.equal(storyPartColor(d,{mat:'case',matSpec:{surface:'lacquer',color:'turquoise'}}),COLORS.turquoise.hex);
+assert.equal(storyPartColor(d,{mat:'lac:turquoise'}),COLORS.turquoise.hex);
+for(const surface of ['wood','veneer'])assert.equal(storyPartColor({materials:{front:{...spec,surface}}},{mat:'front'}),expected);
+for(const [surface,key,val,want]of [['stone','stone','carrara',STONES.carrara.base],['glass','glass','clear',GLASS.clear.hex],['metal','metal','bronze',METALS.bronze.hex]])assert.equal(storyPartColor({materials:{front:{surface,[key]:val,color:'turquoise'}}},{mat:'front'}),want);
+console.log('PASS active wood/veneer and stain ignore dormant paint; explicit lacquer/part override/stone/glass/metal remain correct; source unchanged');
