@@ -1,0 +1,49 @@
+{
+  "producer_test_sha": "d6d64376e3a6385caec1817fb0fffbb48865c61e",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "scope": "account portal and server verified owner editor session",
+  "tests": {
+    "chrome_mock_auth": [
+      390,
+      1440
+    ],
+    "pageerror": 0,
+    "config_negative": true,
+    "verified_unverified_denied_ui": true,
+    "php_owner_checks": 7,
+    "php_gate_status": [
+      503,
+      303,
+      403
+    ],
+    "endpoint_status": [
+      303,
+      403,
+      401
+    ],
+    "account_sync_regressions": 16,
+    "version_maps": 18,
+    "stale": 0,
+    "php_lint": true
+  },
+  "limitations": [
+    "Google provider false on real settings read; admin panels not configured",
+    "Real OAuth callback and email link click not tested",
+    "OTP single request HTTP200 is acceptance, not inbox delivery",
+    "New page and server environment not deployed",
+    "Old Basic browser fixture superseded; unchanged video not rerun"
+  ],
+  "prior_failures": [
+    "CUA kernel assets os error3; admin interaction unavailable",
+    "sandbox Chrome ERR_NETWORK_ACCESS_DENIED",
+    "sandbox PHP inaccessible from escalated Chrome",
+    "first mock password assertion expected localized code but SDK returned message; message mapping corrected"
+  ],
+  "sha256": {
+    "assets/auth/config.js": "1385814583f3d584232e8cd74428fc4e25e1d74dae6f40db1cf45be076860beb",
+    "assets/auth/portal.js": "66fa55fa9492eafdee7240bec8f2295ddd06d17b9b2388446b23d8f733df0cc8",
+    "api/editor-auth.php": "1e335a7d393da12da88aa964e856150d70e9c523c33929628670e670393d320f",
+    "api/editor-session.php": "c97c584d404f307a9aac1775d16882efb7659bccec0a8ee6ac2b93c0595247cb"
+  }
+}

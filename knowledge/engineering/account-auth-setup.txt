@@ -1,0 +1,39 @@
+AURA HESAP GIRISI - YAYIN ONCESI KURULUM
+
+Bu dal PR279 sosyal editor dalinin uzerindedir. Canliya yayinlanmadi.
+Yeni hesap ekrani: hesap.html; editor girisi: hesap.html?next=sosyal-editor.php.
+E-posta baglantisi, e-posta/parola, kayit, parola sifirlama ve temel profil akislari bulunur.
+Google dugmesi Supabase gercek provider ayari kapaliyken devre disidir.
+
+SUNUCU
+HTTPS gereklidir. PHP cURL ve session destegi gerekir.
+AURA_EDITOR_OWNER_EMAIL ortam degiskenine kullanicinin onayladigi editor e-postasi yazilir.
+Bu deger Git'e veya tarayici koduna sabitlenmez. AURA_EDITOR_LOCAL yalniz loopback test icindir.
+Auth sunucusundan dogrulanmis e-posta ve kullanici kimligi kontrol edilir; profil metadata'sindaki rol yetki vermez.
+Token sadece sunucudaki oturumda saklanir; HttpOnly/SameSite cookie kullanilir.
+
+GOOGLE / SUPABASE PANELLERI - KULLANICI ADMIN OTURUMU GEREKIR
+Supabase: https://supabase.com/dashboard/project/xcsvobtewvjlnjeyqiux/auth/providers
+Google: https://console.cloud.google.com/auth/clients
+Google Web OAuth client redirect URI:
+https://xcsvobtewvjlnjeyqiux.supabase.co/auth/v1/callback
+Google client ID ve secret sadece Supabase Google provider paneline girilir; sohbete veya Git'e yazilmaz.
+Google consent app testing durumundaysa kullanici test kullanicisi olarak eklenmelidir.
+Supabase URL Configuration: Site URL https://auraproject.com.tr
+Redirect allowlist: https://auraproject.com.tr/hesap.html**
+Yerel test gerekiyorsa yalniz kullanilan loopback adresi icin http://127.0.0.1:51947/hesap.html** eklenir.
+Auth e-posta teslimi icin SMTP/domain ayarlari ve limitleri panelde kontrol edilir; ucretli servis acilmaz.
+Google provider acildiktan sonra gercek consent/callback ve e-posta linki ayni tarayicida uctan uca denenmelidir.
+
+GERCEK GONDERIM
+24 Ekim 2026: kullanicinin tek giris e-postasi istegi Supabase OTP ile bir kez gonderildi; HTTP200 {}.
+Yeni hesap sayfasi canlida olmadigindan redirect mevcut canli tasarla.html olarak secildi.
+HTTP200 teslim veya hesabin dogrulanmasi kaniti degildir. Tekrar gonderim yapilmadi.
+Google provider durum okumasinda false; Google ile gercek giris basarisi henuz yok.
+Tarayici kontrol araci baslatilamadigindan admin panellerinde degisiklik yapilmadi.
+
+TEST SINIRI
+390/1440 gercek Chrome + paketli Supabase SDK, Auth ag yanitlari sahtedir.
+OTP kayit/giris farki, PKCE, parola hata ve sifirlama istegi; dogrulanmamis/izinsiz/izinli devam kapisi kontrol edildi.
+Gercek Google OAuth, e-posta linki tiklama, SMTP teslim ve canli editor oturumu onayi yoktur.
+Eski Basic-auth browser fixture'i bu yeni dalda gecerli degildir; video motoru degismedi ve pahali video testi tekrarlanmadi.

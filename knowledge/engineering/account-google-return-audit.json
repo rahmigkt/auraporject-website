@@ -1,0 +1,42 @@
+{
+  "date_local": "2026-10-24",
+  "reviewer": "Codex",
+  "review_mode": "user_authorized_self_review",
+  "scope": "User-completed Google authentication followed by real local account and editor authorization verification; identity evidence retained outside Git",
+  "auth_code_source_sha": "d5dd380d1efd6930586060aba2e464ff7d283d3d",
+  "observed": {
+    "configured_owner_verified": true,
+    "continue_enabled": true,
+    "editor_loaded": true,
+    "editor_reload_loaded": true,
+    "account_to_editor_return": true,
+    "guest_http_status": 303,
+    "guest_location": "hesap.html?next=sosyal-editor.php",
+    "social_publish_button_disabled": true,
+    "social_accounts_connected": 0
+  },
+  "change": "Clarify that the unconnected account notice refers to social media, not the signed-in AURA account. No auth gate change.",
+  "checks": {
+    "php_gate_checks": 3,
+    "owner_checks": 7,
+    "social_model_regressions": true,
+    "version_maps": 18,
+    "stale": 0,
+    "diff_check": true,
+    "real_browser_ui": true
+  },
+  "auth_file_sha256": {
+    "api/editor-auth.php": "1e335a7d393da12da88aa964e856150d70e9c523c33929628670e670393d320f",
+    "api/editor-session.php": "c97c584d404f307a9aac1775d16882efb7659bccec0a8ee6ac2b93c0595247cb",
+    "assets/auth/portal.js": "66fa55fa9492eafdee7240bec8f2295ddd06d17b9b2388446b23d8f733df0cc8",
+    "assets/auth/config.js": "1385814583f3d584232e8cd74428fc4e25e1d74dae6f40db1cf45be076860beb"
+  },
+  "limits": [
+    "Local PHP environment only; production owner configuration and code release not performed",
+    "OAuth browser wire trace not captured; successful result observed after user authentication",
+    "Logout not invoked; user session preserved",
+    "Unchanged video recording tests not repeated",
+    "No social upload, publication, paid service, credential logging or secret export"
+  ],
+  "preserved_test_issue": "Coordinate scrolling was outside active viewport; no input occurred; screenshot inspected and End key used."
+}
