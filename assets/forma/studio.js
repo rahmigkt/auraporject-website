@@ -1081,7 +1081,7 @@ function openAccount(first = false) {
   const body = u ? `<h2>${L('account')}</h2><p class="f-lead">${esc(u.email)}</p><p class="f-note">${L('accountSaved')}</p>
       <div class="f-actions"><button class="f-secondary" data-auth="out">${L('signOut')}</button><button class="f-primary" data-auth="close">${L('continue')}</button></div>`
     : `<h2>${L(first ? 'welcomeTitle' : 'account')}</h2><p class="f-lead">${L('accountWhy')}</p>
-      <nav class="f-authtabs"><button class="f-link" data-auth="up" aria-pressed="true">${L('createAccount')}</button><button class="f-link" data-auth="in">${L('signIn')}</button></nav>
+      <p><a class="f-primary" href="hesap.html?next=tasarla.html">${state.lang==='tr'?'Google veya e-posta ile kolay giriş':'Continue with Google or email'}</a></p><nav class="f-authtabs"><button class="f-link" data-auth="up" aria-pressed="true">${L('createAccount')}</button><button class="f-link" data-auth="in">${L('signIn')}</button></nav>
       <div id="authForm">${form('up')}</div>
       <p class="f-note"><button class="f-link" data-auth="reset">${L('forgot')}</button></p>
       <div class="f-actions"><button class="f-secondary" data-auth="skip">${L('continueWithout')}</button></div>
@@ -1244,7 +1244,7 @@ function listen() {
 
 // ---- Events ----------------------------------------------------------------------------------
 function bindShell() {
-  $('#accountBtn').onclick = () => openAccount();
+  $('#accountBtn').onclick = () => location.assign('hesap.html?next=tasarla.html');
   
   renderAccountBtn();
   $('#lang').onchange = e => { state.lang = e.target.value; store.set('aura-forma-lang', state.lang); state.drawingCache = null; shell(); };
