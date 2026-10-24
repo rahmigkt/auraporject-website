@@ -9,7 +9,7 @@ for(const order of [[0],[0,1],[1,0],[1,0,2],[2,1,0]]){
  try{
   const pending=[],hosts=[],created=[];let current=null;
   const app={set innerHTML(value){current={innerHTML:'',id:hosts.length};hosts.push(current);}};
-  const ctx={state:{lang:'tr',tab:'parts',design:{family:'seating',materials:{}},sketch:false},viewer:null,sceneModule:null,
+  const ctx={state:{lang:'tr',tab:'parts',design:{family:'seating',materials:{}},sketch:false},viewer:null,sceneModule:null,stopLayoutObservation(){},watchVisualHeight:()=>()=>{},
    document:{documentElement:{}},UI_LANGS:{tr:'Türkçe'},L:s=>s,esc:s=>s,
    $:id=>id==='#app'?app:id==='#stage'?current:null,
    loadScene:()=>new Promise(resolve=>pending.push(resolve)),bindShell(){},shellNav(){},renderCaption(){},renderPanel(){},shown:()=>({}),showRoom(){},textileView(){}};

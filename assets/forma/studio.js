@@ -56,6 +56,16 @@ const state = {
 const L = k => t(k, state.lang);
 const N = entry => nm(entry, state.lang);
 let viewer = null, sceneModule = null;
+let stopLayoutObservation = () => {};
+function watchVisualHeight() {
+  const visual = document.querySelector('.f-visual'), layout = document.querySelector('.f-layout');
+  if (!visual || !layout) return () => {};
+  const sync = () => layout.style.setProperty('--f-visual-height', `${Math.ceil(visual.getBoundingClientRect().height)}px`);
+  sync();
+  if (typeof ResizeObserver === 'undefined') return () => {};
+  const observer = new ResizeObserver(sync); observer.observe(visual);
+  return () => observer.disconnect();
+}
 
 const compileOf = d => compileDesign(d);
 /** What the viewer shows: case goods may be shown with doors and drawers open (drawings and files stay closed). */
@@ -164,6 +174,7 @@ const bomOf = () => deliverables().bom;
 
 // ---- Layout --------------------------------------------------------------------------
 function shell() {
+  stopLayoutObservation();
   document.documentElement.lang = state.lang; document.documentElement.dir = state.lang === 'ar' ? 'rtl' : 'ltr';
   document.title = `AURA · ${L('title')}`;
   $('#app').innerHTML = `
@@ -205,6 +216,7 @@ function shell() {
     if (!viewer) host.innerHTML = `<p class="f-nogl">WebGL ${state.lang === 'tr' ? 'kullanılamıyor; teknik çizimler Teslim sekmesinde.' : 'is unavailable; technical drawings are in the Hand-off tab.'}</p>`;
     else { viewer.mode(state.sketch ? 'sketch' : 'render'); viewer.setDesign(shown(), state.design.materials); if (state.tab === 'team') showSeatingSet(); else if (state.room) showRoom(); }
   }).catch(() => { host.innerHTML = '<p class="f-nogl">WebGL</p>'; });
+  stopLayoutObservation = watchVisualHeight();
   bindShell(); shellNav();
   renderCaption(); renderPanel();
   if (state.textileView) textileView();
@@ -1150,7 +1162,13 @@ function familyStart(family, kind) {
   const k = FAMILIES[family].kinds[kind] ? kind : FAMILIES[family].defaultKind, list = startList(family, k), e = list.find(x => x.style === state.design.style) || list[0];
   return prev?.schema === SCHEMA && (!kind || prev.kind === kind) ? prev : e ? startDesign(e, family, k) : sample({family, style: state.design.style, kind, seed: state.design.seed});
 }
-function switchFamily(family, kind) { setDesign(familyStart(family, kind)); }
+function switchFamily(family, kind) {
+  const next = familyStart(family, kind);
+  // Choosing a different product family starts another project item. Only the
+  // explicit project Edit action may keep the selected item's identity.
+  state.editing = null; state.justAdded = false; saveProject();
+  setDesign(next);
+}
 const studioEnv = () => ({L, part: (g, k) => partName(g, k, state.lang), material: materialLabel, style: v => styleName(v, state.lang),
   startFamily: familyStart, forKind: designForKind, selCell, mattressTop: () => state.compiled.meta.mattressTop});
 function applyActions(actions) {
