@@ -1,3 +1,4 @@
+import {identifyDesign,designRevision} from './identity.js';
 import {openInspectionViewer} from './production/inspection-viewer.js';
 import {projectInspectionEnabled,openInspectionPdf} from './production/inspection-ui.js';
 import {machiningGeometryFiles} from './production/machined-geometry.js';
@@ -75,7 +76,7 @@ const focus = () => state.design.kind;
 
 // ---- Design state --------------------------------------------------------------
 function setDesign(next, {record = true, keepPanel = false, sync = true} = {}) {
-  next = normalizeDesign(next);
+  next = identifyDesign(normalizeDesign(next),state.design);
   // Bedroom set: when the piece in focus changes, the other pieces are re-proposed to match it.
   if (sync && record && next.family === 'bedroom' && state.design?.family === 'bedroom') {
     // Only a change to the focused piece's design language is proposed to the others (sizes stay per piece).
@@ -216,7 +217,8 @@ function shellNav() {
 
 function renderCaption() {
   const d = state.design, c = state.compiled, issues = issuesOf(d, c);
-  $('#eyebrow').textContent = `F-${String(d.seed % 100000).padStart(5, '0')} · ${L(state.sketch ? 'modeSketch' : 'modeRender')}`;
+  $('#eyebrow').textContent = `${d.productId||('F-'+String(d.seed % 100000).padStart(5,'0'))} · ${L(state.sketch ? 'modeSketch' : 'modeRender')}`;
+  $('#eyebrow').style.overflowWrap='anywhere';
   renderStartLabel();
   $('#designTitle').textContent = d.family === 'bedroom' ? (d.params.view === 'set' ? L('bedroomSet') : L(d.kind)) : L(d.family === 'seating' ? c.meta.kind : d.kind);
   $('#dims').textContent = L('designDimensions')+': '+ui().dims(c);
@@ -806,7 +808,7 @@ function deliverables() {
   state.drawingCache = {key, bom: b, get sheet() { return this._sheet ??= drawingSheet(state.compiled, sheetLabels(), {title: `${L(state.design.family === 'table' ? state.design.kind : state.compiled.meta.kind)} · ${styleName(state.design.style, state.lang)}`, style: styleName(state.design.style, state.lang), date: new Date().toISOString().slice(0, 10), id: projectId(), rows: specRows(b), link: state.sheetLink || null}); }};
   return state.drawingCache;
 }
-const projectId = () => `F-${String(state.design.seed % 100000).padStart(5, '0')}`;
+const projectId = () => state.design.productId || `F-${String(state.design.seed % 100000).padStart(5, '0')}`;
 
 function drawDeliverables() {
   fetch('api/forma-submit.php', {cache: 'no-store'}).then(r => r.json()).catch(() => ({available: false})).then(s => {
@@ -867,7 +869,7 @@ function sameDesign(d, kind) {
   }
   return d;
 }
-function startNew(d, note) { state.editing = null; state.justAdded = false; state.room = null; saveProject(); state.tab = 'parts'; setSketch(true); setDesign(d); feedback(note); }
+function startNew(d, note) { state.editing = null; state.justAdded = false; state.room = null; saveProject(); state.tab = 'parts'; setSketch(true); setDesign(identifyDesign({...d,productId:null})); feedback(note); }
 function projectPanel() {
   const items = state.project.items, d = state.design, fam = d.family;
   // Back on a design that is already in the project (undo, reopening): it is that item, not a new one.
@@ -896,7 +898,7 @@ function projectPanel() {
   ${editing && !changed ? technicalReviewHTML(editing) : ''}
   <div class="f-current"><div><b>${esc(itemName(d))}</b><small>${esc(styleName(d.style, state.lang))} · ${esc(fam === 'bedroom' ? L('setPiecesList') : itemDims(d))}</small></div>
   <button class="f-primary" data-act="add" ${editing && !changed ? 'disabled' : ''}>${editing ? (changed ? L('saveChanges') : L('inProject')) : L('addContinue')} ${editing && !changed ? '✓' : '+'}</button></div>
-  ${next}${list}${dimensions}<section data-model-inspection-entry><h3>Model ve montaj inceleyicisi · geçici</h3><button data-act="modelInspection">Bu modeli ve proje ürünlerini incele</button><p class="f-note">Dosya indirmeden 3B model, bütün parça ölçüleri ve mevcut montaj kayıtları. Eksik reçeteler onaylı sayılmaz.</p></section>${projectInspectionEnabled()?`<section data-temporary-inspection><h3>Geçici montaj incelemesi</h3><button data-act="currentInspectionPdf">Bu modeli incele / PDF indir</button><button data-act="inspectionPdf" ${items.length?'':'disabled'}>Projedeki ürünleri incele / PDF indir</button><p class="f-note">Projeye kaydedilmiş ürünler için bu tarayıcıda üretilir. Bu görünüm bağlantıdaki inceleme seçeneğiyle açılır; erişim yetkilendirmesi değildir. Gönderim yapılmaz.</p></section>`:''}${room}${send}`;
+  <section><p data-product-identity>${esc(d.productId||'')}</p><h3>${state.lang==='tr'?'Tasarımı aktar':'Transfer design'}</h3><button data-act="shareCurrent">${state.lang==='tr'?'Bu tasarımın bağlantısını al':'Get this design link'}</button><button data-act="exportCurrent">${state.lang==='tr'?'Bu tasarımı JSON olarak indir':'Download this design as JSON'}</button><button data-act="shareProject" ${items.length?'':'disabled'}>${state.lang==='tr'?'Proje bağlantısını al':'Get project link'}</button><p class="f-note">${state.lang==='tr'?'Bağlantı ölçü, düzen ve malzemenin şu anki kopyasını taşır. Sonraki değişiklikler için yeniden alın. Bağlantıyı verdiğiniz kişi tasarımı açabilir; kendiliğinden paylaşım yapılmaz.':'The link carries a snapshot of dimensions, layout and materials. Create a new link after changes. Anyone you give it to can open the design; nothing is sent automatically.'}</p></section>${next}${list}${dimensions}<section data-model-inspection-entry><h3>Model ve montaj inceleyicisi · geçici</h3><button data-act="modelInspection">Bu modeli ve proje ürünlerini incele</button><p class="f-note">Dosya indirmeden 3B model, bütün parça ölçüleri ve mevcut montaj kayıtları. Eksik reçeteler onaylı sayılmaz.</p></section>${projectInspectionEnabled()?`<section data-temporary-inspection><h3>Geçici montaj incelemesi</h3><button data-act="currentInspectionPdf">Bu modeli incele / PDF indir</button><button data-act="inspectionPdf" ${items.length?'':'disabled'}>Projedeki ürünleri incele / PDF indir</button><p class="f-note">Projeye kaydedilmiş ürünler için bu tarayıcıda üretilir. Bu görünüm bağlantıdaki inceleme seçeneğiyle açılır; erişim yetkilendirmesi değildir. Gönderim yapılmaz.</p></section>`:''}${room}${send}`;
 }
 
 function technicalReviewHTML(item) {
@@ -1019,7 +1021,26 @@ async function downloadMachiningProject(){
     feedback(state.lang==='tr'?'İnceleme dosyası hazır; imalat onayı değildir.':'Review file ready; not manufacturing approval.');
   }catch(error){feedback(String(error.message||error),'error');}finally{machiningDownloadBusy=false;}
 }
+async function transferDesign(project=false) {
+  try {
+    const revision=await designRevision(state.design);
+    const url=project?await projectLink(state.project.items,state.room,state.lang):await designLink(state.design,state.lang);
+    const modal=document.createElement('div');modal.className='f-modal';modal.setAttribute('role','dialog');modal.setAttribute('aria-label','Tasarım bağlantısı');
+    const box=document.createElement('div');box.className='f-modal-box';box.style.overflowWrap='anywhere';const h=document.createElement('h2');h.textContent=state.lang==='tr'?'Tasarım bağlantısı hazır':'Design link ready';
+    const note=document.createElement('p');note.textContent=state.lang==='tr'?'Bu bağlantı tasarımın anlık kopyasını içerir. Kopyalayıp bana veya editöre verebilirsin.':'This link contains a snapshot of the design. Copy it to the editor.';
+    const identity=document.createElement('p');identity.textContent=project?'Projedeki ürünlerin kimlikleri bağlantıda korunur.':`${state.design.productId} / ${revision}`;
+    const area=document.createElement('textarea');area.readOnly=true;area.value=url;area.rows=5;area.style.cssText='width:100%;box-sizing:border-box;resize:vertical;font:13px monospace;margin:12px 0';area.setAttribute('aria-label','Tam tasarım bağlantısı');
+    const copy=document.createElement('button');copy.textContent='Bağlantıyı kopyala';copy.onclick=async()=>{try{await navigator.clipboard.writeText(url);copy.textContent='Kopyalandı';}catch{area.focus();area.select();copy.textContent='Seçili bağlantıyı kopyalayın';}};
+    const editor=document.createElement('a');editor.textContent='Editörde bu kopyayı aç';editor.href='sosyal-editor.php'+new URL(url).hash;
+    const close=document.createElement('button');close.textContent='Kapat';close.onclick=()=>modal.remove();modal.onkeydown=e=>{if(e.key==='Escape')modal.remove()};
+    box.append(h,note,identity,area,copy,document.createElement('br'),editor,document.createElement('br'),close);modal.append(box);document.body.append(modal);area.focus();area.select();
+  }catch(e){feedback(String(e.message||e),'error')}
+}
 function projectAction(el) {
+  if(el.dataset.act==='shareCurrent')return transferDesign(false);
+  if(el.dataset.act==='shareProject')return transferDesign(true);
+  if(el.dataset.act==='exportCurrent'){download('AURA-tasarim.json',JSON.stringify(state.design,null,2),'application/json');return;}
+
   if(el.dataset.act==='modelInspection'){try{return openInspectionViewer([{id:'CURRENT',name:state.lang==='tr'?'Şimdiki tasarım':'Current design',qty:1,design:state.design},...state.project.items],{temporary:true});}catch(error){feedback(String(error.message||error),'error');return;}}
   if(el.dataset.act==='currentInspectionPdf')return openInspectionPdf([{id:'CURRENT',qty:1,design:state.design}]).catch(error=>feedback(String(error.message||error),'error'));
   if(el.dataset.act==='inspectionPdf')return openInspectionPdf(state.project.items).catch(error=>feedback(String(error.message||error),'error'));
@@ -1472,11 +1493,12 @@ function initialDesign() {
 
 window.formaDebug = {state, get viewer() { return viewer; }, projectPackage};
 const start = initialDesign();
-state.design = start.design; state.compiled = compileOf(state.design);
+state.design = identifyDesign(start.design); state.compiled = compileOf(state.design);
 store.set('aura-forma-design-' + state.design.family, state.design); store.set('aura-forma-family', state.design.family);
 store.set('aura-forma-lang', state.lang);
 { // The project (products added so far) and which of them is being edited.
-  const pr = store.get('aura-forma-project'); if (pr?.items?.length) state.project = {items: pr.items.filter(i => i?.design?.schema === SCHEMA).map(i => ({...i, design: normalizeDesign(i.design)}))};
+  const pr = store.get('aura-forma-project'); if (pr?.items?.length) state.project = {items: pr.items.filter(i => i?.design?.schema === SCHEMA).map(i => ({...i, design: identifyDesign(normalizeDesign(i.design))}))};
+  if(pr?.items?.length&&JSON.stringify(pr.items)!==JSON.stringify(state.project.items))store.set('aura-forma-project',{...pr,items:state.project.items});
   const ed = store.get('aura-forma-editing'); state.editing = state.project.items.some(i => i.id === ed) ? ed : null;
   const prev = store.get('aura-forma-sent-project'); if (prev?.key && prev.key === projectKey()) state.sent = prev; }
 shell();
@@ -1497,10 +1519,10 @@ const openFromLink = () => readLink().then(r => {
   if (!r) return;
   history.replaceState(null, '', location.pathname + location.search);
   state.tab = 'parts'; state.room = null; setSketch(true);
-  if (r.design) { setDesign(normalizeDesign(r.design)); feedback(L('linkOpened')); return; }
+  if (r.design) { setDesign(identifyDesign(normalizeDesign(r.design))); feedback(L('linkOpened')); return; }
   const have = new Set(state.project.items.map(i => designKey(i.design)));
   let next = 1 + Math.max(0, ...state.project.items.map(x => +x.id.slice(1) || 0));
-  const added = r.items.map(i => ({id: 'U' + next++, qty: i.qty || 1, design: normalizeDesign(i.design)})).filter(i => !have.has(designKey(i.design)));
+  const added = r.items.map(i => ({id: 'U' + next++, qty: i.qty || 1, design: identifyDesign(normalizeDesign(i.design))})).filter(i => !have.has(designKey(i.design)));
   state.project.items.push(...added); state.editing = added[0]?.id || null; saveProject();
   if (r.items[0]) setDesign(normalizeDesign(r.items[0].design));
   feedback(L('projectOpened'));

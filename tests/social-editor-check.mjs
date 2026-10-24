@@ -9,7 +9,7 @@ const before=JSON.stringify(p);const svg=planSvg(p);assert.ok(svg.startsWith('<s
 p.spaces[0].name='<script>window.bad=1</script>';assert.ok(!planSvg(p).includes('<script>'));assert.ok(planSvg(p).includes('&lt;script&gt;'));
 assert.throws(()=>planSvg({spaces:[],walls:[]}));p.spaces[0].boundary_xy_mm[0][0]=NaN;assert.throws(()=>planSvg(p));
 assert.throws(()=>boundedJson(' '.repeat(2000001)));
-const c={market:'TR',channel:'instagram',title:'AURA',caption:'Örnek',rights:true,shots:[{kind:'image'}]};
+const c={market:'TR',channel:'instagram',title:'AURA',caption:'Örnek',rights:true,format:'portrait',seconds:3,shots:[{kind:'image'}]};
 const checked=validateCampaign(c);assert.equal(checked.approved,false);assert.equal(checked.published,false);assert.equal(checked.status,'review_pending');
 for(const changes of [{rights:false},{title:''},{caption:''},{shots:[]},{channel:'tiktok'}])assert.throws(()=>validateCampaign({...c,...changes}));
 assert.throws(()=>publish(c,{approved:true}));

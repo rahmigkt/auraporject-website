@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {rectangleRoom,validateRoom,visualPlacement,frameAt,assertStoryOrder} from '../assets/social/story-model.js';
+import {validateCampaign} from '../assets/social/model.js';
+const room=rectangleRoom(4.4,3.8,2.8),before=JSON.stringify(room);
+assert.deepEqual(visualPlacement(room,[{width:1600,depth:900,height:750}]),[{x:2200,z:1900}]);assert.equal(JSON.stringify(room),before);
+for(const a of [[0,3,2.8],[4,NaN,2.8],[21,3,2.8],[4,3,7]])assert.throws(()=>rectangleRoom(...a));
+assert.throws(()=>validateRoom({boundary:[[0,0],[1000,1000],[0,1000],[1000,0]],height:2800}));
+assert.throws(()=>visualPlacement(room,[{width:6000,depth:900,height:750}]));assert.throws(()=>visualPlacement(room,[{width:1600,depth:900,height:3000}]));
+const notch=validateRoom({boundary:[[0,0],[4000,0],[4000,4000],[2500,4000],[2500,1000],[1500,1000],[1500,4000],[0,4000]],height:2800});assert.throws(()=>visualPlacement(notch,[{width:2000,depth:2000,height:700}]));
+assert.equal(frameAt(0,8),0);assert.equal(frameAt(.5,8),4);assert.equal(frameAt(1,8),7);
+const process={kind:'sequence',role:'process'},final={kind:'image',role:'result'};assertStoryOrder([process,final]);assert.throws(()=>assertStoryOrder([final,process]));assert.throws(()=>assertStoryOrder([final,final]));
+const c={market:'TR',channel:'instagram',title:'Story',caption:'Example',format:'portrait',seconds:3,rights:true,shots:[process,final]};assert.equal(validateCampaign(c).published,false);for(const bad of [{format:'bad'},{seconds:0},{shots:[final,process]}])assert.throws(()=>validateCampaign({...c,...bad}));
+console.log('PASS visual room limits, concave placement, immutable source, final-only ordering, sequence timing, campaign validation');
